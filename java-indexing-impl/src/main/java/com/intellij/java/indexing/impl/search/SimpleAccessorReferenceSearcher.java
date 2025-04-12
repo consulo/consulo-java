@@ -18,7 +18,6 @@ package com.intellij.java.indexing.impl.search;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -29,8 +28,9 @@ import consulo.language.psi.search.SearchRequestCollector;
 import consulo.language.psi.search.UsageSearchContext;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
 
 /**
  * @author ven
@@ -44,25 +44,22 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
     @Override
     public void processQuery(
         @Nonnull ReferencesSearch.SearchParameters queryParameters,
-        @Nonnull Processor<? super PsiReference> consumer
+        @Nonnull Predicate<? super PsiReference> consumer
     ) {
-        PsiElement refElement = queryParameters.getElementToSearch();
-        if (!(refElement instanceof PsiMethod)) {
-            return;
+        if (queryParameters.getElementToSearch() instanceof PsiMethod method) {
+            addPropertyAccessUsages(method, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
         }
-
-        addPropertyAccessUsages((PsiMethod)refElement, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
     }
 
     static void addPropertyAccessUsages(PsiMethod method, SearchScope scope, SearchRequestCollector collector) {
-        final String propertyName = PropertyUtil.getPropertyName(method);
+        String propertyName = PropertyUtil.getPropertyName(method);
         if (StringUtil.isNotEmpty(propertyName)) {
             SearchScope additional = GlobalSearchScope.EMPTY_SCOPE;
             for (CustomPropertyScopeProvider provider : CustomPropertyScopeProvider.EP_NAME.getExtensionList()) {
                 additional = additional.union(provider.getScope(method.getProject()));
             }
             assert propertyName != null;
-            final SearchScope propScope = scope.intersectWith(method.getUseScope()).intersectWith(additional);
+            SearchScope propScope = scope.intersectWith(method.getUseScope()).intersectWith(additional);
             collector.searchWord(propertyName, propScope, UsageSearchContext.IN_FOREIGN_LANGUAGES, true, method);
         }
     }

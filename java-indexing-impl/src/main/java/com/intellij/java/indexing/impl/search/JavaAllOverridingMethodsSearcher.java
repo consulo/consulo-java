@@ -24,14 +24,15 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
+import consulo.application.Application;
 import consulo.content.scope.SearchScope;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author ven
@@ -40,77 +41,69 @@ import jakarta.annotation.Nonnull;
 public class JavaAllOverridingMethodsSearcher implements AllOverridingMethodsSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull final AllOverridingMethodsSearch.SearchParameters p,
-        @Nonnull final Processor<? super Pair<PsiMethod, PsiMethod>> consumer
+        @Nonnull AllOverridingMethodsSearch.SearchParameters p,
+        @Nonnull Predicate<? super Pair<PsiMethod, PsiMethod>> consumer
     ) {
-        final PsiClass psiClass = p.getPsiClass();
+        PsiClass psiClass = p.getPsiClass();
 
-        final MultiMap<String, PsiMethod> methods =
-            ApplicationManager.getApplication().runReadAction(new Computable<MultiMap<String, PsiMethod>>() {
-                @Override
-                public MultiMap<String, PsiMethod> compute() {
-                    final MultiMap<String, PsiMethod> methods = MultiMap.create();
-                    for (PsiMethod method : psiClass.getMethods()) {
-                        if (PsiUtil.canBeOverriden(method)) {
-                            methods.putValue(method.getName(), method);
-                        }
+        MultiMap<String, PsiMethod> methods =
+            Application.get().runReadAction((Supplier<MultiMap<String, PsiMethod>>)() -> {
+                MultiMap<String, PsiMethod> methods1 = MultiMap.create();
+                for (PsiMethod method : psiClass.getMethods()) {
+                    if (PsiUtil.canBeOverriden(method)) {
+                        methods1.putValue(method.getName(), method);
                     }
-                    return methods;
                 }
+                return methods1;
             });
 
 
-        final SearchScope scope = p.getScope();
+        SearchScope scope = p.getScope();
 
-        Processor<PsiClass> inheritorsProcessor = new Processor<PsiClass>() {
-            @Override
-            public boolean process(PsiClass inheritor) {
-                PsiSubstitutor substitutor = null;
+        Predicate<PsiClass> inheritorsProcessor = inheritor -> {
+            PsiSubstitutor substitutor = null;
 
-                for (String name : methods.keySet()) {
-                    if (inheritor.findMethodsByName(name, true).length == 0) {
+            for (String name : methods.keySet()) {
+                if (inheritor.findMethodsByName(name, true).length == 0) {
+                    continue;
+                }
+
+                for (PsiMethod method : methods.get(name)) {
+                    if (method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && !JavaPsiFacade.getInstance(inheritor.getProject())
+                        .arePackagesTheSame(psiClass, inheritor)) {
                         continue;
                     }
 
-                    for (PsiMethod method : methods.get(name)) {
-                        if (method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && !JavaPsiFacade.getInstance(inheritor.getProject())
-                            .arePackagesTheSame(psiClass, inheritor)) {
-                            continue;
-                        }
-
+                    if (substitutor == null) {
+                        //could be null if not java inheritor, TODO only JavaClassInheritors are needed
+                        substitutor = TypeConversionUtil.getClassSubstitutor(psiClass, inheritor, PsiSubstitutor.EMPTY);
                         if (substitutor == null) {
-                            //could be null if not java inheritor, TODO only JavaClassInheritors are needed
-                            substitutor = TypeConversionUtil.getClassSubstitutor(psiClass, inheritor, PsiSubstitutor.EMPTY);
-                            if (substitutor == null) {
-                                return true;
-                            }
+                            return true;
                         }
+                    }
 
-                        MethodSignature signature = method.getSignature(substitutor);
-                        PsiMethod inInheritor = MethodSignatureUtil.findMethodBySuperSignature(inheritor, signature, false);
-                        if (inInheritor != null && !inInheritor.hasModifierProperty(PsiModifier.STATIC)) {
-                            if (!consumer.process(Pair.create(method, inInheritor))) {
+                    MethodSignature signature = method.getSignature(substitutor);
+                    PsiMethod inInheritor = MethodSignatureUtil.findMethodBySuperSignature(inheritor, signature, false);
+                    if (inInheritor != null && !inInheritor.isStatic()) {
+                        if (!consumer.test(Couple.of(method, inInheritor))) {
+                            return false;
+                        }
+                    }
+
+                    if (psiClass.isInterface() && !inheritor.isInterface()) {  //check for sibling implementation
+                        PsiClass superClass = inheritor.getSuperClass();
+                        if (superClass != null && !superClass.isInheritor(psiClass, true)) {
+                            inInheritor =
+                                MethodSignatureUtil.findMethodInSuperClassBySignatureInDerived(inheritor, superClass, signature, true);
+                            if (inInheritor != null && !inInheritor.isStatic() && !consumer.test(Couple.of(method, inInheritor))) {
                                 return false;
-                            }
-                        }
-
-                        if (psiClass.isInterface() && !inheritor.isInterface()) {  //check for sibling implementation
-                            final PsiClass superClass = inheritor.getSuperClass();
-                            if (superClass != null && !superClass.isInheritor(psiClass, true)) {
-                                inInheritor =
-                                    MethodSignatureUtil.findMethodInSuperClassBySignatureInDerived(inheritor, superClass, signature, true);
-                                if (inInheritor != null && !inInheritor.hasModifierProperty(PsiModifier.STATIC)) {
-                                    if (!consumer.process(Pair.create(method, inInheritor))) {
-                                        return false;
-                                    }
-                                }
                             }
                         }
                     }
                 }
-
-                return true;
             }
+
+            return true;
         };
 
         return ClassInheritorsSearch.search(psiClass, scope, true).forEach(inheritorsProcessor);

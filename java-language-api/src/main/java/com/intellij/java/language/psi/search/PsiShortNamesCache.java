@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.application.util.function.Processor;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -28,12 +27,11 @@ import consulo.language.psi.stub.IdFilter;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 /**
  * Allows to retrieve files and Java classes, methods and fields in a project by
@@ -81,7 +79,7 @@ public abstract class PsiShortNamesCache {
      * @return the list of found classes.
      */
     @Nonnull
-    public abstract PsiClass[] getClassesByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiClass[] getClassesByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
 
     /**
      * Returns the list of names of all classes in the project and
@@ -92,11 +90,11 @@ public abstract class PsiShortNamesCache {
     @Nonnull
     public abstract String[] getAllClassNames();
 
-    public boolean processAllClassNames(Processor<String> processor) {
+    public boolean processAllClassNames(Predicate<String> processor) {
         return ContainerUtil.process(getAllClassNames(), processor);
     }
 
-    public boolean processAllClassNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllClassNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return ContainerUtil.process(getAllClassNames(), processor);
     }
 
@@ -116,29 +114,32 @@ public abstract class PsiShortNamesCache {
      * @return the list of found methods.
      */
     @Nonnull
-    public abstract PsiMethod[] getMethodsByName(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
 
     @Nonnull
-    public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+    public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
 
     @Nonnull
-    public abstract PsiField[] getFieldsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+    public abstract PsiField[] getFieldsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
 
     public abstract boolean processMethodsWithName(
-        @NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope,
-        @Nonnull Processor<PsiMethod> processor
+        @Nonnull String name,
+        @Nonnull GlobalSearchScope scope,
+        @Nonnull Predicate<PsiMethod> processor
     );
 
     public abstract boolean processMethodsWithName(
-        @NonNls @Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
-        @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter
+        @Nonnull String name,
+        @Nonnull Predicate<? super PsiMethod> processor,
+        @Nonnull GlobalSearchScope scope,
+        @Nullable IdFilter filter
     );
 
-    public boolean processAllMethodNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllMethodNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return ContainerUtil.process(getAllFieldNames(), processor);
     }
 
-    public boolean processAllFieldNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllFieldNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return ContainerUtil.process(getAllFieldNames(), processor);
     }
 
@@ -167,7 +168,7 @@ public abstract class PsiShortNamesCache {
      * @return the list of found fields.
      */
     @Nonnull
-    public abstract PsiField[] getFieldsByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiField[] getFieldsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
 
     /**
      * Returns the list of names of all fields in the project and
@@ -187,12 +188,16 @@ public abstract class PsiShortNamesCache {
     public abstract void getAllFieldNames(@Nonnull HashSet<String> set);
 
     public abstract boolean processFieldsWithName(
-        @Nonnull String name, @Nonnull Processor<? super PsiField> processor,
-        @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter
+        @Nonnull String name,
+        @Nonnull Predicate<? super PsiField> processor,
+        @Nonnull GlobalSearchScope scope,
+        @Nullable IdFilter filter
     );
 
     public abstract boolean processClassesWithName(
-        @Nonnull String name, @Nonnull Processor<? super PsiClass> processor,
-        @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter
+        @Nonnull String name,
+        @Nonnull Predicate<? super PsiClass> processor,
+        @Nonnull GlobalSearchScope scope,
+        @Nullable IdFilter filter
     );
 }

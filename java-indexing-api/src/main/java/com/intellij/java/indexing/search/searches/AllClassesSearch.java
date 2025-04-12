@@ -19,12 +19,12 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.content.scope.SearchScope;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
 
 import java.util.function.Predicate;
 
@@ -34,13 +34,13 @@ public class AllClassesSearch extends ExtensibleQueryFactory<PsiClass, AllClasse
     public static class SearchParameters {
         private final SearchScope myScope;
         private final Project myProject;
-        private final Condition<String> myShortNameCondition;
+        private final Predicate<String> myShortNameCondition;
 
-        public SearchParameters(final SearchScope scope, final Project project) {
+        public SearchParameters(SearchScope scope, Project project) {
             this(scope, project, Condition.TRUE);
         }
 
-        public SearchParameters(final SearchScope scope, final Project project, final Condition<String> shortNameCondition) {
+        public SearchParameters(SearchScope scope, Project project, Predicate<String> shortNameCondition) {
             myScope = scope;
             myProject = project;
             myShortNameCondition = shortNameCondition;
@@ -55,7 +55,7 @@ public class AllClassesSearch extends ExtensibleQueryFactory<PsiClass, AllClasse
         }
 
         public boolean nameMatches(String name) {
-            return myShortNameCondition.value(name);
+            return myShortNameCondition.test(name);
         }
     }
 

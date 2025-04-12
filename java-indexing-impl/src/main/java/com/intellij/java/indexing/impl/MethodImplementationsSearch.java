@@ -17,10 +17,8 @@ package com.intellij.java.indexing.impl;
 
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.search.DefinitionsScopedSearch;
@@ -30,35 +28,28 @@ import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @ExtensionImpl
 public class MethodImplementationsSearch implements DefinitionsScopedSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters,
-        @Nonnull final Processor<? super PsiElement> consumer
+        @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
+        @Nonnull Predicate<? super PsiElement> consumer
     ) {
-        final PsiElement sourceElement = queryParameters.getElement();
-        if (sourceElement instanceof PsiMethod) {
-            return processImplementations((PsiMethod)sourceElement, consumer, queryParameters.getScope());
-        }
-        return true;
+        PsiElement sourceElement = queryParameters.getElement();
+        return !(sourceElement instanceof PsiMethod method) || processImplementations(method, consumer, queryParameters.getScope());
     }
 
     public static boolean processImplementations(
-        final PsiMethod psiMethod,
-        final Processor<? super PsiElement> consumer,
-        final SearchScope searchScope
+        PsiMethod psiMethod,
+        Predicate<? super PsiElement> consumer,
+        SearchScope searchScope
     ) {
-        if (!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(new Processor<PsiFunctionalExpression>() {
-            @Override
-            public boolean process(PsiFunctionalExpression expression) {
-                return consumer.process(expression);
-            }
-        })) {
+        if (!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(consumer::test)) {
             return false;
         }
-        List<PsiMethod> methods = new ArrayList<PsiMethod>();
+        List<PsiMethod> methods = new ArrayList<>();
         getOverridingMethods(psiMethod, methods, searchScope);
         return ContainerUtil.process(methods, consumer);
     }
@@ -71,8 +62,8 @@ public class MethodImplementationsSearch implements DefinitionsScopedSearchExecu
 
     @SuppressWarnings("UnusedDeclaration")
     @Deprecated
-    public static PsiMethod[] getMethodImplementations(final PsiMethod method, SearchScope scope) {
-        List<PsiMethod> result = new ArrayList<PsiMethod>();
+    public static PsiMethod[] getMethodImplementations(PsiMethod method, SearchScope scope) {
+        List<PsiMethod> result = new ArrayList<>();
 
         getOverridingMethods(method, result, scope);
         return result.toArray(new PsiMethod[result.size()]);

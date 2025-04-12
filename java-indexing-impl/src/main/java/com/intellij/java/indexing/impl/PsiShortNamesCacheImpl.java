@@ -25,10 +25,10 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.search.PsiShortNameProvider;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.util.function.CommonProcessors;
-import consulo.application.util.function.Processor;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -41,13 +41,12 @@ import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.collection.SmartList;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @ExtensionImpl
 public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
@@ -58,8 +57,9 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
         myProject = project;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiFile[] getFilesByName(@Nonnull String name) {
         return FilenameIndex.getFilesByName(myProject, name, GlobalSearchScope.projectScope(myProject));
     }
@@ -72,13 +72,13 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     @Nonnull
-    public PsiClass[] getClassesByName(@Nonnull String name, @Nonnull final GlobalSearchScope scope) {
-        final Collection<PsiClass> classes = JavaShortClassNameIndex.getInstance().get(name, myProject, scope);
+    public PsiClass[] getClassesByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+        Collection<PsiClass> classes = JavaShortClassNameIndex.getInstance().get(name, myProject, scope);
 
         if (classes.isEmpty()) {
             return PsiClass.EMPTY_ARRAY;
         }
-        ArrayList<PsiClass> list = new ArrayList<PsiClass>(classes.size());
+        ArrayList<PsiClass> list = new ArrayList<>(classes.size());
 
         OuterLoop:
         for (PsiClass aClass : classes) {
@@ -119,32 +119,32 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     public void getAllClassNames(@Nonnull HashSet<String> set) {
-        processAllClassNames(new CommonProcessors.CollectProcessor<String>(set));
+        processAllClassNames(new CommonProcessors.CollectProcessor<>(set));
     }
 
     @Override
-    public boolean processAllClassNames(Processor<String> processor) {
+    public boolean processAllClassNames(Predicate<String> processor) {
         return JavaShortClassNameIndex.getInstance().processAllKeys(myProject, processor);
     }
 
     @Override
-    public boolean processAllClassNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllClassNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return StubIndex.getInstance().processAllKeys(JavaStubIndexKeys.CLASS_SHORT_NAMES, processor, scope, filter);
     }
 
     @Override
-    public boolean processAllMethodNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllMethodNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return StubIndex.getInstance().processAllKeys(JavaStubIndexKeys.METHODS, processor, scope, filter);
     }
 
     @Override
-    public boolean processAllFieldNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
+    public boolean processAllFieldNames(Predicate<String> processor, GlobalSearchScope scope, IdFilter filter) {
         return StubIndex.getInstance().processAllKeys(JavaStubIndexKeys.FIELDS, processor, scope, filter);
     }
 
     @Override
     @Nonnull
-    public PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull final GlobalSearchScope scope) {
+    public PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
         Collection<PsiMethod> methods = StubIndex.getElements(JavaStubIndexKeys.METHODS, name, myProject,
             new JavaSourceFilterScope(scope), PsiMethod.class
         );
@@ -159,19 +159,15 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     @Nonnull
-    public PsiMethod[] getMethodsByNameIfNotMoreThan(
-        @NonNls @Nonnull final String name,
-        @Nonnull final GlobalSearchScope scope,
-        final int maxCount
-    ) {
-        final List<PsiMethod> methods = new SmartList<PsiMethod>();
+    public PsiMethod[] getMethodsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount) {
+        List<PsiMethod> methods = new SmartList<>();
         StubIndex.getInstance().processElements(
             JavaStubIndexKeys.METHODS,
             name,
             myProject,
             scope,
             PsiMethod.class,
-            new CommonProcessors.CollectProcessor<PsiMethod>(methods) {
+            new CommonProcessors.CollectProcessor<>(methods) {
                 @Override
                 public boolean process(PsiMethod method) {
                     return methods.size() != maxCount && super.process(method);
@@ -188,9 +184,9 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     public boolean processMethodsWithName(
-        @NonNls @Nonnull String name,
+        @Nonnull String name,
         @Nonnull GlobalSearchScope scope,
-        @Nonnull Processor<PsiMethod> processor
+        @Nonnull Predicate<PsiMethod> processor
     ) {
         return StubIndex.getInstance().processElements(JavaStubIndexKeys.METHODS, name, myProject, scope, PsiMethod.class, processor);
     }
@@ -203,20 +199,20 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     public void getAllMethodNames(@Nonnull HashSet<String> set) {
-        JavaMethodNameIndex.getInstance().processAllKeys(myProject, new CommonProcessors.CollectProcessor<String>(set));
+        JavaMethodNameIndex.getInstance().processAllKeys(myProject, new CommonProcessors.CollectProcessor<>(set));
     }
 
     @Override
     @Nonnull
-    public PsiField[] getFieldsByNameIfNotMoreThan(@Nonnull String name, @Nonnull final GlobalSearchScope scope, final int maxCount) {
-        final List<PsiField> methods = new SmartList<PsiField>();
+    public PsiField[] getFieldsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount) {
+        List<PsiField> methods = new SmartList<>();
         StubIndex.getInstance().processElements(
             JavaStubIndexKeys.FIELDS,
             name,
             myProject,
             scope,
             PsiField.class,
-            new CommonProcessors.CollectProcessor<PsiField>(methods) {
+            new CommonProcessors.CollectProcessor<>(methods) {
                 @Override
                 public boolean process(PsiField method) {
                     return methods.size() != maxCount && super.process(method);
@@ -233,8 +229,8 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Nonnull
     @Override
-    public PsiField[] getFieldsByName(@Nonnull String name, @Nonnull final GlobalSearchScope scope) {
-        final Collection<PsiField> fields = JavaFieldNameIndex.getInstance().get(name, myProject, scope);
+    public PsiField[] getFieldsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+        Collection<PsiField> fields = JavaFieldNameIndex.getInstance().get(name, myProject, scope);
 
         if (fields.isEmpty()) {
             return PsiField.EMPTY_ARRAY;
@@ -252,13 +248,13 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     public void getAllFieldNames(@Nonnull HashSet<String> set) {
-        JavaFieldNameIndex.getInstance().processAllKeys(myProject, new CommonProcessors.CollectProcessor<String>(set));
+        JavaFieldNameIndex.getInstance().processAllKeys(myProject, new CommonProcessors.CollectProcessor<>(set));
     }
 
     @Override
     public boolean processFieldsWithName(
         @Nonnull String name,
-        @Nonnull Processor<? super PsiField> processor,
+        @Nonnull Predicate<? super PsiField> processor,
         @Nonnull GlobalSearchScope scope,
         @Nullable IdFilter filter
     ) {
@@ -275,8 +271,8 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
     @Override
     public boolean processMethodsWithName(
-        @NonNls @Nonnull String name,
-        @Nonnull Processor<? super PsiMethod> processor,
+        @Nonnull String name,
+        @Nonnull Predicate<? super PsiMethod> processor,
         @Nonnull GlobalSearchScope scope,
         @Nullable IdFilter filter
     ) {
@@ -295,7 +291,7 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
     @Override
     public boolean processClassesWithName(
         @Nonnull String name,
-        @Nonnull Processor<? super PsiClass> processor,
+        @Nonnull Predicate<? super PsiClass> processor,
         @Nonnull GlobalSearchScope scope,
         @Nullable IdFilter filter
     ) {
@@ -310,13 +306,14 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
         );
     }
 
-    private <T extends PsiMember> List<T> filterMembers(Collection<T> members, final GlobalSearchScope scope) {
-        List<T> result = new ArrayList<T>(members.size());
+    private <T extends PsiMember> List<T> filterMembers(Collection<T> members, GlobalSearchScope scope) {
+        List<T> result = new ArrayList<>(members.size());
         Set<PsiMember> set = Sets.newHashSet(members.size(), new HashingStrategy<PsiMember>() {
             @Override
+            @RequiredReadAction
             public int hashCode(PsiMember member) {
                 int code = 0;
-                final PsiClass clazz = member.getContainingClass();
+                PsiClass clazz = member.getContainingClass();
                 if (clazz != null) {
                     String name = clazz.getName();
                     if (name != null) {
@@ -327,8 +324,8 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
                         code += clazz.hashCode();
                     }
                 }
-                if (member instanceof PsiMethod) {
-                    code += 37 * ((PsiMethod)member).getParameterList().getParametersCount();
+                if (member instanceof PsiMethod method) {
+                    code += 37 * method.getParameterList().getParametersCount();
                 }
                 return code;
             }

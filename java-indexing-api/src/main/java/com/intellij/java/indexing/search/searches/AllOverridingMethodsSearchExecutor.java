@@ -8,7 +8,7 @@ import consulo.util.lang.Pair;
 
 /**
  * @author VISTALL
- * @since 01-Sep-22
+ * @since 2022-09-01
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface AllOverridingMethodsSearchExecutor extends QueryExecutor<Pair<PsiMethod, PsiMethod>, AllOverridingMethodsSearch.SearchParameters> {

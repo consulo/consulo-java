@@ -19,7 +19,6 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
@@ -28,34 +27,23 @@ import consulo.language.psi.search.DefinitionsScopedSearch;
 import consulo.language.psi.search.DefinitionsScopedSearchExecutor;
 import jakarta.annotation.Nonnull;
 
+import java.util.function.Predicate;
+
 @ExtensionImpl
 public class ClassImplementationsSearch implements DefinitionsScopedSearchExecutor {
     @Override
     public boolean execute(
         @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
-        @Nonnull Processor<? super PsiElement> consumer
+        @Nonnull Predicate<? super PsiElement> consumer
     ) {
-        final PsiElement sourceElement = queryParameters.getElement();
-        return !(sourceElement instanceof PsiClass) || processImplementations(
-            (PsiClass)sourceElement,
-            consumer,
-            queryParameters.getScope()
-        );
+        PsiElement sourceElement = queryParameters.getElement();
+        return !(sourceElement instanceof PsiClass psiClass)
+            || processImplementations(psiClass, consumer, queryParameters.getScope());
     }
 
-    public static boolean processImplementations(
-        final PsiClass psiClass,
-        final Processor<? super PsiElement> processor,
-        SearchScope scope
-    ) {
-        if (!FunctionalExpressionSearch.search(psiClass, scope).forEach(expression ->
-        {
-            return processor.process(expression);
-        })) {
-            return false;
-        }
-
-        return ClassInheritorsSearch.search(psiClass, scope, true)
-            .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>)element -> processor.process(element)));
+    public static boolean processImplementations(PsiClass psiClass, Predicate<? super PsiElement> processor, SearchScope scope) {
+        return FunctionalExpressionSearch.search(psiClass, scope).forEach(processor::test)
+            && ClassInheritorsSearch.search(psiClass, scope, true)
+            .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>)processor::test));
     }
 }

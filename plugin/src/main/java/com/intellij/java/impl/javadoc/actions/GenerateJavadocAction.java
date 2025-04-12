@@ -17,8 +17,8 @@ package com.intellij.java.impl.javadoc.actions;
 
 import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
-import com.intellij.java.language.JavadocBundle;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.java.language.localize.JavadocLocalize;
+import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
 import consulo.project.Project;
@@ -35,11 +35,11 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     private JavadocConfigurable myConfigurable;
 
     public GenerateJavadocAction() {
-        super(JavadocBundle.message("javadoc.generate.title"), JavadocBundle.message("javadoc.generate.title"));
+        super(JavadocLocalize.javadocGenerateTitle().get(), JavadocLocalize.javadocGenerateTitle().get());
     }
 
     @Override
-    protected void analyze(@Nonnull Project project, AnalysisScope scope) {
+    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
         myConfigurable.apply();
         JavadocGenerationManager.getInstance(project).generateJavadoc(scope);
         dispose();
@@ -49,7 +49,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     @Override
     protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
         myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
-        final JComponent component = myConfigurable.createComponent();
+        JComponent component = myConfigurable.createComponent();
         myConfigurable.reset();
         myConfigurable.getOutputDirField().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override

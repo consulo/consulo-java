@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -31,8 +31,9 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.util.query.QueryExecutorBase;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
 
 /**
  * Looks for references to local variable or method parameter in invalid (incomplete) code.
@@ -44,39 +45,35 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
     }
 
     @Override
-    public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
-        final PsiElement refElement = p.getElementToSearch();
+    @RequiredReadAction
+    public void processQuery(@Nonnull ReferencesSearch.SearchParameters p, @Nonnull Predicate<? super PsiReference> consumer) {
+        PsiElement refElement = p.getElementToSearch();
         if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) {
             return;
         }
 
-        final String name = ((PsiVariable)refElement).getName();
+        String name = ((PsiVariable)refElement).getName();
         if (name == null) {
             return;
         }
 
-        final SearchScope scope = p.getEffectiveSearchScope();
-        if (!(scope instanceof LocalSearchScope)) {
+        SearchScope scope = p.getEffectiveSearchScope();
+        if (!(scope instanceof LocalSearchScope localSearchScope)) {
             return;
         }
 
-        PsiElement[] elements = ((LocalSearchScope)scope).getScope();
+        PsiElement[] elements = localSearchScope.getScope();
         if (elements == null || elements.length == 0) {
             return;
         }
 
-        PsiElementProcessor processor = new PsiElementProcessor() {
-            @Override
-            public boolean execute(@Nonnull final PsiElement element) {
-                if (element instanceof PsiJavaCodeReferenceElement) {
-                    final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)element;
-                    if (!ref.isQualified() && name.equals(ref.getText()) &&
-                        ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
-                        consumer.process(ref);
-                    }
-                }
-                return true;
+        PsiElementProcessor processor = element -> {
+            if (element instanceof PsiJavaCodeReferenceElement ref
+                && !ref.isQualified() && name.equals(ref.getText())
+                && ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
+                consumer.test(ref);
             }
+            return true;
         };
 
         for (PsiElement element : elements) {

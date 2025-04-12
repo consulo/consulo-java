@@ -22,8 +22,6 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.document.util.TextRange;
 import consulo.document.util.UnfairTextRange;
@@ -36,9 +34,11 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.SearchRequestCollector;
 import consulo.project.DumbService;
 import consulo.project.Project;
-import consulo.util.lang.function.PairProcessor;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author max
@@ -57,28 +57,28 @@ public class ConstructorReferencesSearchHelper {
      *    and so getProject would fail with an assertion that read action is required but not present.
      */
     public boolean processConstructorReferences(
-        @Nonnull final Processor<? super PsiReference> processor,
-        @Nonnull final PsiMethod constructor,
-        @Nonnull final PsiClass containingClass,
-        @Nonnull final SearchScope searchScope,
-        @Nonnull final Project project,
+        @Nonnull Predicate<? super PsiReference> processor,
+        @Nonnull PsiMethod constructor,
+        @Nonnull PsiClass containingClass,
+        @Nonnull SearchScope searchScope,
+        @Nonnull Project project,
         boolean ignoreAccessScope,
-        final boolean isStrictSignatureSearch,
+        boolean isStrictSignatureSearch,
         @Nonnull SearchRequestCollector collector
     ) {
-        final boolean[] constructorCanBeCalledImplicitly = new boolean[1];
-        final boolean[] isEnum = new boolean[1];
-        final boolean[] isUnder18 = new boolean[1];
+        boolean[] constructorCanBeCalledImplicitly = new boolean[1];
+        boolean[] isEnum = new boolean[1];
+        boolean[] isUnder18 = new boolean[1];
 
-        MethodUsagesSearcher.resolveInReadAction(project, new Computable<Void>() {
-            @Override
-            public Void compute() {
+        MethodUsagesSearcher.resolveInReadAction(
+            project,
+            (Supplier<Void>)() -> {
                 constructorCanBeCalledImplicitly[0] = constructor.getParameterList().getParametersCount() == 0;
                 isEnum[0] = containingClass.isEnum();
                 isUnder18[0] = PsiUtil.getLanguageLevel(containingClass).isAtLeast(LanguageLevel.JDK_1_8);
                 return null;
             }
-        });
+        );
 
         if (isEnum[0]) {
             if (!processEnumReferences(processor, constructor, project, containingClass)) {
@@ -87,30 +87,27 @@ public class ConstructorReferencesSearchHelper {
         }
 
         // search usages like "new XXX(..)"
-        PairProcessor<PsiReference, SearchRequestCollector> processor1 = new PairProcessor<PsiReference, SearchRequestCollector>() {
-            @Override
-            public boolean process(PsiReference reference, SearchRequestCollector collector) {
-                PsiElement parent = reference.getElement().getParent();
-                if (parent instanceof PsiAnonymousClass) {
-                    parent = parent.getParent();
-                }
-                if (parent instanceof PsiNewExpression) {
-                    PsiMethod constructor1 = ((PsiNewExpression)parent).resolveConstructor();
-                    if (constructor1 != null) {
-                        if (isStrictSignatureSearch) {
-                            if (myManager.areElementsEquivalent(constructor, constructor1)) {
-                                return processor.process(reference);
-                            }
+        BiPredicate<PsiReference, SearchRequestCollector> processor1 = (reference, collector1) -> {
+            PsiElement parent = reference.getElement().getParent();
+            if (parent instanceof PsiAnonymousClass) {
+                parent = parent.getParent();
+            }
+            if (parent instanceof PsiNewExpression newExpr) {
+                PsiMethod constructor1 = newExpr.resolveConstructor();
+                if (constructor1 != null) {
+                    if (isStrictSignatureSearch) {
+                        if (myManager.areElementsEquivalent(constructor, constructor1)) {
+                            return processor.test(reference);
                         }
-                        else {
-                            if (myManager.areElementsEquivalent(containingClass, constructor1.getContainingClass())) {
-                                return processor.process(reference);
-                            }
+                    }
+                    else {
+                        if (myManager.areElementsEquivalent(containingClass, constructor1.getContainingClass())) {
+                            return processor.test(reference);
                         }
                     }
                 }
-                return true;
             }
+            return true;
         };
 
         ReferencesSearch.searchOptimized(containingClass, searchScope, ignoreAccessScope, collector, true, processor1);
@@ -121,113 +118,93 @@ public class ConstructorReferencesSearchHelper {
         }
 
         // search usages like "this(..)"
-        if (!MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>() {
-            @Override
-            public Boolean compute() {
-                return processSuperOrThis(
-                    containingClass,
-                    constructor,
-                    constructorCanBeCalledImplicitly[0],
-                    searchScope,
-                    project,
-                    isStrictSignatureSearch,
-                    PsiKeyword.THIS,
-                    processor
-                );
-            }
-        })) {
+        if (!MethodUsagesSearcher.resolveInReadAction(
+            project,
+            () -> processSuperOrThis(
+                containingClass,
+                constructor,
+                constructorCanBeCalledImplicitly[0],
+                searchScope,
+                project,
+                isStrictSignatureSearch,
+                PsiKeyword.THIS,
+                processor
+            )
+        )) {
             return false;
         }
 
         // search usages like "super(..)"
-        Processor<PsiClass> processor2 = new Processor<PsiClass>() {
-            @Override
-            public boolean process(PsiClass inheritor) {
-                final PsiElement navigationElement = inheritor.getNavigationElement();
-                if (navigationElement instanceof PsiClass) {
-                    return processSuperOrThis(
-                        (PsiClass)navigationElement,
-                        constructor,
-                        constructorCanBeCalledImplicitly[0],
-                        searchScope,
-                        project,
-                        isStrictSignatureSearch,
-                        PsiKeyword.SUPER,
-                        processor
-                    );
-                }
-                return true;
-            }
+        Predicate<PsiClass> processor2 = inheritor -> {
+            PsiElement navigationElement = inheritor.getNavigationElement();
+            return !(navigationElement instanceof PsiClass psiClass) || processSuperOrThis(
+                psiClass,
+                constructor,
+                constructorCanBeCalledImplicitly[0],
+                searchScope,
+                project,
+                isStrictSignatureSearch,
+                PsiKeyword.SUPER,
+                processor
+            );
         };
 
         return ClassInheritorsSearch.search(containingClass, searchScope, false).forEach(processor2);
     }
 
     private static boolean processEnumReferences(
-        @Nonnull final Processor<? super PsiReference> processor,
-        @Nonnull final PsiMethod constructor,
-        @Nonnull final Project project,
-        @Nonnull final PsiClass aClass
+        @Nonnull Predicate<? super PsiReference> processor,
+        @Nonnull PsiMethod constructor,
+        @Nonnull Project project,
+        @Nonnull PsiClass aClass
     ) {
-        return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>() {
-            @Override
-            public Boolean compute() {
+        return MethodUsagesSearcher.resolveInReadAction(
+            project,
+            () -> {
                 for (PsiField field : aClass.getFields()) {
                     if (field instanceof PsiEnumConstant) {
                         PsiReference reference = field.getReference();
-                        if (reference != null && reference.isReferenceTo(constructor)) {
-                            if (!processor.process(reference)) {
-                                return false;
-                            }
+                        if (reference != null && reference.isReferenceTo(constructor) && !processor.test(reference)) {
+                            return false;
                         }
                     }
                 }
                 return true;
             }
-        });
+        );
     }
 
     private static boolean process18MethodPointers(
-        @Nonnull final Processor<? super PsiReference> processor,
-        @Nonnull final PsiMethod constructor,
-        @Nonnull final Project project,
+        @Nonnull Predicate<? super PsiReference> processor,
+        @Nonnull PsiMethod constructor,
+        @Nonnull Project project,
         @Nonnull PsiClass aClass,
         SearchScope searchScope
     ) {
-        return ReferencesSearch.search(aClass, searchScope).forEach(new Processor<PsiReference>() {
-            @Override
-            public boolean process(PsiReference reference) {
-                final PsiElement element = reference.getElement();
-                if (element != null) {
-                    return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>() {
-                        @Override
-                        public Boolean compute() {
-                            final PsiElement parent = element.getParent();
-                            if (parent instanceof PsiMethodReferenceExpression && ((PsiMethodReferenceExpression)parent).getReferenceNameElement() instanceof PsiKeyword) {
-                                if (((PsiMethodReferenceExpression)parent).isReferenceTo(constructor)) {
-                                    if (!processor.process((PsiReference)parent)) {
-                                        return false;
-                                    }
-                                }
-                            }
-                            return true;
-                        }
-                    });
-                }
-                return true;
+        return ReferencesSearch.search(aClass, searchScope).forEach(reference -> {
+            PsiElement element = reference.getElement();
+            if (element != null) {
+                return MethodUsagesSearcher.resolveInReadAction(
+                    project,
+                    () -> !(element.getParent() instanceof PsiMethodReferenceExpression methodReferenceExpression
+                        && methodReferenceExpression.getReferenceNameElement() instanceof PsiKeyword
+                        && methodReferenceExpression.isReferenceTo(constructor)
+                        && !processor.test(methodReferenceExpression))
+                );
             }
+            return true;
         });
     }
 
     private boolean processSuperOrThis(
         @Nonnull PsiClass inheritor,
         @Nonnull PsiMethod constructor,
-        final boolean constructorCanBeCalledImplicitly,
+        boolean constructorCanBeCalledImplicitly,
         @Nonnull SearchScope searchScope,
         @Nonnull Project project,
-        final boolean isStrictSignatureSearch,
+        boolean isStrictSignatureSearch,
         @Nonnull String superOrThisKeyword,
-        @Nonnull Processor<? super PsiReference> processor
+        @Nonnull Predicate<? super PsiReference> processor
     ) {
         PsiMethod[] constructors = inheritor.getConstructors();
         if (constructors.length == 0 && constructorCanBeCalledImplicitly) {
@@ -243,29 +220,23 @@ public class ConstructorReferencesSearchHelper {
             PsiStatement[] statements = body.getStatements();
             if (statements.length != 0) {
                 PsiStatement statement = statements[0];
-                if (statement instanceof PsiExpressionStatement) {
-                    PsiExpression expr = ((PsiExpressionStatement)statement).getExpression();
-                    if (expr instanceof PsiMethodCallExpression) {
-                        PsiReferenceExpression refExpr = ((PsiMethodCallExpression)expr).getMethodExpression();
-                        if (PsiSearchScopeUtil.isInScope(searchScope, refExpr)) {
-                            if (refExpr.textMatches(superOrThisKeyword)) {
-                                PsiElement referencedElement = refExpr.resolve();
-                                if (referencedElement instanceof PsiMethod) {
-                                    PsiMethod constructor1 = (PsiMethod)referencedElement;
-                                    boolean match = isStrictSignatureSearch
-                                        ? myManager.areElementsEquivalent(constructor1, constructor)
-                                        : myManager.areElementsEquivalent(
-                                            constructor.getContainingClass(),
-                                            constructor1.getContainingClass()
-                                        );
-                                    if (match && !processor.process(refExpr)) {
-                                        return false;
-                                    }
-                                }
-                                //as long as we've encountered super/this keyword, no implicit ctr calls are possible here
-                                continue;
+                if (statement instanceof PsiExpressionStatement exprStmt
+                    && exprStmt.getExpression() instanceof PsiMethodCallExpression methodCall) {
+                    PsiReferenceExpression refExpr = methodCall.getMethodExpression();
+                    if (PsiSearchScopeUtil.isInScope(searchScope, refExpr) && refExpr.textMatches(superOrThisKeyword)) {
+                        if (refExpr.resolve() instanceof PsiMethod constructor1) {
+                            boolean match = isStrictSignatureSearch
+                                ? myManager.areElementsEquivalent(constructor1, constructor)
+                                : myManager.areElementsEquivalent(
+                                constructor.getContainingClass(),
+                                constructor1.getContainingClass()
+                            );
+                            if (match && !processor.test(refExpr)) {
+                                return false;
                             }
                         }
+                        //as long as we've encountered super/this keyword, no implicit ctr calls are possible here
+                        continue;
                     }
                 }
             }
@@ -280,11 +251,11 @@ public class ConstructorReferencesSearchHelper {
     }
 
     private boolean processImplicitConstructorCall(
-        @Nonnull final PsiMember usage,
-        @Nonnull final Processor<? super PsiReference> processor,
-        @Nonnull final PsiMethod constructor,
-        @Nonnull final Project project,
-        @Nonnull final PsiClass containingClass
+        @Nonnull PsiMember usage,
+        @Nonnull Predicate<? super PsiReference> processor,
+        @Nonnull PsiMethod constructor,
+        @Nonnull Project project,
+        @Nonnull PsiClass containingClass
     ) {
         if (containingClass instanceof PsiAnonymousClass) {
             return true;
@@ -306,11 +277,12 @@ public class ConstructorReferencesSearchHelper {
         boolean resolvesToThisConstructor = DumbService.getInstance(project).runReadActionInSmartMode(
             () -> myManager.areElementsEquivalent(constructor, resolved));
 
+        //noinspection SimplifiableIfStatement
         if (!resolvesToThisConstructor) {
             return true;
         }
 
-        return processor.process(new LightMemberReference(myManager, usage, PsiSubstitutor.EMPTY) {
+        return processor.test(new LightMemberReference(myManager, usage, PsiSubstitutor.EMPTY) {
             @Nonnull
             @Override
             public PsiElement getElement() {
@@ -321,10 +293,10 @@ public class ConstructorReferencesSearchHelper {
             @Override
             @RequiredReadAction
             public TextRange getRangeInElement() {
-                if (usage instanceof PsiNameIdentifierOwner) {
-                    PsiElement identifier = ((PsiNameIdentifierOwner)usage).getNameIdentifier();
+                if (usage instanceof PsiNameIdentifierOwner nameIdentifierOwner) {
+                    PsiElement identifier = nameIdentifierOwner.getNameIdentifier();
                     if (identifier != null) {
-                        final int startOffsetInParent = identifier.getStartOffsetInParent();
+                        int startOffsetInParent = identifier.getStartOffsetInParent();
                         if (startOffsetInParent >= 0) { // -1 for light elements generated e.g. by lombok
                             return TextRange.from(startOffsetInParent, identifier.getTextLength());
                         }

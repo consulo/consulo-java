@@ -28,17 +28,15 @@ import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.Result;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
 import consulo.content.library.Library;
 import consulo.document.Document;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
 import consulo.ide.impl.idea.util.SequentialModalProgressTask;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
@@ -63,13 +61,14 @@ import consulo.usage.*;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @ActionImpl(id = "InferNullity", parents =
@@ -86,27 +85,27 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     @Override
     @RequiredUIAccess
-    protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
+    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
         boolean annotateLocaVars = myAnnotateLocalVariablesCb.getValueOrError();
         PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocaVars);
         myAnnotateLocalVariablesCb = null;
 
-        final ProgressManager progressManager = ProgressManager.getInstance();
-        final Set<Module> modulesWithoutAnnotations = new HashSet<>();
-        final Set<Module> modulesWithLL = new HashSet<>();
-        final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
-        final String defaultNullable = NullableNotNullManager.getInstance(project).getDefaultNullable();
-        final int[] fileCount = new int[]{0};
+        ProgressManager progressManager = ProgressManager.getInstance();
+        Set<Module> modulesWithoutAnnotations = new HashSet<>();
+        Set<Module> modulesWithLL = new HashSet<>();
+        JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
+        String defaultNullable = NullableNotNullManager.getInstance(project).getDefaultNullable();
+        int[] fileCount = new int[]{0};
         if (!progressManager.runProcessWithProgressSynchronously(() -> scope.accept(new PsiElementVisitor() {
-            final private Set<Module> processed = new HashSet<>();
+            private Set<Module> processed = new HashSet<>();
 
             @Override
             @RequiredReadAction
             public void visitFile(PsiFile file) {
                 fileCount[0]++;
-                final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
+                ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
                 if (progressIndicator != null) {
-                    final VirtualFile virtualFile = file.getVirtualFile();
+                    VirtualFile virtualFile = file.getVirtualFile();
                     if (virtualFile != null) {
                         progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
                     }
@@ -115,7 +114,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
                 if (!(file instanceof PsiJavaFile)) {
                     return;
                 }
-                final Module module = file.getModule();
+                Module module = file.getModule();
                 if (module != null && processed.add(module)) {
                     if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_5) < 0) {
                         modulesWithLL.add(module);
@@ -146,7 +145,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             return;
         }
         PsiDocumentManager.getInstance(project).commitAllDocuments();
-        final UsageInfo[] usageInfos = findUsages(annotateLocaVars, project, scope, fileCount[0]);
+        UsageInfo[] usageInfos = findUsages(annotateLocaVars, project, scope, fileCount[0]);
         if (usageInfos == null) {
             return;
         }
@@ -170,12 +169,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     @RequiredUIAccess
     public static boolean addAnnotationsDependency(
-        @Nonnull final Project project,
-        @Nonnull final Set<Module> modulesWithoutAnnotations,
+        @Nonnull Project project,
+        @Nonnull Set<Module> modulesWithoutAnnotations,
         @Nonnull String annoFQN,
-        final String title
+        String title
     ) {
-        final Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
+        Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
         if (annotationsLib != null) {
             @NonNls
             String message = "Module" + (modulesWithoutAnnotations.size() == 1 ? " " : "s ");
@@ -211,25 +210,25 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     @Nullable
     protected UsageInfo[] findUsages(
         boolean annotateLocaVars,
-        @Nonnull final Project project,
-        @Nonnull final AnalysisScope scope,
-        final int fileCount
+        @Nonnull Project project,
+        @Nonnull AnalysisScope scope,
+        int fileCount
     ) {
-        final NullityInferrer inferrer = new NullityInferrer(annotateLocaVars, project);
-        final PsiManager psiManager = PsiManager.getInstance(project);
-        final Runnable searchForUsages = () -> scope.accept(new PsiElementVisitor() {
+        NullityInferrer inferrer = new NullityInferrer(annotateLocaVars, project);
+        PsiManager psiManager = PsiManager.getInstance(project);
+        Runnable searchForUsages = () -> scope.accept(new PsiElementVisitor() {
             int myFileCount;
 
             @Override
-            public void visitFile(final PsiFile file) {
+            public void visitFile(PsiFile file) {
                 myFileCount++;
-                final VirtualFile virtualFile = file.getVirtualFile();
-                final FileViewProvider viewProvider = psiManager.findViewProvider(virtualFile);
-                final Document document = viewProvider == null ? null : viewProvider.getDocument();
+                VirtualFile virtualFile = file.getVirtualFile();
+                FileViewProvider viewProvider = psiManager.findViewProvider(virtualFile);
+                Document document = viewProvider == null ? null : viewProvider.getDocument();
                 if (document == null || virtualFile.getFileType().isBinary()) {
                     return; //do not inspect binary files
                 }
-                final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
+                ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
                 if (progressIndicator != null) {
                     progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
                     progressIndicator.setFraction(((double)myFileCount) / fileCount);
@@ -249,25 +248,24 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             searchForUsages.run();
         }
 
-        final List<UsageInfo> usages = new ArrayList<>();
+        List<UsageInfo> usages = new ArrayList<>();
         inferrer.collect(usages);
         return usages.toArray(new UsageInfo[usages.size()]);
     }
 
-    private static Runnable applyRunnable(final Project project, final Computable<UsageInfo[]> computable) {
-        return () ->
-        {
-            final LocalHistoryAction action = LocalHistory.getInstance().startAction(INFER_NULLITY_ANNOTATIONS);
+    private static Runnable applyRunnable(Project project, Supplier<UsageInfo[]> computable) {
+        return () -> {
+            LocalHistoryAction action = LocalHistory.getInstance().startAction(INFER_NULLITY_ANNOTATIONS);
             try {
                 new WriteCommandAction(project, INFER_NULLITY_ANNOTATIONS) {
                     @Override
                     protected void run(@Nonnull Result result) throws Throwable {
-                        final UsageInfo[] infos = computable.compute();
+                        UsageInfo[] infos = computable.get();
                         if (infos.length > 0) {
 
-                            final Set<PsiElement> elements = new LinkedHashSet<>();
+                            Set<PsiElement> elements = new LinkedHashSet<>();
                             for (UsageInfo info : infos) {
-                                final PsiElement element = info.getElement();
+                                PsiElement element = info.getElement();
                                 if (element != null) {
                                     ContainerUtil.addIfNotNull(elements, element.getContainingFile());
                                 }
@@ -276,7 +274,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
                                 return;
                             }
 
-                            final SequentialModalProgressTask progressTask =
+                            SequentialModalProgressTask progressTask =
                                 new SequentialModalProgressTask(project, INFER_NULLITY_ANNOTATIONS, false);
                             progressTask.setMinIterationTime(200);
                             progressTask.setTask(new AnnotateTask(project, progressTask, infos));
@@ -295,7 +293,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     }
 
     @RequiredUIAccess
-    protected void restartAnalysis(final Project project, final AnalysisScope scope) {
+    protected void restartAnalysis(Project project, AnalysisScope scope) {
         DumbService.getInstance(project).smartInvokeLater(() -> {
             if (DumbService.isDumb(project)) {
                 restartAnalysis(project, scope);
@@ -309,11 +307,11 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     private void showUsageView(
         boolean annotateLocaVars,
         @Nonnull Project project,
-        final UsageInfo[] usageInfos,
+        UsageInfo[] usageInfos,
         @Nonnull AnalysisScope scope
     ) {
-        final UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
-        final Ref<Usage[]> convertUsagesRef = new Ref<>();
+        UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
+        SimpleReference<Usage[]> convertUsagesRef = new SimpleReference<>();
         if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
             () -> project.getApplication().runReadAction(() -> convertUsagesRef.set(UsageInfo2UsageAdapter.convert(usageInfos))),
             "Preprocess Usages",
@@ -326,20 +324,20 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         if (convertUsagesRef.isNull()) {
             return;
         }
-        final Usage[] usages = convertUsagesRef.get();
+        Usage[] usages = convertUsagesRef.get();
 
-        final UsageViewPresentation presentation = new UsageViewPresentation();
+        UsageViewPresentation presentation = new UsageViewPresentation();
         presentation.setTabText("Infer Nullity Preview");
         presentation.setShowReadOnlyStatusAsRed(true);
         presentation.setShowCancelButton(true);
         presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext().get());
 
-        final UsageView usageView =
+        UsageView usageView =
             UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(annotateLocaVars, project, scope));
 
-        final Runnable refactoringRunnable = applyRunnable(project, () ->
+        Runnable refactoringRunnable = applyRunnable(project, () ->
         {
-            final Set<UsageInfo> infos = UsageViewUtil.getNotExcludedUsageInfos(usageView);
+            Set<UsageInfo> infos = UsageViewUtil.getNotExcludedUsageInfos(usageView);
             return infos.toArray(new UsageInfo[infos.size()]);
         });
 
@@ -358,8 +356,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     @Nonnull
     private Supplier<UsageSearcher> rerunFactory(
         boolean annotateLocaVars,
-        @Nonnull final Project project,
-        @Nonnull final AnalysisScope scope
+        @Nonnull Project project,
+        @Nonnull AnalysisScope scope
     ) {
         return () -> new UsageInfoSearcherAdapter() {
             @Nonnull
@@ -372,7 +370,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             }
 
             @Override
-            public void generate(@Nonnull Processor<Usage> processor) {
+            public void generate(@Nonnull Predicate<Usage> processor) {
                 processUsages(processor, project);
             }
         };

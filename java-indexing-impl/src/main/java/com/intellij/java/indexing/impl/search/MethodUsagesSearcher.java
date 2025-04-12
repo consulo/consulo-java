@@ -17,13 +17,13 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearchExecutor;
-import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
@@ -35,59 +35,56 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author max
  */
 @ExtensionImpl
-public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters> implements MethodReferencesSearchExecutor {
+public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters>
+    implements MethodReferencesSearchExecutor {
     @Override
     public void processQuery(
-        @Nonnull final MethodReferencesSearch.SearchParameters p,
-        @Nonnull final Processor<? super PsiReference> consumer
+        @Nonnull MethodReferencesSearch.SearchParameters p,
+        @Nonnull Predicate<? super PsiReference> consumer
     ) {
-        final PsiMethod method = p.getMethod();
-        final boolean[] isConstructor = new boolean[1];
-        final PsiManager[] psiManager = new PsiManager[1];
-        final String[] methodName = new String[1];
-        final boolean[] isValueAnnotation = new boolean[1];
-        final boolean[] needStrictSignatureSearch = new boolean[1];
-        final boolean strictSignatureSearch = p.isStrictSignatureSearch();
+        PsiMethod method = p.getMethod();
+        boolean[] isConstructor = new boolean[1];
+        PsiManager[] psiManager = new PsiManager[1];
+        String[] methodName = new String[1];
+        boolean[] isValueAnnotation = new boolean[1];
+        boolean[] needStrictSignatureSearch = new boolean[1];
+        boolean strictSignatureSearch = p.isStrictSignatureSearch();
 
-        final PsiClass aClass = resolveInReadAction(p.getProject(), new Computable<PsiClass>() {
-            @Override
-            public PsiClass compute() {
-                PsiClass aClass = method.getContainingClass();
-                if (aClass == null) {
+        PsiClass aClass = resolveInReadAction(
+            p.getProject(),
+            () -> {
+                PsiClass aClass1 = method.getContainingClass();
+                if (aClass1 == null) {
                     return null;
                 }
                 isConstructor[0] = method.isConstructor();
-                psiManager[0] = aClass.getManager();
+                psiManager[0] = aClass1.getManager();
                 methodName[0] = method.getName();
                 isValueAnnotation[0] = PsiUtil.isAnnotationMethod(method)
                     && PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(methodName[0])
                     && method.getParameterList().getParametersCount() == 0;
                 needStrictSignatureSearch[0] = strictSignatureSearch
-                    && (aClass instanceof PsiAnonymousClass || aClass.hasModifierProperty(PsiModifier.FINAL)
-                    || method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.FINAL)
-                    || method.hasModifierProperty(PsiModifier.PRIVATE));
-                return aClass;
+                    && (aClass1 instanceof PsiAnonymousClass
+                    || aClass1.isFinal() || method.isStatic() || method.isFinal() || method.isPrivate());
+                return aClass1;
             }
-        });
+        );
         if (aClass == null) {
             return;
         }
 
-        final SearchRequestCollector collector = p.getOptimizer();
+        SearchRequestCollector collector = p.getOptimizer();
 
-        final SearchScope searchScope = resolveInReadAction(p.getProject(), new Computable<SearchScope>() {
-            @Override
-            public SearchScope compute() {
-                return p.getEffectiveSearchScope();
-            }
-        });
+        SearchScope searchScope = resolveInReadAction(p.getProject(), p::getEffectiveSearchScope);
         if (searchScope == GlobalSearchScope.EMPTY_SCOPE) {
             return;
         }
@@ -106,7 +103,7 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
         }
 
         if (isValueAnnotation[0]) {
-            Processor<PsiReference> refProcessor =
+            Predicate<PsiReference> refProcessor =
                 PsiAnnotationMethodReferencesSearcher.createImplicitDefaultAnnotationMethodConsumer(consumer);
             ReferencesSearch.search(aClass, searchScope).forEach(refProcessor);
         }
@@ -120,10 +117,10 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
             return;
         }
 
-        resolveInReadAction(p.getProject(), new Computable<Void>() {
-            @Override
-            public Void compute() {
-                final PsiMethod[] methods =
+        resolveInReadAction(
+            p.getProject(),
+            (Supplier<Void>)() -> {
+                PsiMethod[] methods =
                     strictSignatureSearch ? new PsiMethod[]{method} : aClass.findMethodsByName(methodName[0], false);
                 SearchScope accessScope = methods[0].getUseScope();
                 for (int i = 1; i < methods.length; i++) {
@@ -146,12 +143,12 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
                 SimpleAccessorReferenceSearcher.addPropertyAccessUsages(method, restrictedByAccessScope, collector);
                 return null;
             }
-        });
+        );
     }
 
-    static <T> T resolveInReadAction(@Nonnull Project p, @Nonnull Computable<T> computable) {
+    static <T> T resolveInReadAction(@Nonnull Project p, @Nonnull Supplier<T> computable) {
         return Application.get().isReadAccessAllowed()
-            ? computable.compute()
+            ? computable.get()
             : DumbService.getInstance(p).runReadActionInSmartMode(computable);
     }
 

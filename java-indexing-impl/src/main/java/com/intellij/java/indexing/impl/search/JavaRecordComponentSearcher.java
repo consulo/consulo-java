@@ -4,8 +4,7 @@ package com.intellij.java.indexing.impl.search;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ReadAction;
-import consulo.application.util.function.Processor;
+import consulo.application.AccessRule;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -19,13 +18,15 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 @ExtensionImpl
-public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
+public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>
+    implements ReferencesSearchQueryExecutor {
     @Override
     public void processQuery(
         @Nonnull ReferencesSearch.SearchParameters queryParameters,
-        @Nonnull Processor<? super PsiReference> consumer
+        @Nonnull Predicate<? super PsiReference> consumer
     ) {
         PsiElement element = queryParameters.getElementToSearch();
         if (element instanceof PsiRecordComponent recordComponent) {
@@ -35,14 +36,14 @@ public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiRefe
                 SearchRequestCollector optimizer = queryParameters.getOptimizer();
                 optimizer.searchWord(
                     info.myName,
-                    ReadAction.compute(() -> info.myLightMethod.getUseScope().intersectWith(scope)),
+                    AccessRule.read(() -> info.myLightMethod.getUseScope().intersectWith(scope)),
                     true,
                     info.myLightMethod
                 );
 
                 optimizer.searchWord(
                     info.myName,
-                    ReadAction.compute(() -> info.myLightField.getUseScope().intersectWith(scope)),
+                    AccessRule.read(() -> info.myLightField.getUseScope().intersectWith(scope)),
                     true,
                     info.myLightField
                 );
@@ -51,7 +52,7 @@ public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiRefe
                 if (parameter != null) {
                     optimizer.searchWord(
                         info.myName,
-                        ReadAction.compute(() -> new LocalSearchScope(parameter.getDeclarationScope())),
+                        AccessRule.read(() -> new LocalSearchScope(parameter.getDeclarationScope())),
                         true,
                         parameter
                     );
@@ -61,7 +62,7 @@ public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiRefe
     }
 
     private static RecordNavigationInfo findNavigationInfo(PsiRecordComponent recordComponent) {
-        return ReadAction.compute(() -> {
+        return AccessRule.read(() -> {
             String name = recordComponent.getName();
             PsiClass containingClass = recordComponent.getContainingClass();
             if (containingClass == null) {

@@ -15,21 +15,23 @@
  */
 package com.intellij.java.indexing.impl.search;
 
-import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.HierarchicalMethodSignature;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearchExecutor;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
+import consulo.application.Application;
 import consulo.logging.Logger;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author ven
@@ -40,39 +42,35 @@ public class MethodSuperSearcher implements SuperMethodsSearchExecutor {
 
     @Override
     public boolean execute(
-        @Nonnull final SuperMethodsSearch.SearchParameters queryParameters,
-        @Nonnull final Processor<? super MethodSignatureBackedByPsiMethod> consumer
+        @Nonnull SuperMethodsSearch.SearchParameters queryParameters,
+        @Nonnull Predicate<? super MethodSignatureBackedByPsiMethod> consumer
     ) {
-        final PsiClass parentClass = queryParameters.getPsiClass();
-        final PsiMethod method = queryParameters.getMethod();
-        return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-            @Override
-            public Boolean compute() {
-                HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
+        PsiClass parentClass = queryParameters.getPsiClass();
+        PsiMethod method = queryParameters.getMethod();
+        return Application.get().runReadAction((Supplier<Boolean>)() -> {
+            HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
 
-                final boolean checkBases = queryParameters.isCheckBases();
-                final boolean allowStaticMethod = queryParameters.isAllowStaticMethod();
-                final List<HierarchicalMethodSignature> supers = signature.getSuperSignatures();
-                for (HierarchicalMethodSignature superSignature : supers) {
-                    if (MethodSignatureUtil.isSubsignature(superSignature, signature)) {
-                        if (!addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer)) {
-                            return false;
-                        }
-                    }
+            boolean checkBases = queryParameters.isCheckBases();
+            boolean allowStaticMethod = queryParameters.isAllowStaticMethod();
+            List<HierarchicalMethodSignature> supers = signature.getSuperSignatures();
+            for (HierarchicalMethodSignature superSignature : supers) {
+                if (MethodSignatureUtil.isSubsignature(superSignature, signature)
+                    && !addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer)) {
+                    return false;
                 }
-
-                return true;
             }
+
+            return true;
         });
     }
 
     private static boolean addSuperMethods(
-        final HierarchicalMethodSignature signature,
-        final PsiMethod method,
-        final PsiClass parentClass,
-        final boolean allowStaticMethod,
-        final boolean checkBases,
-        final Processor<? super MethodSignatureBackedByPsiMethod> consumer
+        HierarchicalMethodSignature signature,
+        PsiMethod method,
+        PsiClass parentClass,
+        boolean allowStaticMethod,
+        boolean checkBases,
+        Predicate<? super MethodSignatureBackedByPsiMethod> consumer
     ) {
         PsiMethod signatureMethod = signature.getMethod();
         PsiClass hisClass = signatureMethod.getContainingClass();
@@ -82,7 +80,7 @@ public class MethodSuperSearcher implements SuperMethodsSearchExecutor {
                     return true;
                 }
                 LOG.assertTrue(signatureMethod != method, method); // method != method.getsuper()
-                return consumer.process(signature); //no need to check super classes
+                return consumer.test(signature); //no need to check super classes
             }
         }
         for (HierarchicalMethodSignature superSignature : signature.getSuperSignatures()) {
@@ -94,10 +92,9 @@ public class MethodSuperSearcher implements SuperMethodsSearchExecutor {
         return true;
     }
 
-    private static boolean isAcceptable(final PsiMethod superMethod, final PsiMethod method, final boolean allowStaticMethod) {
-        boolean hisStatic = superMethod.hasModifierProperty(PsiModifier.STATIC);
-        return hisStatic == method.hasModifierProperty(PsiModifier.STATIC)
-            && (allowStaticMethod || !hisStatic)
+    private static boolean isAcceptable(PsiMethod superMethod, PsiMethod method, boolean allowStaticMethod) {
+        boolean hisStatic = superMethod.isStatic();
+        return hisStatic == method.isStatic() && (allowStaticMethod || !hisStatic)
             && JavaPsiFacade.getInstance(method.getProject()).getResolveHelper().isAccessible(superMethod, method, null);
     }
 }

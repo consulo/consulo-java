@@ -19,8 +19,9 @@ import com.intellij.java.analysis.impl.codeInspection.nullable.NullableStuffInsp
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ReadAction;
+import consulo.application.AccessRule;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -66,6 +67,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
         }
 
         @Override
+        @RequiredReadAction
         public void invoke(
             @Nonnull Project project,
             @Nonnull PsiFile file,
@@ -73,11 +75,11 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
             @Nonnull PsiElement endElement
         ) {
             PsiParameter p = (PsiParameter)startElement;
-            final PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
             if (method == null) {
                 return;
             }
-            final int parameterIdx = ArrayUtil.find(method.getParameterList().getParameters(), p);
+            int parameterIdx = ArrayUtil.find(method.getParameterList().getParameters(), p);
             if (parameterIdx < 0) {
                 return;
             }
@@ -89,10 +91,10 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
             presentation.setTabText(title);
             UsageViewManager.getInstance(project).searchAndShowUsages(
                 new UsageTarget[]{new PsiElement2UsageTargetAdapter(method.getParameterList().getParameters()[parameterIdx])},
-                () -> processor -> ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(
+                () -> processor -> AccessRule.read(() -> JavaNullMethodArgumentUtil.searchNullArgument(
                     method,
                     parameterIdx,
-                    (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(arg)))
+                    (arg) -> processor.test(new UsageInfo2UsageAdapter(new UsageInfo(arg)))
                 )),
                 false,
                 false,

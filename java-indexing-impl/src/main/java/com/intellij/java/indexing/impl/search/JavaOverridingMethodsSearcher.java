@@ -8,6 +8,7 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
@@ -16,6 +17,9 @@ import consulo.content.scope.SearchScope;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
 /**
  * @author max
  */
@@ -23,32 +27,17 @@ import jakarta.annotation.Nullable;
 public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull final OverridingMethodsSearch.SearchParameters p,
-        @Nonnull final Processor<? super PsiMethod> consumer
+        @Nonnull OverridingMethodsSearch.SearchParameters p,
+        @Nonnull Predicate<? super PsiMethod> consumer
     ) {
-        final PsiMethod method = p.getMethod();
-        final SearchScope scope = p.getScope();
+        PsiMethod method = p.getMethod();
+        SearchScope scope = p.getScope();
 
-        final PsiClass parentClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-            @Nullable
-            @Override
-            public PsiClass compute() {
-                return method.getContainingClass();
-            }
-        });
+        PsiClass parentClass = Application.get().runReadAction((Supplier<PsiClass>)method::getContainingClass);
         assert parentClass != null;
-        Processor<PsiClass> inheritorsProcessor = new Processor<PsiClass>() {
-            @Override
-            public boolean process(final PsiClass inheritor) {
-                PsiMethod found = ApplicationManager.getApplication().runReadAction(new Computable<PsiMethod>() {
-                    @Override
-                    @Nullable
-                    public PsiMethod compute() {
-                        return findOverridingMethod(inheritor, method, parentClass);
-                    }
-                });
-                return found == null || consumer.process(found) && p.isCheckDeep();
-            }
+        Predicate<PsiClass> inheritorsProcessor = inheritor -> {
+            PsiMethod found = Application.get().runReadAction((Supplier<PsiMethod>)() -> findOverridingMethod(inheritor, method, parentClass));
+            return found == null || consumer.test(found) && p.isCheckDeep();
         };
 
         return ClassInheritorsSearch.search(parentClass, scope, true).forEach(inheritorsProcessor);
@@ -69,7 +58,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
         }
 
         if (methodContainingClass.isInterface() && !inheritor.isInterface()) {  //check for sibling implementation
-            final PsiClass superClass = inheritor.getSuperClass();
+            PsiClass superClass = inheritor.getSuperClass();
             if (superClass != null && !superClass.isInheritor(methodContainingClass, true)
                 && superClass.findMethodsByName(name, true).length > 0) {
                 MethodSignature signature = getSuperSignature(inheritor, methodContainingClass, method);
@@ -90,9 +79,8 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     }
 
 
-    private static boolean isAcceptable(final PsiMethod found, final PsiMethod method) {
-        return !found.hasModifierProperty(PsiModifier.STATIC) && (!method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) || JavaPsiFacade.getInstance(
-            found.getProject()).arePackagesTheSame(method
-            .getContainingClass(), found.getContainingClass()));
+    private static boolean isAcceptable(PsiMethod found, PsiMethod method) {
+        return !found.isStatic() && (!method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)
+            || JavaPsiFacade.getInstance(found.getProject()).arePackagesTheSame(method.getContainingClass(), found.getContainingClass()));
     }
 }

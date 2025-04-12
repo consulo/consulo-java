@@ -18,14 +18,13 @@ package com.intellij.java.indexing.impl.search;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearchExecutor;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
-
+import consulo.application.Application;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author peter
@@ -33,38 +32,33 @@ import java.util.Set;
 @ExtensionImpl
 public class MethodDeepestSuperSearcher implements DeepestSuperMethodsSearchExecutor {
     @Override
-    public boolean execute(@Nonnull PsiMethod method, @Nonnull Processor<? super PsiMethod> consumer) {
+    public boolean execute(@Nonnull PsiMethod method, @Nonnull Predicate<? super PsiMethod> consumer) {
         return processDeepestSuperMethods(method, consumer);
     }
 
-    public static boolean processDeepestSuperMethods(PsiMethod method, Processor<? super PsiMethod> consumer) {
-        final Set<PsiMethod> methods = new HashSet<PsiMethod>();
+    public static boolean processDeepestSuperMethods(PsiMethod method, Predicate<? super PsiMethod> consumer) {
+        Set<PsiMethod> methods = new HashSet<>();
         methods.add(method);
         return findDeepestSuperOrSelfSignature(method, methods, null, consumer);
     }
 
     private static boolean findDeepestSuperOrSelfSignature(
-        final PsiMethod method,
+        PsiMethod method,
         Set<PsiMethod> set,
         Set<PsiMethod> guard,
-        Processor<? super PsiMethod> processor
+        Predicate<? super PsiMethod> processor
     ) {
         if (guard != null && !guard.add(method)) {
             return true;
         }
-        PsiMethod[] supers = ApplicationManager.getApplication().runReadAction(new Computable<PsiMethod[]>() {
-            @Override
-            public PsiMethod[] compute() {
-                return method.findSuperMethods();
-            }
-        });
+        PsiMethod[] supers = Application.get().runReadAction((Supplier<PsiMethod[]>)method::findSuperMethods);
 
-        if (supers.length == 0 && set.add(method) && !processor.process(method)) {
+        if (supers.length == 0 && set.add(method) && !processor.test(method)) {
             return false;
         }
         for (PsiMethod superMethod : supers) {
             if (guard == null) {
-                guard = new HashSet<PsiMethod>();
+                guard = new HashSet<>();
                 guard.add(method);
             }
             if (!findDeepestSuperOrSelfSignature(superMethod, set, guard, processor)) {
