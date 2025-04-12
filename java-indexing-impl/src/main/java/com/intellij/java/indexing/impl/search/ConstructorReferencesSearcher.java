@@ -20,41 +20,43 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
-  @Override
-  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<? super PsiReference> consumer) {
-    final PsiElement element = p.getElementToSearch();
-    if (!(element instanceof PsiMethod)) {
-      return;
-    }
-    final PsiMethod method = (PsiMethod)element;
-    final PsiManager[] manager = new PsiManager[1];
-    PsiClass aClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-      @Override
-      public PsiClass compute() {
-        if (!method.isConstructor()) {
-          return null;
+    @Override
+    public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<? super PsiReference> consumer) {
+        final PsiElement element = p.getElementToSearch();
+        if (!(element instanceof PsiMethod)) {
+            return;
         }
-        PsiClass aClass = method.getContainingClass();
-        manager[0] = aClass == null ? null : aClass.getManager();
-        return aClass;
-      }
-    });
-    if (manager[0] == null) {
-      return;
+        final PsiMethod method = (PsiMethod)element;
+        final PsiManager[] manager = new PsiManager[1];
+        PsiClass aClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
+            @Override
+            public PsiClass compute() {
+                if (!method.isConstructor()) {
+                    return null;
+                }
+                PsiClass aClass = method.getContainingClass();
+                manager[0] = aClass == null ? null : aClass.getManager();
+                return aClass;
+            }
+        });
+        if (manager[0] == null) {
+            return;
+        }
+        SearchScope scope = ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>() {
+            @Override
+            public SearchScope compute() {
+                return p.getEffectiveSearchScope();
+            }
+        });
+        new ConstructorReferencesSearchHelper(manager[0]).processConstructorReferences(
+            consumer,
+            method,
+            aClass,
+            scope,
+            p.getProject(),
+            p.isIgnoreAccessScope(),
+            true,
+            p.getOptimizer()
+        );
     }
-    SearchScope scope = ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>() {
-      @Override
-      public SearchScope compute() {
-        return p.getEffectiveSearchScope();
-      }
-    });
-    new ConstructorReferencesSearchHelper(manager[0]).processConstructorReferences(consumer,
-                                                                                   method,
-                                                                                   aClass,
-                                                                                   scope,
-                                                                                   p.getProject(),
-                                                                                   p.isIgnoreAccessScope(),
-                                                                                   true,
-                                                                                   p.getOptimizer());
-  }
 }

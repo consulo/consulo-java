@@ -37,68 +37,73 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullableStuffInspection extends NullableStuffInspectionBase {
-  @Override
-  protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter) {
-    return new NavigateToNullLiteralArguments(parameter);
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public static class NavigateToNullLiteralArguments extends LocalQuickFixOnPsiElement {
-    public NavigateToNullLiteralArguments(@Nonnull PsiParameter element) {
-      super(element);
-    }
-
-    @Nonnull
     @Override
-    public String getText() {
-      return getFamilyName();
-    }
-
-    @Nls
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName().get();
+    protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter) {
+        return new NavigateToNullLiteralArguments(parameter);
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
-      PsiParameter p = (PsiParameter)startElement;
-      final PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
-      if (method == null) {
-        return;
-      }
-      final int parameterIdx = ArrayUtil.find(method.getParameterList().getParameters(), p);
-      if (parameterIdx < 0) {
-        return;
-      }
-
-      UsageViewPresentation presentation = new UsageViewPresentation();
-      String title = JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesViewName(p.getName()).get();
-      presentation.setUsagesString(title);
-      presentation.setTabName(title);
-      presentation.setTabText(title);
-      UsageViewManager.getInstance(project).searchAndShowUsages(
-        new UsageTarget[]{new PsiElement2UsageTargetAdapter(method.getParameterList().getParameters()[parameterIdx])},
-        () -> processor -> ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(
-          method,
-          parameterIdx,
-          (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(arg)))
-        )),
-        false,
-        false,
-        presentation,
-        null
-      );
+    public boolean isEnabledByDefault() {
+        return true;
     }
 
-    @Override
-    public boolean startInWriteAction() {
-      return false;
+    public static class NavigateToNullLiteralArguments extends LocalQuickFixOnPsiElement {
+        public NavigateToNullLiteralArguments(@Nonnull PsiParameter element) {
+            super(element);
+        }
+
+        @Nonnull
+        @Override
+        public String getText() {
+            return getFamilyName();
+        }
+
+        @Nls
+        @Nonnull
+        @Override
+        public String getFamilyName() {
+            return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName().get();
+        }
+
+        @Override
+        public void invoke(
+            @Nonnull Project project,
+            @Nonnull PsiFile file,
+            @Nonnull PsiElement startElement,
+            @Nonnull PsiElement endElement
+        ) {
+            PsiParameter p = (PsiParameter)startElement;
+            final PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
+            if (method == null) {
+                return;
+            }
+            final int parameterIdx = ArrayUtil.find(method.getParameterList().getParameters(), p);
+            if (parameterIdx < 0) {
+                return;
+            }
+
+            UsageViewPresentation presentation = new UsageViewPresentation();
+            String title = JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesViewName(p.getName()).get();
+            presentation.setUsagesString(title);
+            presentation.setTabName(title);
+            presentation.setTabText(title);
+            UsageViewManager.getInstance(project).searchAndShowUsages(
+                new UsageTarget[]{new PsiElement2UsageTargetAdapter(method.getParameterList().getParameters()[parameterIdx])},
+                () -> processor -> ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(
+                    method,
+                    parameterIdx,
+                    (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(arg)))
+                )),
+                false,
+                false,
+                presentation,
+                null
+            );
+        }
+
+        @Override
+        public boolean startInWriteAction() {
+            return false;
+        }
     }
-  }
 }

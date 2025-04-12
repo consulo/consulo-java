@@ -37,29 +37,33 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
-
-  public SimpleAccessorReferenceSearcher() {
-    super(true);
-  }
-
-  @Override
-  public void processQuery(@Nonnull ReferencesSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiReference> consumer) {
-    PsiElement refElement = queryParameters.getElementToSearch();
-    if (!(refElement instanceof PsiMethod)) return;
-
-    addPropertyAccessUsages((PsiMethod)refElement, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
-  }
-
-  static void addPropertyAccessUsages(PsiMethod method, SearchScope scope, SearchRequestCollector collector) {
-    final String propertyName = PropertyUtil.getPropertyName(method);
-    if (StringUtil.isNotEmpty(propertyName)) {
-      SearchScope additional = GlobalSearchScope.EMPTY_SCOPE;
-      for (CustomPropertyScopeProvider provider : CustomPropertyScopeProvider.EP_NAME.getExtensionList()) {
-        additional = additional.union(provider.getScope(method.getProject()));
-      }
-      assert propertyName != null;
-      final SearchScope propScope = scope.intersectWith(method.getUseScope()).intersectWith(additional);
-      collector.searchWord(propertyName, propScope, UsageSearchContext.IN_FOREIGN_LANGUAGES, true, method);
+    public SimpleAccessorReferenceSearcher() {
+        super(true);
     }
-  }
+
+    @Override
+    public void processQuery(
+        @Nonnull ReferencesSearch.SearchParameters queryParameters,
+        @Nonnull Processor<? super PsiReference> consumer
+    ) {
+        PsiElement refElement = queryParameters.getElementToSearch();
+        if (!(refElement instanceof PsiMethod)) {
+            return;
+        }
+
+        addPropertyAccessUsages((PsiMethod)refElement, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
+    }
+
+    static void addPropertyAccessUsages(PsiMethod method, SearchScope scope, SearchRequestCollector collector) {
+        final String propertyName = PropertyUtil.getPropertyName(method);
+        if (StringUtil.isNotEmpty(propertyName)) {
+            SearchScope additional = GlobalSearchScope.EMPTY_SCOPE;
+            for (CustomPropertyScopeProvider provider : CustomPropertyScopeProvider.EP_NAME.getExtensionList()) {
+                additional = additional.union(provider.getScope(method.getProject()));
+            }
+            assert propertyName != null;
+            final SearchScope propScope = scope.intersectWith(method.getUseScope()).intersectWith(additional);
+            collector.searchWord(propertyName, propScope, UsageSearchContext.IN_FOREIGN_LANGUAGES, true, method);
+        }
+    }
 }

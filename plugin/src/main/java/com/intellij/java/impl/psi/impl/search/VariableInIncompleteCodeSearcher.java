@@ -39,42 +39,50 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
-  public VariableInIncompleteCodeSearcher() {
-    super(true);
-  }
-
-  @Override
-  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
-    final PsiElement refElement = p.getElementToSearch();
-    if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) return;
-
-    final String name = ((PsiVariable)refElement).getName();
-    if (name == null) return;
-
-    final SearchScope scope = p.getEffectiveSearchScope();
-    if (!(scope instanceof LocalSearchScope)) return;
-
-    PsiElement[] elements = ((LocalSearchScope)scope).getScope();
-    if (elements == null || elements.length == 0) return;
-
-    PsiElementProcessor processor = new PsiElementProcessor() {
-      @Override
-      public boolean execute(@Nonnull final PsiElement element) {
-        if (element instanceof PsiJavaCodeReferenceElement) {
-          final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)element;
-          if (!ref.isQualified() && name.equals(ref.getText()) &&
-            ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
-            consumer.process(ref);
-          }
-        }
-        return true;
-      }
-    };
-
-    for (PsiElement element : elements) {
-      if (element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
-        PsiTreeUtil.processElements(element, processor);
-      }
+    public VariableInIncompleteCodeSearcher() {
+        super(true);
     }
-  }
+
+    @Override
+    public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
+        final PsiElement refElement = p.getElementToSearch();
+        if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) {
+            return;
+        }
+
+        final String name = ((PsiVariable)refElement).getName();
+        if (name == null) {
+            return;
+        }
+
+        final SearchScope scope = p.getEffectiveSearchScope();
+        if (!(scope instanceof LocalSearchScope)) {
+            return;
+        }
+
+        PsiElement[] elements = ((LocalSearchScope)scope).getScope();
+        if (elements == null || elements.length == 0) {
+            return;
+        }
+
+        PsiElementProcessor processor = new PsiElementProcessor() {
+            @Override
+            public boolean execute(@Nonnull final PsiElement element) {
+                if (element instanceof PsiJavaCodeReferenceElement) {
+                    final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)element;
+                    if (!ref.isQualified() && name.equals(ref.getText()) &&
+                        ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
+                        consumer.process(ref);
+                    }
+                }
+                return true;
+            }
+        };
+
+        for (PsiElement element : elements) {
+            if (element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
+                PsiTreeUtil.processElements(element, processor);
+            }
+        }
+    }
 }

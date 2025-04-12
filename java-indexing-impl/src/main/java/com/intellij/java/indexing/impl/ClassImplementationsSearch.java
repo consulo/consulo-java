@@ -30,20 +30,32 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassImplementationsSearch implements DefinitionsScopedSearchExecutor {
-  @Override
-  public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer) {
-    final PsiElement sourceElement = queryParameters.getElement();
-    return !(sourceElement instanceof PsiClass) || processImplementations((PsiClass) sourceElement, consumer, queryParameters.getScope());
-  }
-
-  public static boolean processImplementations(final PsiClass psiClass, final Processor<? super PsiElement> processor, SearchScope scope) {
-    if (!FunctionalExpressionSearch.search(psiClass, scope).forEach(expression ->
-    {
-      return processor.process(expression);
-    })) {
-      return false;
+    @Override
+    public boolean execute(
+        @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
+        @Nonnull Processor<? super PsiElement> consumer
+    ) {
+        final PsiElement sourceElement = queryParameters.getElement();
+        return !(sourceElement instanceof PsiClass) || processImplementations(
+            (PsiClass)sourceElement,
+            consumer,
+            queryParameters.getScope()
+        );
     }
 
-    return ClassInheritorsSearch.search(psiClass, scope, true).forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>) element -> processor.process(element)));
-  }
+    public static boolean processImplementations(
+        final PsiClass psiClass,
+        final Processor<? super PsiElement> processor,
+        SearchScope scope
+    ) {
+        if (!FunctionalExpressionSearch.search(psiClass, scope).forEach(expression ->
+        {
+            return processor.process(expression);
+        })) {
+            return false;
+        }
+
+        return ClassInheritorsSearch.search(psiClass, scope, true)
+            .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>)element -> processor.process(element)));
+    }
 }

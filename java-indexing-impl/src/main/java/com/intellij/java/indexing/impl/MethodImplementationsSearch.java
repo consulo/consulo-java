@@ -33,41 +33,48 @@ import java.util.List;
 
 @ExtensionImpl
 public class MethodImplementationsSearch implements DefinitionsScopedSearchExecutor {
-  @Override
-  public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull final Processor<? super PsiElement> consumer) {
-    final PsiElement sourceElement = queryParameters.getElement();
-    if (sourceElement instanceof PsiMethod) {
-      return processImplementations((PsiMethod) sourceElement, consumer, queryParameters.getScope());
+    @Override
+    public boolean execute(
+        @Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters,
+        @Nonnull final Processor<? super PsiElement> consumer
+    ) {
+        final PsiElement sourceElement = queryParameters.getElement();
+        if (sourceElement instanceof PsiMethod) {
+            return processImplementations((PsiMethod)sourceElement, consumer, queryParameters.getScope());
+        }
+        return true;
     }
-    return true;
-  }
 
-  public static boolean processImplementations(final PsiMethod psiMethod, final Processor<? super PsiElement> consumer, final SearchScope searchScope) {
-    if (!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(new Processor<PsiFunctionalExpression>() {
-      @Override
-      public boolean process(PsiFunctionalExpression expression) {
-        return consumer.process(expression);
-      }
-    })) {
-      return false;
+    public static boolean processImplementations(
+        final PsiMethod psiMethod,
+        final Processor<? super PsiElement> consumer,
+        final SearchScope searchScope
+    ) {
+        if (!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(new Processor<PsiFunctionalExpression>() {
+            @Override
+            public boolean process(PsiFunctionalExpression expression) {
+                return consumer.process(expression);
+            }
+        })) {
+            return false;
+        }
+        List<PsiMethod> methods = new ArrayList<PsiMethod>();
+        getOverridingMethods(psiMethod, methods, searchScope);
+        return ContainerUtil.process(methods, consumer);
     }
-    List<PsiMethod> methods = new ArrayList<PsiMethod>();
-    getOverridingMethods(psiMethod, methods, searchScope);
-    return ContainerUtil.process(methods, consumer);
-  }
 
-  public static void getOverridingMethods(PsiMethod method, List<PsiMethod> list, SearchScope scope) {
-    for (PsiMethod psiMethod : OverridingMethodsSearch.search(method, scope, true)) {
-      list.add(psiMethod);
+    public static void getOverridingMethods(PsiMethod method, List<PsiMethod> list, SearchScope scope) {
+        for (PsiMethod psiMethod : OverridingMethodsSearch.search(method, scope, true)) {
+            list.add(psiMethod);
+        }
     }
-  }
 
-  @SuppressWarnings("UnusedDeclaration")
-  @Deprecated
-  public static PsiMethod[] getMethodImplementations(final PsiMethod method, SearchScope scope) {
-    List<PsiMethod> result = new ArrayList<PsiMethod>();
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public static PsiMethod[] getMethodImplementations(final PsiMethod method, SearchScope scope) {
+        List<PsiMethod> result = new ArrayList<PsiMethod>();
 
-    getOverridingMethods(method, result, scope);
-    return result.toArray(new PsiMethod[result.size()]);
-  }
+        getOverridingMethods(method, result, scope);
+        return result.toArray(new PsiMethod[result.size()]);
+    }
 }

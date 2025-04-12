@@ -28,84 +28,76 @@ import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 /**
  * @author ven
  */
 @ExtensionImpl
-public class MethodSuperSearcher implements SuperMethodsSearchExecutor
-{
-	private static final Logger LOG = Logger.getInstance(MethodSuperSearcher.class);
+public class MethodSuperSearcher implements SuperMethodsSearchExecutor {
+    private static final Logger LOG = Logger.getInstance(MethodSuperSearcher.class);
 
-	@Override
-	public boolean execute(@Nonnull final SuperMethodsSearch.SearchParameters queryParameters, @Nonnull final Processor<? super MethodSignatureBackedByPsiMethod> consumer)
-	{
-		final PsiClass parentClass = queryParameters.getPsiClass();
-		final PsiMethod method = queryParameters.getMethod();
-		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
-		{
-			@Override
-			public Boolean compute()
-			{
-				HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
+    @Override
+    public boolean execute(
+        @Nonnull final SuperMethodsSearch.SearchParameters queryParameters,
+        @Nonnull final Processor<? super MethodSignatureBackedByPsiMethod> consumer
+    ) {
+        final PsiClass parentClass = queryParameters.getPsiClass();
+        final PsiMethod method = queryParameters.getMethod();
+        return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
+            @Override
+            public Boolean compute() {
+                HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
 
-				final boolean checkBases = queryParameters.isCheckBases();
-				final boolean allowStaticMethod = queryParameters.isAllowStaticMethod();
-				final List<HierarchicalMethodSignature> supers = signature.getSuperSignatures();
-				for(HierarchicalMethodSignature superSignature : supers)
-				{
-					if(MethodSignatureUtil.isSubsignature(superSignature, signature))
-					{
-						if(!addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer))
-						{
-							return false;
-						}
-					}
-				}
+                final boolean checkBases = queryParameters.isCheckBases();
+                final boolean allowStaticMethod = queryParameters.isAllowStaticMethod();
+                final List<HierarchicalMethodSignature> supers = signature.getSuperSignatures();
+                for (HierarchicalMethodSignature superSignature : supers) {
+                    if (MethodSignatureUtil.isSubsignature(superSignature, signature)) {
+                        if (!addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer)) {
+                            return false;
+                        }
+                    }
+                }
 
-				return true;
-			}
-		});
-	}
+                return true;
+            }
+        });
+    }
 
-	private static boolean addSuperMethods(final HierarchicalMethodSignature signature,
-			final PsiMethod method,
-			final PsiClass parentClass,
-			final boolean allowStaticMethod,
-			final boolean checkBases,
-			final Processor<? super MethodSignatureBackedByPsiMethod> consumer)
-	{
-		PsiMethod signatureMethod = signature.getMethod();
-		PsiClass hisClass = signatureMethod.getContainingClass();
-		if(parentClass == null || InheritanceUtil.isInheritorOrSelf(parentClass, hisClass, true))
-		{
-			if(isAcceptable(signatureMethod, method, allowStaticMethod))
-			{
-				if(parentClass != null && !parentClass.equals(hisClass) && !checkBases)
-				{
-					return true;
-				}
-				LOG.assertTrue(signatureMethod != method, method); // method != method.getsuper()
-				return consumer.process(signature); //no need to check super classes
-			}
-		}
-		for(HierarchicalMethodSignature superSignature : signature.getSuperSignatures())
-		{
-			if(MethodSignatureUtil.isSubsignature(superSignature, signature))
-			{
-				addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer);
-			}
-		}
+    private static boolean addSuperMethods(
+        final HierarchicalMethodSignature signature,
+        final PsiMethod method,
+        final PsiClass parentClass,
+        final boolean allowStaticMethod,
+        final boolean checkBases,
+        final Processor<? super MethodSignatureBackedByPsiMethod> consumer
+    ) {
+        PsiMethod signatureMethod = signature.getMethod();
+        PsiClass hisClass = signatureMethod.getContainingClass();
+        if (parentClass == null || InheritanceUtil.isInheritorOrSelf(parentClass, hisClass, true)) {
+            if (isAcceptable(signatureMethod, method, allowStaticMethod)) {
+                if (parentClass != null && !parentClass.equals(hisClass) && !checkBases) {
+                    return true;
+                }
+                LOG.assertTrue(signatureMethod != method, method); // method != method.getsuper()
+                return consumer.process(signature); //no need to check super classes
+            }
+        }
+        for (HierarchicalMethodSignature superSignature : signature.getSuperSignatures()) {
+            if (MethodSignatureUtil.isSubsignature(superSignature, signature)) {
+                addSuperMethods(superSignature, method, parentClass, allowStaticMethod, checkBases, consumer);
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private static boolean isAcceptable(final PsiMethod superMethod, final PsiMethod method, final boolean allowStaticMethod)
-	{
-		boolean hisStatic = superMethod.hasModifierProperty(PsiModifier.STATIC);
-		return hisStatic == method.hasModifierProperty(PsiModifier.STATIC) &&
-				(allowStaticMethod || !hisStatic) &&
-				JavaPsiFacade.getInstance(method.getProject()).getResolveHelper().isAccessible(superMethod, method, null);
-	}
+    private static boolean isAcceptable(final PsiMethod superMethod, final PsiMethod method, final boolean allowStaticMethod) {
+        boolean hisStatic = superMethod.hasModifierProperty(PsiModifier.STATIC);
+        return hisStatic == method.hasModifierProperty(PsiModifier.STATIC)
+            && (allowStaticMethod || !hisStatic)
+            && JavaPsiFacade.getInstance(method.getProject()).getResolveHelper().isAccessible(superMethod, method, null);
+    }
 }
