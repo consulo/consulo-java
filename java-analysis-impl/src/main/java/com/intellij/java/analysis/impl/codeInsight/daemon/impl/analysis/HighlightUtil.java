@@ -34,8 +34,6 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
-import com.intellij.java.language.impl.psi.scope.processor.VariablesNotProcessor;
-import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
@@ -47,6 +45,7 @@ import com.intellij.java.language.psi.util.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.component.extension.Extensions;
 import consulo.document.util.TextRange;
+import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.CodeInsightUtilCore;
@@ -61,7 +60,6 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.findUsage.FindUsagesProvider;
 import consulo.language.psi.*;
-import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ContainerProvider;
 import consulo.language.psi.util.PsiMatcherImpl;
@@ -785,54 +783,11 @@ public class HighlightUtil extends HighlightUtilBase {
   }
 
   @Nullable
+  @RequiredReadAction
   public static HighlightInfo checkVariableAlreadyDefined(@Nonnull PsiVariable variable) {
-    if (variable instanceof ExternallyDefinedPsiElement) {
-      return null;
-    }
-    boolean isIncorrect = false;
-    PsiElement declarationScope = null;
-    if (variable instanceof PsiLocalVariable || variable instanceof PsiParameter && ((declarationScope =
-      ((PsiParameter)variable).getDeclarationScope()) instanceof PsiCatchSection ||
-      declarationScope instanceof PsiForeachStatement || declarationScope instanceof PsiLambdaExpression)) {
-      @SuppressWarnings("unchecked") PsiElement scope =
-        PsiTreeUtil.getParentOfType(variable, PsiFile.class, PsiMethod.class, PsiClassInitializer.class, PsiResourceList.class);
-      VariablesNotProcessor proc = new VariablesNotProcessor(variable, false) {
-        @Override
-        protected boolean check(final PsiVariable var, final ResolveState state) {
-          return (var instanceof PsiLocalVariable || var instanceof PsiParameter) && super.check(var, state);
-        }
-      };
-      PsiIdentifier identifier = variable.getNameIdentifier();
-      assert identifier != null : variable;
-      PsiScopesUtil.treeWalkUp(proc, identifier, scope);
-      if (scope instanceof PsiResourceList && proc.size() == 0) {
-        scope = PsiTreeUtil.getParentOfType(variable, PsiFile.class, PsiMethod.class, PsiClassInitializer.class);
-        PsiScopesUtil.treeWalkUp(proc, identifier, scope);
-      }
-      if (proc.size() > 0) {
-        isIncorrect = true;
-      }
-      else if (declarationScope instanceof PsiLambdaExpression) {
-        isIncorrect = checkSameNames(variable);
-      }
-    }
-    else if (variable instanceof PsiField) {
-      PsiField field = (PsiField)variable;
-      PsiClass aClass = field.getContainingClass();
-      if (aClass == null) {
-        return null;
-      }
-      PsiField fieldByName = aClass.findFieldByName(variable.getName(), false);
-      if (fieldByName != null && fieldByName != field) {
-        isIncorrect = true;
-      }
-    }
-    else {
-      isIncorrect = checkSameNames(variable);
-    }
-
-    if (isIncorrect) {
-      String description = JavaErrorBundle.message("variable.already.defined", variable.getName());
+    PsiVariable oldVariable = JavaPsiVariableUtil.findPreviousVariableDeclaration(variable);
+    if (oldVariable != null) {
+      String description = JavaErrorLocalize.variableAlreadyDefined(variable.getName()).get();
       PsiIdentifier identifier = variable.getNameIdentifier();
       assert identifier != null : variable;
       HighlightInfo highlightInfo =
@@ -844,22 +799,6 @@ public class HighlightUtil extends HighlightUtilBase {
       return highlightInfo;
     }
     return null;
-  }
-
-  private static boolean checkSameNames(@Nonnull PsiVariable variable) {
-    PsiElement scope = variable.getParent();
-    PsiElement[] children = scope.getChildren();
-    for (PsiElement child : children) {
-      if (child instanceof PsiVariable) {
-        if (child.equals(variable)) {
-          continue;
-        }
-        if (Objects.equals(variable.getName(), ((PsiVariable)child).getName())) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   @Nullable
