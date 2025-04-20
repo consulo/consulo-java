@@ -16,6 +16,7 @@
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.internal.DefaultJavaSdkType;
+import consulo.application.Application;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
 import consulo.content.bundle.SdkTable;
@@ -26,35 +27,35 @@ import jakarta.annotation.Nonnull;
 import java.io.File;
 
 public abstract class JavaSdkType extends SdkType {
-  /**
-   * Return default impl JavaSdkType implementation
-   */
-  @Nonnull
-  public static JavaSdkType getDefaultJavaSdkType() {
-    return EP_NAME.findExtensionOrFail(DefaultJavaSdkType.class);
-  }
+    /**
+     * Return default impl JavaSdkType implementation
+     */
+    @Nonnull
+    public static JavaSdkType getDefaultJavaSdkType() {
+        return Application.get().getExtensionPoint(SdkType.class).findExtensionOrFail(DefaultJavaSdkType.class);
+    }
 
-  public JavaSdkType(String name) {
-    super(name);
-  }
+    public JavaSdkType(String name) {
+        super(name);
+    }
 
-  public final Sdk createJdk(String jdkName, @Nonnull String home) {
-    Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
-    SdkModificator sdkModificator = jdk.getSdkModificator();
+    public final Sdk createJdk(String jdkName, @Nonnull String home) {
+        Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
+        SdkModificator sdkModificator = jdk.getSdkModificator();
 
-    String path = home.replace(File.separatorChar, '/');
-    sdkModificator.setHomePath(path);
-    sdkModificator.setVersionString(jdkName); // must be set after home path, otherwise setting home path clears the version string
-    sdkModificator.commitChanges();
+        String path = home.replace(File.separatorChar, '/');
+        sdkModificator.setHomePath(path);
+        sdkModificator.setVersionString(jdkName); // must be set after home path, otherwise setting home path clears the version string
+        sdkModificator.commitChanges();
 
-    setupSdkPaths(jdk);
+        setupSdkPaths(jdk);
 
-    return jdk;
-  }
+        return jdk;
+    }
 
-  public abstract String getBinPath(Sdk sdk);
+    public abstract String getBinPath(Sdk sdk);
 
-  public abstract String getToolsPath(Sdk sdk);
+    public abstract String getToolsPath(Sdk sdk);
 
-  public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
+    public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
 }

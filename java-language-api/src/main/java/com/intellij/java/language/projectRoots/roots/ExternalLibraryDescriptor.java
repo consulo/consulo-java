@@ -23,55 +23,52 @@ import jakarta.annotation.Nullable;
 /**
  * @author nik
  */
-public abstract class ExternalLibraryDescriptor
-{
-	private final String myLibraryGroupId;
-	private final String myLibraryArtifactId;
-	private final String myMinVersion;
-	private final String myMaxVersion;
+public abstract class ExternalLibraryDescriptor {
+    private final String myLibraryGroupId;
+    private final String myLibraryArtifactId;
+    private final String myMinVersion;
+    private final String myMaxVersion;
 
-	public ExternalLibraryDescriptor(String libraryGroupId, String libraryArtifactId)
-	{
-		this(libraryGroupId, libraryArtifactId, null, null);
-	}
+    public ExternalLibraryDescriptor(String libraryGroupId, String libraryArtifactId) {
+        this(libraryGroupId, libraryArtifactId, null, null);
+    }
 
-	public ExternalLibraryDescriptor(@Nonnull String libraryGroupId, @Nonnull String libraryArtifactId, @Nullable String minVersion, @Nullable String maxVersion)
-	{
-		myLibraryGroupId = libraryGroupId;
-		myLibraryArtifactId = libraryArtifactId;
-		myMinVersion = minVersion;
-		myMaxVersion = maxVersion;
-	}
+    public ExternalLibraryDescriptor(
+        @Nonnull String libraryGroupId,
+        @Nonnull String libraryArtifactId,
+        @Nullable String minVersion,
+        @Nullable String maxVersion
+    ) {
+        myLibraryGroupId = libraryGroupId;
+        myLibraryArtifactId = libraryArtifactId;
+        myMinVersion = minVersion;
+        myMaxVersion = maxVersion;
+    }
 
-	@Nonnull
-	public String getLibraryGroupId()
-	{
-		return myLibraryGroupId;
-	}
+    @Nonnull
+    public String getLibraryGroupId() {
+        return myLibraryGroupId;
+    }
 
-	@Nonnull
-	public String getLibraryArtifactId()
-	{
-		return myLibraryArtifactId;
-	}
+    @Nonnull
+    public String getLibraryArtifactId() {
+        return myLibraryArtifactId;
+    }
 
-	@Nullable
-	public String getMinVersion()
-	{
-		return myMinVersion;
-	}
+    @Nullable
+    public String getMinVersion() {
+        return myMinVersion;
+    }
 
-	@Nullable
-	public String getMaxVersion()
-	{
-		return myMaxVersion;
-	}
+    @Nullable
+    public String getMaxVersion() {
+        return myMaxVersion;
+    }
 
-	public String getPresentableName()
-	{
-		return myLibraryArtifactId;
-	}
+    public String getPresentableName() {
+        return myLibraryArtifactId;
+    }
 
-	@Nonnull
-	public abstract List<String> getLibraryClassesRoots();
+    @Nonnull
+    public abstract List<String> getLibraryClassesRoots();
 }
