@@ -29,15 +29,15 @@ import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public class JavaVersionService {
-  public static JavaVersionService getInstance() {
-    return ServiceManager.getService(JavaVersionService.class);
-  }
+    public static JavaVersionService getInstance() {
+        return ServiceManager.getService(JavaVersionService.class);
+    }
 
-  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
-    return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
-  }
+    public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
+        return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
+    }
 
-  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
-    return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
-  }
+    public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
+        return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
+    }
 }

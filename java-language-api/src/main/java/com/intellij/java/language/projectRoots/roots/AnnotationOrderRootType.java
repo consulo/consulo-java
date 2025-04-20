@@ -25,6 +25,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,44 +35,44 @@ import java.util.List;
  */
 @ExtensionImpl
 public class AnnotationOrderRootType extends OrderRootType {
-  @Nonnull
-  public static OrderRootType getInstance() {
-    return getOrderRootType(AnnotationOrderRootType.class);
-  }
+    @Nonnull
+    public static OrderRootType getInstance() {
+        return getOrderRootType(AnnotationOrderRootType.class);
+    }
 
-  public AnnotationOrderRootType() {
-    super("javaExternalAnnotations");
-  }
+    public AnnotationOrderRootType() {
+        super("javaExternalAnnotations");
+    }
 
-  @Nonnull
-  public static VirtualFile[] getFiles(@Nonnull OrderEntry entry) {
-    List<VirtualFile> result = new ArrayList<VirtualFile>();
-    RootPolicy<List<VirtualFile>> policy = new RootPolicy<List<VirtualFile>>() {
-      @Override
-      public List<VirtualFile> visitOrderEntry(OrderEntry orderEntry, List<VirtualFile> value) {
-        if (orderEntry instanceof OrderEntryWithTracking) {
-          Collections.addAll(value, orderEntry.getFiles(getInstance()));
-        }
-        return value;
-      }
-    };
-    entry.accept(policy, result);
-    return VirtualFileUtil.toVirtualFileArray(result);
-  }
+    @Nonnull
+    public static VirtualFile[] getFiles(@Nonnull OrderEntry entry) {
+        List<VirtualFile> result = new ArrayList<VirtualFile>();
+        RootPolicy<List<VirtualFile>> policy = new RootPolicy<List<VirtualFile>>() {
+            @Override
+            public List<VirtualFile> visitOrderEntry(OrderEntry orderEntry, List<VirtualFile> value) {
+                if (orderEntry instanceof OrderEntryWithTracking) {
+                    Collections.addAll(value, orderEntry.getFiles(getInstance()));
+                }
+                return value;
+            }
+        };
+        entry.accept(policy, result);
+        return VirtualFileUtil.toVirtualFileArray(result);
+    }
 
-  @Nonnull
-  public static String[] getUrls(@Nonnull OrderEntry entry) {
-    List<String> result = new ArrayList<String>();
-    RootPolicy<List<String>> policy = new RootPolicy<List<String>>() {
-      @Override
-      public List<String> visitOrderEntry(OrderEntry orderEntry, List<String> value) {
-        if (orderEntry instanceof OrderEntryWithTracking) {
-          Collections.addAll(value, orderEntry.getUrls(getInstance()));
-        }
-        return value;
-      }
-    };
-    entry.accept(policy, result);
-    return ArrayUtil.toStringArray(result);
-  }
+    @Nonnull
+    public static String[] getUrls(@Nonnull OrderEntry entry) {
+        List<String> result = new ArrayList<String>();
+        RootPolicy<List<String>> policy = new RootPolicy<List<String>>() {
+            @Override
+            public List<String> visitOrderEntry(OrderEntry orderEntry, List<String> value) {
+                if (orderEntry instanceof OrderEntryWithTracking) {
+                    Collections.addAll(value, orderEntry.getUrls(getInstance()));
+                }
+                return value;
+            }
+        };
+        entry.accept(policy, result);
+        return ArrayUtil.toStringArray(result);
+    }
 }

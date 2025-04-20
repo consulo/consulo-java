@@ -31,13 +31,13 @@ import jakarta.annotation.Nonnull;
 @Singleton
 @ServiceImpl
 public class JavaVersionServiceImpl extends JavaVersionService {
-  @Override
-  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
-    return JavaSdkVersionUtil.isAtLeast(element, version);
-  }
+    @Override
+    public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
+        return JavaSdkVersionUtil.isAtLeast(element, version);
+    }
 
-  @Override
-  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
-    return JavaSdkVersionUtil.getJavaSdkVersion(element);
-  }
+    @Override
+    public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
+        return JavaSdkVersionUtil.getJavaSdkVersion(element);
+    }
 }
