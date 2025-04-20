@@ -21,7 +21,6 @@ import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.SystemInfo;
 import consulo.container.plugin.PluginManager;
 import consulo.content.OrderRootType;
 import consulo.content.base.BinariesOrderRootType;
@@ -52,7 +51,6 @@ import consulo.virtualFileSystem.archive.ZipArchiveFileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -98,7 +96,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return "reference.project.structure.sdk.java";
     }
 
-    @NonNls
     @Override
     @Nullable
     public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk) {
@@ -137,7 +134,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Override
-    @NonNls
     public String getToolsPath(Sdk sdk) {
         final String versionString = sdk.getVersionString();
         final boolean isJdk1_x = versionString != null && (versionString.contains("1.0") || versionString.contains("1.1"));
@@ -238,6 +234,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return true;
     }
 
+    @Nonnull
     @Override
     public FileChooserDescriptor getHomeChooserDescriptor() {
         FileChooserDescriptor descriptor = super.getHomeChooserDescriptor();
@@ -245,7 +242,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return descriptor;
     }
 
-    @NonNls
     public static final String MAC_HOME_PATH = "/Home";
 
     @Override

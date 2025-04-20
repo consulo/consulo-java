@@ -18,6 +18,7 @@ package com.intellij.java.impl.openapi.projectRoots;
 import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
@@ -26,17 +27,19 @@ import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
- * @since 3/28/12
+ * @since 2012-03-28
  */
 @Singleton
 @ServiceImpl
 public class JavaVersionServiceImpl extends JavaVersionService {
     @Override
+    @RequiredReadAction
     public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
         return JavaSdkVersionUtil.isAtLeast(element, version);
     }
 
     @Override
+    @RequiredReadAction
     public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
         return JavaSdkVersionUtil.getJavaSdkVersion(element);
     }

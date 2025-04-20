@@ -16,6 +16,7 @@
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.internal.DefaultJavaSdkType;
+import consulo.application.Application;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
 import consulo.content.bundle.SdkTable;
@@ -31,7 +32,7 @@ public abstract class JavaSdkType extends SdkType {
      */
     @Nonnull
     public static JavaSdkType getDefaultJavaSdkType() {
-        return EP_NAME.findExtensionOrFail(DefaultJavaSdkType.class);
+        return Application.get().getExtensionPoint(SdkType.class).findExtensionOrFail(DefaultJavaSdkType.class);
     }
 
     public JavaSdkType(String name) {

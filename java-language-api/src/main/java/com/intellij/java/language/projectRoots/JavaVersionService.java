@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author max
- */
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
@@ -27,16 +24,21 @@ import consulo.language.psi.PsiElement;
 
 import jakarta.annotation.Nonnull;
 
+/**
+ * @author max
+ */
 @ServiceAPI(ComponentScope.APPLICATION)
 public class JavaVersionService {
     public static JavaVersionService getInstance() {
         return ServiceManager.getService(JavaVersionService.class);
     }
 
+    @RequiredReadAction
     public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
         return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
     }
 
+    @RequiredReadAction
     public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
         return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
     }
