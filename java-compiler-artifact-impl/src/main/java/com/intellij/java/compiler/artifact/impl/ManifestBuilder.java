@@ -16,30 +16,28 @@
 package com.intellij.java.compiler.artifact.impl;
 
 import consulo.application.Application;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.jar.Attributes;
 
 public class ManifestBuilder {
-  @NonNls
-  private static final String NAME = "Created-By";
-  private static final Attributes.Name CREATED_BY = new Attributes.Name(NAME);
+    private static final String NAME = "Created-By";
+    private static final Attributes.Name CREATED_BY = new Attributes.Name(NAME);
 
-  private ManifestBuilder() {
-  }
-
-  public static void setGlobalAttributes(Attributes mainAttributes) {
-    setVersionAttribute(mainAttributes);
-    setIfNone(mainAttributes, CREATED_BY, Application.get().getName().get());
-  }
-
-  public static void setVersionAttribute(Attributes mainAttributes) {
-    setIfNone(mainAttributes, Attributes.Name.MANIFEST_VERSION, "1.0");
-  }
-
-  private static void setIfNone(Attributes mainAttributes, Attributes.Name attrName, String value) {
-    if (mainAttributes.getValue(attrName) == null) {
-      mainAttributes.put(attrName, value);
+    private ManifestBuilder() {
     }
-  }
+
+    public static void setGlobalAttributes(Attributes mainAttributes) {
+        setVersionAttribute(mainAttributes);
+        setIfNone(mainAttributes, CREATED_BY, Application.get().getName().get());
+    }
+
+    public static void setVersionAttribute(Attributes mainAttributes) {
+        setIfNone(mainAttributes, Attributes.Name.MANIFEST_VERSION, "1.0");
+    }
+
+    private static void setIfNone(Attributes mainAttributes, Attributes.Name attrName, String value) {
+        if (mainAttributes.getValue(attrName) == null) {
+            mainAttributes.put(attrName, value);
+        }
+    }
 }

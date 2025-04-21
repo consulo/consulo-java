@@ -23,20 +23,20 @@ import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
- * @since 16:05/18.06.13
+ * @since 2013-06-18
  */
 public class JarArchivePackagingElement extends ArchivePackagingElement {
-  public JarArchivePackagingElement() {
-    super(JarArchiveElementType.getInstance());
-  }
+    public JarArchivePackagingElement() {
+        super(JarArchiveElementType.getInstance());
+    }
 
-  public JarArchivePackagingElement(@Nonnull String archiveFileName) {
-    super(JarArchiveElementType.getInstance(), archiveFileName);
-  }
+    public JarArchivePackagingElement(@Nonnull String archiveFileName) {
+        super(JarArchiveElementType.getInstance(), archiveFileName);
+    }
 
-  @Override
-  public ArchivePackageWriter<?> getPackageWriter() {
-    // use zip - later write own with manifest correction
-    return ZipArchivePackagingElement.ZipArchivePackageWriter.INSTANCE;
-  }
+    @Override
+    public ArchivePackageWriter<?> getPackageWriter() {
+        // use zip - later write own with manifest correction
+        return ZipArchivePackagingElement.ZipArchivePackageWriter.INSTANCE;
+    }
 }

@@ -17,7 +17,7 @@ package com.intellij.java.compiler.artifact.impl.artifacts;
 
 import com.intellij.java.compiler.artifact.impl.elements.JarArchivePackagingElement;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
+import consulo.application.Application;
 import consulo.compiler.artifact.ArtifactTemplate;
 import consulo.compiler.artifact.ArtifactType;
 import consulo.compiler.artifact.ArtifactUtil;
@@ -27,10 +27,13 @@ import consulo.compiler.artifact.element.PackagingElementOutputKind;
 import consulo.compiler.artifact.element.PackagingElementResolvingContext;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.layer.ModulesProvider;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -39,39 +42,39 @@ import java.util.List;
  */
 @ExtensionImpl(order = "after zip-artifact")
 public class JarArtifactType extends ArtifactType {
-  public JarArtifactType() {
-    super("jar", "Jar");
-  }
+    public JarArtifactType() {
+        super("jar", LocalizeValue.localizeTODO("Jar"));
+    }
 
-  public static JarArtifactType getInstance() {
-    return EP_NAME.findExtension(JarArtifactType.class);
-  }
+    public static JarArtifactType getInstance() {
+        return Application.get().getExtensionPoint(ArtifactType.class).findExtension(JarArtifactType.class);
+    }
 
-  @Nonnull
-  @Override
-  public Image getIcon() {
-    return AllIcons.Nodes.Artifact;
-  }
+    @Nonnull
+    @Override
+    public Image getIcon() {
+        return PlatformIconGroup.nodesArtifact();
+    }
 
-  @Override
-  public String getDefaultPathFor(@Nonnull PackagingElementOutputKind kind) {
-    return "/";
-  }
+    @Override
+    public String getDefaultPathFor(@Nonnull PackagingElementOutputKind kind) {
+        return "/";
+    }
 
-  @Override
-  public boolean isAvailableForAdd(@Nonnull ModulesProvider modulesProvider) {
-    return ModuleUtilCore.hasModuleExtension(modulesProvider, JavaModuleExtension.class);
-  }
+    @Override
+    public boolean isAvailableForAdd(@Nonnull ModulesProvider modulesProvider) {
+        return ModuleUtilCore.hasModuleExtension(modulesProvider, JavaModuleExtension.class);
+    }
 
-  @Nonnull
-  @Override
-  public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName) {
-    return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
-  }
+    @Nonnull
+    @Override
+    public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName) {
+        return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
+    }
 
-  @Nonnull
-  @Override
-  public List<? extends ArtifactTemplate> getNewArtifactTemplates(@Nonnull PackagingElementResolvingContext context) {
-    return Collections.singletonList(new JarFromModulesTemplate(context));
-  }
+    @Nonnull
+    @Override
+    public List<? extends ArtifactTemplate> getNewArtifactTemplates(@Nonnull PackagingElementResolvingContext context) {
+        return Collections.singletonList(new JarFromModulesTemplate(context));
+    }
 }
