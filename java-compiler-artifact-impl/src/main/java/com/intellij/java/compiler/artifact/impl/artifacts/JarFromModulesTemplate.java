@@ -24,6 +24,7 @@ import consulo.compiler.artifact.PlainArtifactType;
 import consulo.compiler.artifact.element.*;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
@@ -74,16 +75,16 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
     @Nullable
     @RequiredUIAccess
     public NewArtifactConfiguration doCreateArtifact(
-        final Module[] modules,
-        final String mainClassName,
-        final String directoryForManifest,
-        final boolean extractLibrariesToJar,
-        final boolean includeTests
+        Module[] modules,
+        String mainClassName,
+        String directoryForManifest,
+        boolean extractLibrariesToJar,
+        boolean includeTests
     ) {
         VirtualFile manifestFile = null;
-        final Project project = myContext.getProject();
+        Project project = myContext.getProject();
         if (mainClassName != null && !mainClassName.isEmpty() || !extractLibrariesToJar) {
-            final VirtualFile directory;
+            VirtualFile directory;
             try {
                 directory = project.getApplication().runWriteAction(
                     (ThrowableComputable<VirtualFile, IOException>)() -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest)
@@ -111,17 +112,17 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
         String name = modules.length == 1 ? modules[0].getName() : project.getName();
 
-        final PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
-        final CompositePackagingElement<?> archive = factory.createZipArchive(ArtifactUtil.suggestArtifactFileName(name) + ".jar");
+        PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
+        CompositePackagingElement<?> archive = factory.createZipArchive(ArtifactUtil.suggestArtifactFileName(name) + ".jar");
 
         OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(project).orderEntries(Arrays.asList(modules));
 
-        final Set<Library> libraries = new HashSet<>();
+        Set<Library> libraries = new HashSet<>();
         if (!includeTests) {
             orderEnumerator = orderEnumerator.productionOnly();
         }
-        final ModulesProvider modulesProvider = myContext.getModulesProvider();
-        final OrderEnumerator enumerator = orderEnumerator.using(modulesProvider).withoutSdk().runtimeOnly().recursively();
+        ModulesProvider modulesProvider = myContext.getModulesProvider();
+        OrderEnumerator enumerator = orderEnumerator.using(modulesProvider).withoutSdk().runtimeOnly().recursively();
         enumerator.forEachLibrary(new CommonProcessors.CollectProcessor<>(libraries));
         enumerator.forEachModule(module -> {
             if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
@@ -133,18 +134,18 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
             return true;
         });
 
-        final JarArtifactType jarArtifactType = JarArtifactType.getInstance();
+        JarArtifactType jarArtifactType = JarArtifactType.getInstance();
         if (manifestFile != null && !manifestFile.equals(ManifestFileUtil.findManifestFile(archive, myContext, jarArtifactType))) {
             archive.addFirstChild(factory.createFileCopyWithParentDirectories(manifestFile.getPath(), ManifestFileUtil.MANIFEST_DIR_NAME));
         }
 
-        final String artifactName = name + ":jar";
+        String artifactName = name + ":jar";
         if (extractLibrariesToJar) {
             addExtractedLibrariesToJar(archive, factory, libraries);
             return new NewArtifactConfiguration(archive, artifactName, jarArtifactType);
         }
         else {
-            final ArtifactRootElement<?> root = factory.createArtifactRootElement();
+            ArtifactRootElement<?> root = factory.createArtifactRootElement();
             List<String> classpath = new ArrayList<>();
             root.addOrFindChild(archive);
             addLibraries(libraries, root, archive, classpath);
@@ -167,7 +168,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
                         archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
                     }
                     else {
-                        final PackagingElement<?> child =
+                        PackagingElement<?> child =
                             factory.createFileCopyWithParentDirectories(VirtualFilePathUtil.getLocalFile(classesRoot).getPath(), "/");
                         root.addOrFindChild(child);
                         classpath.addAll(ManifestFileUtil.getClasspathForElements(
@@ -180,7 +181,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
             }
             else {
-                final List<? extends PackagingElement<?>> children = factory.createLibraryElements(library);
+                List<? extends PackagingElement<?>> children = factory.createLibraryElements(library);
                 classpath.addAll(ManifestFileUtil.getClasspathForElements(children, myContext, PlainArtifactType.getInstance()));
                 root.addOrFindChildren(children);
             }
@@ -211,7 +212,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
     }
 
     @Override
-    public String getPresentableName() {
-        return "From modules with dependencies...";
+    public LocalizeValue getPresentableName() {
+        return LocalizeValue.localizeTODO("From modules with dependencies...");
     }
 }

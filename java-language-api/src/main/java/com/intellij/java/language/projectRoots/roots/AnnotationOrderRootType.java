@@ -46,8 +46,8 @@ public class AnnotationOrderRootType extends OrderRootType {
 
     @Nonnull
     public static VirtualFile[] getFiles(@Nonnull OrderEntry entry) {
-        List<VirtualFile> result = new ArrayList<VirtualFile>();
-        RootPolicy<List<VirtualFile>> policy = new RootPolicy<List<VirtualFile>>() {
+        List<VirtualFile> result = new ArrayList<>();
+        RootPolicy<List<VirtualFile>> policy = new RootPolicy<>() {
             @Override
             public List<VirtualFile> visitOrderEntry(OrderEntry orderEntry, List<VirtualFile> value) {
                 if (orderEntry instanceof OrderEntryWithTracking) {
@@ -62,8 +62,8 @@ public class AnnotationOrderRootType extends OrderRootType {
 
     @Nonnull
     public static String[] getUrls(@Nonnull OrderEntry entry) {
-        List<String> result = new ArrayList<String>();
-        RootPolicy<List<String>> policy = new RootPolicy<List<String>>() {
+        List<String> result = new ArrayList<>();
+        RootPolicy<List<String>> policy = new RootPolicy<>() {
             @Override
             public List<String> visitOrderEntry(OrderEntry orderEntry, List<String> value) {
                 if (orderEntry instanceof OrderEntryWithTracking) {

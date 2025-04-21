@@ -20,13 +20,14 @@ import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nik
  */
 public class ManifestFileConfiguration {
     private final boolean myWritable;
-    private List<String> myClasspath = new ArrayList<String>();
+    private List<String> myClasspath = new ArrayList<>();
     private String myMainClass;
     private String myManifestFilePath;
 
@@ -81,26 +82,11 @@ public class ManifestFileConfiguration {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ManifestFileConfiguration)) {
-            return false;
-        }
-
-        ManifestFileConfiguration that = (ManifestFileConfiguration)o;
-
-        if (!myClasspath.equals(that.myClasspath)) {
-            return false;
-        }
-        if (myMainClass != null ? !myMainClass.equals(that.myMainClass) : that.myMainClass != null) {
-            return false;
-        }
-        if (myManifestFilePath != null ? !myManifestFilePath.equals(that.myManifestFilePath) : that.myManifestFilePath != null) {
-            return false;
-        }
-
-        return true;
+        return this == o
+            || o instanceof ManifestFileConfiguration that
+            && myClasspath.equals(that.myClasspath)
+            && Objects.equals(myMainClass, that.myMainClass)
+            && Objects.equals(myManifestFilePath, that.myManifestFilePath);
     }
 
     @Override

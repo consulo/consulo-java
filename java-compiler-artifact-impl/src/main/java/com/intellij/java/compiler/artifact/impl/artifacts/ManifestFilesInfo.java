@@ -33,17 +33,16 @@ import java.util.Map;
 
 public class ManifestFilesInfo {
     private static final Logger LOG = Logger.getInstance(ManifestFilesInfo.class);
-    private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
-    private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles =
-        new HashMap<VirtualFile, ManifestFileConfiguration>();
+    private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<>();
+    private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles = new HashMap<>();
 
     @Nullable
     public ManifestFileConfiguration getManifestFile(
         CompositePackagingElement<?> element,
         ArtifactType artifactType,
-        final PackagingElementResolvingContext context
+        PackagingElementResolvingContext context
     ) {
-        final VirtualFile manifestFile = ManifestFileUtil.findManifestFile(element, context, artifactType);
+        VirtualFile manifestFile = ManifestFileUtil.findManifestFile(element, context, artifactType);
         if (manifestFile == null) {
             return null;
         }
@@ -59,20 +58,20 @@ public class ManifestFilesInfo {
 
     public void saveManifestFiles() {
         for (Map.Entry<VirtualFile, ManifestFileConfiguration> entry : myManifestFiles.entrySet()) {
-            final ManifestFileConfiguration configuration = entry.getValue();
-            final String path = configuration.getManifestFilePath();
+            ManifestFileConfiguration configuration = entry.getValue();
+            String path = configuration.getManifestFilePath();
             if (path == null) {
                 continue;
             }
 
-            final ManifestFileConfiguration original = myOriginalManifestFiles.get(entry.getKey());
+            ManifestFileConfiguration original = myOriginalManifestFiles.get(entry.getKey());
             if (original != null && original.equals(configuration)) {
                 continue;
             }
 
             VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
             if (file == null) {
-                final File ioFile = new File(FileUtil.toSystemDependentName(path));
+                File ioFile = new File(FileUtil.toSystemDependentName(path));
                 FileUtil.createIfDoesntExist(ioFile);
                 file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(ioFile);
                 if (file == null) {

@@ -22,22 +22,21 @@ import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import consulo.compiler.artifact.ui.PackagingElementPropertiesPanel;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.IdeaFileChooser;
+import consulo.localize.LocalizeValue;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.io.FileUtil;
-import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nik
@@ -56,38 +55,24 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
     private JLabel myManifestNotFoundLabel;
     private ManifestFileConfiguration myManifestFileConfiguration;
 
-    public ElementWithManifestPropertiesPanel(E element, final ArtifactEditorContext context) {
+    public ElementWithManifestPropertiesPanel(E element, ArtifactEditorContext context) {
         myElement = element;
         myContext = context;
 
         ManifestFileUtil.setupMainClassField(context.getProject(), myMainClassField);
 
-        myClasspathField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Messages.showTextAreaDialog(myClasspathField.getTextField(), "Edit Classpath", "classpath-attribute-editor");
-            }
-        });
+        myClasspathField.addActionListener(e -> Messages.showTextAreaDialog(myClasspathField.getTextField(), "Edit Classpath", "classpath-attribute-editor"));
         myClasspathField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             protected void textChanged(DocumentEvent e) {
                 myContext.queueValidation();
             }
         });
-        myUseExistingManifestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chooseManifest();
-            }
-        });
-        myCreateManifestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createManifest();
-            }
-        });
+        myUseExistingManifestButton.addActionListener(e -> chooseManifest());
+        myCreateManifestButton.addActionListener(e -> createManifest());
     }
 
+    @RequiredUIAccess
     private void createManifest() {
         final VirtualFile file = ManifestFileUtil.showDialogAndCreateManifest(myContext, myElement);
         if (file == null) {
@@ -107,7 +92,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
                     .MANIFEST_FILE_NAME));
             }
         };
-        descriptor.setTitle("Specify Path to MANIFEST.MF file");
+        descriptor.withTitleValue(LocalizeValue.localizeTODO("Specify Path to MANIFEST.MF file"));
         final VirtualFile file = IdeaFileChooser.chooseFile(descriptor, myContext.getProject(), null);
         if (file == null) {
             return;
@@ -121,7 +106,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
     private void updateManifest() {
     /*myManifestFileConfiguration = myContext.getManifestFile(myElement, myContext.getArtifactType());
         final String card;
-        if(myManifestFileConfiguration != null)
+        if (myManifestFileConfiguration != null)
         {
             card = "properties";
             myManifestPathField.setText(FileUtil.toSystemDependentName(myManifestFileConfiguration.getManifestFilePath()));
@@ -139,6 +124,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
     }
 
     @Override
+    @RequiredUIAccess
     public void reset() {
         myTitleLabel.setText("'" + myElement.getName() + "' manifest properties:");
         myManifestNotFoundLabel.setText("META-INF/MANIFEST.MF file not found in '" + myElement.getName() + "'");
@@ -146,10 +132,11 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
     }
 
     @Override
+    @RequiredUIAccess
     public boolean isModified() {
         return myManifestFileConfiguration != null && (!myManifestFileConfiguration.getClasspath().equals(getConfiguredClasspath())
-            || !Comparing.equal(myManifestFileConfiguration.getMainClass(), getConfiguredMainClass())
-            || !Comparing.equal(myManifestFileConfiguration.getManifestFilePath(), getConfiguredManifestPath()));
+            || !Objects.equals(myManifestFileConfiguration.getMainClass(), getConfiguredMainClass())
+            || !Objects.equals(myManifestFileConfiguration.getManifestFilePath(), getConfiguredManifestPath()));
     }
 
     @Nullable

@@ -23,7 +23,7 @@ import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
- * @since 16:05/18.06.13
+ * @since 2013-06-18
  */
 public class JarArchivePackagingElement extends ArchivePackagingElement {
     public JarArchivePackagingElement() {

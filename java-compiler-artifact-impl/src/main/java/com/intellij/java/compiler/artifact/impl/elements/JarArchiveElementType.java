@@ -16,7 +16,6 @@
 package com.intellij.java.compiler.artifact.impl.elements;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
 import consulo.compiler.artifact.Artifact;
 import consulo.compiler.artifact.ArtifactUtil;
 import consulo.compiler.artifact.element.*;
@@ -24,7 +23,9 @@ import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
 import consulo.util.io.FileUtil;
@@ -54,7 +55,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
     @Nonnull
     @Override
     public Image getIcon() {
-        return AllIcons.Nodes.PpJar;
+        return PlatformIconGroup.filetypesArchive();
     }
 
     @Nonnull
@@ -63,20 +64,22 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
         return new JarArchivePackagingElement();
     }
 
-	/*@Override
-  public PackagingElementPropertiesPanel createElementPropertiesPanel(@NotNull JarArchivePackagingElement element,
-			@NotNull ArtifactEditorContext context)
-	{
-		return new JarArchiveElementPropertiesPanel(element, context);
-	}    */
+    /*@Override
+    public PackagingElementPropertiesPanel createElementPropertiesPanel(
+        @Nonnull JarArchivePackagingElement element,
+        @Nonnull ArtifactEditorContext context
+    ) {
+        return new JarArchiveElementPropertiesPanel(element, context);
+    }*/
 
     @Override
+    @RequiredUIAccess
     public CompositePackagingElement<?> createComposite(
         CompositePackagingElement<?> parent,
         @Nullable String baseName,
         @Nonnull ArtifactEditorContext context
     ) {
-        final String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
+        String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
         String path = Messages.showInputDialog(
             context.getProject(),
             "Enter archive name: ",
@@ -89,9 +92,9 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
             return null;
         }
         path = FileUtil.toSystemIndependentName(path);
-        final String parentPath = PathUtil.getParentPath(path);
-        final String fileName = PathUtil.getFileName(path);
-        final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
+        String parentPath = PathUtil.getParentPath(path);
+        String fileName = PathUtil.getFileName(path);
+        PackagingElement<?> element = new JarArchivePackagingElement(fileName);
         return (CompositePackagingElement<?>)PackagingElementFactory.getInstance(context.getProject())
             .createParentDirectories(parentPath, element);
     }

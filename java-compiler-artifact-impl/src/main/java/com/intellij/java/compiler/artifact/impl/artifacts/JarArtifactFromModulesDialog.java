@@ -16,10 +16,11 @@
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import consulo.application.AllIcons;
 import consulo.compiler.artifact.element.PackagingElementResolvingContext;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.ModulesAlphaComparator;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.ComboboxSpeedSearch;
@@ -34,7 +35,6 @@ import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
@@ -44,7 +44,7 @@ import java.util.Arrays;
 public class JarArtifactFromModulesDialog extends DialogWrapper {
     private JPanel myMainPanel;
     private TextFieldWithBrowseButton myMainClassField;
-    private JComboBox myModuleComboBox;
+    private JComboBox<Module> myModuleComboBox;
     private JLabel myMainClassLabel;
     private TextFieldWithBrowseButton myManifestDirField;
     private JLabel myManifestDirLabel;
@@ -56,11 +56,11 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
     public JarArtifactFromModulesDialog(PackagingElementResolvingContext context) {
         super(context.getProject());
         myContext = context;
-        setTitle("Create Jar from Modules");
+        setTitle(LocalizeValue.localizeTODO("Create Jar from Modules"));
         myMainClassLabel.setLabelFor(myMainClassField.getTextField());
         myManifestDirLabel.setLabelFor(myManifestDirField.getTextField());
 
-        final Project project = myContext.getProject();
+        Project project = myContext.getProject();
         ManifestFileUtil.setupMainClassField(project, myMainClassField);
         myMainClassField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
@@ -68,12 +68,7 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
                 updateManifestDirField();
             }
         });
-        final ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateManifestDirField();
-            }
-        };
+        final ActionListener actionListener = e -> updateManifestDirField();
         myExtractJarsRadioButton.addActionListener(actionListener);
         myCopyJarsRadioButton.addActionListener(actionListener);
 
@@ -163,12 +158,12 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
         @Override
         protected void customizeCellRenderer(@Nonnull JList<? extends Module> jList, Module module, int i, boolean b, boolean b1) {
             if (module != null) {
-                setIcon(AllIcons.Nodes.Module);
+                setIcon(PlatformIconGroup.nodesModule());
                 append(module.getName());
             }
             else {
                 append("<All Modules>");
-                setIcon(AllIcons.Nodes.ModuleGroup);
+                setIcon(PlatformIconGroup.nodesModulegroup());
             }
         }
     }

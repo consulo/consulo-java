@@ -16,12 +16,10 @@
 package com.intellij.java.compiler.artifact.impl;
 
 import consulo.application.Application;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.jar.Attributes;
 
 public class ManifestBuilder {
-    @NonNls
     private static final String NAME = "Created-By";
     private static final Attributes.Name CREATED_BY = new Attributes.Name(NAME);
 

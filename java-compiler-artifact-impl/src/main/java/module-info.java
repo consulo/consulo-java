@@ -1,6 +1,6 @@
 /**
  * @author VISTALL
- * @since 06/12/2022
+ * @since 2022-12-06
  */
 module consulo.java.compiler.artifact.impl {
     requires consulo.ide.api;
