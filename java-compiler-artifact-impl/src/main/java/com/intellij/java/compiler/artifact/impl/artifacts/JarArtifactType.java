@@ -31,6 +31,7 @@ import consulo.module.content.layer.ModulesProvider;
 import consulo.ui.image.Image;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -39,39 +40,39 @@ import java.util.List;
  */
 @ExtensionImpl(order = "after zip-artifact")
 public class JarArtifactType extends ArtifactType {
-  public JarArtifactType() {
-    super("jar", "Jar");
-  }
+    public JarArtifactType() {
+        super("jar", "Jar");
+    }
 
-  public static JarArtifactType getInstance() {
-    return EP_NAME.findExtension(JarArtifactType.class);
-  }
+    public static JarArtifactType getInstance() {
+        return EP_NAME.findExtension(JarArtifactType.class);
+    }
 
-  @Nonnull
-  @Override
-  public Image getIcon() {
-    return AllIcons.Nodes.Artifact;
-  }
+    @Nonnull
+    @Override
+    public Image getIcon() {
+        return AllIcons.Nodes.Artifact;
+    }
 
-  @Override
-  public String getDefaultPathFor(@Nonnull PackagingElementOutputKind kind) {
-    return "/";
-  }
+    @Override
+    public String getDefaultPathFor(@Nonnull PackagingElementOutputKind kind) {
+        return "/";
+    }
 
-  @Override
-  public boolean isAvailableForAdd(@Nonnull ModulesProvider modulesProvider) {
-    return ModuleUtilCore.hasModuleExtension(modulesProvider, JavaModuleExtension.class);
-  }
+    @Override
+    public boolean isAvailableForAdd(@Nonnull ModulesProvider modulesProvider) {
+        return ModuleUtilCore.hasModuleExtension(modulesProvider, JavaModuleExtension.class);
+    }
 
-  @Nonnull
-  @Override
-  public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName) {
-    return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
-  }
+    @Nonnull
+    @Override
+    public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName) {
+        return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
+    }
 
-  @Nonnull
-  @Override
-  public List<? extends ArtifactTemplate> getNewArtifactTemplates(@Nonnull PackagingElementResolvingContext context) {
-    return Collections.singletonList(new JarFromModulesTemplate(context));
-  }
+    @Nonnull
+    @Override
+    public List<? extends ArtifactTemplate> getNewArtifactTemplates(@Nonnull PackagingElementResolvingContext context) {
+        return Collections.singletonList(new JarFromModulesTemplate(context));
+    }
 }

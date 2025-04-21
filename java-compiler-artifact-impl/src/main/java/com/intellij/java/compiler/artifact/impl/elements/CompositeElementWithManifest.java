@@ -23,7 +23,7 @@ import consulo.compiler.artifact.element.PackagingElementType;
  */
 @Deprecated
 public abstract class CompositeElementWithManifest<T> extends CompositePackagingElement<T> {
-  protected CompositeElementWithManifest(PackagingElementType type) {
-    super(type);
-  }
+    protected CompositeElementWithManifest(PackagingElementType type) {
+        super(type);
+    }
 }

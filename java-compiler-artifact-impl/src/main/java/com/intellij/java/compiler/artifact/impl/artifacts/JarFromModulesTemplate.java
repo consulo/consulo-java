@@ -45,158 +45,173 @@ import java.util.*;
  * @author nik
  */
 public class JarFromModulesTemplate extends ArtifactTemplate {
-  private static final Logger LOG = Logger.getInstance(JarFromModulesTemplate.class);
+    private static final Logger LOG = Logger.getInstance(JarFromModulesTemplate.class);
 
-  private PackagingElementResolvingContext myContext;
+    private PackagingElementResolvingContext myContext;
 
-  public JarFromModulesTemplate(PackagingElementResolvingContext context) {
-    myContext = context;
-  }
-
-  @Override
-  @RequiredUIAccess
-  public NewArtifactConfiguration createArtifact() {
-    JarArtifactFromModulesDialog dialog = new JarArtifactFromModulesDialog(myContext);
-    dialog.show();
-    if (!dialog.isOK()) {
-      return null;
+    public JarFromModulesTemplate(PackagingElementResolvingContext context) {
+        myContext = context;
     }
 
-    return doCreateArtifact(
-      dialog.getSelectedModules(),
-      dialog.getMainClassName(),
-      dialog.getDirectoryForManifest(),
-      dialog.isExtractLibrariesToJar(),
-      dialog.isIncludeTests()
-    );
-  }
-
-  @Nullable
-  @RequiredUIAccess
-  public NewArtifactConfiguration doCreateArtifact(
-    final Module[] modules,
-    final String mainClassName,
-    final String directoryForManifest,
-    final boolean extractLibrariesToJar,
-    final boolean includeTests
-  ) {
-    VirtualFile manifestFile = null;
-    final Project project = myContext.getProject();
-    if (mainClassName != null && !mainClassName.isEmpty() || !extractLibrariesToJar) {
-      final VirtualFile directory;
-      try {
-        directory = project.getApplication().runWriteAction(
-          (ThrowableComputable<VirtualFile, IOException>) () -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest)
-        );
-      }
-      catch (IOException e) {
-        LOG.info(e);
-        Messages.showErrorDialog(
-          project,
-          "Cannot create directory '" + directoryForManifest + "': " + e.getMessage(),
-          CommonLocalize.titleError().get()
-        );
-        return null;
-      }
-      if (directory == null) return null;
-
-      manifestFile = ManifestFileUtil.createManifestFile(directory, project);
-      if (manifestFile == null) {
-        return null;
-      }
-      ManifestFileUtil.updateManifest(manifestFile, mainClassName, null, true);
-    }
-
-    String name = modules.length == 1 ? modules[0].getName() : project.getName();
-
-    final PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
-    final CompositePackagingElement<?> archive = factory.createZipArchive(ArtifactUtil.suggestArtifactFileName(name) + ".jar");
-
-    OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(project).orderEntries(Arrays.asList(modules));
-
-    final Set<Library> libraries = new HashSet<>();
-    if (!includeTests) {
-      orderEnumerator = orderEnumerator.productionOnly();
-    }
-    final ModulesProvider modulesProvider = myContext.getModulesProvider();
-    final OrderEnumerator enumerator = orderEnumerator.using(modulesProvider).withoutSdk().runtimeOnly().recursively();
-    enumerator.forEachLibrary(new CommonProcessors.CollectProcessor<>(libraries));
-    enumerator.forEachModule(module -> {
-      if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
-        archive.addOrFindChild(factory.createModuleOutput(module));
-      }
-      if (includeTests && TestModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
-        archive.addOrFindChild(factory.createTestModuleOutput(module));
-      }
-      return true;
-    });
-
-    final JarArtifactType jarArtifactType = JarArtifactType.getInstance();
-    if (manifestFile != null && !manifestFile.equals(ManifestFileUtil.findManifestFile(archive, myContext, jarArtifactType))) {
-      archive.addFirstChild(factory.createFileCopyWithParentDirectories(manifestFile.getPath(), ManifestFileUtil.MANIFEST_DIR_NAME));
-    }
-
-    final String artifactName = name + ":jar";
-    if (extractLibrariesToJar) {
-      addExtractedLibrariesToJar(archive, factory, libraries);
-      return new NewArtifactConfiguration(archive, artifactName, jarArtifactType);
-    }
-    else {
-      final ArtifactRootElement<?> root = factory.createArtifactRootElement();
-      List<String> classpath = new ArrayList<>();
-      root.addOrFindChild(archive);
-      addLibraries(libraries, root, archive, classpath);
-      ManifestFileUtil.updateManifest(manifestFile, mainClassName, classpath, true);
-      return new NewArtifactConfiguration(root, artifactName, PlainArtifactType.getInstance());
-    }
-  }
-
-  private void addLibraries(Set<Library> libraries, ArtifactRootElement<?> root, CompositePackagingElement<?> archive,
-                            List<String> classpath) {
-    PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
-    for (Library library : libraries) {
-      if (LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
-        for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
-          if (classesRoot.isInLocalFileSystem()) {
-            archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
-          }
-          else {
-            final PackagingElement<?> child = factory.createFileCopyWithParentDirectories(VirtualFilePathUtil.getLocalFile(classesRoot).getPath(), "/");
-            root.addOrFindChild(child);
-            classpath.addAll(ManifestFileUtil.getClasspathForElements(Collections.singletonList(child), myContext, PlainArtifactType.getInstance()));
-          }
+    @Override
+    @RequiredUIAccess
+    public NewArtifactConfiguration createArtifact() {
+        JarArtifactFromModulesDialog dialog = new JarArtifactFromModulesDialog(myContext);
+        dialog.show();
+        if (!dialog.isOK()) {
+            return null;
         }
 
-      }
-      else {
-        final List<? extends PackagingElement<?>> children = factory.createLibraryElements(library);
-        classpath.addAll(ManifestFileUtil.getClasspathForElements(children, myContext, PlainArtifactType.getInstance()));
-        root.addOrFindChildren(children);
-      }
+        return doCreateArtifact(
+            dialog.getSelectedModules(),
+            dialog.getMainClassName(),
+            dialog.getDirectoryForManifest(),
+            dialog.isExtractLibrariesToJar(),
+            dialog.isIncludeTests()
+        );
     }
-  }
 
-  private static void addExtractedLibrariesToJar(CompositePackagingElement<?> archive, PackagingElementFactory factory, Set<Library> libraries) {
-    for (Library library : libraries) {
-      if (LibraryPackagingElement.getKindForLibrary(library).containsJarFiles()) {
-        for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
-          if (classesRoot.isInLocalFileSystem()) {
-            archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
-          }
-          else {
-            archive.addOrFindChild(factory.createExtractedDirectory(classesRoot));
-          }
+    @Nullable
+    @RequiredUIAccess
+    public NewArtifactConfiguration doCreateArtifact(
+        final Module[] modules,
+        final String mainClassName,
+        final String directoryForManifest,
+        final boolean extractLibrariesToJar,
+        final boolean includeTests
+    ) {
+        VirtualFile manifestFile = null;
+        final Project project = myContext.getProject();
+        if (mainClassName != null && !mainClassName.isEmpty() || !extractLibrariesToJar) {
+            final VirtualFile directory;
+            try {
+                directory = project.getApplication().runWriteAction(
+                    (ThrowableComputable<VirtualFile, IOException>)() -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest)
+                );
+            }
+            catch (IOException e) {
+                LOG.info(e);
+                Messages.showErrorDialog(
+                    project,
+                    "Cannot create directory '" + directoryForManifest + "': " + e.getMessage(),
+                    CommonLocalize.titleError().get()
+                );
+                return null;
+            }
+            if (directory == null) {
+                return null;
+            }
+
+            manifestFile = ManifestFileUtil.createManifestFile(directory, project);
+            if (manifestFile == null) {
+                return null;
+            }
+            ManifestFileUtil.updateManifest(manifestFile, mainClassName, null, true);
         }
 
-      }
-      else {
-        archive.addOrFindChildren(factory.createLibraryElements(library));
-      }
-    }
-  }
+        String name = modules.length == 1 ? modules[0].getName() : project.getName();
 
-  @Override
-  public String getPresentableName() {
-    return "From modules with dependencies...";
-  }
+        final PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
+        final CompositePackagingElement<?> archive = factory.createZipArchive(ArtifactUtil.suggestArtifactFileName(name) + ".jar");
+
+        OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(project).orderEntries(Arrays.asList(modules));
+
+        final Set<Library> libraries = new HashSet<>();
+        if (!includeTests) {
+            orderEnumerator = orderEnumerator.productionOnly();
+        }
+        final ModulesProvider modulesProvider = myContext.getModulesProvider();
+        final OrderEnumerator enumerator = orderEnumerator.using(modulesProvider).withoutSdk().runtimeOnly().recursively();
+        enumerator.forEachLibrary(new CommonProcessors.CollectProcessor<>(libraries));
+        enumerator.forEachModule(module -> {
+            if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
+                archive.addOrFindChild(factory.createModuleOutput(module));
+            }
+            if (includeTests && TestModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
+                archive.addOrFindChild(factory.createTestModuleOutput(module));
+            }
+            return true;
+        });
+
+        final JarArtifactType jarArtifactType = JarArtifactType.getInstance();
+        if (manifestFile != null && !manifestFile.equals(ManifestFileUtil.findManifestFile(archive, myContext, jarArtifactType))) {
+            archive.addFirstChild(factory.createFileCopyWithParentDirectories(manifestFile.getPath(), ManifestFileUtil.MANIFEST_DIR_NAME));
+        }
+
+        final String artifactName = name + ":jar";
+        if (extractLibrariesToJar) {
+            addExtractedLibrariesToJar(archive, factory, libraries);
+            return new NewArtifactConfiguration(archive, artifactName, jarArtifactType);
+        }
+        else {
+            final ArtifactRootElement<?> root = factory.createArtifactRootElement();
+            List<String> classpath = new ArrayList<>();
+            root.addOrFindChild(archive);
+            addLibraries(libraries, root, archive, classpath);
+            ManifestFileUtil.updateManifest(manifestFile, mainClassName, classpath, true);
+            return new NewArtifactConfiguration(root, artifactName, PlainArtifactType.getInstance());
+        }
+    }
+
+    private void addLibraries(
+        Set<Library> libraries,
+        ArtifactRootElement<?> root,
+        CompositePackagingElement<?> archive,
+        List<String> classpath
+    ) {
+        PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
+        for (Library library : libraries) {
+            if (LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
+                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
+                    if (classesRoot.isInLocalFileSystem()) {
+                        archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
+                    }
+                    else {
+                        final PackagingElement<?> child =
+                            factory.createFileCopyWithParentDirectories(VirtualFilePathUtil.getLocalFile(classesRoot).getPath(), "/");
+                        root.addOrFindChild(child);
+                        classpath.addAll(ManifestFileUtil.getClasspathForElements(
+                            Collections.singletonList(child),
+                            myContext,
+                            PlainArtifactType.getInstance()
+                        ));
+                    }
+                }
+
+            }
+            else {
+                final List<? extends PackagingElement<?>> children = factory.createLibraryElements(library);
+                classpath.addAll(ManifestFileUtil.getClasspathForElements(children, myContext, PlainArtifactType.getInstance()));
+                root.addOrFindChildren(children);
+            }
+        }
+    }
+
+    private static void addExtractedLibrariesToJar(
+        CompositePackagingElement<?> archive,
+        PackagingElementFactory factory,
+        Set<Library> libraries
+    ) {
+        for (Library library : libraries) {
+            if (LibraryPackagingElement.getKindForLibrary(library).containsJarFiles()) {
+                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
+                    if (classesRoot.isInLocalFileSystem()) {
+                        archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
+                    }
+                    else {
+                        archive.addOrFindChild(factory.createExtractedDirectory(classesRoot));
+                    }
+                }
+
+            }
+            else {
+                archive.addOrFindChildren(factory.createLibraryElements(library));
+            }
+        }
+    }
+
+    @Override
+    public String getPresentableName() {
+        return "From modules with dependencies...";
+    }
 }

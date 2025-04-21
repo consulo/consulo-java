@@ -37,31 +37,31 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl(order = "after zip-archive-element")
 public class JarArchiveElementType extends CompositePackagingElementType<JarArchivePackagingElement> {
-  @Nonnull
-  public static JarArchiveElementType getInstance() {
-    return getInstance(JarArchiveElementType.class);
-  }
+    @Nonnull
+    public static JarArchiveElementType getInstance() {
+        return getInstance(JarArchiveElementType.class);
+    }
 
-  public JarArchiveElementType() {
-    super("jar-archive", CompilerLocalize.elementTypeNameJarArchive().get());
-  }
+    public JarArchiveElementType() {
+        super("jar-archive", CompilerLocalize.elementTypeNameJarArchive().get());
+    }
 
-  @Override
-  public boolean isAvailableForAdd(@Nonnull ArtifactEditorContext context, @Nonnull Artifact artifact) {
-    return ModuleUtilCore.hasModuleExtension(context.getModulesProvider(), JavaModuleExtension.class);
-  }
+    @Override
+    public boolean isAvailableForAdd(@Nonnull ArtifactEditorContext context, @Nonnull Artifact artifact) {
+        return ModuleUtilCore.hasModuleExtension(context.getModulesProvider(), JavaModuleExtension.class);
+    }
 
-  @Nonnull
-  @Override
-  public Image getIcon() {
-    return AllIcons.Nodes.PpJar;
-  }
+    @Nonnull
+    @Override
+    public Image getIcon() {
+        return AllIcons.Nodes.PpJar;
+    }
 
-  @Nonnull
-  @Override
-  public JarArchivePackagingElement createEmpty(@Nonnull Project project) {
-    return new JarArchivePackagingElement();
-  }
+    @Nonnull
+    @Override
+    public JarArchivePackagingElement createEmpty(@Nonnull Project project) {
+        return new JarArchivePackagingElement();
+    }
 
 	/*@Override
   public PackagingElementPropertiesPanel createElementPropertiesPanel(@NotNull JarArchivePackagingElement element,
@@ -70,29 +70,29 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 		return new JarArchiveElementPropertiesPanel(element, context);
 	}    */
 
-  @Override
-  public CompositePackagingElement<?> createComposite(
-    CompositePackagingElement<?> parent,
-    @Nullable String baseName,
-    @Nonnull ArtifactEditorContext context
-  ) {
-    final String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
-    String path = Messages.showInputDialog(
-      context.getProject(),
-      "Enter archive name: ",
-      "New Archive",
-      null,
-      initialValue,
-      new FilePathValidator()
-    );
-    if (path == null) {
-      return null;
+    @Override
+    public CompositePackagingElement<?> createComposite(
+        CompositePackagingElement<?> parent,
+        @Nullable String baseName,
+        @Nonnull ArtifactEditorContext context
+    ) {
+        final String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
+        String path = Messages.showInputDialog(
+            context.getProject(),
+            "Enter archive name: ",
+            "New Archive",
+            null,
+            initialValue,
+            new FilePathValidator()
+        );
+        if (path == null) {
+            return null;
+        }
+        path = FileUtil.toSystemIndependentName(path);
+        final String parentPath = PathUtil.getParentPath(path);
+        final String fileName = PathUtil.getFileName(path);
+        final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
+        return (CompositePackagingElement<?>)PackagingElementFactory.getInstance(context.getProject())
+            .createParentDirectories(parentPath, element);
     }
-    path = FileUtil.toSystemIndependentName(path);
-    final String parentPath = PathUtil.getParentPath(path);
-    final String fileName = PathUtil.getFileName(path);
-    final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
-    return (CompositePackagingElement<?>) PackagingElementFactory.getInstance(context.getProject())
-      .createParentDirectories(parentPath, element);
-  }
 }
