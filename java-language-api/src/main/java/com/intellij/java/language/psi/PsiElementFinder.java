@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import consulo.application.util.function.Processor;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
@@ -147,17 +147,19 @@ public abstract class PsiElementFinder {
      * A method to optimize resolve (to only search classes in a package which might be there)
      */
     @Nonnull
+    @RequiredReadAction
     public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
         return getClassNames(getClasses(psiPackage, scope));
     }
 
     @Nonnull
+    @RequiredReadAction
     protected static Set<String> getClassNames(@Nonnull PsiClass[] classes) {
         if (classes.length == 0) {
             return Collections.emptySet();
         }
 
-        final HashSet<String> names = new HashSet<String>();
+        HashSet<String> names = new HashSet<>();
         for (PsiClass aClass : classes) {
             ContainerUtil.addIfNotNull(names, aClass.getName());
         }
@@ -167,7 +169,7 @@ public abstract class PsiElementFinder {
     public boolean processPackageDirectories(
         @Nonnull PsiJavaPackage psiPackage,
         @Nonnull GlobalSearchScope scope,
-        @Nonnull Processor<PsiDirectory> consumer
+        @Nonnull Predicate<PsiDirectory> consumer
     ) {
         return processPackageDirectories(psiPackage, scope, consumer, false);
     }
@@ -175,7 +177,7 @@ public abstract class PsiElementFinder {
     public boolean processPackageDirectories(
         @Nonnull PsiJavaPackage psiPackage,
         @Nonnull GlobalSearchScope scope,
-        @Nonnull Processor<PsiDirectory> consumer,
+        @Nonnull Predicate<PsiDirectory> consumer,
         boolean includeLibrarySources
     ) {
         return true;
@@ -191,6 +193,7 @@ public abstract class PsiElementFinder {
      * @see PsiJavaPackage#getClasses(GlobalSearchScope)
      */
     @Nonnull
+    @RequiredReadAction
     public PsiClass[] getClasses(@Nullable String className, @Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
         PsiClass[] allClasses = getClasses(psiPackage, scope);
         if (className == null) {
@@ -200,6 +203,7 @@ public abstract class PsiElementFinder {
     }
 
     @Nonnull
+    @RequiredReadAction
     public static PsiClass[] filterByName(@Nonnull String className, @Nonnull PsiClass[] classes) {
         if (classes.length == 0) {
             return PsiClass.EMPTY_ARRAY;
@@ -207,7 +211,7 @@ public abstract class PsiElementFinder {
         if (classes.length == 1) {
             return className.equals(classes[0].getName()) ? classes : PsiClass.EMPTY_ARRAY;
         }
-        List<PsiClass> foundClasses = new SmartList<PsiClass>();
+        List<PsiClass> foundClasses = new SmartList<>();
         for (PsiClass psiClass : classes) {
             if (className.equals(psiClass.getName())) {
                 foundClasses.add(psiClass);

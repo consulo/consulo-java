@@ -20,13 +20,12 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFileFactory;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -35,11 +34,11 @@ import jakarta.annotation.Nonnull;
 public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotationMethod {
     private SoftReference<PsiAnnotationMemberValue> myCachedDefaultValue = null;
 
-    public PsiAnnotationMethodImpl(final PsiMethodStub stub) {
+    public PsiAnnotationMethodImpl(PsiMethodStub stub) {
         super(stub, JavaStubElementTypes.ANNOTATION_METHOD);
     }
 
-    public PsiAnnotationMethodImpl(final ASTNode node) {
+    public PsiAnnotationMethodImpl(ASTNode node) {
         super(node);
     }
 
@@ -54,47 +53,49 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
     }
 
     @Override
+    @RequiredReadAction
     public PsiAnnotationMemberValue getDefaultValue() {
-        final PsiMethodStub stub = getStub();
+        PsiMethodStub stub = getStub();
         if (stub != null) {
-            final String text = stub.getDefaultValueText();
+            String text = stub.getDefaultValueText();
             if (StringUtil.isEmpty(text)) {
                 return null;
             }
 
             if (myCachedDefaultValue != null) {
-                final PsiAnnotationMemberValue value = myCachedDefaultValue.get();
+                PsiAnnotationMemberValue value = myCachedDefaultValue.get();
                 if (value != null) {
                     return value;
                 }
             }
 
-            @NonNls final String annoText = "@interface _Dummy_ { Class foo() default " + text + "; }";
-            final PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
-            final PsiJavaFile file = (PsiJavaFile)factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
-            final PsiAnnotationMemberValue value = ((PsiAnnotationMethod)file.getClasses()[0].getMethods()[0]).getDefaultValue();
-            myCachedDefaultValue = new SoftReference<PsiAnnotationMemberValue>(value);
+            String annoText = "@interface _Dummy_ { Class foo() default " + text + "; }";
+            PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
+            PsiJavaFile file = (PsiJavaFile)factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
+            PsiAnnotationMemberValue value = ((PsiAnnotationMethod)file.getClasses()[0].getMethods()[0]).getDefaultValue();
+            myCachedDefaultValue = new SoftReference<>(value);
             return value;
         }
 
         myCachedDefaultValue = null;
 
-        final ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_DEFAULT_VALUE);
+        ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_DEFAULT_VALUE);
         if (node == null) {
             return null;
         }
         return (PsiAnnotationMemberValue)node.getPsi();
     }
 
-    @NonNls
+    @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiAnnotationMethod:" + getName();
     }
 
     @Override
     public final void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitAnnotationMethod(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitAnnotationMethod(this);
         }
         else {
             visitor.visitElement(this);

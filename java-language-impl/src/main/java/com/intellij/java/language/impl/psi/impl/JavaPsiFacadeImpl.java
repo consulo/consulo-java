@@ -20,9 +20,9 @@ import com.intellij.java.language.impl.psi.impl.source.JavaDummyHolder;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.progress.ProgressIndicatorProvider;
-import consulo.application.util.function.Processor;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -84,7 +84,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     }
 
     @Override
-    public PsiClass findClass(@Nonnull final String qualifiedName, @Nonnull GlobalSearchScope scope) {
+    @RequiredReadAction
+    public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
         ProgressIndicatorProvider.checkCanceled(); // We hope this method is being called often enough to cancel daemon processes smoothly
 
         if (DumbService.getInstance(getProject()).isDumb()) {
@@ -106,10 +107,11 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     }
 
     @Nonnull
+    @RequiredReadAction
     private PsiClass[] findClassesInDumbMode(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
-        final String packageName = StringUtil.getPackageName(qualifiedName);
-        final PsiJavaPackage pkg = findPackage(packageName);
-        final String className = StringUtil.getShortName(qualifiedName);
+        String packageName = StringUtil.getPackageName(qualifiedName);
+        PsiJavaPackage pkg = findPackage(packageName);
+        String className = StringUtil.getShortName(qualifiedName);
         if (pkg == null && packageName.length() < qualifiedName.length()) {
             PsiClass[] containingClasses = findClassesInDumbMode(packageName, scope);
             if (containingClasses.length == 1) {
@@ -126,8 +128,9 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
         return pkg.findClassByShortName(className, scope);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
         if (DumbService.getInstance(getProject()).isDumb()) {
             return findClassesInDumbMode(qualifiedName, scope);
@@ -147,13 +150,14 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
         return myProject.getExtensionList(PsiElementFinder.class);
     }
 
-    @Override
     @Nonnull
+    @Override
     public PsiConstantEvaluationHelper getConstantEvaluationHelper() {
         return myConstantEvaluationHelper;
     }
 
     @Override
+    @RequiredReadAction
     public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
         for (PsiElementFinder elementFinder : filteredFinders()) {
             PsiJavaPackage aPackage = elementFinder.findPackage(qualifiedName);
@@ -223,6 +227,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     }
 
     @Nonnull
+    @RequiredReadAction
     public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
         Set<String> result = new HashSet<>();
         for (PsiElementFinder finder : filteredFinders()) {
@@ -249,6 +254,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     }
 
     @Nonnull
+    @RequiredReadAction
     public PsiFile[] getPackageFiles(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
         Predicate<PsiFile> filter = null;
 
@@ -259,7 +265,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
                     filter = finderFilter;
                 }
                 else {
-                    final Predicate<PsiFile> oldFilter = filter;
+                    Predicate<PsiFile> oldFilter = filter;
                     filter = psiFile -> oldFilter.test(psiFile) && finderFilter.test(psiFile);
                 }
             }
@@ -284,7 +290,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     public boolean processPackageDirectories(
         @Nonnull PsiJavaPackage psiPackage,
         @Nonnull GlobalSearchScope scope,
-        @Nonnull Processor<PsiDirectory> consumer
+        @Nonnull Predicate<PsiDirectory> consumer
     ) {
         for (PsiElementFinder finder : filteredFinders()) {
             if (!finder.processPackageDirectories(psiPackage, scope, consumer)) {
@@ -294,6 +300,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
         return true;
     }
 
+    @RequiredReadAction
     public PsiClass[] findClassByShortName(String name, PsiJavaPackage psiPackage, GlobalSearchScope scope) {
         List<PsiClass> result = null;
         for (PsiElementFinder finder : filteredFinders()) {
@@ -313,8 +320,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
 
     @Override
     public boolean isPartOfPackagePrefix(@Nonnull String packageName) {
-        final Collection<String> packagePrefixes = JavaFileManager.getInstance(myProject).getNonTrivialPackagePrefixes();
-        for (final String subpackageName : packagePrefixes) {
+        Collection<String> packagePrefixes = JavaFileManager.getInstance(myProject).getNonTrivialPackagePrefixes();
+        for (String subpackageName : packagePrefixes) {
             if (isSubpackageOf(subpackageName, packageName)) {
                 return true;
             }
@@ -328,12 +335,12 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
 
     @Override
     public boolean isInPackage(@Nonnull PsiElement element, @Nonnull PsiJavaPackage aPackage) {
-        final PsiFile file = FileContextUtil.getContextFile(element);
-        if (file instanceof JavaDummyHolder) {
-            return ((JavaDummyHolder)file).isInPackage(aPackage);
+        PsiFile file = FileContextUtil.getContextFile(element);
+        if (file instanceof JavaDummyHolder javaDummyHolder) {
+            return javaDummyHolder.isInPackage(aPackage);
         }
-        if (file instanceof PsiJavaFile) {
-            final String packageName = ((PsiJavaFile)file).getPackageName();
+        if (file instanceof PsiJavaFile javaFile) {
+            String packageName = javaFile.getPackageName();
             return packageName.equals(aPackage.getQualifiedName());
         }
         return false;
@@ -354,15 +361,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
             PsiElement other = file1 instanceof JavaDummyHolder ? file2 : file1;
             return dummyHolder.isSamePackage(other);
         }
-        if (!(file1 instanceof PsiClassOwner)) {
-            return false;
-        }
-        if (!(file2 instanceof PsiClassOwner)) {
-            return false;
-        }
-        String package1 = ((PsiClassOwner)file1).getPackageName();
-        String package2 = ((PsiClassOwner)file2).getPackageName();
-        return Comparing.equal(package1, package2);
+        return file1 instanceof PsiClassOwner pco1 && file2 instanceof PsiClassOwner pco2
+            && Objects.equals(pco1.getPackageName(), pco2.getPackageName());
     }
 
     @Override
