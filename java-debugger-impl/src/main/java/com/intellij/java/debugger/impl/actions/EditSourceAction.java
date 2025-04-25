@@ -15,42 +15,44 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SourcePositionProvider;
-import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
+import consulo.application.AccessRule;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.action.Presentation;
-import consulo.application.ReadAction;
-import consulo.project.Project;
 
 public class EditSourceAction extends DebuggerAction {
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
-        final Project project = e.getData(Project.KEY);
+        Project project = e.getData(Project.KEY);
 
         if (project == null) {
             return;
         }
 
-        final DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
+        DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
         if (selectedNode != null) {
-            final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+            DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
             DebugProcessImpl process = debuggerContext.getDebugProcess();
             if (process != null) {
                 process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
                     @Override
                     public void threadAction() {
-                        final SourcePosition sourcePosition = getSourcePosition(selectedNode, debuggerContext);
+                        SourcePosition sourcePosition = getSourcePosition(selectedNode, debuggerContext);
                         if (sourcePosition != null) {
                             sourcePosition.navigate(true);
                         }
@@ -61,47 +63,48 @@ public class EditSourceAction extends DebuggerAction {
     }
 
     private static SourcePosition getSourcePosition(DebuggerTreeNodeImpl selectedNode, DebuggerContextImpl debuggerContext) {
-        final DebuggerContextImpl context = debuggerContext;
+        DebuggerContextImpl context = debuggerContext;
 
         if (selectedNode == null || context == null) {
             return null;
         }
 
-        final Project project = selectedNode.getProject();
+        Project project = selectedNode.getProject();
 
-        final DebuggerSession debuggerSession = context.getDebuggerSession();
+        DebuggerSession debuggerSession = context.getDebuggerSession();
 
         if (debuggerSession == null) {
             return null;
         }
 
         NodeDescriptorImpl nodeDescriptor = selectedNode.getDescriptor();
-        if (nodeDescriptor instanceof WatchItemDescriptor) {
-            Modifier modifier = ((WatchItemDescriptor)nodeDescriptor).getModifier();
+        if (nodeDescriptor instanceof WatchItemDescriptor watchItemDescriptor) {
+            Modifier modifier = watchItemDescriptor.getModifier();
             if (modifier == null) {
                 return null;
             }
             nodeDescriptor = (NodeDescriptorImpl)modifier.getInspectItem(project);
         }
 
-        final NodeDescriptorImpl nodeDescriptor1 = nodeDescriptor;
-        return ReadAction.compute(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
-    }
+        NodeDescriptorImpl nodeDescriptor1 = nodeDescriptor;
+        return AccessRule.read(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
+  }
 
     @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
-        final Project project = e.getData(Project.KEY);
+        Project project = e.getData(Project.KEY);
 
-        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-        final DebuggerTreeNodeImpl node = getSelectedNode(e.getDataContext());
+        DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        DebuggerTreeNodeImpl node = getSelectedNode(e.getDataContext());
 
-        final Presentation presentation = e.getPresentation();
+        Presentation presentation = e.getPresentation();
         if (debuggerContext.getDebugProcess() != null) {
             presentation.setEnabled(true);
             debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
                 @Override
                 public void threadAction() {
-                    final SourcePosition position = getSourcePosition(node, debuggerContext);
+                    SourcePosition position = getSourcePosition(node, debuggerContext);
                     if (position == null) {
                         DebuggerInvocationUtil.swingInvokeLater(project, () -> presentation.setEnabled(false));
                     }
@@ -112,6 +115,6 @@ public class EditSourceAction extends DebuggerAction {
             presentation.setEnabled(false);
         }
         e.getPresentation()
-            .setText(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getText());
+            .setTextValue(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue());
     }
 }

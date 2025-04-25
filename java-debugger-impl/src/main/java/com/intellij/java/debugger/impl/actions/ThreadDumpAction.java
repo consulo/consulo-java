@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
@@ -23,18 +22,22 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import consulo.application.Application;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,30 +45,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * class ExportThreadsAction
- *
  * @author Eugene Zhuravlev
  * @author Sascha Weinreuter
  */
 public class ThreadDumpAction extends AnAction {
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
-        final Project project = e.getData(Project.KEY);
+        Project project = e.getData(Project.KEY);
         if (project == null) {
             return;
         }
         DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
 
-        final DebuggerSession session = context.getDebuggerSession();
+        DebuggerSession session = context.getDebuggerSession();
         if (session != null && session.isAttached()) {
-            final DebugProcessImpl process = context.getDebugProcess();
+            DebugProcessImpl process = context.getDebugProcess();
             process.getManagerThread().invoke(new DebuggerCommandImpl() {
                 @Override
                 protected void action() throws Exception {
-                    final VirtualMachineProxyImpl vm = process.getVirtualMachineProxy();
+                    VirtualMachineProxyImpl vm = process.getVirtualMachineProxy();
                     vm.suspend();
                     try {
-                        final List<ThreadState> threads = buildThreadStates(vm);
+                        List<ThreadState> threads = buildThreadStates(vm);
                         project.getApplication().invokeLater(
                             () -> {
                                 XDebugSession xSession = session.getXDebugSession();
@@ -85,19 +87,19 @@ public class ThreadDumpAction extends AnAction {
     }
 
     static List<ThreadState> buildThreadStates(VirtualMachineProxyImpl vmProxy) {
-        final List<ThreadReference> threads = vmProxy.getVirtualMachine().allThreads();
-        final List<ThreadState> result = new ArrayList<>();
-        final Map<String, ThreadState> nameToThreadMap = new HashMap<>();
-        final Map<String, String> waitingMap = new HashMap<>(); // key 'waits_for' value
+        List<ThreadReference> threads = vmProxy.getVirtualMachine().allThreads();
+        List<ThreadState> result = new ArrayList<>();
+        Map<String, ThreadState> nameToThreadMap = new HashMap<>();
+        Map<String, String> waitingMap = new HashMap<>(); // key 'waits_for' value
         for (ThreadReference threadReference : threads) {
-            final StringBuilder buffer = new StringBuilder();
+            StringBuilder buffer = new StringBuilder();
             boolean hasEmptyStack = true;
-            final int threadStatus = threadReference.status();
+            int threadStatus = threadReference.status();
             if (threadStatus == ThreadReference.THREAD_STATUS_ZOMBIE) {
                 continue;
             }
-            final String threadName = threadName(threadReference);
-            final ThreadState threadState = new ThreadState(threadName, threadStatusToState(threadStatus));
+            String threadName = threadName(threadReference);
+            ThreadState threadState = new ThreadState(threadName, threadStatusToState(threadStatus));
             nameToThreadMap.put(threadName, threadState);
             result.add(threadState);
             threadState.setJavaThreadState(threadStatusToJavaThreadState(threadStatus));
@@ -110,7 +112,7 @@ public class ThreadDumpAction extends AnAction {
                 if (daemon != null) {
                     Value value = threadReference.getValue(daemon);
                     if (value instanceof BooleanValue booleanValue && booleanValue.booleanValue()) {
-                        buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.daemon"));
+                        buffer.append(" ").append(JavaDebuggerLocalize.threadsExportAttributeLabelDaemon());
                         threadState.setDaemon(true);
                     }
                 }
@@ -121,7 +123,7 @@ public class ThreadDumpAction extends AnAction {
                     Value value = threadReference.getValue(priority);
                     if (value instanceof IntegerValue integerValue) {
                         buffer.append(" ")
-                            .append(DebuggerBundle.message("threads.export.attribute.label.priority", integerValue.intValue()));
+                            .append(JavaDebuggerLocalize.threadsExportAttributeLabelPriority(integerValue.intValue()));
                     }
                 }
 
@@ -130,7 +132,7 @@ public class ThreadDumpAction extends AnAction {
                     Value value = threadReference.getValue(tid);
                     if (value instanceof LongValue longValue) {
                         buffer.append(" ")
-                            .append(DebuggerBundle.message("threads.export.attribute.label.tid", Long.toHexString(longValue.longValue())));
+                            .append(JavaDebuggerLocalize.threadsExportAttributeLabelTid(Long.toHexString(longValue.longValue())));
                         buffer.append(" nid=NA");
                     }
                 }
@@ -139,7 +141,7 @@ public class ThreadDumpAction extends AnAction {
             //if (groupReference != null) {
             //    buffer.append(", ").append(DebuggerBundle.message("threads.export.attribute.label.group", groupReference.name()));
             //}
-            final String state = threadState.getState();
+            String state = threadState.getState();
             if (state != null) {
                 buffer.append(" ").append(state);
             }
@@ -153,12 +155,12 @@ public class ThreadDumpAction extends AnAction {
                         if (!vmProxy.canGetMonitorFrameInfo()) { // java 5 and earlier
                             buffer.append("\n\t ").append(renderLockedObject(reference));
                         }
-                        final List<ThreadReference> waiting = reference.waitingThreads();
+                        List<ThreadReference> waiting = reference.waitingThreads();
                         for (ThreadReference thread : waiting) {
-                            final String waitingThreadName = threadName(thread);
+                            String waitingThreadName = threadName(thread);
                             waitingMap.put(waitingThreadName, threadName);
                             buffer.append("\n\t ")
-                                .append(DebuggerBundle.message("threads.export.attribute.label.blocks.thread", waitingThreadName));
+                                .append(JavaDebuggerLocalize.threadsExportAttributeLabelBlocksThread(waitingThreadName));
                         }
                     }
                 }
@@ -168,22 +170,23 @@ public class ThreadDumpAction extends AnAction {
                     if (vmProxy.canGetMonitorInfo()) {
                         ThreadReference waitedMonitorOwner = waitedMonitor.owningThread();
                         if (waitedMonitorOwner != null) {
-                            final String monitorOwningThreadName = threadName(waitedMonitorOwner);
+                            String monitorOwningThreadName = threadName(waitedMonitorOwner);
                             waitingMap.put(threadName, monitorOwningThreadName);
-                            buffer.append("\n\t ").append(DebuggerBundle.message("threads.export.attribute.label.waiting.for.thread",
-                                monitorOwningThreadName, renderObject(waitedMonitor)
+                            buffer.append("\n\t ").append(JavaDebuggerLocalize.threadsExportAttributeLabelWaitingForThread(
+                                monitorOwningThreadName,
+                                renderObject(waitedMonitor)
                             ));
                         }
                     }
                 }
 
-                final List<StackFrame> frames = threadReference.frames();
+                List<StackFrame> frames = threadReference.frames();
                 hasEmptyStack = frames.size() == 0;
 
-                final IntObjectMap<List<ObjectReference>> lockedAt = IntMaps.newIntObjectHashMap();
+                IntObjectMap<List<ObjectReference>> lockedAt = IntMaps.newIntObjectHashMap();
                 if (vmProxy.canGetMonitorFrameInfo()) {
                     for (MonitorInfo info : threadReference.ownedMonitorsAndFrames()) {
-                        final int stackDepth = info.stackDepth();
+                        int stackDepth = info.stackDepth();
                         List<ObjectReference> monitors;
                         if ((monitors = lockedAt.get(stackDepth)) == null) {
                             lockedAt.put(stackDepth, monitors = new SmartList<>());
@@ -193,12 +196,12 @@ public class ThreadDumpAction extends AnAction {
                 }
 
                 for (int i = 0, framesSize = frames.size(); i < framesSize; i++) {
-                    final StackFrame stackFrame = frames.get(i);
+                    StackFrame stackFrame = frames.get(i);
                     try {
-                        final Location location = stackFrame.location();
+                        Location location = stackFrame.location();
                         buffer.append("\n\t  ").append(renderLocation(location));
 
-                        final List<ObjectReference> monitors = lockedAt.get(i);
+                        List<ObjectReference> monitors = lockedAt.get(i);
                         if (monitors != null) {
                             for (ObjectReference monitor : monitors) {
                                 buffer.append("\n\t  - ").append(renderLockedObject(monitor));
@@ -211,15 +214,15 @@ public class ThreadDumpAction extends AnAction {
                 }
             }
             catch (IncompatibleThreadStateException e) {
-                buffer.append("\n\t ").append(DebuggerBundle.message("threads.export.attribute.error.incompatible.state"));
+                buffer.append("\n\t ").append(JavaDebuggerLocalize.threadsExportAttributeErrorIncompatibleState());
             }
             threadState.setStackTrace(buffer.toString(), hasEmptyStack);
             ThreadDumpParser.inferThreadStateDetail(threadState);
         }
 
         for (String waiting : waitingMap.keySet()) {
-            final ThreadState waitingThread = nameToThreadMap.get(waiting);
-            final ThreadState awaitedThread = nameToThreadMap.get(waitingMap.get(waiting));
+            ThreadState waitingThread = nameToThreadMap.get(waiting);
+            ThreadState awaitedThread = nameToThreadMap.get(waitingMap.get(waiting));
             awaitedThread.addWaitingThread(waitingThread);
         }
 
@@ -237,8 +240,9 @@ public class ThreadDumpAction extends AnAction {
         return result;
     }
 
-    private static String renderLockedObject(ObjectReference monitor) {
-        return DebuggerBundle.message("threads.export.attribute.label.locked", renderObject(monitor));
+    @Nonnull
+    private static LocalizeValue renderLockedObject(ObjectReference monitor) {
+        return JavaDebuggerLocalize.threadsExportAttributeLabelLocked(renderObject(monitor));
     }
 
     public static String renderObject(ObjectReference monitor) {
@@ -249,7 +253,7 @@ public class ThreadDumpAction extends AnAction {
         catch (Throwable e) {
             monitorTypeName = "Error getting object type: '" + e.getMessage() + "'";
         }
-        return DebuggerBundle.message("threads.export.attribute.label.object-id", Long.toHexString(monitor.uniqueID()), monitorTypeName);
+        return JavaDebuggerLocalize.threadsExportAttributeLabelObjectId(Long.toHexString(monitor.uniqueID()), monitorTypeName).get();
     }
 
     private static String threadStatusToJavaThreadState(int status) {
@@ -294,7 +298,7 @@ public class ThreadDumpAction extends AnAction {
         }
     }
 
-    public static String renderLocation(final Location location) {
+    public static String renderLocation(Location location) {
         String sourceName;
         try {
             sourceName = location.sourceName();
@@ -303,7 +307,7 @@ public class ThreadDumpAction extends AnAction {
             sourceName = "Unknown Source";
         }
 
-        final StringBuilder methodName = new StringBuilder();
+        StringBuilder methodName = new StringBuilder();
         try {
             methodName.append(location.declaringType().name());
         }
@@ -325,7 +329,7 @@ public class ThreadDumpAction extends AnAction {
         catch (Throwable e) {
             lineNumber = -1;
         }
-        return DebuggerBundle.message("export.threads.stackframe.format", methodName.toString(), sourceName, lineNumber);
+        return JavaDebuggerLocalize.exportThreadsStackframeFormat(methodName.toString(), sourceName, lineNumber).get();
     }
 
     private static String threadName(ThreadReference threadReference) {
@@ -333,6 +337,7 @@ public class ThreadDumpAction extends AnAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void update(AnActionEvent event) {
         Presentation presentation = event.getPresentation();
         Project project = event.getData(Project.KEY);

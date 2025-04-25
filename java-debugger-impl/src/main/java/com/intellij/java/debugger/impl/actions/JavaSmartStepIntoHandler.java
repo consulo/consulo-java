@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.actions;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
@@ -36,46 +37,48 @@ import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
- * User: Alexander Podkhalyuzin
- * Date: 22.11.11
+ * @author Alexander Podkhalyuzin
+ * @since 2011-11-22
  */
 @ExtensionImpl
 public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
     @Override
-    public boolean isAvailable(final SourcePosition position) {
-        final PsiFile file = position.getFile();
+    @RequiredReadAction
+    public boolean isAvailable(SourcePosition position) {
+        PsiFile file = position.getFile();
         return file.getLanguage().isKindOf(JavaLanguage.INSTANCE);
     }
 
-    @Override
     @Nonnull
-    public List<SmartStepTarget> findSmartStepTargets(final SourcePosition position) {
-        final int line = position.getLine();
+    @Override
+    @RequiredReadAction
+    public List<SmartStepTarget> findSmartStepTargets(SourcePosition position) {
+        int line = position.getLine();
         if (line < 0) {
             return Collections.emptyList(); // the document has been changed
         }
 
-        final PsiFile file = position.getFile();
-        final VirtualFile vFile = file.getVirtualFile();
+        PsiFile file = position.getFile();
+        VirtualFile vFile = file.getVirtualFile();
         if (vFile == null) {
             // the file is not physical
             return Collections.emptyList();
         }
 
-        final Document doc = FileDocumentManager.getInstance().getDocument(vFile);
+        Document doc = FileDocumentManager.getInstance().getDocument(vFile);
         if (doc == null) {
             return Collections.emptyList();
         }
         if (line >= doc.getLineCount()) {
             return Collections.emptyList(); // the document has been changed
         }
-        final int startOffset = doc.getLineStartOffset(line);
-        final TextRange lineRange = new TextRange(startOffset, doc.getLineEndOffset(line));
-        final int offset = CharArrayUtil.shiftForward(doc.getCharsSequence(), startOffset, " \t");
+        int startOffset = doc.getLineStartOffset(line);
+        TextRange lineRange = new TextRange(startOffset, doc.getLineEndOffset(line));
+        int offset = CharArrayUtil.shiftForward(doc.getCharsSequence(), startOffset, " \t");
         PsiElement element = file.findElementAt(offset);
         if (element != null && !(element instanceof PsiCompiledElement)) {
             do {
-                final PsiElement parent = element.getParent();
+                PsiElement parent = element.getParent();
                 if (parent == null || (parent.getTextOffset() < lineRange.getStartOffset())) {
                     break;
                 }
@@ -83,15 +86,16 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
             }
             while (true);
 
-            final Set<SmartStepTarget> targets = new LinkedHashSet<SmartStepTarget>();
+            Set<SmartStepTarget> targets = new LinkedHashSet<>();
 
-            final Range<Integer> lines =
-                new Range<Integer>(doc.getLineNumber(element.getTextOffset()), doc.getLineNumber(element.getTextOffset() +
-                    element.getTextLength()));
+            Range<Integer> lines = new Range<>(
+                doc.getLineNumber(element.getTextOffset()),
+                doc.getLineNumber(element.getTextOffset() + element.getTextLength())
+            );
 
-            final PsiElementVisitor methodCollector = new JavaRecursiveElementVisitor() {
-                final Stack<PsiMethod> myContextStack = new Stack<PsiMethod>();
-                final Stack<String> myParamNameStack = new Stack<String>();
+            PsiElementVisitor methodCollector = new JavaRecursiveElementVisitor() {
+                Stack<PsiMethod> myContextStack = new Stack<>();
+                Stack<String> myParamNameStack = new Stack<>();
                 private int myNextLambdaExpressionOrdinal = 0;
 
                 @Nullable
@@ -106,7 +110,8 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                     }
                 }
 
-                public void visitLambdaExpression(PsiLambdaExpression expression) {
+                @Override
+                public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
                     targets.add(new LambdaSmartStepTarget(
                         expression,
                         getCurrentParamName(),
@@ -117,24 +122,26 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                 }
 
                 @Override
+                @RequiredReadAction
                 public void visitStatement(PsiStatement statement) {
                     if (lineRange.intersects(statement.getTextRange())) {
                         super.visitStatement(statement);
                     }
                 }
 
-                public void visitExpressionList(PsiExpressionList expressionList) {
-                    final PsiMethod psiMethod = myContextStack.isEmpty() ? null : myContextStack.peek();
+                @Override
+                public void visitExpressionList(@Nonnull PsiExpressionList expressionList) {
+                    PsiMethod psiMethod = myContextStack.isEmpty() ? null : myContextStack.peek();
                     if (psiMethod != null) {
-                        final String methodName = psiMethod.getName();
-                        final PsiExpression[] expressions = expressionList.getExpressions();
-                        final PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+                        String methodName = psiMethod.getName();
+                        PsiExpression[] expressions = expressionList.getExpressions();
+                        PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
                         for (int idx = 0; idx < expressions.length; idx++) {
-                            final String paramName =
-                                (idx < parameters.length && !parameters[idx].isVarArgs()) ? parameters[idx].getName() : "arg" +
-                                    (idx + 1);
+                            String paramName = (idx < parameters.length && !parameters[idx].isVarArgs())
+                                ? parameters[idx].getName()
+                                : "arg" + (idx + 1);
                             myParamNameStack.push(methodName + ": " + paramName + ".");
-                            final PsiExpression argExpression = expressions[idx];
+                            PsiExpression argExpression = expressions[idx];
                             try {
                                 argExpression.accept(this);
                             }
@@ -149,17 +156,17 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                 }
 
                 @Override
-                public void visitCallExpression(final PsiCallExpression expression) {
-                    final PsiMethod psiMethod = expression.resolveMethod();
+                public void visitCallExpression(PsiCallExpression expression) {
+                    PsiMethod psiMethod = expression.resolveMethod();
                     if (psiMethod != null) {
                         myContextStack.push(psiMethod);
                         targets.add(new MethodSmartStepTarget(
                             psiMethod,
                             null,
-                            expression instanceof PsiMethodCallExpression
-                                ? ((PsiMethodCallExpression)expression).getMethodExpression().getReferenceNameElement()
-                                : expression instanceof PsiNewExpression
-                                ? ((PsiNewExpression)expression).getClassOrAnonymousClassReference()
+                            expression instanceof PsiMethodCallExpression methodCall
+                                ? methodCall.getMethodExpression().getReferenceNameElement()
+                                : expression instanceof PsiNewExpression newExpr
+                                ? newExpr.getClassOrAnonymousClassReference()
                                 : expression,
                             false,
                             lines
@@ -174,7 +181,6 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                         }
                     }
                 }
-
             };
 
             element.accept(methodCollector);

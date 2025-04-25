@@ -16,7 +16,11 @@
 package com.intellij.java.debugger.impl.actions;
 
 import java.util.List;
+import java.util.function.Supplier;
 
+import consulo.application.Application;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -46,34 +50,36 @@ public class JumpToObjectAction extends DebuggerAction {
     private static final Logger LOG = Logger.getInstance(JumpToObjectAction.class);
 
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
         DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
         if (selectedNode == null) {
             return;
         }
 
-        final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
-        if (!(descriptor instanceof ValueDescriptor)) {
+        NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
+        if (!(descriptor instanceof ValueDescriptor valueDescriptor)) {
             return;
         }
 
         DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-        final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+        DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
         if (debugProcess == null) {
             return;
         }
 
-        debugProcess.getManagerThread().schedule(new NavigateCommand(debuggerContext, (ValueDescriptor)descriptor, debugProcess, e));
+        debugProcess.getManagerThread().schedule(new NavigateCommand(debuggerContext, valueDescriptor, debugProcess, e));
     }
 
     @Override
-    public void update(final AnActionEvent e) {
+    @RequiredUIAccess
+    public void update(@Nonnull AnActionEvent e) {
         if (!isFirstStart(e)) {
             return;
         }
 
-        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-        final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+        DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
         if (debugProcess == null) {
             e.getPresentation().setVisible(false);
             return;
@@ -85,18 +91,18 @@ public class JumpToObjectAction extends DebuggerAction {
             return;
         }
 
-        final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
-        if (descriptor instanceof ValueDescriptor) {
-            debugProcess.getManagerThread().schedule(new EnableCommand(debuggerContext, (ValueDescriptor)descriptor, debugProcess, e));
+        NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
+        if (descriptor instanceof ValueDescriptor valueDescriptor) {
+            debugProcess.getManagerThread().schedule(new EnableCommand(debuggerContext, valueDescriptor, debugProcess, e));
         }
         else {
             e.getPresentation().setVisible(false);
         }
     }
 
-    private static SourcePosition calcPosition(final ValueDescriptor descriptor, final DebugProcessImpl debugProcess)
+    private static SourcePosition calcPosition(ValueDescriptor descriptor, DebugProcessImpl debugProcess)
         throws ClassNotLoadedException {
-        final Value value = descriptor.getValue();
+        Value value = descriptor.getValue();
         if (value == null) {
             return null;
         }
@@ -107,38 +113,31 @@ public class JumpToObjectAction extends DebuggerAction {
         }
 
         try {
-            if (type instanceof ArrayType) {
-                type = ((ArrayType)type).componentType();
+            if (type instanceof ArrayType arrayType) {
+                type = arrayType.componentType();
             }
-            if (type instanceof ClassType) {
-                final ClassType clsType = (ClassType)type;
-                final List<Location> locations = clsType.allLineLocations();
+            if (type instanceof ClassType clsType) {
+                List<Location> locations = clsType.allLineLocations();
                 if (locations.size() > 0) {
-                    final Location location = locations.get(0);
-                    return ApplicationManager.getApplication().runReadAction(new Computable<SourcePosition>() {
-                        @Override
-                        public SourcePosition compute() {
-                            SourcePosition position = debugProcess.getPositionManager().getSourcePosition(location);
-                            // adjust position for non-anonymous classes
-                            if (clsType.name().indexOf('$') < 0) {
-                                final PsiClass classAt = JVMNameUtil.getClassAt(position);
-                                if (classAt != null) {
-                                    final SourcePosition classPosition = SourcePosition.createFromElement(classAt);
-                                    if (classPosition != null) {
-                                        position = classPosition;
-                                    }
+                    Location location = locations.get(0);
+                    return Application.get().runReadAction((Supplier<SourcePosition>)() -> {
+                        SourcePosition position = debugProcess.getPositionManager().getSourcePosition(location);
+                        // adjust position for non-anonymous classes
+                        if (clsType.name().indexOf('$') < 0) {
+                            PsiClass classAt = JVMNameUtil.getClassAt(position);
+                            if (classAt != null) {
+                                SourcePosition classPosition = SourcePosition.createFromElement(classAt);
+                                if (classPosition != null) {
+                                    position = classPosition;
                                 }
                             }
-                            return position;
                         }
+                        return position;
                     });
                 }
             }
         }
-        catch (ClassNotPreparedException e) {
-            LOG.debug(e);
-        }
-        catch (AbsentInformationException e) {
+        catch (ClassNotPreparedException | AbsentInformationException e) {
             LOG.debug(e);
         }
         return null;
@@ -146,10 +145,10 @@ public class JumpToObjectAction extends DebuggerAction {
 
     public static class NavigateCommand extends SourcePositionCommand {
         public NavigateCommand(
-            final DebuggerContextImpl debuggerContext,
-            final ValueDescriptor descriptor,
-            final DebugProcessImpl debugProcess,
-            final AnActionEvent e
+            DebuggerContextImpl debuggerContext,
+            ValueDescriptor descriptor,
+            DebugProcessImpl debugProcess,
+            AnActionEvent e
         ) {
             super(debuggerContext, descriptor, debugProcess, e);
         }
@@ -160,7 +159,7 @@ public class JumpToObjectAction extends DebuggerAction {
         }
 
         @Override
-        protected void doAction(final SourcePosition sourcePosition) {
+        protected void doAction(SourcePosition sourcePosition) {
             if (sourcePosition != null) {
                 sourcePosition.navigate(true);
             }
@@ -169,10 +168,10 @@ public class JumpToObjectAction extends DebuggerAction {
 
     private static class EnableCommand extends SourcePositionCommand {
         public EnableCommand(
-            final DebuggerContextImpl debuggerContext,
-            final ValueDescriptor descriptor,
-            final DebugProcessImpl debugProcess,
-            final AnActionEvent e
+            DebuggerContextImpl debuggerContext,
+            ValueDescriptor descriptor,
+            DebugProcessImpl debugProcess,
+            AnActionEvent e
         ) {
             super(debuggerContext, descriptor, debugProcess, e);
         }
@@ -183,7 +182,7 @@ public class JumpToObjectAction extends DebuggerAction {
         }
 
         @Override
-        protected void doAction(final SourcePosition sourcePosition) {
+        protected void doAction(SourcePosition sourcePosition) {
             enableAction(myActionEvent, sourcePosition != null);
         }
     }
@@ -195,10 +194,10 @@ public class JumpToObjectAction extends DebuggerAction {
         protected final AnActionEvent myActionEvent;
 
         public SourcePositionCommand(
-            final DebuggerContextImpl debuggerContext,
-            final ValueDescriptor descriptor,
-            final DebugProcessImpl debugProcess,
-            final AnActionEvent actionEvent
+            DebuggerContextImpl debuggerContext,
+            ValueDescriptor descriptor,
+            DebugProcessImpl debugProcess,
+            AnActionEvent actionEvent
         ) {
             super(debuggerContext.getSuspendContext());
             myDebuggerContext = debuggerContext;
@@ -213,7 +212,7 @@ public class JumpToObjectAction extends DebuggerAction {
                 doAction(calcPosition(myDescriptor, myDebugProcess));
             }
             catch (ClassNotLoadedException ex) {
-                final String className = ex.className();
+                String className = ex.className();
                 if (loadClass(className) != null) {
                     myDebugProcess.getManagerThread().schedule(createRetryCommand());
                 }
@@ -224,8 +223,8 @@ public class JumpToObjectAction extends DebuggerAction {
 
         protected abstract void doAction(@Nullable SourcePosition sourcePosition);
 
-        private ReferenceType loadClass(final String className) {
-            final EvaluationContextImpl eContext = myDebuggerContext.createEvaluationContext();
+        private ReferenceType loadClass(String className) {
+            EvaluationContextImpl eContext = myDebuggerContext.createEvaluationContext();
             try {
                 return myDebugProcess.loadClass(eContext, className, eContext.getClassLoader());
             }

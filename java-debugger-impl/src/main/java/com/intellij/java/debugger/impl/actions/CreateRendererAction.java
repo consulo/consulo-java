@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
@@ -23,69 +22,71 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.settings.UserRenderersConfigurable;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.application.Application;
 import consulo.configurable.IdeaConfigurableBase;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 public class CreateRendererAction extends AnAction {
     @Override
-    public void update(AnActionEvent e) {
-        final List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
+    @RequiredUIAccess
+    public void update(@Nonnull AnActionEvent e) {
+        List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
         if (values.size() != 1) {
             e.getPresentation().setEnabledAndVisible(false);
         }
     }
 
-    public void actionPerformed(@Nonnull final AnActionEvent event) {
-        final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
-        final List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(@Nonnull AnActionEvent event) {
+        DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
+        List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
         if (values.size() != 1) {
             return;
         }
 
-        final JavaValue javaValue = values.get(0);
+        JavaValue javaValue = values.get(0);
 
-        final DebugProcessImpl process = debuggerContext.getDebugProcess();
+        DebugProcessImpl process = debuggerContext.getDebugProcess();
         if (process == null) {
             return;
         }
 
-        final Project project = event.getData(Project.KEY);
+        Project project = event.getData(Project.KEY);
 
         process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
+            @Override
             public void threadAction() {
                 Type type = javaValue.getDescriptor().getType();
-                final String name = type != null ? type.name() : null;
-                Application.get().invokeLater(() ->
-                {
-                    final UserRenderersConfigurable ui = new UserRenderersConfigurable();
-                    IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable =
-                        new IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>(
-                            "reference.idesettings" +
-                                ".debugger.typerenderers",
-                            DebuggerBundle.message("user.renderers.configurable.display.name"),
-                            "reference.idesettings.debugger.typerenderers"
-                        ) {
-                            @Nonnull
-                            @Override
-                            protected NodeRendererSettings getSettings() {
-                                return NodeRendererSettings.getInstance();
-                            }
+                String name = type != null ? type.name() : null;
+                Application.get().invokeLater(() -> {
+                    UserRenderersConfigurable ui = new UserRenderersConfigurable();
+                    IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new IdeaConfigurableBase<>(
+                        "reference.idesettings.debugger.typerenderers",
+                        JavaDebuggerLocalize.userRenderersConfigurableDisplayName().get(),
+                        "reference.idesettings.debugger.typerenderers"
+                    ) {
+                        @Nonnull
+                        @Override
+                        protected NodeRendererSettings getSettings() {
+                            return NodeRendererSettings.getInstance();
+                        }
 
-                            @Override
-                            protected UserRenderersConfigurable createUi() {
-                                return ui;
-                            }
-                        };
+                        @Override
+                        protected UserRenderersConfigurable createUi() {
+                            return ui;
+                        }
+                    };
                     SingleConfigurableEditor editor = new SingleConfigurableEditor(project, configurable);
                     if (name != null) {
                         NodeRenderer renderer =

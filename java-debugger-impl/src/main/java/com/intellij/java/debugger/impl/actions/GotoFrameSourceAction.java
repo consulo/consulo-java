@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.actions;
 import com.intellij.java.debugger.impl.DebuggerContextUtil;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
@@ -26,13 +27,15 @@ import consulo.project.Project;
  * @author lex
  */
 public abstract class GotoFrameSourceAction extends DebuggerAction {
+    @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         doAction(dataContext);
     }
 
     protected static void doAction(DataContext dataContext) {
-        final Project project = dataContext.getData(Project.KEY);
+        Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return;
         }
@@ -42,6 +45,8 @@ public abstract class GotoFrameSourceAction extends DebuggerAction {
         }
     }
 
+    @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
     }

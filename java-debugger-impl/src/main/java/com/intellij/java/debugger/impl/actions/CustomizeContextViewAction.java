@@ -15,10 +15,10 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.settings.JavaDebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.disposer.Disposable;
@@ -39,8 +39,9 @@ import java.util.List;
 
 public class CustomizeContextViewAction extends DumbAwareAction {
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
-        final Project project = e.getData(Project.KEY);
+        Project project = e.getData(Project.KEY);
         Disposable disposable = Disposable.newDisposable();
         SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {
             @Override
@@ -57,7 +58,7 @@ public class CustomizeContextViewAction extends DumbAwareAction {
 
             @Override
             public String getDisplayName() {
-                return DebuggerBundle.message("title.customize.data.views");
+                return JavaDebuggerLocalize.titleCustomizeDataViews().get();
             }
 
             @Override
@@ -66,6 +67,7 @@ public class CustomizeContextViewAction extends DumbAwareAction {
             }
 
             @Override
+            @RequiredUIAccess
             protected void createConfigurableTabs() {
                 for (Configurable configurable : getConfigurables()) {
                     JComponent component = configurable.createComponent();
@@ -80,12 +82,13 @@ public class CustomizeContextViewAction extends DumbAwareAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizecontextviewText());
 
         Project project = e.getData(Project.KEY);
-        final XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);
-        final XDebugSession currentSession = debuggerManager == null ? null : debuggerManager.getCurrentSession();
+        XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);
+        XDebugSession currentSession = debuggerManager == null ? null : debuggerManager.getCurrentSession();
         if (currentSession != null) {
             e.getPresentation().setEnabledAndVisible(currentSession.getDebugProcess() instanceof JavaDebugProcess);
         }

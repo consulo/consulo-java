@@ -26,7 +26,7 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- * Date: 10/25/13
+ * @since 2013-10-25
  */
 public class LambdaSmartStepTarget extends SmartStepTarget {
     private final PsiLambdaExpression myLambda;
@@ -67,16 +67,10 @@ public class LambdaSmartStepTarget extends SmartStepTarget {
             return false;
         }
 
-        final LambdaSmartStepTarget that = (LambdaSmartStepTarget)o;
+        LambdaSmartStepTarget that = (LambdaSmartStepTarget)o;
 
-        if (myOrdinal != that.myOrdinal) {
-            return false;
-        }
-        if (!myLambda.equals(that.myLambda)) {
-            return false;
-        }
-
-        return true;
+        return myOrdinal == that.myOrdinal
+            && myLambda.equals(that.myLambda);
     }
 
     @Override

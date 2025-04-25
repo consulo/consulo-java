@@ -25,7 +25,7 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- * Date: 10/25/13
+ * @since 2013-10-25
  */
 public abstract class SmartStepTarget {
     private final PsiElement myHighlightElement;

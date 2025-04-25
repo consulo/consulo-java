@@ -19,15 +19,16 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.ExportDialog;
+import consulo.platform.Platform;
 import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.SystemProperties;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 
@@ -37,12 +38,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * class ExportThreadsAction
- *
  * @author Jeka
  */
 public class ExportThreadsAction extends AnAction {
     @Override
+    @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {
@@ -52,7 +52,7 @@ public class ExportThreadsAction extends AnAction {
 
         if (context.getDebuggerSession() != null) {
             String destinationDirectory = "";
-            final VirtualFile baseDir = project.getBaseDir();
+            VirtualFile baseDir = project.getBaseDir();
             if (baseDir != null) {
                 destinationDirectory = baseDir.getPresentableUrl();
             }
@@ -63,7 +63,10 @@ public class ExportThreadsAction extends AnAction {
                 try {
                     File file = new File(dialog.getFilePath());
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                        String text = StringUtil.convertLineSeparators(dialog.getTextToSave(), SystemProperties.getLineSeparator());
+                        String text = StringUtil.convertLineSeparators(
+                            dialog.getTextToSave(),
+                            Platform.current().os().lineSeparator().getSeparatorString()
+                        );
                         writer.write(text);
                     }
                 }
@@ -80,6 +83,7 @@ public class ExportThreadsAction extends AnAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void update(@Nonnull AnActionEvent event) {
         Presentation presentation = event.getPresentation();
         Project project = event.getData(Project.KEY);

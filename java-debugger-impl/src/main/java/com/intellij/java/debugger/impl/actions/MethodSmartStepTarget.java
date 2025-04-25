@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
@@ -29,7 +30,7 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- * Date: 10/25/13
+ * @since 2013-10-25
  */
 public class MethodSmartStepTarget extends SmartStepTarget {
     private final PsiMethod myMethod;
@@ -47,6 +48,7 @@ public class MethodSmartStepTarget extends SmartStepTarget {
 
     @Nullable
     @Override
+    @RequiredReadAction
     public Image getIcon() {
         return IconDescriptorUpdaters.getIcon(myMethod, 0);
     }
@@ -70,6 +72,7 @@ public class MethodSmartStepTarget extends SmartStepTarget {
         return myMethod;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -78,15 +81,12 @@ public class MethodSmartStepTarget extends SmartStepTarget {
             return false;
         }
 
-        final MethodSmartStepTarget that = (MethodSmartStepTarget)o;
+        MethodSmartStepTarget that = (MethodSmartStepTarget)o;
 
-        if (!myMethod.equals(that.myMethod)) {
-            return false;
-        }
-
-        return true;
+        return myMethod.equals(that.myMethod);
     }
 
+    @Override
     public int hashCode() {
         return myMethod.hashCode();
     }

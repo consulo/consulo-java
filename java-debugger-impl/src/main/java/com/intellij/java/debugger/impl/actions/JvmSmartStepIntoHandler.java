@@ -29,18 +29,17 @@ import consulo.execution.debug.ui.DebuggerUIUtil;
 import consulo.fileEditor.TextEditor;
 import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.language.psi.PsiElement;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * User: Alexander Podkhalyuzin
- * Date: 22.11.11
+ * @author Alexander Podkhalyuzin
+ * @since 2011-11-22
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JvmSmartStepIntoHandler {
@@ -59,18 +58,21 @@ public abstract class JvmSmartStepIntoHandler {
      * @param fileEditor
      * @return false to continue for another handler or for default action (step into)
      */
-    public boolean doSmartStep(SourcePosition position, final DebuggerSession session, TextEditor fileEditor) {
-        final List<SmartStepTarget> targets = findSmartStepTargets(position);
+    @RequiredUIAccess
+    public boolean doSmartStep(SourcePosition position, DebuggerSession session, TextEditor fileEditor) {
+        List<SmartStepTarget> targets = findSmartStepTargets(position);
         if (!targets.isEmpty()) {
-            final SmartStepTarget firstTarget = targets.get(0);
+            SmartStepTarget firstTarget = targets.get(0);
             if (targets.size() == 1) {
                 session.sessionResumed();
                 session.stepInto(true, createMethodFilter(firstTarget));
             }
             else {
-                final Editor editor = fileEditor.getEditor();
-                final PsiMethodListPopupStep popupStep =
+                Editor editor = fileEditor.getEditor();
+                PsiMethodListPopupStep popupStep =
                     new PsiMethodListPopupStep(editor, targets, new PsiMethodListPopupStep.OnChooseRunnable() {
+                        @Override
+                        @RequiredUIAccess
                         public void execute(SmartStepTarget chosenTarget) {
                             session.sessionResumed();
                             session.stepInto(true, createMethodFilter(chosenTarget));
@@ -79,14 +81,12 @@ public abstract class JvmSmartStepIntoHandler {
                 ListPopupImpl popup = new ListPopupImpl(popupStep);
                 DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
                 DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
-                popup.addListSelectionListener(new ListSelectionListener() {
-                    public void valueChanged(ListSelectionEvent e) {
-                        popupStep.getScopeHighlighter().dropHighlight();
-                        if (!e.getValueIsAdjusting()) {
-                            final SmartStepTarget selectedTarget = (SmartStepTarget)((JBList)e.getSource()).getSelectedValue();
-                            if (selectedTarget != null) {
-                                highlightTarget(popupStep, selectedTarget);
-                            }
+                popup.addListSelectionListener(e -> {
+                    popupStep.getScopeHighlighter().dropHighlight();
+                    if (!e.getValueIsAdjusting()) {
+                        SmartStepTarget selectedTarget = (SmartStepTarget)((JBList)e.getSource()).getSelectedValue();
+                        if (selectedTarget != null) {
+                            highlightTarget(popupStep, selectedTarget);
                         }
                     }
                 });
@@ -99,7 +99,7 @@ public abstract class JvmSmartStepIntoHandler {
     }
 
     private static void highlightTarget(PsiMethodListPopupStep popupStep, SmartStepTarget target) {
-        final PsiElement highlightElement = target.getHighlightElement();
+        PsiElement highlightElement = target.getHighlightElement();
         if (highlightElement != null) {
             popupStep.getScopeHighlighter().highlight(highlightElement, Collections.singletonList(highlightElement));
         }
@@ -113,8 +113,8 @@ public abstract class JvmSmartStepIntoHandler {
      */
     @Nullable
     protected MethodFilter createMethodFilter(SmartStepTarget stepTarget) {
-        if (stepTarget instanceof MethodSmartStepTarget) {
-            final PsiMethod method = ((MethodSmartStepTarget)stepTarget).getMethod();
+        if (stepTarget instanceof MethodSmartStepTarget methodSmartStepTarget) {
+            PsiMethod method = methodSmartStepTarget.getMethod();
             if (stepTarget.needsBreakpointRequest()) {
                 return method.getContainingClass() instanceof PsiAnonymousClass
                     ? new ClassInstanceMethodFilter(method, stepTarget.getCallingExpressionLines())
@@ -124,8 +124,7 @@ public abstract class JvmSmartStepIntoHandler {
                 return new BasicStepMethodFilter(method, stepTarget.getCallingExpressionLines());
             }
         }
-        if (stepTarget instanceof LambdaSmartStepTarget) {
-            final LambdaSmartStepTarget lambdaTarget = (LambdaSmartStepTarget)stepTarget;
+        if (stepTarget instanceof LambdaSmartStepTarget lambdaTarget) {
             return new LambdaMethodFilter(lambdaTarget.getLambda(), lambdaTarget.getOrdinal(), stepTarget.getCallingExpressionLines());
         }
         return null;

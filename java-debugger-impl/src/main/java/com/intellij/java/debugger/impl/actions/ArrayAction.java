@@ -40,8 +40,8 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 public abstract class ArrayAction extends DebuggerAction {
-    @RequiredUIAccess
     @Override
+    @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {
         DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 
@@ -55,7 +55,7 @@ public abstract class ArrayAction extends DebuggerAction {
             return;
         }
 
-        final XValueNode node = tree.getSelectedNode();
+        XValueNode node = tree.getSelectedNode();
         if (node == null) {
             return;
         }
@@ -69,13 +69,22 @@ public abstract class ArrayAction extends DebuggerAction {
         //String label = selectedNode.toString();
         //int index = label.indexOf('=');
         //if (index > 0) {
-        //  title = title + " " + label.substring(index);
+        //    title = title + " " + label.substring(index);
         //}
-        createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(newRenderer, node, debuggerContext));
+        createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(
+            newRenderer,
+            node,
+            debuggerContext
+        ));
     }
 
     @Nonnull
-    protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNode node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
+    protected abstract AsyncResult<ArrayRenderer> createNewRenderer(
+        XValueNode node,
+        ArrayRenderer original,
+        @Nonnull DebuggerContextImpl debuggerContext,
+        String title
+    );
 
     @RequiredUIAccess
     @Override
@@ -90,20 +99,19 @@ public abstract class ArrayAction extends DebuggerAction {
 
     @Nullable
     public static ArrayRenderer getArrayRenderer(XValue value) {
-        if (value instanceof JavaValue) {
-            ValueDescriptorImpl descriptor = ((JavaValue) value).getDescriptor();
+        if (value instanceof JavaValue javaValue) {
+            ValueDescriptorImpl descriptor = javaValue.getDescriptor();
             Renderer lastRenderer = descriptor.getLastRenderer();
-            if (lastRenderer instanceof CompoundNodeRenderer) {
-                ChildrenRenderer childrenRenderer = ((CompoundNodeRenderer) lastRenderer).getChildrenRenderer();
-                if (childrenRenderer instanceof ExpressionChildrenRenderer) {
-                    lastRenderer = ExpressionChildrenRenderer.getLastChildrenRenderer(descriptor);
-                    if (lastRenderer == null) {
-                        lastRenderer = ((ExpressionChildrenRenderer) childrenRenderer).getPredictedRenderer();
-                    }
+            if (lastRenderer instanceof CompoundNodeRenderer compoundNodeRenderer
+                && compoundNodeRenderer.getChildrenRenderer() instanceof ExpressionChildrenRenderer expressionChildrenRenderer) {
+                lastRenderer = ExpressionChildrenRenderer.getLastChildrenRenderer(descriptor);
+                if (lastRenderer == null) {
+                    lastRenderer = expressionChildrenRenderer.getPredictedRenderer();
                 }
             }
-            if (lastRenderer instanceof ArrayRenderer) {
-                return (ArrayRenderer) lastRenderer;
+
+            if (lastRenderer instanceof ArrayRenderer arrayRenderer) {
+                return arrayRenderer;
             }
         }
         return null;
@@ -117,24 +125,22 @@ public abstract class ArrayAction extends DebuggerAction {
             return;
         }
 
-        ValueDescriptorImpl descriptor = ((JavaValue) container).getDescriptor();
+        ValueDescriptorImpl descriptor = ((JavaValue)container).getDescriptor();
 
         DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
         if (debugProcess != null) {
             debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
                 @Override
                 public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
-                    final Renderer lastRenderer = descriptor.getLastRenderer();
+                    Renderer lastRenderer = descriptor.getLastRenderer();
                     if (lastRenderer instanceof ArrayRenderer) {
-                        ((JavaValue) container).setRenderer(newRenderer, node);
+                        ((JavaValue)container).setRenderer(newRenderer, node);
                         Application.get().invokeLater(() -> node.getTree().expand(node));
                     }
-                    else if (lastRenderer instanceof CompoundNodeRenderer) {
-                        final CompoundNodeRenderer compoundRenderer = (CompoundNodeRenderer) lastRenderer;
-                        final ChildrenRenderer childrenRenderer = compoundRenderer.getChildrenRenderer();
-                        if (childrenRenderer instanceof ExpressionChildrenRenderer) {
+                    else if (lastRenderer instanceof CompoundNodeRenderer compoundRenderer) {
+                        if (compoundRenderer.getChildrenRenderer() instanceof ExpressionChildrenRenderer) {
                             ExpressionChildrenRenderer.setPreferableChildrenRenderer(descriptor, newRenderer);
-                            ((JavaValue) container).reBuild(node);
+                            ((JavaValue)container).reBuild(node);
                         }
                     }
                 }
@@ -146,7 +152,7 @@ public abstract class ArrayAction extends DebuggerAction {
         if (node != null) {
             DebuggerTreeNodeImpl parent = node.getParent();
             NodeDescriptorImpl descriptor = parent.getDescriptor();
-            if (descriptor instanceof ValueDescriptorImpl && ((ValueDescriptorImpl) descriptor).isArray()) {
+            if (descriptor instanceof ValueDescriptorImpl valueDescriptor && valueDescriptor.isArray()) {
                 int index = parent.getIndex(node);
                 return createNodeTitle(prefix, parent) + "[" + index + "]";
             }
@@ -179,13 +185,19 @@ public abstract class ArrayAction extends DebuggerAction {
         @Nonnull
         @Override
         @RequiredUIAccess
-        protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNode node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title) {
+        protected AsyncResult<ArrayRenderer> createNewRenderer(
+            XValueNode node,
+            ArrayRenderer original,
+            @Nonnull DebuggerContextImpl debuggerContext,
+            String title
+        ) {
             ArrayRenderer clonedRenderer = original.clone();
             clonedRenderer.setForced(true);
             AsyncResult<ArrayRenderer> result = AsyncResult.undefined();
-            AsyncResult<Void> showResult = ShowSettingsUtil.getInstance().editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer));
+            AsyncResult<Void> showResult = ShowSettingsUtil.getInstance()
+                .editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer));
             showResult.doWhenDone(() -> result.setDone(clonedRenderer));
-            showResult.doWhenRejected((Runnable) result::setRejected);
+            showResult.doWhenRejected((Runnable)result::setRejected);
             return result;
         }
     }
@@ -193,7 +205,12 @@ public abstract class ArrayAction extends DebuggerAction {
     public static class FilterArrayAction extends ArrayAction {
         @Nonnull
         @Override
-        protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNode node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title) {
+        protected AsyncResult<ArrayRenderer> createNewRenderer(
+            XValueNode node,
+            ArrayRenderer original,
+            @Nonnull DebuggerContextImpl debuggerContext,
+            String title
+        ) {
             //TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
             return AsyncResult.rejected();
         }

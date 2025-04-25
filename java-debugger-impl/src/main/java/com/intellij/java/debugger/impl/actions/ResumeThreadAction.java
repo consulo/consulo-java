@@ -15,36 +15,40 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.localize.LocalizeValue;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
-import consulo.internal.com.sun.jdi.request.EventRequest;
 
 /**
- * User: lex
- * Date: Sep 26, 2003
- * Time: 7:35:09 PM
+ * @author lex
+ * @since 2003-09-26
  */
 public class ResumeThreadAction extends DebuggerAction {
-    public void actionPerformed(final AnActionEvent e) {
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
-        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-        final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+        DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 
         //noinspection ConstantConditions
-        for (final DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
-            final ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
+        for (DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
+            ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
 
             if (threadDescriptor.isSuspended()) {
-                final ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
+                ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
                 debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
+                    @Override
                     public void contextAction() throws Exception {
                         debugProcess.createResumeThreadCommand(getSuspendContext(), thread).run();
                         debuggerTreeNode.calcValue();
@@ -54,39 +58,40 @@ public class ResumeThreadAction extends DebuggerAction {
         }
     }
 
+    @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNodes = getSelectedNodes(e.getDataContext());
 
         boolean visible = false;
         boolean enabled = false;
-        String text = DebuggerBundle.message("action.resume.thread.text.resume");
+        LocalizeValue text = JavaDebuggerLocalize.actionResumeThreadTextResume();
 
         if (selectedNodes != null && selectedNodes.length > 0) {
             visible = true;
             enabled = true;
             for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
-                final NodeDescriptorImpl threadDescriptor = selectedNode.getDescriptor();
-                if (!(threadDescriptor instanceof ThreadDescriptorImpl) || !((ThreadDescriptorImpl)threadDescriptor).isSuspended()) {
+                if (!(selectedNode.getDescriptor() instanceof ThreadDescriptorImpl threadDescr && threadDescr.isSuspended())) {
                     visible = false;
                     break;
                 }
             }
             if (visible) {
                 for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
-                    final ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl)selectedNode.getDescriptor();
+                    ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl)selectedNode.getDescriptor();
                     if (threadDescriptor.getSuspendContext().getSuspendPolicy() == EventRequest.SUSPEND_ALL
                         && !threadDescriptor.isFrozen()) {
                         enabled = false;
                         break;
                     }
                     else if (threadDescriptor.isFrozen()) {
-                        text = DebuggerBundle.message("action.resume.thread.text.unfreeze");
+                        text = JavaDebuggerLocalize.actionResumeThreadTextUnfreeze();
                     }
                 }
             }
         }
-        final Presentation presentation = e.getPresentation();
-        presentation.setText(text);
+        Presentation presentation = e.getPresentation();
+        presentation.setTextValue(text);
         presentation.setVisible(visible);
         presentation.setEnabled(enabled);
     }

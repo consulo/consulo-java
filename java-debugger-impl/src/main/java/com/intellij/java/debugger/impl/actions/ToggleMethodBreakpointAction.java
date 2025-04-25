@@ -32,17 +32,20 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.CharArrayUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ToggleMethodBreakpointAction extends AnAction {
     @Override
-    public void update(AnActionEvent event) {
+    @RequiredUIAccess
+    public void update(@Nonnull AnActionEvent event) {
         boolean toEnable = getPlace(event) != null;
 
         if (ActionPlaces.isPopupPlace(event.getPlace())) {
@@ -54,6 +57,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {
@@ -61,8 +65,8 @@ public class ToggleMethodBreakpointAction extends AnAction {
         }
         DebuggerManagerEx debugManager = DebuggerManagerEx.getInstanceEx(project);
 
-        final BreakpointManager manager = debugManager.getBreakpointManager();
-        final PlaceInDocument place = getPlace(e);
+        BreakpointManager manager = debugManager.getBreakpointManager();
+        PlaceInDocument place = getPlace(e);
         if (place != null && DocumentUtil.isValidOffset(place.getOffset(), place.getDocument())) {
             Breakpoint breakpoint = manager.findBreakpoint(place.getDocument(), place.getOffset(), MethodBreakpoint.CATEGORY);
             if (breakpoint == null) {
@@ -76,7 +80,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
 
     @Nullable
     private static PlaceInDocument getPlace(AnActionEvent event) {
-        final Project project = event.getData(Project.KEY);
+        Project project = event.getData(Project.KEY);
         if (project == null) {
             return null;
         }
@@ -84,13 +88,15 @@ public class ToggleMethodBreakpointAction extends AnAction {
         PsiElement method = null;
         Document document = null;
 
-        if (ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace())
-            || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.NAVIGATION_BAR_POPUP.equals(event.getPlace())) {
-            final PsiElement psiElement = event.getData(PsiElement.KEY);
-            if (psiElement instanceof PsiMethod) {
-                final PsiFile containingFile = psiElement.getContainingFile();
+        String place = event.getPlace();
+        if (ActionPlaces.PROJECT_VIEW_POPUP.equals(place)
+            || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(place)
+            || ActionPlaces.FAVORITES_VIEW_POPUP.equals(place)
+            || ActionPlaces.NAVIGATION_BAR_POPUP.equals(place)) {
+            if (event.getData(PsiElement.KEY) instanceof PsiMethod m) {
+                PsiFile containingFile = m.getContainingFile();
                 if (containingFile != null) {
-                    method = psiElement;
+                    method = m;
                     document = PsiDocumentManager.getInstance(project).getDocument(containingFile);
                 }
             }
@@ -104,7 +110,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
                 document = editor.getDocument();
                 PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(document);
                 if (file != null) {
-                    final VirtualFile virtualFile = file.getVirtualFile();
+                    VirtualFile virtualFile = file.getVirtualFile();
                     FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
                     if (JavaFileType.INSTANCE == fileType || JavaClassFileType.INSTANCE == fileType) {
                         method = findMethod(project, editor);
@@ -125,7 +131,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
         if (psiFile == null) {
             return null;
         }
-        final int offset = CharArrayUtil.shiftForward(editor.getDocument().getCharsSequence(), editor.getCaretModel().getOffset(), " \t");
+        int offset = CharArrayUtil.shiftForward(editor.getDocument().getCharsSequence(), editor.getCaretModel().getOffset(), " \t");
         return DebuggerUtilsEx.findPsiMethod(psiFile, offset);
     }
 }

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.JavaValue;
@@ -25,6 +24,7 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.XValueNodePresentationConfigurator;
@@ -66,7 +66,7 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computeChildren(@Nonnull final XCompositeNode node) {
+    public void computeChildren(@Nonnull XCompositeNode node) {
         scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext()) {
             @Override
             public Priority getPriority() {
@@ -75,7 +75,7 @@ public class JavaReferringObjectsValue extends JavaValue {
 
             @Override
             public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
-                final XValueChildrenList children = new XValueChildrenList();
+                XValueChildrenList children = new XValueChildrenList();
 
                 Value value = getDescriptor().getValue();
 
@@ -84,12 +84,12 @@ public class JavaReferringObjectsValue extends JavaValue {
                     references = ((ObjectReference)value).referringObjects(MAX_REFERRING);
                 }
                 catch (ObjectCollectedException e) {
-                    node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
+                    node.setErrorMessage(JavaDebuggerLocalize.evaluationErrorObjectCollected().get());
                     return;
                 }
 
                 int i = 1;
-                for (final ObjectReference reference : references) {
+                for (ObjectReference reference : references) {
                     // try to find field name
                     Field field = findField(reference, value);
                     if (field != null) {
@@ -132,7 +132,7 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place) {
+    public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
         if (!myIsField) {
             super.computePresentation(node, place);
         }
@@ -142,7 +142,7 @@ public class JavaReferringObjectsValue extends JavaValue {
                     @Override
                     public void applyPresentation(
                         @Nullable Image icon,
-                        @Nonnull final XValuePresentation valuePresenter,
+                        @Nonnull XValuePresentation valuePresenter,
                         boolean hasChildren
                     ) {
                         node.setPresentation(icon, new XValuePresentation() {

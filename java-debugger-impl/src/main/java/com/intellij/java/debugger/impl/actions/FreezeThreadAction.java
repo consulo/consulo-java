@@ -22,26 +22,30 @@ import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 
 /**
  * @author lex
  */
 public class FreezeThreadAction extends DebuggerAction {
-    public void actionPerformed(final AnActionEvent e) {
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
         if (selectedNode == null) {
             return;
         }
-        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-        final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+        DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 
-        for (final DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
+        for (DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
             ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
-            final ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
+            ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
 
             if (!threadDescriptor.isFrozen()) {
                 debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
+                    @Override
                     public void contextAction() throws Exception {
                         debugProcess.createFreezeThreadCommand(thread).run();
                         debuggerTreeNode.calcValue();
@@ -51,6 +55,8 @@ public class FreezeThreadAction extends DebuggerAction {
         }
     }
 
+    @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
         if (selectedNode == null) {
@@ -62,13 +68,11 @@ public class FreezeThreadAction extends DebuggerAction {
         if (debugProcess != null) {
             visible = true;
             for (DebuggerTreeNodeImpl aSelectedNode : selectedNode) {
-                NodeDescriptorImpl threadDescriptor = aSelectedNode.getDescriptor();
-                if (!(threadDescriptor instanceof ThreadDescriptorImpl) || ((ThreadDescriptorImpl)threadDescriptor).isFrozen()) {
+                if (!(aSelectedNode.getDescriptor() instanceof ThreadDescriptorImpl tdi && !tdi.isFrozen())) {
                     visible = false;
                     break;
                 }
             }
-
         }
 
         e.getPresentation().setVisible(visible);
