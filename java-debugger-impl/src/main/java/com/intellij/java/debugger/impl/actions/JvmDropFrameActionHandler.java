@@ -10,7 +10,6 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.execution.debug.XDebuggerBundle;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.EvaluationMode;
 import consulo.execution.debug.evaluation.XDebuggerEvaluator;
@@ -68,7 +67,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                 myDebugSession.setSteppingThrough(stackFrame.getStackFrameProxy().threadProxy());
                 if (evaluateFinallyBlocks(
                     project,
-                    XDebuggerBundle.message("xdebugger.reset.frame.title"),
+                    XDebuggerLocalize.xdebuggerResetFrameTitle().get(),
                     stackFrame,
                     new XDebuggerEvaluator.XEvaluationCallback() {
                         @Override
@@ -81,7 +80,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                             showError(
                                 project,
                                 JavaDebuggerLocalize.errorExecutingFinally(errorMessage).get(),
-                                XDebuggerBundle.message("xdebugger.reset.frame.title")
+                                XDebuggerLocalize.xdebuggerResetFrameTitle().get()
                             );
                         }
                     }
@@ -204,7 +203,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
             Messages.showMessageDialog(
                 project,
                 XDebuggerLocalize.xdebuggerEvaluateStackFrameHasNotEvaluator().get(),
-                XDebuggerBundle.message("xdebugger.reset.frame.title"),
+                XDebuggerLocalize.xdebuggerResetFrameTitle().get(),
                 UIUtil.getErrorIcon()
             );
         }

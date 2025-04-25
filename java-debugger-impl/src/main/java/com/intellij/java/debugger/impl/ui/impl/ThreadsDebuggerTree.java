@@ -15,53 +15,44 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.swing.SwingUtilities;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.tree.TreePath;
-
-import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
-import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
-import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.ThreadGroupDescriptorImpl;
-import consulo.application.ApplicationManager;
-import consulo.execution.debug.XDebuggerBundle;
+import com.intellij.java.debugger.impl.ui.impl.watch.*;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.application.Application;
+import consulo.execution.debug.localize.XDebuggerLocalize;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.tree.TreeModelAdapter;
-import consulo.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.tree.TreePath;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
- * User: lex
- * Date: Sep 26, 2003
- * Time: 5:57:58 PM
+ * @author lex
+ * @since 2003-09-26
  */
 public class ThreadsDebuggerTree extends DebuggerTree {
     private static final Logger LOG = Logger.getInstance(ThreadsDebuggerTree.class);
 
     public ThreadsDebuggerTree(Project project) {
         super(project);
-        getEmptyText().setText(XDebuggerBundle.message("debugger.threads.not.available"));
+        getEmptyText().setText(XDebuggerLocalize.debuggerThreadsNotAvailable().get());
     }
 
     @Override
@@ -77,10 +68,7 @@ public class ThreadsDebuggerTree extends DebuggerTree {
     @Override
     protected boolean isExpandable(DebuggerTreeNodeImpl node) {
         NodeDescriptorImpl descriptor = node.getDescriptor();
-        if (descriptor instanceof StackFrameDescriptorImpl) {
-            return false;
-        }
-        return descriptor.isExpandable();
+        return !(descriptor instanceof StackFrameDescriptorImpl) && descriptor.isExpandable();
     }
 
     @Override
@@ -89,13 +77,14 @@ public class ThreadsDebuggerTree extends DebuggerTree {
         final RefreshThreadsTreeCommand command = new RefreshThreadsTreeCommand(session);
 
         final DebuggerSession.State state = session != null ? session.getState() : DebuggerSession.State.DISPOSED;
-        if (ApplicationManager.getApplication()
-            .isUnitTestMode() || state == DebuggerSession.State.PAUSED || state == DebuggerSession.State.RUNNING) {
+        if (Application.get().isUnitTestMode()
+            || state == DebuggerSession.State.PAUSED
+            || state == DebuggerSession.State.RUNNING) {
             showMessage(MessageDescriptor.EVALUATING);
             context.getDebugProcess().getManagerThread().schedule(command);
         }
         else {
-            showMessage(session != null ? session.getStateDescription() : DebuggerBundle.message("status.debug.stopped"));
+            showMessage(session != null ? session.getStateDescription() : JavaDebuggerLocalize.statusDebugStopped().get());
         }
     }
 
@@ -164,7 +153,7 @@ public class ThreadsDebuggerTree extends DebuggerTree {
                     if (currentThread != null) {
                         root.insert(nodeManager.createNode(nodeManager.getThreadDescriptor(null, currentThread), evaluationContext), 0);
                     }
-                    List<ThreadReferenceProxyImpl> allThreads = new ArrayList<ThreadReferenceProxyImpl>(vm.allThreads());
+                    List<ThreadReferenceProxyImpl> allThreads = new ArrayList<>(vm.allThreads());
                     Collections.sort(allThreads, ThreadReferenceProxyImpl.ourComparator);
 
                     for (ThreadReferenceProxyImpl threadProxy : allThreads) {
@@ -185,7 +174,7 @@ public class ThreadsDebuggerTree extends DebuggerTree {
             final boolean hasThreadToSelect = suspendContextThread != null; // thread can be null if pause was pressed
             final List<ThreadGroupReferenceProxyImpl> groups;
             if (hasThreadToSelect && showGroups) {
-                groups = new ArrayList<ThreadGroupReferenceProxyImpl>();
+                groups = new ArrayList<>();
                 for (ThreadGroupReferenceProxyImpl group = suspendContextThread.threadGroupProxy(); group != null; group = group.parent()) {
                     groups.add(group);
                 }
@@ -195,16 +184,16 @@ public class ThreadsDebuggerTree extends DebuggerTree {
                 groups = Collections.emptyList();
             }
 
-            DebuggerInvocationUtil.swingInvokeLater(getProject(), new Runnable() {
-                @Override
-                public void run() {
+            DebuggerInvocationUtil.swingInvokeLater(
+                getProject(),
+                () -> {
                     getMutableModel().setRoot(root);
                     treeChanged();
                     if (hasThreadToSelect) {
                         selectThread(groups, suspendContextThread, true);
                     }
                 }
-            });
+            );
         }
 
         private void selectThread(
@@ -243,12 +232,7 @@ public class ThreadsDebuggerTree extends DebuggerTree {
 
                 private void removeListener() {
                     final TreeModelAdapter listener = this;
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            getModel().removeTreeModelListener(listener);
-                        }
-                    });
+                    SwingUtilities.invokeLater(() -> getModel().removeTreeModelListener(listener));
                 }
 
                 @Override
