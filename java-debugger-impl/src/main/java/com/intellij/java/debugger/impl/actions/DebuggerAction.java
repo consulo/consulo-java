@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class DebuggerAction
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.actions;
-
 
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
@@ -31,7 +25,6 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.disposer.Disposable;
-import consulo.execution.debug.XDebugProcess;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.ui.XValueTree;
@@ -50,6 +43,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class DebuggerAction
+ *
+ * @author Jeka
+ */
 public abstract class DebuggerAction extends AnAction {
     private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
@@ -78,10 +76,7 @@ public abstract class DebuggerAction extends AnAction {
             return null;
         }
         Object component = path.getLastPathComponent();
-        if (!(component instanceof DebuggerTreeNodeImpl)) {
-            return null;
-        }
-        return (DebuggerTreeNodeImpl) component;
+        return component instanceof DebuggerTreeNodeImpl debuggerTreeNode ? debuggerTreeNode : null;
     }
 
     @Nullable
@@ -128,8 +123,8 @@ public abstract class DebuggerAction extends AnAction {
             DebuggerActions.INSPECT_PANEL_POPUP.equals(e.getPlace());
     }
 
-    public static Disposable installEditAction(final JTree tree, String actionName) {
-        final DoubleClickListener listener = new DoubleClickListener() {
+    public static Disposable installEditAction(JTree tree, String actionName) {
+        DoubleClickListener listener = new DoubleClickListener() {
             @Override
             protected boolean onDoubleClick(MouseEvent e) {
                 if (tree.getPathForLocation(e.getX(), e.getY()) == null) {
@@ -142,7 +137,7 @@ public abstract class DebuggerAction extends AnAction {
         };
         listener.installOn(tree);
 
-        final AnAction action = ActionManager.getInstance().getAction(actionName);
+        AnAction action = ActionManager.getInstance().getAction(actionName);
         action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
 
         return () -> {
@@ -151,7 +146,7 @@ public abstract class DebuggerAction extends AnAction {
         };
     }
 
-    public static boolean isFirstStart(final AnActionEvent event) {
+    public static boolean isFirstStart(AnActionEvent event) {
         //noinspection HardCodedStringLiteral
         String key = "initalized";
         if (event.getPresentation().getClientProperty(key) != null) {
@@ -162,7 +157,7 @@ public abstract class DebuggerAction extends AnAction {
         return true;
     }
 
-    public static void enableAction(final AnActionEvent event, final boolean enable) {
+    public static void enableAction(AnActionEvent event, boolean enable) {
         SwingUtilities.invokeLater(() -> {
             event.getPresentation().setEnabled(enable);
             event.getPresentation().setVisible(true);
@@ -178,8 +173,7 @@ public abstract class DebuggerAction extends AnAction {
 
     public static void refreshViews(@Nullable XDebugSession session) {
         if (session != null) {
-            XDebugProcess process = session.getDebugProcess();
-            if (process instanceof JavaDebugProcess debugProcess) {
+            if (session.getDebugProcess() instanceof JavaDebugProcess debugProcess) {
                 debugProcess.saveNodeHistory();
             }
             session.rebuildViews();

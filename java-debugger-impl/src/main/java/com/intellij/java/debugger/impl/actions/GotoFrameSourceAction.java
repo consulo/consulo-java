@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.actions;
 import com.intellij.java.debugger.impl.DebuggerContextUtil;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
@@ -25,44 +26,39 @@ import consulo.project.Project;
 /**
  * @author lex
  */
-public abstract class GotoFrameSourceAction extends DebuggerAction
-{
-	public void actionPerformed(AnActionEvent e)
-	{
-		DataContext dataContext = e.getDataContext();
-		doAction(dataContext);
-	}
+public abstract class GotoFrameSourceAction extends DebuggerAction {
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
+        DataContext dataContext = e.getDataContext();
+        doAction(dataContext);
+    }
 
-	protected static void doAction(DataContext dataContext)
-	{
-		final Project project = dataContext.getData(Project.KEY);
-		if (project == null)
-		{
-			return;
-		}
-		StackFrameDescriptorImpl stackFrameDescriptor = getStackFrameDescriptor(dataContext);
-		if (stackFrameDescriptor != null)
-		{
-			DebuggerContextUtil.setStackFrame(getContextManager(dataContext), stackFrameDescriptor.getFrameProxy());
-		}
-	}
+    protected static void doAction(DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return;
+        }
+        StackFrameDescriptorImpl stackFrameDescriptor = getStackFrameDescriptor(dataContext);
+        if (stackFrameDescriptor != null) {
+            DebuggerContextUtil.setStackFrame(getContextManager(dataContext), stackFrameDescriptor.getFrameProxy());
+        }
+    }
 
-	public void update(AnActionEvent e)
-	{
-		e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
-	}
+    @Override
+    @RequiredUIAccess
+    public void update(AnActionEvent e) {
+        e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
+    }
 
-	private static StackFrameDescriptorImpl getStackFrameDescriptor(DataContext dataContext)
-	{
-		DebuggerTreeNodeImpl selectedNode = getSelectedNode(dataContext);
-		if (selectedNode == null)
-		{
-			return null;
-		}
-		if (selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl))
-		{
-			return null;
-		}
-		return (StackFrameDescriptorImpl) selectedNode.getDescriptor();
-	}
+    private static StackFrameDescriptorImpl getStackFrameDescriptor(DataContext dataContext) {
+        DebuggerTreeNodeImpl selectedNode = getSelectedNode(dataContext);
+        if (selectedNode == null) {
+            return null;
+        }
+        if (selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl)) {
+            return null;
+        }
+        return (StackFrameDescriptorImpl)selectedNode.getDescriptor();
+    }
 }

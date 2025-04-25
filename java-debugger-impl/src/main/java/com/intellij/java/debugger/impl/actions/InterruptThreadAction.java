@@ -15,13 +15,14 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
 
@@ -29,70 +30,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User: lex
- * Date: Sep 26, 2003
- * Time: 7:35:09 PM
+ * @author lex
+ * @since 2003-09-26
  */
-public class InterruptThreadAction extends DebuggerAction{
-  
-  public void actionPerformed(final AnActionEvent e) {
-    final DebuggerTreeNodeImpl[] nodes = getSelectedNodes(e.getDataContext());
-    if (nodes == null) {
-      return;
-    }
-
-    //noinspection ConstantConditions
-    final List<ThreadReferenceProxyImpl> threadsToInterrupt = new ArrayList<ThreadReferenceProxyImpl>();
-    for (final DebuggerTreeNodeImpl debuggerTreeNode : nodes) {
-      final NodeDescriptorImpl descriptor = debuggerTreeNode.getDescriptor();
-      if (descriptor instanceof ThreadDescriptorImpl) {
-        threadsToInterrupt.add(((ThreadDescriptorImpl)descriptor).getThreadReference());
-      }
-    }
-    
-    if (!threadsToInterrupt.isEmpty()) {
-      final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-      debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerCommandImpl() {
-        protected void action() throws Exception {
-          for (ThreadReferenceProxyImpl thread : threadsToInterrupt) {
-            thread.getThreadReference().interrupt();
-          }
+public class InterruptThreadAction extends DebuggerAction {
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
+        DebuggerTreeNodeImpl[] nodes = getSelectedNodes(e.getDataContext());
+        if (nodes == null) {
+            return;
         }
-      });
+
+        //noinspection ConstantConditions
+        List<ThreadReferenceProxyImpl> threadsToInterrupt = new ArrayList<>();
+        for (DebuggerTreeNodeImpl debuggerTreeNode : nodes) {
+            if (debuggerTreeNode.getDescriptor() instanceof ThreadDescriptorImpl threadDescriptor) {
+                threadsToInterrupt.add(threadDescriptor.getThreadReference());
+            }
+        }
+
+        if (!threadsToInterrupt.isEmpty()) {
+            DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+            debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerCommandImpl() {
+                @Override
+                protected void action() throws Exception {
+                    for (ThreadReferenceProxyImpl thread : threadsToInterrupt) {
+                        thread.getThreadReference().interrupt();
+                    }
+                }
+            });
+        }
     }
 
-  }
+    @Override
+    @RequiredUIAccess
+    public void update(AnActionEvent e) {
+        DebuggerTreeNodeImpl[] selectedNodes = getSelectedNodes(e.getDataContext());
 
-  public void update(AnActionEvent e) {
-    final DebuggerTreeNodeImpl[] selectedNodes = getSelectedNodes(e.getDataContext());
+        boolean visible = false;
+        boolean enabled = false;
 
-    boolean visible = false;
-    boolean enabled = false;
+        if (selectedNodes != null && selectedNodes.length > 0) {
+            visible = true;
+            enabled = true;
+            for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
+                if (!(selectedNode.getDescriptor() instanceof ThreadDescriptorImpl)) {
+                    visible = false;
+                    break;
+                }
+            }
 
-    if(selectedNodes != null && selectedNodes.length > 0){
-      visible = true;
-      enabled = true;
-      for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
-        final NodeDescriptorImpl threadDescriptor = selectedNode.getDescriptor();
-        if (!(threadDescriptor instanceof ThreadDescriptorImpl)) {
-          visible = false;
-          break;
+            if (visible) {
+                for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
+                    ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl)selectedNode.getDescriptor();
+                    if (threadDescriptor.isFrozen()) {
+                        enabled = false;
+                        break;
+                    }
+                }
+            }
         }
-      }
-      
-      if (visible) {
-        for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
-          final ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl)selectedNode.getDescriptor();
-          if (threadDescriptor.isFrozen()) {
-            enabled = false;
-            break;
-          }
-        }
-      }
+        Presentation presentation = e.getPresentation();
+        presentation.setTextValue(JavaDebuggerLocalize.actionInterruptThreadText());
+        presentation.setVisible(visible);
+        presentation.setEnabled(enabled);
     }
-    final Presentation presentation = e.getPresentation();
-    presentation.setText(DebuggerBundle.message("action.interrupt.thread.text"));
-    presentation.setVisible(visible);
-    presentation.setEnabled(enabled);
-  }
 }

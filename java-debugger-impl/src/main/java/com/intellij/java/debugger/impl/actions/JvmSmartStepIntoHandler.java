@@ -29,104 +29,104 @@ import consulo.execution.debug.ui.DebuggerUIUtil;
 import consulo.fileEditor.TextEditor;
 import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.language.psi.PsiElement;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * User: Alexander Podkhalyuzin
- * Date: 22.11.11
+ * @author Alexander Podkhalyuzin
+ * @since 2011-11-22
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JvmSmartStepIntoHandler {
-  public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create(JvmSmartStepIntoHandler.class);
+    public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create(JvmSmartStepIntoHandler.class);
 
-  @Nonnull
-  public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
+    @Nonnull
+    public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
 
-  public abstract boolean isAvailable(SourcePosition position);
+    public abstract boolean isAvailable(SourcePosition position);
 
-  /**
-   * Override this if you haven't PsiMethod, like in Kotlin.
-   *
-   * @param position
-   * @param session
-   * @param fileEditor
-   * @return false to continue for another handler or for default action (step into)
-   */
-  public boolean doSmartStep(SourcePosition position, final DebuggerSession session, TextEditor fileEditor) {
-    final List<SmartStepTarget> targets = findSmartStepTargets(position);
-    if (!targets.isEmpty()) {
-      final SmartStepTarget firstTarget = targets.get(0);
-      if (targets.size() == 1) {
-        session.sessionResumed();
-        session.stepInto(true, createMethodFilter(firstTarget));
-      }
-      else {
-        final Editor editor = fileEditor.getEditor();
-        final PsiMethodListPopupStep popupStep = new PsiMethodListPopupStep(editor, targets, new PsiMethodListPopupStep.OnChooseRunnable() {
-          public void execute(SmartStepTarget chosenTarget) {
-            session.sessionResumed();
-            session.stepInto(true, createMethodFilter(chosenTarget));
-          }
-        });
-        ListPopupImpl popup = new ListPopupImpl(popupStep);
-        DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
-        DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
-        popup.addListSelectionListener(new ListSelectionListener() {
-          public void valueChanged(ListSelectionEvent e) {
-            popupStep.getScopeHighlighter().dropHighlight();
-            if (!e.getValueIsAdjusting()) {
-              final SmartStepTarget selectedTarget = (SmartStepTarget)((JBList)e.getSource()).getSelectedValue();
-              if (selectedTarget != null) {
-                highlightTarget(popupStep, selectedTarget);
-              }
+    /**
+     * Override this if you haven't PsiMethod, like in Kotlin.
+     *
+     * @param position
+     * @param session
+     * @param fileEditor
+     * @return false to continue for another handler or for default action (step into)
+     */
+    @RequiredUIAccess
+    public boolean doSmartStep(SourcePosition position, DebuggerSession session, TextEditor fileEditor) {
+        List<SmartStepTarget> targets = findSmartStepTargets(position);
+        if (!targets.isEmpty()) {
+            SmartStepTarget firstTarget = targets.get(0);
+            if (targets.size() == 1) {
+                session.sessionResumed();
+                session.stepInto(true, createMethodFilter(firstTarget));
             }
-          }
-        });
-        highlightTarget(popupStep, firstTarget);
-        DebuggerUIUtil.showPopupForEditorLine(popup, editor, position.getLine());
-      }
-      return true;
+            else {
+                Editor editor = fileEditor.getEditor();
+                PsiMethodListPopupStep popupStep =
+                    new PsiMethodListPopupStep(editor, targets, new PsiMethodListPopupStep.OnChooseRunnable() {
+                        @Override
+                        @RequiredUIAccess
+                        public void execute(SmartStepTarget chosenTarget) {
+                            session.sessionResumed();
+                            session.stepInto(true, createMethodFilter(chosenTarget));
+                        }
+                    });
+                ListPopupImpl popup = new ListPopupImpl(popupStep);
+                DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
+                DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
+                popup.addListSelectionListener(e -> {
+                    popupStep.getScopeHighlighter().dropHighlight();
+                    if (!e.getValueIsAdjusting()) {
+                        SmartStepTarget selectedTarget = (SmartStepTarget)((JBList)e.getSource()).getSelectedValue();
+                        if (selectedTarget != null) {
+                            highlightTarget(popupStep, selectedTarget);
+                        }
+                    }
+                });
+                highlightTarget(popupStep, firstTarget);
+                DebuggerUIUtil.showPopupForEditorLine(popup, editor, position.getLine());
+            }
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  private static void highlightTarget(PsiMethodListPopupStep popupStep, SmartStepTarget target) {
-    final PsiElement highlightElement = target.getHighlightElement();
-    if (highlightElement != null) {
-      popupStep.getScopeHighlighter().highlight(highlightElement, Collections.singletonList(highlightElement));
+    private static void highlightTarget(PsiMethodListPopupStep popupStep, SmartStepTarget target) {
+        PsiElement highlightElement = target.getHighlightElement();
+        if (highlightElement != null) {
+            popupStep.getScopeHighlighter().highlight(highlightElement, Collections.singletonList(highlightElement));
+        }
     }
-  }
 
-  /**
-   * Override in case if your JVMNames slightly different then it can be provided by getJvmSignature method.
-   *
-   * @param stepTarget
-   * @return SmartStepFilter
-   */
-  @Nullable
-  protected MethodFilter createMethodFilter(SmartStepTarget stepTarget) {
-    if (stepTarget instanceof MethodSmartStepTarget) {
-      final PsiMethod method = ((MethodSmartStepTarget)stepTarget).getMethod();
-      if (stepTarget.needsBreakpointRequest()) {
-        return method.getContainingClass() instanceof PsiAnonymousClass ? new ClassInstanceMethodFilter(method,
-                                                                                                        stepTarget.getCallingExpressionLines()) : new AnonymousClassMethodFilter
-          (method, stepTarget.getCallingExpressionLines());
-      }
-      else {
-        return new BasicStepMethodFilter(method, stepTarget.getCallingExpressionLines());
-      }
+    /**
+     * Override in case if your JVMNames slightly different then it can be provided by getJvmSignature method.
+     *
+     * @param stepTarget
+     * @return SmartStepFilter
+     */
+    @Nullable
+    protected MethodFilter createMethodFilter(SmartStepTarget stepTarget) {
+        if (stepTarget instanceof MethodSmartStepTarget methodSmartStepTarget) {
+            PsiMethod method = methodSmartStepTarget.getMethod();
+            if (stepTarget.needsBreakpointRequest()) {
+                return method.getContainingClass() instanceof PsiAnonymousClass
+                    ? new ClassInstanceMethodFilter(method, stepTarget.getCallingExpressionLines())
+                    : new AnonymousClassMethodFilter(method, stepTarget.getCallingExpressionLines());
+            }
+            else {
+                return new BasicStepMethodFilter(method, stepTarget.getCallingExpressionLines());
+            }
+        }
+        if (stepTarget instanceof LambdaSmartStepTarget lambdaTarget) {
+            return new LambdaMethodFilter(lambdaTarget.getLambda(), lambdaTarget.getOrdinal(), stepTarget.getCallingExpressionLines());
+        }
+        return null;
     }
-    if (stepTarget instanceof LambdaSmartStepTarget) {
-      final LambdaSmartStepTarget lambdaTarget = (LambdaSmartStepTarget)stepTarget;
-      return new LambdaMethodFilter(lambdaTarget.getLambda(), lambdaTarget.getOrdinal(), stepTarget.getCallingExpressionLines());
-    }
-    return null;
-  }
 }

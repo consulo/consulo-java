@@ -20,6 +20,7 @@ import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.HotSwapUI;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 
@@ -28,6 +29,7 @@ import consulo.ui.ex.action.AnActionEvent;
  */
 public class HotSwapAction extends AnAction {
     @Override
+    @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {
@@ -43,6 +45,7 @@ public class HotSwapAction extends AnAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {

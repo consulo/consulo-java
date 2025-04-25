@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.JavaValue;
@@ -25,6 +24,7 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.XValueNodePresentationConfigurator;
@@ -44,11 +44,13 @@ public class JavaReferringObjectsValue extends JavaValue {
     private static final long MAX_REFERRING = 100;
     private final boolean myIsField;
 
-    private JavaReferringObjectsValue(@Nullable JavaValue parent,
-                                      @Nonnull ValueDescriptorImpl valueDescriptor,
-                                      @Nonnull EvaluationContextImpl evaluationContext,
-                                      NodeManagerImpl nodeManager,
-                                      boolean isField) {
+    private JavaReferringObjectsValue(
+        @Nullable JavaValue parent,
+        @Nonnull ValueDescriptorImpl valueDescriptor,
+        @Nonnull EvaluationContextImpl evaluationContext,
+        NodeManagerImpl nodeManager,
+        boolean isField
+    ) {
         super(parent, valueDescriptor, evaluationContext, nodeManager, false);
         myIsField = isField;
     }
@@ -64,7 +66,7 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computeChildren(@Nonnull final XCompositeNode node) {
+    public void computeChildren(@Nonnull XCompositeNode node) {
         scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext()) {
             @Override
             public Priority getPriority() {
@@ -73,21 +75,21 @@ public class JavaReferringObjectsValue extends JavaValue {
 
             @Override
             public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
-                final XValueChildrenList children = new XValueChildrenList();
+                XValueChildrenList children = new XValueChildrenList();
 
                 Value value = getDescriptor().getValue();
 
                 List<ObjectReference> references;
                 try {
-                    references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
+                    references = ((ObjectReference)value).referringObjects(MAX_REFERRING);
                 }
                 catch (ObjectCollectedException e) {
-                    node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
+                    node.setErrorMessage(JavaDebuggerLocalize.evaluationErrorObjectCollected().get());
                     return;
                 }
 
                 int i = 1;
-                for (final ObjectReference reference : references) {
+                for (ObjectReference reference : references) {
                     // try to find field name
                     Field field = findField(reference, value);
                     if (field != null) {
@@ -117,7 +119,10 @@ public class JavaReferringObjectsValue extends JavaValue {
                                 return null;
                             }
                         };
-                        children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false));
+                        children.add(
+                            "Referrer " + i++,
+                            new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false)
+                        );
                     }
                 }
 
@@ -127,61 +132,70 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place) {
+    public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
         if (!myIsField) {
             super.computePresentation(node, place);
         }
         else {
-            super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl() {
-                @Override
-                public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren) {
-                    node.setPresentation(icon, new XValuePresentation() {
-                        @Nonnull
-                        @Override
-                        public String getSeparator() {
-                            return " in ";
-                        }
+            super.computePresentation(
+                new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl() {
+                    @Override
+                    public void applyPresentation(
+                        @Nullable Image icon,
+                        @Nonnull XValuePresentation valuePresenter,
+                        boolean hasChildren
+                    ) {
+                        node.setPresentation(icon, new XValuePresentation() {
+                                @Nonnull
+                                @Override
+                                public String getSeparator() {
+                                    return " in ";
+                                }
 
-                        @Nullable
-                        @Override
-                        public String getType() {
-                            return valuePresenter.getType();
-                        }
+                                @Nullable
+                                @Override
+                                public String getType() {
+                                    return valuePresenter.getType();
+                                }
 
-                        @Override
-                        public void renderValue(@Nonnull XValueTextRenderer renderer) {
-                            valuePresenter.renderValue(renderer);
-                        }
-                    }, hasChildren);
-                }
+                                @Override
+                                public void renderValue(@Nonnull XValueTextRenderer renderer) {
+                                    valuePresenter.renderValue(renderer);
+                                }
+                            },
+                            hasChildren
+                        );
+                    }
 
-                @Override
-                public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
-                }
+                    @Override
+                    public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
+                    }
 
-                @Nullable
-                @Override
-                public String getName() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public String getName() {
+                        return null;
+                    }
 
-                @Nullable
-                @Override
-                public XValue getValueContainer() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public XValue getValueContainer() {
+                        return null;
+                    }
 
-                @Nullable
-                @Override
-                public XValueTree getTree() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public XValueTree getTree() {
+                        return null;
+                    }
 
-                @Override
-                public boolean isObsolete() {
-                    return false;
-                }
-            }, place);
+                    @Override
+                    public boolean isObsolete() {
+                        return false;
+                    }
+                },
+                place
+            );
         }
     }
 

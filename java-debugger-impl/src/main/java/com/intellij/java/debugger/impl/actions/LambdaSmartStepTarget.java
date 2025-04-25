@@ -26,73 +26,57 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: 10/25/13
+ * @since 2013-10-25
  */
-public class LambdaSmartStepTarget extends SmartStepTarget
-{
-	private final PsiLambdaExpression myLambda;
-	private final int myOrdinal;
+public class LambdaSmartStepTarget extends SmartStepTarget {
+    private final PsiLambdaExpression myLambda;
+    private final int myOrdinal;
 
-	public LambdaSmartStepTarget(
-			@Nonnull PsiLambdaExpression lambda,
-			@Nullable String label,
-			@Nullable PsiElement highlightElement,
-			int ordinal,
-			Range<Integer> lines)
-	{
-		super(label, highlightElement, true, lines);
-		myLambda = lambda;
-		myOrdinal = ordinal;
-	}
+    public LambdaSmartStepTarget(
+        @Nonnull PsiLambdaExpression lambda,
+        @Nullable String label,
+        @Nullable PsiElement highlightElement,
+        int ordinal,
+        Range<Integer> lines
+    ) {
+        super(label, highlightElement, true, lines);
+        myLambda = lambda;
+        myOrdinal = ordinal;
+    }
 
-	public PsiLambdaExpression getLambda()
-	{
-		return myLambda;
-	}
+    public PsiLambdaExpression getLambda() {
+        return myLambda;
+    }
 
-	public int getOrdinal()
-	{
-		return myOrdinal;
-	}
+    public int getOrdinal() {
+        return myOrdinal;
+    }
 
-	@Nullable
-	@Override
-	public Image getIcon()
-	{
-		return PlatformIconGroup.nodesLambda();
-	}
+    @Nullable
+    @Override
+    public Image getIcon() {
+        return PlatformIconGroup.nodesLambda();
+    }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		if(o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-		final LambdaSmartStepTarget that = (LambdaSmartStepTarget) o;
+        LambdaSmartStepTarget that = (LambdaSmartStepTarget)o;
 
-		if(myOrdinal != that.myOrdinal)
-		{
-			return false;
-		}
-		if(!myLambda.equals(that.myLambda))
-		{
-			return false;
-		}
+        return myOrdinal == that.myOrdinal
+            && myLambda.equals(that.myLambda);
+    }
 
-		return true;
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int result = myLambda.hashCode();
-		result = 31 * result + myOrdinal;
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = myLambda.hashCode();
+        result = 31 * result + myOrdinal;
+        return result;
+    }
 }

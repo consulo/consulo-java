@@ -1,16 +1,15 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaStackFrame;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.execution.debug.XDebuggerBundle;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.EvaluationMode;
@@ -18,6 +17,7 @@ import consulo.execution.debug.evaluation.XDebuggerEvaluator;
 import consulo.execution.debug.frame.XDropFrameHandler;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.execution.debug.frame.XValue;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.language.psi.PsiElement;
@@ -27,9 +27,11 @@ import consulo.logging.Logger;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ModalityState;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.MessageDialogBuilder;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -39,7 +41,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class JvmDropFrameActionHandler implements XDropFrameHandler {
-
     private static final Logger LOG = Logger.getInstance(JvmDropFrameActionHandler.class);
     private final @Nonnull DebuggerSession myDebugSession;
 
@@ -49,6 +50,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
 
     @Override
     public boolean canDrop(@Nonnull XStackFrame frame) {
+        //noinspection SimplifiableIfStatement
         if (frame instanceof JavaStackFrame javaStackFrame) {
             return javaStackFrame.getStackFrameProxy().getVirtualMachine().canPopFrames() && javaStackFrame.getDescriptor().canDrop();
         }
@@ -56,6 +58,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
     }
 
     @Override
+    @RequiredUIAccess
     public void drop(@Nonnull XStackFrame frame) {
         if (frame instanceof JavaStackFrame stackFrame) {
             var project = myDebugSession.getProject();
@@ -63,7 +66,8 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
             var debuggerContext = myDebugSession.getContextManager().getContext();
             try {
                 myDebugSession.setSteppingThrough(stackFrame.getStackFrameProxy().threadProxy());
-                if (evaluateFinallyBlocks(project,
+                if (evaluateFinallyBlocks(
+                    project,
                     XDebuggerBundle.message("xdebugger.reset.frame.title"),
                     stackFrame,
                     new XDebuggerEvaluator.XEvaluationCallback() {
@@ -73,11 +77,15 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                         }
 
                         @Override
-                        public void errorOccurred(@Nonnull final String errorMessage) {
-                            showError(project, DebuggerBundle.message("error.executing.finally", errorMessage),
-                                XDebuggerBundle.message("xdebugger.reset.frame.title"));
+                        public void errorOccurred(@Nonnull String errorMessage) {
+                            showError(
+                                project,
+                                JavaDebuggerLocalize.errorExecutingFinally(errorMessage).get(),
+                                XDebuggerBundle.message("xdebugger.reset.frame.title")
+                            );
                         }
-                    })) {
+                    }
+                )) {
                     return;
                 }
                 popFrame(debugProcess, debuggerContext, stackFrame);
@@ -87,10 +95,13 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
         }
     }
 
-    public static boolean evaluateFinallyBlocks(Project project,
-                                                String title,
-                                                JavaStackFrame stackFrame,
-                                                XDebuggerEvaluator.XEvaluationCallback callback) {
+    @RequiredUIAccess
+    public static boolean evaluateFinallyBlocks(
+        Project project,
+        String title,
+        JavaStackFrame stackFrame,
+        XDebuggerEvaluator.XEvaluationCallback callback
+    ) {
         if (!DebuggerSettings.EVALUATE_FINALLY_NEVER.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME)) {
             List<PsiStatement> statements = getFinallyStatements(project, stackFrame.getDescriptor().getSourcePosition());
             if (!statements.isEmpty()) {
@@ -104,25 +115,30 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                 }
                 else {
                     int res = MessageDialogBuilder
-                        .yesNoCancel(title,
-                            DebuggerBundle.message("warning.finally.block.detected") + sb)
-                        .icon(Messages.getWarningIcon())
-                        .yesText(DebuggerBundle.message("button.execute.finally"))
-                        .noText(DebuggerBundle.message("button.drop.anyway"))
+                        .yesNoCancel(
+                            title,
+                            JavaDebuggerLocalize.warningFinallyBlockDetected().get() + sb
+                        )
+                        .icon(UIUtil.getWarningIcon())
+                        .yesText(JavaDebuggerLocalize.buttonExecuteFinally().get())
+                        .noText(JavaDebuggerLocalize.buttonDropAnyway().get())
                         .project(project)
-                        .cancelText(CommonBundle.getCancelButtonText())
+                        .cancelText(CommonLocalize.buttonCancel().get())
                         .doNotAsk(new DialogWrapper.DoNotAskOption() {
                             @Override
                             public boolean isToBeShown() {
-                                return !DebuggerSettings.EVALUATE_FINALLY_ALWAYS.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME) &&
-                                    !DebuggerSettings.EVALUATE_FINALLY_NEVER.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME);
+                                return !DebuggerSettings.EVALUATE_FINALLY_ALWAYS
+                                    .equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME)
+                                    && !DebuggerSettings.EVALUATE_FINALLY_NEVER
+                                    .equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME);
                             }
 
                             @Override
                             public void setToBeShown(boolean value, int exitCode) {
                                 if (!value) {
-                                    DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME =
-                                        exitCode == Messages.YES ? DebuggerSettings.EVALUATE_FINALLY_ALWAYS : DebuggerSettings.EVALUATE_FINALLY_NEVER;
+                                    DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME = exitCode == Messages.YES
+                                        ? DebuggerSettings.EVALUATE_FINALLY_ALWAYS
+                                        : DebuggerSettings.EVALUATE_FINALLY_NEVER;
                                 }
                                 else {
                                     DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME = DebuggerSettings.EVALUATE_FINALLY_ASK;
@@ -169,30 +185,39 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
             .schedule(debugProcess.createPopFrameCommand(debuggerContext, stackFrame.getStackFrameProxy()));
     }
 
-    private static void evaluateAndAct(Project project,
-                                       JavaStackFrame stackFrame,
-                                       StringBuilder sb,
-                                       XDebuggerEvaluator.XEvaluationCallback callback) {
+    @RequiredUIAccess
+    private static void evaluateAndAct(
+        Project project,
+        JavaStackFrame stackFrame,
+        StringBuilder sb,
+        XDebuggerEvaluator.XEvaluationCallback callback
+    ) {
         XDebuggerEvaluator evaluator = stackFrame.getEvaluator();
         if (evaluator != null) {
-            evaluator.evaluate(XExpression.fromText(sb.toString(), EvaluationMode.CODE_FRAGMENT),
+            evaluator.evaluate(
+                XExpression.fromText(sb.toString(), EvaluationMode.CODE_FRAGMENT),
                 callback,
-                stackFrame.getSourcePosition());
+                stackFrame.getSourcePosition()
+            );
         }
         else {
-            Messages.showMessageDialog(project, XDebuggerBundle.message("xdebugger.evaluate.stack.frame.has.not.evaluator"),
+            Messages.showMessageDialog(
+                project,
+                XDebuggerLocalize.xdebuggerEvaluateStackFrameHasNotEvaluator().get(),
                 XDebuggerBundle.message("xdebugger.reset.frame.title"),
-                Messages.getErrorIcon());
+                UIUtil.getErrorIcon()
+            );
         }
     }
 
-
     public static void showError(Project project, String message, String title) {
-        ApplicationManager.getApplication().invokeLater(
-            () -> Messages.showMessageDialog(project, message, title, Messages.getErrorIcon()),
-            ModalityState.any());
+        project.getApplication().invokeLater(
+            () -> Messages.showMessageDialog(project, message, title, UIUtil.getErrorIcon()),
+            ModalityState.any()
+        );
     }
 
+    @RequiredReadAction
     private static List<PsiStatement> getFinallyStatements(Project project, @Nullable SourcePosition position) {
         if (position == null) {
             return Collections.emptyList();
@@ -220,12 +245,13 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
         return res;
     }
 
+    @RequiredReadAction
     private static String getResourceName(PsiResourceListElement resource) {
-        if (resource instanceof PsiResourceVariable) {
-            return ((PsiResourceVariable) resource).getName();
+        if (resource instanceof PsiResourceVariable resourceVar) {
+            return resourceVar.getName();
         }
-        else if (resource instanceof PsiResourceExpression) {
-            return ((PsiResourceExpression) resource).getExpression().getText();
+        else if (resource instanceof PsiResourceExpression resourceExpr) {
+            return resourceExpr.getExpression().getText();
         }
         LOG.error("Unknown PsiResourceListElement type: " + resource.getClass());
         return null;

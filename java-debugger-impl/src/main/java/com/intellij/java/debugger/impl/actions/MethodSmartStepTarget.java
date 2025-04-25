@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
@@ -29,74 +30,64 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- * Date: 10/25/13
+ * @since 2013-10-25
  */
-public class MethodSmartStepTarget extends SmartStepTarget
-{
-	private final PsiMethod myMethod;
+public class MethodSmartStepTarget extends SmartStepTarget {
+    private final PsiMethod myMethod;
 
-	public MethodSmartStepTarget(
-			@Nonnull PsiMethod method,
-			@Nullable String label,
-			@Nullable PsiElement highlightElement,
-			boolean needBreakpointRequest,
-			Range<Integer> lines)
-	{
-		super(label, highlightElement, needBreakpointRequest, lines);
-		myMethod = method;
-	}
+    public MethodSmartStepTarget(
+        @Nonnull PsiMethod method,
+        @Nullable String label,
+        @Nullable PsiElement highlightElement,
+        boolean needBreakpointRequest,
+        Range<Integer> lines
+    ) {
+        super(label, highlightElement, needBreakpointRequest, lines);
+        myMethod = method;
+    }
 
-	@Nullable
-	@Override
-	public Image getIcon()
-	{
-		return IconDescriptorUpdaters.getIcon(myMethod, 0);
-	}
+    @Nullable
+    @Override
+    @RequiredReadAction
+    public Image getIcon() {
+        return IconDescriptorUpdaters.getIcon(myMethod, 0);
+    }
 
-	@Nonnull
-	@Override
-	public String getPresentation()
-	{
-		String label = getLabel();
-		String formatted = PsiFormatUtil.formatMethod(
-				myMethod,
-				PsiSubstitutor.EMPTY,
-				PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
-				PsiFormatUtilBase.SHOW_TYPE,
-				999
-		);
-		return label != null ? label + formatted : formatted;
-	}
+    @Nonnull
+    @Override
+    public String getPresentation() {
+        String label = getLabel();
+        String formatted = PsiFormatUtil.formatMethod(
+            myMethod,
+            PsiSubstitutor.EMPTY,
+            PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+            PsiFormatUtilBase.SHOW_TYPE,
+            999
+        );
+        return label != null ? label + formatted : formatted;
+    }
 
-	@Nonnull
-	public PsiMethod getMethod()
-	{
-		return myMethod;
-	}
+    @Nonnull
+    public PsiMethod getMethod() {
+        return myMethod;
+    }
 
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		if(o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-		final MethodSmartStepTarget that = (MethodSmartStepTarget) o;
+        MethodSmartStepTarget that = (MethodSmartStepTarget)o;
 
-		if(!myMethod.equals(that.myMethod))
-		{
-			return false;
-		}
+        return myMethod.equals(that.myMethod);
+    }
 
-		return true;
-	}
-
-	public int hashCode()
-	{
-		return myMethod.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return myMethod.hashCode();
+    }
 }

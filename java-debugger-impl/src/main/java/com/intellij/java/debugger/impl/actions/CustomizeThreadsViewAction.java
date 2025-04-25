@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.debugger.impl.settings.ThreadsViewConfigurable;
 import consulo.platform.base.localize.ActionLocalize;
@@ -26,30 +26,26 @@ import consulo.ui.ex.action.AnActionEvent;
 import jakarta.annotation.Nonnull;
 
 /**
- * User: lex
- * Date: Sep 26, 2003
- * Time: 4:40:12 PM
+ * @author lex
+ * @since 2003-09-26
  */
-public class CustomizeThreadsViewAction extends DebuggerAction
-{
-	@RequiredUIAccess
-	@Override
-	public void actionPerformed(@Nonnull AnActionEvent e)
-	{
-		Project project = e.getData(Project.KEY);
+public class CustomizeThreadsViewAction extends DebuggerAction {
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(@Nonnull AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
 
-		ShowSettingsUtil.getInstance().editConfigurable(
-			DebuggerBundle.message("threads.view.configurable.display.name"),
-			project,
-			new ThreadsViewConfigurable(ThreadsViewSettings::getInstance)
-		);
-	}
+        ShowSettingsUtil.getInstance().editConfigurable(
+            JavaDebuggerLocalize.threadsViewConfigurableDisplayName().get(),
+            project,
+            new ThreadsViewConfigurable(ThreadsViewSettings::getInstance)
+        );
+    }
 
-	@RequiredUIAccess
-	@Override
-	public void update(@Nonnull AnActionEvent e)
-	{
-		e.getPresentation().setVisible(true);
-		e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizethreadsviewText());
-	}
+    @Override
+    @RequiredUIAccess
+    public void update(@Nonnull AnActionEvent e) {
+        e.getPresentation().setVisible(true);
+        e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizethreadsviewText());
+    }
 }

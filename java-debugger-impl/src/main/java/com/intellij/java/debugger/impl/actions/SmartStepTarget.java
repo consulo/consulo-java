@@ -25,58 +25,51 @@ import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- * Date: 10/25/13
+ * @since 2013-10-25
  */
-public abstract class SmartStepTarget
-{
-	private final PsiElement myHighlightElement;
-	private final String myLabel;
-	private final boolean myNeedBreakpointRequest;
-	private final Range<Integer> myExpressionLines;
+public abstract class SmartStepTarget {
+    private final PsiElement myHighlightElement;
+    private final String myLabel;
+    private final boolean myNeedBreakpointRequest;
+    private final Range<Integer> myExpressionLines;
 
-	protected SmartStepTarget(
-			@Nullable String label,
-			@Nullable PsiElement highlightElement,
-			boolean needBreakpointRequest,
-			Range<Integer> expressionLines)
-	{
-		myHighlightElement = highlightElement;
-		myLabel = label;
-		myNeedBreakpointRequest = needBreakpointRequest;
-		myExpressionLines = expressionLines;
-	}
+    protected SmartStepTarget(
+        @Nullable String label,
+        @Nullable PsiElement highlightElement,
+        boolean needBreakpointRequest,
+        Range<Integer> expressionLines
+    ) {
+        myHighlightElement = highlightElement;
+        myLabel = label;
+        myNeedBreakpointRequest = needBreakpointRequest;
+        myExpressionLines = expressionLines;
+    }
 
-	@Nullable
-	public PsiElement getHighlightElement()
-	{
-		return myHighlightElement;
-	}
+    @Nullable
+    public PsiElement getHighlightElement() {
+        return myHighlightElement;
+    }
 
-	@Nullable
-	public String getLabel()
-	{
-		return myLabel;
-	}
+    @Nullable
+    public String getLabel() {
+        return myLabel;
+    }
 
-	public boolean needsBreakpointRequest()
-	{
-		return myNeedBreakpointRequest;
-	}
+    public boolean needsBreakpointRequest() {
+        return myNeedBreakpointRequest;
+    }
 
-	public Range<Integer> getCallingExpressionLines()
-	{
-		return myExpressionLines;
-	}
+    public Range<Integer> getCallingExpressionLines() {
+        return myExpressionLines;
+    }
 
-	@Nullable
-	public Image getIcon()
-	{
-		return null;
-	}
+    @Nullable
+    public Image getIcon() {
+        return null;
+    }
 
-	@Nonnull
-	public String getPresentation()
-	{
-		return StringUtil.notNullize(getLabel());
-	}
+    @Nonnull
+    public String getPresentation() {
+        return StringUtil.notNullize(getLabel());
+    }
 }

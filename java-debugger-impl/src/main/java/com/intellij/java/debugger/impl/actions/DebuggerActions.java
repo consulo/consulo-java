@@ -13,31 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Interface DebuggerActions
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.actions;
 
 import consulo.execution.debug.XDebuggerActions;
-import org.jetbrains.annotations.NonNls;
 
+/**
+ * @author Jeka
+ */
 public interface DebuggerActions extends XDebuggerActions {
-  @NonNls String POP_FRAME = "Debugger.PopFrame";
-  @NonNls String EVALUATION_DIALOG_POPUP = "Debugger.EvaluationDialogPopup";
-  @NonNls String FRAME_PANEL_POPUP = "Debugger.FramePanelPopup";
-  @NonNls String INSPECT_PANEL_POPUP = "Debugger.InspectPanelPopup";
-  @NonNls String THREADS_PANEL_POPUP = "Debugger.ThreadsPanelPopup";
-  @NonNls String WATCH_PANEL_POPUP = "Debugger.WatchesPanelPopup";
-  @NonNls String REMOVE_WATCH = "Debugger.RemoveWatch";
-  @NonNls String NEW_WATCH = "Debugger.NewWatch";
-  @NonNls String EDIT_WATCH = "Debugger.EditWatch";
-  @NonNls String COPY_VALUE = "Debugger.CopyValue";
-  @NonNls String SET_VALUE = "Debugger.SetValue";
-  @NonNls String EDIT_FRAME_SOURCE = "Debugger.EditFrameSource";
-  @NonNls String EDIT_NODE_SOURCE = "Debugger.EditNodeSource";
-  @NonNls String REPRESENTATION_LIST = "Debugger.Representation";
-  @NonNls String INSPECT = "Debugger.Inspect";
-  @NonNls String DUMP_THREADS = "DumpThreads";
+    String POP_FRAME = "Debugger.PopFrame";
+    String EVALUATION_DIALOG_POPUP = "Debugger.EvaluationDialogPopup";
+    String FRAME_PANEL_POPUP = "Debugger.FramePanelPopup";
+    String INSPECT_PANEL_POPUP = "Debugger.InspectPanelPopup";
+    String THREADS_PANEL_POPUP = "Debugger.ThreadsPanelPopup";
+    String WATCH_PANEL_POPUP = "Debugger.WatchesPanelPopup";
+    String REMOVE_WATCH = "Debugger.RemoveWatch";
+    String NEW_WATCH = "Debugger.NewWatch";
+    String EDIT_WATCH = "Debugger.EditWatch";
+    String COPY_VALUE = "Debugger.CopyValue";
+    String SET_VALUE = "Debugger.SetValue";
+    String EDIT_FRAME_SOURCE = "Debugger.EditFrameSource";
+    String EDIT_NODE_SOURCE = "Debugger.EditNodeSource";
+    String REPRESENTATION_LIST = "Debugger.Representation";
+    String INSPECT = "Debugger.Inspect";
+    String DUMP_THREADS = "DumpThreads";
 }
