@@ -17,24 +17,20 @@ package com.intellij.java.debugger.impl.actions;
 
 import consulo.document.Document;
 
-class PlaceInDocument
-{
-	private final Document myDocument;
-	private final int myOffset;
+class PlaceInDocument {
+    private final Document myDocument;
+    private final int myOffset;
 
-	PlaceInDocument(Document document, int offset)
-	{
-		myDocument = document;
-		myOffset = offset;
-	}
+    PlaceInDocument(Document document, int offset) {
+        myDocument = document;
+        myOffset = offset;
+    }
 
-	public Document getDocument()
-	{
-		return myDocument;
-	}
+    public Document getDocument() {
+        return myDocument;
+    }
 
-	public int getOffset()
-	{
-		return myOffset;
-	}
+    public int getOffset() {
+        return myOffset;
+    }
 }

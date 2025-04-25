@@ -30,26 +30,23 @@ import jakarta.annotation.Nonnull;
  * Date: Sep 26, 2003
  * Time: 4:40:12 PM
  */
-public class CustomizeThreadsViewAction extends DebuggerAction
-{
-	@RequiredUIAccess
-	@Override
-	public void actionPerformed(@Nonnull AnActionEvent e)
-	{
-		Project project = e.getData(Project.KEY);
+public class CustomizeThreadsViewAction extends DebuggerAction {
+    @RequiredUIAccess
+    @Override
+    public void actionPerformed(@Nonnull AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
 
-		ShowSettingsUtil.getInstance().editConfigurable(
-			DebuggerBundle.message("threads.view.configurable.display.name"),
-			project,
-			new ThreadsViewConfigurable(ThreadsViewSettings::getInstance)
-		);
-	}
+        ShowSettingsUtil.getInstance().editConfigurable(
+            DebuggerBundle.message("threads.view.configurable.display.name"),
+            project,
+            new ThreadsViewConfigurable(ThreadsViewSettings::getInstance)
+        );
+    }
 
-	@RequiredUIAccess
-	@Override
-	public void update(@Nonnull AnActionEvent e)
-	{
-		e.getPresentation().setVisible(true);
-		e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizethreadsviewText());
-	}
+    @RequiredUIAccess
+    @Override
+    public void update(@Nonnull AnActionEvent e) {
+        e.getPresentation().setVisible(true);
+        e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizethreadsviewText());
+    }
 }

@@ -25,44 +25,35 @@ import consulo.project.Project;
 /**
  * @author lex
  */
-public abstract class GotoFrameSourceAction extends DebuggerAction
-{
-	public void actionPerformed(AnActionEvent e)
-	{
-		DataContext dataContext = e.getDataContext();
-		doAction(dataContext);
-	}
+public abstract class GotoFrameSourceAction extends DebuggerAction {
+    public void actionPerformed(AnActionEvent e) {
+        DataContext dataContext = e.getDataContext();
+        doAction(dataContext);
+    }
 
-	protected static void doAction(DataContext dataContext)
-	{
-		final Project project = dataContext.getData(Project.KEY);
-		if (project == null)
-		{
-			return;
-		}
-		StackFrameDescriptorImpl stackFrameDescriptor = getStackFrameDescriptor(dataContext);
-		if (stackFrameDescriptor != null)
-		{
-			DebuggerContextUtil.setStackFrame(getContextManager(dataContext), stackFrameDescriptor.getFrameProxy());
-		}
-	}
+    protected static void doAction(DataContext dataContext) {
+        final Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return;
+        }
+        StackFrameDescriptorImpl stackFrameDescriptor = getStackFrameDescriptor(dataContext);
+        if (stackFrameDescriptor != null) {
+            DebuggerContextUtil.setStackFrame(getContextManager(dataContext), stackFrameDescriptor.getFrameProxy());
+        }
+    }
 
-	public void update(AnActionEvent e)
-	{
-		e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
-	}
+    public void update(AnActionEvent e) {
+        e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
+    }
 
-	private static StackFrameDescriptorImpl getStackFrameDescriptor(DataContext dataContext)
-	{
-		DebuggerTreeNodeImpl selectedNode = getSelectedNode(dataContext);
-		if (selectedNode == null)
-		{
-			return null;
-		}
-		if (selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl))
-		{
-			return null;
-		}
-		return (StackFrameDescriptorImpl) selectedNode.getDescriptor();
-	}
+    private static StackFrameDescriptorImpl getStackFrameDescriptor(DataContext dataContext) {
+        DebuggerTreeNodeImpl selectedNode = getSelectedNode(dataContext);
+        if (selectedNode == null) {
+            return null;
+        }
+        if (selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl)) {
+            return null;
+        }
+        return (StackFrameDescriptorImpl)selectedNode.getDescriptor();
+    }
 }

@@ -33,104 +33,85 @@ import consulo.ui.ex.action.Presentation;
 import consulo.application.ReadAction;
 import consulo.project.Project;
 
-public class EditSourceAction extends DebuggerAction
-{
-	@Override
-	public void actionPerformed(AnActionEvent e)
-	{
-		final Project project = e.getData(Project.KEY);
+public class EditSourceAction extends DebuggerAction {
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        final Project project = e.getData(Project.KEY);
 
-		if(project == null)
-		{
-			return;
-		}
+        if (project == null) {
+            return;
+        }
 
-		final DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
-		if(selectedNode != null)
-		{
-			final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-			DebugProcessImpl process = debuggerContext.getDebugProcess();
-			if(process != null)
-			{
-				process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext)
-				{
-					@Override
-					public void threadAction()
-					{
-						final SourcePosition sourcePosition = getSourcePosition(selectedNode, debuggerContext);
-						if(sourcePosition != null)
-						{
-							sourcePosition.navigate(true);
-						}
-					}
-				});
-			}
-		}
-	}
+        final DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
+        if (selectedNode != null) {
+            final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+            DebugProcessImpl process = debuggerContext.getDebugProcess();
+            if (process != null) {
+                process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
+                    @Override
+                    public void threadAction() {
+                        final SourcePosition sourcePosition = getSourcePosition(selectedNode, debuggerContext);
+                        if (sourcePosition != null) {
+                            sourcePosition.navigate(true);
+                        }
+                    }
+                });
+            }
+        }
+    }
 
-	private static SourcePosition getSourcePosition(DebuggerTreeNodeImpl selectedNode, DebuggerContextImpl debuggerContext)
-	{
-		final DebuggerContextImpl context = debuggerContext;
+    private static SourcePosition getSourcePosition(DebuggerTreeNodeImpl selectedNode, DebuggerContextImpl debuggerContext) {
+        final DebuggerContextImpl context = debuggerContext;
 
-		if(selectedNode == null || context == null)
-		{
-			return null;
-		}
+        if (selectedNode == null || context == null) {
+            return null;
+        }
 
-		final Project project = selectedNode.getProject();
+        final Project project = selectedNode.getProject();
 
-		final DebuggerSession debuggerSession = context.getDebuggerSession();
+        final DebuggerSession debuggerSession = context.getDebuggerSession();
 
-		if(debuggerSession == null)
-		{
-			return null;
-		}
+        if (debuggerSession == null) {
+            return null;
+        }
 
-		NodeDescriptorImpl nodeDescriptor = selectedNode.getDescriptor();
-		if(nodeDescriptor instanceof WatchItemDescriptor)
-		{
-			Modifier modifier = ((WatchItemDescriptor) nodeDescriptor).getModifier();
-			if(modifier == null)
-			{
-				return null;
-			}
-			nodeDescriptor = (NodeDescriptorImpl) modifier.getInspectItem(project);
-		}
+        NodeDescriptorImpl nodeDescriptor = selectedNode.getDescriptor();
+        if (nodeDescriptor instanceof WatchItemDescriptor) {
+            Modifier modifier = ((WatchItemDescriptor)nodeDescriptor).getModifier();
+            if (modifier == null) {
+                return null;
+            }
+            nodeDescriptor = (NodeDescriptorImpl)modifier.getInspectItem(project);
+        }
 
-		final NodeDescriptorImpl nodeDescriptor1 = nodeDescriptor;
-		return ReadAction.compute(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
-	}
+        final NodeDescriptorImpl nodeDescriptor1 = nodeDescriptor;
+        return ReadAction.compute(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
+    }
 
-	@Override
-	public void update(AnActionEvent e)
-	{
-		final Project project = e.getData(Project.KEY);
+    @Override
+    public void update(AnActionEvent e) {
+        final Project project = e.getData(Project.KEY);
 
-		final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-		final DebuggerTreeNodeImpl node = getSelectedNode(e.getDataContext());
+        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        final DebuggerTreeNodeImpl node = getSelectedNode(e.getDataContext());
 
-		final Presentation presentation = e.getPresentation();
-		if(debuggerContext.getDebugProcess() != null)
-		{
-			presentation.setEnabled(true);
-			debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext)
-			{
-				@Override
-				public void threadAction()
-				{
-					final SourcePosition position = getSourcePosition(node, debuggerContext);
-					if(position == null)
-					{
-						DebuggerInvocationUtil.swingInvokeLater(project, () -> presentation.setEnabled(false));
-					}
-				}
-			});
-		}
-		else
-		{
-			presentation.setEnabled(false);
-		}
-		e.getPresentation().setText(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getText());
-	}
-
+        final Presentation presentation = e.getPresentation();
+        if (debuggerContext.getDebugProcess() != null) {
+            presentation.setEnabled(true);
+            debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
+                @Override
+                public void threadAction() {
+                    final SourcePosition position = getSourcePosition(node, debuggerContext);
+                    if (position == null) {
+                        DebuggerInvocationUtil.swingInvokeLater(project, () -> presentation.setEnabled(false));
+                    }
+                }
+            });
+        }
+        else {
+            presentation.setEnabled(false);
+        }
+        e.getPresentation()
+            .setText(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getText());
+    }
 }

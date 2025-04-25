@@ -28,49 +28,49 @@ import consulo.ui.ex.action.AnActionEvent;
  * @author lex
  */
 public class FreezeThreadAction extends DebuggerAction {
-  public void actionPerformed(final AnActionEvent e) {
-    DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
-    if (selectedNode == null) {
-      return;
-    }
-    final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-    final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
-
-    for (final DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
-      ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
-      final ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
-
-      if (!threadDescriptor.isFrozen()) {
-        debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
-          public void contextAction() throws Exception {
-            debugProcess.createFreezeThreadCommand(thread).run();
-            debuggerTreeNode.calcValue();
-          }
-        });
-      }
-    }
-  }
-
-  public void update(AnActionEvent e) {
-    DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
-    if (selectedNode == null) {
-      return;
-    }
-    DebugProcessImpl debugProcess = getDebuggerContext(e.getDataContext()).getDebugProcess();
-
-    boolean visible = false;
-    if (debugProcess != null) {
-      visible = true;
-      for (DebuggerTreeNodeImpl aSelectedNode : selectedNode) {
-        NodeDescriptorImpl threadDescriptor = aSelectedNode.getDescriptor();
-        if (!(threadDescriptor instanceof ThreadDescriptorImpl) || ((ThreadDescriptorImpl)threadDescriptor).isFrozen()) {
-          visible = false;
-          break;
+    public void actionPerformed(final AnActionEvent e) {
+        DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
+        if (selectedNode == null) {
+            return;
         }
-      }
+        final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+        final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 
+        for (final DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
+            ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
+            final ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
+
+            if (!threadDescriptor.isFrozen()) {
+                debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
+                    public void contextAction() throws Exception {
+                        debugProcess.createFreezeThreadCommand(thread).run();
+                        debuggerTreeNode.calcValue();
+                    }
+                });
+            }
+        }
     }
 
-    e.getPresentation().setVisible(visible);
-  }
+    public void update(AnActionEvent e) {
+        DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
+        if (selectedNode == null) {
+            return;
+        }
+        DebugProcessImpl debugProcess = getDebuggerContext(e.getDataContext()).getDebugProcess();
+
+        boolean visible = false;
+        if (debugProcess != null) {
+            visible = true;
+            for (DebuggerTreeNodeImpl aSelectedNode : selectedNode) {
+                NodeDescriptorImpl threadDescriptor = aSelectedNode.getDescriptor();
+                if (!(threadDescriptor instanceof ThreadDescriptorImpl) || ((ThreadDescriptorImpl)threadDescriptor).isFrozen()) {
+                    visible = false;
+                    break;
+                }
+            }
+
+        }
+
+        e.getPresentation().setVisible(visible);
+    }
 }

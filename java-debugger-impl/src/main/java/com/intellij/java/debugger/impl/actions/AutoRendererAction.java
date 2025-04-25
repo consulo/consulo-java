@@ -23,24 +23,24 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 
-public class AutoRendererAction extends AnAction{
-  public void actionPerformed(AnActionEvent e) {
-    final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
-    final DebuggerTreeNodeImpl[] selectedNodes = DebuggerAction.getSelectedNodes(e.getDataContext());
+public class AutoRendererAction extends AnAction {
+    public void actionPerformed(AnActionEvent e) {
+        final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
+        final DebuggerTreeNodeImpl[] selectedNodes = DebuggerAction.getSelectedNodes(e.getDataContext());
 
-    if(debuggerContext != null && debuggerContext.getDebugProcess() != null) {
-      debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
-          public void threadAction() {
-            for (int i = 0; i < selectedNodes.length; i++) {
-              DebuggerTreeNodeImpl selectedNode = selectedNodes[i];
-              NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
-              if (descriptor instanceof ValueDescriptorImpl) {
-                ((ValueDescriptorImpl) descriptor).setRenderer(null);
-                selectedNode.calcRepresentation();
-              }
-            }
-          }
-        });
+        if (debuggerContext != null && debuggerContext.getDebugProcess() != null) {
+            debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
+                public void threadAction() {
+                    for (int i = 0; i < selectedNodes.length; i++) {
+                        DebuggerTreeNodeImpl selectedNode = selectedNodes[i];
+                        NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
+                        if (descriptor instanceof ValueDescriptorImpl) {
+                            ((ValueDescriptorImpl)descriptor).setRenderer(null);
+                            selectedNode.calcRepresentation();
+                        }
+                    }
+                }
+            });
+        }
     }
-  }
 }

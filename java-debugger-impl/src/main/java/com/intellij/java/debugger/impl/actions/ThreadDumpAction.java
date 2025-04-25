@@ -13,13 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * class ExportThreadsAction
- *
- * @author Eugene Zhuravlev
- * @author Sascha Weinreuter
- */
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.DebuggerBundle;
@@ -48,6 +41,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * class ExportThreadsAction
+ *
+ * @author Eugene Zhuravlev
+ * @author Sascha Weinreuter
+ */
 public class ThreadDumpAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -67,12 +66,15 @@ public class ThreadDumpAction extends AnAction {
                     vm.suspend();
                     try {
                         final List<ThreadState> threads = buildThreadStates(vm);
-                        project.getApplication().invokeLater(() -> {
-                            XDebugSession xSession = session.getXDebugSession();
-                            if (xSession != null) {
-                                DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
-                            }
-                        }, Application.get().getNoneModalityState());
+                        project.getApplication().invokeLater(
+                            () -> {
+                                XDebugSession xSession = session.getXDebugSession();
+                                if (xSession != null) {
+                                    DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
+                                }
+                            },
+                            Application.get().getNoneModalityState()
+                        );
                     }
                     finally {
                         vm.resume();
@@ -118,7 +120,8 @@ public class ThreadDumpAction extends AnAction {
                 if (priority != null) {
                     Value value = threadReference.getValue(priority);
                     if (value instanceof IntegerValue integerValue) {
-                        buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.priority", integerValue.intValue()));
+                        buffer.append(" ")
+                            .append(DebuggerBundle.message("threads.export.attribute.label.priority", integerValue.intValue()));
                     }
                 }
 
@@ -126,14 +129,15 @@ public class ThreadDumpAction extends AnAction {
                 if (tid != null) {
                     Value value = threadReference.getValue(tid);
                     if (value instanceof LongValue longValue) {
-                        buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.tid", Long.toHexString(longValue.longValue())));
+                        buffer.append(" ")
+                            .append(DebuggerBundle.message("threads.export.attribute.label.tid", Long.toHexString(longValue.longValue())));
                         buffer.append(" nid=NA");
                     }
                 }
             }
             //ThreadGroupReference groupReference = threadReference.threadGroup();
             //if (groupReference != null) {
-            //  buffer.append(", ").append(DebuggerBundle.message("threads.export.attribute.label.group", groupReference.name()));
+            //    buffer.append(", ").append(DebuggerBundle.message("threads.export.attribute.label.group", groupReference.name()));
             //}
             final String state = threadState.getState();
             if (state != null) {
@@ -153,7 +157,8 @@ public class ThreadDumpAction extends AnAction {
                         for (ThreadReference thread : waiting) {
                             final String waitingThreadName = threadName(thread);
                             waitingMap.put(waitingThreadName, threadName);
-                            buffer.append("\n\t ").append(DebuggerBundle.message("threads.export.attribute.label.blocks.thread", waitingThreadName));
+                            buffer.append("\n\t ")
+                                .append(DebuggerBundle.message("threads.export.attribute.label.blocks.thread", waitingThreadName));
                         }
                     }
                 }
@@ -166,7 +171,8 @@ public class ThreadDumpAction extends AnAction {
                             final String monitorOwningThreadName = threadName(waitedMonitorOwner);
                             waitingMap.put(threadName, monitorOwningThreadName);
                             buffer.append("\n\t ").append(DebuggerBundle.message("threads.export.attribute.label.waiting.for.thread",
-                                monitorOwningThreadName, renderObject(waitedMonitor)));
+                                monitorOwningThreadName, renderObject(waitedMonitor)
+                            ));
                         }
                     }
                 }

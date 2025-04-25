@@ -33,62 +33,69 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.StringUtil;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 public class CreateRendererAction extends AnAction {
-  @Override
-  public void update(AnActionEvent e) {
-    final List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
-    if (values.size() != 1) {
-      e.getPresentation().setEnabledAndVisible(false);
-    }
-  }
-
-  public void actionPerformed(@Nonnull final AnActionEvent event) {
-    final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
-    final List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
-    if (values.size() != 1) {
-      return;
+    @Override
+    public void update(AnActionEvent e) {
+        final List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
+        if (values.size() != 1) {
+            e.getPresentation().setEnabledAndVisible(false);
+        }
     }
 
-    final JavaValue javaValue = values.get(0);
+    public void actionPerformed(@Nonnull final AnActionEvent event) {
+        final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
+        final List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
+        if (values.size() != 1) {
+            return;
+        }
 
-    final DebugProcessImpl process = debuggerContext.getDebugProcess();
-    if (process == null) {
-      return;
-    }
+        final JavaValue javaValue = values.get(0);
 
-    final Project project = event.getData(Project.KEY);
+        final DebugProcessImpl process = debuggerContext.getDebugProcess();
+        if (process == null) {
+            return;
+        }
 
-    process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
-      public void threadAction() {
-        Type type = javaValue.getDescriptor().getType();
-        final String name = type != null ? type.name() : null;
-        Application.get().invokeLater(() ->
-        {
-          final UserRenderersConfigurable ui = new UserRenderersConfigurable();
-          IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>("reference.idesettings" +
-              ".debugger.typerenderers", DebuggerBundle.message("user.renderers.configurable.display.name"), "reference.idesettings.debugger.typerenderers") {
-            @Nonnull
-            @Override
-            protected NodeRendererSettings getSettings() {
-              return NodeRendererSettings.getInstance();
+        final Project project = event.getData(Project.KEY);
+
+        process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
+            public void threadAction() {
+                Type type = javaValue.getDescriptor().getType();
+                final String name = type != null ? type.name() : null;
+                Application.get().invokeLater(() ->
+                {
+                    final UserRenderersConfigurable ui = new UserRenderersConfigurable();
+                    IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable =
+                        new IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>(
+                            "reference.idesettings" +
+                                ".debugger.typerenderers",
+                            DebuggerBundle.message("user.renderers.configurable.display.name"),
+                            "reference.idesettings.debugger.typerenderers"
+                        ) {
+                            @Nonnull
+                            @Override
+                            protected NodeRendererSettings getSettings() {
+                                return NodeRendererSettings.getInstance();
+                            }
+
+                            @Override
+                            protected UserRenderersConfigurable createUi() {
+                                return ui;
+                            }
+                        };
+                    SingleConfigurableEditor editor = new SingleConfigurableEditor(project, configurable);
+                    if (name != null) {
+                        NodeRenderer renderer =
+                            NodeRendererSettings.getInstance().createCompoundTypeRenderer(StringUtil.getShortName(name), name, null, null);
+                        renderer.setEnabled(true);
+                        ui.addRenderer(renderer);
+                    }
+                    editor.show();
+                });
             }
-
-            @Override
-            protected UserRenderersConfigurable createUi() {
-              return ui;
-            }
-          };
-          SingleConfigurableEditor editor = new SingleConfigurableEditor(project, configurable);
-          if (name != null) {
-            NodeRenderer renderer = NodeRendererSettings.getInstance().createCompoundTypeRenderer(StringUtil.getShortName(name), name, null, null);
-            renderer.setEnabled(true);
-            ui.addRenderer(renderer);
-          }
-          editor.show();
         });
-      }
-    });
-  }
+    }
 }

@@ -22,9 +22,10 @@ import consulo.ui.ex.action.IdeActions;
 /**
  * @author lex
  */
-public class EditFrameSourceAction extends GotoFrameSourceAction{
-  public void update(AnActionEvent e) {
-    super.update(e);
-    e.getPresentation().setText(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getText());
-  }
+public class EditFrameSourceAction extends GotoFrameSourceAction {
+    public void update(AnActionEvent e) {
+        super.update(e);
+        e.getPresentation()
+            .setText(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getText());
+    }
 }

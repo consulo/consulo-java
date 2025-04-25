@@ -53,7 +53,6 @@ public class ToggleMethodBreakpointAction extends AnAction {
         }
     }
 
-
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);

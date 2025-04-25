@@ -56,7 +56,6 @@ import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nullable;
 
 public class ToggleFieldBreakpointAction extends AnAction {
-
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
@@ -164,9 +163,9 @@ public class ToggleFieldBreakpointAction extends AnAction {
 
                     @Override
                     public void threadAction() {
-                        project.getApplication().runReadAction(
-                            () -> positionRef.set(SourcePositionProvider.getSourcePosition(selectedNode.getDescriptor(), project, debuggerContext))
-                        );
+                        project.getApplication().runReadAction(() -> positionRef.set(
+                            SourcePositionProvider.getSourcePosition(selectedNode.getDescriptor(), project, debuggerContext)
+                        ));
                     }
                 });
                 final SourcePosition sourcePosition = positionRef.get();
@@ -179,14 +178,14 @@ public class ToggleFieldBreakpointAction extends AnAction {
         if (DebuggerAction.isContextView(event)) {
             DebuggerTree tree = event.getData(DebuggerTree.DATA_KEY);
             if (tree != null && tree.getSelectionPath() != null) {
-                DebuggerTreeNodeImpl node = ((DebuggerTreeNodeImpl) tree.getSelectionPath().getLastPathComponent());
+                DebuggerTreeNodeImpl node = ((DebuggerTreeNodeImpl)tree.getSelectionPath().getLastPathComponent());
                 if (node != null && node.getDescriptor() instanceof FieldDescriptorImpl fieldDescriptor) {
                     Field field = fieldDescriptor.getField();
                     DebuggerSession session = tree.getDebuggerContext().getDebuggerSession();
                     PsiClass psiClass = DebuggerUtils.findClass(field.declaringType().name(), project, (session != null)
                         ? session.getSearchScope() : GlobalSearchScope.allScope(project));
                     if (psiClass != null) {
-                        psiClass = (PsiClass) psiClass.getNavigationElement();
+                        psiClass = (PsiClass)psiClass.getNavigationElement();
                         final PsiField psiField = psiClass.findFieldByName(field.name(), true);
                         if (psiField != null) {
                             return SourcePosition.createFromElement(psiField);

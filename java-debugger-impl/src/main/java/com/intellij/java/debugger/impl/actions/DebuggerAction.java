@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class DebuggerAction
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.actions;
-
 
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
@@ -50,6 +44,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class DebuggerAction
+ * @author Jeka
+ */
 public abstract class DebuggerAction extends AnAction {
     private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
@@ -81,7 +79,7 @@ public abstract class DebuggerAction extends AnAction {
         if (!(component instanceof DebuggerTreeNodeImpl)) {
             return null;
         }
-        return (DebuggerTreeNodeImpl) component;
+        return (DebuggerTreeNodeImpl)component;
     }
 
     @Nullable

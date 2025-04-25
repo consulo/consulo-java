@@ -31,72 +31,63 @@ import jakarta.annotation.Nullable;
  * @author Eugene Zhuravlev
  * Date: 10/25/13
  */
-public class MethodSmartStepTarget extends SmartStepTarget
-{
-	private final PsiMethod myMethod;
+public class MethodSmartStepTarget extends SmartStepTarget {
+    private final PsiMethod myMethod;
 
-	public MethodSmartStepTarget(
-			@Nonnull PsiMethod method,
-			@Nullable String label,
-			@Nullable PsiElement highlightElement,
-			boolean needBreakpointRequest,
-			Range<Integer> lines)
-	{
-		super(label, highlightElement, needBreakpointRequest, lines);
-		myMethod = method;
-	}
+    public MethodSmartStepTarget(
+        @Nonnull PsiMethod method,
+        @Nullable String label,
+        @Nullable PsiElement highlightElement,
+        boolean needBreakpointRequest,
+        Range<Integer> lines
+    ) {
+        super(label, highlightElement, needBreakpointRequest, lines);
+        myMethod = method;
+    }
 
-	@Nullable
-	@Override
-	public Image getIcon()
-	{
-		return IconDescriptorUpdaters.getIcon(myMethod, 0);
-	}
+    @Nullable
+    @Override
+    public Image getIcon() {
+        return IconDescriptorUpdaters.getIcon(myMethod, 0);
+    }
 
-	@Nonnull
-	@Override
-	public String getPresentation()
-	{
-		String label = getLabel();
-		String formatted = PsiFormatUtil.formatMethod(
-				myMethod,
-				PsiSubstitutor.EMPTY,
-				PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
-				PsiFormatUtilBase.SHOW_TYPE,
-				999
-		);
-		return label != null ? label + formatted : formatted;
-	}
+    @Nonnull
+    @Override
+    public String getPresentation() {
+        String label = getLabel();
+        String formatted = PsiFormatUtil.formatMethod(
+            myMethod,
+            PsiSubstitutor.EMPTY,
+            PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+            PsiFormatUtilBase.SHOW_TYPE,
+            999
+        );
+        return label != null ? label + formatted : formatted;
+    }
 
-	@Nonnull
-	public PsiMethod getMethod()
-	{
-		return myMethod;
-	}
+    @Nonnull
+    public PsiMethod getMethod() {
+        return myMethod;
+    }
 
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		if(o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-		final MethodSmartStepTarget that = (MethodSmartStepTarget) o;
+        final MethodSmartStepTarget that = (MethodSmartStepTarget)o;
 
-		if(!myMethod.equals(that.myMethod))
-		{
-			return false;
-		}
+        if (!myMethod.equals(that.myMethod)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public int hashCode()
-	{
-		return myMethod.hashCode();
-	}
+    public int hashCode() {
+        return myMethod.hashCode();
+    }
 }

@@ -19,72 +19,61 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 
-public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant>
-{
-	private final DebuggerSession mySession;
+public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant> {
+    private final DebuggerSession mySession;
 
-	public JvmSmartStepIntoActionHandler(@Nonnull DebuggerSession session)
-	{
-		mySession = session;
-	}
+    public JvmSmartStepIntoActionHandler(@Nonnull DebuggerSession session) {
+        mySession = session;
+    }
 
-	@Nonnull
-	@Override
-	public List<JvmSmartStepIntoVariant> computeSmartStepVariants(@Nonnull XSourcePosition xPosition)
-	{
-		SourcePosition pos = DebuggerUtilsEx.toSourcePosition(xPosition, mySession.getProject());
-		JvmSmartStepIntoHandler handler = JvmSmartStepIntoHandler.EP_NAME.findFirstSafe(h -> h.isAvailable(pos));
-		if(handler != null)
-		{
-			List<SmartStepTarget> targets = handler.findSmartStepTargets(pos);
-			return ContainerUtil.map(targets, target -> new JvmSmartStepIntoVariant(target, handler));
-		}
+    @Nonnull
+    @Override
+    public List<JvmSmartStepIntoVariant> computeSmartStepVariants(@Nonnull XSourcePosition xPosition) {
+        SourcePosition pos = DebuggerUtilsEx.toSourcePosition(xPosition, mySession.getProject());
+        JvmSmartStepIntoHandler handler = JvmSmartStepIntoHandler.EP_NAME.findFirstSafe(h -> h.isAvailable(pos));
+        if (handler != null) {
+            List<SmartStepTarget> targets = handler.findSmartStepTargets(pos);
+            return ContainerUtil.map(targets, target -> new JvmSmartStepIntoVariant(target, handler));
+        }
 
-		return List.of();
-	}
+        return List.of();
+    }
 
-	@Override
-	public String getPopupTitle(@Nonnull XSourcePosition position)
-	{
-		return DebuggerBundle.message("title.smart.step.popup");
-	}
+    @Override
+    public String getPopupTitle(@Nonnull XSourcePosition position) {
+        return DebuggerBundle.message("title.smart.step.popup");
+    }
 
-	@Override
-	public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
-	{
-		mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
-	}
+    @Override
+    public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context) {
+        mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
+    }
 
-	static class JvmSmartStepIntoVariant extends XSmartStepIntoVariant
-	{
-		private final SmartStepTarget myTarget;
-		private final JvmSmartStepIntoHandler myHandler;
+    static class JvmSmartStepIntoVariant extends XSmartStepIntoVariant {
+        private final SmartStepTarget myTarget;
+        private final JvmSmartStepIntoHandler myHandler;
 
-		JvmSmartStepIntoVariant(SmartStepTarget target, JvmSmartStepIntoHandler handler)
-		{
-			myTarget = target;
-			myHandler = handler;
-		}
+        JvmSmartStepIntoVariant(SmartStepTarget target, JvmSmartStepIntoHandler handler) {
+            myTarget = target;
+            myHandler = handler;
+        }
 
-		@Override
-		public String getText()
-		{
-			return myTarget.getPresentation();
-		}
+        @Override
+        public String getText() {
+            return myTarget.getPresentation();
+        }
 
-		@Nullable
-		@Override
-		public Image getIcon()
-		{
-			return myTarget.getIcon();
-		}
+        @Nullable
+        @Override
+        public Image getIcon() {
+            return myTarget.getIcon();
+        }
 
-		@Nullable
-		//@Override
-		public TextRange getHighlightRange()
-		{
-			PsiElement element = myTarget.getHighlightElement();
-			return element != null ? element.getTextRange() : null;
-		}
-	}
+        @Nullable
+        //@Override
+        public TextRange getHighlightRange() {
+            PsiElement element = myTarget.getHighlightElement();
+            return element != null ? element.getTextRange() : null;
+        }
+    }
 }

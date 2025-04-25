@@ -39,7 +39,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class JvmDropFrameActionHandler implements XDropFrameHandler {
-
     private static final Logger LOG = Logger.getInstance(JvmDropFrameActionHandler.class);
     private final @Nonnull DebuggerSession myDebugSession;
 
@@ -63,7 +62,8 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
             var debuggerContext = myDebugSession.getContextManager().getContext();
             try {
                 myDebugSession.setSteppingThrough(stackFrame.getStackFrameProxy().threadProxy());
-                if (evaluateFinallyBlocks(project,
+                if (evaluateFinallyBlocks(
+                    project,
                     XDebuggerBundle.message("xdebugger.reset.frame.title"),
                     stackFrame,
                     new XDebuggerEvaluator.XEvaluationCallback() {
@@ -74,10 +74,14 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
 
                         @Override
                         public void errorOccurred(@Nonnull final String errorMessage) {
-                            showError(project, DebuggerBundle.message("error.executing.finally", errorMessage),
-                                XDebuggerBundle.message("xdebugger.reset.frame.title"));
+                            showError(
+                                project,
+                                DebuggerBundle.message("error.executing.finally", errorMessage),
+                                XDebuggerBundle.message("xdebugger.reset.frame.title")
+                            );
                         }
-                    })) {
+                    }
+                )) {
                     return;
                 }
                 popFrame(debugProcess, debuggerContext, stackFrame);
@@ -87,10 +91,12 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
         }
     }
 
-    public static boolean evaluateFinallyBlocks(Project project,
-                                                String title,
-                                                JavaStackFrame stackFrame,
-                                                XDebuggerEvaluator.XEvaluationCallback callback) {
+    public static boolean evaluateFinallyBlocks(
+        Project project,
+        String title,
+        JavaStackFrame stackFrame,
+        XDebuggerEvaluator.XEvaluationCallback callback
+    ) {
         if (!DebuggerSettings.EVALUATE_FINALLY_NEVER.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME)) {
             List<PsiStatement> statements = getFinallyStatements(project, stackFrame.getDescriptor().getSourcePosition());
             if (!statements.isEmpty()) {
@@ -104,8 +110,10 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                 }
                 else {
                     int res = MessageDialogBuilder
-                        .yesNoCancel(title,
-                            DebuggerBundle.message("warning.finally.block.detected") + sb)
+                        .yesNoCancel(
+                            title,
+                            DebuggerBundle.message("warning.finally.block.detected") + sb
+                        )
                         .icon(Messages.getWarningIcon())
                         .yesText(DebuggerBundle.message("button.execute.finally"))
                         .noText(DebuggerBundle.message("button.drop.anyway"))
@@ -114,15 +122,18 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                         .doNotAsk(new DialogWrapper.DoNotAskOption() {
                             @Override
                             public boolean isToBeShown() {
-                                return !DebuggerSettings.EVALUATE_FINALLY_ALWAYS.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME) &&
-                                    !DebuggerSettings.EVALUATE_FINALLY_NEVER.equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME);
+                                return !DebuggerSettings.EVALUATE_FINALLY_ALWAYS
+                                    .equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME)
+                                    && !DebuggerSettings.EVALUATE_FINALLY_NEVER
+                                    .equals(DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME);
                             }
 
                             @Override
                             public void setToBeShown(boolean value, int exitCode) {
                                 if (!value) {
-                                    DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME =
-                                        exitCode == Messages.YES ? DebuggerSettings.EVALUATE_FINALLY_ALWAYS : DebuggerSettings.EVALUATE_FINALLY_NEVER;
+                                    DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME = exitCode == Messages.YES
+                                        ? DebuggerSettings.EVALUATE_FINALLY_ALWAYS
+                                        : DebuggerSettings.EVALUATE_FINALLY_NEVER;
                                 }
                                 else {
                                     DebuggerSettings.getInstance().EVALUATE_FINALLY_ON_POP_FRAME = DebuggerSettings.EVALUATE_FINALLY_ASK;
@@ -169,20 +180,25 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
             .schedule(debugProcess.createPopFrameCommand(debuggerContext, stackFrame.getStackFrameProxy()));
     }
 
-    private static void evaluateAndAct(Project project,
-                                       JavaStackFrame stackFrame,
-                                       StringBuilder sb,
-                                       XDebuggerEvaluator.XEvaluationCallback callback) {
+    private static void evaluateAndAct(
+        Project project,
+        JavaStackFrame stackFrame,
+        StringBuilder sb,
+        XDebuggerEvaluator.XEvaluationCallback callback
+    ) {
         XDebuggerEvaluator evaluator = stackFrame.getEvaluator();
         if (evaluator != null) {
-            evaluator.evaluate(XExpression.fromText(sb.toString(), EvaluationMode.CODE_FRAGMENT),
+            evaluator.evaluate(
+                XExpression.fromText(sb.toString(), EvaluationMode.CODE_FRAGMENT),
                 callback,
-                stackFrame.getSourcePosition());
+                stackFrame.getSourcePosition()
+            );
         }
         else {
             Messages.showMessageDialog(project, XDebuggerBundle.message("xdebugger.evaluate.stack.frame.has.not.evaluator"),
                 XDebuggerBundle.message("xdebugger.reset.frame.title"),
-                Messages.getErrorIcon());
+                Messages.getErrorIcon()
+            );
         }
     }
 
@@ -190,7 +206,8 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
     public static void showError(Project project, String message, String title) {
         ApplicationManager.getApplication().invokeLater(
             () -> Messages.showMessageDialog(project, message, title, Messages.getErrorIcon()),
-            ModalityState.any());
+            ModalityState.any()
+        );
     }
 
     private static List<PsiStatement> getFinallyStatements(Project project, @Nullable SourcePosition position) {
@@ -222,10 +239,10 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
 
     private static String getResourceName(PsiResourceListElement resource) {
         if (resource instanceof PsiResourceVariable) {
-            return ((PsiResourceVariable) resource).getName();
+            return ((PsiResourceVariable)resource).getName();
         }
         else if (resource instanceof PsiResourceExpression) {
-            return ((PsiResourceExpression) resource).getExpression().getText();
+            return ((PsiResourceExpression)resource).getExpression().getText();
         }
         LOG.error("Unknown PsiResourceListElement type: " + resource.getClass());
         return null;

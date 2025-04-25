@@ -44,11 +44,13 @@ public class JavaReferringObjectsValue extends JavaValue {
     private static final long MAX_REFERRING = 100;
     private final boolean myIsField;
 
-    private JavaReferringObjectsValue(@Nullable JavaValue parent,
-                                      @Nonnull ValueDescriptorImpl valueDescriptor,
-                                      @Nonnull EvaluationContextImpl evaluationContext,
-                                      NodeManagerImpl nodeManager,
-                                      boolean isField) {
+    private JavaReferringObjectsValue(
+        @Nullable JavaValue parent,
+        @Nonnull ValueDescriptorImpl valueDescriptor,
+        @Nonnull EvaluationContextImpl evaluationContext,
+        NodeManagerImpl nodeManager,
+        boolean isField
+    ) {
         super(parent, valueDescriptor, evaluationContext, nodeManager, false);
         myIsField = isField;
     }
@@ -79,7 +81,7 @@ public class JavaReferringObjectsValue extends JavaValue {
 
                 List<ObjectReference> references;
                 try {
-                    references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
+                    references = ((ObjectReference)value).referringObjects(MAX_REFERRING);
                 }
                 catch (ObjectCollectedException e) {
                     node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
@@ -117,7 +119,10 @@ public class JavaReferringObjectsValue extends JavaValue {
                                 return null;
                             }
                         };
-                        children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false));
+                        children.add(
+                            "Referrer " + i++,
+                            new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false)
+                        );
                     }
                 }
 
@@ -132,56 +137,65 @@ public class JavaReferringObjectsValue extends JavaValue {
             super.computePresentation(node, place);
         }
         else {
-            super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl() {
-                @Override
-                public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren) {
-                    node.setPresentation(icon, new XValuePresentation() {
-                        @Nonnull
-                        @Override
-                        public String getSeparator() {
-                            return " in ";
-                        }
+            super.computePresentation(
+                new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl() {
+                    @Override
+                    public void applyPresentation(
+                        @Nullable Image icon,
+                        @Nonnull final XValuePresentation valuePresenter,
+                        boolean hasChildren
+                    ) {
+                        node.setPresentation(icon, new XValuePresentation() {
+                                @Nonnull
+                                @Override
+                                public String getSeparator() {
+                                    return " in ";
+                                }
 
-                        @Nullable
-                        @Override
-                        public String getType() {
-                            return valuePresenter.getType();
-                        }
+                                @Nullable
+                                @Override
+                                public String getType() {
+                                    return valuePresenter.getType();
+                                }
 
-                        @Override
-                        public void renderValue(@Nonnull XValueTextRenderer renderer) {
-                            valuePresenter.renderValue(renderer);
-                        }
-                    }, hasChildren);
-                }
+                                @Override
+                                public void renderValue(@Nonnull XValueTextRenderer renderer) {
+                                    valuePresenter.renderValue(renderer);
+                                }
+                            },
+                            hasChildren
+                        );
+                    }
 
-                @Override
-                public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
-                }
+                    @Override
+                    public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
+                    }
 
-                @Nullable
-                @Override
-                public String getName() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public String getName() {
+                        return null;
+                    }
 
-                @Nullable
-                @Override
-                public XValue getValueContainer() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public XValue getValueContainer() {
+                        return null;
+                    }
 
-                @Nullable
-                @Override
-                public XValueTree getTree() {
-                    return null;
-                }
+                    @Nullable
+                    @Override
+                    public XValueTree getTree() {
+                        return null;
+                    }
 
-                @Override
-                public boolean isObsolete() {
-                    return false;
-                }
-            }, place);
+                    @Override
+                    public boolean isObsolete() {
+                        return false;
+                    }
+                },
+                place
+            );
         }
     }
 

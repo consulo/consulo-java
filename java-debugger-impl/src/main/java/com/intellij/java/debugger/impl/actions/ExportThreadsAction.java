@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * class ExportThreadsAction
- *
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
@@ -42,6 +36,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * class ExportThreadsAction
+ *
+ * @author Jeka
+ */
 public class ExportThreadsAction extends AnAction {
     @Override
     public void actionPerformed(@Nonnull AnActionEvent e) {
@@ -69,7 +68,12 @@ public class ExportThreadsAction extends AnAction {
                     }
                 }
                 catch (IOException ex) {
-                    Messages.showMessageDialog(project, ex.getMessage(), ActionLocalize.actionExportthreadsText().get(), UIUtil.getErrorIcon());
+                    Messages.showMessageDialog(
+                        project,
+                        ex.getMessage(),
+                        ActionLocalize.actionExportthreadsText().get(),
+                        UIUtil.getErrorIcon()
+                    );
                 }
             }
         }
