@@ -1117,12 +1117,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
               }
             }
 
-            if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
-              // ensure args are not collected
-              myArgs.stream()
-                .filter(value -> value instanceof ObjectReference)
-                .forEach(value -> DebuggerUtilsEx.disableCollection((ObjectReference)value));
-            }
+            // ensure args are not collected
+            myArgs.stream()
+              .filter(value -> value instanceof ObjectReference)
+              .forEach(value -> DebuggerUtilsEx.disableCollection((ObjectReference)value));
 
             // workaround for jdi hang in trace mode
             if (!StringUtil.isEmpty(ourTrace)) {
@@ -1133,12 +1131,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
           }
           finally {
             //  assertThreadSuspended(thread, context);
-            if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
-              // ensure args are not collected
-              myArgs.stream()
-                .filter(value -> value instanceof ObjectReference)
-                .forEach(value -> DebuggerUtilsEx.enableCollection((ObjectReference)value));
-            }
+            // ensure args are not collected
+            myArgs.stream()
+              .filter(value -> value instanceof ObjectReference)
+              .forEach(value -> DebuggerUtilsEx.enableCollection((ObjectReference)value));
           }
         }
         catch (Exception e) {
