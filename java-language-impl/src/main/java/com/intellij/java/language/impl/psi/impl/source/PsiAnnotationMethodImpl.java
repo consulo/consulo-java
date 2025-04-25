@@ -20,79 +20,85 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFileFactory;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
  */
 public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotationMethod {
-  private SoftReference<PsiAnnotationMemberValue> myCachedDefaultValue = null;
+    private SoftReference<PsiAnnotationMemberValue> myCachedDefaultValue = null;
 
-  public PsiAnnotationMethodImpl(final PsiMethodStub stub) {
-    super(stub, JavaStubElementTypes.ANNOTATION_METHOD);
-  }
+    public PsiAnnotationMethodImpl(PsiMethodStub stub) {
+        super(stub, JavaStubElementTypes.ANNOTATION_METHOD);
+    }
 
-  public PsiAnnotationMethodImpl(final ASTNode node) {
-    super(node);
-  }
+    public PsiAnnotationMethodImpl(ASTNode node) {
+        super(node);
+    }
 
-  @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
-    return PsiModifier.ABSTRACT.equals(name) || PsiModifier.PUBLIC.equals(name) || super.hasModifierProperty(name);
-  }
+    @Override
+    public boolean hasModifierProperty(@Nonnull String name) {
+        return PsiModifier.ABSTRACT.equals(name) || PsiModifier.PUBLIC.equals(name) || super.hasModifierProperty(name);
+    }
 
-  @Override
-  protected void dropCached() {
-    myCachedDefaultValue = null;
-  }
+    @Override
+    protected void dropCached() {
+        myCachedDefaultValue = null;
+    }
 
-  @Override
-  public PsiAnnotationMemberValue getDefaultValue() {
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      final String text = stub.getDefaultValueText();
-      if (StringUtil.isEmpty(text)) return null;
+    @Override
+    @RequiredReadAction
+    public PsiAnnotationMemberValue getDefaultValue() {
+        PsiMethodStub stub = getStub();
+        if (stub != null) {
+            String text = stub.getDefaultValueText();
+            if (StringUtil.isEmpty(text)) {
+                return null;
+            }
 
-      if (myCachedDefaultValue != null) {
-        final PsiAnnotationMemberValue value = myCachedDefaultValue.get();
-        if (value != null) {
-          return value;
+            if (myCachedDefaultValue != null) {
+                PsiAnnotationMemberValue value = myCachedDefaultValue.get();
+                if (value != null) {
+                    return value;
+                }
+            }
+
+            String annoText = "@interface _Dummy_ { Class foo() default " + text + "; }";
+            PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
+            PsiJavaFile file = (PsiJavaFile)factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
+            PsiAnnotationMemberValue value = ((PsiAnnotationMethod)file.getClasses()[0].getMethods()[0]).getDefaultValue();
+            myCachedDefaultValue = new SoftReference<>(value);
+            return value;
         }
-      }
 
-      @NonNls final String annoText = "@interface _Dummy_ { Class foo() default " + text + "; }";
-      final PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
-      final PsiJavaFile file = (PsiJavaFile) factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
-      final PsiAnnotationMemberValue value = ((PsiAnnotationMethod) file.getClasses()[0].getMethods()[0]).getDefaultValue();
-      myCachedDefaultValue = new SoftReference<PsiAnnotationMemberValue>(value);
-      return value;
+        myCachedDefaultValue = null;
+
+        ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_DEFAULT_VALUE);
+        if (node == null) {
+            return null;
+        }
+        return (PsiAnnotationMemberValue)node.getPsi();
     }
 
-    myCachedDefaultValue = null;
-
-    final ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_DEFAULT_VALUE);
-    if (node == null) return null;
-    return (PsiAnnotationMemberValue) node.getPsi();
-  }
-
-  @NonNls
-  public String toString() {
-    return "PsiAnnotationMethod:" + getName();
-  }
-
-  @Override
-  public final void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitAnnotationMethod(this);
-    } else {
-      visitor.visitElement(this);
+    @Override
+    @RequiredReadAction
+    public String toString() {
+        return "PsiAnnotationMethod:" + getName();
     }
-  }
+
+    @Override
+    public final void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitAnnotationMethod(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
 }

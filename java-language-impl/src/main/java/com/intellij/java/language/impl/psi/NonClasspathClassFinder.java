@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.LowMemoryWatcher;
 import consulo.application.util.function.CommonProcessors;
-import consulo.application.util.function.Processor;
 import consulo.component.messagebus.MessageBusConnection;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiDirectory;
@@ -37,7 +37,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.event.BulkFileListener;
 import consulo.virtualFileSystem.event.VFileEvent;
@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author peter
@@ -91,8 +92,8 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     }
 
     @Nonnull
-    protected static PackageDirectoryCache createCache(@Nonnull final List<VirtualFile> roots) {
-        final MultiMap<String, VirtualFile> map = MultiMap.create();
+    protected static PackageDirectoryCache createCache(@Nonnull List<VirtualFile> roots) {
+        MultiMap<String, VirtualFile> map = MultiMap.create();
         map.putValues("", roots);
         return new PackageDirectoryCache(map);
     }
@@ -110,21 +111,24 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     }
 
     @Override
-    public PsiClass findClass(@Nonnull final String qualifiedName, @Nonnull GlobalSearchScope scope) {
-        final Ref<PsiClass> result = Ref.create();
-        processDirectories(StringUtil.getPackageName(qualifiedName), scope, dir ->
-        {
-            VirtualFile virtualFile = findChild(dir, StringUtil.getShortName(qualifiedName), myFileExtensions);
-            final PsiFile file = virtualFile == null ? null : myManager.findFile(virtualFile);
-            if (file instanceof PsiClassOwner) {
-                final PsiClass[] classes = ((PsiClassOwner) file).getClasses();
-                if (classes.length == 1) {
-                    result.set(classes[0]);
-                    return false;
+    public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+        SimpleReference<PsiClass> result = SimpleReference.create();
+        processDirectories(
+            StringUtil.getPackageName(qualifiedName),
+            scope,
+            dir -> {
+                VirtualFile virtualFile = findChild(dir, StringUtil.getShortName(qualifiedName), myFileExtensions);
+                PsiFile file = virtualFile == null ? null : myManager.findFile(virtualFile);
+                if (file instanceof PsiClassOwner classOwner) {
+                    PsiClass[] classes = classOwner.getClasses();
+                    if (classes.length == 1) {
+                        result.set(classes[0]);
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
-        });
+        );
         return result.get();
     }
 
@@ -133,42 +137,48 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     @Nonnull
     @Override
     public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
-        final List<PsiClass> result = ContainerUtil.newArrayList();
-        processDirectories(psiPackage.getQualifiedName(), scope, dir ->
-        {
-            for (final VirtualFile file : dir.getChildren()) {
-                if (!file.isDirectory() && ArrayUtil.contains(file.getExtension(), myFileExtensions)) {
-                    final PsiFile psi = myManager.findFile(file);
-                    if (psi instanceof PsiClassOwner) {
-                        ContainerUtil.addAll(result, ((PsiClassOwner) psi).getClasses());
+        List<PsiClass> result = new ArrayList<>();
+        processDirectories(
+            psiPackage.getQualifiedName(),
+            scope,
+            dir -> {
+                for (VirtualFile file : dir.getChildren()) {
+                    if (!file.isDirectory() && ArrayUtil.contains(file.getExtension(), myFileExtensions)) {
+                        PsiFile psi = myManager.findFile(file);
+                        if (psi instanceof PsiClassOwner classOwner) {
+                            ContainerUtil.addAll(result, classOwner.getClasses());
+                        }
                     }
                 }
+                return true;
             }
-            return true;
-        });
+        );
         return result.toArray(new PsiClass[result.size()]);
     }
 
-
     @Nonnull
     @Override
+    @RequiredReadAction
     public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
-        final Set<String> result = new HashSet<>();
-        processDirectories(psiPackage.getQualifiedName(), scope, dir ->
-        {
-            for (final VirtualFile file : dir.getChildren()) {
-                if (!file.isDirectory() && ArrayUtil.contains(file.getExtension(), myFileExtensions)) {
-                    result.add(file.getNameWithoutExtension());
+        Set<String> result = new HashSet<>();
+        processDirectories(
+            psiPackage.getQualifiedName(),
+            scope,
+            dir -> {
+                for (VirtualFile file : dir.getChildren()) {
+                    if (!file.isDirectory() && ArrayUtil.contains(file.getExtension(), myFileExtensions)) {
+                        result.add(file.getNameWithoutExtension());
+                    }
                 }
+                return true;
             }
-            return true;
-        });
+        );
         return result;
     }
 
     @Override
     public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
-        final CommonProcessors.FindFirstProcessor<VirtualFile> processor = new CommonProcessors.FindFirstProcessor<>();
+        CommonProcessors.FindFirstProcessor<VirtualFile> processor = new CommonProcessors.FindFirstProcessor<>();
         processDirectories(qualifiedName, ALL_SCOPE, processor);
         return processor.getFoundValue() != null ? createPackage(qualifiedName) : null;
     }
@@ -178,24 +188,38 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     }
 
     @Override
-    public boolean processPackageDirectories(@Nonnull final PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope, @Nonnull final Processor<PsiDirectory> consumer, boolean
-        includeLibrarySources) {
-        return processDirectories(psiPackage.getQualifiedName(), scope, dir ->
-        {
-            final PsiDirectory psiDirectory = psiPackage.getManager().findDirectory(dir);
-            return psiDirectory == null || consumer.process(psiDirectory);
-        });
+    public boolean processPackageDirectories(
+        @Nonnull PsiJavaPackage psiPackage,
+        @Nonnull GlobalSearchScope scope,
+        @Nonnull Predicate<PsiDirectory> consumer,
+        boolean includeLibrarySources
+    ) {
+        return processDirectories(
+            psiPackage.getQualifiedName(),
+            scope,
+            dir -> {
+                PsiDirectory psiDirectory = psiPackage.getManager().findDirectory(dir);
+                return psiDirectory == null || consumer.test(psiDirectory);
+            }
+        );
     }
 
-    private boolean processDirectories(@Nonnull String qualifiedName, @Nonnull final GlobalSearchScope scope, @Nonnull final Processor<VirtualFile> processor) {
-        return ContainerUtil.process(getCache(scope).getDirectoriesByPackageName(qualifiedName), file -> !scope.contains(file) || processor.process(file));
+    private boolean processDirectories(
+        @Nonnull String qualifiedName,
+        @Nonnull GlobalSearchScope scope,
+        @Nonnull Predicate<VirtualFile> processor
+    ) {
+        return ContainerUtil.process(
+            getCache(scope).getDirectoriesByPackageName(qualifiedName),
+            file -> !scope.contains(file) || processor.test(file)
+        );
     }
 
     @Nonnull
     @Override
     public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
-        final String pkgName = psiPackage.getQualifiedName();
-        final Set<String> names = getCache(scope).getSubpackageNames(pkgName);
+        String pkgName = psiPackage.getQualifiedName();
+        Set<String> names = getCache(scope).getSubpackageNames(pkgName);
         if (names.isEmpty()) {
             return super.getSubPackages(psiPackage, scope);
         }
@@ -210,7 +234,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     @Nonnull
     @Override
     public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
-        final PsiClass psiClass = findClass(qualifiedName, scope);
+        PsiClass psiClass = findClass(qualifiedName, scope);
         return psiClass == null ? PsiClass.EMPTY_ARRAY : new PsiClass[]{psiClass};
     }
 
@@ -218,8 +242,8 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     public static GlobalSearchScope addNonClasspathScope(@Nonnull Project project, @Nonnull GlobalSearchScope base) {
         GlobalSearchScope scope = base;
         for (PsiElementFinder finder : project.getExtensionList(PsiElementFinder.class)) {
-            if (finder instanceof NonClasspathClassFinder) {
-                scope = scope.uniteWith(NonClasspathDirectoriesScope.compose(((NonClasspathClassFinder) finder).getClassRoots()));
+            if (finder instanceof NonClasspathClassFinder nonClasspathClassFinder) {
+                scope = scope.uniteWith(NonClasspathDirectoriesScope.compose(nonClasspathClassFinder.getClassRoots()));
             }
         }
         return scope;

@@ -82,24 +82,59 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     ) {
         PsiElement element = getPsiElement();
         if (element instanceof PsiPackage) {
-            return new FindPackageUsagesDialog(element, getProject(), myFactory.getFindPackageOptions(),
-                toShowInNewTab, mustOpenInNewTab, isSingleFile, this);
+            return new FindPackageUsagesDialog(
+                element,
+                getProject(),
+                myFactory.getFindPackageOptions(),
+                toShowInNewTab,
+                mustOpenInNewTab,
+                isSingleFile,
+                this
+            );
         }
         if (element instanceof PsiClass) {
-            return new FindClassUsagesDialog(element, getProject(), myFactory.getFindClassOptions(), toShowInNewTab,
-                mustOpenInNewTab, isSingleFile, this);
+            return new FindClassUsagesDialog(
+                element,
+                getProject(),
+                myFactory.getFindClassOptions(),
+                toShowInNewTab,
+                mustOpenInNewTab,
+                isSingleFile,
+                this
+            );
         }
         if (element instanceof PsiMethod) {
-            return new FindMethodUsagesDialog(element, getProject(), myFactory.getFindMethodOptions(), toShowInNewTab,
-                mustOpenInNewTab, isSingleFile, this);
+            return new FindMethodUsagesDialog(
+                element,
+                getProject(),
+                myFactory.getFindMethodOptions(),
+                toShowInNewTab,
+                mustOpenInNewTab,
+                isSingleFile,
+                this
+            );
         }
         if (element instanceof PsiVariable) {
-            return new FindVariableUsagesDialog(element, getProject(), myFactory.getFindVariableOptions(),
-                toShowInNewTab, mustOpenInNewTab, isSingleFile, this);
+            return new FindVariableUsagesDialog(
+                element,
+                getProject(),
+                myFactory.getFindVariableOptions(),
+                toShowInNewTab,
+                mustOpenInNewTab,
+                isSingleFile,
+                this
+            );
         }
         if (ThrowSearchUtil.isSearchable(element)) {
-            return new FindThrowUsagesDialog(element, getProject(), myFactory.getFindThrowOptions(), toShowInNewTab,
-                mustOpenInNewTab, isSingleFile, this);
+            return new FindThrowUsagesDialog(
+                element,
+                getProject(),
+                myFactory.getFindThrowOptions(),
+                toShowInNewTab,
+                mustOpenInNewTab,
+                isSingleFile,
+                this
+            );
         }
         return super.getFindUsagesDialog(isSingleFile, toShowInNewTab, mustOpenInNewTab);
     }
@@ -179,13 +214,21 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
                     .variableNameToPropertyName(fieldName, VariableKind.FIELD);
                 Set<PsiMethod> accessors = new HashSet<>();
                 boolean isStatic = field.isStatic();
-                PsiMethod getter = PropertyUtil.findPropertyGetterWithType(propertyName, isStatic, field.getType(),
-                    List.of(containingClass.getMethods()).iterator());
+                PsiMethod getter = PropertyUtil.findPropertyGetterWithType(
+                    propertyName,
+                    isStatic,
+                    field.getType(),
+                    List.of(containingClass.getMethods()).iterator()
+                );
                 if (getter != null) {
                     accessors.add(getter);
                 }
-                PsiMethod setter = PropertyUtil.findPropertySetterWithType(propertyName, isStatic, field.getType(),
-                    List.of(containingClass.getMethods()).iterator());
+                PsiMethod setter = PropertyUtil.findPropertySetterWithType(
+                    propertyName,
+                    isStatic,
+                    field.getType(),
+                    List.of(containingClass.getMethods()).iterator()
+                );
                 if (setter != null) {
                     accessors.add(setter);
                 }
@@ -253,8 +296,8 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
 
     @Override
     protected boolean isSearchForTextOccurencesAvailable(@Nonnull PsiElement psiElement, boolean isSingleFile) {
-        return !isSingleFile && new JavaNonCodeSearchElementDescriptionProvider().getElementDescription(psiElement,
-            NonCodeSearchDescriptionLocation.NON_JAVA) != null;
+        return !isSingleFile && new JavaNonCodeSearchElementDescriptionProvider()
+            .getElementDescription(psiElement, NonCodeSearchDescriptionLocation.NON_JAVA) != null;
     }
 
     @Nonnull
