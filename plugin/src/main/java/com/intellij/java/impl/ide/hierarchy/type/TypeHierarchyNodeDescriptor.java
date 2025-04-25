@@ -34,10 +34,10 @@ import java.awt.*;
 
 public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
     public TypeHierarchyNodeDescriptor(
-        final Project project,
-        final HierarchyNodeDescriptor parentDescriptor,
-        final PsiElement classOrFunctionalExpression,
-        final boolean isBase
+        Project project,
+        HierarchyNodeDescriptor parentDescriptor,
+        PsiElement classOrFunctionalExpression,
+        boolean isBase
     ) {
         super(project, parentDescriptor, classOrFunctionalExpression, isBase);
     }
@@ -51,7 +51,7 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
         boolean changes = super.update();
 
         if (getPsiElement() == null) {
-            final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
+            String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
             if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
                 myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
             }
@@ -62,9 +62,9 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
             setIcon(ImageEffects.appendRight(AllIcons.Hierarchy.Base, getIcon()));
         }
 
-        final PsiElement psiElement = getPsiClass();
+        PsiElement psiElement = getPsiClass();
 
-        final CompositeAppearance oldText = myHighlightedText;
+        CompositeAppearance oldText = myHighlightedText;
 
         myHighlightedText = new CompositeAppearance();
 

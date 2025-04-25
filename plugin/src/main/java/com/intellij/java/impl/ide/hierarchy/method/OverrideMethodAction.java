@@ -19,7 +19,8 @@ import consulo.ide.localize.IdeLocalize;
 import consulo.ui.ex.action.Presentation;
 
 public final class OverrideMethodAction extends OverrideImplementMethodAction {
-    protected final void update(final Presentation presentation, final int toImplement, final int toOverride) {
+    @Override
+    protected final void update(Presentation presentation, int toImplement, int toOverride) {
         if (toOverride > 0) {
             presentation.setEnabled(true);
             presentation.setVisible(true);

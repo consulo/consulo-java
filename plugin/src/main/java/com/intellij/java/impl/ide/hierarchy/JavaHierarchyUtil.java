@@ -35,22 +35,16 @@ public class JavaHierarchyUtil {
     }
 
     @Nullable
-    public static String getPackageName(final PsiClass psiClass) {
-        final PsiFile file = psiClass.getContainingFile();
-        if (file instanceof PsiClassOwner) {
-            return ((PsiClassOwner)file).getPackageName();
+    public static String getPackageName(PsiClass psiClass) {
+        if (psiClass.getContainingFile() instanceof PsiClassOwner classOwner) {
+            return classOwner.getPackageName();
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     public static Comparator<NodeDescriptor> getComparator(Project project) {
-        if (HierarchyBrowserManager.getInstance(project).getState().SORT_ALPHABETICALLY) {
-            return AlphaComparator.INSTANCE;
-        }
-        else {
-            return SourceComparator.INSTANCE;
-        }
+        HierarchyBrowserManager.State state = HierarchyBrowserManager.getInstance(project).getState();
+        assert state != null;
+        return state.SORT_ALPHABETICALLY ? AlphaComparator.INSTANCE : SourceComparator.INSTANCE;
     }
 }

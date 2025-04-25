@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiSyntheticClass;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
@@ -45,20 +46,20 @@ import java.util.Set;
 public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
     @Override
     @RequiredUIAccess
-    public PsiElement getTarget(@Nonnull final DataContext dataContext) {
-        final Project project = dataContext.getData(Project.KEY);
+    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return null;
         }
 
-        final Editor editor = dataContext.getData(Editor.KEY);
+        Editor editor = dataContext.getData(Editor.KEY);
         if (editor != null) {
-            final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+            PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
             if (file == null) {
                 return null;
             }
 
-            final PsiElement targetElement = TargetElementUtil.findTargetElement(
+            PsiElement targetElement = TargetElementUtil.findTargetElement(
                 editor,
                 Set.of(
                     TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
@@ -70,14 +71,14 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
                 return targetElement;
             }
 
-            final int offset = editor.getCaretModel().getOffset();
+            int offset = editor.getCaretModel().getOffset();
             PsiElement element = file.findElementAt(offset);
             while (element != null) {
                 if (element instanceof PsiFile) {
-                    if (!(element instanceof PsiClassOwner)) {
+                    if (!(element instanceof PsiClassOwner classOwner)) {
                         return null;
                     }
-                    final PsiClass[] classes = ((PsiClassOwner)element).getClasses();
+                    PsiClass[] classes = classOwner.getClasses();
                     return classes.length == 1 ? classes[0] : null;
                 }
                 if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass) && !(element instanceof PsiSyntheticClass)) {
@@ -89,21 +90,22 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
             return null;
         }
         else {
-            final PsiElement element = dataContext.getData(PsiElement.KEY);
+            PsiElement element = dataContext.getData(PsiElement.KEY);
             return element instanceof PsiClass psiClass ? psiClass : null;
         }
     }
 
     @Override
     @Nonnull
-    public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
+    public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
         return new TypeHierarchyBrowser(target.getProject(), (PsiClass)target);
     }
 
     @Override
-    public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
-        final TypeHierarchyBrowser browser = (TypeHierarchyBrowser)hierarchyBrowser;
-        final String typeName = browser.isInterface()
+    @RequiredReadAction
+    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
+        TypeHierarchyBrowser browser = (TypeHierarchyBrowser)hierarchyBrowser;
+        String typeName = browser.isInterface()
             ? TypeHierarchyBrowserBase.SUBTYPES_HIERARCHY_TYPE : TypeHierarchyBrowserBase.TYPE_HIERARCHY_TYPE;
         browser.changeView(typeName);
     }

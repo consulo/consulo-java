@@ -17,6 +17,7 @@ package com.intellij.java.impl.ide.hierarchy.call;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
@@ -35,24 +36,25 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaCallHierarchyProvider implements CallHierarchyProvider {
     @Override
-    public PsiElement getTarget(@Nonnull final DataContext dataContext) {
-        final Project project = dataContext.getData(Project.KEY);
+    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return null;
         }
 
-        final PsiElement element = dataContext.getData(PsiElement.KEY);
+        PsiElement element = dataContext.getData(PsiElement.KEY);
         return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     }
 
     @Override
     @Nonnull
-    public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
+    public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
         return new CallHierarchyBrowser(target.getProject(), (PsiMethod)target);
     }
 
     @Override
-    public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
+    @RequiredReadAction
+    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
         ((CallHierarchyBrowser)hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
     }
 

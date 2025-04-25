@@ -20,8 +20,6 @@ import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUt
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.application.AllIcons;
 import consulo.colorScheme.TextAttributes;
 import consulo.component.util.Iconable;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
@@ -29,6 +27,7 @@ import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
@@ -43,21 +42,21 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
     private MethodHierarchyTreeStructure myTreeStructure;
 
     public MethodHierarchyNodeDescriptor(
-        final Project project,
-        final HierarchyNodeDescriptor parentDescriptor,
-        final PsiElement aClass,
-        final boolean isBase,
-        final MethodHierarchyTreeStructure treeStructure
+        Project project,
+        HierarchyNodeDescriptor parentDescriptor,
+        PsiElement aClass,
+        boolean isBase,
+        MethodHierarchyTreeStructure treeStructure
     ) {
         super(project, parentDescriptor, aClass, isBase);
         myTreeStructure = treeStructure;
     }
 
-    public final void setTreeStructure(final MethodHierarchyTreeStructure treeStructure) {
+    public final void setTreeStructure(MethodHierarchyTreeStructure treeStructure) {
         myTreeStructure = treeStructure;
     }
 
-    PsiMethod getMethod(final PsiClass aClass, final boolean checkBases) {
+    PsiMethod getMethod(PsiClass aClass, boolean checkBases) {
         return MethodHierarchyUtil.findBaseMethodInClass(myTreeStructure.getBaseMethod(), aClass, checkBases);
     }
 
@@ -69,15 +68,14 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
      * Element for OpenFileDescriptor
      */
     public final PsiElement getTargetElement() {
-        final PsiElement element = getPsiClass();
-        if (!(element instanceof PsiClass)) {
+        PsiElement element = getPsiClass();
+        if (!(element instanceof PsiClass aClass)) {
             return element;
         }
-        final PsiClass aClass = (PsiClass)getPsiClass();
         if (!aClass.isValid()) {
             return null;
         }
-        final PsiMethod method = getMethod(aClass, false);
+        PsiMethod method = getMethod(aClass, false);
         if (method != null) {
             return method;
         }
@@ -94,18 +92,18 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 
         boolean changes = super.update();
 
-        final PsiElement aClass = getPsiClass();
+        PsiElement aClass = getPsiClass();
 
         if (aClass == null) {
-            final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
+            String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
             if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
                 myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
             }
             return true;
         }
 
-        final Image newRawIcon = IconDescriptorUpdaters.getIcon(aClass, flags);
-        final Image newStateIcon = aClass instanceof PsiClass psiClass ? calculateState(psiClass) : AllIcons.Hierarchy.MethodDefined;
+        Image newRawIcon = IconDescriptorUpdaters.getIcon(aClass, flags);
+        Image newStateIcon = aClass instanceof PsiClass psiClass ? calculateState(psiClass) : PlatformIconGroup.hierarchyMethoddefined();
 
         if (changes || newRawIcon != myRawIcon || newStateIcon != myStateIcon) {
             changes = true;
@@ -116,7 +114,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
             Image newIcon = myRawIcon;
 
             if (myIsBase) {
-                newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
+                newIcon = ImageEffects.appendRight(PlatformIconGroup.hierarchyBase(), newIcon);
             }
 
             if (myStateIcon != null) {
@@ -126,7 +124,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
             setIcon(newIcon);
         }
 
-        final CompositeAppearance oldText = myHighlightedText;
+        CompositeAppearance oldText = myHighlightedText;
 
         myHighlightedText = new CompositeAppearance();
         TextAttributes classNameAttributes = null;
@@ -152,23 +150,25 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
         return changes;
     }
 
-    private Image calculateState(final PsiClass psiClass) {
-        final PsiMethod method = getMethod(psiClass, false);
+    private Image calculateState(PsiClass psiClass) {
+        PsiMethod method = getMethod(psiClass, false);
         if (method != null) {
-            return method.hasModifierProperty(PsiModifier.ABSTRACT) ? null : AllIcons.Hierarchy.MethodDefined;
+            return method.isAbstract() ? null : PlatformIconGroup.hierarchyMethoddefined();
         }
 
         if (myTreeStructure.isSuperClassForBaseClass(psiClass)) {
-            return AllIcons.Hierarchy.MethodNotDefined;
+            return PlatformIconGroup.hierarchyMethodnotdefined();
         }
 
-        final boolean isAbstractClass = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
+        boolean isAbstractClass = psiClass.isAbstract();
 
         // was it implemented is in superclasses?
-        final PsiMethod baseClassMethod = getMethod(psiClass, true);
+        PsiMethod baseClassMethod = getMethod(psiClass, true);
 
-        final boolean hasBaseImplementation = baseClassMethod != null && !baseClassMethod.hasModifierProperty(PsiModifier.ABSTRACT);
+        boolean hasBaseImplementation = baseClassMethod != null && !baseClassMethod.isAbstract();
 
-        return hasBaseImplementation || isAbstractClass ? AllIcons.Hierarchy.MethodNotDefined : AllIcons.Hierarchy.ShouldDefineMethod;
+        return hasBaseImplementation || isAbstractClass
+            ? PlatformIconGroup.hierarchyMethodnotdefined()
+            : PlatformIconGroup.hierarchyShoulddefinemethod();
     }
 }

@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.AllIcons;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.markup.RangeHighlighter;
@@ -45,6 +44,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.Navigatable;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
@@ -60,15 +60,15 @@ import java.util.List;
 
 public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable {
     private int myUsageCount = 1;
-    private final List<PsiReference> myReferences = new ArrayList<PsiReference>();
+    private final List<PsiReference> myReferences = new ArrayList<>();
     private final boolean myNavigateToReference;
 
     public CallHierarchyNodeDescriptor(
         @Nonnull Project project,
-        final HierarchyNodeDescriptor parentDescriptor,
+        HierarchyNodeDescriptor parentDescriptor,
         @Nonnull PsiElement element,
-        final boolean isBase,
-        final boolean navigateToReference
+        boolean isBase,
+        boolean navigateToReference
     ) {
         super(project, parentDescriptor, element, isBase);
         myNavigateToReference = navigateToReference;
@@ -82,7 +82,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         return element == null ? null : getEnclosingElement(element);
     }
 
-    public static PsiMember getEnclosingElement(final PsiElement element) {
+    public static PsiMember getEnclosingElement(PsiElement element) {
         return PsiTreeUtil.getNonStrictParentOfType(element, PsiMethod.class, PsiClass.class);
     }
 
@@ -105,8 +105,8 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     @Override
     @RequiredUIAccess
     public final boolean update() {
-        final CompositeAppearance oldText = myHighlightedText;
-        final Icon oldIcon = TargetAWT.to(getIcon());
+        CompositeAppearance oldText = myHighlightedText;
+        Icon oldIcon = TargetAWT.to(getIcon());
 
         int flags = Iconable.ICON_FLAG_VISIBILITY;
         if (isMarkReadOnly()) {
@@ -115,10 +115,10 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 
         boolean changes = super.update();
 
-        final PsiElement enclosingElement = getEnclosingElement();
+        PsiElement enclosingElement = getEnclosingElement();
 
         if (enclosingElement == null) {
-            final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
+            String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
             if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
                 myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
             }
@@ -127,7 +127,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
 
         Image newIcon = IconDescriptorUpdaters.getIcon(enclosingElement, flags);
         if (changes && myIsBase) {
-            newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
+            newIcon = ImageEffects.appendRight(PlatformIconGroup.hierarchyBase(), newIcon);
         }
         setIcon(newIcon);
 
@@ -145,14 +145,14 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
                 );
             }
             else {
-                final PsiMethod method = (PsiMethod)enclosingElement;
-                final StringBuilder buffer = new StringBuilder(128);
-                final PsiClass containingClass = method.getContainingClass();
+                PsiMethod method = (PsiMethod)enclosingElement;
+                StringBuilder buffer = new StringBuilder(128);
+                PsiClass containingClass = method.getContainingClass();
                 if (containingClass != null) {
                     buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false));
                     buffer.append('.');
                 }
-                final String methodText = PsiFormatUtil.formatMethod(
+                String methodText = PsiFormatUtil.formatMethod(
                     method,
                     PsiSubstitutor.EMPTY,
                     PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
@@ -175,10 +175,10 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
             );
         }
 
-        final PsiClass containingClass =
+        PsiClass containingClass =
             enclosingElement instanceof PsiMethod method ? method.getContainingClass() : (PsiClass)enclosingElement;
         if (containingClass != null) {
-            final String packageName = JavaHierarchyUtil.getPackageName(containingClass);
+            String packageName = JavaHierarchyUtil.getPackageName(containingClass);
             myHighlightedText.getEnding().addText("  (" + packageName + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
         }
 
@@ -190,7 +190,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         return changes;
     }
 
-    public void addReference(final PsiReference reference) {
+    public void addReference(PsiReference reference) {
         myReferences.add(reference);
     }
 
@@ -209,17 +209,17 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
             return;
         }
 
-        final PsiReference firstReference = myReferences.get(0);
-        final PsiElement element = firstReference.getElement();
+        PsiReference firstReference = myReferences.get(0);
+        PsiElement element = firstReference.getElement();
         if (element == null) {
             return;
         }
-        final PsiElement callElement = element.getParent();
+        PsiElement callElement = element.getParent();
         if (callElement instanceof Navigatable navigatable && navigatable.canNavigate()) {
             navigatable.navigate(requestFocus);
         }
         else {
-            final PsiFile psiFile = callElement.getContainingFile();
+            PsiFile psiFile = callElement.getContainingFile();
             if (psiFile == null || psiFile.getVirtualFile() == null) {
                 return;
             }
@@ -235,11 +235,11 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
             TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
             ArrayList<RangeHighlighter> highlighters = new ArrayList<>();
             for (PsiReference psiReference : myReferences) {
-                final PsiElement eachElement = psiReference.getElement();
+                PsiElement eachElement = psiReference.getElement();
                 if (eachElement != null) {
-                    final PsiElement eachMethodCall = eachElement.getParent();
+                    PsiElement eachMethodCall = eachElement.getParent();
                     if (eachMethodCall != null) {
-                        final TextRange textRange = eachMethodCall.getTextRange();
+                        TextRange textRange = eachMethodCall.getTextRange();
                         highlightManager.addRangeHighlight(
                             editor,
                             textRange.getStartOffset(),
@@ -255,6 +255,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigate() {
         if (!myNavigateToReference) {
             PsiElement element = getPsiElement();
@@ -263,13 +264,13 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         if (myReferences.isEmpty()) {
             return false;
         }
-        final PsiReference firstReference = myReferences.get(0);
-        final PsiElement callElement = firstReference.getElement().getParent();
+        PsiReference firstReference = myReferences.get(0);
+        PsiElement callElement = firstReference.getElement().getParent();
         if (callElement == null || !callElement.isValid()) {
             return false;
         }
         if (!(callElement instanceof Navigatable navigatable && navigatable.canNavigate())) {
-            final PsiFile psiFile = callElement.getContainingFile();
+            PsiFile psiFile = callElement.getContainingFile();
             if (psiFile == null) {
                 return false;
             }
@@ -278,6 +279,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigateToSource() {
         return canNavigate();
     }

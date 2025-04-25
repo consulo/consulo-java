@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.Map;
 
+import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.JPanel;
@@ -45,13 +46,13 @@ import jakarta.annotation.Nullable;
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     private static final Logger LOG = Logger.getInstance(TypeHierarchyBrowser.class);
 
-    public TypeHierarchyBrowser(final Project project, final PsiClass psiClass) {
+    public TypeHierarchyBrowser(Project project, PsiClass psiClass) {
         super(project, psiClass);
     }
 
     @Override
     protected boolean isInterface(PsiElement psiElement) {
-        return psiElement instanceof PsiClass && ((PsiClass)psiElement).isInterface();
+        return psiElement instanceof PsiClass psiClass && psiClass.isInterface();
     }
 
     @Override
@@ -71,16 +72,17 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
+    @RequiredReadAction
     protected String getContentDisplayName(@Nonnull String typeName, @Nonnull PsiElement element) {
         return MessageFormat.format(typeName, ClassPresentationUtil.getNameForClass((PsiClass)element, false));
     }
 
     @Override
     protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
-        if (!(descriptor instanceof TypeHierarchyNodeDescriptor)) {
-            return null;
+        if (descriptor instanceof TypeHierarchyNodeDescriptor nodeDescriptor) {
+            return nodeDescriptor.getPsiClass();
         }
-        return ((TypeHierarchyNodeDescriptor)descriptor).getPsiClass();
+        return null;
     }
 
     @Override
@@ -90,7 +92,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected boolean isApplicableElement(@Nonnull final PsiElement element) {
+    protected boolean isApplicableElement(@Nonnull PsiElement element) {
         return element instanceof PsiClass;
     }
 
@@ -100,7 +102,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
+    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
         if (SUPERTYPES_HIERARCHY_TYPE.equals(typeName)) {
             return new SupertypesHierarchyTreeStructure(myProject, (PsiClass)psiElement);
         }
@@ -117,20 +119,21 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected boolean canBeDeleted(final PsiElement psiElement) {
+    protected boolean canBeDeleted(PsiElement psiElement) {
         return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
     }
 
     @Override
-    protected String getQualifiedName(final PsiElement psiElement) {
-        if (psiElement instanceof PsiClass) {
-            return ((PsiClass)psiElement).getQualifiedName();
+    protected String getQualifiedName(PsiElement psiElement) {
+        if (psiElement instanceof PsiClass psiClass) {
+            return psiClass.getQualifiedName();
         }
         return "";
     }
 
     public static class BaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction {
-        protected boolean isEnabled(@Nonnull final HierarchyBrowserBaseEx browser, @Nonnull final PsiElement psiElement) {
+        @Override
+        protected boolean isEnabled(@Nonnull HierarchyBrowserBaseEx browser, @Nonnull PsiElement psiElement) {
             return super.isEnabled(browser, psiElement)
                 && !JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)psiElement).getQualifiedName());
         }

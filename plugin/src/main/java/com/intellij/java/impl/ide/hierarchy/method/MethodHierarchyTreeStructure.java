@@ -15,24 +15,26 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import jakarta.annotation.Nonnull;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
-import consulo.util.collection.ArrayUtil;
-import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
-import jakarta.annotation.Nullable;
 
 public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
     private final SmartPsiElementPointer myMethod;
@@ -40,7 +42,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
     /**
      * Should be called in read action
      */
-    public MethodHierarchyTreeStructure(final Project project, final PsiMethod method) {
+    public MethodHierarchyTreeStructure(Project project, PsiMethod method) {
         super(project, null);
         myBaseDescriptor = buildHierarchyElement(project, method);
         ((MethodHierarchyNodeDescriptor)myBaseDescriptor).setTreeStructure(this);
@@ -48,11 +50,11 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
         setBaseElement(myBaseDescriptor); //to set myRoot
     }
 
-    private HierarchyNodeDescriptor buildHierarchyElement(final Project project, final PsiMethod method) {
-        final PsiClass suitableBaseClass = findSuitableBaseClass(method);
+    private HierarchyNodeDescriptor buildHierarchyElement(Project project, PsiMethod method) {
+        PsiClass suitableBaseClass = findSuitableBaseClass(method);
 
         HierarchyNodeDescriptor descriptor = null;
-        final ArrayList<PsiClass> superClasses = createSuperClasses(suitableBaseClass);
+        ArrayList<PsiClass> superClasses = createSuperClasses(suitableBaseClass);
 
         if (!suitableBaseClass.equals(method.getContainingClass())) {
             superClasses.add(0, suitableBaseClass);
@@ -60,7 +62,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
 
         // remove from the top of the branch the classes that contain no 'method'
         for (int i = superClasses.size() - 1; i >= 0; i--) {
-            final PsiClass psiClass = superClasses.get(i);
+            PsiClass psiClass = superClasses.get(i);
 
             if (MethodHierarchyUtil.findBaseMethodInClass(method, psiClass, false) == null) {
                 superClasses.remove(i);
@@ -71,15 +73,15 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
         }
 
         for (int i = superClasses.size() - 1; i >= 0; i--) {
-            final PsiClass superClass = superClasses.get(i);
-            final HierarchyNodeDescriptor newDescriptor =
+            PsiClass superClass = superClasses.get(i);
+            HierarchyNodeDescriptor newDescriptor =
                 new MethodHierarchyNodeDescriptor(project, descriptor, superClass, false, this);
             if (descriptor != null) {
                 descriptor.setCachedChildren(new HierarchyNodeDescriptor[]{newDescriptor});
             }
             descriptor = newDescriptor;
         }
-        final HierarchyNodeDescriptor newDescriptor =
+        HierarchyNodeDescriptor newDescriptor =
             new MethodHierarchyNodeDescriptor(project, descriptor, method.getContainingClass(), true, this);
         if (descriptor != null) {
             descriptor.setCachedChildren(new HierarchyNodeDescriptor[]{newDescriptor});
@@ -89,16 +91,16 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
 
     private static ArrayList<PsiClass> createSuperClasses(PsiClass aClass) {
         if (!aClass.isValid()) {
-            return new ArrayList<PsiClass>();
+            return new ArrayList<>();
         }
 
-        final ArrayList<PsiClass> superClasses = new ArrayList<PsiClass>();
+        ArrayList<PsiClass> superClasses = new ArrayList<>();
         while (!isJavaLangObject(aClass)) {
-            final PsiClass aClass1 = aClass;
-            final PsiClass[] superTypes = aClass1.getSupers();
+            PsiClass aClass1 = aClass;
+            PsiClass[] superTypes = aClass1.getSupers();
             PsiClass superType = null;
             // find class first
-            for (final PsiClass type : superTypes) {
+            for (PsiClass type : superTypes) {
                 if (!type.isInterface() && !isJavaLangObject(type)) {
                     superType = type;
                     break;
@@ -106,7 +108,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
             }
             // if we haven't found a class, try to find an interface
             if (superType == null) {
-                for (final PsiClass type : superTypes) {
+                for (PsiClass type : superTypes) {
                     if (!isJavaLangObject(type)) {
                         superType = type;
                         break;
@@ -126,24 +128,24 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
         return superClasses;
     }
 
-    private static boolean isJavaLangObject(final PsiClass aClass) {
+    private static boolean isJavaLangObject(PsiClass aClass) {
         return JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
     }
 
-    private static PsiClass findSuitableBaseClass(final PsiMethod method) {
-        final PsiClass containingClass = method.getContainingClass();
+    private static PsiClass findSuitableBaseClass(PsiMethod method) {
+        PsiClass containingClass = method.getContainingClass();
 
         if (containingClass instanceof PsiAnonymousClass) {
             return containingClass;
         }
 
-        final PsiClass superClass = containingClass.getSuperClass();
+        PsiClass superClass = containingClass.getSuperClass();
         if (superClass == null) {
             return containingClass;
         }
 
         if (MethodHierarchyUtil.findBaseMethodInClass(method, superClass, true) == null) {
-            for (final PsiClass anInterface : containingClass.getInterfaces()) {
+            for (PsiClass anInterface : containingClass.getInterfaces()) {
                 if (MethodHierarchyUtil.findBaseMethodInClass(method, anInterface, true) != null) {
                     return anInterface;
                 }
@@ -154,69 +156,66 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
     }
 
     @Nullable
+    @RequiredReadAction
     public final PsiMethod getBaseMethod() {
-        final PsiElement element = myMethod.getElement();
-        return element instanceof PsiMethod ? (PsiMethod)element : null;
+        return myMethod.getElement() instanceof PsiMethod method ? method : null;
     }
-
 
     @Nonnull
     @Override
-    protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor) {
-        final PsiElement psiElement = ((MethodHierarchyNodeDescriptor)descriptor).getPsiClass();
-        if (!(psiElement instanceof PsiClass)) {
+    @RequiredReadAction
+    protected final Object[] buildChildren(@Nonnull HierarchyNodeDescriptor descriptor) {
+        PsiElement psiElement = ((MethodHierarchyNodeDescriptor)descriptor).getPsiClass();
+        if (!(psiElement instanceof PsiClass psiClass)) {
             return ArrayUtil.EMPTY_OBJECT_ARRAY;
         }
-        final PsiClass psiClass = (PsiClass)psiElement;
-        final Collection<PsiClass> subclasses = getSubclasses(psiClass);
+        Collection<PsiClass> subclasses = getSubclasses(psiClass);
 
-        final List<HierarchyNodeDescriptor> descriptors = new ArrayList<HierarchyNodeDescriptor>(subclasses.size());
-        for (final PsiClass aClass : subclasses) {
-            if (HierarchyBrowserManager.getInstance(myProject).getState().HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED) {
-                if (shouldHideClass(aClass)) {
-                    continue;
-                }
+        List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(subclasses.size());
+        for (PsiClass aClass : subclasses) {
+            HierarchyBrowserManager.State state = HierarchyBrowserManager.getInstance(myProject).getState();
+            assert state != null;
+            if (state.HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED && shouldHideClass(aClass)) {
+                continue;
             }
 
-            final MethodHierarchyNodeDescriptor d = new MethodHierarchyNodeDescriptor(myProject, descriptor, aClass, false, this);
+            MethodHierarchyNodeDescriptor d = new MethodHierarchyNodeDescriptor(myProject, descriptor, aClass, false, this);
             descriptors.add(d);
         }
 
-        final PsiMethod existingMethod = ((MethodHierarchyNodeDescriptor)descriptor).getMethod(psiClass, false);
+        PsiMethod existingMethod = ((MethodHierarchyNodeDescriptor)descriptor).getMethod(psiClass, false);
         if (existingMethod != null) {
-            FunctionalExpressionSearch.search(existingMethod).forEach(new Processor<PsiFunctionalExpression>() {
-                @Override
-                public boolean process(PsiFunctionalExpression expression) {
-                    descriptors.add(new MethodHierarchyNodeDescriptor(
-                        myProject,
-                        descriptor,
-                        expression,
-                        false,
-                        MethodHierarchyTreeStructure.this
-                    ));
-                    return true;
-                }
+            FunctionalExpressionSearch.search(existingMethod).forEach(expression -> {
+                descriptors.add(new MethodHierarchyNodeDescriptor(
+                    myProject,
+                    descriptor,
+                    expression,
+                    false,
+                    MethodHierarchyTreeStructure.this
+                ));
+                return true;
             });
         }
 
         return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
     }
 
-    private static Collection<PsiClass> getSubclasses(final PsiClass psiClass) {
-        if (psiClass instanceof PsiAnonymousClass || psiClass.hasModifierProperty(PsiModifier.FINAL)) {
+    private static Collection<PsiClass> getSubclasses(PsiClass psiClass) {
+        if (psiClass instanceof PsiAnonymousClass || psiClass.isFinal()) {
             return Collections.emptyList();
         }
 
         return ClassInheritorsSearch.search(psiClass, false).findAll();
     }
 
-    private boolean shouldHideClass(final PsiClass psiClass) {
+    @RequiredReadAction
+    private boolean shouldHideClass(PsiClass psiClass) {
         if (getMethod(psiClass, false) != null || isSuperClassForBaseClass(psiClass)) {
             return false;
         }
 
         if (hasBaseClassMethod(psiClass) || isAbstract(psiClass)) {
-            for (final PsiClass subclass : getSubclasses(psiClass)) {
+            for (PsiClass subclass : getSubclasses(psiClass)) {
                 if (!shouldHideClass(subclass)) {
                     return false;
                 }
@@ -227,25 +226,28 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
         return false;
     }
 
-    private boolean isAbstract(final PsiModifierListOwner owner) {
+    private boolean isAbstract(PsiModifierListOwner owner) {
         return owner.hasModifierProperty(PsiModifier.ABSTRACT);
     }
 
-    private boolean hasBaseClassMethod(final PsiClass psiClass) {
-        final PsiMethod baseClassMethod = getMethod(psiClass, true);
+    @RequiredReadAction
+    private boolean hasBaseClassMethod(PsiClass psiClass) {
+        PsiMethod baseClassMethod = getMethod(psiClass, true);
         return baseClassMethod != null && !isAbstract(baseClassMethod);
     }
 
-    private PsiMethod getMethod(final PsiClass aClass, final boolean checkBases) {
+    @RequiredReadAction
+    private PsiMethod getMethod(PsiClass aClass, boolean checkBases) {
         return MethodHierarchyUtil.findBaseMethodInClass(getBaseMethod(), aClass, checkBases);
     }
 
-    boolean isSuperClassForBaseClass(final PsiClass aClass) {
-        final PsiMethod baseMethod = getBaseMethod();
+    @RequiredReadAction
+    boolean isSuperClassForBaseClass(PsiClass aClass) {
+        PsiMethod baseMethod = getBaseMethod();
         if (baseMethod == null) {
             return false;
         }
-        final PsiClass baseClass = baseMethod.getContainingClass();
+        PsiClass baseClass = baseMethod.getContainingClass();
         if (baseClass == null) {
             return false;
         }
