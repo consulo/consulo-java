@@ -22,32 +22,27 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;
-import consulo.language.codeStyle.Block;
-import consulo.language.codeStyle.DocumentBasedFormattingModel;
-import consulo.language.codeStyle.FormatterUtil;
-import consulo.language.codeStyle.PsiBasedFormattingModel;
+import consulo.language.codeStyle.*;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.xml.psi.xml.XmlTokenType;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel {
   private static final Logger LOG = Logger.getInstance(PsiBasedFormatterModelWithShiftIndentInside.class);
 
   private final Project myProject;
 
-  public PsiBasedFormatterModelWithShiftIndentInside(final PsiFile file,
-                                                     @Nonnull final Block rootBlock,
-                                                     final FormattingDocumentModelImpl documentModel) {
+  public PsiBasedFormatterModelWithShiftIndentInside(PsiFile file,
+                                                     @Nonnull Block rootBlock,
+                                                     FormattingDocumentModel documentModel) {
     super(file, rootBlock, documentModel);
     myProject = file.getProject();
   }

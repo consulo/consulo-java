@@ -26,7 +26,6 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.TokenType;
@@ -38,7 +37,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -57,7 +55,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     CommonCodeStyleSettings commonSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
     JavaCodeStyleSettings customJavaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
     Block block = AbstractJavaBlock.newJavaBlock(fileElement, commonSettings, customJavaSettings, formattingMode);
-    FormattingDocumentModelImpl model = FormattingDocumentModelImpl.createOn(element.getContainingFile());
+    FormattingDocumentModel model = FormattingDocumentModel.create(element.getContainingFile());
     return new PsiBasedFormatterModelWithShiftIndentInside(element.getContainingFile(), block, model);
   }
 

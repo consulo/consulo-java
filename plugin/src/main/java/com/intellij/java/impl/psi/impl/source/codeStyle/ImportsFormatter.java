@@ -16,11 +16,11 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import consulo.document.util.TextRange;
-import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessorHelper;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.FormattingDocumentModel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -37,7 +37,7 @@ import jakarta.annotation.Nonnull;
 public class ImportsFormatter extends XmlRecursiveElementVisitor {
   private static final Logger LOG = Logger.getInstance(ImportsFormatter.class);
 
-  private final FormattingDocumentModelImpl myDocumentModel;
+  private final FormattingDocumentModel myDocumentModel;
   private final CommonCodeStyleSettings.IndentOptions myIndentOptions;
   private static final String PAGE_DIRECTIVE = "page";
   private static final String IMPORT_ATT = "import";
@@ -46,7 +46,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
 
   public ImportsFormatter(@Nonnull CodeStyleSettings settings, @Nonnull PsiFile file) {
     myPostProcessor = new PostFormatProcessorHelper(settings);
-    myDocumentModel = FormattingDocumentModelImpl.createOn(file);
+    myDocumentModel = FormattingDocumentModel.create(file);
     myIndentOptions = settings.getIndentOptions(file.getFileType());
   }
 
