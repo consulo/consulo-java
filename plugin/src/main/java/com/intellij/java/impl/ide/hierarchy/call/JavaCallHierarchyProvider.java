@@ -34,29 +34,31 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaCallHierarchyProvider implements CallHierarchyProvider {
-  @Override
-  public PsiElement getTarget(@Nonnull final DataContext dataContext) {
-    final Project project = dataContext.getData(Project.KEY);
-    if (project == null) return null;
+    @Override
+    public PsiElement getTarget(@Nonnull final DataContext dataContext) {
+        final Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return null;
+        }
 
-    final PsiElement element = dataContext.getData(PsiElement.KEY);
-    return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
-  }
+        final PsiElement element = dataContext.getData(PsiElement.KEY);
+        return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
+    }
 
-  @Override
-  @Nonnull
-  public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
-    return new CallHierarchyBrowser(target.getProject(), (PsiMethod) target);
-  }
+    @Override
+    @Nonnull
+    public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
+        return new CallHierarchyBrowser(target.getProject(), (PsiMethod)target);
+    }
 
-  @Override
-  public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
-    ((CallHierarchyBrowser) hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
-  }
+    @Override
+    public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
+        ((CallHierarchyBrowser)hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
+    }
 
-  @Nonnull
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }

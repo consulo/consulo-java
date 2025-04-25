@@ -32,67 +32,61 @@ import consulo.util.lang.Comparing;
 
 import java.awt.*;
 
-public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
-{
-	public TypeHierarchyNodeDescriptor(final Project project, final HierarchyNodeDescriptor parentDescriptor, final PsiElement classOrFunctionalExpression, final boolean isBase)
-	{
-		super(project, parentDescriptor, classOrFunctionalExpression, isBase);
-	}
+public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
+    public TypeHierarchyNodeDescriptor(
+        final Project project,
+        final HierarchyNodeDescriptor parentDescriptor,
+        final PsiElement classOrFunctionalExpression,
+        final boolean isBase
+    ) {
+        super(project, parentDescriptor, classOrFunctionalExpression, isBase);
+    }
 
-	public final PsiElement getPsiClass()
-	{
-		return getPsiElement();
-	}
+    public final PsiElement getPsiClass() {
+        return getPsiElement();
+    }
 
-	@RequiredUIAccess
-	public final boolean update()
-	{
-		boolean changes = super.update();
+    @RequiredUIAccess
+    public final boolean update() {
+        boolean changes = super.update();
 
-		if (getPsiElement() == null)
-		{
-			final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
-			if (!myHighlightedText.getText().startsWith(invalidPrefix))
-			{
-				myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
-			}
-			return true;
-		}
+        if (getPsiElement() == null) {
+            final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
+            if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
+                myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
+            }
+            return true;
+        }
 
-		if (changes && myIsBase)
-		{
-			setIcon(ImageEffects.appendRight(AllIcons.Hierarchy.Base, getIcon()));
-		}
+        if (changes && myIsBase) {
+            setIcon(ImageEffects.appendRight(AllIcons.Hierarchy.Base, getIcon()));
+        }
 
-		final PsiElement psiElement = getPsiClass();
+        final PsiElement psiElement = getPsiClass();
 
-		final CompositeAppearance oldText = myHighlightedText;
+        final CompositeAppearance oldText = myHighlightedText;
 
-		myHighlightedText = new CompositeAppearance();
+        myHighlightedText = new CompositeAppearance();
 
-		TextAttributes classNameAttributes = null;
-		if (myColor != null)
-		{
-			classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
-		}
-		if (psiElement instanceof PsiClass psiClass)
-		{
-			myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
-			myHighlightedText.getEnding().addText(
-				" (" + JavaHierarchyUtil.getPackageName(psiClass) + ")",
-				HierarchyNodeDescriptor.getPackageNameAttributes()
-			);
-		}
-		else if (psiElement instanceof PsiFunctionalExpression functionalExpression)
-		{
-			myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false));
-		}
-		myName = myHighlightedText.getText();
+        TextAttributes classNameAttributes = null;
+        if (myColor != null) {
+            classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
+        }
+        if (psiElement instanceof PsiClass psiClass) {
+            myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
+            myHighlightedText.getEnding().addText(
+                " (" + JavaHierarchyUtil.getPackageName(psiClass) + ")",
+                HierarchyNodeDescriptor.getPackageNameAttributes()
+            );
+        }
+        else if (psiElement instanceof PsiFunctionalExpression functionalExpression) {
+            myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false));
+        }
+        myName = myHighlightedText.getText();
 
-		if (!Comparing.equal(myHighlightedText, oldText))
-		{
-			changes = true;
-		}
-		return changes;
-	}
+        if (!Comparing.equal(myHighlightedText, oldText)) {
+            changes = true;
+        }
+        return changes;
+    }
 }

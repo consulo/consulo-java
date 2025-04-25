@@ -19,15 +19,15 @@ import consulo.ide.localize.IdeLocalize;
 import consulo.ui.ex.action.Presentation;
 
 public final class ImplementMethodAction extends OverrideImplementMethodAction {
-  protected final void update(final Presentation presentation, final int toImplement, final int toOverride) {
-    if (toImplement > 0) {
-      presentation.setEnabled(true);
-      presentation.setVisible(true);
-      presentation.setTextValue(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
+    protected final void update(final Presentation presentation, final int toImplement, final int toOverride) {
+        if (toImplement > 0) {
+            presentation.setEnabled(true);
+            presentation.setVisible(true);
+            presentation.setTextValue(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
+        }
+        else {
+            presentation.setEnabled(false);
+            presentation.setVisible(false);
+        }
     }
-    else {
-      presentation.setEnabled(false);
-      presentation.setVisible(false);
-    }
-  }
 }

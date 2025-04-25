@@ -32,55 +32,46 @@ import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
-{
-	private final String myCurrentScopeType;
+public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure {
+    private final String myCurrentScopeType;
 
-	protected SubtypesHierarchyTreeStructure(final Project project, final HierarchyNodeDescriptor descriptor, String currentScopeType)
-	{
-		super(project, descriptor);
-		myCurrentScopeType = currentScopeType;
-	}
+    protected SubtypesHierarchyTreeStructure(final Project project, final HierarchyNodeDescriptor descriptor, String currentScopeType) {
+        super(project, descriptor);
+        myCurrentScopeType = currentScopeType;
+    }
 
-	public SubtypesHierarchyTreeStructure(Project project, PsiClass psiClass, String currentScopeType)
-	{
-		super(project, new TypeHierarchyNodeDescriptor(project, null, psiClass, true));
-		myCurrentScopeType = currentScopeType;
-	}
+    public SubtypesHierarchyTreeStructure(Project project, PsiClass psiClass, String currentScopeType) {
+        super(project, new TypeHierarchyNodeDescriptor(project, null, psiClass, true));
+        myCurrentScopeType = currentScopeType;
+    }
 
-	@Override
-	@Nonnull
-	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
-	{
-		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
-		if (!(element instanceof PsiClass))
-		{
-			return ArrayUtil.EMPTY_OBJECT_ARRAY;
-		}
-		final PsiClass psiClass = (PsiClass) element;
-		if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
-		{
-			return new Object[]{IdeLocalize.nodeHierarchyJavaLangObject().get()};
-		}
-		if (psiClass instanceof PsiAnonymousClass)
-		{
-			return ArrayUtil.EMPTY_OBJECT_ARRAY;
-		}
-		if (psiClass.hasModifierProperty(PsiModifier.FINAL))
-		{
-			return ArrayUtil.EMPTY_OBJECT_ARRAY;
-		}
-		final SearchScope searchScope = psiClass.getUseScope().intersectWith(getSearchScope(myCurrentScopeType, psiClass));
-		final List<PsiClass> classes = new ArrayList<>(ClassInheritorsSearch.search(psiClass, searchScope, false).findAll());
-		final List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(classes.size());
-		for (PsiClass aClass : classes)
-		{
-			descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aClass, false));
-		}
-		FunctionalExpressionSearch.search(psiClass, searchScope).forEach(expression -> {
-			descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, expression, false));
-			return true;
-		});
-		return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
-	}
+    @Override
+    @Nonnull
+    protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor) {
+        final Object element = ((TypeHierarchyNodeDescriptor)descriptor).getPsiClass();
+        if (!(element instanceof PsiClass)) {
+            return ArrayUtil.EMPTY_OBJECT_ARRAY;
+        }
+        final PsiClass psiClass = (PsiClass)element;
+        if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+            return new Object[]{IdeLocalize.nodeHierarchyJavaLangObject().get()};
+        }
+        if (psiClass instanceof PsiAnonymousClass) {
+            return ArrayUtil.EMPTY_OBJECT_ARRAY;
+        }
+        if (psiClass.hasModifierProperty(PsiModifier.FINAL)) {
+            return ArrayUtil.EMPTY_OBJECT_ARRAY;
+        }
+        final SearchScope searchScope = psiClass.getUseScope().intersectWith(getSearchScope(myCurrentScopeType, psiClass));
+        final List<PsiClass> classes = new ArrayList<>(ClassInheritorsSearch.search(psiClass, searchScope, false).findAll());
+        final List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(classes.size());
+        for (PsiClass aClass : classes) {
+            descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aClass, false));
+        }
+        FunctionalExpressionSearch.search(psiClass, searchScope).forEach(expression -> {
+            descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, expression, false));
+            return true;
+        });
+        return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
+    }
 }
