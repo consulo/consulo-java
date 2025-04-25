@@ -16,84 +16,74 @@
 
 /**
  * class ExportThreadsAction
+ *
  * @author Jeka
  */
 package com.intellij.java.debugger.impl.actions;
+
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
+import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.ui.ExportDialog;
+import consulo.platform.base.localize.ActionLocalize;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.SystemProperties;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.ui.ExportDialog;
-import consulo.platform.base.localize.ActionLocalize;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.Presentation;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.util.lang.SystemProperties;
-import jakarta.annotation.Nonnull;
+public class ExportThreadsAction extends AnAction {
+    @Override
+    public void actionPerformed(@Nonnull AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
+        if (project == null) {
+            return;
+        }
+        DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
 
-public class ExportThreadsAction extends AnAction implements AnAction.TransparentUpdate
-{
-	@Override
-	public void actionPerformed(@Nonnull AnActionEvent e)
-	{
-		Project project = e.getData(Project.KEY);
-		if (project == null)
-		{
-			return;
-		}
-		DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
+        if (context.getDebuggerSession() != null) {
+            String destinationDirectory = "";
+            final VirtualFile baseDir = project.getBaseDir();
+            if (baseDir != null) {
+                destinationDirectory = baseDir.getPresentableUrl();
+            }
 
-		if (context.getDebuggerSession() != null)
-		{
-			String destinationDirectory = "";
-			final VirtualFile baseDir = project.getBaseDir();
-			if (baseDir != null)
-			{
-				destinationDirectory = baseDir.getPresentableUrl();
-			}
+            ExportDialog dialog = new ExportDialog(context.getDebugProcess(), destinationDirectory);
+            dialog.show();
+            if (dialog.isOK()) {
+                try {
+                    File file = new File(dialog.getFilePath());
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                        String text = StringUtil.convertLineSeparators(dialog.getTextToSave(), SystemProperties.getLineSeparator());
+                        writer.write(text);
+                    }
+                }
+                catch (IOException ex) {
+                    Messages.showMessageDialog(project, ex.getMessage(), ActionLocalize.actionExportthreadsText().get(), UIUtil.getErrorIcon());
+                }
+            }
+        }
+    }
 
-			ExportDialog dialog = new ExportDialog(context.getDebugProcess(), destinationDirectory);
-			dialog.show();
-			if (dialog.isOK())
-			{
-				try
-				{
-					File file = new File(dialog.getFilePath());
-					try (BufferedWriter writer = new BufferedWriter(new FileWriter(file)))
-					{
-						String text = StringUtil.convertLineSeparators(dialog.getTextToSave(), SystemProperties.getLineSeparator());
-						writer.write(text);
-					}
-				}
-				catch (IOException ex)
-				{
-					Messages.showMessageDialog(project, ex.getMessage(), ActionLocalize.actionExportthreadsText().get(), UIUtil.getErrorIcon());
-				}
-			}
-		}
-	}
-
-	@Override
-	public void update(@Nonnull AnActionEvent event)
-	{
-		Presentation presentation = event.getPresentation();
-		Project project = event.getData(Project.KEY);
-		if (project == null)
-		{
-			presentation.setEnabled(false);
-			return;
-		}
-		DebuggerSession debuggerSession = (DebuggerManagerEx.getInstanceEx(project)).getContext().getDebuggerSession();
-		presentation.setEnabled(debuggerSession != null && debuggerSession.isPaused());
-	}
+    @Override
+    public void update(@Nonnull AnActionEvent event) {
+        Presentation presentation = event.getPresentation();
+        Project project = event.getData(Project.KEY);
+        if (project == null) {
+            presentation.setEnabled(false);
+            return;
+        }
+        DebuggerSession debuggerSession = (DebuggerManagerEx.getInstanceEx(project)).getContext().getDebuggerSession();
+        presentation.setEnabled(debuggerSession != null && debuggerSession.isPaused());
+    }
 }
