@@ -1486,6 +1486,8 @@ ignore.overflowing.byte.casts.option:
     text: Ignore casts from int 128-255 to byte
 ignore.parameter.if.annotated.by:
     text: Ignore parameter if it is annotated by
+ignore.parentheses.around.single.no.formal.type.lambda.parameter:
+    text: Ignore parentheses around single no formal type lambda parameter
 ignore.serializable.option:
     text: Ignore 'java.io.Serializable'
 ignore.single.field.static.imports.option:
@@ -2610,6 +2612,10 @@ optional.used.as.field.type.problem.descriptor:
     text: <code>#ref</code> used as type for field ''{0}''
 optional.used.as.parameter.type.problem.descriptor:
     text: <code>#ref</code> used as type for parameter ''{0}''
+orred.not.equal.expression.display.name:
+    text: Identical reference in '!=' expression on both sides of '||' expression
+orred.not.equal.expression.problem.descriptor:
+    text: '<code>#ref</code> is always true #loc'
 overloaded.methods.with.same.number.parameters.display.name:
     text: Overloaded methods with same number of parameters
 overloaded.methods.with.same.number.parameters.option:
@@ -3016,6 +3022,8 @@ refused.bequest.ignore.empty.super.methods.option:
     text: Ignore empty super methods
 refused.bequest.problem.descriptor:
     text: 'Method <code>#ref()</code> does not call ''super.#ref()'' #loc'
+remove.annotation.parameter.0.fix.name:
+    text: Remove annotation parameter ''{0}''
 remove.finally.block.quickfix:
     text: Remove 'finally' block
 remove.junit4.test.annotation.and.rename.quickfix:
@@ -3192,6 +3200,8 @@ serialversionuid.private.static.final.long.problem.descriptor:
     text: '<code>#ref</code> field of a Serializable class is not declared ''private static final long'' #loc'
 serialversionuid.private.static.final.long.quickfix:
     text: Make serialVersionUID 'private static final'
+set.annotation.parameter.0.1.fix.name:
+    text: Set annotation parameter {0} = "{1}"
 set.replaceable.by.enum.set.display.name:
     text: Set replaceable with EnumSet
 set.replaceable.by.enum.set.problem.descriptor:
@@ -3468,6 +3478,10 @@ string.constructor.replace.empty.quickfix:
     text: Replace with empty string
 string.constructor.substring.parameter.option:
     text: Ignore string constructor calls with a 'substring()' call argument
+string.equals.call.display.name:
+    text: Call to 'String.equals()'
+string.equals.call.problem.descriptor:
+    text: '<code>String.#ref()</code> using internationalized strings #loc'
 string.equals.empty.string.display.name:
     text: '''String.equals("")'''
 string.equals.empty.string.is.empty.problem.descriptor:
@@ -3478,6 +3492,10 @@ string.equals.empty.string.problem.descriptor:
     text: '<code>#ref("")</code> can be replaced with ''length()==0'' #loc'
 string.equals.empty.string.quickfix:
     text: Replace with 'length()==0'
+string.equalsignorecase.call.display.name:
+    text: Call to 'String.equalsIgnoreCase()'
+string.equalsignorecase.call.problem.descriptor:
+    text: '<code>String.#ref()</code> using internationalized strings #loc'
 string.format.choose.class:
     text: Choose Formatter class
 string.format.class.column.name:
@@ -3768,6 +3786,8 @@ throw.from.finally.block.problem.descriptor:
     text: '<code>#ref</code> inside ''finally'' block #loc'
 throwable.instance.never.thrown.checked.exception.problem.descriptor:
     text: 'Checked exception instance <code>#ref</code> is not thrown #loc'
+throwable.instance.never.thrown.display.name:
+    text: Throwable instance not thrown
 throwable.instance.never.thrown.error.problem.descriptor:
     text: 'Error instance <code>#ref</code> is not thrown #loc'
 throwable.instance.never.thrown.problem.descriptor:
