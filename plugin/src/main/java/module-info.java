@@ -290,7 +290,6 @@ open module consulo.java {
     exports com.intellij.java.impl.psi.impl.source.tree.java;
     exports com.intellij.java.impl.psi.infos;
     exports com.intellij.java.impl.psi.resolve;
-    exports com.intellij.java.impl.psi.search.scope.packageSet;
     exports com.intellij.java.impl.psi.search.searches;
     exports com.intellij.java.impl.psi.statistics;
     exports com.intellij.java.impl.psi.util;
