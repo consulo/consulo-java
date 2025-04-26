@@ -36,71 +36,69 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
-  private static final Logger LOG = Logger.getInstance(CallHierarchyBrowser.class);
+    private static final Logger LOG = Logger.getInstance(CallHierarchyBrowser.class);
 
-  public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
-    super(project, method);
-  }
-
-  @Override
-  protected void createTrees(@Nonnull final Map<String, JTree> type2TreeMap) {
-    ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
-    final JTree tree1 = createTree(false);
-    PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
-    final BaseOnThisMethodAction baseOnThisMethodAction = new BaseOnThisMethodAction();
-    baseOnThisMethodAction
-      .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_CALL_HIERARCHY).getShortcutSet(), tree1);
-    type2TreeMap.put(CALLEE_TYPE, tree1);
-
-    final JTree tree2 = createTree(false);
-    PopupHandler.installPopupHandler(tree2, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
-    baseOnThisMethodAction
-      .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_CALL_HIERARCHY).getShortcutSet(), tree2);
-    type2TreeMap.put(CALLER_TYPE, tree2);
-  }
-
-  @Override
-  protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
-    if (descriptor instanceof CallHierarchyNodeDescriptor) {
-      CallHierarchyNodeDescriptor nodeDescriptor = (CallHierarchyNodeDescriptor)descriptor;
-      return nodeDescriptor.getEnclosingElement();
+    public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
+        super(project, method);
     }
-    return null;
-  }
 
-  @Override
-  protected PsiElement getOpenFileElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
-    if (descriptor instanceof CallHierarchyNodeDescriptor) {
-      CallHierarchyNodeDescriptor nodeDescriptor = (CallHierarchyNodeDescriptor)descriptor;
-      return nodeDescriptor.getTargetElement();
+    @Override
+    protected void createTrees(@Nonnull Map<String, JTree> type2TreeMap) {
+        ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
+        JTree tree1 = createTree(false);
+        PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
+        BaseOnThisMethodAction baseOnThisMethodAction = new BaseOnThisMethodAction();
+        baseOnThisMethodAction
+            .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_CALL_HIERARCHY).getShortcutSet(), tree1);
+        type2TreeMap.put(CALLEE_TYPE, tree1);
+
+        JTree tree2 = createTree(false);
+        PopupHandler.installPopupHandler(tree2, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
+        baseOnThisMethodAction
+            .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_CALL_HIERARCHY).getShortcutSet(), tree2);
+        type2TreeMap.put(CALLER_TYPE, tree2);
     }
-    return null;
-  }
 
-  @Override
-  protected boolean isApplicableElement(@Nonnull final PsiElement element) {
-    return element instanceof PsiMethod;
-  }
-
-  @Override
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
-    if (CALLER_TYPE.equals(typeName)) {
-      return new CallerMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
+    @Override
+    protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+        if (descriptor instanceof CallHierarchyNodeDescriptor nodeDescriptor) {
+            return nodeDescriptor.getEnclosingElement();
+        }
+        return null;
     }
-    else if (CALLEE_TYPE.equals(typeName)) {
-      return new CalleeMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
-    }
-    else {
-      LOG.error("unexpected type: " + typeName);
-      return null;
-    }
-  }
 
-  @Override
-  protected Comparator<NodeDescriptor> getComparator() {
-    return JavaHierarchyUtil.getComparator(myProject);
-  }
+    @Override
+    protected PsiElement getOpenFileElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+        if (descriptor instanceof CallHierarchyNodeDescriptor nodeDescriptor) {
+            return nodeDescriptor.getTargetElement();
+        }
+        return null;
+    }
 
-  public static final class BaseOnThisMethodAction extends CallHierarchyBrowserBase.BaseOnThisMethodAction {
-  }
+    @Override
+    protected boolean isApplicableElement(@Nonnull PsiElement element) {
+        return element instanceof PsiMethod;
+    }
+
+    @Override
+    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
+        if (CALLER_TYPE.equals(typeName)) {
+            return new CallerMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
+        }
+        else if (CALLEE_TYPE.equals(typeName)) {
+            return new CalleeMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
+        }
+        else {
+            LOG.error("unexpected type: " + typeName);
+            return null;
+        }
+    }
+
+    @Override
+    protected Comparator<NodeDescriptor> getComparator() {
+        return JavaHierarchyUtil.getComparator(myProject);
+    }
+
+    public static final class BaseOnThisMethodAction extends CallHierarchyBrowserBase.BaseOnThisMethodAction {
+    }
 }

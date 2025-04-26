@@ -31,24 +31,20 @@ import java.util.Comparator;
  * @author yole
  */
 public class JavaHierarchyUtil {
-  private JavaHierarchyUtil() {
-  }
-
-  @Nullable
-  public static String getPackageName(final PsiClass psiClass) {
-    final PsiFile file = psiClass.getContainingFile();
-    if (file instanceof PsiClassOwner) {
-      return ((PsiClassOwner) file).getPackageName();
-    } else {
-      return null;
+    private JavaHierarchyUtil() {
     }
-  }
 
-  public static Comparator<NodeDescriptor> getComparator(Project project) {
-    if (HierarchyBrowserManager.getInstance(project).getState().SORT_ALPHABETICALLY) {
-      return AlphaComparator.INSTANCE;
-    } else {
-      return SourceComparator.INSTANCE;
+    @Nullable
+    public static String getPackageName(PsiClass psiClass) {
+        if (psiClass.getContainingFile() instanceof PsiClassOwner classOwner) {
+            return classOwner.getPackageName();
+        }
+        return null;
     }
-  }
+
+    public static Comparator<NodeDescriptor> getComparator(Project project) {
+        HierarchyBrowserManager.State state = HierarchyBrowserManager.getInstance(project).getState();
+        assert state != null;
+        return state.SORT_ALPHABETICALLY ? AlphaComparator.INSTANCE : SourceComparator.INSTANCE;
+    }
 }
