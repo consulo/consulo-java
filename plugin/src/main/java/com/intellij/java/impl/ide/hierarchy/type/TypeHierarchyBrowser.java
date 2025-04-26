@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.Map;
 
+import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.JPanel;
@@ -42,127 +43,105 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import jakarta.annotation.Nullable;
 
-public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
-{
-	private static final Logger LOG = Logger.getInstance(TypeHierarchyBrowser.class);
+public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
+    private static final Logger LOG = Logger.getInstance(TypeHierarchyBrowser.class);
 
+    public TypeHierarchyBrowser(Project project, PsiClass psiClass) {
+        super(project, psiClass);
+    }
 
-	public TypeHierarchyBrowser(final Project project, final PsiClass psiClass)
-	{
-		super(project, psiClass);
-	}
+    @Override
+    protected boolean isInterface(PsiElement psiElement) {
+        return psiElement instanceof PsiClass psiClass && psiClass.isInterface();
+    }
 
-	@Override
-	protected boolean isInterface(PsiElement psiElement)
-	{
-		return psiElement instanceof PsiClass && ((PsiClass) psiElement).isInterface();
-	}
+    @Override
+    protected void createTrees(@Nonnull Map<String, JTree> trees) {
+        createTreeAndSetupCommonActions(trees, IdeActions.GROUP_TYPE_HIERARCHY_POPUP);
+    }
 
-	@Override
-	protected void createTrees(@Nonnull Map<String, JTree> trees)
-	{
-		createTreeAndSetupCommonActions(trees, IdeActions.GROUP_TYPE_HIERARCHY_POPUP);
-	}
+    @Override
+    protected void prependActions(DefaultActionGroup actionGroup) {
+        super.prependActions(actionGroup);
+        actionGroup.add(new ChangeScopeAction() {
+            @Override
+            protected boolean isEnabled() {
+                return !Comparing.strEqual(myCurrentViewType, SUPERTYPES_HIERARCHY_TYPE);
+            }
+        });
+    }
 
-	@Override
-	protected void prependActions(DefaultActionGroup actionGroup)
-	{
-		super.prependActions(actionGroup);
-		actionGroup.add(new ChangeScopeAction()
-		{
-			@Override
-			protected boolean isEnabled()
-			{
-				return !Comparing.strEqual(myCurrentViewType, SUPERTYPES_HIERARCHY_TYPE);
-			}
-		});
-	}
+    @Override
+    @RequiredReadAction
+    protected String getContentDisplayName(@Nonnull String typeName, @Nonnull PsiElement element) {
+        return MessageFormat.format(typeName, ClassPresentationUtil.getNameForClass((PsiClass)element, false));
+    }
 
-	@Override
-	protected String getContentDisplayName(@Nonnull String typeName, @Nonnull PsiElement element)
-	{
-		return MessageFormat.format(typeName, ClassPresentationUtil.getNameForClass((PsiClass) element, false));
-	}
+    @Override
+    protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+        if (descriptor instanceof TypeHierarchyNodeDescriptor nodeDescriptor) {
+            return nodeDescriptor.getPsiClass();
+        }
+        return null;
+    }
 
-	@Override
-	protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor)
-	{
-		if(!(descriptor instanceof TypeHierarchyNodeDescriptor))
-		{
-			return null;
-		}
-		return ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
-	}
+    @Override
+    @Nullable
+    protected JPanel createLegendPanel() {
+        return null;
+    }
 
-	@Override
-	@Nullable
-	protected JPanel createLegendPanel()
-	{
-		return null;
-	}
+    @Override
+    protected boolean isApplicableElement(@Nonnull PsiElement element) {
+        return element instanceof PsiClass;
+    }
 
-	@Override
-	protected boolean isApplicableElement(@Nonnull final PsiElement element)
-	{
-		return element instanceof PsiClass;
-	}
+    @Override
+    protected Comparator<NodeDescriptor> getComparator() {
+        return JavaHierarchyUtil.getComparator(myProject);
+    }
 
-	@Override
-	protected Comparator<NodeDescriptor> getComparator()
-	{
-		return JavaHierarchyUtil.getComparator(myProject);
-	}
+    @Override
+    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
+        if (SUPERTYPES_HIERARCHY_TYPE.equals(typeName)) {
+            return new SupertypesHierarchyTreeStructure(myProject, (PsiClass)psiElement);
+        }
+        else if (SUBTYPES_HIERARCHY_TYPE.equals(typeName)) {
+            return new SubtypesHierarchyTreeStructure(myProject, (PsiClass)psiElement, getCurrentScopeType());
+        }
+        else if (TYPE_HIERARCHY_TYPE.equals(typeName)) {
+            return new TypeHierarchyTreeStructure(myProject, (PsiClass)psiElement, getCurrentScopeType());
+        }
+        else {
+            LOG.error("unexpected type: " + typeName);
+            return null;
+        }
+    }
 
-	@Override
-	protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement)
-	{
-		if(SUPERTYPES_HIERARCHY_TYPE.equals(typeName))
-		{
-			return new SupertypesHierarchyTreeStructure(myProject, (PsiClass) psiElement);
-		}
-		else if(SUBTYPES_HIERARCHY_TYPE.equals(typeName))
-		{
-			return new SubtypesHierarchyTreeStructure(myProject, (PsiClass) psiElement, getCurrentScopeType());
-		}
-		else if(TYPE_HIERARCHY_TYPE.equals(typeName))
-		{
-			return new TypeHierarchyTreeStructure(myProject, (PsiClass) psiElement, getCurrentScopeType());
-		}
-		else
-		{
-			LOG.error("unexpected type: " + typeName);
-			return null;
-		}
-	}
+    @Override
+    protected boolean canBeDeleted(PsiElement psiElement) {
+        return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
+    }
 
-	@Override
-	protected boolean canBeDeleted(final PsiElement psiElement)
-	{
-		return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
-	}
+    @Override
+    protected String getQualifiedName(PsiElement psiElement) {
+        if (psiElement instanceof PsiClass psiClass) {
+            return psiClass.getQualifiedName();
+        }
+        return "";
+    }
 
-	@Override
-	protected String getQualifiedName(final PsiElement psiElement)
-	{
-		if(psiElement instanceof PsiClass)
-		{
-			return ((PsiClass) psiElement).getQualifiedName();
-		}
-		return "";
-	}
+    public static class BaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction {
+        @Override
+        protected boolean isEnabled(@Nonnull HierarchyBrowserBaseEx browser, @Nonnull PsiElement psiElement) {
+            return super.isEnabled(browser, psiElement)
+                && !JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)psiElement).getQualifiedName());
+        }
+    }
 
-	public static class BaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction
-	{
-		protected boolean isEnabled(@Nonnull final HierarchyBrowserBaseEx browser, @Nonnull final PsiElement psiElement)
-		{
-			return super.isEnabled(browser, psiElement) && !JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) psiElement).getQualifiedName());
-		}
-	}
-
-	@Nonnull
-	@Override
-	protected TypeHierarchyBrowserBase.BaseOnThisTypeAction createBaseOnThisAction()
-	{
-		return new BaseOnThisTypeAction();
-	}
+    @Nonnull
+    @Override
+    protected TypeHierarchyBrowserBase.BaseOnThisTypeAction createBaseOnThisAction() {
+        return new BaseOnThisTypeAction();
+    }
 }

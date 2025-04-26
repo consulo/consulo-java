@@ -30,42 +30,38 @@ import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.util.collection.ArrayUtil;
 
-public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructure
-{
+public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructure {
+    public SupertypesHierarchyTreeStructure(Project project, PsiClass aClass) {
+        super(project, new TypeHierarchyNodeDescriptor(project, null, aClass, true));
+    }
 
-	public SupertypesHierarchyTreeStructure(final Project project, final PsiClass aClass)
-	{
-		super(project, new TypeHierarchyNodeDescriptor(project, null, aClass, true));
-	}
-
-	@Override
-	@Nonnull
-	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
-	{
-		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
-		if(element instanceof PsiClass)
-		{
-			final PsiClass psiClass = (PsiClass) element;
-			final PsiClass[] supers = psiClass.getSupers();
-			final List<HierarchyNodeDescriptor> descriptors = new ArrayList<HierarchyNodeDescriptor>();
-			final PsiClass objectClass = JavaPsiFacade.getInstance(myProject).findClass(JavaClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
-			for(PsiClass aSuper : supers)
-			{
-				if(!psiClass.isInterface() || !aSuper.equals(objectClass))
-				{
-					descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aSuper, false));
-				}
-			}
-			return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
-		}
-		else if(element instanceof PsiFunctionalExpression)
-		{
-			final PsiClass functionalInterfaceClass = PsiUtil.resolveClassInType(((PsiFunctionalExpression) element).getFunctionalInterfaceType());
-			if(functionalInterfaceClass != null)
-			{
-				return new HierarchyNodeDescriptor[]{new TypeHierarchyNodeDescriptor(myProject, descriptor, functionalInterfaceClass, false)};
-			}
-		}
-		return ArrayUtil.EMPTY_OBJECT_ARRAY;
-	}
+    @Override
+    @Nonnull
+    protected final Object[] buildChildren(@Nonnull HierarchyNodeDescriptor descriptor) {
+        Object element = ((TypeHierarchyNodeDescriptor)descriptor).getPsiClass();
+        if (element instanceof PsiClass psiClass) {
+            PsiClass[] supers = psiClass.getSupers();
+            List<HierarchyNodeDescriptor> descriptors = new ArrayList<>();
+            PsiClass objectClass =
+                JavaPsiFacade.getInstance(myProject).findClass(JavaClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
+            for (PsiClass aSuper : supers) {
+                if (!psiClass.isInterface() || !aSuper.equals(objectClass)) {
+                    descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aSuper, false));
+                }
+            }
+            return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
+        }
+        else if (element instanceof PsiFunctionalExpression funcExpr) {
+            PsiClass functionalInterfaceClass = PsiUtil.resolveClassInType(funcExpr.getFunctionalInterfaceType());
+            if (functionalInterfaceClass != null) {
+                return new HierarchyNodeDescriptor[]{new TypeHierarchyNodeDescriptor(
+                    myProject,
+                    descriptor,
+                    functionalInterfaceClass,
+                    false
+                )};
+            }
+        }
+        return ArrayUtil.EMPTY_OBJECT_ARRAY;
+    }
 }

@@ -19,7 +19,6 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
@@ -34,7 +33,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,75 +41,76 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
-  @RequiredReadAction
-  public PsiElement getTarget(@Nonnull final DataContext dataContext) {
-    final PsiMethod method = getMethodImpl(dataContext);
-    if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE)
-      && !method.hasModifierProperty(PsiModifier.STATIC)) {
-      return method;
-    } else {
-      return null;
-    }
-  }
-
-  @RequiredReadAction
-  @Nullable
-  private static PsiMethod getMethodImpl(final DataContext dataContext) {
-    final Project project = dataContext.getData(Project.KEY);
-    if (project == null) {
-      return null;
+    @Override
+    @RequiredReadAction
+    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+        PsiMethod method = getMethodImpl(dataContext);
+        if (method != null && method.getContainingClass() != null && !method.isPrivate() && !method.isStatic()) {
+            return method;
+        }
+        return null;
     }
 
-    PsiElement element = dataContext.getData(PsiElement.KEY);
-    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
+    @RequiredReadAction
+    @Nullable
+    private static PsiMethod getMethodImpl(DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return null;
+        }
 
-    if (method != null) {
-      return method;
+        PsiElement element = dataContext.getData(PsiElement.KEY);
+        PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
+
+        if (method != null) {
+            return method;
+        }
+
+        Editor editor = dataContext.getData(Editor.KEY);
+        if (editor == null) {
+            return null;
+        }
+
+        PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+        if (psiFile == null) {
+            return null;
+        }
+
+        PsiDocumentManager.getInstance(project).commitAllDocuments();
+
+        int offset = editor.getCaretModel().getOffset();
+        if (offset < 1) {
+            return null;
+        }
+
+        element = psiFile.findElementAt(offset);
+        if (!(element instanceof PsiWhiteSpace)) {
+            return null;
+        }
+
+        element = psiFile.findElementAt(offset - 1);
+        if (!(element instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.SEMICOLON)) {
+            return null;
+        }
+
+        return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     }
 
-    final Editor editor = dataContext.getData(Editor.KEY);
-    if (editor == null) {
-      return null;
+    @Nonnull
+    @Override
+    public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
+        return new MethodHierarchyBrowser(target.getProject(), (PsiMethod)target);
     }
 
-    final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
-    if (psiFile == null) {
-      return null;
+    @Override
+    @RequiredReadAction
+    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
+        ((MethodHierarchyBrowser)hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
     }
 
-    PsiDocumentManager.getInstance(project).commitAllDocuments();
-
-    final int offset = editor.getCaretModel().getOffset();
-    if (offset < 1) {
-      return null;
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
     }
-
-    element = psiFile.findElementAt(offset);
-    if (!(element instanceof PsiWhiteSpace)) {
-      return null;
-    }
-
-    element = psiFile.findElementAt(offset - 1);
-    if (!(element instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.SEMICOLON)) {
-      return null;
-    }
-
-    return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
-  }
-
-  @Nonnull
-  public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
-    return new MethodHierarchyBrowser(target.getProject(), (PsiMethod) target);
-  }
-
-  @RequiredReadAction
-  public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
-    ((MethodHierarchyBrowser) hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
-  }
-
-  @Nonnull
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
 }
