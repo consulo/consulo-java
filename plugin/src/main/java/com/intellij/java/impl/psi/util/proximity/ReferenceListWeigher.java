@@ -20,15 +20,14 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.module.content.ProjectFileIndex;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PlatformPatterns;
 import consulo.language.psi.PsiElement;
-import consulo.ide.impl.psi.util.ProximityLocation;
-import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
-import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.util.proximity.ProximityLocation;
+import consulo.language.util.proximity.ProximityWeigher;
+import consulo.module.content.ProjectFileIndex;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

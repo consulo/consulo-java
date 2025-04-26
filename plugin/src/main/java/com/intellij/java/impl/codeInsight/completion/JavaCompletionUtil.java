@@ -29,7 +29,6 @@ import consulo.codeEditor.action.TabOutScopesTracker;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.RangeMarker;
-import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.AutoPopupController;
@@ -51,17 +50,18 @@ import consulo.ui.style.StandardColors;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.dataholder.Key;
+import consulo.util.dataholder.NullableLazyKey;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
 import consulo.util.lang.function.PairFunction;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.impl.codeInsight.completion.ReferenceExpressionCompletionContributor.findConstantsUsedInSwitch;

@@ -16,11 +16,11 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import consulo.document.util.TextRange;
-import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessorHelper;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.FormattingDocumentModel;
+import consulo.language.codeStyle.PostFormatProcessorHelper;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;

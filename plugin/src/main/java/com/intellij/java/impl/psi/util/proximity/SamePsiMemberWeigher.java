@@ -18,14 +18,13 @@ package com.intellij.java.impl.psi.util.proximity;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.util.dataholder.NotNullLazyKey;
+import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.ide.impl.psi.util.ProximityLocation;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
-import consulo.ide.impl.idea.util.NotNullFunction;
-
+import consulo.language.util.proximity.ProximityLocation;
+import consulo.language.util.proximity.ProximityWeigher;
+import consulo.util.dataholder.NotNullLazyKey;
 import jakarta.annotation.Nonnull;
 
 /**

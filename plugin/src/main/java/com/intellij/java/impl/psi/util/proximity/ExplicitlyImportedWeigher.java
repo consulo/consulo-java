@@ -18,20 +18,20 @@ package com.intellij.java.impl.psi.util.proximity;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
-import consulo.ide.impl.psi.util.ProximityLocation;
-import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ModuleUtilCore;
+import consulo.language.util.proximity.ProximityLocation;
+import consulo.language.util.proximity.ProximityWeigher;
 import consulo.module.Module;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.NotNullLazyKey;
+import consulo.util.dataholder.NullableLazyKey;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class ExplicitlyImportedWeigher extends ProximityWeigher {
       return Collections.emptyList();
     }
 
-    List<String> importedNames = ContainerUtil.newArrayList();
+    List<String> importedNames = new ArrayList<>();
     for (PsiImportStatementBase statement : importList.getAllImportStatements()) {
       PsiJavaCodeReferenceElement reference = statement.getImportReference();
       ContainerUtil.addIfNotNull(importedNames, reference == null ? null : reference.getQualifiedName());

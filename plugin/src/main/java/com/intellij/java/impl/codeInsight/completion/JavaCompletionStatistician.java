@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.completion.CompletionLocation;
-import consulo.ide.impl.idea.codeInsight.completion.CompletionStatistician;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.completion.CompletionLocation;
+import consulo.language.editor.completion.CompletionStatistician;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.statistician.StatisticsInfo;
 import consulo.util.collection.ContainerUtil;
 
 import java.util.List;

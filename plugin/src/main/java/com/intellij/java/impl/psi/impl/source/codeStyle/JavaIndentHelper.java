@@ -24,95 +24,106 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperExtension;
-import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
 import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.IndentHelperExtension;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeUtil;
+import consulo.language.impl.psi.IndentHelper;
 import consulo.language.psi.PsiFile;
-
 import jakarta.annotation.Nonnull;
+import jakarta.inject.Inject;
 
 @ExtensionImpl
 public class JavaIndentHelper implements IndentHelperExtension {
-  @RequiredReadAction
-  @Override
-  public int getIndentInner(
-      @Nonnull PsiFile file,
-      @Nonnull final ASTNode element,
-      boolean includeNonSpace,
-      int recursionLevel) {
-    if (recursionLevel > TOO_BIG_WALK_THRESHOLD) {
-      return 0;
+    private final IndentHelper myIndentHelper;
+
+    @Inject
+    public JavaIndentHelper(IndentHelper indentHelper) {
+        myIndentHelper = indentHelper;
     }
 
-    if (element.getTreePrev() != null) {
-      ASTNode prev = element.getTreePrev();
-      while (prev instanceof CompositeElement && !TreeUtil.isStrongWhitespaceHolder(prev.getElementType())) {
-        ASTNode lastCompositePrev = prev;
-        prev = prev.getLastChildNode();
-        if (prev == null) { // element.prev is "empty composite"
-          return getIndentInner(file, lastCompositePrev, includeNonSpace, recursionLevel + 1);
+    @RequiredReadAction
+    @Override
+    public int getIndentInner(
+        @Nonnull PsiFile file,
+        @Nonnull final ASTNode element,
+        boolean includeNonSpace,
+        int recursionLevel) {
+        if (recursionLevel > TOO_BIG_WALK_THRESHOLD) {
+            return 0;
         }
-      }
 
-      String text = prev.getText();
-      int index = Math.max(text.lastIndexOf('\n'), text.lastIndexOf('\r'));
+        if (element.getTreePrev() != null) {
+            ASTNode prev = element.getTreePrev();
+            while (prev instanceof CompositeElement && !TreeUtil.isStrongWhitespaceHolder(prev.getElementType())) {
+                ASTNode lastCompositePrev = prev;
+                prev = prev.getLastChildNode();
+                if (prev == null) { // element.prev is "empty composite"
+                    return getIndentInner(file, lastCompositePrev, includeNonSpace, recursionLevel + 1);
+                }
+            }
 
-      if (index >= 0) {
-        return IndentHelperImpl.getIndent(file, text.substring(index + 1), includeNonSpace);
-      }
+            String text = prev.getText();
+            int index = Math.max(text.lastIndexOf('\n'), text.lastIndexOf('\r'));
 
-      if (includeNonSpace) {
-        return getIndentInner(file, prev, includeNonSpace, recursionLevel + 1) + IndentHelperImpl.getIndent(file, text, includeNonSpace);
-      }
+            if (index >= 0) {
+                return myIndentHelper.getIndent(file, text.substring(index + 1), includeNonSpace);
+            }
 
-      if (element.getElementType() == JavaElementType.CODE_BLOCK) {
-        ASTNode parent = element.getTreeParent();
-        if (parent.getElementType() == JavaElementType.BLOCK_STATEMENT) {
-          parent = parent.getTreeParent();
+            if (includeNonSpace) {
+                return getIndentInner(file, prev, includeNonSpace, recursionLevel + 1) + myIndentHelper.getIndent(file, text, includeNonSpace);
+            }
+
+            if (element.getElementType() == JavaElementType.CODE_BLOCK) {
+                ASTNode parent = element.getTreeParent();
+                if (parent.getElementType() == JavaElementType.BLOCK_STATEMENT) {
+                    parent = parent.getTreeParent();
+                }
+                if (parent.getElementType() != JavaElementType.CODE_BLOCK) {
+                    //Q: use some "anchor" part of parent for some elements?
+                    // e.g. for method it could be declaration start, not doc-comment
+                    return getIndentInner(file, parent, includeNonSpace, recursionLevel + 1);
+                }
+            }
+            else {
+                if (element.getElementType() == JavaTokenType.LBRACE) {
+                    return getIndentInner(file, element.getTreeParent(), includeNonSpace, recursionLevel + 1);
+                }
+            }
+            //Q: any other cases?
+
+            ASTNode parent = prev.getTreeParent();
+            ASTNode child = prev;
+            while (parent != null) {
+                if (child.getTreePrev() != null) {
+                    break;
+                }
+                child = parent;
+                parent = parent.getTreeParent();
+            }
+
+            if (parent == null) {
+                return myIndentHelper.getIndent(file, text, includeNonSpace);
+            }
+            else {
+                if (prev.getTreeParent().getElementType() == JavaElementType.LABELED_STATEMENT) {
+                    return getIndentInner(file, prev, true, recursionLevel + 1) + myIndentHelper.getIndent(file, text, true);
+                }
+                else {
+                    return getIndentInner(file, prev, includeNonSpace, recursionLevel + 1);
+                }
+            }
         }
-        if (parent.getElementType() != JavaElementType.CODE_BLOCK) {
-          //Q: use some "anchor" part of parent for some elements?
-          // e.g. for method it could be declaration start, not doc-comment
-          return getIndentInner(file, parent, includeNonSpace, recursionLevel + 1);
+        else {
+            if (element.getTreeParent() == null) {
+                return 0;
+            }
+            return getIndentInner(file, element.getTreeParent(), includeNonSpace, recursionLevel + 1);
         }
-      } else {
-        if (element.getElementType() == JavaTokenType.LBRACE) {
-          return getIndentInner(file, element.getTreeParent(), includeNonSpace, recursionLevel + 1);
-        }
-      }
-      //Q: any other cases?
-
-      ASTNode parent = prev.getTreeParent();
-      ASTNode child = prev;
-      while (parent != null) {
-        if (child.getTreePrev() != null) {
-          break;
-        }
-        child = parent;
-        parent = parent.getTreeParent();
-      }
-
-      if (parent == null) {
-        return IndentHelperImpl.getIndent(file, text, includeNonSpace);
-      } else {
-        if (prev.getTreeParent().getElementType() == JavaElementType.LABELED_STATEMENT) {
-          return getIndentInner(file, prev, true, recursionLevel + 1) + IndentHelperImpl.getIndent(file, text, true);
-        } else {
-          return getIndentInner(file, prev, includeNonSpace, recursionLevel + 1);
-        }
-      }
-    } else {
-      if (element.getTreeParent() == null) {
-        return 0;
-      }
-      return getIndentInner(file, element.getTreeParent(), includeNonSpace, recursionLevel + 1);
     }
-  }
 
-  @Override
-  public boolean isAvailable(@Nonnull PsiFile psiFile) {
-    return psiFile instanceof PsiJavaFile;
-  }
+    @Override
+    public boolean isAvailable(@Nonnull PsiFile psiFile) {
+        return psiFile instanceof PsiJavaFile;
+    }
 }

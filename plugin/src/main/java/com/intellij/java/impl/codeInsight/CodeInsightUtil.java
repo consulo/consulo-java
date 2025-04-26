@@ -31,7 +31,6 @@ import consulo.application.util.query.Query;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
 import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
@@ -43,14 +42,15 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.proximity.PsiProximityComparator;
 import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBTreeTraverser;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.function.Consumer;
 
