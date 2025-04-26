@@ -71,8 +71,6 @@
 		</action>
 
 		<group id="AnalyzeJavaMenu">
-			<action id="ShowPackageCycles" class="com.intellij.java.impl.cyclicDependencies.actions.CyclicDependenciesAction"/>
-			<separator/>
 			<action id="SliceBackward" class="com.intellij.java.impl.slicer.SliceBackwardAction"/>
 			<action id="SliceForward" class="com.intellij.java.impl.slicer.SliceForwardAction"/>
 			<add-to-group group-id="AnalyzeMenu" anchor="last"/>

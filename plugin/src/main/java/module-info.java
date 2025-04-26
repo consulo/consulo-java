@@ -118,9 +118,6 @@ open module consulo.java {
     exports com.intellij.java.impl.codeInspection.visibility;
     exports com.intellij.java.impl.codeInspection.wrongPackageStatement;
     exports com.intellij.java.impl.copyright.psi;
-    exports com.intellij.java.impl.cyclicDependencies;
-    exports com.intellij.java.impl.cyclicDependencies.actions;
-    exports com.intellij.java.impl.cyclicDependencies.ui;
     exports com.intellij.java.impl.debugger.codeinsight;
     exports com.intellij.java.impl.find.findUsages;
     exports com.intellij.java.impl.generate.config;
@@ -254,8 +251,6 @@ open module consulo.java {
     exports com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
     exports com.intellij.java.impl.openapi.vcs.contentAnnotation;
     exports com.intellij.java.impl.openapi.vfs.impl.jrt;
-    exports com.intellij.java.impl.packageDependencies;
-    exports com.intellij.java.impl.packageDependencies.ui;
     exports com.intellij.java.impl.profile.codeInspection.ui;
     exports com.intellij.java.impl.psi;
     exports com.intellij.java.impl.psi.codeStyle;

@@ -39,7 +39,6 @@ import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
 import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.ui.DependenciesPanel;
-import com.intellij.java.impl.packageDependencies.ui.PackagePatternProvider;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiDirectory;
