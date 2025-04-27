@@ -125,7 +125,7 @@ extract.delegate.generate.accessors.checkbox:
 extract.delegate.unable.create.warning.message:
     text: Unable to create class with the given name
 extracted.class.command.name:
-    text: Extracted class {0}
+    text: Extracted Class {0}
 extracted.class.should.have.unique.name:
     text: Extracted class should have unique name. Name ''{0}'' is already in use by one of the inner classes
 extracting.from.class:
@@ -375,7 +375,7 @@ search.for.class.family.name:
 search.for.class.text:
     text: Search for class
 select.wrapper.class:
-    text: Select parameter class
+    text: Select Parameter Class
 source.column.header:
     text: Source
 split.loop.family.name:
@@ -414,8 +414,6 @@ the.caret.should.be.positioned.in.the.class.to.add.to.property.to:
     text: The caret should be positioned in the class to add to property to.
 the.caret.should.be.positioned.within.a.class.to.be.refactored:
     text: The caret should be positioned within a class to be refactored.
-the.refactor.j.license.entered.is.for.another.product:
-    text: "The Refactor-J license entered is for another product. \n"
 the.refactoring.is.not.supported.on.non.static.inner.classes:
     text: The refactoring is not supported on non-static inner classes.
 the.selected.class.has.no.members.to.extract:
@@ -423,9 +421,9 @@ the.selected.class.has.no.members.to.extract:
 the.selected.class.has.no.overridden.methods.with.javadoc:
     text: The selected class has no overriden methods with javadoc.
 the.selected.class.is.an.annotation.type:
-    text: The selected class is an annotation type.
+    text: The selected class is an annotation interface.
 the.selected.class.is.an.enumeration:
-    text: The selected class is an enumeration.
+    text: The selected class is an enum class.
 the.selected.class.is.an.interface:
     text: The selected class is an interface.
 the.selected.method.cannot.be.wrapped.because.it.is.defined.in.a.non.project.class:
