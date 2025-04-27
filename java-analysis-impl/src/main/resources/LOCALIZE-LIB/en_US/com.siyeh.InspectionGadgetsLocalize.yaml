@@ -5,7 +5,7 @@
 0.will.no.longer.be.visible.from.overriding.1:
     text: '{0} will no longer be visible from overriding {1}'
 absolute.alignment.in.user.interface.display.name:
-    text: Absolute alignment used in AWT/Swing code
+    text: Absolute alignment in AWT/Swing code
 absolute.alignment.in.user.interface.problem.descriptor:
     text: 'Absolute alignment constant <code>{0}.#ref</code> used #loc'
 absolute.alignment.in.user.interface.quickfix:
@@ -23,11 +23,11 @@ abstract.class.never.implemented.display.name:
 abstract.class.never.implemented.problem.descriptor:
     text: 'Abstract class <code>#ref</code> has no concrete subclass #loc'
 abstract.class.with.only.one.direct.inheritor.display.name:
-    text: Abstract class which has only one direct inheritor
+    text: Abstract class with a single direct inheritor
 abstract.class.with.only.one.direct.inheritor.problem.descriptor:
     text: 'Abstract class <code>#ref</code> has only one direct inheritor #loc'
 abstract.class.without.abstract.methods.display.name:
-    text: Abstract class without abstract methods
+    text: Abstract class without 'abstract' methods
 abstract.class.without.abstract.methods.problem.descriptor:
     text: 'Class <code>#ref</code> is declared ''abstract'', and has no ''abstract'' methods #loc'
 abstract.method.call.in.constructor.display.name:
@@ -53,21 +53,21 @@ abstract.method.with.missing.implementations.display.name:
 abstract.method.with.missing.implementations.problem.descriptor:
     text: 'Abstract method <code>#ref()</code> is not implemented in every subclass #loc'
 access.to.non.thread.safe.static.field.from.instance.class.chooser.title:
-    text: Choose non thread-safe class
+    text: Choose Non-Thread-Safe Class
 access.to.non.thread.safe.static.field.from.instance.display.name:
-    text: Non thread-safe static field access
+    text: Non-thread-safe 'static' field access
 access.to.non.thread.safe.static.field.from.instance.field.problem.descriptor:
-    text: 'Access to non thread-safe static field <code>#ref</code> of type ''''{0}'''' #loc'
+    text: 'Access to non-thread-safe static field <code>#ref</code> of type ''''{0}'''' #loc'
 access.to.non.thread.safe.static.field.from.instance.option.title:
-    text: Non thread-safe classes
+    text: Non-thread-safe classes
 access.to.static.field.locked.on.instance.display.name:
-    text: Access to static field locked on instance data
+    text: Access to 'static' field locked on instance data
 access.to.static.field.locked.on.instance.problem.descriptor:
     text: 'Access to static field <code>#ref</code> locked on instance data #loc'
 accessing.non.public.field.of.another.object.display.name:
     text: Accessing a non-public field of another object
 accessing.non.public.field.of.another.object.problem.descriptor:
-    text: 'Direct access of non-public field <code>#ref</code> on another object #loc'
+    text: 'Direct access to non-public field <code>#ref</code> of another object #loc'
 add.0.to.ignore.if.annotated.by.list.quickfix:
     text: Add ''{0}'' to ''Ignore if annotated by'' list
 add.serialversionuidfield.quickfix:
@@ -79,7 +79,7 @@ all.levels.option:
 allow.resource.to.be.opened.inside.a.try.block:
     text: Allow resource to be opened inside a 'try' block
 ambiguous.field.access.display.name:
-    text: Access of inherited field looks like access of element in surrounding code
+    text: Access to inherited field looks like access to element from surrounding code
 ambiguous.field.access.hides.field.problem.descriptor:
     text: 'Access of field <code>#ref</code> from superclass ''''{0}'''' looks like access of field from surrounding class #loc'
 ambiguous.field.access.hides.local.variable.problem.descriptor:
@@ -95,15 +95,15 @@ ambiguous.method.call.problem.descriptor:
 ambiguous.method.call.quickfix:
     text: Add 'super' qualifier to method call
 annotation.class.display.name:
-    text: Annotation class
+    text: Annotation interface
 annotation.class.problem.descriptor:
-    text: 'Annotation class <code>#ref</code> #loc'
+    text: 'Annotation interface <code>#ref</code> #loc'
 annotation.display.name:
     text: Annotation
 annotation.naming.convention.display.name:
     text: Annotation naming convention
 annotation.naming.convention.element.description:
-    text: Annotation
+    text: Annotation interface
 annotation.problem.descriptor:
     text: 'Annotation <code>#ref</code> #loc'
 anonymous.class.field.hides.containing.method.variable.problem.descriptor:
@@ -121,13 +121,13 @@ anonymous.extends.thread.problem.descriptor:
 anonymous.extends.throwable.problem.descriptor:
     text: 'Anonymous class directly extends ''java.lang.Throwable'' #loc'
 anonymous.inner.class.display.name:
-    text: Anonymous inner class
+    text: Anonymous class can be replaced with inner class
 anonymous.inner.class.problem.descriptor:
-    text: 'Anonymous inner class <code>#ref</code> #loc'
+    text: 'Anonymous class <code>#ref</code> #loc'
 anonymous.inner.class.with.too.many.methods.display.name:
-    text: Anonymous inner class with too many methods
+    text: Anonymous class with too many methods
 anonymous.inner.class.with.too.many.methods.problem.descriptor:
-    text: 'Anonymous inner class with too many methods (method count = {0}) #loc'
+    text: 'Anonymous class with too many methods (method count = {0}) #loc'
 anonymous.inner.may.be.named.static.inner.class.display.name:
     text: Anonymous class may be a named 'static' inner class
 anonymous.inner.may.be.named.static.inner.class.problem.descriptor:
@@ -165,11 +165,11 @@ array.objects.equals.display.name:
 array.objects.equals.problem.descriptor:
     text: '<code>Objects.#ref()</code> on arrays should probably be ''Arrays.equals()'' #loc'
 arrays.as.list.with.one.argument.problem.descriptor:
-    text: 'Call to <code>#ref</code> with only one argument #loc'
+    text: 'Call to <code>#ref()</code> with only one argument #loc'
 arrays.as.list.with.one.argument.quickfix:
     text: Replace with call to 'Collections.singletonList()'
 arrays.as.list.with.zero.arguments.problem.descriptor:
-    text: 'Call to <code>#ref</code> with zero arguments #loc'
+    text: 'Call to <code>#ref()</code> to create an empty List #loc'
 arrays.as.list.with.zero.arguments.quickfix:
     text: Replace with call to 'Collections.emptyList()'
 arrays.as.list.with.zero.or.one.argument.display.name:
@@ -183,7 +183,7 @@ assert.can.be.if.quickfix:
 assert.keyword.is.considered.an.assertion:
     text: '''assert'' keyword is considered an assertion'
 assert.message.not.string.display.name:
-    text: '''assert'' message is not a String'
+    text: '''assert'' message is not a string'
 assert.message.not.string.only.warn.boolean.option:
     text: Only warn when 'assert' message is 'boolean' or 'java.lang.Boolean'
 assert.message.of.type.boolean.problem.descriptor:
@@ -207,9 +207,9 @@ assertequals.may.be.assertsame.display.name:
 assertequals.may.be.assertsame.problem.descriptor:
     text: '<code>#ref()</code> may be ''assertSame()'' #loc'
 assertion.can.be.if.name:
-    text: Assertion can be replaced with if statement
+    text: Assertion can be replaced with 'if' statement
 asserts.without.messages.display.name:
-    text: Message missing on JUnit assertion
+    text: Message missing on assertion
 asserts.without.messages.problem.descriptor:
     text: 'JUnit <code>#ref()</code> without message #loc'
 assignment.collection.array.field.from.parameter.display.name:
@@ -221,17 +221,17 @@ assignment.collection.array.field.from.parameter.problem.descriptor.collection:
 assignment.collection.array.field.option:
     text: Ignore assignments in 'private' methods
 assignment.replaceable.with.operator.assignment.display.name:
-    text: Assignment replaceable with operator assignment
+    text: Assignment can be replaced with operator assignment
 assignment.replaceable.with.operator.assignment.ignore.conditional.operators.option:
     text: Ignore conditional operators
 assignment.replaceable.with.operator.assignment.ignore.obscure.operators.option:
     text: Ignore the obscure ^ and % operators
 assignment.replaceable.with.operator.assignment.problem.descriptor:
-    text: '<code>#ref</code> could be simplified to ''''{0}'''' #loc'
+    text: '<code>#ref</code> can be simplified to ''''{0}'''' #loc'
 assignment.replaceable.with.operator.replace.quickfix:
     text: Replace ''='' with ''{0}=''
 assignment.to.catch.block.parameter.display.name:
-    text: Assignment to catch block parameter
+    text: Assignment to 'catch' block parameter
 assignment.to.catch.block.parameter.problem.descriptor:
     text: 'Assignment to ''catch'' block parameter <code>#ref</code> #loc'
 assignment.to.date.calendar.field.from.parameter.display.name:
@@ -239,7 +239,7 @@ assignment.to.date.calendar.field.from.parameter.display.name:
 assignment.to.date.calendar.field.from.parameter.problem.descriptor:
     text: 'Assignment to ''''{0}'''' field <code>#ref</code> from parameter {1} #loc'
 assignment.to.for.loop.parameter.check.foreach.option:
-    text: Check foreach parameters
+    text: Check enhanced 'for' loop parameters
 assignment.to.for.loop.parameter.display.name:
     text: Assignment to 'for' loop parameter
 assignment.to.for.loop.parameter.problem.descriptor:
@@ -271,13 +271,13 @@ assignment.to.superclass.field.problem.descriptor:
 assignment.used.as.condition.display.name:
     text: Assignment used as condition
 assignment.used.as.condition.problem.descriptor:
-    text: '<code>#ref</code> used as condition #loc'
+    text: 'Assignment <code>#ref</code> used as condition #loc'
 assignment.used.as.condition.replace.quickfix:
     text: Replace '=' with '=='
 atomic.field.updater.issues.display.name:
-    text: AtomicFieldUpdater issues
+    text: Inconsistent 'AtomicFieldUpdater' declaration
 atomic.field.updater.not.static.final.display.name:
-    text: AtomicFieldUpdater field not declared 'static final'
+    text: "'AtomicFieldUpdater' field not declared 'static final'"
 atomic.field.updater.not.static.final.problem.descriptor:
     text: '{0} field <code>#ref</code> is not declared ''''static final'''' #loc'
 auto.boxing.display.name:
@@ -303,15 +303,15 @@ auto.unboxing.make.unboxing.explicit.quickfix:
 auto.unboxing.problem.descriptor:
     text: 'Auto-unboxing <code>#ref</code> #loc'
 await.not.in.loop.display.name:
-    text: '''await()'' not in loop'
+    text: "'await()' not called in loop"
 await.not.in.loop.problem.descriptor:
-    text: 'Call to <code>#ref()</code> is not made in a loop #loc'
+    text: 'Call to <code>#ref()</code> is not in loop #loc'
 await.without.corresponding.signal.display.name:
     text: '''await()'' without corresponding ''signal()'''
 await.without.corresponding.signal.problem.descriptor:
-    text: 'Call to <code>#ref</code> without corresponding <code>signal()</code> or <code>signalAll()</code> #loc'
+    text: 'Call to <code>#ref()</code> without corresponding <code>signal()</code> or <code>signalAll()</code> #loc'
 bad.exception.caught.display.name:
-    text: Prohibited exception caught
+    text: Prohibited 'Exception' caught
 bad.exception.caught.problem.descriptor:
     text: 'Prohibited exception <code>#ref</code> caught #loc'
 bad.exception.declared.display.name:
@@ -323,7 +323,7 @@ bad.exception.thrown.display.name:
 bad.exception.thrown.problem.descriptor:
     text: 'Prohibited exception ''''{0}'''' thrown #loc'
 bad.oddness.display.name:
-    text: Suspicious test for oddness
+    text: Suspicious oddness check
 bad.oddness.problem.descriptor:
     text: 'Test for oddness <code>#ref</code> will fail on negative values #loc'
 before.class.or.after.class.is.public.static.void.no.arg.display.name:
@@ -335,7 +335,7 @@ before.or.after.is.public.void.no.arg.display.name:
 before.or.after.is.public.void.no.arg.problem.descriptor:
     text: '<code>#ref()</code> has incorrect signature for a @Before or @After method #loc'
 big.decimal.equals.display.name:
-    text: '''equals()'' called on ''java.math.BigDecimal'''
+    text: '''equals()'' called on ''BigDecimal'''
 big.decimal.equals.problem.descriptor:
     text: '<code>#ref()</code> between BigDecimal values should probably be ''compareTo()'' #loc'
 big.decimal.equals.replace.quickfix:
@@ -359,7 +359,7 @@ boolean.constructor.simplify.quickfix:
 boolean.expression.can.be.simplified.problem.descriptor:
     text: '<code>#ref</code> can be simplified to ''''{0}'''' #loc'
 boolean.expression.may.be.conditional.display.name:
-    text: Boolean expression could be replaced with conditional expression
+    text: Boolean expression can be replaced with conditional expression
 boolean.field.always.inverted.problem.descriptor:
     text: 'Boolean field <code>#ref</code> is always inverted #loc'
 boolean.method.name.must.start.with.question.display.name:
@@ -417,17 +417,17 @@ call.to.date.tostring.display.name:
 call.to.date.tostring.problem.descriptor:
     text: '<code>Date.#ref()</code> used in an internationalized context #loc'
 call.to.native.method.while.locked.display.name:
-    text: Call to a native method while locked
+    text: Call to a 'native' method while locked
 call.to.native.method.while.locked.problem.descriptor:
     text: 'Call to native method <code>#ref()</code> in a synchronized context #loc'
 call.to.numeric.tostring.display.name:
-    text: Call to Numeric 'toString()'
+    text: Call to 'Number.toString()'
 call.to.numeric.tostring.problem.descriptor:
-    text: 'Numeric <code>#ref()</code> called in an internationalized context #loc'
+    text: '<code>Number.#ref()</code> called in an internationalized context #loc'
 call.to.private.setter.in.class.option:
     text: Only report when setter is 'private'
 call.to.private.simple.getter.in.class.option:
-    text: Only report getter is 'private'
+    text: Only report when getter is 'private'
 call.to.simple.getter.in.class.display.name:
     text: Call to simple getter from within class
 call.to.simple.getter.in.class.ignore.option:
@@ -451,7 +451,7 @@ call.to.string.concat.can.be.replaced.by.operator.problem.descriptor:
 call.to.string.concat.can.be.replaced.by.operator.quickfix:
     text: Replace 'concat()' call with '+'
 call.to.suspicious.string.method.display.name:
-    text: Call to suspicious String method
+    text: Call to suspicious 'String' method
 call.to.suspicious.string.method.problem.descriptor:
     text: '<code>String.#ref()</code> called in internationalized context #loc'
 cast.conflicts.with.instanceof.display.name:
@@ -479,7 +479,7 @@ cast.to.concrete.class.option:
 cast.to.concrete.class.problem.descriptor:
     text: 'Cast to concrete class <code>{0}</code> #loc'
 casting.to.incompatible.interface.display.name:
-    text: Casting to incompatible interface
+    text: Cast to incompatible type
 casting.to.incompatible.interface.problem.descriptor:
     text: 'Cast to incompatible interface <code>#ref</code> #loc'
 caught.exception.immediately.rethrown.display.name:
@@ -507,11 +507,11 @@ chained.method.call.problem.descriptor:
 change.modifier.quickfix:
     text: Make ''{0}''
 channel.opened.not.closed.display.name:
-    text: Channel opened but not safely closed
+    text: "'Channel' opened but not safely closed"
 char.used.in.arithmetic.context.cast.quickfix:
     text: Insert cast to {0}
 char.used.in.arithmetic.context.display.name:
-    text: Char expression used in arithmetic context
+    text: "'char' expression used in arithmetic context"
 char.used.in.arithmetic.context.problem.descriptor:
     text: '''char'' <code>#ref</code> used in arithmetic context #loc'
 char.used.in.arithmetic.context.quickfix:
@@ -525,31 +525,31 @@ checked.exception.class.display.name:
 checked.exception.class.problem.descriptor:
     text: 'Checked exception class <code>#ref</code> #loc'
 choose.autocloseable.type.to.ignore.title:
-    text: Choose AutoCloseable resource type to ignore
+    text: Choose AutoCloseable Resource Type to Ignore
 choose.class:
-    text: Choose class
+    text: Choose Class
 choose.class.type.to.ignore:
-    text: Choose class type to ignore
+    text: Choose Class to Ignore
 choose.exception.class:
-    text: Choose Exception class
+    text: Choose Exception Class
 choose.io.resource.type.to.ignore:
-    text: Choose I/O resource type to ignore
+    text: Choose I/O Resource Type to Ignore
 choose.logger.class:
-    text: Choose logger class
+    text: Choose Logger Class
 choose.super.class.to.ignore:
     text: Choose class
 class.escapes.defined.scope.display.module.option:
-    text: Module's API exposes not exported classes (Java 9+)
+    text: Report non-exported classes exposed in module API (Java 9+)
 class.escapes.defined.scope.display.name:
-    text: Non-accessible class is exposed
+    text: Class is exposed outside of its visibility scope
 class.escapes.defined.scope.display.package.option:
-    text: Package-local API exposes private classes
+    text: Report private classes exposed in package-local API
 class.escapes.defined.scope.display.public.option:
-    text: Public API exposes non-accessible classes
+    text: Report non-accessible classes exposed in public API
 class.escapes.defined.scope.java9.modules.descriptor:
     text: Class <code>#ref</code> is not exported from module ''{0}''
 class.escapes.defined.scope.problem.descriptor:
-    text: 'Class <code>#ref</code> is exposed outside its defined scope #loc'
+    text: 'Class <code>#ref</code> is exposed outside its defined visibility scope #loc'
 class.extends.utility.class.display.name:
     text: Class extends utility class
 class.extends.utility.class.ignore.utility.class.option:
@@ -573,19 +573,19 @@ class.initializer.option:
 class.initializer.problem.descriptor:
     text: 'Non-''static'' initializer #loc'
 class.loader.instantiation.display.name:
-    text: ClassLoader instantiation
+    text: "'ClassLoader' instantiation"
 class.loader.instantiation.problem.descriptor:
     text: 'Instantiation of <code>#ref</code> may pose security concerns #loc'
 class.may.be.interface.convert.quickfix:
     text: Convert class to interface
 class.may.be.interface.display.name:
-    text: Abstract class may be interface
+    text: Abstract 'class' may be 'interface'
 class.may.be.interface.java8.option:
     text: Report classes containing non-abstract methods when using Java 8
 class.may.be.interface.problem.descriptor:
     text: 'Abstract class <code>#ref</code> may be interface #loc'
 class.name:
-    text: Class name
+    text: Class Name
 class.name.differs.from.file.name.display.name:
     text: Class name differs from file name
 class.name.differs.from.file.name.problem.descriptor:
@@ -671,7 +671,7 @@ class.without.no.arg.constructor.display.name:
 class.without.no.arg.constructor.ignore.option:
     text: Ignore if class has default constructor
 class.without.no.arg.constructor.problem.descriptor:
-    text: '<code>#ref</code> has no no-arg constructor #loc'
+    text: 'Class <code>#ref</code> is missing a no-arg constructor #loc'
 class.without.tostring.display.name:
     text: Class without 'toString()'
 class.without.tostring.problem.descriptor:
@@ -681,7 +681,7 @@ clone.doesnt.call.super.clone.display.name:
 clone.doesnt.call.super.clone.problem.descriptor:
     text: '<code>#ref()</code> does not call ''super.clone()'' #loc'
 clone.doesnt.declare.clonenotsupportedexception.declare.quickfix:
-    text: Declare 'CloneNotSupportedException'
+    text: Add 'CloneNotSupportedException' to throws clause
 clone.doesnt.declare.clonenotsupportedexception.display.name:
     text: '''clone()'' does not declare ''CloneNotSupportedException'''
 clone.doesnt.declare.clonenotsupportedexception.problem.descriptor:
@@ -709,15 +709,15 @@ cloneable.class.in.secure.context.display.name:
 cloneable.class.in.secure.context.problem.descriptor:
     text: 'Class <code>#ref</code> may be cloned, compromising security #loc'
 cloneable.class.without.clone.display.name:
-    text: Cloneable class without 'clone()'
+    text: Cloneable class without 'clone()' method
 cloneable.class.without.clone.ignore.option:
     text: Ignore classes cloneable due to inheritance
 cloneable.class.without.clone.problem.descriptor:
-    text: '<code>#ref</code> does not define ''clone()'' #loc'
+    text: '<code>#ref</code> is ''Cloneable'' but does not define ''clone()'' method #loc'
 cloneable.class.without.clone.quickfix:
     text: Generate 'clone()' method
 collection.added.to.self.display.name:
-    text: Collection added to self
+    text: Collection added to itself
 collection.added.to.self.problem.descriptor:
     text: '''''{0}()'''' called on collection <code>#ref</code> with itself as argument #loc'
 collection.contains.url.display.name:
@@ -733,9 +733,9 @@ collection.declared.by.class.ignore.private.members.option:
 collection.declared.by.class.problem.descriptor:
     text: 'Declaration of <code>#ref</code> should probably be weakened to ''''{0}'''' #loc'
 collections.field.access.replaceable.by.method.call.display.name:
-    text: Collections.EMPTY_* field access replaceable with 'Collections.empty*()' method call
+    text: Reference to empty collection field can be replaced with method call
 collections.field.access.replaceable.by.method.call.problem.descriptor:
-    text: '<code>#ref</code> replaceable with ''''Collections.{0}'''' #loc'
+    text: "<code>#ref</code> can be replaced with ''Collections.{0}'' #loc"
 collections.field.access.replaceable.by.method.call.quickfix:
     text: Replace with ''{0}''
 collections.must.have.initial.capacity.display.name:
@@ -743,11 +743,11 @@ collections.must.have.initial.capacity.display.name:
 collections.must.have.initial.capacity.problem.descriptor:
     text: '<code>new #ref()</code> without initial capacity #loc'
 comparable.implemented.but.equals.not.overridden.display.name:
-    text: Comparable implemented but 'equals()' not overridden
+    text: '''Comparable'' implemented but ''equals()'' not overridden'
 comparable.implemented.but.equals.not.overridden.problem.descriptor:
     text: 'Class <code>#ref</code> implements ''java.lang.Comparable'' but does not override ''equals()'' #loc'
 comparator.not.serializable.display.name:
-    text: Comparator class not declared Serializable
+    text: "'Comparator' class not declared 'Serializable'"
 comparator.not.serializable.problem.descriptor:
     text: 'Comparator class <code>#ref</code> is not declared as Serializable #loc'
 comparison.of.short.and.char.display.name:
@@ -755,7 +755,7 @@ comparison.of.short.and.char.display.name:
 comparison.of.short.and.char.problem.descriptor:
     text: 'Equality comparison <code>#ref</code> of short and char values #loc'
 comparison.to.nan.display.name:
-    text: Comparison to Double.NaN or Float.NaN
+    text: Comparison to 'Double.NaN' or 'Float.NaN'
 comparison.to.nan.problem.descriptor1:
     text: 'Comparison to <code>#ref</code> is always false #loc'
 comparison.to.nan.problem.descriptor2:
@@ -799,23 +799,23 @@ confusing.floating.point.literal.change.quickfix:
 confusing.floating.point.literal.display.name:
     text: Confusing floating-point literal
 confusing.floating.point.literal.option:
-    text: Ignore floating point literals in scientific notation
+    text: Ignore floating-point literals in scientific notation
 confusing.floating.point.literal.problem.descriptor:
-    text: 'Confusing floating point literal <code>#ref</code> #loc'
+    text: 'Confusing floating-point literal <code>#ref</code> #loc'
 confusing.main.method.display.name:
     text: Confusing 'main()' method
 confusing.main.method.problem.descriptor:
-    text: 'Method named <code>#ref</code> without signature ''public static void main(String[])'' #loc'
+    text: 'Method <code>#ref()</code> does not have signature ''public static void main(String[])'' #loc'
 confusing.octal.escape.sequence.display.name:
     text: Confusing octal escape sequence
 confusing.octal.escape.sequence.problem.descriptor:
-    text: 'Octal escape sequence <code>#ref</code> immediately followed by digit #loc'
+    text: 'Octal escape sequence <code>#ref</code> immediately followed by a digit #loc'
 connection.opened.not.safely.closed.display.name:
     text: Connection opened but not safely closed
 consider.static.final.fields.constant.option:
     text: Consider 'static final' fields constant
 constant.assert.condition.display.name:
-    text: '''assert'' statement condition is constant'
+    text: Constant condition in 'assert' statement
 constant.assert.condition.problem.descriptor:
     text: 'Assert condition <code>#ref</code> is constant #loc'
 constant.conditional.expression.display.name:
@@ -825,7 +825,7 @@ constant.conditional.expression.problem.descriptor:
 constant.conditional.expression.simplify.quickfix:
     text: Simplify
 constant.declared.in.abstract.class.display.name:
-    text: Constant declared in abstract class
+    text: Constant declared in 'abstract' class
 constant.declared.in.abstract.class.problem.descriptor:
     text: 'Constant <code>#ref</code> declared in abstract class #loc'
 constant.declared.in.interface.display.name:
@@ -843,11 +843,11 @@ constant.if.statement.display.name:
 constant.if.statement.problem.descriptor:
     text: '<code>#ref</code> statement can be simplified #loc'
 constant.junit.assert.argument.display.name:
-    text: Constant JUnit assert argument
+    text: Constant assert argument
 constant.junit.assert.argument.problem.descriptor:
     text: 'Argument <code>#ref</code> is constant #loc'
 constant.math.call.display.name:
-    text: Constant call to 'java.lang.Math'
+    text: Constant call to 'Math'
 constant.math.call.problem.descriptor:
     text: 'Constant call to <code>#ref()</code> can be simplified #loc'
 constant.naming.convention.display.name:
@@ -859,11 +859,11 @@ constant.naming.convention.immutables.option:
 constant.on.lhs.of.comparison.display.name:
     text: Constant on left side of comparison
 constant.on.lhs.of.comparison.problem.descriptor:
-    text: '<code>#ref</code>: constant on left side of comparison #loc'
+    text: 'Constant <code>#ref</code> on the left side of the comparison #loc'
 constant.on.rhs.of.comparison.display.name:
     text: Constant on right side of comparison
 constant.on.rhs.of.comparison.problem.descriptor:
-    text: '<code>#ref</code>: constant on right side of comparison #loc'
+    text: 'Constant <code>#ref</code> on the right side of the comparison #loc'
 constant.string.intern.display.name:
     text: Call to 'intern()' on String constant
 constant.string.intern.problem.descriptor:
@@ -909,11 +909,11 @@ cstyle.array.method.declaration.problem.descriptor:
 cstyle.array.variable.declaration.problem.descriptor:
     text: 'C-style array declaration of {0, choice, 1#field|2#parameter|3#local variable} <code>#ref</code> #loc'
 custom.classloader.display.name:
-    text: Custom ClassLoader
+    text: Custom 'ClassLoader' is declared
 custom.classloader.problem.descriptor:
     text: 'Custom ClassLoader class <code>#ref</code> #loc'
 custom.security.manager.display.name:
-    text: Custom SecurityManager
+    text: Custom 'SecurityManager'
 custom.security.manager.problem.descriptor:
     text: 'Custom SecurityManager class <code>#ref</code> #loc'
 cyclic.class.dependency.1.problem.descriptor:
@@ -955,7 +955,7 @@ debug.level.and.lower.option:
 declare.collection.as.interface.quickfix:
     text: Weaken to ''{0}''
 default.not.last.case.in.switch.display.name:
-    text: '''default'' not last case in ''switch'' statement'
+    text: '''default'' not last case in ''switch'''
 default.not.last.case.in.switch.problem.descriptor:
     text: '<code>#ref</code> branch not last case in ''switch'' statement #loc'
 default.tostring.call.display.name:
@@ -983,7 +983,7 @@ disjoint.package.display.name:
 disjoint.package.problem.descriptor:
     text: Package {0} can be decomposed into {1} independent packages
 divide.by.zero.display.name:
-    text: Divide by zero
+    text: Division by zero
 divide.by.zero.problem.descriptor:
     text: 'Division by zero #loc'
 dollar.sign.in.name.display.name:
@@ -1003,7 +1003,7 @@ double.checked.locking.problem.descriptor:
 double.checked.locking.quickfix:
     text: Make ''{0}'' volatile
 double.literal.may.be.float.literal.display.name:
-    text: '''double'' literal cast to ''float'' could be ''float'' literal'
+    text: Cast to 'float' can be 'float' literal
 double.literal.may.be.float.literal.problem.descriptor:
     text: '<code>#ref</code> could be replaced with ''''{0}'''' #loc'
 double.literal.may.be.float.literal.quickfix:
@@ -1015,7 +1015,7 @@ double.negation.problem.descriptor:
 double.negation.quickfix:
     text: Remove double negation
 drivermanager.call.display.name:
-    text: Use of DriverManager to get JDBC connection
+    text: Use of 'DriverManager' to get JDBC connection
 drivermanager.call.problem.descriptor:
     text: 'Call to <code>DriverManager.#ref()</code> #loc'
 dumpstack.call.display.name:
@@ -1029,13 +1029,13 @@ duplicate.boolean.branch.problem.descriptor:
 duplicate.condition.display.name:
     text: Duplicate condition in 'if' statement
 duplicate.condition.ignore.method.calls.option:
-    text: Ignore conditions with side effects
+    text: Ignore conditions with possible side effects
 duplicate.condition.problem.descriptor:
     text: 'Duplicate condition <code>#ref</code> #loc'
 dynamic.regex.replaceable.by.compiled.pattern.display.name:
-    text: Dynamic regular expression could be replaced by compiled Pattern
+    text: Dynamic regular expression can be replaced by compiled 'Pattern'
 dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor:
-    text: '<code>#ref()</code> could be replaced with compiled ''java.util.regex.Pattern'' construct #loc'
+    text: '<code>#ref()</code> can be replaced with compiled ''java.util.regex.Pattern'' construct #loc'
 dynamic.regex.replaceable.by.compiled.pattern.quickfix:
     text: Replace with call to method of compiled 'Pattern' constant
 empty.anonymous.class.problem.descriptor:
@@ -1089,19 +1089,19 @@ enum.switch.statement.which.misses.cases.display.name:
 enum.switch.statement.which.misses.cases.option:
     text: Ignore switch statements with a default branch
 enum.switch.statement.which.misses.cases.problem.descriptor:
-    text: '<code>#ref</code> statement on enumerated type ''''{0}'''' misses cases #loc'
+    text: '<code>#ref</code> statement on enum type ''''{0}'''' misses cases #loc'
 enumerated.class.display.name:
     text: Enumerated class
 enumerated.class.naming.convention.display.name:
     text: Enumerated class naming convention
 enumerated.class.naming.convention.element.description:
-    text: Enumerated class
+    text: Enum class
 enumerated.class.problem.descriptor:
     text: 'Enumerated class <code>#ref</code> #loc'
 enumerated.constant.naming.convention.display.name:
     text: Enumerated constant naming convention
 enumerated.constant.naming.convention.element.description:
-    text: Enumerated constant
+    text: Enum constant
 enumeration.can.be.iteration.display.name:
     text: Enumeration can be iteration
 enumeration.can.be.iteration.problem.descriptor:
@@ -1129,17 +1129,17 @@ equals.called.on.array.display.name:
 equals.called.on.array.problem.descriptor:
     text: '<code>#ref()</code> between arrays should probably be ''Arrays.equals()'' #loc'
 equals.called.on.enum.constant.display.name:
-    text: '''equals()'' called on Enum value'
+    text: '''equals()'' called on enum value'
 equals.called.on.enum.constant.problem.descriptor:
-    text: '<code>#ref()</code> called on Enum value #loc'
+    text: '<code>#ref()</code> called on enum value #loc'
 equals.called.on.enum.constant.quickfix:
     text: Replace 'equals()' with '=='
 equals.called.on.suspicious.object.display.name:
-    text: '''equals()'' called on suspicious object'
+    text: '''equals()'' called on classes which don''t override it'
 equals.called.on.suspicious.object.problem.descriptor:
-    text: Suspicious call ''equals'' on ''{0}'' object
+    text: Suspicious call to ''equals()'' on ''{0}'' object
 equals.doesnt.check.class.parameter.display.name:
-    text: '''equals()'' method which does not check class of parameter'
+    text: '''equals()'' method that does not check the class of its parameter'
 equals.doesnt.check.class.parameter.problem.descriptor:
     text: '<code>#ref()</code> should check the class of its parameter #loc'
 equals.hashcode.called.on.url.display.name:
@@ -1159,7 +1159,7 @@ equals.with.itself.display.name:
 equals.with.itself.problem.descriptor:
     text: <code>#ref()</code> called on itself
 error.rethrown.display.name:
-    text: '''java.lang.Error'' not rethrown'
+    text: '''Error'' not rethrown'
 error.rethrown.problem.descriptor:
     text: 'Error <code>#ref</code> not rethrown #loc'
 exception.class.column.name:
@@ -1185,7 +1185,7 @@ explicit.array.to.string.problem.descriptor:
 expression.can.be.replaced.problem.descriptor:
     text: '<code>#ref</code> can be replaced with ''''{0}'''' #loc'
 extended.for.statement.display.name:
-    text: Extended 'for' statement
+    text: Enhanced 'for' statement
 extended.for.statement.problem.descriptor:
     text: 'Extended <code>#ref</code> statement #loc'
 extended.for.statement.replace.quickfix:
@@ -1197,23 +1197,23 @@ extends.annotation.interface.problem.descriptor:
 extends.annotation.problem.descriptor:
     text: 'Class ''''{0}'''' implements annotation interface <code>#ref</code> #loc'
 extends.concrete.collection.display.name:
-    text: Class explicitly extends a Collection class
+    text: Class explicitly extends a 'Collection' class
 extends.concrete.collection.problem.descriptor:
     text: 'Class <code>#ref</code> explicitly extends ''''{0}'''' #loc'
 extends.object.display.name:
-    text: Class explicitly extends 'java.lang.Object'
+    text: Class explicitly extends 'Object'
 extends.object.problem.descriptor:
     text: 'Class <code>#ref</code> explicitly extends ''java.lang.Object'' #loc'
 extends.object.remove.quickfix:
     text: Remove redundant 'extends Object'
 extends.thread.display.name:
-    text: Class directly extends 'java.lang.Thread'
+    text: Class directly extends 'Thread'
 extends.thread.problem.descriptor:
     text: 'Class <code>#ref</code> directly extends ''java.lang.Thread'' #loc'
 extends.throwable.display.name:
-    text: Class directly extends 'java.lang.Throwable'
+    text: Class directly extends 'Throwable'
 extends.throwable.problem.descriptor:
-    text: 'class <code>#ref</code> directly extends ''java.lang.Throwable'' #loc'
+    text: 'Class <code>#ref</code> directly extends ''java.lang.Throwable'' #loc'
 externalizable.with.serialization.methods.display.name:
     text: Externalizable class with 'readObject()' or 'writeObject()'
 externalizable.with.serialization.methods.problem.descriptor.both:
@@ -1223,7 +1223,7 @@ externalizable.with.serialization.methods.problem.descriptor.read:
 externalizable.with.serialization.methods.problem.descriptor.write:
     text: 'Externalizable class <code>#ref</code> defines ''writeObject()'' #loc'
 externalizable.without.public.no.arg.constructor.display.name:
-    text: Externalizable class without 'public' no-arg constructor
+    text: '''Externalizable'' class without ''public'' no-arg constructor'
 externalizable.without.public.no.arg.constructor.problem.descriptor:
     text: 'Externalizable class <code>#ref</code> has no ''public'' no-arg constructor #loc'
 extract.method.quickfix:
@@ -1241,7 +1241,7 @@ feature.envy.display.name:
 feature.envy.problem.descriptor:
     text: 'Class ''''{0}'''' accessed repeatedly in method <code>#ref()</code> #loc'
 field.accessed.synchronized.and.unsynchronized.display.name:
-    text: Field accessed in both synchronized and unsynchronized contexts
+    text: Field accessed in both 'synchronized' and unsynchronized contexts
 field.accessed.synchronized.and.unsynchronized.option:
     text: Simple getters and setters are considered field accesses too
 field.accessed.synchronized.and.unsynchronized.problem.descriptor:
@@ -1265,25 +1265,25 @@ field.may.be.final.display.name:
 field.may.be.final.problem.descriptor:
     text: 'Field <code>#ref</code> may be ''final'' #loc'
 field.may.be.static.display.name:
-    text: Field may be 'static'
+    text: Field can be made 'static'
 field.may.be.static.problem.descriptor:
     text: 'Field <code>#ref</code> may be ''static'' #loc'
 field.missing.volatile.modifier.problem.descriptor:
     text: Field ''{0}'' does not have ''volatile'' modifier
 field.name.hides.in.superclass.display.name:
-    text: Field name hides field in superclass
+    text: Subclass field hides superclass field
 field.name.hides.in.superclass.ignore.option:
-    text: Ignore superclass fields not visible from subclass
+    text: Ignore non-accessible fields
 field.name.hides.in.superclass.problem.descriptor:
     text: 'Field <code>#ref</code> hides field in superclass #loc'
 field.not.found.in.class.problem.descriptor:
     text: No field named ''{0}'' found in class ''{1}''
 final.class.display.name:
-    text: '''final'' class'
+    text: Class is closed to inheritance
 final.class.problem.descriptor:
     text: 'Class declared <code>#ref</code> #loc'
 final.method.display.name:
-    text: '''final'' method'
+    text: Method can't be overridden
 final.method.in.final.class.display.name:
     text: '''final'' method in ''final'' class'
 final.method.in.final.class.problem.descriptor:
@@ -1303,13 +1303,13 @@ finalize.called.explicitly.display.name:
 finalize.called.explicitly.problem.descriptor:
     text: '<code>#ref()</code> called explicitly #loc'
 finalize.declaration.display.name:
-    text: '''finalize()'' declaration'
+    text: '''finalize()'' should not be overridden'
 finalize.declaration.problem.descriptor:
-    text: '<code>#ref()</code> declared #loc'
+    text: '''finalize()'' should not be overridden #loc'
 finalize.not.declared.protected.display.name:
-    text: '''finalize()'' not declared ''protected'''
+    text: '''finalize()'' should be protected, not public'
 finalize.not.declared.protected.problem.descriptor:
-    text: '<code>#ref()</code> not declared ''protected'' #loc'
+    text: '''finalize()'' should have protected access, not public #loc'
 finally.block.cannot.complete.normally.display.name:
     text: '''finally'' block which can not complete normally'
 finally.block.cannot.complete.normally.problem.descriptor:
@@ -1317,17 +1317,17 @@ finally.block.cannot.complete.normally.problem.descriptor:
 flip.comparison.quickfix:
     text: Flip comparison
 floating.point.equality.display.name:
-    text: Floating point equality comparison
+    text: Floating-point equality comparison
 floating.point.equality.problem.descriptor:
-    text: '<code>#ref</code>: floating point values compared for exact equality #loc'
+    text: '<code>#ref</code>: floating-point values compared for exact equality #loc'
 for.can.be.foreach.display.name:
-    text: '''for'' loop replaceable with ''foreach'''
+    text: '''for'' loop can be replaced with enhanced for loop'
 for.can.be.foreach.option:
     text: Report indexed 'java.util.List' loops
 for.can.be.foreach.option2:
     text: Do not report iterations over untyped collections
 for.can.be.foreach.problem.descriptor:
-    text: '<code>#ref</code> loop replaceable with ''foreach'' #loc'
+    text: '<code>#ref</code> loop can be replaced with enhanced ''for'' #loc'
 for.loop.not.use.loop.variable.display.name:
     text: '''for'' loop where update or condition does not use loop variable'
 for.loop.not.use.loop.variable.problem.descriptor.both.condition.and.update:
@@ -1363,7 +1363,7 @@ for.loop.with.missing.component.problem.descriptor6:
 for.loop.with.missing.component.problem.descriptor7:
     text: '<code>#ref</code> statement lacks initializer, condition and update #loc'
 foreach.replace.quickfix:
-    text: Replace with 'foreach'
+    text: Replace with enhanced 'for'
 format.decode.any:
     text: any
 format.decode.char:
@@ -1377,13 +1377,13 @@ format.decode.floating.point:
 format.decode.integer.type:
     text: integer type
 gc.call.display.name:
-    text: Calls to 'System.gc()' or 'Runtime.gc()'
+    text: Call to 'System.gc()' or 'Runtime.gc()'
 gc.call.problem.descriptor:
     text: '<code>#ref</code> should not be called in production code #loc'
 hardcoded.file.separator.display.name:
     text: Hardcoded file separator
 hardcoded.file.separator.include.option:
-    text: Include "example/*" in recognized MIME media types
+    text: Include 'example/*' in recognized MIME media types
 hardcoded.file.separator.problem.descriptor:
     text: 'Hardcoded file separator <code>#ref</code> #loc'
 hardcoded.line.separator.display.name:
@@ -1393,9 +1393,9 @@ hardcoded.line.separator.problem.descriptor:
 hibernate.resource.opened.not.closed.display.name:
     text: Hibernate resource opened but not safely closed
 html.tag.can.be.javadoc.tag.display.name:
-    text: <code>...</code> can be replaced with '{'@code ...'}'
+    text: '''<code>…</code>'' can be replaced with ''{@code …}'''
 html.tag.can.be.javadoc.tag.problem.descriptor:
-    text: '<code>#ref...\&lt;/code\&gt;</code> can be replaced with ''{@code ...}'' #loc'
+    text: '<code>#ref…\&lt;/code\&gt;</code> can be replaced with ''{@code …}'' #loc'
 html.tag.can.be.javadoc.tag.quickfix:
     text: Replace with '{@code ...}'
 i.o.resource.opened.not.closed.display.name:
@@ -1405,23 +1405,23 @@ if.can.be.assertion.name:
 if.can.be.assertion.quickfix:
     text: Replace 'if' with 'assert' statement
 if.can.be.switch.display.name:
-    text: '''if'' replaceable with ''switch'''
+    text: '''if'' can be replaced with ''switch'''
 if.can.be.switch.enum.option:
     text: Suggest switch on enums
 if.can.be.switch.int.option:
     text: Suggest switch on numbers
 if.can.be.switch.minimum.branch.option:
-    text: 'Minimum number of branches:'
+    text: 'Minimum number of ''if'' condition branches:'
 if.can.be.switch.null.safe.option:
     text: Only suggest on null-safe expressions
 if.can.be.switch.problem.descriptor:
-    text: '<code>#ref</code> statement replaceable with ''switch'' statement #loc'
+    text: '<code>#ref</code> statement can be replaced with ''switch'' statement #loc'
 if.can.be.switch.quickfix:
     text: Replace with 'switch'
 if.may.be.conditional.display.name:
     text: '''if'' statement could be replaced with conditional expression'
 if.may.be.conditional.problem.descriptor:
-    text: '<code>#ref</code> could be replaced with conditional expression #loc'
+    text: '<code>#ref</code> can be replaced with conditional expression #loc'
 if.may.be.conditional.quickfix:
     text: Replace with conditional expression
 if.may.be.conditional.report.method.calls.option:
@@ -1455,7 +1455,7 @@ ignore.calls.to.static.methods:
 ignore.classes.extending.throwable.option:
     text: Ignore classes extending 'Throwable'
 ignore.classes.in.hierarchy.column.name:
-    text: Ignore subclasses of
+    text: 'Ignore subclasses of:'
 ignore.cloneable.option:
     text: Ignore 'java.lang.Cloneable'
 ignore.equals.hashcode.and.tostring:
@@ -1467,7 +1467,7 @@ ignore.for.equals.methods.option:
 ignore.guard.clauses.option:
     text: Ignore &guard clauses
 ignore.if.annotated.by:
-    text: Ignore if annotated by
+    text: 'Ignore if annotated by:'
 ignore.in.module.statements.option:
     text: Ignore in Java 9 module statements
 ignore.instanceof.on.library.classes:
@@ -1505,7 +1505,7 @@ ignore.trivial.finalizers.option:
 ignored.autocloseable.types.column.label:
     text: Ignored AutoCloseable resource types
 ignored.class.names:
-    text: Ignore classes (including subclasses)
+    text: Ignore Classes (Including Subclasses)
 ignored.classes.table:
     text: Ignored classes
 ignored.io.resource.types:
@@ -1543,7 +1543,7 @@ implicit.numeric.conversion.convert.quickfix:
 implicit.numeric.conversion.display.name:
     text: Implicit numeric conversion
 implicit.numeric.conversion.ignore.char.conversion.option:
-    text: Ignore conversions from and to char
+    text: Ignore conversions from and to 'char'
 implicit.numeric.conversion.ignore.constant.conversion.option:
     text: Ignore conversions from constants and literals
 implicit.numeric.conversion.ignore.widening.conversion.option:
@@ -1555,9 +1555,9 @@ implicit.numeric.conversion.problem.descriptor:
 import.display.name:
     text: '''*'' import'
 import.from.same.package.display.name:
-    text: Import from same package
+    text: Unnecessary import from the same package
 import.from.same.package.problem.descriptor:
-    text: 'Unnecessary import from same package <code>#ref</code> #loc'
+    text: 'Unnecessary import from the same package <code>#ref</code> #loc'
 import.problem.descriptor:
     text: 'Package import <code>#ref</code> #loc'
 include.java.system.classes.option:
@@ -1571,7 +1571,7 @@ incompatible.mask.operation.problem.descriptor.always.false:
 incompatible.mask.operation.problem.descriptor.always.true:
     text: '<code>#ref</code> is always true #loc'
 increment.decrement.display.name:
-    text: Value of ++ or -- used
+    text: Result of '++' or '--' used
 increment.decrement.used.as.expression.quickfix:
     text: Extract ''{0}'' to separate statement
 indexof.replaceable.by.contains.display.name:
@@ -1681,7 +1681,7 @@ instanceof.concrete.class.problem.descriptor:
 instanceof.interfaces.option:
     text: Ignore instanceof abstract class
 instanceof.with.incompatible.interface.display.name:
-    text: '''instanceof'' with incompatible interface'
+    text: '''instanceof'' with incompatible type'
 instanceof.with.incompatible.interface.problem.descriptor:
     text: '''instanceof'' incompatible interface <code>#ref</code> #loc'
 instantiating.object.to.get.class.object.display.name:
@@ -1691,7 +1691,7 @@ instantiating.object.to.get.class.object.problem.descriptor:
 instantiating.object.to.get.class.object.replace.quickfix:
     text: Replace with direct class object access
 instantiating.simpledateformat.without.locale.display.name:
-    text: Instantiating a SimpleDateFormat without a Locale
+    text: '''SimpleDateFormat'' without locale'
 instantiating.simpledateformat.without.locale.problem.descriptor:
     text: 'Instantiating a <code>#ref</code> without specifying a Locale in an internationalized context #loc'
 instantiation.utility.class.display.name:
@@ -1699,17 +1699,17 @@ instantiation.utility.class.display.name:
 instantiation.utility.class.problem.descriptor:
     text: 'Instantiation of utility class <code>#ref</code> #loc'
 int.literal.may.be.long.literal.display.name:
-    text: '''int'' literal cast to ''long'' could be ''long'' literal'
+    text: Cast to 'long' can be 'long' literal
 int.literal.may.be.long.literal.problem.descriptor:
-    text: '<code>#ref</code> could be replaced with ''''{0}'''' #loc'
+    text: '<code>#ref</code> can be replaced with ''''{0}'''' #loc'
 int.literal.may.be.long.literal.quickfix:
     text: Replace with ''{0}''
 integer.division.in.floating.point.context.display.name:
-    text: Integer division in floating point context
+    text: Integer division in floating-point context
 integer.division.in.floating.point.context.problem.descriptor:
     text: '<code>#ref</code>: integer division in floating-point context #loc'
 integer.multiplication.implicit.cast.to.long.display.name:
-    text: Integer multiplication or shift implicitly cast to long
+    text: Integer multiplication or shift implicitly cast to 'long'
 integer.multiplication.implicit.cast.to.long.option:
     text: <html>Ignore compile time constant expressions which do not overflow</html>
 integer.multiplication.implicit.cast.to.long.problem.descriptor:
@@ -1717,11 +1717,11 @@ integer.multiplication.implicit.cast.to.long.problem.descriptor:
 integer.shift.implicit.cast.to.long.problem.descriptor:
     text: '#ref: integer shift implicitly cast to long #loc'
 interface.clashes.with.object.class.display.name:
-    text: Interface method clashes with method in 'java.lang.Object'
+    text: Interface method clashes with method in 'Object'
 interface.clashes.with.object.class.problem.descriptor:
     text: <code>#ref()</code> clashes with method in 'java.lang.Object'
 interface.may.be.annotated.functional.display.name:
-    text: Interface may be annotated @FunctionalInterface
+    text: Interface may be annotated as '@FunctionalInterface'
 interface.may.be.annotated.functional.problem.descriptor:
     text: Interface <code>#ref</code> may be annotated with @FunctionalInterface
 interface.naming.convention.display.name:
@@ -1735,7 +1735,7 @@ interface.never.implemented.option:
 interface.never.implemented.problem.descriptor:
     text: 'Interface <code>#ref</code> has no concrete subclass #loc'
 interface.one.inheritor.display.name:
-    text: Interface which has only one direct inheritor
+    text: Interface with a single direct inheritor
 interface.one.inheritor.problem.descriptor:
     text: 'Interface <code>#ref</code> has only one direct inheritor #loc'
 introduce.constant.quickfix:
@@ -1761,9 +1761,9 @@ iterator.next.does.not.throw.nosuchelementexception.display.name:
 iterator.next.does.not.throw.nosuchelementexception.problem.descriptor:
     text: '<code>Iterator.#ref()</code> which can''t throw ''NoSuchElementException'' #loc'
 java.lang.import.display.name:
-    text: '''java.lang'' import'
+    text: Unnecessary import from the 'java.lang' package
 java.lang.import.problem.descriptor:
-    text: 'Unnecessary import from package ''java.lang'' #loc'
+    text: 'Unnecessary import from the ''java.lang'' package #loc'
 jdbc.execute.with.non.constant.string.display.name:
     text: Call to 'Statement.execute()' with non-constant string
 jdbc.execute.with.non.constant.string.problem.descriptor:
@@ -1793,7 +1793,7 @@ junit.rule.type.problem.descriptor:
 junit.test.class.naming.convention.display.name:
     text: JUnit test class naming convention
 junit.test.class.naming.convention.element.description:
-    text: JUnit test class
+    text: Test class
 junit3.method.naming.convention.display.name:
     text: JUnit 3 test method naming convention
 junit3.method.naming.convention.element.description:
@@ -1865,11 +1865,11 @@ lambda.parameter.type.can.be.specified.name:
 lambda.parameter.type.can.be.specified.quickfix:
     text: Expand lambda to {0} -> '{'...'}'
 lambda.unfriendly.constructor.overload.problem.descriptor:
-    text: Lambda unfriendly overload of constructor <code>#ref()</code>
+    text: Lambda-unfriendly overload of constructor <code>#ref()</code>
 lambda.unfriendly.method.overload.display.name:
-    text: Lambda unfriendly method overload
+    text: Lambda-unfriendly method overload
 lambda.unfriendly.method.overload.problem.descriptor:
-    text: Lambda unfriendly overload of method <code>#ref()</code>
+    text: Lambda-unfriendly overload of method <code>#ref()</code>
 large.array.allocation.no.outofmemoryerror.display.name:
     text: Large array allocation with no OutOfMemoryError check
 large.array.allocation.no.outofmemoryerror.maximum.number.of.elements.option:
@@ -1937,9 +1937,9 @@ local.variable.of.concrete.class.option:
 local.variable.of.concrete.class.problem.descriptor:
     text: 'Local variable ''''{0}'''' of concrete class <code>#ref</code> #loc'
 log.condition.text:
-    text: Log condition text
+    text: Log Condition Text
 log.method.name:
-    text: Logging method name
+    text: Logging Method Name
 log.statement.guarded.by.log.condition.display.name:
     text: Logging call not guarded by log condition
 log.statement.guarded.by.log.condition.flag.all.unguarded.option:
@@ -1951,9 +1951,9 @@ log.statement.guarded.by.log.condition.quickfix:
 logger.class.name:
     text: Logger class name
 logger.factory.class.name:
-    text: Logger factory class name
+    text: Logger Factory Class Name
 logger.factory.method.name:
-    text: Logger factory method name
+    text: Logger Factory Method Name
 logger.initialized.with.foreign.class.display.name:
     text: Logger initialized with foreign class
 logger.initialized.with.foreign.class.problem.descriptor:
@@ -2057,9 +2057,9 @@ manual.array.to.collection.copy.problem.descriptor:
 manual.array.to.collection.copy.replace.quickfix:
     text: Replace with 'Collections.addAll(...,...)'
 map.replaceable.by.enum.map.display.name:
-    text: Map replaceable with EnumMap
+    text: '''Map'' can be replaced with ''EnumMap'''
 map.replaceable.by.enum.map.problem.descriptor:
-    text: '<code>#ref</code> replaceable with ''EnumMap'' #loc'
+    text: '<code>#ref</code> can be replaced with ''EnumMap'' #loc'
 marker.interface.display.name:
     text: Marker interface
 marker.interface.problem.descriptor:
@@ -2077,7 +2077,7 @@ method.call.in.loop.condition.display.name:
 method.call.in.loop.condition.problem.descriptor:
     text: 'Call to method <code>#ref()</code> in loop condition #loc'
 method.can.be.variable.arity.method.display.name:
-    text: Method can be varargs method
+    text: Method can have varargs parameter
 method.can.be.variable.arity.method.ignore.all.primitive.arrays.option:
     text: Ignore all primitive array types
 method.can.be.variable.arity.method.ignore.byte.short.option:
@@ -2101,7 +2101,7 @@ method.coupling.limit.option:
 method.coupling.problem.descriptor:
     text: '<code>#ref</code> is overly coupled (# referenced classes = {0}) #loc'
 method.may.be.static.display.name:
-    text: Method may be 'static'
+    text: Method can be made 'static'
 method.may.be.static.empty.option:
     text: Ignore empty methods
 method.may.be.static.only.option:
@@ -2109,9 +2109,9 @@ method.may.be.static.only.option:
 method.may.be.static.problem.descriptor:
     text: 'Method <code>#ref()</code> may be ''static'' #loc'
 method.may.be.synchronized.display.name:
-    text: Method with synchronized block could be synchronized method
+    text: Method with single 'synchronized' block can be replaced with 'synchronized' method
 method.may.be.synchronized.problem.descriptor:
-    text: 'Method <code>#ref()</code> with synchronized block could be synchronized method #loc'
+    text: 'Method <code>#ref()</code> with synchronized block can be synchronized method #loc'
 method.may.be.synchronized.quickfix:
     text: Make method synchronized and remove synchronized block
 method.missing.return.statement.display.name:
@@ -2119,7 +2119,7 @@ method.missing.return.statement.display.name:
 method.missing.return.statement.problem.descriptor:
     text: Method <code>#ref</code> contains logic but is missing a 'return' statement
 method.name.regex:
-    text: Method name regex
+    text: Method Name Regex
 method.name.same.as.class.name.display.name:
     text: Method name same as class name
 method.name.same.as.class.name.problem.descriptor:
@@ -2143,7 +2143,7 @@ method.only.used.from.inner.class.problem.descriptor.anonymous.extending:
 method.only.used.from.inner.class.problem.descriptor.anonymous.implementing:
     text: 'Method <code>#ref()</code>#loc is only used from an anonymous class implementing ''''{0}'''' #loc'
 method.overloads.display.name:
-    text: Method overloads method of superclass
+    text: Possibly unintended overload of method from superclass
 method.overloads.problem.descriptor:
     text: 'Method <code>#ref()</code> overloads a compatible method of a superclass, when overriding might have been intended #loc'
 method.overloads.report.incompatible.option:
@@ -2155,9 +2155,9 @@ method.overrides.package.local.method.problem.descriptor:
 method.overrides.private.display.name.problem.descriptor:
     text: 'Method <code>#ref()</code> overrides a ''private'' method of a superclass #loc'
 method.overrides.static.display.name:
-    text: Method overrides static method of superclass
+    text: Method tries to override 'static' method of superclass
 method.overrides.static.problem.descriptor:
-    text: 'Method <code>#ref()</code> overrides a static method of a superclass #loc'
+    text: 'Method <code>#ref()</code> tries to override a static method of a superclass #loc'
 method.ref.can.be.replaced.with.lambda.name:
     text: Method reference can be replaced with lambda
 method.ref.can.be.replaced.with.lambda.quickfix:
@@ -2165,7 +2165,7 @@ method.ref.can.be.replaced.with.lambda.quickfix:
 method.return.always.constant.display.name:
     text: Method returns per-class constant
 method.return.always.constant.problem.descriptor:
-    text: Method <code>#ref()</code> and all it's derivables always return constants
+    text: Method <code>#ref()</code> and all its derivables always return constants
 method.return.concrete.class.display.name:
     text: Method return of concrete class
 method.return.concrete.class.problem.descriptor:
@@ -2183,11 +2183,11 @@ mismatched.read.write.array.problem.descriptor.read.not.write:
 mismatched.read.write.array.problem.descriptor.write.not.read:
     text: 'Contents of array <code>#ref</code> are written to, but never read #loc'
 mismatched.string.builder.queried.problem.descriptor:
-    text: 'Contents of {0} <code>#ref</code> are queried, but never updated #loc'
+    text: 'Contents of <code>{0} #ref</code> are queried, but never updated #loc'
 mismatched.string.builder.query.update.display.name:
-    text: Mismatched query and update of StringBuilder
+    text: Mismatched query and update of 'StringBuilder'
 mismatched.string.builder.updated.problem.descriptor:
-    text: 'Contents of {0} <code>#ref</code> are updated, but never queried #loc'
+    text: 'Contents of <code>{0} #ref</code> are updated, but never queried #loc'
 mismatched.update.collection.display.name:
     text: Mismatched query and update of collection
 mismatched.update.collection.problem.description.queried.not.updated:
@@ -2201,9 +2201,9 @@ misordered.assert.equals.arguments.flip.quickfix:
 misordered.assert.equals.arguments.problem.descriptor:
     text: 'Arguments to <code>#ref()</code> in wrong order #loc'
 missing.deprecated.annotation.add.quickfix:
-    text: Add @Deprecated annotation
+    text: Add '@Deprecated' annotation
 missing.deprecated.annotation.display.name:
-    text: Missing @Deprecated annotation
+    text: Missing '@Deprecated' annotation
 missing.deprecated.annotation.problem.descriptor:
     text: 'Missing ''@Deprecated'' annotation #loc'
 missing.deprecated.tag.option:
@@ -2213,7 +2213,7 @@ missing.deprecated.tag.problem.descriptor:
 missing.override.annotation.add.quickfix:
     text: Add @Override annotation
 missing.override.annotation.display.name:
-    text: Missing @Override annotation
+    text: Missing '@Override' annotation
 missing.override.annotation.problem.descriptor:
     text: 'Missing ''@Override'' annotation on <code>#ref()</code> #loc'
 missing.package.html.problem.descriptor:
@@ -2283,7 +2283,7 @@ multiple.typed.declaration.display.name:
 multiple.typed.declaration.problem.descriptor:
     text: 'Variables of different types in one declaration #loc'
 multiply.or.divide.by.power.of.two.display.name:
-    text: Multiply or divide by power of two
+    text: Multiplication or division by power of two
 multiply.or.divide.by.power.of.two.divide.option:
     text: Check divisions by a power of two also
 multiply.or.divide.by.power.of.two.replace.quickfix:
@@ -2391,7 +2391,7 @@ no.logger.display.name:
 no.logger.problem.descriptor:
     text: 'Class <code>#ref</code> does not declare a logger #loc'
 non.atomic.operation.on.volatile.field.display.name:
-    text: Non-atomic operation on volatile field
+    text: Non-atomic operation on 'volatile' field
 non.atomic.operation.on.volatile.field.problem.descriptor:
     text: 'Non-atomic operation on volatile field <code>#ref</code> #loc'
 non.boolean.method.name.must.not.start.with.question.display.name:
@@ -2423,9 +2423,9 @@ non.final.field.compareto.display.name:
 non.final.field.compareto.problem.descriptor:
     text: 'Non-final field <code>#ref</code> accessed in ''compareTo()'' #loc'
 non.final.field.in.enum.display.name:
-    text: Non-'final' field in enum
+    text: Non-final field in 'enum'
 non.final.field.in.enum.problem.descriptor:
-    text: 'non-''''final'''' field <code>#ref</code> in enum ''''{0}'''' #loc'
+    text: 'Non-final field <code>#ref</code> in enum ''''{0}'''' #loc'
 non.final.field.in.equals.display.name:
     text: Non-final field referenced in 'equals()'
 non.final.field.in.equals.problem.descriptor:
@@ -2435,7 +2435,7 @@ non.final.field.in.hashcode.display.name:
 non.final.field.in.hashcode.problem.descriptor:
     text: 'Non-final field <code>#ref</code> accessed in ''hashCode()'' #loc'
 non.final.field.of.exception.display.name:
-    text: Non-final field of exception class
+    text: Non-final field of 'Exception' class
 non.final.field.of.exception.problem.descriptor:
     text: 'Non-final field <code>#ref</code> of exception class #loc'
 non.final.static.variable.initialization.display.name:
@@ -2457,7 +2457,7 @@ non.public.clone.display.name:
 non.public.clone.problem.descriptor:
     text: '<code>#ref()</code> method not ''public'' #loc'
 non.reproducible.math.call.display.name:
-    text: Non-reproducible call to 'java.lang.Math'
+    text: Non-reproducible call to 'Math'
 non.reproducible.math.call.problem.descriptor:
     text: '<code>Math.#ref()</code> may produce non-reproducible results #loc'
 non.reproducible.math.call.replace.quickfix:
@@ -2471,7 +2471,7 @@ non.serializable.anonymous.with.readwriteobject.problem.descriptor.read:
 non.serializable.anonymous.with.readwriteobject.problem.descriptor.write:
     text: 'Non-serializable anonymous class extending <code>#ref</code> defines ''writeObject()'' #loc'
 non.serializable.anonymous.with.serialversionuid.problem.descriptor:
-    text: 'Non-serializable anonymous class extending <code>#ref</code> defines a ''serialVersionUID'' field #loc'
+    text: 'Non-serializable anonymous class derived from <code>#ref</code> defines a ''serialVersionUID'' field #loc'
 non.serializable.class.with.readwriteobject.display.name:
     text: Non-serializable class with 'readObject()' or 'writeObject()'
 non.serializable.class.with.readwriteobject.problem.descriptor.both:
@@ -2483,17 +2483,17 @@ non.serializable.class.with.readwriteobject.problem.descriptor.write:
 non.serializable.class.with.serialversionuid.problem.descriptor:
     text: 'Non-serializable class <code>#ref</code> defines a ''serialVersionUID'' field #loc'
 non.serializable.field.in.serializable.class.display.name:
-    text: Non-serializable field in a Serializable class
+    text: Non-serializable field in a 'Serializable' class
 non.serializable.field.in.serializable.class.problem.descriptor:
-    text: 'Non-serializable field ''#ref'' in a Serializable class #loc'
+    text: 'Non-serializable field ''#ref'' in Serializable class #loc'
 non.serializable.interface.with.serialversionuid.problem.descriptor:
     text: 'Non-serializable interface <code>#ref</code> defines a ''serialVersionUID'' field #loc'
 non.serializable.object.bound.to.http.session.display.name:
-    text: Non-serializable object bound to HttpSession
+    text: Non-serializable object bound to 'HttpSession'
 non.serializable.object.bound.to.http.session.problem.descriptor:
     text: 'Non-serializable object bound to HttpSession #loc'
 non.serializable.object.passed.to.object.stream.display.name:
-    text: Non-serializable object passed to ObjectOutputStream
+    text: Non-serializable object passed to 'ObjectOutputStream'
 non.serializable.object.passed.to.object.stream.problem.descriptor:
     text: 'Non-serializable object passed to ObjectOutputStream #loc'
 non.serializable.with.serialversionuid.display.name:
@@ -2511,7 +2511,7 @@ non.static.inner.class.in.secure.context.display.name:
 non.static.inner.class.in.secure.context.problem.descriptor:
     text: 'Non-''static'' inner class <code>#ref</code>, compromising security #loc'
 non.synchronized.method.overrides.synchronized.method.display.name:
-    text: Unsynchronized method overrides synchronized method
+    text: Unsynchronized method overrides 'synchronized' method
 non.synchronized.method.overrides.synchronized.method.problem.descriptor:
     text: 'Unsynchronized method <code>#ref()</code> overrides synchronized method #loc'
 non.thread.safe.lazy.initialization.display.name:
@@ -2521,11 +2521,11 @@ non.thread.safe.lazy.initialization.problem.descriptor:
 none:
     text: none
 noop.method.in.abstract.class.display.name:
-    text: No-op method in abstract class
+    text: No-op method in 'abstract' class
 noop.method.in.abstract.class.problem.descriptor:
     text: 'No-op Method <code>#ref()</code> should be made abstract #loc'
 normalize.declaration.quickfix:
-    text: Split into multiple declarations
+    text: Split into separate declarations
 notify.called.on.condition.display.name:
     text: '''notify()''  or ''notifyAll()'' called on ''java.util.concurrent.locks.Condition'' object'
 notify.called.on.condition.problem.descriptor:
@@ -2533,7 +2533,7 @@ notify.called.on.condition.problem.descriptor:
 notify.without.corresponding.wait.display.name:
     text: '''notify()'' without corresponding ''wait()'''
 notify.without.corresponding.wait.problem.descriptor:
-    text: 'Call to <code>#ref</code> without corresponding <code>wait()</code> #loc'
+    text: 'Call to <code>#ref()</code> without corresponding <code>wait()</code> #loc'
 null.argument.to.var.arg.method.display.name:
     text: Confusing argument to varargs method
 null.argument.to.var.arg.method.problem.descriptor:
@@ -2555,7 +2555,7 @@ object.allocation.in.loop.problem.descriptor:
 object.comparison.display.name:
     text: Object comparison using '==', instead of 'equals()'
 object.comparison.enumerated.ignore.option:
-    text: Ignore '==' between enumerated types
+    text: Ignore '==' between enum variables
 object.comparison.klass.ignore.option:
     text: Ignore '==' on 'java.lang.Class' objects
 object.comparison.problem.description:
@@ -2705,13 +2705,13 @@ package.in.multiple.modules.problem.descriptor:
 package.info.java.without.package.display.name:
     text: '''package-info.java'' without ''package'' statement'
 package.info.without.package.family.quickfix:
-    text: add package statement
+    text: Add package statement
 package.info.without.package.problem.descriptor:
     text: '''package-info.java'' does not have a ''package'' statement'
 package.info.without.package.quickfix:
-    text: add ''package {0};''
+    text: Add ''package {0};''
 package.local.field.not.accessible:
-    text: package-private field ''{0}'' is not accessible from here
+    text: Package-private field ''{0}'' is not accessible from here
 package.local.private:
     text: package-private \& private
 package.naming.convention.display.name:
@@ -2727,13 +2727,13 @@ package.visible.field.display.name:
 package.visible.field.problem.descriptor:
     text: 'Package-visible field <code>#ref</code> #loc'
 package.visible.inner.class.display.name:
-    text: Package-visible inner class
+    text: Package-visible nested class
 package.visible.inner.class.ignore.enum.option:
     text: Ignore package-visible inner enums
 package.visible.inner.class.ignore.interface.option:
     text: Ignore package-visible inner interfaces
 package.visible.inner.class.problem.descriptor:
-    text: 'Package-visible inner class <code>#ref</code> #loc'
+    text: 'Package-visible nested class <code>#ref</code> #loc'
 package.with.too.few.classes.display.name:
     text: Package with too few classes
 package.with.too.few.classes.min.option:
@@ -2853,7 +2853,7 @@ problematic.varargs.method.display.name:
 problematic.varargs.method.override.problem.descriptor:
     text: 'Non-varargs method <code>#ref()</code> overrides varargs method #loc'
 properties.object.as.hashtable.display.name:
-    text: Use of Properties object as a Hashtable
+    text: Use of 'Properties' object as a 'Hashtable'
 properties.object.as.hashtable.get.quickfix:
     text: Replace with call to 'getProperty()'
 properties.object.as.hashtable.problem.descriptor:
@@ -2869,13 +2869,13 @@ protected.field.not.accessible.problem.descriptor:
 protected.field.problem.descriptor:
     text: 'Protected field <code>#ref</code> #loc'
 protected.inner.class.display.name:
-    text: Protected inner class
+    text: Protected nested class
 protected.inner.class.ignore.enum.option:
     text: Ignore 'protected' inner enums
 protected.inner.class.ignore.interface.option:
     text: Ignore 'protected' inner interfaces
 protected.inner.class.problem.descriptor:
-    text: 'Protected inner class <code>#ref</code> #loc'
+    text: 'Protected nested class <code>#ref</code> #loc'
 protected.member.in.final.class.display.name:
     text: '''protected'' member in ''final'' class'
 protected.member.in.final.class.problem.descriptor:
@@ -2897,7 +2897,7 @@ public.constructor.quickfix:
 public.default.constructor.problem.descriptor:
     text: Class <code>#ref</code> has 'public' default constructor
 public.field.accessed.in.synchronized.context.display.name:
-    text: Non-private field accessed in synchronized context
+    text: Non-private field accessed in 'synchronized' context
 public.field.accessed.in.synchronized.context.problem.descriptor:
     text: 'Non-private field <code>#ref</code> accessed in synchronized context  #loc'
 public.field.display.name:
@@ -2907,13 +2907,13 @@ public.field.ignore.enum.type.fields.option:
 public.field.problem.descriptor:
     text: '''public'' field <code>#ref</code> #loc'
 public.inner.class.display.name:
-    text: '''public'' inner class'
+    text: '''public'' nested class'
 public.inner.class.ignore.enum.option:
     text: Ignore 'public' inner enums
 public.inner.class.ignore.interface.option:
     text: Ignore 'public' inner interfaces
 public.inner.class.problem.descriptor:
-    text: '''public'' inner class <code>#ref</code> #loc'
+    text: '''public'' nested class <code>#ref</code> #loc'
 public.method.not.in.interface.display.name:
     text: '''public'' method not exposed in interface'
 public.method.not.in.interface.option:
@@ -2971,7 +2971,7 @@ readwriteobject.private.display.name:
 readwriteobject.private.problem.descriptor:
     text: '<code>#ref</code> not declared ''private'' #loc'
 recordstore.opened.not.safely.closed.display.name:
-    text: RecordStore opened but not safely closed
+    text: "'RecordStore' opened but not safely closed"
 redundant.else.display.name:
     text: Redundant 'else'
 redundant.else.problem.descriptor:
@@ -3067,7 +3067,7 @@ replace.with.catch.clause.for.runtime.exception.quickfix:
 resource.opened.not.closed.problem.descriptor:
     text: '''''{0}'''' should be opened in front of a ''''try'''' block and closed in the corresponding ''''finally'''' block #loc'
 result.of.method.call.ignored.class.column.title:
-    text: Class name
+    text: Class Name
 result.of.method.call.ignored.display.name:
     text: Result of method call ignored
 result.of.method.call.ignored.method.column.title:
@@ -3173,7 +3173,7 @@ serializable.has.serialization.methods.problem.descriptor1:
 serializable.has.serialization.methods.problem.descriptor2:
     text: 'Serializable class <code>#ref</code> does not define ''readObject()'' #loc'
 serializable.inner.class.has.serial.version.uid.field.display.name:
-    text: Serializable non-'static' inner class without 'serialVersionUID'
+    text: Serializable non-static inner class without 'serialVersionUID'
 serializable.inner.class.has.serial.version.uid.field.problem.descriptor:
     text: 'Inner class <code>#ref</code> does not define a ''serialVersionUID'' field #loc'
 serializable.inner.class.with.non.serializable.outer.class.display.name:
@@ -3185,7 +3185,7 @@ serializable.lambda.stores.non.serializable.problem.descriptor:
 serializable.local.class.stores.non.serializable.problem.descriptor:
     text: Serializable local class ''{1}'' implicitly stores non-Serializable object of type ''{0}''
 serializable.stores.non.serializable.display.name:
-    text: Serializable object implicitly stores non-Serializable object
+    text: '''Serializable'' object implicitly stores non-''Serializable'' object'
 serializable.with.unconstructable.ancestor.display.name:
     text: Serializable class with unconstructable ancestor
 serializable.with.unconstructable.ancestor.problem.descriptor:
@@ -3203,9 +3203,9 @@ serialversionuid.private.static.final.long.quickfix:
 set.annotation.parameter.0.1.fix.name:
     text: Set annotation parameter {0} = "{1}"
 set.replaceable.by.enum.set.display.name:
-    text: Set replaceable with EnumSet
+    text: '''Set'' can be replaced with ''EnumSet'''
 set.replaceable.by.enum.set.problem.descriptor:
-    text: '<code>#ref</code> replaceable with ''EnumSet'' #loc'
+    text: '<code>#ref</code> can be replaced with ''EnumSet'' #loc'
 shared.thread.local.random.display.name:
     text: '''ThreadLocalRandom'' instance might be shared'
 shared.thread.local.random.problem.descriptor:
@@ -3221,7 +3221,7 @@ shift.out.of.range.quickfix:
 signal.without.corresponding.await.display.name:
     text: '''signal()'' without corresponding ''await()'''
 signal.without.corresponding.await.problem.descriptor:
-    text: 'Call to <code>#ref</code> without corresponding <code>await()</code> #loc'
+    text: 'Call to <code>#ref()</code> without corresponding <code>await()</code> #loc'
 simplifiable.annotation.display.name:
     text: Simplifiable annotation
 simplifiable.annotation.problem.descriptor:
@@ -3247,7 +3247,7 @@ simplifiable.if.statement.display.name:
 simplifiable.if.statement.problem.descriptor:
     text: '<code>#ref</code> statement can be replaced with ''''{0}'''' #loc'
 simplifiable.junit.assertion.display.name:
-    text: Simplifiable JUnit assertion
+    text: Simplifiable assertion
 simplifiable.junit.assertion.problem.descriptor:
     text: '<code>#ref()</code> can be simplified to ''''{0}'''' #loc'
 simplifiable.testng.assertion.display.name:
@@ -3257,7 +3257,7 @@ simplify.junit.assertion.simplify.quickfix:
 single.character.startswith.display.name:
     text: Single character 'startsWith()' or 'endsWith()'
 single.character.startswith.problem.descriptor:
-    text: 'Single character <code>#ref()</code> could be replaced with ''charAt()'' expression #loc'
+    text: 'Single character <code>#ref()</code> can be replaced with ''charAt()'' expression #loc'
 single.character.startswith.quickfix:
     text: Replace with 'charAt()'
 single.class.import.display.name:
@@ -3283,7 +3283,7 @@ singleton.display.name:
 singleton.problem.descriptor:
     text: 'Class <code>#ref</code> is a singleton #loc'
 size.replaceable.by.isempty.display.name:
-    text: '''size() == 0'' replaceable with ''isEmpty()'''
+    text: '''size() == 0'' can be replaced with ''isEmpty()'''
 size.replaceable.by.isempty.negation.ignore.option:
     text: Ignore expressions which would be replaced with '!isEmpty()'
 size.replaceable.by.isempty.quickfix:
@@ -3333,7 +3333,7 @@ static.import.replace.quickfix:
 static.inheritance.display.name:
     text: Static inheritance
 static.inheritance.problem.descriptor:
-    text: 'Interface <code>#ref</code> is implemented only for its ''static'' constants #loc'
+    text: 'Interface <code>#ref</code> is implemented only for its static constants #loc'
 static.inheritance.replace.quickfix:
     text: Replace inheritance with qualified references in {0}
 static.initializer.references.subclass.display.name:
@@ -3342,6 +3342,8 @@ static.method.naming.convention.display.name:
     text: '''static'' method naming convention'
 static.method.naming.convention.element.description:
     text: '''static'' method'
+static.method.only.used.in.one.anonymous.class.problem.descriptor:
+    text: 'Static {0, choice, 1#method|2#field} <code>#ref{0, choice, 1#()|2#}</code> is only used from an anonymous class derived from ''''{1}'''' #loc'
 static.method.only.used.in.one.class.display.name:
     text: '''static'' method only used from one other class'
 static.method.only.used.in.one.class.ignore.anonymous.option:
@@ -3447,7 +3449,7 @@ string.concatenation.in.message.format.call.display.name:
 string.concatenation.in.message.format.call.problem.descriptor:
     text: 'String concatenation as argument to ''MessageFormat.format()'' call #loc'
 string.concatenation.inside.string.buffer.append.display.name:
-    text: String concatenation as argument to 'StringBuffer.append()' call
+    text: String concatenation as argument to 'StringBuilder.append()' call
 string.concatenation.inside.string.buffer.append.problem.descriptor:
     text: 'String concatenation as argument to <code>{0}.#ref()</code> call #loc'
 string.concatenation.inside.string.buffer.append.replace.quickfix:
@@ -3497,7 +3499,7 @@ string.equalsignorecase.call.display.name:
 string.equalsignorecase.call.problem.descriptor:
     text: '<code>String.#ref()</code> using internationalized strings #loc'
 string.format.choose.class:
-    text: Choose Formatter class
+    text: Choose Formatter Class
 string.format.class.column.name:
     text: Additional formatter classes
 string.format.class.method.name:
@@ -3505,21 +3507,21 @@ string.format.class.method.name:
 string.replace.quickfix:
     text: Replace concatenation with ''{0}''
 string.replaceable.by.string.buffer.display.name:
-    text: Non-constant String should be StringBuilder
+    text: Non-constant 'String' can be replaced with 'StringBuilder'
 string.replaceable.by.string.buffer.in.loop.option:
     text: Only warn when appending in a loop
 string.replaceable.by.string.buffer.problem.descriptor:
-    text: 'Non-constant <code>String #ref</code> should probably be declared as ''''StringBuilder'''' #loc'
+    text: 'Non-constant String <code>#ref</code> should probably be declared as ''StringBuilder'' #loc'
 string.to.string.display.name:
     text: Redundant 'String.toString()'
 string.to.string.problem.descriptor:
     text: '<code>#ref</code> is redundant #loc'
 string.touppercase.tolowercase.without.locale.display.name:
-    text: Call to 'String.toUpperCase()' or 'toLowerCase()' without a Locale
+    text: Call to 'String.toUpperCase()' or 'toLowerCase()' without locale
 string.touppercase.tolowercase.without.locale.problem.descriptor:
     text: '<code>String.#ref()</code> called without specifying a Locale using internationalized strings #loc'
 stringbuffer.field.display.name:
-    text: StringBuffer field
+    text: '''StringBuilder'' field'
 stringbuffer.field.problem.descriptor:
     text: '''''{0}'''' field <code>#ref</code> #loc'
 substring.zero.display.name:
@@ -3580,18 +3582,24 @@ suspicious.to.array.call.display.name:
     text: Suspicious 'Collection.toArray()' call
 suspicious.to.array.call.problem.descriptor:
     text: 'Array of type ''''{0}[]'''' expected #loc'
+switch.expression.with.single.default.message:
+    text: '''switch'' expression has only ''default'' case'
+switch.expression.with.too.few.branches.problem.descriptor:
+    text: '''''switch'''' expression has too few case labels ({0}), and should probably be replaced with an ''''if'''' statement or conditional operator #loc'
 switch.statement.density.display.name:
     text: '''switch'' statement with too low of a branch density'
 switch.statement.density.min.option:
     text: 'Minimum density of branches: %'
 switch.statement.density.problem.descriptor:
-    text: '<code>#ref</code> has too low of a branch density ({0}%) #loc'
+    text: '<code>#ref</code> branch density is too low ({0}%) #loc'
 switch.statement.display.name:
     text: '''switch'' statement'
 switch.statement.with.confusing.declaration.display.name:
     text: Local variable used and declared in different 'switch' branches
 switch.statement.with.confusing.declaration.problem.descriptor:
     text: 'Local variable <code>#ref</code> declared in one ''switch'' branch and used in another #loc'
+switch.statement.with.single.default.message:
+    text: '''switch'' statement has only ''default'' case'
 switch.statement.with.too.few.branches.display.name:
     text: '''switch'' statement with too few branches'
 switch.statement.with.too.few.branches.min.option:
@@ -3623,7 +3631,7 @@ synchronization.on.static.field.problem.descriptor:
 synchronize.on.class.problem.descriptor:
     text: 'Lock operations on a class may have unforeseen side-effects #loc'
 synchronize.on.lock.display.name:
-    text: Synchronization on a Lock object
+    text: Synchronization on a 'Lock' object
 synchronize.on.lock.problem.descriptor:
     text: 'Synchronization on a ''''{0}'''' object is unlikely to be intentional #loc'
 synchronize.on.non.final.field.display.name:
@@ -3731,11 +3739,11 @@ this.reference.escaped.in.construction.display.name:
 this.reference.escaped.in.construction.problem.descriptor:
     text: 'Escape of <code>#ref</code> during object construction #loc'
 thread.death.rethrown.display.name:
-    text: '''java.lang.ThreadDeath'' not rethrown'
+    text: '''ThreadDeath'' not rethrown'
 thread.death.rethrown.problem.descriptor:
     text: 'ThreadDeath <code>#ref</code> not rethrown #loc'
 thread.local.not.static.final.display.name:
-    text: ThreadLocal field not declared static final
+    text: '''ThreadLocal'' field not declared ''static final'''
 thread.local.not.static.final.problem.descriptor:
     text: 'ThreadLocal <code>#ref</code> is not declared ''static final'' #loc'
 thread.priority.display.name:
@@ -3751,13 +3759,13 @@ thread.run.replace.quickfix:
 thread.start.in.construction.display.name:
     text: Call to 'Thread.start()' during object construction
 thread.start.in.construction.problem.descriptor:
-    text: 'Call to <code>#ref</code> during object construction #loc'
+    text: 'Call to <code>#ref()</code> during object construction #loc'
 thread.stop.suspend.resume.display.name:
     text: Call to 'Thread.stop()', 'suspend()' or 'resume()'
 thread.stop.suspend.resume.problem.descriptor:
     text: 'Call to <code>Thread.#ref()</code> #loc'
 thread.with.default.run.method.display.name:
-    text: Instantiating a Thread with default 'run()' method
+    text: Instantiating a 'Thread' with default 'run()' method
 thread.with.default.run.method.problem.descriptor:
     text: 'Instantiating a <code>#ref</code> with default ''run()'' method #loc'
 thread.yield.display.name:
@@ -3793,9 +3801,9 @@ throwable.instance.never.thrown.error.problem.descriptor:
 throwable.instance.never.thrown.problem.descriptor:
     text: 'Throwable instance <code>#ref</code> is not thrown #loc'
 throwable.instance.never.thrown.runtime.exception.problem.descriptor:
-    text: 'Runtime exception instance <code>#ref</code> is not thrown #loc'
+    text: 'Runtime exception instance <code>new #ref()</code> is not thrown #loc'
 throwable.not.thrown.display.name:
-    text: Throwable not thrown
+    text: '''Throwable'' not thrown'
 throwable.printed.to.system.out.display.name:
     text: '''Throwable'' printed to ''System.out'''
 throwable.printed.to.system.out.problem.descriptor:
@@ -3837,7 +3845,7 @@ too.broad.catch.problem.descriptor1:
 too.broad.catch.quickfix:
     text: Add ''catch'' clause for ''{0}''
 too.broad.scope.allow.option:
-    text: '<html>Report variables with a new expression as initializer<br>(Potentially unsafe: quick fix may modify semantics if the constructor has non-local side-effects)</html>'
+    text: '<html>Report variables with a new expression as initializer<br>(potentially unsafe: quick fix may modify semantics if the constructor has non-local side-effects)</html>'
 too.broad.scope.display.name:
     text: Scope of variable is too broad
 too.broad.scope.narrow.quickfix:
@@ -3883,15 +3891,15 @@ trivial.if.problem.descriptor:
 trivial.string.concatenation.display.name:
     text: Concatenation with empty string
 trivial.string.concatenation.problem.descriptor:
-    text: Empty string used in concatenation
+    text: Empty string in concatenation
 try.finally.can.be.try.with.resources.display.name:
-    text: '''try finally'' replaceable with ''try'' with resources'
+    text: '''try finally'' can be replaced with ''try'' with resources'
 try.finally.can.be.try.with.resources.problem.descriptor:
     text: '<code>#ref</code> can use automatic resource management #loc'
 try.finally.can.be.try.with.resources.quickfix:
     text: Replace with 'try' with resources
 try.statement.with.multiple.resources.name:
-    text: Try statement with multiple resources can be split
+    text: '''try'' statement with multiple resources can be split'
 try.statement.with.multiple.resources.quickfix:
     text: Split 'try' statement with multiple resources
 try.with.identical.catches.display.name:
@@ -3919,7 +3927,7 @@ type.may.be.weakened.problem.descriptor:
 type.may.be.weakened.quickfix:
     text: Weaken type to ''{0}''
 type.parameter.extends.final.class.display.name:
-    text: Type parameter extends final class
+    text: Type parameter extends 'final' class
 type.parameter.extends.final.class.problem.descriptor1:
     text: 'Type parameter <code>#ref</code> extends ''''final'''' class ''''{0}'''' #loc'
 type.parameter.extends.final.class.problem.descriptor2:
@@ -3927,7 +3935,7 @@ type.parameter.extends.final.class.problem.descriptor2:
 type.parameter.extends.final.class.quickfix:
     text: Replace type parameter with actual class
 type.parameter.extends.object.display.name:
-    text: Type parameter explicitly extends 'java.lang.Object'
+    text: Type parameter explicitly extends 'Object'
 type.parameter.extends.object.problem.descriptor1:
     text: 'Type parameter <code>#ref</code> explicitly extends ''java.lang.Object'' #loc'
 type.parameter.extends.object.problem.descriptor2:
@@ -3949,7 +3957,7 @@ unary.plus.problem.descriptor:
 unary.plus.quickfix:
     text: Remove unary '+'
 unchecked.exception.class.display.name:
-    text: Unchecked exception class
+    text: Unchecked 'Exception' class
 unchecked.exception.class.problem.descriptor:
     text: 'Unchecked exception class <code>#ref</code> #loc'
 unclear.binary.expression.display.name:
@@ -3981,9 +3989,9 @@ unnecessarily.qualified.static.usage.ignore.field.option:
 unnecessarily.qualified.static.usage.ignore.method.option:
     text: Ignore unnecessarily qualified method calls
 unnecessarily.qualified.static.usage.problem.descriptor:
-    text: 'Unnecessarily qualified static method call <code>{0}()</code> #loc'
+    text: 'Unnecessarily qualified call to static method <code>{0}()</code> #loc'
 unnecessarily.qualified.static.usage.problem.descriptor1:
-    text: 'Unnecessarily qualified static access <code>{0}</code> #loc'
+    text: 'Unnecessarily qualified access to static field <code>{0}</code> #loc'
 unnecessarily.qualified.statically.imported.element.display.name:
     text: Unnecessarily qualified statically imported element
 unnecessarily.qualified.statically.imported.element.problem.descriptor:
@@ -4071,9 +4079,9 @@ unnecessary.fully.qualified.name.problem.descriptor1:
 unnecessary.fully.qualified.name.problem.descriptor2:
     text: 'Qualifier <code>#ref</code> is unnecessary and can be removed #loc'
 unnecessary.fully.qualified.name.remove.quickfix:
-    text: Remove qualification
+    text: Remove unnecessary qualification
 unnecessary.fully.qualified.name.replace.quickfix:
-    text: Replace with import
+    text: Replace qualified name with import
 unnecessary.fully.qualified.name.status.bar.escape.highlighting.message:
     text: '{0} fully qualified {0, choice, 1#name|2#names} replaced with import (press Escape to remove highlighting)'
 unnecessary.inherit.doc.class.invalid.problem.descriptor:
@@ -4083,7 +4091,7 @@ unnecessary.inherit.doc.constructor.invalid.problem.descriptor:
 unnecessary.inherit.doc.constructor.no.super.problem.descriptor:
     text: 'No super method found to inherit Javadoc from #loc'
 unnecessary.inherit.doc.display.name:
-    text: Unnecessary '{'@inheritDoc'}' Javadoc comment
+    text: Unnecessary '{@inheritDoc}' Javadoc comment
 unnecessary.inherit.doc.field.invalid.problem.descriptor:
     text: '<code>#ref</code> is not valid on fields #loc'
 unnecessary.inherit.doc.module.invalid.problem.descriptor:
@@ -4091,7 +4099,7 @@ unnecessary.inherit.doc.module.invalid.problem.descriptor:
 unnecessary.inherit.doc.problem.descriptor:
     text: 'Javadoc comment containing only <code>#ref</code> is unnecessary #loc'
 unnecessary.inherit.doc.quickfix:
-    text: Remove unnecessary '{'@inheritDoc'}'
+    text: Remove unnecessary '{@inheritDoc}'
 unnecessary.initcause.display.name:
     text: Unnecessary call to 'Throwable.initCause()'
 unnecessary.initcause.problem.descriptor:
@@ -4179,13 +4187,13 @@ unnecessary.super.qualifier.problem.descriptor:
 unnecessary.super.qualifier.quickfix:
     text: Remove unnecessary 'super' qualifier
 unnecessary.temporary.on.conversion.from.string.display.name:
-    text: Unnecessary temporary object in conversion from String
+    text: Unnecessary temporary object in conversion from 'String'
 unnecessary.temporary.on.conversion.from.string.fix.name:
     text: Replace with ''{0}''
 unnecessary.temporary.on.conversion.from.string.problem.descriptor:
     text: '<code>#ref</code> #loc can be simplified to ''''{0}'''''
 unnecessary.temporary.on.conversion.to.string.display.name:
-    text: Unnecessary temporary object in conversion to String
+    text: Unnecessary temporary object in conversion to 'String'
 unnecessary.this.display.name:
     text: Unnecessary 'this' qualifier
 unnecessary.this.ignore.assignments.option:
@@ -4213,11 +4221,11 @@ unnecessary.unboxing.remove.quickfix:
 unnecessary.unboxing.superfluous.option:
     text: Only report truly superfluously unboxed expressions
 unnecessary.unicode.escape.display.name:
-    text: Unnecessary unicode escape sequence
+    text: Unnecessary Unicode escape sequence
 unnecessary.unicode.escape.problem.descriptor:
     text: 'Unicode escape sequence <code>#ref</code> can be replaced with ''''{0}'''' #loc'
 unpredictable.big.decimal.constructor.call.display.name:
-    text: Unpredictable BigDecimal constructor call
+    text: Unpredictable 'BigDecimal' constructor call
 unpredictable.big.decimal.constructor.call.ignore.complex.literals.option:
     text: Ignore constructor calls with multiple literals (e.g. 0.1 + 0.2)
 unpredictable.big.decimal.constructor.call.ignore.references.option:
@@ -4241,7 +4249,7 @@ unqualified.inner.class.access.quickfix:
 unqualified.method.access.display.name:
     text: Instance method call not qualified with 'this'
 unqualified.method.access.problem.descriptor:
-    text: 'Instance method call <code>#ref</code> is not qualified with ''this'' #loc'
+    text: 'Instance method call <code>#ref()</code> is not qualified with ''this'' #loc'
 unqualified.static.usage.display.name:
     text: Unqualified static access
 unqualified.static.usage.ignore.field.option:
@@ -4339,15 +4347,15 @@ use.processbuilder.class.display.name:
 use.processbuilder.class.problem.descriptor:
     text: 'Use of <code>#ref</code> is non-portable #loc'
 use.stringtokenizer.display.name:
-    text: Use of StringTokenizer
+    text: Use of 'StringTokenizer'
 use.stringtokenizer.problem.descriptor:
     text: '<code>#ref</code> in an internationalized context #loc'
 use.sun.classes.display.name:
-    text: Use of sun.* classes
+    text: Use of 'sun.*' classes
 use.sun.classes.problem.descriptor:
     text: 'Use of Sun-supplied class <code>#ref</code> is non-portable #loc'
 use.system.out.err.display.name:
-    text: Use of System.out or System.err
+    text: Use of 'System.out' or 'System.err'
 use.system.out.err.problem.descriptor:
     text: 'Uses of <code>#ref</code> should probably be replaced with more robust logging #loc'
 used.catch.parameter.named.ignore.problem.descriptor:
@@ -4409,11 +4417,11 @@ wait.called.on.condition.display.name:
 wait.called.on.condition.problem.descriptor:
     text: 'Call to <code>#ref()</code> on Condition object #loc'
 wait.not.in.loop.display.name:
-    text: '''wait()'' not in loop'
+    text: '''wait()'' not called in loop'
 wait.not.in.loop.problem.descriptor:
-    text: 'Call to <code>#ref()</code> is not made in a loop #loc'
+    text: 'Call to <code>#ref()</code> is not in loop #loc'
 wait.notify.not.in.synchronized.context.display.name:
-    text: '''wait()'' or ''notify()'' while not synchronized'
+    text: '''wait()'' or ''notify()'' is not in synchronized context'
 wait.notify.while.not.synchronized.on.problem.descriptor:
     text: 'Call to <code>#ref</code> while not synchronized on ''''{0}'''' #loc'
 wait.or.await.without.timeout.display.name:
@@ -4427,15 +4435,15 @@ wait.while.holding.two.locks.problem.descriptor:
 wait.without.corresponding.notify.display.name:
     text: '''wait()'' without corresponding ''notify()'''
 wait.without.corresponding.notify.problem.descriptor:
-    text: 'Call to <code>#ref</code> without corresponding <code>notify()</code> or <code>notifyAll()</code> #loc'
+    text: 'Call to <code>#ref()</code> without corresponding <code>notify()</code> or <code>notifyAll()</code> #loc'
 warn.level.and.lower.option:
     text: warn level and lower
 warn.on.label:
     text: 'Warn on:'
 while.can.be.foreach.display.name:
-    text: '''while'' loop replaceable with ''foreach'''
+    text: '''while'' loop can be replaced with enhanced ''for'' loop'
 while.can.be.foreach.problem.descriptor:
-    text: '<code>#ref</code> loop replaceable with ''foreach'' #loc'
+    text: '<code>#ref</code> loop can be replaced with enhanced ''for'' #loc'
 while.loop.spins.on.field.display.name:
     text: '''while'' loop spins on field'
 while.loop.spins.on.field.fix.family.name:
