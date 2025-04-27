@@ -1,512 +1,510 @@
-rename.overloads:
-  text: Rename &overloads
-declare.static.pass.fields.checkbox:
-  text: Declare &static (pass fields as params)
-declare.generated.annotations:
-  text: '&Generate annotations'
-add.property:
-  text: Add Property
-add.property.dialog.title:
-  text: Add property to {0}
-property.name.field.label:
-  text: 'Property name:'
-property.type.field.label:
-  text: 'Property type:'
-create.property.getter.checkbox:
-  text: Create property getter
-create.property.setter.checkbox:
-  text: Create property setter
-add.property.to.constructors.checkbox:
-  text: Add property to constructors
-make.property.final.checkbox:
-  text: Make property final
-initialization.expression.checkbox:
-  text: 'Initialization expression (optional):'
-cannot.perform.the.refactoring:
-  text: |
-    Cannot perform the refactoring.
-refactor.j.is.not.licensed:
-  text: Refactor-J is not licensed.
-the.caret.should.be.positioned.in.the.class.to.add.to.property.to:
-  text: The caret should be positioned in the class to add to property to.
-class.to.be.add.property.to:
-  text: Class to be add property to
-constructor.calls.to.be.updated.view.descriptor:
-  text: Constructor calls to be updated {0}
-unable.to.find.the.requested.class:
-  text: Unable to find the requested class
-no.class.found:
-  text: No class found
-search.for.class.text:
-  text: Search for class
-search.for.class.family.name:
-  text: Search For Class
-add.global.library:
-  text: Add library dependency
-global.library.source:
-  text: 'Global Library: {0}'
-add.module.dependency:
-  text: Add module dependency
-module.source:
-  text: 'Module: {0}'
-project.library.source:
-  text: 'Project Library: {0}'
-add.project.library:
-  text: Add library dependency
-class.found.column.header:
-  text: Class found
-source.column.header:
-  text: Source
-action.column.header:
-  text: Action
-class.search.results.title:
-  text: Class search results
-extract.class.title:
-  text: Extract Class
-extract.class.from.label:
-  text: Extract class from {0}
-name.for.new.class.label:
-  text: '&Name for new class:'
-choose.destination.package.label:
-  text: Choose Destination Package
-package.for.new.class.label:
-  text: '&Package name:'
-name.for.wrapper.class.label:
-  text: 'Class name:'
-package.for.wrapper.class.label:
-  text: 'Package name:'
-members.to.extract.label:
-  text: Mem&bers to Extract
-generate.array.access.methods.title:
-  text: Choose members to generate array access methods for
-generate.collection.access.methods.title:
-  text: Choose members to generate collection access methods for
-generate.array.methods.undo.string:
-  text: Generate Array Methods
-generate.collection.methods.undo.string:
-  text: Generate Collection Methods
-introduce.parameter.object.title:
-  text: Introduce Parameter Object
-there.already.exists.a.class.with.the.chosen.name:
-  text: There already exists a class with the chosen name.
-introduce.parameter.object:
-  text: Introduce Parameter Object
-introduce.type.parameter:
-  text: Introduce Type Parameter
-the.caret.should.be.positioned.at.on.a.type.to.be.parameterized:
-  text: The caret should be positioned at a type to be parameterized.
-type.selected.is.not.in.class.context:
-  text: Type selected is not in class context.
-type.parameters.can.not.be.introduced.as.type.parameters:
-  text: Type parameters can not be introduced as type parameters.
-primitive.types.can.not.be.introduced.as.type.parameters:
-  text: Primitive types can not be introduced as type parameters.
-conflicts.found:
-  text: Conflicts found
-there.are.non.genericizable.instances.of.the.type.you.selected:
-  text: |
-    There are non-genericizable instances of the type you selected.
-do.you.wish.to.continue:
-  text: |
-    Do you wish to continue?.
-introduce.type.parameter.title:
-  text: Introduce Type Parameter
-name.for.new.type.parameter.label:
-  text: 'Name for new type parameter:'
-the.caret.should.be.positioned.within.a.class.to.be.refactored:
-  text: The caret should be positioned within a class to be refactored.
-push.javadoc.down:
-  text: Push Javadoc Down
-the.selected.class.is.an.enumeration:
-  text: The selected class is an enumeration.
-the.selected.class.has.no.overridden.methods.with.javadoc:
-  text: The selected class has no overriden methods with javadoc.
-push.javadoc.down.title:
-  text: Push Javadoc Down
-replace.existing.comments.checkbox:
-  text: Replace existing comments
-use.inheritdoc.comments:
-  text: Use @inheritdoc comments
-push.javadoc.down.from.label:
-  text: 'Push Javadoc down from:'
-methods.to.copy.javadoc.from:
-  text: Methods to copy javadoc from
-remove.property:
-  text: Remove Property
-the.caret.should.be.positioned.at.on.a.property.to.be.removed:
-  text: The caret should be positioned at a property to be removed.
-remove.property.getter.checkbox:
-  text: Remove property getter
-remove.property.setter.checkbox:
-  text: Remove property setter
-remove.property.title:
-  text: Remove Property
-remove.property.border:
-  text: Remove property {0}
-replacement.expression.label:
-  text: 'Replacement expression (optional):'
-remove.middleman:
-  text: Remove Middleman
-the.caret.should.be.positioned.at.the.name.of.the.field.to.be.refactored:
-  text: The caret should be positioned at the name of the field to be refactored.
-field.selected.is.not.used.as.a.delegate:
-  text: Field selected is not used as a delegate.
-wrap.return.value:
-  text: Wrap Return Value
-the.caret.should.be.positioned.at.the.name.of.the.method.to.be.refactored:
-  text: The caret should be positioned at the name of the method to be refactored, inside parameters list or inside method call.
-method.selected.returns.void:
-  text: Method selected returns 'void'.
-constructor.returns.can.not.be.wrapped:
-  text: Constructor returns can not be wrapped.
-wrap.return.value.title:
-  text: Wrap Return Value
-the.caret.should.be.positioned.at.an.annotation.to.be.refactored.to.be.refactored:
-  text: The caret should be positioned at an annotation to be refactored to be refactored.
-pull.annotation.up:
-  text: Pull Annotation Up
-pull.annotation.up.title:
-  text: Pull Annotation Up
-replace.existing.annotations.checkbox:
-  text: Replace existing annotations
-pull.up.annotation.from.label:
-  text: 'Pull up annotation from {0} to:'
-pull.javadoc.up.title:
-  text: Pull Javadoc Up
-pull.up.javadoc.from.label:
-  text: 'Pull up javadoc from {0} to:'
-methods.to.pull.up.javadoc.from.panel:
-  text: Methods to pull up javadoc from
-remove.type.parameter:
-  text: Remove Type Parameter
-the.caret.should.be.positioned.at.the.name.of.the.type.parameter.to.be.refactored:
-  text: The caret should be positioned at the name of the type parameter to be refactored.
-type.parameter.selected.extends.multiple.types:
-  text: Type parameter selected extends multiple types.
-type.parameter.question.label:
-  text: Do you wish to remove type parameter {0} and all uses of it?
-method.to.wrap.returns.from.label:
-  text: 'Method to wrap returns from:'
-method.whose.return.are.to.wrapped:
-  text: Method whose return are to wrapped
-references.to.be.modified.usage.view:
-  text: "References to be modified {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}"
-reference:
-  text: reference
-type.parameter.to.be.remove:
-  text: Type parameter to be remove
-references.to.be.changed.usage.view:
-  text: References to be changed {0}
-references.to.be.made.removed.usage.view:
-  text: References to be made removed {0}
-property.to.be.removed:
-  text: Property to be removed
-remove.middleman.field.header:
-  text: 'Remove middleman field:'
-references.to.expose.usage.view:
-  text: References to expose {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}
-retain.all.delegating.methods.radio.button:
-  text: Retain all delegating methods
-remove.middleman.title:
-  text: Remove Middleman
-delete.all.delegating.methods.radio.button:
-  text: Delete all delegating methods
-field.label:
-  text: Field {0}
-delete.delegating.methods.border:
-  text: Delete delegating methods
-make.class.inner.title:
-  text: Make Class Inner
-make.class.an.inner.class.border:
-  text: Make class {0} an inner class
-outer.class.label:
-  text: 'Outer class:'
-choose.destination.class.label:
-  text: Choose destination class
-add.property.command:
-  text: Add property {0} to {1}
-refactor:
-  text: Refactor
-preview:
-  text: Preview
-wrapped.return.command.name:
-  text: Wrapped return as {0} for {1}{2}{3}()
-split.loop.text:
-  text: Split loop
-split.loop.family.name:
-  text: Split Loop
-removed.type.parameter.from.class.command.name:
-  text: Removed type parameter {0} from class {1}
-removed.type.parameter.from.method.command.name:
-  text: Removed type parameter {0} from method {1}()
-remove.property.command.name:
-  text: Remove property {0}
-exposed.delegation.command.name:
-  text: Exposed delegation to {0}{1}{2}
-push.up.javadoc.command.name:
-  text: Push up Javadoc
-javadoced.class:
-  text: Javadoced class
-superclass.methods.to.be.javadoced:
-  text: Superclass methods to be javadoced
-push.annotation.down:
-  text: Push Annotation Down
 0.refactor.j.is.not.licensed:
-  text: '{0}Refactor-J is not licensed.'
+    text: '{0}Refactor-J is not licensed.'
 0.the.caret.should.be.positioned.at.an.annotation.to.be.refactored.to.be.refactored:
-  text: '{0}The caret should be positioned at an annotation to be refactored to be refactored.'
-push.down.annotation.command.name:
-  text: Push down annotation
-annotation:
-  text: Annotation
-subclass.elements.to.be.annotated:
-  text: Subclass elements to be annotated
-push.annotation.down.title:
-  text: Push Annotation Down
-pull.up.annotation.command.name:
-  text: Pull up annotation
-superclass.elements.to.be.annotated:
-  text: Superclass elements to be annotated
-pull.javadoc.up:
-  text: Pull Javadoc Up
-pull.up.javadoc.command.name:
-  text: Pull up Javadoc
-merge.loops.text:
-  text: Merge loops
-merge.loops.family.name:
-  text: Merge Loops
-make.class.inner:
-  text: Make Class Inner
-the.caret.should.be.positioned.at.on.a.class.to.be.made.into.an.inner.class:
-  text: The caret should be positioned at a class to be made into an inner class.
-only.outer.classes.and.static.inner.classes.may.be.made.inner:
-  text: Only outer classes and static inner classes may be made inner.
+    text: '{0}The caret should be positioned at an annotation to be refactored to be refactored.'
 a.class.can.not.be.made.an.inner.class.of.itself:
-  text: A class can not be made an inner class of itself.
+    text: A class can not be made an inner class of itself.
 a.class.can.not.be.made.an.inner.class.of.one.of.it.s.decendents:
-  text: A class can not be made an inner class of one of it's decendents.
-make.class.inner.command.name:
-  text: Move class {0} inside class {1}
-invert.boolean:
-  text: Invert Boolean
-the.caret.should.be.positioned.at.the.name.of.the.variable.or.parameter.to.be.refactored:
-  text: The caret should be positioned at the name of the variable or parameter to be refactored.
-variable.selected.is.not.boolean:
-  text: Variable selected is not boolean.
-invert.boolean.title:
-  text: Invert boolean
-do.you.wish.to.invert.all.uses.of.variable:
-  text: Do you wish to invert all uses of variable {0}?
-parameter.selected.is.not.boolean:
-  text: Parameter selected is not boolean.
-do.you.wish.to.invert.all.uses.of.parameter:
-  text: Do you wish to invert all uses of parameter {0}?
-invert.parameter.command.name:
-  text: Inverted {0}({1})
-invert.variable.command.name:
-  text: Inverted
-variable.to.be.inverted:
-  text: Variable to be inverted
-references.to.be.inverted.0:
-  text: References to be inverted {0}
-parameterize.class.radio.button:
-  text: Parameterize class {0}
-parameterize.method.radio.button:
-  text: Parameterize method {0}()
-genericize.uses.border:
-  text: Genericize uses of {0}
-introduced.type.parameter.command.name:
-  text: Introduced type {0} as parameter to class {1}
-type.parameter.to.be.introduced:
-  text: Type parameter to be introduced
-class.references.to.be.made.inner:
-  text: Class references to be made inner
-references.to.be.made.inner.usage.view:
-  text: References to be made inner {0}
-control.flow.category:
-  text: Control Flow
-other.category:
-  text: Other
-genericize.uses.in.border:
-  text: Genericize uses of {0} in {1}
-to.purchase.a.commercial.license.please.visit:
-  text: To purchase a commercial license, please visit
-enter.license.key.for.refactor.j:
-  text: Enter license key for Refactor-J
-review.license.terms:
-  text: Review License terms
-user.name:
-  text: '&User Name:'
-license.key:
-  text: '&License Key:'
-www.sixthandredriver.com:
-  text: www.sixthandredriver.com
-i.have.read.the.terms.of.this.license.and.i.accept.them:
-  text: '&I have read the terms of this license, and I accept them.'
-i.do.not.accept.the.terms.of.this.license:
-  text: I &do not accept the terms of this license.
-enter.refactor.j.license.data.title:
-  text: Enter Refactor-J License Data
-license.renewal.needed:
-  text: License renewal needed
-license.entered:
-  text: License Entered
-license.expired:
-  text: License Expired
-to.purchase.a.license.for.the.latest.version.please.contact.sixth.and.red.river.software:
-  text: To purchase a license for the latest version, please contact Sixth and Red River Software
-to.purchase.a.new.license.please.contact.sixth.and.red.river.software:
-  text: To purchase a new license, please contact Sixth and Red River Software
-to.purchase.a.license.for.the.refactor.j.please.contact.sixth.and.red.river.software:
-  text: To purchase a license for the Refactor-J, please contact Sixth and Red River Software
-invalid.license.data:
-  text: Invalid License Data
-invalid.license.data.please.try.again:
-  text: Invalid license data. Please, try again.
-your.refactor.j.license.has.expired:
-  text: "Your Refactor-J license has expired. \n"
-your.refactor.j.license.is.for.an.older.version.and.does.not.support.the.currently.installed.version.of.refactor.j:
-  text: "Your Refactor-J license is for an older version, and does not support the currently installed version of Refactor-J. \n"
-the.refactor.j.license.entered.is.for.another.product:
-  text: "The Refactor-J license entered is for another product. \n"
-to.purchase.a.full.license.please.contact.sixth.and.red.river.software:
-  text: To purchase a full license, please contact Sixth and Red River Software.
-your.evaluation.license.for.refactor.j.will.expire.in.less.than.a.day.n:
-  text: |
-    Your evaluation license for Refactor-J will expire in less than a day.
-your.evaluation.license.for.refactor.j.will.expire.in.one.day:
-  text: |
-    Your evaluation license for Refactor-J will expire in one day.
-thank.you.for.supporting.sixth.and.red.river.software:
-  text: Thank you for supporting Sixth and Red River Software
-extract.class:
-  text: Extract Class
-the.selected.class.is.an.interface:
-  text: The selected class is an interface.
-the.selected.class.is.an.annotation.type:
-  text: The selected class is an annotation type.
-the.refactoring.is.not.supported.on.non.static.inner.classes:
-  text: The refactoring is not supported on non-static inner classes.
-the.selected.class.has.no.members.to.extract:
-  text: The selected class has no members to extract.
-references.to.extract:
-  text: References to extract ({0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files})
-extracting.from.class:
-  text: 'Extracting from class:'
-extracted.class.command.name:
-  text: Extracted class {0}
-method.to.extract.parameters.from.label:
-  text: Method to extract parameters from
-name.for.new.parameter.label:
-  text: 'Name for new parameter:'
-method.selected.has.no.parameters:
-  text: Method selected has no parameters.
-introduced.parameter.class.command.name:
-  text: Introduced parameter class {0} for {1}.{2}()
-method.whose.parameters.are.to.wrapped:
-  text: Method whose parameters are to wrapped
-references.to.be.modified:
-  text: References to be modified
-parameters.to.extract.border:
-  text: Parameters to Extract
-parameter:
-  text: Parameter
-your.evaluation.license.for.refactor.j.will.expire.in.less.than.n.days:
-  text: |
-    Your evaluation license for Refactor-J will expire in less than {0} days.
-refactor.j.licensed.to:
-  text: 'Refactor-J licensed to:'
-can.only.pull.annotations.up.on.methods.parameters.and.classes:
-  text: Can only pull annotations up on methods, parameters, and classes
-can.not.find.any.available.superclasses.for.the.selected.class:
-  text: Can not find any available superclasses for the selected class
-can.not.find.any.available.super.methods.for.the.selected.method:
-  text: Can not find any available super-methods for the selected method
-can.only.push.annotations.down.on.methods.parameters.and.classes:
-  text: Can only push annotations down on methods, parameters, and classes
-can.not.find.any.available.subclasses.for.the.selected.class:
-  text: Can not find any available subclasses for the selected class
+    text: A class can not be made an inner class of one of it's decendents.
+action.column.header:
+    text: Action
+add.global.library:
+    text: Add library dependency
+add.module.dependency:
+    text: Add module dependency
+add.project.library:
+    text: Add library dependency
+add.property:
+    text: Add Property
+add.property.command:
+    text: Add property {0} to {1}
+add.property.dialog.title:
+    text: Add property to {0}
+add.property.to.constructors.checkbox:
+    text: Add property to constructors
+annotation:
+    text: Annotation
 can.not.find.any.available.overriding.methods.for.the.selected.method:
-  text: Can not find any available overriding methods for the selected method
-delete.selected.annotation.checkbox:
-  text: Delete selected annotation
-push.annotation.down.from.label:
-  text: 'Push annotation down from:'
-there.already.exists.an.incompatible.class.with.the.chosen.name:
-  text: There already exists an incompatible class with the chosen name
-weaken.type:
-  text: Weaken Type
-weaken.type.label:
-  text: 'Weaken the type of ''''{0}'''' from {1} to:'
-weaken.type.command.name:
-  text: Weaken type
-weaken.type.refactoring.is.not.supported.for.primitive.types:
-  text: Weaken type refactoring is not supported for primitive types
-weaken.type.refactoring.is.not.supported.for.arrays:
-  text: Weaken type refactoring is not supported for arrays
-weaken.type.refactoring.is.not.supported.for.type.parameters:
-  text: Weaken type refactoring is not supported for type parameters
-invalid.type.for.weaken.type.refactoring:
-  text: Invalid type for Weaken Type refactoring
-weaken.type.refactoring.is.not.supported.for.constructors:
-  text: Weaken type refactoring is not supported for constructors
-the.selected.type.cannot.be.weakened:
-  text: The selected type cannot be weakened
-the.selected.type.cannot.be.weakened.because.the.method.is.declared.in.a.non.project.class:
-  text: The selected type cannot be weakened because the method is declared in a non-project class
-the.selected.method.cannot.be.wrapped.because.it.is.defined.in.a.non.project.class:
-  text: The selected method cannot be wrapped because it is defined in a non-project class
-existing.wrapper.class.label:
-  text: Use Existing Parameter Class
-select.wrapper.class:
-  text: Select parameter class
-could.not.find.selected.wrapping.class:
-  text: Could not find selected wrapping class
-there.already.exists.a.class.with.the.selected.name:
-  text: There already exists a class with the selected name
-pull.annotation.up.from.label:
-  text: 'Pull annotation up from:'
+    text: Can not find any available overriding methods for the selected method
+can.not.find.any.available.subclasses.for.the.selected.class:
+    text: Can not find any available subclasses for the selected class
+can.not.find.any.available.super.methods.for.the.selected.method:
+    text: Can not find any available super-methods for the selected method
+can.not.find.any.available.superclasses.for.the.selected.class:
+    text: Can not find any available superclasses for the selected class
+can.only.pull.annotations.up.on.methods.parameters.and.classes:
+    text: Can only pull annotations up on methods, parameters, and classes
+can.only.push.annotations.down.on.methods.parameters.and.classes:
+    text: Can only push annotations down on methods, parameters, and classes
+cannot.perform.the.refactoring:
+    text: |
+        Cannot perform the refactoring.
+choose.destination.class.label:
+    text: Choose destination class
+choose.destination.package.label:
+    text: Choose Destination Package
+class.found.column.header:
+    text: Class found
+class.references.to.be.made.inner:
+    text: Class references to be made inner
+class.search.results.title:
+    text: Class search results
+class.to.be.add.property.to:
+    text: Class to be add property to
+conflicts.found:
+    text: Conflicts found
+constructor.calls.to.be.updated.view.descriptor:
+    text: Constructor calls to be updated {0}
+constructor.returns.can.not.be.wrapped:
+    text: Constructor returns can not be wrapped.
+control.flow.category:
+    text: Control Flow
 convert.equality.disjunction.to.set.contains:
-  text: Convert Equality Disjunction To Set.contains()
-convert.to.set.contains:
-  text: Convert to Set.contains()
-the.caret.should.be.positioned.at.the.name.of.the.variable.parameter.or.method.to.be.refactored:
-  text: The caret should be positioned at the name of the variable, parameter, or method to be refactored.
-convert.to.String.format:
-  text: Convert to String.format
-convert.to.printf:
-  text: Convert to printf
+    text: Convert Equality Disjunction To Set.contains()
 convert.to.MessageFormat.format:
-  text: Convert to MessageFormat.format
-split.string:
-  text: Split string
-copy.javadoc.to.inheritors:
-  text: Copy Javadoc to inheritors
+    text: Convert to MessageFormat.format
+convert.to.String.format:
+    text: Convert to String.format
+convert.to.printf:
+    text: Convert to printf
+convert.to.set.contains:
+    text: Convert to Set.contains()
 copy.javadoc.to.ancestors:
-  text: Copy Javadoc to ancestors
-extract.delegate.as.enum.checkbox:
-  text: Extract as enum
-extract.delegate.create.nested.checkbox:
-  text: Create nested class
-extract.delegate.generate.accessors.checkbox:
-  text: "&Generate accessors"
-extract.delegate.unable.create.warning.message:
-  text: Unable to create class with the given name
+    text: Copy Javadoc to ancestors
+copy.javadoc.to.inheritors:
+    text: Copy Javadoc to inheritors
+could.not.find.selected.wrapping.class:
+    text: Could not find selected wrapping class
+create.property.getter.checkbox:
+    text: Create property getter
+create.property.setter.checkbox:
+    text: Create property setter
+declare.generated.annotations:
+    text: '&Generate annotations'
+declare.static.pass.fields.checkbox:
+    text: Declare &static (pass fields as params)
+delete.all.delegating.methods.radio.button:
+    text: Delete all delegating methods
+delete.delegating.methods.border:
+    text: Delete delegating methods
+delete.selected.annotation.checkbox:
+    text: Delete selected annotation
 dialog.message.nothing.found.to.extract:
-  text: Nothing found to extract
-invalid.extracted.class.name:
-  text: "''{0}'' is invalid extracted class name"
-extracted.class.should.have.unique.name:
-  text: "Extracted class should have unique name. Name ''{0}'' is already in use by one of the inner classes"
+    text: Nothing found to extract
+do.you.wish.to.continue:
+    text: |
+        Do you wish to continue?.
+do.you.wish.to.invert.all.uses.of.parameter:
+    text: Do you wish to invert all uses of parameter {0}?
+do.you.wish.to.invert.all.uses.of.variable:
+    text: Do you wish to invert all uses of variable {0}?
+enter.license.key.for.refactor.j:
+    text: Enter license key for Refactor-J
+enter.refactor.j.license.data.title:
+    text: Enter Refactor-J License Data
+existing.wrapper.class.label:
+    text: Use Existing Parameter Class
+exposed.delegation.command.name:
+    text: Exposed delegation to {0}{1}{2}
+extract.class:
+    text: Extract Class
 extract.class.depends.on.0.from.1.tooltip:
-  text: "Depends on {0} from {1}"
+    text: Depends on {0} from {1}
 extract.class.depends.on.0.from.new.class:
-  text: "Depends on {0} from new class {1}"
-remove.middleman.tooltip.warning:
-  text: "Deletion will break type hierarchy"
+    text: Depends on {0} from new class {1}
+extract.class.from.label:
+    text: Extract class from {0}
+extract.class.title:
+    text: Extract Class
+extract.delegate.as.enum.checkbox:
+    text: Extract as enum
+extract.delegate.create.nested.checkbox:
+    text: Create nested class
+extract.delegate.generate.accessors.checkbox:
+    text: '&Generate accessors'
+extract.delegate.unable.create.warning.message:
+    text: Unable to create class with the given name
+extracted.class.command.name:
+    text: Extracted Class {0}
+extracted.class.should.have.unique.name:
+    text: Extracted class should have unique name. Name ''{0}'' is already in use by one of the inner classes
+extracting.from.class:
+    text: 'Extracting from class:'
+field.label:
+    text: Field {0}
+field.selected.is.not.used.as.a.delegate:
+    text: Field selected is not used as a delegate.
+generate.array.access.methods.title:
+    text: Choose members to generate array access methods for
+generate.array.methods.undo.string:
+    text: Generate Array Methods
+generate.collection.access.methods.title:
+    text: Choose members to generate collection access methods for
+generate.collection.methods.undo.string:
+    text: Generate Collection Methods
+genericize.uses.border:
+    text: Genericize uses of {0}
+genericize.uses.in.border:
+    text: Genericize uses of {0} in {1}
+global.library.source:
+    text: 'Global Library: {0}'
+i.do.not.accept.the.terms.of.this.license:
+    text: I &do not accept the terms of this license.
+i.have.read.the.terms.of.this.license.and.i.accept.them:
+    text: '&I have read the terms of this license, and I accept them.'
+initialization.expression.checkbox:
+    text: 'Initialization expression (optional):'
+introduce.parameter.object:
+    text: Introduce Parameter Object
+introduce.parameter.object.title:
+    text: Introduce Parameter Object
+introduce.type.parameter:
+    text: Introduce Type Parameter
+introduce.type.parameter.title:
+    text: Introduce Type Parameter
+introduced.parameter.class.command.name:
+    text: Introduced parameter class {0} for {1}.{2}()
+introduced.type.parameter.command.name:
+    text: Introduced type {0} as parameter to class {1}
+invalid.extracted.class.name:
+    text: '''''{0}'''' is invalid extracted class name'
+invalid.license.data:
+    text: Invalid License Data
+invalid.license.data.please.try.again:
+    text: Invalid license data. Please, try again.
+invalid.type.for.weaken.type.refactoring:
+    text: Invalid type for Weaken Type refactoring
+invert.boolean:
+    text: Invert Boolean
+invert.boolean.title:
+    text: Invert boolean
+invert.parameter.command.name:
+    text: Inverted {0}({1})
+invert.variable.command.name:
+    text: Inverted
+javadoced.class:
+    text: Javadoced class
+license.entered:
+    text: License Entered
+license.expired:
+    text: License Expired
+license.key:
+    text: '&License Key:'
+license.renewal.needed:
+    text: License renewal needed
+make.class.an.inner.class.border:
+    text: Make class {0} an inner class
+make.class.inner:
+    text: Make Class Inner
+make.class.inner.command.name:
+    text: Move class {0} inside class {1}
+make.class.inner.title:
+    text: Make Class Inner
+make.property.final.checkbox:
+    text: Make property final
+members.to.extract.label:
+    text: Mem&bers to Extract
+merge.loops.family.name:
+    text: Merge Loops
+merge.loops.text:
+    text: Merge loops
+method.selected.has.no.parameters:
+    text: Method selected has no parameters.
+method.selected.returns.void:
+    text: Method selected returns 'void'.
+method.to.extract.parameters.from.label:
+    text: Method to extract parameters from
+method.to.wrap.returns.from.label:
+    text: 'Method to wrap returns from:'
+method.whose.parameters.are.to.wrapped:
+    text: Method whose parameters are to wrapped
+method.whose.return.are.to.wrapped:
+    text: Method whose return are to wrapped
+methods.to.copy.javadoc.from:
+    text: Methods to copy javadoc from
+methods.to.pull.up.javadoc.from.panel:
+    text: Methods to pull up javadoc from
+module.source:
+    text: 'Module: {0}'
+name.for.new.class.label:
+    text: '&Name for new class:'
+name.for.new.parameter.label:
+    text: 'Name for new parameter:'
+name.for.new.type.parameter.label:
+    text: 'Name for new type parameter:'
+name.for.wrapper.class.label:
+    text: 'Class name:'
+no.class.found:
+    text: No class found
+only.outer.classes.and.static.inner.classes.may.be.made.inner:
+    text: Only outer classes and static inner classes may be made inner.
+other.category:
+    text: Other
+outer.class.label:
+    text: 'Outer class:'
+package.for.new.class.label:
+    text: '&Package name:'
+package.for.wrapper.class.label:
+    text: 'Package name:'
+parameter:
+    text: Parameter
+parameter.selected.is.not.boolean:
+    text: Parameter selected is not boolean.
+parameterize.class.radio.button:
+    text: Parameterize class {0}
+parameterize.method.radio.button:
+    text: Parameterize method {0}()
+parameters.to.extract.border:
+    text: Parameters to Extract
+preview:
+    text: Preview
+primitive.types.can.not.be.introduced.as.type.parameters:
+    text: Primitive types can not be introduced as type parameters.
+project.library.source:
+    text: 'Project Library: {0}'
+property.name.field.label:
+    text: 'Property name:'
+property.to.be.removed:
+    text: Property to be removed
+property.type.field.label:
+    text: 'Property type:'
+pull.annotation.up:
+    text: Pull Annotation Up
+pull.annotation.up.from.label:
+    text: 'Pull annotation up from:'
+pull.annotation.up.title:
+    text: Pull Annotation Up
+pull.javadoc.up:
+    text: Pull Javadoc Up
+pull.javadoc.up.title:
+    text: Pull Javadoc Up
+pull.up.annotation.command.name:
+    text: Pull up annotation
+pull.up.annotation.from.label:
+    text: 'Pull up annotation from {0} to:'
+pull.up.javadoc.command.name:
+    text: Pull up Javadoc
+pull.up.javadoc.from.label:
+    text: 'Pull up javadoc from {0} to:'
+push.annotation.down:
+    text: Push Annotation Down
+push.annotation.down.from.label:
+    text: 'Push annotation down from:'
+push.annotation.down.title:
+    text: Push Annotation Down
+push.down.annotation.command.name:
+    text: Push down annotation
+push.javadoc.down:
+    text: Push Javadoc Down
+push.javadoc.down.from.label:
+    text: 'Push Javadoc down from:'
+push.javadoc.down.title:
+    text: Push Javadoc Down
+push.up.javadoc.command.name:
+    text: Push up Javadoc
+refactor:
+    text: Refactor
+refactor.j.is.not.licensed:
+    text: Refactor-J is not licensed.
+refactor.j.licensed.to:
+    text: 'Refactor-J licensed to:'
+reference:
+    text: reference
+references.to.be.changed.usage.view:
+    text: References to be changed {0}
+references.to.be.inverted.0:
+    text: References to be inverted {0}
+references.to.be.made.inner.usage.view:
+    text: References to be made inner {0}
+references.to.be.made.removed.usage.view:
+    text: References to be made removed {0}
+references.to.be.modified:
+    text: References to be modified
+references.to.be.modified.usage.view:
+    text: References to be modified {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}
+references.to.expose.usage.view:
+    text: References to expose {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}
+references.to.extract:
+    text: References to extract ({0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files})
+remove.middleman:
+    text: Remove Middleman
 remove.middleman.column.header:
-  text: "Delete"
-remove.middleman.methods.to.inline.title:
-  text: "&Methods to Inline"
+    text: Delete
 remove.middleman.deleted.hierarchy.conflict:
-  text: "{0} will be deleted. Hierarchy will be broken"
+    text: '{0} will be deleted. Hierarchy will be broken'
+remove.middleman.field.header:
+    text: 'Remove middleman field:'
+remove.middleman.methods.to.inline.title:
+    text: '&Methods to Inline'
+remove.middleman.title:
+    text: Remove Middleman
+remove.middleman.tooltip.warning:
+    text: Deletion will break type hierarchy
+remove.property:
+    text: Remove Property
+remove.property.border:
+    text: Remove property {0}
+remove.property.command.name:
+    text: Remove property {0}
+remove.property.getter.checkbox:
+    text: Remove property getter
+remove.property.setter.checkbox:
+    text: Remove property setter
+remove.property.title:
+    text: Remove Property
+remove.type.parameter:
+    text: Remove Type Parameter
+removed.type.parameter.from.class.command.name:
+    text: Removed type parameter {0} from class {1}
+removed.type.parameter.from.method.command.name:
+    text: Removed type parameter {0} from method {1}()
+rename.overloads:
+    text: Rename &overloads
+replace.existing.annotations.checkbox:
+    text: Replace existing annotations
+replace.existing.comments.checkbox:
+    text: Replace existing comments
+replacement.expression.label:
+    text: 'Replacement expression (optional):'
+retain.all.delegating.methods.radio.button:
+    text: Retain all delegating methods
+review.license.terms:
+    text: Review License terms
+search.for.class.family.name:
+    text: Search For Class
+search.for.class.text:
+    text: Search for class
+select.wrapper.class:
+    text: Select Parameter Class
+source.column.header:
+    text: Source
+split.loop.family.name:
+    text: Split Loop
+split.loop.text:
+    text: Split loop
+split.string:
+    text: Split string
+subclass.elements.to.be.annotated:
+    text: Subclass elements to be annotated
+superclass.elements.to.be.annotated:
+    text: Superclass elements to be annotated
+superclass.methods.to.be.javadoced:
+    text: Superclass methods to be javadoced
+thank.you.for.supporting.sixth.and.red.river.software:
+    text: Thank you for supporting Sixth and Red River Software
+the.caret.should.be.positioned.at.an.annotation.to.be.refactored.to.be.refactored:
+    text: The caret should be positioned at an annotation to be refactored to be refactored.
+the.caret.should.be.positioned.at.on.a.class.to.be.made.into.an.inner.class:
+    text: The caret should be positioned at a class to be made into an inner class.
+the.caret.should.be.positioned.at.on.a.property.to.be.removed:
+    text: The caret should be positioned at a property to be removed.
+the.caret.should.be.positioned.at.on.a.type.to.be.parameterized:
+    text: The caret should be positioned at a type to be parameterized.
+the.caret.should.be.positioned.at.the.name.of.the.field.to.be.refactored:
+    text: The caret should be positioned at the name of the field to be refactored.
+the.caret.should.be.positioned.at.the.name.of.the.method.to.be.refactored:
+    text: The caret should be positioned at the name of the method to be refactored, inside parameters list or inside method call.
+the.caret.should.be.positioned.at.the.name.of.the.type.parameter.to.be.refactored:
+    text: The caret should be positioned at the name of the type parameter to be refactored.
+the.caret.should.be.positioned.at.the.name.of.the.variable.or.parameter.to.be.refactored:
+    text: The caret should be positioned at the name of the variable or parameter to be refactored.
+the.caret.should.be.positioned.at.the.name.of.the.variable.parameter.or.method.to.be.refactored:
+    text: The caret should be positioned at the name of the variable, parameter, or method to be refactored.
+the.caret.should.be.positioned.in.the.class.to.add.to.property.to:
+    text: The caret should be positioned in the class to add to property to.
+the.caret.should.be.positioned.within.a.class.to.be.refactored:
+    text: The caret should be positioned within a class to be refactored.
+the.refactoring.is.not.supported.on.non.static.inner.classes:
+    text: The refactoring is not supported on non-static inner classes.
+the.selected.class.has.no.members.to.extract:
+    text: The selected class has no members to extract.
+the.selected.class.has.no.overridden.methods.with.javadoc:
+    text: The selected class has no overriden methods with javadoc.
+the.selected.class.is.an.annotation.type:
+    text: The selected class is an annotation interface.
+the.selected.class.is.an.enumeration:
+    text: The selected class is an enum class.
+the.selected.class.is.an.interface:
+    text: The selected class is an interface.
+the.selected.method.cannot.be.wrapped.because.it.is.defined.in.a.non.project.class:
+    text: The selected method cannot be wrapped because it is defined in a non-project class
+the.selected.type.cannot.be.weakened:
+    text: The selected type cannot be weakened
+the.selected.type.cannot.be.weakened.because.the.method.is.declared.in.a.non.project.class:
+    text: The selected type cannot be weakened because the method is declared in a non-project class
+there.already.exists.a.class.with.the.chosen.name:
+    text: There already exists a class with the chosen name.
+there.already.exists.a.class.with.the.selected.name:
+    text: There already exists a class with the selected name
+there.already.exists.an.incompatible.class.with.the.chosen.name:
+    text: There already exists an incompatible class with the chosen name
+there.are.non.genericizable.instances.of.the.type.you.selected:
+    text: |
+        There are non-genericizable instances of the type you selected.
+to.purchase.a.commercial.license.please.visit:
+    text: To purchase a commercial license, please visit
+to.purchase.a.full.license.please.contact.sixth.and.red.river.software:
+    text: To purchase a full license, please contact Sixth and Red River Software.
+to.purchase.a.license.for.the.latest.version.please.contact.sixth.and.red.river.software:
+    text: To purchase a license for the latest version, please contact Sixth and Red River Software
+to.purchase.a.license.for.the.refactor.j.please.contact.sixth.and.red.river.software:
+    text: To purchase a license for the Refactor-J, please contact Sixth and Red River Software
+to.purchase.a.new.license.please.contact.sixth.and.red.river.software:
+    text: To purchase a new license, please contact Sixth and Red River Software
+type.parameter.question.label:
+    text: Do you wish to remove type parameter {0} and all uses of it?
+type.parameter.selected.extends.multiple.types:
+    text: Type parameter selected extends multiple types.
+type.parameter.to.be.introduced:
+    text: Type parameter to be introduced
+type.parameter.to.be.remove:
+    text: Type parameter to be remove
+type.parameters.can.not.be.introduced.as.type.parameters:
+    text: Type parameters can not be introduced as type parameters.
+type.selected.is.not.in.class.context:
+    text: Type selected is not in class context.
+unable.to.find.the.requested.class:
+    text: Unable to find the requested class
+use.inheritdoc.comments:
+    text: Use @inheritdoc comments
+user.name:
+    text: '&User Name:'
+variable.selected.is.not.boolean:
+    text: Variable selected is not boolean.
+variable.to.be.inverted:
+    text: Variable to be inverted
+weaken.type:
+    text: Weaken Type
+weaken.type.command.name:
+    text: Weaken type
+weaken.type.label:
+    text: 'Weaken the type of ''''{0}'''' from {1} to:'
+weaken.type.refactoring.is.not.supported.for.arrays:
+    text: Weaken type refactoring is not supported for arrays
+weaken.type.refactoring.is.not.supported.for.constructors:
+    text: Weaken type refactoring is not supported for constructors
+weaken.type.refactoring.is.not.supported.for.primitive.types:
+    text: Weaken type refactoring is not supported for primitive types
+weaken.type.refactoring.is.not.supported.for.type.parameters:
+    text: Weaken type refactoring is not supported for type parameters
+wrap.return.value:
+    text: Wrap Return Value
+wrap.return.value.title:
+    text: Wrap Return Value
+wrapped.return.command.name:
+    text: Wrapped return as {0} for {1}{2}{3}()
+www.sixthandredriver.com:
+    text: www.sixthandredriver.com
+your.evaluation.license.for.refactor.j.will.expire.in.less.than.a.day.n:
+    text: |
+        Your evaluation license for Refactor-J will expire in less than a day.
+your.evaluation.license.for.refactor.j.will.expire.in.less.than.n.days:
+    text: |
+        Your evaluation license for Refactor-J will expire in less than {0} days.
+your.evaluation.license.for.refactor.j.will.expire.in.one.day:
+    text: |
+        Your evaluation license for Refactor-J will expire in one day.
+your.refactor.j.license.has.expired:
+    text: "Your Refactor-J license has expired. \n"
+your.refactor.j.license.is.for.an.older.version.and.does.not.support.the.currently.installed.version.of.refactor.j:
+    text: "Your Refactor-J license is for an older version, and does not support the currently installed version of Refactor-J. \n"
