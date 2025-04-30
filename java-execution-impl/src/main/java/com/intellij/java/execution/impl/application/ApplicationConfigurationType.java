@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
@@ -31,8 +32,6 @@ import consulo.localize.LocalizeValue;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 import consulo.ui.image.Image;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -66,11 +65,13 @@ public class ApplicationConfigurationType implements ConfigurationType {
         };
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaExecutionLocalize.applicationConfigurationName();
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getConfigurationTypeDescription() {
         return JavaExecutionLocalize.applicationConfigurationDescription();
@@ -112,13 +113,13 @@ public class ApplicationConfigurationType implements ConfigurationType {
 
     @Override
     @Nonnull
-    @NonNls
     public String getId() {
         return "JavaApplication";
     }
 
-    @Nullable
+    @Nonnull
     public static ApplicationConfigurationType getInstance() {
-        return EP_NAME.findExtensionOrFail(ApplicationConfigurationType.class);
+        return Application.get().getExtensionPoint(ConfigurationType.class)
+            .findExtensionOrFail(ApplicationConfigurationType.class);
     }
 }

@@ -17,22 +17,33 @@ package com.intellij.java.coverage;
 
 import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.execution.configuration.*;
 import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageExecutor;
 import consulo.execution.coverage.CoverageRunnerData;
 
 import jakarta.annotation.Nonnull;
+import jakarta.inject.Inject;
 
 @ExtensionImpl(id = "DefaultJavaCoverageRunner")
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
-    public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
+    private final Application myApplication;
+
+    @Inject
+    public DefaultJavaCoverageRunner(Application myApplication) {
+        this.myApplication = myApplication;
+    }
+
+    @Override
+    public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
         try {
             return executorId.equals(CoverageExecutor.EXECUTOR_ID)
                 // && profile instanceof ModuleBasedConfiguration
                 && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction)
                 && profile instanceof RunConfigurationBase
-                && CoverageEngine.EP_NAME.findExtension(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase)profile);
+                && myApplication.getExtensionPoint(CoverageEngine.class)
+                .findExtensionOrFail(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase)profile);
         }
         catch (Exception e) {
             return false;

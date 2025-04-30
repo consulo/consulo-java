@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class RemoteConfigurationFactory
- * @author Jeka
- */
 package com.intellij.java.execution.impl.remote;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.execution.configuration.ConfigurationFactory;
+import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ConfigurationTypeBase;
 import consulo.execution.configuration.RunConfiguration;
 import consulo.java.execution.localize.JavaExecutionLocalize;
@@ -29,9 +26,11 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
+/**
+ * @author Jeka
+ */
 @ExtensionImpl
 public class RemoteConfigurationType extends ConfigurationTypeBase {
     public RemoteConfigurationType() {
@@ -62,6 +61,7 @@ public class RemoteConfigurationType extends ConfigurationTypeBase {
 
     @Nonnull
     public static RemoteConfigurationType getInstance() {
-        return EP_NAME.findExtensionOrFail(RemoteConfigurationType.class);
+        return Application.get().getExtensionPoint(ConfigurationType.class)
+            .findExtensionOrFail(RemoteConfigurationType.class);
     }
 }
