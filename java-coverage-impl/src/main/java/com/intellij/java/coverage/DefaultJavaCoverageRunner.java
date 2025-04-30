@@ -26,26 +26,27 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl(id = "DefaultJavaCoverageRunner")
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
-  public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
-    try {
-      return executorId.equals(CoverageExecutor.EXECUTOR_ID) &&
-          //profile instanceof ModuleBasedConfiguration &&
-          !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction) &&
-          profile instanceof RunConfigurationBase &&
-          CoverageEngine.EP_NAME.findExtension(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase) profile);
-    } catch (Exception e) {
-      return false;
+    public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
+        try {
+            return executorId.equals(CoverageExecutor.EXECUTOR_ID)
+                // && profile instanceof ModuleBasedConfiguration
+                && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction)
+                && profile instanceof RunConfigurationBase
+                && CoverageEngine.EP_NAME.findExtension(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase)profile);
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
-  }
 
-  @Override
-  public RunnerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
-    return new CoverageRunnerData();
-  }
+    @Override
+    public RunnerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
+        return new CoverageRunnerData();
+    }
 
-  @Nonnull
-  @Override
-  public String getRunnerId() {
-    return "Cover";
-  }
+    @Nonnull
+    @Override
+    public String getRunnerId() {
+        return "Cover";
+    }
 }

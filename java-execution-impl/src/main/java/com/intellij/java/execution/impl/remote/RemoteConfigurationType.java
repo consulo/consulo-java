@@ -34,29 +34,34 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RemoteConfigurationType extends ConfigurationTypeBase {
-  public RemoteConfigurationType() {
-    super("JavaRemoteConfigurationType", JavaExecutionLocalize.remoteDebugConfigurationDisplayName(), JavaExecutionLocalize.remoteDebugConfigurationDescription(), PlatformIconGroup.runconfigurationsRemote());
-    addFactory(new ConfigurationFactory(this) {
-      @Nonnull
-      @Override
-      public String getId() {
-        return "Java Remote";
-      }
+    public RemoteConfigurationType() {
+        super(
+            "JavaRemoteConfigurationType",
+            JavaExecutionLocalize.remoteDebugConfigurationDisplayName(),
+            JavaExecutionLocalize.remoteDebugConfigurationDescription(),
+            PlatformIconGroup.runconfigurationsRemote()
+        );
+        addFactory(new ConfigurationFactory(this) {
+            @Nonnull
+            @Override
+            public String getId() {
+                return "Java Remote";
+            }
 
-      @Override
-      public RunConfiguration createTemplateConfiguration(Project project) {
-        return new RemoteConfiguration(project, this);
-      }
+            @Override
+            public RunConfiguration createTemplateConfiguration(Project project) {
+                return new RemoteConfiguration(project, this);
+            }
 
-      @Override
-      public boolean isApplicable(@Nonnull Project project) {
-        return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
-      }
-    });
-  }
+            @Override
+            public boolean isApplicable(@Nonnull Project project) {
+                return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+            }
+        });
+    }
 
-  @Nonnull
-  public static RemoteConfigurationType getInstance() {
-    return EP_NAME.findExtensionOrFail(RemoteConfigurationType.class);
-  }
+    @Nonnull
+    public static RemoteConfigurationType getInstance() {
+        return EP_NAME.findExtensionOrFail(RemoteConfigurationType.class);
+    }
 }

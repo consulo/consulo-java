@@ -38,86 +38,87 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ApplicationConfigurationType implements ConfigurationType {
-  private final ConfigurationFactory myFactory;
+    private final ConfigurationFactory myFactory;
 
-  public ApplicationConfigurationType() {
-    myFactory = new ConfigurationFactory(this) {
-      @Nonnull
-      @Override
-      public String getId() {
-        // non localized string as id - do change, this can break loading old projects
-        return "Java Application";
-      }
+    public ApplicationConfigurationType() {
+        myFactory = new ConfigurationFactory(this) {
+            @Nonnull
+            @Override
+            public String getId() {
+                // non localized string as id - do change, this can break loading old projects
+                return "Java Application";
+            }
 
-      @Override
-      public RunConfiguration createTemplateConfiguration(Project project) {
-        return new ApplicationConfiguration("", project, ApplicationConfigurationType.this);
-      }
+            @Override
+            public RunConfiguration createTemplateConfiguration(Project project) {
+                return new ApplicationConfiguration("", project, ApplicationConfigurationType.this);
+            }
 
-      @Override
-      public boolean isApplicable(@Nonnull Project project) {
-        return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
-      }
+            @Override
+            public boolean isApplicable(@Nonnull Project project) {
+                return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+            }
 
-      @Override
-      public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
-        ((ModuleBasedConfiguration) configuration).onNewConfigurationCreated();
-      }
-    };
-  }
-
-  @Override
-  public LocalizeValue getDisplayName() {
-    return JavaExecutionLocalize.applicationConfigurationName();
-  }
-
-  @Override
-  public LocalizeValue getConfigurationTypeDescription() {
-    return JavaExecutionLocalize.applicationConfigurationDescription();
-  }
-
-  @Override
-  public Image getIcon() {
-    return JavaPsiImplIconGroup.java();
-  }
-
-  @Override
-  public ConfigurationFactory[] getConfigurationFactories() {
-    return new ConfigurationFactory[]{myFactory};
-  }
-
-  @Nullable
-  public static PsiClass getMainClass(PsiElement element) {
-    while (element != null) {
-      if (element instanceof PsiClass) {
-        final PsiClass aClass = (PsiClass) element;
-        if (PsiMethodUtil.findMainInClass(aClass) != null) {
-          return aClass;
-        }
-      } else if (element instanceof PsiJavaFile) {
-        final PsiJavaFile javaFile = (PsiJavaFile) element;
-        final PsiClass[] classes = javaFile.getClasses();
-        for (PsiClass aClass : classes) {
-          if (PsiMethodUtil.findMainInClass(aClass) != null) {
-            return aClass;
-          }
-        }
-      }
-      element = element.getParent();
+            @Override
+            public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
+                ((ModuleBasedConfiguration)configuration).onNewConfigurationCreated();
+            }
+        };
     }
-    return null;
-  }
+
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaExecutionLocalize.applicationConfigurationName();
+    }
+
+    @Override
+    public LocalizeValue getConfigurationTypeDescription() {
+        return JavaExecutionLocalize.applicationConfigurationDescription();
+    }
+
+    @Override
+    public Image getIcon() {
+        return JavaPsiImplIconGroup.java();
+    }
+
+    @Override
+    public ConfigurationFactory[] getConfigurationFactories() {
+        return new ConfigurationFactory[]{myFactory};
+    }
+
+    @Nullable
+    public static PsiClass getMainClass(PsiElement element) {
+        while (element != null) {
+            if (element instanceof PsiClass) {
+                final PsiClass aClass = (PsiClass)element;
+                if (PsiMethodUtil.findMainInClass(aClass) != null) {
+                    return aClass;
+                }
+            }
+            else if (element instanceof PsiJavaFile) {
+                final PsiJavaFile javaFile = (PsiJavaFile)element;
+                final PsiClass[] classes = javaFile.getClasses();
+                for (PsiClass aClass : classes) {
+                    if (PsiMethodUtil.findMainInClass(aClass) != null) {
+                        return aClass;
+                    }
+                }
+            }
+            element = element.getParent();
+        }
+        return null;
+    }
 
 
-  @Override
-  @Nonnull
-  @NonNls
-  public String getId() {
-    return "JavaApplication";
-  }
+    @Override
+    @Nonnull
+    @NonNls
+    public String getId() {
+        return "JavaApplication";
+    }
 
-  @Nullable
-  public static ApplicationConfigurationType getInstance() {
-    return EP_NAME.findExtensionOrFail(ApplicationConfigurationType.class);
-  }
+    @Nullable
+    public static ApplicationConfigurationType getInstance() {
+        return EP_NAME.findExtensionOrFail(ApplicationConfigurationType.class);
+    }
 }
