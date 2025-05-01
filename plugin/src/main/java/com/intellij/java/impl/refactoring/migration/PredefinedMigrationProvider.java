@@ -24,16 +24,16 @@ import java.net.URL;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface PredefinedMigrationProvider {
-  ExtensionPointName<PredefinedMigrationProvider> EP_NAME = ExtensionPointName.create(PredefinedMigrationProvider.class);
+    ExtensionPointName<PredefinedMigrationProvider> EP_NAME = ExtensionPointName.create(PredefinedMigrationProvider.class);
 
-  /**
-   * URL should point to the file with serialized migration map.
-   * <p>
-   * The simplest way to prepare such map:
-   * 1. Refactor|Migrate...
-   * 2. Create new migration map with all settings needed
-   * 3. Copy map's file from config/migration to the plugin's resources
-   */
-  @Nonnull
-  URL getMigrationMap();
+    /**
+     * URL should point to the file with serialized migration map.
+     * <p>
+     * The simplest way to prepare such map:
+     * 1. Refactor|Migrate...
+     * 2. Create new migration map with all settings needed
+     * 3. Copy map's file from config/migration to the plugin's resources
+     */
+    @Nonnull
+    URL getMigrationMap();
 }

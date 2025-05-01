@@ -30,9 +30,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface UnusedDeclarationFixProvider {
+    ExtensionPointName<UnusedDeclarationFixProvider> EP_NAME = ExtensionPointName.create(UnusedDeclarationFixProvider.class);
 
-  ExtensionPointName<UnusedDeclarationFixProvider> EP_NAME = ExtensionPointName.create(UnusedDeclarationFixProvider.class);
-
-  @Nonnull
-  IntentionAction[] getQuickFixes(PsiElement unusedElement);
+    @Nonnull
+    IntentionAction[] getQuickFixes(PsiElement unusedElement);
 }

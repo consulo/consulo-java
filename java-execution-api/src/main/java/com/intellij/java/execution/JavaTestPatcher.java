@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaTestPatcher {
-  ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create(JavaTestPatcher.class);
+    ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create(JavaTestPatcher.class);
 
-  void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
+    void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
 }

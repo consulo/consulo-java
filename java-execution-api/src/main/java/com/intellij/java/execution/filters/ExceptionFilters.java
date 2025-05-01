@@ -19,6 +19,7 @@ import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +30,16 @@ import java.util.List;
  * Time: 7:54 PM
  */
 public class ExceptionFilters {
-  private ExceptionFilters() {
-  }
-
-  @Nonnull
-  public static List<Filter> getFilters(@Nonnull GlobalSearchScope searchScope) {
-    ExceptionFilterFactory[] extensions = ExceptionFilterFactory.EP_NAME.getExtensions();
-    List<Filter> filters = new ArrayList<Filter>(extensions.length);
-    for (ExceptionFilterFactory extension : extensions) {
-      filters.add(extension.create(searchScope));
+    private ExceptionFilters() {
     }
-    return filters;
-  }
+
+    @Nonnull
+    public static List<Filter> getFilters(@Nonnull GlobalSearchScope searchScope) {
+        ExceptionFilterFactory[] extensions = ExceptionFilterFactory.EP_NAME.getExtensions();
+        List<Filter> filters = new ArrayList<Filter>(extensions.length);
+        for (ExceptionFilterFactory extension : extensions) {
+            filters.add(extension.create(searchScope));
+        }
+        return filters;
+    }
 }

@@ -29,9 +29,9 @@ import java.util.Set;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface FrameExtraVariablesProvider {
-  ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create(FrameExtraVariablesProvider.class);
+    ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create(FrameExtraVariablesProvider.class);
 
-  boolean isAvailable(SourcePosition sourcePosition, EvaluationContext evalContext);
+    boolean isAvailable(SourcePosition sourcePosition, EvaluationContext evalContext);
 
-  Set<TextWithImports> collectVariables(SourcePosition sourcePosition, EvaluationContext evalContext, Set<String> alreadyCollected);
+    Set<TextWithImports> collectVariables(SourcePosition sourcePosition, EvaluationContext evalContext, Set<String> alreadyCollected);
 }

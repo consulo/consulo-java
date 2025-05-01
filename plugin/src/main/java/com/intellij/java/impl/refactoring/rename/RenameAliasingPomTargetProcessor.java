@@ -31,34 +31,36 @@ import java.util.Map;
 @ExtensionImpl
 public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
 
-  @Override
-  public boolean canProcessElement(@Nonnull PsiElement element) {
-    return element instanceof PomTarget || element instanceof PomTargetPsiElement;
-  }
-
-  @Override
-  public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
-    PomTarget target = null;
-    if (element instanceof PomTargetPsiElement) {
-      target = ((PomTargetPsiElement) element).getTarget();
-    } else if (element instanceof PomTarget) {
-      target = (PomTarget) element;
+    @Override
+    public boolean canProcessElement(@Nonnull PsiElement element) {
+        return element instanceof PomTarget || element instanceof PomTargetPsiElement;
     }
 
-    if (target != null) {
-      for (AliasingPsiTargetMapper mapper : Extensions.getExtensions(AliasingPsiTargetMapper.EP_NAME)) {
-        for (AliasingPsiTarget psiTarget : mapper.getTargets(target)) {
-          PsiElement psiElement = PomService.convertToPsi(psiTarget);
-          String name = psiTarget.getNameAlias(newName);
-
-          String definedName = allRenames.put(psiElement, name);
-          if (definedName != null) {
-            assert definedName.equals(name);
-          } else {
-            prepareRenaming(psiElement, name, allRenames);
-          }
+    @Override
+    public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
+        PomTarget target = null;
+        if (element instanceof PomTargetPsiElement) {
+            target = ((PomTargetPsiElement)element).getTarget();
         }
-      }
+        else if (element instanceof PomTarget) {
+            target = (PomTarget)element;
+        }
+
+        if (target != null) {
+            for (AliasingPsiTargetMapper mapper : Extensions.getExtensions(AliasingPsiTargetMapper.EP_NAME)) {
+                for (AliasingPsiTarget psiTarget : mapper.getTargets(target)) {
+                    PsiElement psiElement = PomService.convertToPsi(psiTarget);
+                    String name = psiTarget.getNameAlias(newName);
+
+                    String definedName = allRenames.put(psiElement, name);
+                    if (definedName != null) {
+                        assert definedName.equals(name);
+                    }
+                    else {
+                        prepareRenaming(psiElement, name, allRenames);
+                    }
+                }
+            }
+        }
     }
-  }
 }

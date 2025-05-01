@@ -29,6 +29,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 
 /**
@@ -37,61 +38,63 @@ import java.util.Collection;
 @Singleton
 @ServiceImpl
 public class JavaProjectModelModificationServiceImpl extends JavaProjectModelModificationService {
-  private final Project myProject;
+    private final Project myProject;
 
-  @Inject
-  public JavaProjectModelModificationServiceImpl(Project project) {
-    myProject = project;
-  }
-
-  @Override
-  public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope) {
-    for (JavaProjectModelModifier modifier : getModelModifiers()) {
-      AsyncResult<Void> asyncResult = modifier.addModuleDependency(from, to, scope);
-      if (asyncResult != null) {
-        return asyncResult;
-      }
+    @Inject
+    public JavaProjectModelModificationServiceImpl(Project project) {
+        myProject = project;
     }
-    return AsyncResult.rejected();
-  }
 
-  @Override
-  public AsyncResult<Void> addDependency(@Nonnull Collection<Module> from,
-                                         @Nonnull ExternalLibraryDescriptor libraryDescriptor,
-                                         @Nonnull DependencyScope scope) {
-    for (JavaProjectModelModifier modifier : getModelModifiers()) {
-      AsyncResult<Void> asyncResult = modifier.addExternalLibraryDependency(from, libraryDescriptor, scope);
-      if (asyncResult != null) {
-        return asyncResult;
-      }
+    @Override
+    public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope) {
+        for (JavaProjectModelModifier modifier : getModelModifiers()) {
+            AsyncResult<Void> asyncResult = modifier.addModuleDependency(from, to, scope);
+            if (asyncResult != null) {
+                return asyncResult;
+            }
+        }
+        return AsyncResult.rejected();
     }
-    return AsyncResult.rejected();
-  }
 
-  @Override
-  public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope) {
-    for (JavaProjectModelModifier modifier : getModelModifiers()) {
-      AsyncResult<Void> asyncResult = modifier.addLibraryDependency(from, library, scope);
-      if (asyncResult != null) {
-        return asyncResult;
-      }
+    @Override
+    public AsyncResult<Void> addDependency(
+        @Nonnull Collection<Module> from,
+        @Nonnull ExternalLibraryDescriptor libraryDescriptor,
+        @Nonnull DependencyScope scope
+    ) {
+        for (JavaProjectModelModifier modifier : getModelModifiers()) {
+            AsyncResult<Void> asyncResult = modifier.addExternalLibraryDependency(from, libraryDescriptor, scope);
+            if (asyncResult != null) {
+                return asyncResult;
+            }
+        }
+        return AsyncResult.rejected();
     }
-    return AsyncResult.rejected();
-  }
 
-  @Override
-  public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel) {
-    for (JavaProjectModelModifier modifier : getModelModifiers()) {
-      AsyncResult<Void> asyncResult = modifier.changeLanguageLevel(module, languageLevel);
-      if (asyncResult != null) {
-        return asyncResult;
-      }
+    @Override
+    public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope) {
+        for (JavaProjectModelModifier modifier : getModelModifiers()) {
+            AsyncResult<Void> asyncResult = modifier.addLibraryDependency(from, library, scope);
+            if (asyncResult != null) {
+                return asyncResult;
+            }
+        }
+        return AsyncResult.rejected();
     }
-    return AsyncResult.rejected();
-  }
 
-  @Nonnull
-  private JavaProjectModelModifier[] getModelModifiers() {
-    return JavaProjectModelModifier.EP_NAME.getExtensions(myProject);
-  }
+    @Override
+    public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel) {
+        for (JavaProjectModelModifier modifier : getModelModifiers()) {
+            AsyncResult<Void> asyncResult = modifier.changeLanguageLevel(module, languageLevel);
+            if (asyncResult != null) {
+                return asyncResult;
+            }
+        }
+        return AsyncResult.rejected();
+    }
+
+    @Nonnull
+    private JavaProjectModelModifier[] getModelModifiers() {
+        return JavaProjectModelModifier.EP_NAME.getExtensions(myProject);
+    }
 }

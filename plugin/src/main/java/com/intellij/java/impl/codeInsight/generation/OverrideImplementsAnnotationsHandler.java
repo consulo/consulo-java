@@ -29,10 +29,11 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface OverrideImplementsAnnotationsHandler {
-  ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create(OverrideImplementsAnnotationsHandler.class);
+    ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME =
+        ExtensionPointName.create(OverrideImplementsAnnotationsHandler.class);
 
-  String[] getAnnotations(Project project);
+    String[] getAnnotations(Project project);
 
-  @Nonnull
-  String[] annotationsToRemove(Project project, @Nonnull String fqName);
+    @Nonnull
+    String[] annotationsToRemove(Project project, @Nonnull String fqName);
 }

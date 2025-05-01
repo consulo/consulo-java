@@ -14,7 +14,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaProgramPatcher {
-  public static final ExtensionPointName<JavaProgramPatcher> EP_NAME = ExtensionPointName.create(JavaProgramPatcher.class);
+    public static final ExtensionPointName<JavaProgramPatcher> EP_NAME = ExtensionPointName.create(JavaProgramPatcher.class);
 
-  public abstract void patchJavaParameters(Executor executor, RunProfile configuration, OwnJavaParameters javaParameters);
+    public abstract void patchJavaParameters(Executor executor, RunProfile configuration, OwnJavaParameters javaParameters);
 }

@@ -21,13 +21,13 @@ import consulo.component.extension.ExtensionPointName;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface NodeRenderer extends ChildrenRenderer, ValueLabelRenderer {
-  ExtensionPointName<NodeRenderer> EP_NAME = ExtensionPointName.create(NodeRenderer.class);
+    ExtensionPointName<NodeRenderer> EP_NAME = ExtensionPointName.create(NodeRenderer.class);
 
-  String getName();
+    String getName();
 
-  void setName(String text);
+    void setName(String text);
 
-  boolean isEnabled();
+    boolean isEnabled();
 
-  void setEnabled(boolean enabled);
+    void setEnabled(boolean enabled);
 }

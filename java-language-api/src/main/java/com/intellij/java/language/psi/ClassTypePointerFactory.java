@@ -28,8 +28,8 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ClassTypePointerFactory {
-  ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create(ClassTypePointerFactory.class);
+    ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create(ClassTypePointerFactory.class);
 
-  @Nullable
-  SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
+    @Nullable
+    SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
 }

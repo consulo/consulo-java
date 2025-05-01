@@ -24,8 +24,7 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface SimplePropertyGetterProvider {
-  ExtensionPointName<SimplePropertyGetterProvider> EP_NAME =
-    ExtensionPointName.create(SimplePropertyGetterProvider.class);
+    ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create(SimplePropertyGetterProvider.class);
 
-  boolean isInsideSimpleGetter(@Nonnull PsiElement element);
+    boolean isInsideSimpleGetter(@Nonnull PsiElement element);
 }

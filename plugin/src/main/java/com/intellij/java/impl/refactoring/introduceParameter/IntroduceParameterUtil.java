@@ -30,97 +30,111 @@ import java.util.List;
  * @author Maxim.Medvedev
  */
 public class IntroduceParameterUtil {
-  private IntroduceParameterUtil() {
-  }
-
-
-  public static boolean insideMethodToBeReplaced(PsiElement methodUsage, final PsiMethod methodToReplaceIn) {
-    PsiElement parent = methodUsage.getParent();
-    while (parent != null) {
-      if (parent.equals(methodToReplaceIn)) {
-        return true;
-      }
-      parent = parent.getParent();
+    private IntroduceParameterUtil() {
     }
-    return false;
-  }
 
-  public static boolean isMethodUsage(UsageInfo usageInfo) {
-    for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-      if (processor.isMethodUsage(usageInfo)) return true;
-    }
-    return false;
-  }
 
-  public static void addSuperCall(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
-    throws IncorrectOperationException {
-    for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-      if (!processor.processAddSuperCall(data, usage, usages)) break;
-    }
-  }
-
-  public static void addDefaultConstructor(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
-    throws IncorrectOperationException {
-    for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-      if (!processor.processAddDefaultConstructor(data, usage, usages)) break;
-    }
-  }
-
-  public static void changeExternalUsage(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
-    throws IncorrectOperationException {
-    for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-      if (!processor.processChangeMethodUsage(data, usage, usages)) break;
-    }
-  }
-
-  public static void changeMethodSignatureAndResolveFieldConflicts(UsageInfo usage,
-                                                                   UsageInfo[] usages,
-                                                                   final IntroduceParameterData data)
-    throws IncorrectOperationException {
-    for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-      if (!processor.processChangeMethodSignature(data, usage, usages)) break;
-    }
-  }
-
-  public static void processUsages(UsageInfo[] usages, IntroduceParameterData data) {
-    PsiManager manager = PsiManager.getInstance(data.getProject());
-
-    List<UsageInfo> methodUsages = new ArrayList<UsageInfo>();
-
-    for (UsageInfo usage : usages) {
-      if (usage instanceof InternalUsageInfo) continue;
-
-      if (usage instanceof DefaultConstructorImplicitUsageInfo) {
-        addSuperCall(usage, usages, data);
-      }
-      else if (usage instanceof NoConstructorClassUsageInfo) {
-        addDefaultConstructor(usage, usages, data);
-      }
-      else {
-        PsiElement element = usage.getElement();
-        if (element instanceof PsiMethod) {
-          if (!manager.areElementsEquivalent(element, data.getMethodToReplaceIn())) {
-            methodUsages.add(usage);
-          }
+    public static boolean insideMethodToBeReplaced(PsiElement methodUsage, final PsiMethod methodToReplaceIn) {
+        PsiElement parent = methodUsage.getParent();
+        while (parent != null) {
+            if (parent.equals(methodToReplaceIn)) {
+                return true;
+            }
+            parent = parent.getParent();
         }
-        else if (!data.isGenerateDelegate()) {
-          changeExternalUsage(usage, usages, data);
+        return false;
+    }
+
+    public static boolean isMethodUsage(UsageInfo usageInfo) {
+        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
+            if (processor.isMethodUsage(usageInfo)) {
+                return true;
+            }
         }
-      }
+        return false;
     }
 
-    for (UsageInfo usage : methodUsages) {
-      changeMethodSignatureAndResolveFieldConflicts(usage, usages, data);
+    public static void addSuperCall(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+        throws IncorrectOperationException {
+        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
+            if (!processor.processAddSuperCall(data, usage, usages)) {
+                break;
+            }
+        }
     }
-  }
 
-  public static boolean isMethodInUsages(IntroduceParameterData data, PsiMethod method, UsageInfo[] usages) {
-    PsiManager manager = PsiManager.getInstance(data.getProject());
-    for (UsageInfo info : usages) {
-      if (!(info instanceof DefaultConstructorImplicitUsageInfo) &&  manager.areElementsEquivalent(info.getElement(), method)) {
-        return true;
-      }
+    public static void addDefaultConstructor(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+        throws IncorrectOperationException {
+        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
+            if (!processor.processAddDefaultConstructor(data, usage, usages)) {
+                break;
+            }
+        }
     }
-    return false;
-  }
+
+    public static void changeExternalUsage(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+        throws IncorrectOperationException {
+        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
+            if (!processor.processChangeMethodUsage(data, usage, usages)) {
+                break;
+            }
+        }
+    }
+
+    public static void changeMethodSignatureAndResolveFieldConflicts(
+        UsageInfo usage,
+        UsageInfo[] usages,
+        final IntroduceParameterData data
+    )
+        throws IncorrectOperationException {
+        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
+            if (!processor.processChangeMethodSignature(data, usage, usages)) {
+                break;
+            }
+        }
+    }
+
+    public static void processUsages(UsageInfo[] usages, IntroduceParameterData data) {
+        PsiManager manager = PsiManager.getInstance(data.getProject());
+
+        List<UsageInfo> methodUsages = new ArrayList<UsageInfo>();
+
+        for (UsageInfo usage : usages) {
+            if (usage instanceof InternalUsageInfo) {
+                continue;
+            }
+
+            if (usage instanceof DefaultConstructorImplicitUsageInfo) {
+                addSuperCall(usage, usages, data);
+            }
+            else if (usage instanceof NoConstructorClassUsageInfo) {
+                addDefaultConstructor(usage, usages, data);
+            }
+            else {
+                PsiElement element = usage.getElement();
+                if (element instanceof PsiMethod) {
+                    if (!manager.areElementsEquivalent(element, data.getMethodToReplaceIn())) {
+                        methodUsages.add(usage);
+                    }
+                }
+                else if (!data.isGenerateDelegate()) {
+                    changeExternalUsage(usage, usages, data);
+                }
+            }
+        }
+
+        for (UsageInfo usage : methodUsages) {
+            changeMethodSignatureAndResolveFieldConflicts(usage, usages, data);
+        }
+    }
+
+    public static boolean isMethodInUsages(IntroduceParameterData data, PsiMethod method, UsageInfo[] usages) {
+        PsiManager manager = PsiManager.getInstance(data.getProject());
+        for (UsageInfo info : usages) {
+            if (!(info instanceof DefaultConstructorImplicitUsageInfo) && manager.areElementsEquivalent(info.getElement(), method)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

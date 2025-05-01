@@ -23,7 +23,7 @@ import consulo.project.Project;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface CustomPropertyScopeProvider {
-  ExtensionPointName<CustomPropertyScopeProvider> EP_NAME = ExtensionPointName.create(CustomPropertyScopeProvider.class);
+    ExtensionPointName<CustomPropertyScopeProvider> EP_NAME = ExtensionPointName.create(CustomPropertyScopeProvider.class);
 
-  SearchScope getScope(final Project project);
+    SearchScope getScope(final Project project);
 }

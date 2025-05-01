@@ -46,129 +46,152 @@ import java.util.Collection;
 
 @ActionImpl(id = "I18nize", parents = @ActionParentRef(@ActionRef(id = "RefactoringMenu")))
 public class I18nizeAction extends AnAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
+    private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
 
-  @Override
-  @RequiredUIAccess
-  public void update(@Nonnull AnActionEvent e) {
-    boolean active = getHandler(e) != null;
-    if (ActionPlaces.isPopupPlace(e.getPlace())) {
-      e.getPresentation().setVisible(active);
-    }
-    else {
-      e.getPresentation().setEnabled(active);
-    }
-  }
-
-  @Nullable
-  @RequiredReadAction
-  public static I18nQuickFixHandler getHandler(final AnActionEvent e) {
-    final Editor editor = getEditor(e);
-    if (editor == null) return null;
-
-    PsiFile psiFile = e.getData(PsiFile.KEY);
-    if (psiFile == null) return null;
-
-    TextRange range = JavaI18nUtil.getSelectedRange(editor, psiFile);
-    if (range == null) return null;
-
-    final PsiLiteralExpression literalExpression = getEnclosingStringLiteral(psiFile, editor);
-    PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    if (element == null) return null;
-    if (I18nizeConcatenationQuickFix.getEnclosingLiteralConcatenation(element) != null) {
-      return new I18nizeConcatenationQuickFix();
-    }
-    else if (literalExpression != null && literalExpression.getTextRange().contains(range)) {
-      return new I18nizeQuickFix();
+    @Override
+    @RequiredUIAccess
+    public void update(@Nonnull AnActionEvent e) {
+        boolean active = getHandler(e) != null;
+        if (ActionPlaces.isPopupPlace(e.getPlace())) {
+            e.getPresentation().setVisible(active);
+        }
+        else {
+            e.getPresentation().setEnabled(active);
+        }
     }
 
-    for (I18nizeHandlerProvider handlerProvider : I18nizeHandlerProvider.EP_NAME.getExtensionList()) {
-      I18nQuickFixHandler handler = handlerProvider.getHandler(psiFile, editor, range);
-      if (handler != null) {
-        return handler;
-      }
+    @Nullable
+    @RequiredReadAction
+    public static I18nQuickFixHandler getHandler(final AnActionEvent e) {
+        final Editor editor = getEditor(e);
+        if (editor == null) {
+            return null;
+        }
+
+        PsiFile psiFile = e.getData(PsiFile.KEY);
+        if (psiFile == null) {
+            return null;
+        }
+
+        TextRange range = JavaI18nUtil.getSelectedRange(editor, psiFile);
+        if (range == null) {
+            return null;
+        }
+
+        final PsiLiteralExpression literalExpression = getEnclosingStringLiteral(psiFile, editor);
+        PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
+        if (element == null) {
+            return null;
+        }
+        if (I18nizeConcatenationQuickFix.getEnclosingLiteralConcatenation(element) != null) {
+            return new I18nizeConcatenationQuickFix();
+        }
+        else if (literalExpression != null && literalExpression.getTextRange().contains(range)) {
+            return new I18nizeQuickFix();
+        }
+
+        for (I18nizeHandlerProvider handlerProvider : I18nizeHandlerProvider.EP_NAME.getExtensionList()) {
+            I18nQuickFixHandler handler = handlerProvider.getHandler(psiFile, editor, range);
+            if (handler != null) {
+                return handler;
+            }
+        }
+
+        return null;
     }
 
-    return null;
-  }
-
-
-  @Nullable
-  @RequiredReadAction
-  public static PsiLiteralExpression getEnclosingStringLiteral(final PsiFile psiFile, final Editor editor) {
-    PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    if (psiElement == null) return null;
-    PsiLiteralExpression expression = PsiTreeUtil.getParentOfType(psiElement, PsiLiteralExpression.class);
-    if (expression == null || !(expression.getValue() instanceof String)) return null;
-    return expression;
-  }
-
-  private static Editor getEditor(final AnActionEvent e) {
-    return e.getData(Editor.KEY);
-  }
-
-  @RequiredUIAccess
-  public static void doI18nSelectedString(
-    final @Nonnull Project project,
-    final @Nonnull Editor editor,
-    final @Nonnull PsiFile psiFile,
-    final @Nonnull I18nQuickFixHandler handler
-  ) {
-    try {
-      handler.checkApplicability(psiFile, editor);
-    }
-    catch (IncorrectOperationException ex) {
-      CommonRefactoringUtil.showErrorHint(project, editor, ex.getMessage(), CodeInsightLocalize.i18nizeErrorTitle().get(), null);
-      return;
+    @Nullable
+    @RequiredReadAction
+    public static PsiLiteralExpression getEnclosingStringLiteral(final PsiFile psiFile, final Editor editor) {
+        PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
+        if (psiElement == null) {
+            return null;
+        }
+        PsiLiteralExpression expression = PsiTreeUtil.getParentOfType(psiElement, PsiLiteralExpression.class);
+        if (expression == null || !(expression.getValue() instanceof String)) {
+            return null;
+        }
+        return expression;
     }
 
-    final JavaI18nizeQuickFixDialog dialog = handler.createDialog(project, editor, psiFile);
-    if (dialog == null) return;
-    dialog.show();
-    if (!dialog.isOK()) return;
-
-    if (!FileModificationService.getInstance().prepareFileForWrite(psiFile)) return;
-    final Collection<PropertiesFile> propertiesFiles = dialog.getAllPropertiesFiles();
-    for (PropertiesFile file : propertiesFiles) {
-      if (!FileModificationService.getInstance().prepareFileForWrite(file.getContainingFile())) return;
+    private static Editor getEditor(final AnActionEvent e) {
+        return e.getData(Editor.KEY);
     }
 
-    project.getApplication().runWriteAction(() -> CommandProcessor.getInstance().executeCommand(
-      project,
-      () -> {
+    @RequiredUIAccess
+    public static void doI18nSelectedString(
+        final @Nonnull Project project,
+        final @Nonnull Editor editor,
+        final @Nonnull PsiFile psiFile,
+        final @Nonnull I18nQuickFixHandler handler
+    ) {
         try {
-          handler.performI18nization(
-            psiFile,
-            editor,
-            dialog.getLiteralExpression(),
-            propertiesFiles,
-            dialog.getKey(),
-            StringUtil.unescapeStringCharacters(dialog.getValue()),
-            dialog.getI18nizedText(),
-            dialog.getParameters(),
-            dialog.getPropertyCreationHandler()
-          );
+            handler.checkApplicability(psiFile, editor);
         }
-        catch (IncorrectOperationException e) {
-          LOG.error(e);
+        catch (IncorrectOperationException ex) {
+            CommonRefactoringUtil.showErrorHint(project, editor, ex.getMessage(), CodeInsightLocalize.i18nizeErrorTitle().get(), null);
+            return;
         }
-      },
-      CodeInsightLocalize.quickfixI18nCommandName().get(),
-      project
-    ));
-  }
 
-  @Override
-  @RequiredUIAccess
-  public void actionPerformed(@Nonnull AnActionEvent e) {
-    final Editor editor = getEditor(e);
-    final Project project = editor.getProject();
-    assert project != null;
-    final PsiFile psiFile = e.getData(PsiFile.KEY);
-    if (psiFile == null) return;
-    final I18nQuickFixHandler handler = getHandler(e);
-    if (handler == null) return;
+        final JavaI18nizeQuickFixDialog dialog = handler.createDialog(project, editor, psiFile);
+        if (dialog == null) {
+            return;
+        }
+        dialog.show();
+        if (!dialog.isOK()) {
+            return;
+        }
 
-    doI18nSelectedString(project, editor, psiFile, handler);
-  }
+        if (!FileModificationService.getInstance().prepareFileForWrite(psiFile)) {
+            return;
+        }
+        final Collection<PropertiesFile> propertiesFiles = dialog.getAllPropertiesFiles();
+        for (PropertiesFile file : propertiesFiles) {
+            if (!FileModificationService.getInstance().prepareFileForWrite(file.getContainingFile())) {
+                return;
+            }
+        }
+
+        project.getApplication().runWriteAction(() -> CommandProcessor.getInstance().executeCommand(
+            project,
+            () -> {
+                try {
+                    handler.performI18nization(
+                        psiFile,
+                        editor,
+                        dialog.getLiteralExpression(),
+                        propertiesFiles,
+                        dialog.getKey(),
+                        StringUtil.unescapeStringCharacters(dialog.getValue()),
+                        dialog.getI18nizedText(),
+                        dialog.getParameters(),
+                        dialog.getPropertyCreationHandler()
+                    );
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            },
+            CodeInsightLocalize.quickfixI18nCommandName().get(),
+            project
+        ));
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(@Nonnull AnActionEvent e) {
+        final Editor editor = getEditor(e);
+        final Project project = editor.getProject();
+        assert project != null;
+        final PsiFile psiFile = e.getData(PsiFile.KEY);
+        if (psiFile == null) {
+            return;
+        }
+        final I18nQuickFixHandler handler = getHandler(e);
+        if (handler == null) {
+            return;
+        }
+
+        doI18nSelectedString(project, editor, psiFile, handler);
+    }
 }

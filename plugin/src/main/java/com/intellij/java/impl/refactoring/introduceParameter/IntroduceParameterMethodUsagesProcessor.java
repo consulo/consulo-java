@@ -25,22 +25,23 @@ import consulo.util.collection.MultiMap;
 
 /**
  * @author Maxim.Medvedev
- *         Date: Apr 17, 2009 5:16:10 PM
+ * Date: Apr 17, 2009 5:16:10 PM
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface IntroduceParameterMethodUsagesProcessor {
-  ExtensionPointName<IntroduceParameterMethodUsagesProcessor> EP_NAME =
-    ExtensionPointName.create(IntroduceParameterMethodUsagesProcessor.class);
+    ExtensionPointName<IntroduceParameterMethodUsagesProcessor> EP_NAME =
+        ExtensionPointName.create(IntroduceParameterMethodUsagesProcessor.class);
 
-  boolean isMethodUsage(UsageInfo usage);
+    boolean isMethodUsage(UsageInfo usage);
 
-  void findConflicts(IntroduceParameterData data, UsageInfo[] usages, MultiMap<PsiElement, String> conflicts);
+    void findConflicts(IntroduceParameterData data, UsageInfo[] usages, MultiMap<PsiElement, String> conflicts);
 
-  boolean processChangeMethodUsage(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
+    boolean processChangeMethodUsage(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
 
-  boolean processChangeMethodSignature(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
+    boolean processChangeMethodSignature(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages)
+        throws IncorrectOperationException;
 
-  boolean processAddDefaultConstructor(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages);
+    boolean processAddDefaultConstructor(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages);
 
-  boolean processAddSuperCall(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
+    boolean processAddSuperCall(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
 }

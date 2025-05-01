@@ -23,7 +23,7 @@ import consulo.component.extension.ExtensionPointName;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface VisibilityExtension {
-  ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create(VisibilityExtension.class);
+    ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create(VisibilityExtension.class);
 
-  void fillIgnoreList(RefManager refManager, ProblemDescriptionsProcessor processor);
+    void fillIgnoreList(RefManager refManager, ProblemDescriptionsProcessor processor);
 }

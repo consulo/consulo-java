@@ -26,47 +26,46 @@ import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class DocumentationDelegateProvider {
+    public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME =
+        ExtensionPointName.create(DocumentationDelegateProvider.class);
 
-  public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME =
-    ExtensionPointName.create(DocumentationDelegateProvider.class);
+    /**
+     * <p>
+     * Computes PsiDocCommentOwner to get documentation from.
+     * </p>
+     * <p>
+     * Suppose there is a {@code Foo#bar()} with doc and {@code Baz#bar()} without doc:
+     * <pre>
+     * class Foo {
+     *   /**
+     *   * Some javadoc
+     *   *&#47;
+     *   void bar() {}
+     * }
+     * class Baz {
+     *   void bar() {}
+     * }
+     * </pre>
+     * If it is needed to display doc from {@code Foo#bar()} when doc for {@code Baz#bar()} is queried
+     * then this method should return PsiMethod corresponding to {@code Foo#bar()} for PsiMethod corresponding to {@code Baz#bar()}.
+     * <br>
+     * The copied documentation will include <i>Description copied from</i> link.
+     * </p>
+     *
+     * @param member method to search delegate for.
+     * @return delegate PsiDocCommentOwner instance.
+     */
+    @Nullable
+    public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
 
-  /**
-   * <p>
-   * Computes PsiDocCommentOwner to get documentation from.
-   * </p>
-   * <p>
-   * Suppose there is a {@code Foo#bar()} with doc and {@code Baz#bar()} without doc:
-   * <pre>
-   * class Foo {
-   *   /**
-   *   * Some javadoc
-   *   *&#47;
-   *   void bar() {}
-   * }
-   * class Baz {
-   *   void bar() {}
-   * }
-   * </pre>
-   * If it is needed to display doc from {@code Foo#bar()} when doc for {@code Baz#bar()} is queried
-   * then this method should return PsiMethod corresponding to {@code Foo#bar()} for PsiMethod corresponding to {@code Baz#bar()}.
-   * <br>
-   * The copied documentation will include <i>Description copied from</i> link.
-   * </p>
-   *
-   * @param member method to search delegate for.
-   * @return delegate PsiDocCommentOwner instance.
-   */
-  @Nullable
-  public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
-
-  @Nullable
-  public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
-    for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
-      PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
-      if (type != null) {
-        return type;
-      }
+    @Nullable
+    public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
+        for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
+            PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
+            if (type != null) {
+                return type;
+            }
+        }
+        return null;
     }
-    return null;
-  }
 }

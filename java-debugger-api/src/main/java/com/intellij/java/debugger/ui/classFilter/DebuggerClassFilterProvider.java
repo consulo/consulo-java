@@ -23,11 +23,11 @@ import java.util.List;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Oct 22, 2008
+ * Date: Oct 22, 2008
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface DebuggerClassFilterProvider {
-  ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = ExtensionPointName.create(DebuggerClassFilterProvider.class);
+    ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = ExtensionPointName.create(DebuggerClassFilterProvider.class);
 
-  List<ClassFilter> getFilters();
+    List<ClassFilter> getFilters();
 }

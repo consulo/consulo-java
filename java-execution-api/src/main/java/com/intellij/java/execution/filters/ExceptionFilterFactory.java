@@ -30,8 +30,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ExceptionFilterFactory {
-  ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create(ExceptionFilterFactory.class);
+    ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create(ExceptionFilterFactory.class);
 
-  @Nonnull
-  Filter create(@Nonnull GlobalSearchScope searchScope);
+    @Nonnull
+    Filter create(@Nonnull GlobalSearchScope searchScope);
 }

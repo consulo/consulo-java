@@ -32,9 +32,8 @@ import jakarta.annotation.Nonnull;
 @DeprecationInfo("Unused")
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface JreProvider {
+    ExtensionPointName<JreProvider> EP_NAME = ExtensionPointName.create(JreProvider.class);
 
-  ExtensionPointName<JreProvider> EP_NAME = ExtensionPointName.create(JreProvider.class);
-
-  @Nonnull
-  String getJrePath();
+    @Nonnull
+    String getJrePath();
 }

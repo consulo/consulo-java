@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 @Deprecated(forRemoval = true)
 @DeprecationInfo("Use CustomExceptionHandler")
 public interface ExtraExceptionHandler {
-  ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
+    ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
 
-  boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
+    boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
 }

@@ -32,37 +32,37 @@ import jakarta.annotation.Nonnull;
  * @author nik
  */
 public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase & CommonJavaRunConfigurationParameters> extends JavaCommandLineState {
-  protected final T myConfiguration;
+    protected final T myConfiguration;
 
-  public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration) {
-    super(environment);
-    myConfiguration = configuration;
-  }
-
-  protected void setupJavaParameters(OwnJavaParameters params) throws ExecutionException {
-    JavaParametersUtil.configureConfiguration(params, myConfiguration);
-
-    for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList()) {
-      ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
+    public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration) {
+        super(environment);
+        myConfiguration = configuration;
     }
-  }
 
-  @Override
-  protected void setupProcessHandler(@Nonnull ProcessHandler handler) {
-    JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
-  }
+    protected void setupJavaParameters(OwnJavaParameters params) throws ExecutionException {
+        JavaParametersUtil.configureConfiguration(params, myConfiguration);
 
-  @Override
-  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
-    builder.colored().killable().silentReader();
-  }
+        for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList()) {
+            ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
+        }
+    }
 
-  @Override
-  protected boolean ansiColoringEnabled() {
-    return true;
-  }
+    @Override
+    protected void setupProcessHandler(@Nonnull ProcessHandler handler) {
+        JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
+    }
 
-  protected T getConfiguration() {
-    return myConfiguration;
-  }
+    @Override
+    protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+        builder.colored().killable().silentReader();
+    }
+
+    @Override
+    protected boolean ansiColoringEnabled() {
+        return true;
+    }
+
+    protected T getConfiguration() {
+        return myConfiguration;
+    }
 }

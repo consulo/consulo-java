@@ -26,10 +26,10 @@ import jakarta.annotation.Nonnull;
  */
 @Deprecated
 public interface JavaExtensionPoints {
-  @Nonnull
-  @Deprecated
-  ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create(EntryPoint.class);
+    @Nonnull
+    @Deprecated
+    ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create(EntryPoint.class);
 
-  @Nonnull
-  ExtensionPointName<CantBeStaticCondition> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create(CantBeStaticCondition.class);
+    @Nonnull
+    ExtensionPointName<CantBeStaticCondition> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create(CantBeStaticCondition.class);
 }

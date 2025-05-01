@@ -30,34 +30,36 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class ExternalLibraryResolver {
-  public static final ExtensionPointName<ExternalLibraryResolver> EP_NAME =
-    ExtensionPointName.create(ExternalLibraryResolver.class);
+    public static final ExtensionPointName<ExternalLibraryResolver> EP_NAME =
+        ExtensionPointName.create(ExternalLibraryResolver.class);
 
-  @Nullable
-  public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName,
-                                                          @Nonnull ThreeState isAnnotation,
-                                                          @Nonnull Module contextModule);
+    @Nullable
+    public abstract ExternalClassResolveResult resolveClass(
+        @Nonnull String shortClassName,
+        @Nonnull ThreeState isAnnotation,
+        @Nonnull Module contextModule
+    );
 
-  @Nullable
-  public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
-    return null;
-  }
-
-  public static class ExternalClassResolveResult {
-    private final String myQualifiedClassName;
-    private final ExternalLibraryDescriptor myLibrary;
-
-    public ExternalClassResolveResult(String qualifiedClassName, ExternalLibraryDescriptor library) {
-      myQualifiedClassName = qualifiedClassName;
-      myLibrary = library;
+    @Nullable
+    public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
+        return null;
     }
 
-    public String getQualifiedClassName() {
-      return myQualifiedClassName;
-    }
+    public static class ExternalClassResolveResult {
+        private final String myQualifiedClassName;
+        private final ExternalLibraryDescriptor myLibrary;
 
-    public ExternalLibraryDescriptor getLibrary() {
-      return myLibrary;
+        public ExternalClassResolveResult(String qualifiedClassName, ExternalLibraryDescriptor library) {
+            myQualifiedClassName = qualifiedClassName;
+            myLibrary = library;
+        }
+
+        public String getQualifiedClassName() {
+            return myQualifiedClassName;
+        }
+
+        public ExternalLibraryDescriptor getLibrary() {
+            return myLibrary;
+        }
     }
-  }
 }

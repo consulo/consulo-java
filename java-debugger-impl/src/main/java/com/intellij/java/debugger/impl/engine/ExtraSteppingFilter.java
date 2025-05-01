@@ -26,12 +26,12 @@ import consulo.internal.com.sun.jdi.request.StepRequest;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ExtraSteppingFilter {
-  ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create(ExtraSteppingFilter.class);
+    ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create(ExtraSteppingFilter.class);
 
-  boolean isApplicable(SuspendContext context);
+    boolean isApplicable(SuspendContext context);
 
-  /**
-   * @return Step request depth as defined in {@link StepRequest}
-   */
-  int getStepRequestDepth(SuspendContext context);
+    /**
+     * @return Step request depth as defined in {@link StepRequest}
+     */
+    int getStepRequestDepth(SuspendContext context);
 }

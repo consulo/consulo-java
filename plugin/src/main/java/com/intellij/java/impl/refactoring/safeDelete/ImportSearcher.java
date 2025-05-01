@@ -27,21 +27,23 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class ImportSearcher {
-  private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create(ImportSearcher.class);
+    private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create(ImportSearcher.class);
 
-  /**
-   * @return found import or null
-   */
-  @Nullable
-  public abstract PsiElement findImport(PsiElement element, boolean onlyNonStatic);
+    /**
+     * @return found import or null
+     */
+    @Nullable
+    public abstract PsiElement findImport(PsiElement element, boolean onlyNonStatic);
 
-  @Nullable
-  public static PsiElement getImport(PsiElement element, boolean onlyNonStatic) {
-    for (ImportSearcher searcher : EP_NAME.getExtensions()) {
-      PsiElement anImport = searcher.findImport(element, onlyNonStatic);
-      if (anImport != null) return anImport;
+    @Nullable
+    public static PsiElement getImport(PsiElement element, boolean onlyNonStatic) {
+        for (ImportSearcher searcher : EP_NAME.getExtensions()) {
+            PsiElement anImport = searcher.findImport(element, onlyNonStatic);
+            if (anImport != null) {
+                return anImport;
+            }
+        }
+
+        return null;
     }
-
-    return null;
-  }
 }
