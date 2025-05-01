@@ -54,7 +54,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +65,6 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
     public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;
     public boolean SUGGEST_PRIVATE_FOR_INNERS = false;
-    @NonNls
     private static final String SHORT_NAME = "WeakerAccess";
 
     private class OptionsPanel extends JPanel {
@@ -138,12 +136,12 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     @Nullable
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        final RefEntity refEntity,
-        final AnalysisScope scope,
-        final InspectionManager manager,
-        final GlobalInspectionContext globalContext,
-        final ProblemDescriptionsProcessor processor,
-        Object state
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor processor,
+        @Nonnull Object state
     ) {
         if (refEntity instanceof RefJavaElement refElement) {
             if (refElement instanceof RefParameter || refElement.isSyntheticJSP()) {
@@ -190,8 +188,8 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
             String access = getPossibleAccess(refElement);
             if (access != refElement.getAccessModifier() && access != null) {
-                final PsiElement element = refElement.getElement();
-                final PsiElement nameIdentifier = element != null ? IdentifierUtil.getNameIdentifier(element) : null;
+                PsiElement element = refElement.getElement();
+                PsiElement nameIdentifier = element != null ? IdentifierUtil.getNameIdentifier(element) : null;
                 if (nameIdentifier != null) {
                     return new ProblemDescriptor[]{
                         manager.createProblemDescriptor(
@@ -318,7 +316,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                 }
             }
 
-            for (final RefElement refElement : refClass.getInTypeReferences()) {
+            for (RefElement refElement : refClass.getInTypeReferences()) {
                 if (!isAccessibleFrom(refElement, refClass, accessModifier)) {
                     return false;
                 }
@@ -355,7 +353,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             return true;
         }
 
-        final RefJavaUtil refUtil = RefJavaUtil.getInstance();
+        RefJavaUtil refUtil = RefJavaUtil.getInstance();
         if (accessModifier == PsiModifier.PACKAGE_LOCAL) {
             return RefJavaUtil.getPackage(from) == RefJavaUtil.getPackage(to);
         }
@@ -377,6 +375,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
         if (accessModifier == PsiModifier.PRIVATE) {
             if (SUGGEST_PRIVATE_FOR_INNERS) {
+                //noinspection SimplifiableIfStatement
                 if (isInExtendsList(to, fromTopLevel.getElement().getExtendsList())
                     || isInExtendsList(to, fromTopLevel.getElement().getImplementsList())
                     || isInAnnotations(to, fromTopLevel)) {
@@ -391,7 +390,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
             if (fromTopLevel == toOwner) {
                 if (from instanceof RefClass fromRefClass && to instanceof RefClass) {
-                    final PsiClass fromClass = fromRefClass.getElement();
+                    PsiClass fromClass = fromRefClass.getElement();
                     LOG.assertTrue(fromClass != null);
                     if (isInExtendsList(to, fromClass.getExtendsList())
                         || isInExtendsList(to, fromClass.getImplementsList())) {
@@ -406,14 +405,14 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         return false;
     }
 
-    private static boolean isInAnnotations(final RefJavaElement to, final RefClass fromTopLevel) {
-        final PsiModifierList modifierList = fromTopLevel.getElement().getModifierList();
+    private static boolean isInAnnotations(RefJavaElement to, RefClass fromTopLevel) {
+        PsiModifierList modifierList = fromTopLevel.getElement().getModifierList();
         if (modifierList == null) {
             return false;
         }
-        final PsiElement toElement = to.getElement();
+        PsiElement toElement = to.getElement();
 
-        final boolean[] resolved = new boolean[]{false};
+        boolean[] resolved = new boolean[]{false};
         modifierList.accept(new JavaRecursiveElementWalkingVisitor() {
             @RequiredReadAction
             @Override
@@ -430,11 +429,11 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         return resolved[0];
     }
 
-    private static boolean isInExtendsList(final RefJavaElement to, final PsiReferenceList extendsList) {
+    private static boolean isInExtendsList(RefJavaElement to, PsiReferenceList extendsList) {
         if (extendsList != null) {
-            final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
             for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
-                final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+                PsiReferenceParameterList parameterList = referenceElement.getParameterList();
                 if (parameterList != null) {
                     for (PsiType type : parameterList.getTypeArguments()) {
                         if (extendsList.getManager().areElementsEquivalent(PsiUtil.resolveClassInType(type), to.getElement())) {
@@ -450,12 +449,12 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        final RefManager manager,
-        final GlobalJavaInspectionContext globalContext,
-        final ProblemDescriptionsProcessor processor,
+        RefManager manager,
+        GlobalJavaInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
         Object state
     ) {
-        final EntryPointsManager entryPointsManager = globalContext.getEntryPointsManager(manager);
+        EntryPointsManager entryPointsManager = globalContext.getEntryPointsManager(manager);
         for (RefElement entryPoint : entryPointsManager.getEntryPoints()) {
             ignoreElement(processor, entryPoint);
         }
@@ -465,7 +464,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         }
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull final RefEntity refEntity) {
+            public void visitElement(@Nonnull RefEntity refEntity) {
                 if (!(refEntity instanceof RefElement)) {
                     return;
                 }
@@ -474,7 +473,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                 }
                 refEntity.accept(new RefJavaVisitor() {
                     @Override
-                    public void visitField(@Nonnull final RefField refField) {
+                    public void visitField(@Nonnull RefField refField) {
                         if (refField.getAccessModifier() != PsiModifier.PRIVATE) {
                             globalContext.enqueueFieldUsagesProcessor(refField, psiReference -> {
                                 ignoreElement(processor, refField);
@@ -484,25 +483,31 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitMethod(@Nonnull final RefMethod refMethod) {
+                    public void visitMethod(@Nonnull RefMethod refMethod) {
                         if (!refMethod.isExternalOverride() && refMethod.getAccessModifier() != PsiModifier.PRIVATE
                             && !(refMethod instanceof RefImplicitConstructor)) {
-                            globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
-                                ignoreElement(processor, refMethod);
-                                return false;
-                            });
+                            globalContext.enqueueDerivedMethodsProcessor(
+                                refMethod,
+                                derivedMethod -> {
+                                    ignoreElement(processor, refMethod);
+                                    return false;
+                                }
+                            );
 
-                            globalContext.enqueueMethodUsagesProcessor(refMethod, psiReference -> {
-                                ignoreElement(processor, refMethod);
-                                return false;
-                            });
+                            globalContext.enqueueMethodUsagesProcessor(
+                                refMethod,
+                                psiReference -> {
+                                    ignoreElement(processor, refMethod);
+                                    return false;
+                                }
+                            );
 
                             if (entryPointsManager.isAddNonJavaEntries()) {
-                                final RefClass ownerClass = refMethod.getOwnerClass();
+                                RefClass ownerClass = refMethod.getOwnerClass();
                                 if (refMethod.isConstructor() && ownerClass.getDefaultConstructor() != null) {
                                     String qualifiedName = ownerClass.getElement().getQualifiedName();
                                     if (qualifiedName != null) {
-                                        final Project project = manager.getProject();
+                                        Project project = manager.getProject();
                                         PsiSearchHelper.SERVICE.getInstance(project).processUsagesInNonJavaFiles(
                                             qualifiedName,
                                             (file, startOffset, endOffset) -> {
@@ -519,7 +524,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitClass(@Nonnull final RefClass refClass) {
+                    public void visitClass(@Nonnull RefClass refClass) {
                         if (!refClass.isAnonymous()) {
                             globalContext.enqueueDerivedClassesProcessor(refClass, inheritor -> {
                                 ignoreElement(processor, refClass);
@@ -557,19 +562,19 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     }
 
     @Override
-    public void compose(@Nonnull final StringBuffer buf, @Nonnull final RefEntity refEntity, final HTMLComposer composer) {
+    public void compose(@Nonnull StringBuffer buf, @Nonnull RefEntity refEntity, HTMLComposer composer) {
         composer.appendElementInReferences(buf, (RefElement)refEntity);
     }
 
     @Override
     @Nullable
-    public QuickFix getQuickFix(final String hint) {
+    public QuickFix getQuickFix(String hint) {
         return new AcceptSuggestedAccess(null, hint);
     }
 
     @Override
     @Nullable
-    public String getHint(@Nonnull final QuickFix fix) {
+    public String getHint(@Nonnull QuickFix fix) {
         return ((AcceptSuggestedAccess)fix).getHint();
     }
 
@@ -578,7 +583,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         @PsiModifier.ModifierConstant
         private final String myHint;
 
-        private AcceptSuggestedAccess(final RefManager manager, @PsiModifier.ModifierConstant String hint) {
+        private AcceptSuggestedAccess(RefManager manager, @PsiModifier.ModifierConstant String hint) {
             myManager = manager;
             myHint = hint;
         }
@@ -601,7 +606,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
                 return;
             }
-            final PsiModifierListOwner element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiModifierListOwner.class);
+            PsiModifierListOwner element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiModifierListOwner.class);
             if (element != null) {
                 RefElement refElement = null;
                 if (myManager != null) {
@@ -619,7 +624,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                     if (element instanceof PsiMethod psiMethod) {
                         PsiClass containingClass = psiMethod.getContainingClass();
                         if (containingClass != null && containingClass.getParent() instanceof PsiFile
-                            && myHint == PsiModifier.PRIVATE && list.hasModifierProperty(PsiModifier.FINAL)) {
+                            && myHint == PsiModifier.PRIVATE && psiMethod.isFinal()) {
                             list.setModifierProperty(PsiModifier.FINAL, false);
                         }
                     }

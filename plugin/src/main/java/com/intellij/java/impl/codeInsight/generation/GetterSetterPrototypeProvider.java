@@ -26,8 +26,8 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.component.extension.Extensions;
 
 /**
- * User: anna
- * Date: 3/4/13
+ * @author anna
+ * @since 2013-03-04
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class GetterSetterPrototypeProvider {
@@ -83,13 +83,13 @@ public abstract class GetterSetterPrototypeProvider {
     public static PsiMethod[] findGetters(PsiClass aClass, String propertyName, boolean isStatic) {
         if (!isStatic) {
             for (GetterSetterPrototypeProvider provider : Extensions.getExtensions(EP_NAME)) {
-                final PsiMethod[] getterSetter = provider.findGetters(aClass, propertyName);
+                PsiMethod[] getterSetter = provider.findGetters(aClass, propertyName);
                 if (getterSetter != null) {
                     return getterSetter;
                 }
             }
         }
-        final PsiMethod propertyGetterSetter = PropertyUtil.findPropertyGetter(aClass, propertyName, isStatic, false);
+        PsiMethod propertyGetterSetter = PropertyUtil.findPropertyGetter(aClass, propertyName, isStatic, false);
         if (propertyGetterSetter != null) {
             return new PsiMethod[]{propertyGetterSetter};
         }

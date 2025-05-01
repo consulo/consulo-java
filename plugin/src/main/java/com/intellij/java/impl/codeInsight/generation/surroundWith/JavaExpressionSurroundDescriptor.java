@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.Language;
@@ -49,8 +50,9 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
         new JavaWithNullCheckSurrounder()
     };
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
         PsiExpression expr = CodeInsightUtil.findExpressionInRange(file, startOffset, endOffset);
         if (expr == null) {
@@ -67,7 +69,7 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
     @Nonnull
     public Surrounder[] getSurrounders() {
         if (mySurrounders == null) {
-            final ArrayList<Surrounder> list = new ArrayList<Surrounder>();
+            ArrayList<Surrounder> list = new ArrayList<>();
             Collections.addAll(list, SURROUNDERS);
             Collections.addAll(list, JavaExpressionSurrounder.EP_NAME.getExtensions());
             mySurrounders = list.toArray(new Surrounder[list.size()]);

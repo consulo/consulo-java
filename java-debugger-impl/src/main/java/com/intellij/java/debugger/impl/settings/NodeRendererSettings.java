@@ -94,7 +94,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
             createLabelRenderer(" size = ", "size()", null),
             createExpressionChildrenRenderer(
                 "entrySet().toArray()",
-                "!isEmpty" + "()"
+                "!isEmpty()"
             )
         ),
         createCompoundReferenceRenderer(

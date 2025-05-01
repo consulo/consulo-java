@@ -18,6 +18,7 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.PsiAnnotation.TargetType;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiCompiledElement;
@@ -108,16 +109,16 @@ public class AnnotationTargetUtil {
             return TYPE_PARAMETER_TARGETS;
         }
 
-        if (owner instanceof PsiModifierList) {
-            PsiElement element = ((PsiModifierList)owner).getParent();
+        if (owner instanceof PsiModifierList modifierList) {
+            PsiElement element = modifierList.getParent();
             if (element instanceof PsiPackageStatement) {
                 return PACKAGE_TARGETS;
             }
-            if (element instanceof PsiClass) {
-                if (((PsiClass)element).getModifierList() != owner) {
+            if (element instanceof PsiClass psiClass) {
+                if (psiClass.getModifierList() != owner) {
                     return TargetType.EMPTY_ARRAY;
                 }
-                if (((PsiClass)element).isAnnotationType()) {
+                if (psiClass.isAnnotationType()) {
                     return ANNOTATION_TARGETS;
                 }
                 else {
@@ -127,26 +128,21 @@ public class AnnotationTargetUtil {
             if (element instanceof PsiRecordComponent) {
                 return RECORD_COMPONENT_TARGETS;
             }
-            if (element instanceof PsiMethod) {
-                if (((PsiMethod)element).isConstructor()) {
-                    return CONSTRUCTOR_TARGETS;
-                }
-                else {
-                    return METHOD_TARGETS;
-                }
+            if (element instanceof PsiMethod method) {
+                return method.isConstructor() ? CONSTRUCTOR_TARGETS : METHOD_TARGETS;
             }
             if (element instanceof PsiField) {
                 return FIELD_TARGETS;
             }
-            if (element instanceof PsiParameter) {
+            if (element instanceof PsiParameter parameter) {
                 // PARAMETER applies only to formal parameters (methods & lambdas) and catch parameters
                 // see https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6.4.1
-                PsiElement scope = element.getParent();
-                if (scope instanceof PsiForeachStatement || element instanceof PsiPatternVariable) {
+                PsiElement scope = parameter.getParent();
+                if (scope instanceof PsiForeachStatement || parameter instanceof PsiPatternVariable) {
                     return LOCAL_VARIABLE_TARGETS;
                 }
-                if (scope instanceof PsiParameterList && scope.getParent() instanceof PsiLambdaExpression &&
-                    ((PsiParameter)element).getTypeElement() == null) {
+                if (scope instanceof PsiParameterList && scope.getParent() instanceof PsiLambdaExpression
+                    && parameter.getTypeElement() == null) {
                     return TargetType.EMPTY_ARRAY;
                 }
 
@@ -167,18 +163,19 @@ public class AnnotationTargetUtil {
     }
 
     @Nullable
+    @RequiredReadAction
     public static Set<TargetType> extractRequiredAnnotationTargets(@Nullable PsiAnnotationMemberValue value) {
-        if (value instanceof PsiReference) {
-            TargetType targetType = translateTargetRef((PsiReference)value);
+        if (value instanceof PsiReference ref) {
+            TargetType targetType = translateTargetRef(ref);
             if (targetType != null) {
                 return Collections.singleton(targetType);
             }
         }
-        else if (value instanceof PsiArrayInitializerMemberValue) {
+        else if (value instanceof PsiArrayInitializerMemberValue arrayInitializerMemberValue) {
             Set<TargetType> targets = new HashSet<>();
-            for (PsiAnnotationMemberValue initializer : ((PsiArrayInitializerMemberValue)value).getInitializers()) {
-                if (initializer instanceof PsiReference) {
-                    TargetType targetType = translateTargetRef((PsiReference)initializer);
+            for (PsiAnnotationMemberValue initializer : arrayInitializerMemberValue.getInitializers()) {
+                if (initializer instanceof PsiReference ref) {
+                    TargetType targetType = translateTargetRef(ref);
                     if (targetType != null) {
                         targets.add(targetType);
                     }
@@ -191,10 +188,11 @@ public class AnnotationTargetUtil {
     }
 
     @Nullable
+    @RequiredReadAction
     private static TargetType translateTargetRef(@Nonnull PsiReference reference) {
         PsiElement field = reference.resolve();
-        if (field instanceof PsiEnumConstant) {
-            String name = ((PsiEnumConstant)field).getName();
+        if (field instanceof PsiEnumConstant enumConst) {
+            String name = enumConst.getName();
             try {
                 return TargetType.valueOf(name);
             }
@@ -208,6 +206,7 @@ public class AnnotationTargetUtil {
     /**
      * Returns {@code true} if the annotation resolves to a class having {@link TargetType#TYPE_USE} in it's targets.
      */
+    @RequiredReadAction
     public static boolean isTypeAnnotation(@Nonnull PsiAnnotation element) {
         return findAnnotationTarget(element, TargetType.TYPE_USE) == TargetType.TYPE_USE;
     }
@@ -217,14 +216,12 @@ public class AnnotationTargetUtil {
      * at any of the targets, or {@linkplain TargetType#UNKNOWN} if the annotation does not resolve to a valid annotation type.
      */
     @Nullable
+    @RequiredReadAction
     public static TargetType findAnnotationTarget(@Nonnull PsiAnnotation annotation, @Nonnull TargetType... types) {
         if (types.length != 0) {
             PsiJavaCodeReferenceElement ref = annotation.getNameReferenceElement();
-            if (ref != null) {
-                PsiElement annotationType = ref.resolve();
-                if (annotationType instanceof PsiClass) {
-                    return findAnnotationTarget((PsiClass)annotationType, types);
-                }
+            if (ref != null && ref.resolve() instanceof PsiClass annotationType) {
+                return findAnnotationTarget(annotationType, types);
             }
         }
 
@@ -236,6 +233,7 @@ public class AnnotationTargetUtil {
      * at any of the targets, or {@linkplain TargetType#UNKNOWN} if the type is not a valid annotation (e.g. cannot be resolved).
      */
     @Nullable
+    @RequiredReadAction
     public static TargetType findAnnotationTarget(@Nonnull PsiClass annotationType, @Nonnull TargetType... types) {
         if (types.length != 0) {
             Set<TargetType> targets = getAnnotationTargets(annotationType);
@@ -256,6 +254,7 @@ public class AnnotationTargetUtil {
      * Returns a set of targets where the given annotation may be applied, or {@code null} when the type is not a valid annotation.
      */
     @Nullable
+    @RequiredReadAction
     public static Set<TargetType> getAnnotationTargets(@Nonnull PsiClass annotationType) {
         if (!annotationType.isAnnotationType()) {
             return null;
@@ -279,6 +278,7 @@ public class AnnotationTargetUtil {
      * Returns null if {@code modifierListOwner.getModifierList()} is null.
      */
     @Nullable
+    @RequiredReadAction
     public static PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotation) {
         PsiModifierList list = modifierListOwner.getModifierList();
         if (list == null) {
@@ -286,7 +286,8 @@ public class AnnotationTargetUtil {
         }
         PsiClass annotationClass = JavaPsiFacade.getInstance(modifierListOwner.getProject())
             .findClass(annotation, modifierListOwner.getResolveScope());
-        return getTarget(modifierListOwner, annotationClass != null && findAnnotationTarget(annotationClass, TargetType.TYPE_USE) != null);
+        return getTarget(modifierListOwner, annotationClass != null
+            && findAnnotationTarget(annotationClass, TargetType.TYPE_USE) != null);
     }
 
     /**
@@ -324,7 +325,7 @@ public class AnnotationTargetUtil {
      *
      * @param modifierList the place where type appears
      */
-    @RequiredReadAction
+    @RequiredWriteAction
     public static PsiType keepStrictlyTypeUseAnnotations(@Nullable PsiModifierList modifierList, @Nonnull PsiType type) {
         if (modifierList == null) {
             return type;
