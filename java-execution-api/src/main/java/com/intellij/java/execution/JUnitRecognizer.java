@@ -12,19 +12,17 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JUnitRecognizer {
+    public static final ExtensionPointName<JUnitRecognizer> EP_NAME = ExtensionPointName.create(JUnitRecognizer.class);
 
-  public static final ExtensionPointName<JUnitRecognizer> EP_NAME = ExtensionPointName.create(JUnitRecognizer.class);
+    public abstract boolean isTestAnnotated(@Nonnull PsiMethod method);
 
-  public abstract boolean isTestAnnotated(@Nonnull PsiMethod method);
+    public static boolean willBeAnnotatedAfterCompilation(@Nonnull PsiMethod method) {
+        for (JUnitRecognizer jUnitRecognizer : EP_NAME.getExtensionList()) {
+            if (jUnitRecognizer.isTestAnnotated(method)) {
+                return true;
+            }
+        }
 
-  public static boolean willBeAnnotatedAfterCompilation(@Nonnull PsiMethod method) {
-    for (JUnitRecognizer jUnitRecognizer : EP_NAME.getExtensionList()) {
-      if (jUnitRecognizer.isTestAnnotated(method)) {
-        return true;
-      }
+        return false;
     }
-
-    return false;
-  }
-
 }

@@ -29,114 +29,126 @@ import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
     PsiElementNavigationItem {
-  private static final Logger LOG = Logger.getInstance(BaseSmartPointerPsiNode.class);
+    private static final Logger LOG = Logger.getInstance(BaseSmartPointerPsiNode.class);
 
-  protected BaseSmartPointerPsiNode(Project project, Type value, ViewSettings viewSettings) {
-    super(project, value, viewSettings);
-  }
-
-  @Override
-  @Nonnull
-  public final Collection<AbstractTreeNode> getChildren() {
-    PsiElement value = getPsiElement();
-    if (value == null) return new ArrayList<>();
-    LOG.assertTrue(value.isValid());
-    return getChildrenImpl();
-  }
-
-  @Nonnull
-  protected abstract Collection<AbstractTreeNode> getChildrenImpl();
-
-  protected boolean isMarkReadOnly() {
-    final Object parentValue = getParentValue();
-    return parentValue instanceof PsiDirectory || parentValue instanceof PackageElement;
-  }
-
-  @Override
-  public PsiElement getTargetElement() {
-    VirtualFile file = getVirtualFileForValue();
-    if (file == null) {
-      return null;
-    } else {
-      return file.isDirectory() ? PsiManager.getInstance(getProject()).findDirectory(file) : PsiManager.getInstance(getProject()).findFile(file);
-    }
-  }
-
-  private VirtualFile getVirtualFileForValue() {
-    PsiElement value = getPsiElement();
-    if (value == null) return null;
-    return PsiUtilCore.getVirtualFile(value);
-  }
-  // Should be called in atomic action
-
-  protected abstract void updateImpl(PresentationData data);
-
-
-  @Override
-  public void update(PresentationData data) {
-    final PsiElement value = getPsiElement();
-    if (value == null || !value.isValid()) {
-      setValue(null);
-    }
-    if (getPsiElement() == null) return;
-
-    int flags = Iconable.ICON_FLAG_VISIBILITY;
-    if (isMarkReadOnly()) {
-      flags |= Iconable.ICON_FLAG_READ_STATUS;
+    protected BaseSmartPointerPsiNode(Project project, Type value, ViewSettings viewSettings) {
+        super(project, value, viewSettings);
     }
 
-    LOG.assertTrue(value.isValid());
-
-    Image icon = IconDescriptorUpdaters.getIcon(value, flags);
-    data.setIcon(icon);
-    data.setPresentableText(myName);
-    if (isDeprecated()) {
-      data.setAttributesKey(CodeInsightColors.DEPRECATED_ATTRIBUTES);
+    @Override
+    @Nonnull
+    public final Collection<AbstractTreeNode> getChildren() {
+        PsiElement value = getPsiElement();
+        if (value == null) {
+            return new ArrayList<>();
+        }
+        LOG.assertTrue(value.isValid());
+        return getChildrenImpl();
     }
-    updateImpl(data);
-    for (ProjectViewNodeDecorator decorator : ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
-      decorator.decorate(this, data);
+
+    @Nonnull
+    protected abstract Collection<AbstractTreeNode> getChildrenImpl();
+
+    protected boolean isMarkReadOnly() {
+        final Object parentValue = getParentValue();
+        return parentValue instanceof PsiDirectory || parentValue instanceof PackageElement;
     }
-  }
 
-  private boolean isDeprecated() {
-    final PsiElement element = getPsiElement();
-    return element instanceof PsiDocCommentOwner
-        && element.isValid()
-        && ((PsiDocCommentOwner) element).isDeprecated();
-  }
-
-  @Override
-  public boolean contains(@Nonnull VirtualFile file) {
-    if (getPsiElement() == null) return false;
-    PsiFile containingFile = getPsiElement().getContainingFile();
-    return file.equals(containingFile.getVirtualFile());
-  }
-
-  @Override
-  public void navigate(boolean requestFocus) {
-    if (canNavigate()) {
-      ((NavigationItem) getPsiElement()).navigate(requestFocus);
+    @Override
+    public PsiElement getTargetElement() {
+        VirtualFile file = getVirtualFileForValue();
+        if (file == null) {
+            return null;
+        }
+        else {
+            return file.isDirectory()
+                ? PsiManager.getInstance(getProject()).findDirectory(file)
+                : PsiManager.getInstance(getProject()).findFile(file);
+        }
     }
-  }
 
-  @Override
-  public boolean canNavigate() {
-    return getPsiElement() instanceof NavigationItem && ((NavigationItem) getPsiElement()).canNavigate();
-  }
+    private VirtualFile getVirtualFileForValue() {
+        PsiElement value = getPsiElement();
+        if (value == null) {
+            return null;
+        }
+        return PsiUtilCore.getVirtualFile(value);
+    }
+    // Should be called in atomic action
 
-  @Override
-  public boolean canNavigateToSource() {
-    return getPsiElement() instanceof NavigationItem && ((NavigationItem) getPsiElement()).canNavigateToSource();
-  }
+    protected abstract void updateImpl(PresentationData data);
 
-  protected PsiElement getPsiElement() {
-    //noinspection CastToIncompatibleInterface
-    return (PsiElement) getValue(); // automatically de-anchorized in AbstractTreeNode.getValue
-  }
+
+    @Override
+    public void update(PresentationData data) {
+        final PsiElement value = getPsiElement();
+        if (value == null || !value.isValid()) {
+            setValue(null);
+        }
+        if (getPsiElement() == null) {
+            return;
+        }
+
+        int flags = Iconable.ICON_FLAG_VISIBILITY;
+        if (isMarkReadOnly()) {
+            flags |= Iconable.ICON_FLAG_READ_STATUS;
+        }
+
+        LOG.assertTrue(value.isValid());
+
+        Image icon = IconDescriptorUpdaters.getIcon(value, flags);
+        data.setIcon(icon);
+        data.setPresentableText(myName);
+        if (isDeprecated()) {
+            data.setAttributesKey(CodeInsightColors.DEPRECATED_ATTRIBUTES);
+        }
+        updateImpl(data);
+        for (ProjectViewNodeDecorator decorator : ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
+            decorator.decorate(this, data);
+        }
+    }
+
+    private boolean isDeprecated() {
+        final PsiElement element = getPsiElement();
+        return element instanceof PsiDocCommentOwner
+            && element.isValid()
+            && ((PsiDocCommentOwner)element).isDeprecated();
+    }
+
+    @Override
+    public boolean contains(@Nonnull VirtualFile file) {
+        if (getPsiElement() == null) {
+            return false;
+        }
+        PsiFile containingFile = getPsiElement().getContainingFile();
+        return file.equals(containingFile.getVirtualFile());
+    }
+
+    @Override
+    public void navigate(boolean requestFocus) {
+        if (canNavigate()) {
+            ((NavigationItem)getPsiElement()).navigate(requestFocus);
+        }
+    }
+
+    @Override
+    public boolean canNavigate() {
+        return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigate();
+    }
+
+    @Override
+    public boolean canNavigateToSource() {
+        return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigateToSource();
+    }
+
+    protected PsiElement getPsiElement() {
+        //noinspection CastToIncompatibleInterface
+        return (PsiElement)getValue(); // automatically de-anchorized in AbstractTreeNode.getValue
+    }
 }

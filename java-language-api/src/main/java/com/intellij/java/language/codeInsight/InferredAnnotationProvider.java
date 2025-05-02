@@ -9,6 +9,7 @@ import consulo.component.extension.ExtensionPointName;
 import jakarta.annotation.Nonnull;
 
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -17,22 +18,22 @@ import java.util.List;
  */
 @ExtensionAPI(ComponentScope.PROJECT)
 public interface InferredAnnotationProvider {
-  ExtensionPointName<InferredAnnotationProvider> EP_NAME = ExtensionPointName.create(InferredAnnotationProvider.class);
+    ExtensionPointName<InferredAnnotationProvider> EP_NAME = ExtensionPointName.create(InferredAnnotationProvider.class);
 
-  /**
-   * @return if exists, an inferred annotation by given qualified name on a given PSI element. Several invocations may return several
-   * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
-   */
-  @Nullable
-  PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+    /**
+     * @return if exists, an inferred annotation by given qualified name on a given PSI element. Several invocations may return several
+     * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
+     */
+    @Nullable
+    PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-  /**
-   * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
-   * potentially faster.
-   *
-   * @return all inferred annotations for the given element.
-   */
-  @Nonnull
-  List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
+    /**
+     * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
+     * potentially faster.
+     *
+     * @return all inferred annotations for the given element.
+     */
+    @Nonnull
+    List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
 }

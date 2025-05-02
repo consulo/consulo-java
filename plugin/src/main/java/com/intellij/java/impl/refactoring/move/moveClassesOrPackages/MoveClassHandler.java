@@ -33,23 +33,23 @@ import java.util.Collection;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface MoveClassHandler {
-	ExtensionPointName<MoveClassHandler> EP_NAME = ExtensionPointName.create(MoveClassHandler.class);
+    ExtensionPointName<MoveClassHandler> EP_NAME = ExtensionPointName.create(MoveClassHandler.class);
 
-  void prepareMove(@Nonnull PsiClass aClass);
+    void prepareMove(@Nonnull PsiClass aClass);
 
-  void finishMoveClass(@Nonnull PsiClass aClass);
+    void finishMoveClass(@Nonnull PsiClass aClass);
 
-  /**
-   * @return null if it cannot move aClass
-   */
-  @Nullable
-  PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
+    /**
+     * @return null if it cannot move aClass
+     */
+    @Nullable
+    PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
 
-  /**
-   * @param clazz psiClass
-   * @return null, if this instance of FileNameForPsiProvider cannot provide name for clazz
-   */
-  String getName(PsiClass clazz);
+    /**
+     * @param clazz psiClass
+     * @return null, if this instance of FileNameForPsiProvider cannot provide name for clazz
+     */
+    String getName(PsiClass clazz);
 
-  void preprocessUsages(Collection<UsageInfo> results);
+    void preprocessUsages(Collection<UsageInfo> results);
 }

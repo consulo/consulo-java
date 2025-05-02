@@ -30,9 +30,8 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class I18nizeHandlerProvider {
+    public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
 
-  public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
-
-  @Nullable
-  public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @Nonnull final Editor editor, @Nonnull TextRange range);
+    @Nullable
+    public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @Nonnull final Editor editor, @Nonnull TextRange range);
 }

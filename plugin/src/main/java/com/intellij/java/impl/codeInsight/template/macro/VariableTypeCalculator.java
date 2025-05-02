@@ -29,22 +29,23 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class VariableTypeCalculator {
-  public static final ExtensionPointName<VariableTypeCalculator> EP_NAME =
-      ExtensionPointName.create(VariableTypeCalculator.class);
+    public static final ExtensionPointName<VariableTypeCalculator> EP_NAME = ExtensionPointName.create(VariableTypeCalculator.class);
 
-  @Nullable
-  public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place);
+    @Nullable
+    public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place);
 
-  /**
-   * @return inferred type of variable in the context of place
-   */
-  @Nonnull
-  public static PsiType getVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place) {
-    for (VariableTypeCalculator calculator : EP_NAME.getExtensionList()) {
-      final PsiType type = calculator.inferVarTypeAt(var, place);
-      if (type != null) return type;
+    /**
+     * @return inferred type of variable in the context of place
+     */
+    @Nonnull
+    public static PsiType getVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place) {
+        for (VariableTypeCalculator calculator : EP_NAME.getExtensionList()) {
+            PsiType type = calculator.inferVarTypeAt(var, place);
+            if (type != null) {
+                return type;
+            }
+        }
+
+        return var.getType();
     }
-
-    return var.getType();
-  }
 }

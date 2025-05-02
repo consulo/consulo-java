@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
@@ -38,62 +37,62 @@ import org.jetbrains.annotations.Nls;
  */
 @ExtensionImpl
 public class ClassInitializerMayBeStaticInspection extends BaseInspection {
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.classInitializerMayBeStaticProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ChangeModifierFix(PsiModifier.STATIC);
-  }
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassInitializerCanBeStaticVisitor();
-  }
-
-  private static class ClassInitializerCanBeStaticVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitClassInitializer(PsiClassInitializer initializer) {
-      if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-
-      final PsiClass containingClass = ClassUtils.getContainingClass(initializer);
-      if (containingClass == null) {
-        return;
-      }
-      for (CantBeStaticCondition addin : JavaExtensionPoints.CANT_BE_STATIC_EP_NAME.getExtensions()) {
-        if (addin.cantBeStatic(initializer)) {
-          return;
-        }
-      }
-      final PsiElement scope = containingClass.getScope();
-      if (!(scope instanceof PsiJavaFile) && !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-
-      final MethodReferenceVisitor visitor = new MethodReferenceVisitor(initializer);
-      initializer.accept(visitor);
-      if (!visitor.areReferencesStaticallyAccessible()) {
-        return;
-      }
-
-      registerClassInitializerError(initializer);
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.classInitializerMayBeStaticProblemDescriptor().get();
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ChangeModifierFix(PsiModifier.STATIC);
+    }
+
+    @Override
+    @Nls
+    @Nonnull
+    public String getDisplayName() {
+        return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName().get();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassInitializerCanBeStaticVisitor();
+    }
+
+    private static class ClassInitializerCanBeStaticVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClassInitializer(PsiClassInitializer initializer) {
+            if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+
+            final PsiClass containingClass = ClassUtils.getContainingClass(initializer);
+            if (containingClass == null) {
+                return;
+            }
+            for (CantBeStaticCondition addin : JavaExtensionPoints.CANT_BE_STATIC_EP_NAME.getExtensions()) {
+                if (addin.cantBeStatic(initializer)) {
+                    return;
+                }
+            }
+            final PsiElement scope = containingClass.getScope();
+            if (!(scope instanceof PsiJavaFile) && !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+
+            final MethodReferenceVisitor visitor = new MethodReferenceVisitor(initializer);
+            initializer.accept(visitor);
+            if (!visitor.areReferencesStaticallyAccessible()) {
+                return;
+            }
+
+            registerClassInitializerError(initializer);
+        }
+    }
 }

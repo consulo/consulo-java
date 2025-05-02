@@ -26,14 +26,16 @@ import consulo.component.extension.ExtensionPointName;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class CanBeFinalHandler {
-  public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create(CanBeFinalHandler.class);
+    public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create(CanBeFinalHandler.class);
 
-  public abstract boolean canBeFinal(PsiMember member);
+    public abstract boolean canBeFinal(PsiMember member);
 
-  public static boolean allowToBeFinal(PsiMember member) {
-    for (CanBeFinalHandler handler : EP_NAME.getExtensionList()) {
-      if (!handler.canBeFinal(member)) return false;
+    public static boolean allowToBeFinal(PsiMember member) {
+        for (CanBeFinalHandler handler : EP_NAME.getExtensionList()) {
+            if (!handler.canBeFinal(member)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 }

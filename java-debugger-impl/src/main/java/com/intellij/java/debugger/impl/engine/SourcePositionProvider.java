@@ -28,33 +28,38 @@ import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class SourcePositionProvider {
-  public static final ExtensionPointName<SourcePositionProvider> EP_NAME =
-    ExtensionPointName.create(SourcePositionProvider.class);
+    public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create(SourcePositionProvider.class);
 
-  @Nullable
-  public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                 @Nonnull Project project,
-                                                 @Nonnull DebuggerContextImpl context) {
-    return getSourcePosition(descriptor, project, context, false);
-  }
-
-  @Nullable
-  public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                 @Nonnull Project project,
-                                                 @Nonnull DebuggerContextImpl context,
-                                                 boolean nearest) {
-    for (SourcePositionProvider provider : EP_NAME.getExtensions()) {
-      SourcePosition sourcePosition = provider.computeSourcePosition(descriptor, project, context, nearest);
-      if (sourcePosition != null) {
-        return sourcePosition;
-      }
+    @Nullable
+    public static SourcePosition getSourcePosition(
+        @Nonnull NodeDescriptor descriptor,
+        @Nonnull Project project,
+        @Nonnull DebuggerContextImpl context
+    ) {
+        return getSourcePosition(descriptor, project, context, false);
     }
-    return null;
-  }
 
-  @Nullable
-  protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                          @Nonnull Project project,
-                                                          @Nonnull DebuggerContextImpl context,
-                                                          boolean nearest);
+    @Nullable
+    public static SourcePosition getSourcePosition(
+        @Nonnull NodeDescriptor descriptor,
+        @Nonnull Project project,
+        @Nonnull DebuggerContextImpl context,
+        boolean nearest
+    ) {
+        for (SourcePositionProvider provider : EP_NAME.getExtensions()) {
+            SourcePosition sourcePosition = provider.computeSourcePosition(descriptor, project, context, nearest);
+            if (sourcePosition != null) {
+                return sourcePosition;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    protected abstract SourcePosition computeSourcePosition(
+        @Nonnull NodeDescriptor descriptor,
+        @Nonnull Project project,
+        @Nonnull DebuggerContextImpl context,
+        boolean nearest
+    );
 }

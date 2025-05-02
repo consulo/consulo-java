@@ -26,8 +26,8 @@ import java.util.List;
 
 @ExtensionAPI(ComponentScope.PROJECT)
 public interface JvmElementProvider {
-  ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create(JvmElementProvider.class);
+    ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create(JvmElementProvider.class);
 
-  @Nonnull
-  List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
+    @Nonnull
+    List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

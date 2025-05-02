@@ -25,8 +25,8 @@ import java.util.Set;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface AliasingPsiTargetMapper {
-  ExtensionPointName<AliasingPsiTargetMapper> EP_NAME = ExtensionPointName.create(AliasingPsiTargetMapper.class);
+    ExtensionPointName<AliasingPsiTargetMapper> EP_NAME = ExtensionPointName.create(AliasingPsiTargetMapper.class);
 
-  @Nonnull
-  Set<AliasingPsiTarget> getTargets(@Nonnull PomTarget target);
+    @Nonnull
+    Set<AliasingPsiTarget> getTargets(@Nonnull PomTarget target);
 }

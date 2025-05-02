@@ -20,48 +20,48 @@ import java.util.List;
 @Singleton
 @ServiceImpl
 public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
-  private static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
-  private final Project myProject;
+    private static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
+    private final Project myProject;
 
-  @Inject
-  public InferredAnnotationsManagerImpl(Project project) {
-    myProject = project;
-  }
-
-  @Nullable
-  @Override
-  public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
-    for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
-      PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
-      if (annotation != null) {
-        markInferred(annotation);
-        return annotation;
-      }
+    @Inject
+    public InferredAnnotationsManagerImpl(Project project) {
+        myProject = project;
     }
-    return null;
-  }
 
-  @Nonnull
-  @Override
-  public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
-    List<PsiAnnotation> result = new ArrayList<>();
-    for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
-      List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
-      for (PsiAnnotation annotation : annotations) {
-        markInferred(annotation);
-        result.add(annotation);
-      }
+    @Nullable
+    @Override
+    public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+        for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
+            PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
+            if (annotation != null) {
+                markInferred(annotation);
+                return annotation;
+            }
+        }
+        return null;
     }
-    return result.toArray(PsiAnnotation.EMPTY_ARRAY);
-  }
 
-  @Override
-  public boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation) {
-    return annotation.getUserData(INFERRED_ANNOTATION) != null;
-  }
+    @Nonnull
+    @Override
+    public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
+        List<PsiAnnotation> result = new ArrayList<>();
+        for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
+            List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
+            for (PsiAnnotation annotation : annotations) {
+                markInferred(annotation);
+                result.add(annotation);
+            }
+        }
+        return result.toArray(PsiAnnotation.EMPTY_ARRAY);
+    }
 
-  private static void markInferred(@Nonnull PsiAnnotation annotation) {
-    annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
-  }
+    @Override
+    public boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation) {
+        return annotation.getUserData(INFERRED_ANNOTATION) != null;
+    }
+
+    private static void markInferred(@Nonnull PsiAnnotation annotation) {
+        annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
+    }
 
 }

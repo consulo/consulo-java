@@ -26,8 +26,8 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.PROJECT)
 public abstract class PositionManagerFactory {
-  public static final ExtensionPointName<PositionManagerFactory> EP_NAME = ExtensionPointName.create(PositionManagerFactory.class);
+    public static final ExtensionPointName<PositionManagerFactory> EP_NAME = ExtensionPointName.create(PositionManagerFactory.class);
 
-  @Nullable
-  public abstract PositionManager createPositionManager(DebugProcess process);
+    @Nullable
+    public abstract PositionManager createPositionManager(DebugProcess process);
 }

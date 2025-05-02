@@ -22,32 +22,40 @@ import java.util.function.Function;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class MoveDirectoryWithClassesHelper {
-  private static final ExtensionPointName<MoveDirectoryWithClassesHelper> EP_NAME =
-    ExtensionPointName.create(MoveDirectoryWithClassesHelper.class);
+    private static final ExtensionPointName<MoveDirectoryWithClassesHelper> EP_NAME =
+        ExtensionPointName.create(MoveDirectoryWithClassesHelper.class);
 
-  public abstract void findUsages(Collection<PsiFile> filesToMove, PsiDirectory[] directoriesToMove, Collection<UsageInfo> result,
-                                  boolean searchInComments, boolean searchInNonJavaFiles, Project project);
+    public abstract void findUsages(
+        Collection<PsiFile> filesToMove,
+        PsiDirectory[] directoriesToMove,
+        Collection<UsageInfo> result,
+        boolean searchInComments, boolean searchInNonJavaFiles, Project project
+    );
 
-  public abstract boolean move(PsiFile file,
-                               PsiDirectory moveDestination,
-                               Map<PsiElement, PsiElement> oldToNewElementsMapping,
-                               List<PsiFile> movedFiles,
-                               RefactoringElementListener listener);
+    public abstract boolean move(
+        PsiFile file,
+        PsiDirectory moveDestination,
+        Map<PsiElement, PsiElement> oldToNewElementsMapping,
+        List<PsiFile> movedFiles,
+        RefactoringElementListener listener
+    );
 
-  public abstract void postProcessUsages(UsageInfo[] usages, Function<PsiDirectory, PsiDirectory> newDirMapper);
+    public abstract void postProcessUsages(UsageInfo[] usages, Function<PsiDirectory, PsiDirectory> newDirMapper);
 
-  public abstract void beforeMove(PsiFile psiFile);
+    public abstract void beforeMove(PsiFile psiFile);
 
-  public abstract void afterMove(PsiElement newElement);
+    public abstract void afterMove(PsiElement newElement);
 
-  public void preprocessUsages(Project project,
-                               Set<PsiFile> files,
-                               UsageInfo[] infos,
-                               PsiDirectory directory,
-                               MultiMap<PsiElement, String> conflicts) {
-  }
+    public void preprocessUsages(
+        Project project,
+        Set<PsiFile> files,
+        UsageInfo[] infos,
+        PsiDirectory directory,
+        MultiMap<PsiElement, String> conflicts
+    ) {
+    }
 
-  public static List<MoveDirectoryWithClassesHelper> findAll() {
-    return EP_NAME.getExtensionList();
-  }
+    public static List<MoveDirectoryWithClassesHelper> findAll() {
+        return EP_NAME.getExtensionList();
+    }
 }

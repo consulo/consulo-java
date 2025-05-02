@@ -25,9 +25,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaBreakpointHandlerFactory {
-  ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME =
-    ExtensionPointName.create(JavaBreakpointHandlerFactory.class);
+    ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME = ExtensionPointName.create(JavaBreakpointHandlerFactory.class);
 
-  @Nonnull
-  JavaBreakpointHandler createHandler(DebugProcessImpl process);
+    @Nonnull
+    JavaBreakpointHandler createHandler(DebugProcessImpl process);
 }

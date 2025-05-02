@@ -22,14 +22,17 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.Map;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class MoveAllClassesInFileHandler {
-  public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
-    ExtensionPointName.create(MoveAllClassesInFileHandler.class);
+    public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
+        ExtensionPointName.create(MoveAllClassesInFileHandler.class);
 
-  public abstract void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses,
-                                                   PsiClass psiClass,
-                                                   PsiElement... elementsToMove);
+    public abstract void processMoveAllClassesInFile(
+        @Nonnull Map<PsiClass, Boolean> allClasses,
+        PsiClass psiClass,
+        PsiElement... elementsToMove
+    );
 }

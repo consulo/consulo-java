@@ -26,15 +26,18 @@ import consulo.java.execution.configurations.OwnJavaParameters;
  * @author spleaner
  */
 public abstract class JavaPatchableProgramRunner<Settings extends RunnerSettings> extends GenericProgramRunner<Settings> {
+    public abstract void patch(
+        OwnJavaParameters javaParameters,
+        RunnerSettings settings,
+        RunProfile runProfile,
+        final boolean beforeExecution
+    ) throws ExecutionException;
 
-  public abstract void patch(OwnJavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException;
-
-
-  protected static void runCustomPatchers(OwnJavaParameters javaParameters, Executor executor, RunProfile runProfile) {
-    if (runProfile != null) {
-      for (JavaProgramPatcher patcher : JavaProgramPatcher.EP_NAME.getExtensionList()) {
-        patcher.patchJavaParameters(executor, runProfile, javaParameters);
-      }
+    protected static void runCustomPatchers(OwnJavaParameters javaParameters, Executor executor, RunProfile runProfile) {
+        if (runProfile != null) {
+            for (JavaProgramPatcher patcher : JavaProgramPatcher.EP_NAME.getExtensionList()) {
+                patcher.patchJavaParameters(executor, runProfile, javaParameters);
+            }
+        }
     }
-  }
 }

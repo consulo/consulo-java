@@ -32,21 +32,20 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class SourcePositionHighlighter {
-  public static final ExtensionPointName<SourcePositionHighlighter> EP_NAME =
-    ExtensionPointName.create(SourcePositionHighlighter.class);
+    public static final ExtensionPointName<SourcePositionHighlighter> EP_NAME = ExtensionPointName.create(SourcePositionHighlighter.class);
 
-  @RequiredReadAction
-  public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
+    @RequiredReadAction
+    public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
 
-  @Nullable
-  public static TextRange getHighlightRangeFor(SourcePosition sourcePosition) {
-    DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());
-    for (SourcePositionHighlighter provider : dumbService.filterByDumbAwareness(EP_NAME.getExtensionList())) {
-      TextRange range = provider.getHighlightRange(sourcePosition);
-      if (range != null) {
-        return range;
-      }
+    @Nullable
+    public static TextRange getHighlightRangeFor(SourcePosition sourcePosition) {
+        DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());
+        for (SourcePositionHighlighter provider : dumbService.filterByDumbAwareness(EP_NAME.getExtensionList())) {
+            TextRange range = provider.getHighlightRange(sourcePosition);
+            if (range != null) {
+                return range;
+            }
+        }
+        return null;
     }
-    return null;
-  }
 }

@@ -27,30 +27,32 @@ import consulo.component.extension.ExtensionPointName;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JvmSteppingCommandProvider {
-  public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME =
-    ExtensionPointName.create(JvmSteppingCommandProvider.class);
+    public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME =
+        ExtensionPointName.create(JvmSteppingCommandProvider.class);
 
-  /**
-   * @return null if can not handle
-   */
-  public DebugProcessImpl.ResumeCommand getStepIntoCommand(SuspendContextImpl suspendContext,
-                                                           boolean ignoreFilters,
-                                                           final MethodFilter smartStepFilter,
-                                                           int stepSize) {
-    return null;
-  }
+    /**
+     * @return null if can not handle
+     */
+    public DebugProcessImpl.ResumeCommand getStepIntoCommand(
+        SuspendContextImpl suspendContext,
+        boolean ignoreFilters,
+        final MethodFilter smartStepFilter,
+        int stepSize
+    ) {
+        return null;
+    }
 
-  /**
-   * @return null if can not handle
-   */
-  public DebugProcessImpl.ResumeCommand getStepOutCommand(SuspendContextImpl suspendContext, int stepSize) {
-    return null;
-  }
+    /**
+     * @return null if can not handle
+     */
+    public DebugProcessImpl.ResumeCommand getStepOutCommand(SuspendContextImpl suspendContext, int stepSize) {
+        return null;
+    }
 
-  /**
-   * @return null if can not handle
-   */
-  public DebugProcessImpl.ResumeCommand getStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints, int stepSize) {
-    return null;
-  }
+    /**
+     * @return null if can not handle
+     */
+    public DebugProcessImpl.ResumeCommand getStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints, int stepSize) {
+        return null;
+    }
 }

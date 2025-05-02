@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.Language;
@@ -28,6 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -36,52 +38,53 @@ import java.util.Collections;
  */
 @ExtensionImpl
 public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
-  private Surrounder[] mySurrounders = null;
+    private Surrounder[] mySurrounders = null;
 
-  private static final Surrounder[] SURROUNDERS = {
-    new JavaWithParenthesesSurrounder(),
-      new JavaWithCastSurrounder(),
-      new JavaWithNotSurrounder(),
-      new JavaWithNotInstanceofSurrounder(),
-      new JavaWithIfExpressionSurrounder(),
-      new JavaWithIfElseExpressionSurrounder(),
-      new JavaWithNullCheckSurrounder()
-  };
+    private static final Surrounder[] SURROUNDERS = {
+        new JavaWithParenthesesSurrounder(),
+        new JavaWithCastSurrounder(),
+        new JavaWithNotSurrounder(),
+        new JavaWithNotInstanceofSurrounder(),
+        new JavaWithIfExpressionSurrounder(),
+        new JavaWithIfElseExpressionSurrounder(),
+        new JavaWithNullCheckSurrounder()
+    };
 
-  @Override
-  @Nonnull
-  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    PsiExpression expr = CodeInsightUtil.findExpressionInRange(file, startOffset, endOffset);
-    if (expr == null) {
-      expr = IntroduceVariableBase.getSelectedExpression(file.getProject(), file, startOffset, endOffset);
-      if (expr == null) {
-        return PsiElement.EMPTY_ARRAY;
-      }
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
+        PsiExpression expr = CodeInsightUtil.findExpressionInRange(file, startOffset, endOffset);
+        if (expr == null) {
+            expr = IntroduceVariableBase.getSelectedExpression(file.getProject(), file, startOffset, endOffset);
+            if (expr == null) {
+                return PsiElement.EMPTY_ARRAY;
+            }
+        }
+        FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.surroundwith.expression");
+        return new PsiElement[]{expr};
     }
-    FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.surroundwith.expression");
-    return new PsiElement[] {expr};
-  }
 
-  @Override
-  @Nonnull
-  public Surrounder[] getSurrounders() {
-    if (mySurrounders == null) {
-      final ArrayList<Surrounder> list = new ArrayList<Surrounder>();
-      Collections.addAll(list, SURROUNDERS);
-      Collections.addAll(list, JavaExpressionSurrounder.EP_NAME.getExtensions());
-      mySurrounders = list.toArray(new Surrounder[list.size()]);
+    @Override
+    @Nonnull
+    public Surrounder[] getSurrounders() {
+        if (mySurrounders == null) {
+            ArrayList<Surrounder> list = new ArrayList<>();
+            Collections.addAll(list, SURROUNDERS);
+            Collections.addAll(list, JavaExpressionSurrounder.EP_NAME.getExtensions());
+            mySurrounders = list.toArray(new Surrounder[list.size()]);
+        }
+        return mySurrounders;
     }
-    return mySurrounders;
-  }
 
-  @Override
-  public boolean isExclusive() {
-    return false;
-  }
+    @Override
+    public boolean isExclusive() {
+        return false;
+    }
 
-  @Nonnull
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }

@@ -40,50 +40,61 @@ import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase> {
-  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = ExtensionPointName.create(RunConfigurationExtension.class);
+    public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = ExtensionPointName.create(RunConfigurationExtension.class);
 
-  public abstract <T extends RunConfigurationBase > void updateJavaParameters(final T configuration, final OwnJavaParameters params, RunnerSettings runnerSettings) throws ExecutionException;
+    public abstract <T extends RunConfigurationBase> void updateJavaParameters(
+        final T configuration,
+        final OwnJavaParameters params,
+        RunnerSettings runnerSettings
+    ) throws ExecutionException;
 
-
-  @Override
-  protected void patchCommandLine(@Nonnull RunConfigurationBase configuration,
-                                  RunnerSettings runnerSettings,
-                                  @Nonnull GeneralCommandLine cmdLine,
-                                  @Nonnull String runnerId)  throws ExecutionException {}
-
-  @Override
-  protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
-    return true;
-  }
-
-  @Override
-  protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
-  }
-
-  public void cleanUserData(RunConfigurationBase runConfigurationBase) {}
-
-  public static void cleanExtensionsUserData(RunConfigurationBase runConfigurationBase) {
-    for (RunConfigurationExtension extension : EP_NAME.getExtensionList()) {
-      extension.cleanUserData(runConfigurationBase);
+    @Override
+    protected void patchCommandLine(
+        @Nonnull RunConfigurationBase configuration,
+        RunnerSettings runnerSettings,
+        @Nonnull GeneralCommandLine cmdLine,
+        @Nonnull String runnerId
+    ) throws ExecutionException {
     }
-  }
 
-  public RefactoringElementListener wrapElementListener(PsiElement element,
-                                                        RunConfigurationBase runJavaConfiguration,
-                                                        RefactoringElementListener listener) {
-    return listener;
-  }
-
-  public static RefactoringElementListener wrapRefactoringElementListener(PsiElement element,
-                                                                          RunConfigurationBase runConfigurationBase,
-                                                                          RefactoringElementListener listener) {
-    for (RunConfigurationExtension extension : Extensions.getExtensions(EP_NAME)) {
-      listener = extension.wrapElementListener(element, runConfigurationBase, listener);
+    @Override
+    protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+        return true;
     }
-    return listener;
-  }
 
-  public  boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings) {
-    return false;
-  }
+    @Override
+    protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
+    }
+
+    public void cleanUserData(RunConfigurationBase runConfigurationBase) {
+    }
+
+    public static void cleanExtensionsUserData(RunConfigurationBase runConfigurationBase) {
+        for (RunConfigurationExtension extension : EP_NAME.getExtensionList()) {
+            extension.cleanUserData(runConfigurationBase);
+        }
+    }
+
+    public RefactoringElementListener wrapElementListener(
+        PsiElement element,
+        RunConfigurationBase runJavaConfiguration,
+        RefactoringElementListener listener
+    ) {
+        return listener;
+    }
+
+    public static RefactoringElementListener wrapRefactoringElementListener(
+        PsiElement element,
+        RunConfigurationBase runConfigurationBase,
+        RefactoringElementListener listener
+    ) {
+        for (RunConfigurationExtension extension : Extensions.getExtensions(EP_NAME)) {
+            listener = extension.wrapElementListener(element, runConfigurationBase, listener);
+        }
+        return listener;
+    }
+
+    public boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings) {
+        return false;
+    }
 }
