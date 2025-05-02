@@ -32,8 +32,8 @@ public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
         FileType fileType = file.getFileType();
         if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
             for (PsiElementFinder finder : PsiElementFinder.EP_NAME.getExtensionList(project)) {
-                if (finder instanceof NonClasspathClassFinder) {
-                    final List<VirtualFile> roots = ((NonClasspathClassFinder)finder).getClassRoots();
+                if (finder instanceof NonClasspathClassFinder nonClasspathClassFinder) {
+                    List<VirtualFile> roots = nonClasspathClassFinder.getClassRoots();
                     for (VirtualFile root : roots) {
                         if (VfsUtilCore.isAncestor(root, file, true)) {
                             return NonClasspathDirectoriesScope.compose(roots);

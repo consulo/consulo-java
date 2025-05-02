@@ -15,59 +15,47 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import consulo.logging.Logger;
-import consulo.component.extension.Extensions;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.jdom.JDOMUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
-import consulo.util.lang.StringUtil;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.application.Application;
 import consulo.component.util.text.UniqueNameGenerator;
 import consulo.container.boot.ContainerPathManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.logging.Logger;
+import consulo.util.io.FileUtil;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MigrationMapSet {
     private static final Logger LOG = Logger.getInstance(MigrationMapSet.class);
 
     private ArrayList<MigrationMap> myMaps;
-    @NonNls
     private static final String MIGRATION_MAP = "migrationMap";
-    @NonNls
     private static final String ENTRY = "entry";
-    @NonNls
     private static final String NAME = "name";
-    @NonNls
     private static final String OLD_NAME = "oldName";
-    @NonNls
     private static final String NEW_NAME = "newName";
-    @NonNls
     private static final String DESCRIPTION = "description";
-    @NonNls
     private static final String VALUE = "value";
-    @NonNls
     private static final String TYPE = "type";
-    @NonNls
     private static final String PACKAGE_TYPE = "package";
-    @NonNls
     private static final String CLASS_TYPE = "class";
-    @NonNls
     private static final String RECURSIVE = "recursive";
 
-    @NonNls
     private static final String[] DEFAULT_MAPS = new String[]{
         "/com/intellij/refactoring/migration/res/Swing__1_0_3____1_1_.xml",
     };
@@ -117,12 +105,12 @@ public class MigrationMapSet {
     }
 
     private static boolean isPredefined(String name) {
-        for (PredefinedMigrationProvider provider : Extensions.getExtensions(PredefinedMigrationProvider.EP_NAME)) {
-            URL migrationMap = provider.getMigrationMap();
-            String fileName = FileUtil.getNameWithoutExtension(new File(migrationMap.getFile()));
-            if (fileName.equals(name)) {
-                return true;
-            }
+        boolean fileNameMatches = Application.get().getExtensionPoint(PredefinedMigrationProvider.class).anyMatchSafe(provider -> {
+            File file = new File(provider.getMigrationMap().getFile());
+            return FileUtil.getNameWithoutExtension(file).equals(name);
+        });
+        if (fileNameMatches) {
+            return true;
         }
 
         for (String defaultTemplate : DEFAULT_MAPS) {
@@ -161,7 +149,9 @@ public class MigrationMapSet {
         File deletedFiles = new File(dir, "deleted.txt");
         if (deletedFiles.isFile()) {
             try {
-                myDeletedMaps.addAll(Arrays.asList(FileUtil.loadFile(deletedFiles, true).split("\n")));
+                myDeletedMaps.addAll(Arrays.asList(
+                    consulo.ide.impl.idea.openapi.util.io.FileUtil.loadFile(deletedFiles, true).split("\n")
+                ));
             }
             catch (IOException e) {
                 LOG.error(e);
@@ -195,28 +185,19 @@ public class MigrationMapSet {
             return;
         }
 
-        try {
-            FileOutputStream outputStream = new FileOutputStream(targetFile);
-            InputStream inputStream = url.openStream();
-
-            try {
-                FileUtil.copy(inputStream, outputStream);
-            }
-            finally {
-                outputStream.close();
-                inputStream.close();
-            }
+        try (FileOutputStream outputStream = new FileOutputStream(targetFile); InputStream inputStream = url.openStream()) {
+            FileUtil.copy(inputStream, outputStream);
         }
         catch (Exception e) {
             LOG.error(e);
         }
     }
 
-    private static File[] getMapFiles(final File dir) {
+    private static File[] getMapFiles(File dir) {
         if (dir == null) {
             return new File[0];
         }
-        File[] ret = dir.listFiles((f) -> FileUtilRt.extensionEquals(f.getPath(), "xml"));
+        File[] ret = dir.listFiles((f) -> FileUtil.extensionEquals(f.getPath(), "xml"));
         if (ret == null) {
             LOG.error("cannot read directory: " + dir.getAbsolutePath());
             return new File[0];
@@ -232,16 +213,16 @@ public class MigrationMapSet {
         copyPredefinedMaps(dir);
 
         File[] files = getMapFiles(dir);
-        for (int i = 0; i < files.length; i++) {
+        for (File file : files) {
             try {
-                MigrationMap map = readMap(files[i]);
+                MigrationMap map = readMap(file);
                 if (map != null) {
-                    map.setFileName(FileUtil.getNameWithoutExtension(files[i]));
+                    map.setFileName(FileUtil.getNameWithoutExtension(file));
                     myMaps.add(map);
                 }
             }
             catch (InvalidDataException | JDOMException e) {
-                LOG.error("Invalid data in file: " + files[i].getAbsolutePath());
+                LOG.error("Invalid data in file: " + file.getAbsolutePath());
             }
             catch (IOException e) {
                 LOG.error(e);
@@ -261,8 +242,7 @@ public class MigrationMapSet {
 
         MigrationMap map = new MigrationMap();
 
-        for (Iterator i = root.getChildren().iterator(); i.hasNext(); ) {
-            Element node = (Element)i.next();
+        for (Element node : root.getChildren()) {
             if (NAME.equals(node.getName())) {
                 String name = node.getAttributeValue(VALUE);
                 map.setName(name);
@@ -291,7 +271,7 @@ public class MigrationMapSet {
                 entry.setType(MigrationMapEntry.CLASS);
                 if (typeStr.equals(PACKAGE_TYPE)) {
                     entry.setType(MigrationMapEntry.PACKAGE);
-                    @NonNls String isRecursiveStr = node.getAttributeValue(RECURSIVE);
+                    String isRecursiveStr = node.getAttributeValue(RECURSIVE);
                     if (isRecursiveStr != null && isRecursiveStr.equals("true")) {
                         entry.setRecursive(true);
                     }
@@ -314,7 +294,7 @@ public class MigrationMapSet {
 
         File[] files = getMapFiles(dir);
 
-        @NonNls String[] filePaths = new String[myMaps.size()];
+        String[] filePaths = new String[myMaps.size()];
         Document[] documents = new Document[myMaps.size()];
 
         UniqueNameGenerator namesProvider = new UniqueNameGenerator();

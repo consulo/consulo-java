@@ -34,12 +34,14 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.colorScheme.TextAttributesScheme;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
+import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.Pass;
@@ -1645,7 +1647,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
-    public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
+    @RequiredReadAction
+    public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
         myHolder.add(checkFeature(expression, JavaFeature.METHOD_REFERENCES));
         final PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
         if (parent instanceof PsiExpressionStatement) {
@@ -1666,18 +1669,19 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
         final PsiElement method = result.getElement();
         if (method != null && !result.isAccessible()) {
-            final String accessProblem = HighlightUtil.buildProblemWithAccessDescription(expression, result);
-            HighlightInfo info =
-                HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(accessProblem).create();
+            HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(expression)
+                .descriptionAndTooltip(HighlightUtil.buildProblemWithAccessDescription(expression, result))
+                .create();
             HighlightUtil.registerAccessQuickFixAction((PsiMember)method, expression, info, result.getCurrentFileResolveScope());
             myHolder.add(info);
         }
         else {
             final TextAttributesScheme colorsScheme = myHolder.getColorsScheme();
-            if (method instanceof PsiMethod && !expression.isConstructor()) {
+            if (method instanceof PsiMethod method1 && !expression.isConstructor()) {
                 PsiElement methodNameElement = expression.getReferenceNameElement();
                 if (methodNameElement != null) {
-                    myHolder.add(HighlightNamesUtil.highlightMethodName((PsiMethod)method, methodNameElement, false, colorsScheme));
+                    myHolder.add(HighlightNamesUtil.highlightMethodName(method1, methodNameElement, false, colorsScheme));
                 }
             }
             myHolder.add(HighlightNamesUtil.highlightClassNameInQualifier(expression, colorsScheme));
@@ -1728,9 +1732,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             if (errorMessage != null) {
                 final HighlightInfo info =
                     HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(errorMessage).create();
-                if (method instanceof PsiMethod && !((PsiMethod)method).isConstructor() && !((PsiMethod)method).hasModifierProperty(
-                    PsiModifier.ABSTRACT)) {
-                    final boolean shouldHave = !((PsiMethod)method).hasModifierProperty(PsiModifier.STATIC);
+                if (method instanceof PsiMethod method1 && !method1.isConstructor() && !method1.isAbstract()) {
+                    final boolean shouldHave = !method1.isStatic();
                     final LocalQuickFixAndIntentionActionOnPsiElement fixStaticModifier =
                         QuickFixFactory.getInstance().createModifierListFix(
                             (PsiModifierListOwner)method,
@@ -1745,8 +1748,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
         if (!myHolder.hasErrorResults()) {
             PsiElement qualifier = expression.getQualifier();
-            if (qualifier instanceof PsiTypeElement) {
-                final PsiType psiType = ((PsiTypeElement)qualifier).getType();
+            if (qualifier instanceof PsiTypeElement typeElem) {
+                final PsiType psiType = typeElem.getType();
                 final HighlightInfo genericArrayCreationInfo = GenericsHighlightUtil.checkGenericArrayCreation(qualifier, psiType);
                 if (genericArrayCreationInfo != null) {
                     myHolder.add(genericArrayCreationInfo);
@@ -1782,35 +1785,34 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
 
         if (!myHolder.hasErrorResults()) {
-            if (results.length == 0 || results[0] instanceof MethodCandidateInfo && !((MethodCandidateInfo)results[0]).isApplicable() && functionalInterfaceType != null) {
+            if (results.length == 0
+                || results[0] instanceof MethodCandidateInfo candidate && !candidate.isApplicable() && functionalInterfaceType != null) {
                 String description = null;
                 if (results.length == 1) {
                     description = ((MethodCandidateInfo)results[0]).getInferenceErrorMessage();
                 }
                 if (expression.isConstructor()) {
-                    final PsiClass containingClass = PsiMethodReferenceUtil.getQualifierResolveResult(expression).getContainingClass();
+                    PsiClass containingClass = PsiMethodReferenceUtil.getQualifierResolveResult(expression).getContainingClass();
 
                     if (containingClass != null) {
-                        if (!myHolder.add(HighlightClassUtil.checkInstantiationOfAbstractClass(
-                            containingClass,
-                            expression
-                        )) && !myHolder.add(GenericsHighlightUtil.checkEnumInstantiation(
-                            expression,
-                            containingClass
-                        )) && containingClass.isPhysical() && description == null) {
-                            description = JavaErrorBundle.message("cannot.resolve.constructor", containingClass.getName());
+                        if (!myHolder.add(HighlightClassUtil.checkInstantiationOfAbstractClass(containingClass, expression))
+                            && !myHolder.add(GenericsHighlightUtil.checkEnumInstantiation(expression, containingClass))
+                            && containingClass.isPhysical() && description == null) {
+                            description = JavaErrorLocalize.cannotResolveConstructor(containingClass.getName()).get();
                         }
                     }
                 }
                 else if (description == null) {
-                    description = JavaErrorBundle.message("cannot.resolve.method", expression.getReferenceName());
+                    description = JavaErrorLocalize.cannotResolveMethod(expression.getReferenceName()).get();
                 }
 
                 if (description != null) {
                     PsiElement referenceNameElement = notNull(expression.getReferenceNameElement(), expression);
                     HighlightInfoType type = results.length == 0 ? HighlightInfoType.WRONG_REF : HighlightInfoType.ERROR;
-                    HighlightInfo highlightInfo =
-                        HighlightInfo.newHighlightInfo(type).descriptionAndTooltip(description).range(referenceNameElement).create();
+                    HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(type)
+                        .descriptionAndTooltip(description)
+                        .range(referenceNameElement)
+                        .create();
                     myHolder.add(highlightInfo);
                     TextRange fixRange = HighlightMethodUtil.getFixRange(referenceNameElement);
                     QuickFixAction.registerQuickFixAction(
@@ -1826,15 +1828,15 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     // 15.13 | 15.27
     // It is a compile-time error if any class or interface mentioned by either U or the function type of U
     // is not accessible from the class or interface in which the method reference expression appears.
+    @RequiredReadAction
     private void checkFunctionalInterfaceTypeAccessible(@Nonnull PsiFunctionalExpression expression, PsiType functionalInterfaceType) {
         PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
         final PsiClass psiClass = resolveResult.getElement();
         if (psiClass != null) {
             if (!PsiUtil.isAccessible(myFile.getProject(), psiClass, expression, null)) {
-                String text = HighlightUtil.buildProblemWithAccessDescription(expression, resolveResult);
                 myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(expression)
-                    .descriptionAndTooltip(text)
+                    .descriptionAndTooltip(HighlightUtil.buildProblemWithAccessDescription(expression, resolveResult))
                     .create());
             }
             else {

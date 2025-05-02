@@ -18,6 +18,7 @@ package com.intellij.java.language.impl.refactoring.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -33,11 +34,7 @@ public class RefactoringChangeUtil {
 
     @Nullable
     private static String getMethodExpressionName(@Nullable PsiElement element) {
-        if (!(element instanceof PsiMethodCallExpression)) {
-            return null;
-        }
-        PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
-        return methodExpression.getReferenceName();
+        return element instanceof PsiMethodCallExpression methodCall ? methodCall.getMethodExpression().getReferenceName() : null;
     }
 
     public static boolean isSuperOrThisMethodCall(@Nullable PsiElement element) {
@@ -64,14 +61,13 @@ public class RefactoringChangeUtil {
                 }
             }
 
-            if (expr instanceof PsiReferenceExpression && PsiUtil.isOnAssignmentLeftHand(expr)) {
-                return getTypeByExpression(((PsiAssignmentExpression)expr.getParent()).getRExpression());
+            if (expr instanceof PsiReferenceExpression refExpr && PsiUtil.isOnAssignmentLeftHand(expr)) {
+                return getTypeByExpression(((PsiAssignmentExpression)refExpr.getParent()).getRExpression());
             }
             return null;
         }
-        PsiClass refClass = PsiUtil.resolveClassInType(type);
-        if (refClass instanceof PsiAnonymousClass) {
-            type = ((PsiAnonymousClass)refClass).getBaseClassType();
+        if (PsiUtil.resolveClassInType(type) instanceof PsiAnonymousClass anonymousClass) {
+            type = anonymousClass.getBaseClassType();
         }
 
         return GenericsUtil.getVariableTypeByExpressionType(type);
@@ -80,7 +76,7 @@ public class RefactoringChangeUtil {
     public static PsiReferenceExpression qualifyReference(
         @Nonnull PsiReferenceExpression referenceExpression,
         @Nonnull PsiMember member,
-        @Nullable final PsiClass qualifyingClass
+        @Nullable PsiClass qualifyingClass
     ) throws IncorrectOperationException {
         PsiManager manager = referenceExpression.getManager();
         PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(
@@ -99,17 +95,17 @@ public class RefactoringChangeUtil {
             );
         }
         PsiReferenceExpression expressionFromText;
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
         if (qualifyingClass == null) {
             PsiClass parentClass = PsiTreeUtil.getParentOfType(referenceExpression, PsiClass.class);
-            final PsiClass containingClass = member.getContainingClass();
+            PsiClass containingClass = member.getContainingClass();
             if (parentClass != null && !InheritanceUtil.isInheritorOrSelf(parentClass, containingClass, true)) {
                 while (parentClass != null && !InheritanceUtil.isInheritorOrSelf(parentClass, containingClass, true)) {
                     parentClass = PsiTreeUtil.getParentOfType(parentClass, PsiClass.class, true);
                 }
                 LOG.assertTrue(parentClass != null);
-                expressionFromText = (PsiReferenceExpression)factory
-                    .createExpressionFromText("A.this." + member.getName(), null);
+                expressionFromText = (PsiReferenceExpression)
+                    factory.createExpressionFromText("A.this." + member.getName(), null);
                 ((PsiThisExpression)expressionFromText.getQualifierExpression()).getQualifier()
                     .replace(factory.createClassReferenceElement(parentClass));
             }
@@ -148,6 +144,8 @@ public class RefactoringChangeUtil {
         }
     }
 
+    @RequiredWriteAction
+    @SuppressWarnings("unchecked")
     static <T extends PsiQualifiedExpression> T createQualifiedExpression(
         @Nonnull PsiManager manager,
         PsiClass qualifierClass,
@@ -167,11 +165,13 @@ public class RefactoringChangeUtil {
         }
     }
 
+    @RequiredWriteAction
     public static PsiThisExpression createThisExpression(PsiManager manager, PsiClass qualifierClass)
         throws IncorrectOperationException {
         return RefactoringChangeUtil.<PsiThisExpression>createQualifiedExpression(manager, qualifierClass, "this");
     }
 
+    @RequiredWriteAction
     public static PsiSuperExpression createSuperExpression(PsiManager manager, PsiClass qualifierClass)
         throws IncorrectOperationException {
         return RefactoringChangeUtil.<PsiSuperExpression>createQualifiedExpression(manager, qualifierClass, "super");

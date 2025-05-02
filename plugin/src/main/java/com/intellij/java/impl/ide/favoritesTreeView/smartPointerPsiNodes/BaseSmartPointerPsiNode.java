@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ide.favoritesTreeView.smartPointerPsiNodes;
 
 import com.intellij.java.language.psi.PsiDocCommentOwner;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.component.util.Iconable;
 import consulo.language.icon.IconDescriptorUpdaters;
@@ -41,8 +42,9 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
         super(project, value, viewSettings);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public final Collection<AbstractTreeNode> getChildren() {
         PsiElement value = getPsiElement();
         if (value == null) {
@@ -56,11 +58,12 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
     protected abstract Collection<AbstractTreeNode> getChildrenImpl();
 
     protected boolean isMarkReadOnly() {
-        final Object parentValue = getParentValue();
+        Object parentValue = getParentValue();
         return parentValue instanceof PsiDirectory || parentValue instanceof PackageElement;
     }
 
     @Override
+    @RequiredReadAction
     public PsiElement getTargetElement() {
         VirtualFile file = getVirtualFileForValue();
         if (file == null) {
@@ -84,10 +87,10 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
 
     protected abstract void updateImpl(PresentationData data);
 
-
     @Override
+    @RequiredReadAction
     public void update(PresentationData data) {
-        final PsiElement value = getPsiElement();
+        PsiElement value = getPsiElement();
         if (value == null || !value.isValid()) {
             setValue(null);
         }
@@ -115,10 +118,8 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
     }
 
     private boolean isDeprecated() {
-        final PsiElement element = getPsiElement();
-        return element instanceof PsiDocCommentOwner
-            && element.isValid()
-            && ((PsiDocCommentOwner)element).isDeprecated();
+        PsiElement element = getPsiElement();
+        return element instanceof PsiDocCommentOwner docCommentOwner && element.isValid() && docCommentOwner.isDeprecated();
     }
 
     @Override

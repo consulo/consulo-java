@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMethod;
@@ -33,8 +34,7 @@ public class IntroduceParameterUtil {
     private IntroduceParameterUtil() {
     }
 
-
-    public static boolean insideMethodToBeReplaced(PsiElement methodUsage, final PsiMethod methodToReplaceIn) {
+    public static boolean insideMethodToBeReplaced(PsiElement methodUsage, PsiMethod methodToReplaceIn) {
         PsiElement parent = methodUsage.getParent();
         while (parent != null) {
             if (parent.equals(methodToReplaceIn)) {
@@ -54,7 +54,7 @@ public class IntroduceParameterUtil {
         return false;
     }
 
-    public static void addSuperCall(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+    public static void addSuperCall(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
         for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
             if (!processor.processAddSuperCall(data, usage, usages)) {
@@ -63,7 +63,7 @@ public class IntroduceParameterUtil {
         }
     }
 
-    public static void addDefaultConstructor(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+    public static void addDefaultConstructor(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
         for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
             if (!processor.processAddDefaultConstructor(data, usage, usages)) {
@@ -72,7 +72,7 @@ public class IntroduceParameterUtil {
         }
     }
 
-    public static void changeExternalUsage(UsageInfo usage, UsageInfo[] usages, final IntroduceParameterData data)
+    public static void changeExternalUsage(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
         for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
             if (!processor.processChangeMethodUsage(data, usage, usages)) {
@@ -84,9 +84,8 @@ public class IntroduceParameterUtil {
     public static void changeMethodSignatureAndResolveFieldConflicts(
         UsageInfo usage,
         UsageInfo[] usages,
-        final IntroduceParameterData data
-    )
-        throws IncorrectOperationException {
+        IntroduceParameterData data
+    ) throws IncorrectOperationException {
         for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
             if (!processor.processChangeMethodSignature(data, usage, usages)) {
                 break;
@@ -94,10 +93,11 @@ public class IntroduceParameterUtil {
         }
     }
 
+    @RequiredReadAction
     public static void processUsages(UsageInfo[] usages, IntroduceParameterData data) {
         PsiManager manager = PsiManager.getInstance(data.getProject());
 
-        List<UsageInfo> methodUsages = new ArrayList<UsageInfo>();
+        List<UsageInfo> methodUsages = new ArrayList<>();
 
         for (UsageInfo usage : usages) {
             if (usage instanceof InternalUsageInfo) {
@@ -128,6 +128,7 @@ public class IntroduceParameterUtil {
         }
     }
 
+    @RequiredReadAction
     public static boolean isMethodInUsages(IntroduceParameterData data, PsiMethod method, UsageInfo[] usages) {
         PsiManager manager = PsiManager.getInstance(data.getProject());
         for (UsageInfo info : usages) {
