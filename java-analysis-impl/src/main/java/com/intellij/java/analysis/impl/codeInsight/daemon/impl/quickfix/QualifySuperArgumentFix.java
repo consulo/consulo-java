@@ -33,42 +33,46 @@ import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
-  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
-    super(expression, psiClass);
-  }
-
-  @Override
-  protected String getQualifierText() {
-    return "super";
-  }
-
-  @Override
-  protected PsiExpression getQualifier(PsiManager manager) {
-    return RefactoringChangeUtil.createSuperExpression(manager, myPsiClass);
-  }
-
-  public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo highlightInfo) {
-    LOG.assertTrue(expr.getQualifier() == null);
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);
-    if (containingClass != null && containingClass.isInterface()) {
-      final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(expr,
-          PsiMethodCallExpression.class);
-      if (callExpression != null) {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(callExpression.getProject());
-        for (PsiClass superClass : containingClass.getSupers()) {
-          if (superClass.isInterface()) {
-            final PsiMethodCallExpression copy = (PsiMethodCallExpression) callExpression.copy();
-            final PsiExpression superQualifierCopy = copy.getMethodExpression().getQualifierExpression();
-            LOG.assertTrue(superQualifierCopy != null);
-            superQualifierCopy.delete();
-            if (((PsiMethodCallExpression) elementFactory.createExpressionFromText(copy.getText(),
-                superClass)).resolveMethod() != null) {
-              QuickFixAction.registerQuickFixAction(highlightInfo, new QualifySuperArgumentFix(expr,
-                  superClass));
-            }
-          }
-        }
-      }
+    public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+        super(expression, psiClass);
     }
-  }
+
+    @Override
+    protected String getQualifierText() {
+        return "super";
+    }
+
+    @Override
+    protected PsiExpression getQualifier(PsiManager manager) {
+        return RefactoringChangeUtil.createSuperExpression(manager, myPsiClass);
+    }
+
+    public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo highlightInfo) {
+        LOG.assertTrue(expr.getQualifier() == null);
+        final PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);
+        if (containingClass != null && containingClass.isInterface()) {
+            final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(
+                expr,
+                PsiMethodCallExpression.class
+            );
+            if (callExpression != null) {
+                final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(callExpression.getProject());
+                for (PsiClass superClass : containingClass.getSupers()) {
+                    if (superClass.isInterface()) {
+                        final PsiMethodCallExpression copy = (PsiMethodCallExpression)callExpression.copy();
+                        final PsiExpression superQualifierCopy = copy.getMethodExpression().getQualifierExpression();
+                        LOG.assertTrue(superQualifierCopy != null);
+                        superQualifierCopy.delete();
+                        if (((PsiMethodCallExpression)elementFactory.createExpressionFromText(copy.getText(), superClass))
+                            .resolveMethod() != null) {
+                            QuickFixAction.registerQuickFixAction(highlightInfo, new QualifySuperArgumentFix(
+                                expr,
+                                superClass
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
