@@ -24,6 +24,7 @@ import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
 import com.intellij.java.execution.configurations.*;
 import com.intellij.java.execution.runners.JavaPatchableProgramRunner;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.document.FileDocumentManager;
 import consulo.execution.DefaultExecutionResult;
 import consulo.execution.ExecutionResult;
@@ -44,7 +45,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl(id = "defaultJavaDebugRunner")
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings> {
     @Override
-    public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
+    public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
         return executorId.equals(DefaultDebugExecutor.EXECUTOR_ID) && profile instanceof GenericDebugRunnerConfiguration;
     }
 
@@ -65,19 +66,24 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         @Nonnull RunProfileState state,
         @Nonnull ExecutionEnvironment environment
     ) throws ExecutionException {
-        if (state instanceof JavaCommandLine) {
-            final OwnJavaParameters parameters = ((JavaCommandLine)state).getJavaParameters();
+        if (state instanceof JavaCommandLine commandLine) {
+            OwnJavaParameters parameters = commandLine.getJavaParameters();
             runCustomPatchers(parameters, environment.getExecutor(), environment.getRunProfile());
-            RemoteConnection connection =
-                DebuggerManagerImpl.createDebugParameters(parameters, true, DebuggerSettings.getInstance().DEBUGGER_TRANSPORT, "", false);
+            RemoteConnection connection = DebuggerManagerImpl.createDebugParameters(
+                parameters,
+                true,
+                DebuggerSettings.getInstance().DEBUGGER_TRANSPORT,
+                "",
+                false
+            );
             return attachVirtualMachine(state, environment, connection, true);
         }
         if (state instanceof PatchedRunnableState) {
-            final RemoteConnection connection = doPatch(new OwnJavaParameters(), environment.getRunnerSettings());
+            RemoteConnection connection = doPatch(new OwnJavaParameters(), environment.getRunnerSettings());
             return attachVirtualMachine(state, environment, connection, true);
         }
-        if (state instanceof RemoteState) {
-            final RemoteConnection connection = createRemoteDebugConnection((RemoteState)state, environment.getRunnerSettings());
+        if (state instanceof RemoteState remoteState) {
+            RemoteConnection connection = createRemoteDebugConnection(remoteState, environment.getRunnerSettings());
             return attachVirtualMachine(state, environment, connection, false);
         }
 
@@ -92,12 +98,12 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         boolean pollConnection
     ) throws ExecutionException {
         DebugEnvironment environment = new DefaultDebugEnvironment(env, state, connection, pollConnection);
-        final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(env.getProject()).attachVirtualMachine(environment);
+        DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(env.getProject()).attachVirtualMachine(environment);
         if (debuggerSession == null) {
             return null;
         }
 
-        final DebugProcessImpl debugProcess = debuggerSession.getProcess();
+        DebugProcessImpl debugProcess = debuggerSession.getProcess();
         if (debugProcess.isDetached() || debugProcess.isDetaching()) {
             debuggerSession.dispose();
             return null;
@@ -118,8 +124,8 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         }).getRunContentDescriptor();
     }
 
-    private static RemoteConnection createRemoteDebugConnection(RemoteState connection, final RunnerSettings settings) {
-        final RemoteConnection remoteConnection = connection.getRemoteConnection();
+    private static RemoteConnection createRemoteDebugConnection(RemoteState connection, RunnerSettings settings) {
+        RemoteConnection remoteConnection = connection.getRemoteConnection();
 
         GenericDebuggerRunnerSettings debuggerRunnerSettings = (GenericDebuggerRunnerSettings)settings;
 
@@ -141,17 +147,18 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         OwnJavaParameters javaParameters,
         RunnerSettings settings,
         RunProfile runProfile,
-        final boolean beforeExecution
+        boolean beforeExecution
     ) throws ExecutionException {
         doPatch(javaParameters, settings);
-        runCustomPatchers(javaParameters, Executor.EP_NAME.findExtension(DefaultDebugExecutor.class), runProfile);
+        runCustomPatchers(
+            javaParameters,
+            Application.get().getExtensionPoint(Executor.class).findExtension(DefaultDebugExecutor.class),
+            runProfile
+        );
     }
 
-    private static RemoteConnection doPatch(
-        final OwnJavaParameters javaParameters,
-        final RunnerSettings settings
-    ) throws ExecutionException {
-        final GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings)settings);
+    private static RemoteConnection doPatch(OwnJavaParameters javaParameters, RunnerSettings settings) throws ExecutionException {
+        GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings)settings);
         if (StringUtil.isEmpty(debuggerSettings.getDebugPort())) {
             debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport()).address());
         }
@@ -159,11 +166,10 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
     }
 
     @Override
-    public SettingsEditor<GenericDebuggerRunnerSettings> getSettingsEditor(final Executor executor, RunConfiguration configuration) {
-        if (configuration instanceof RunConfigurationWithRunnerSettings) {
-            if (((RunConfigurationWithRunnerSettings)configuration).isSettingsNeeded()) {
-                return new GenericDebuggerParametersRunnerConfigurable(configuration.getProject());
-            }
+    public SettingsEditor<GenericDebuggerRunnerSettings> getSettingsEditor(Executor executor, RunConfiguration configuration) {
+        if (configuration instanceof RunConfigurationWithRunnerSettings runConfigurationWithRunnerSettings
+            && runConfigurationWithRunnerSettings.isSettingsNeeded()) {
+            return new GenericDebuggerParametersRunnerConfigurable(configuration.getProject());
         }
         return null;
     }
