@@ -35,6 +35,7 @@ import consulo.virtualFileSystem.VirtualFile;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,95 +45,100 @@ import java.io.IOException;
  */
 @ExtensionImpl
 public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel> {
-
-  public static void pushLanguageLevel(final Project project) {
-    PushedFilePropertiesUpdater.getInstance(project).pushAll(new JavaLanguageLevelPusher());
-  }
-
-  @Override
-  @Nonnull
-  public Key<LanguageLevel> getFileDataKey() {
-    return LanguageLevel.KEY;
-  }
-
-  @Override
-  public boolean pushDirectoriesOnly() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  public LanguageLevel getDefaultValue() {
-    return LanguageLevel.HIGHEST;
-  }
-
-  @Override
-  public LanguageLevel getImmediateValue(@Nonnull Project project, VirtualFile file) {
-    if (file == null) {
-      return null;
+    public static void pushLanguageLevel(final Project project) {
+        PushedFilePropertiesUpdater.getInstance(project).pushAll(new JavaLanguageLevelPusher());
     }
-    final Module moduleForFile = ModuleUtilCore.findModuleForFile(file, project);
-    if (moduleForFile == null) {
-      return null;
+
+    @Override
+    @Nonnull
+    public Key<LanguageLevel> getFileDataKey() {
+        return LanguageLevel.KEY;
     }
-    return getImmediateValue(moduleForFile);
-  }
 
-  @Override
-  public LanguageLevel getImmediateValue(@Nonnull Module module) {
-    ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+    @Override
+    public boolean pushDirectoriesOnly() {
+        return true;
+    }
 
-    final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
-    return extension == null ? null : extension.getLanguageLevel();
-  }
+    @Override
+    @Nonnull
+    public LanguageLevel getDefaultValue() {
+        return LanguageLevel.HIGHEST;
+    }
 
-  @Override
-  public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project) {
-    return ProjectFileIndex.getInstance(project).isInSourceContent(file);
-  }
-
-  private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
-
-  @Override
-  public void persistAttribute(@Nonnull Project project, @Nonnull VirtualFile fileOrDir, @Nonnull LanguageLevel level) throws IOException {
-    final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
-    if (iStream != null) {
-      try {
-        final int oldLevelOrdinal = DataInputOutputUtil.readINT(iStream);
-        if (oldLevelOrdinal == level.ordinal()) {
-          return;
+    @Override
+    public LanguageLevel getImmediateValue(@Nonnull Project project, VirtualFile file) {
+        if (file == null) {
+            return null;
         }
-      }
-      finally {
-        iStream.close();
-      }
+        final Module moduleForFile = ModuleUtilCore.findModuleForFile(file, project);
+        if (moduleForFile == null) {
+            return null;
+        }
+        return getImmediateValue(moduleForFile);
     }
 
-    final DataOutputStream oStream = PERSISTENCE.writeAttribute(fileOrDir);
-    DataInputOutputUtil.writeINT(oStream, level.ordinal());
-    oStream.close();
+    @Override
+    public LanguageLevel getImmediateValue(@Nonnull Module module) {
+        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
-    for (VirtualFile child : fileOrDir.getChildren()) {
-      if (!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType()) {
-        PushedFilePropertiesUpdater.getInstance(project).filePropertiesChanged(child);
-      }
+        final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
+        return extension == null ? null : extension.getLanguageLevel();
     }
-  }
 
-  @Override
-  public void afterRootsChanged(@Nonnull Project project) {
-  }
+    @Override
+    public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project) {
+        return ProjectFileIndex.getInstance(project).isInSourceContent(file);
+    }
 
-  @Override
-  public boolean acceptsFile(@Nonnull VirtualFile file, @Nonnull Project project) {
-    return false;
-  }
+    private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
-  @Nullable
-  public String getInconsistencyLanguageLevelMessage(@Nonnull String message,
-                                                     @Nonnull PsiElement element,
-                                                     @Nonnull LanguageLevel level,
-                                                     @Nonnull PsiFile file) {
-    return null;
-  }
+    @Override
+    public void persistAttribute(
+        @Nonnull Project project,
+        @Nonnull VirtualFile fileOrDir,
+        @Nonnull LanguageLevel level
+    ) throws IOException {
+        final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
+        if (iStream != null) {
+            try {
+                final int oldLevelOrdinal = DataInputOutputUtil.readINT(iStream);
+                if (oldLevelOrdinal == level.ordinal()) {
+                    return;
+                }
+            }
+            finally {
+                iStream.close();
+            }
+        }
+
+        final DataOutputStream oStream = PERSISTENCE.writeAttribute(fileOrDir);
+        DataInputOutputUtil.writeINT(oStream, level.ordinal());
+        oStream.close();
+
+        for (VirtualFile child : fileOrDir.getChildren()) {
+            if (!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType()) {
+                PushedFilePropertiesUpdater.getInstance(project).filePropertiesChanged(child);
+            }
+        }
+    }
+
+    @Override
+    public void afterRootsChanged(@Nonnull Project project) {
+    }
+
+    @Override
+    public boolean acceptsFile(@Nonnull VirtualFile file, @Nonnull Project project) {
+        return false;
+    }
+
+    @Nullable
+    public String getInconsistencyLanguageLevelMessage(
+        @Nonnull String message,
+        @Nonnull PsiElement element,
+        @Nonnull LanguageLevel level,
+        @Nonnull PsiFile file
+    ) {
+        return null;
+    }
 }
