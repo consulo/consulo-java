@@ -23,6 +23,7 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.FilePropertyPusher;
 import consulo.module.content.ModuleRootManager;
@@ -34,7 +35,6 @@ import consulo.virtualFileSystem.FileAttribute;
 import consulo.virtualFileSystem.VirtualFile;
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -132,13 +132,13 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
         return false;
     }
 
-    @Nullable
-    public String getInconsistencyLanguageLevelMessage(
-        @Nonnull String message,
+    @Nonnull
+    public LocalizeValue getInconsistencyLanguageLevelMessage(
+        @Nonnull LocalizeValue message,
         @Nonnull PsiElement element,
         @Nonnull LanguageLevel level,
         @Nonnull PsiFile file
     ) {
-        return null;
+        return LocalizeValue.empty();
     }
 }

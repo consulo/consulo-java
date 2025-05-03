@@ -3989,10 +3989,9 @@ public class HighlightUtil extends HighlightUtilBase {
             if (moduleLanguageLevel.isAtLeast(feature.getMinimumLevel())) {
                 for (FilePropertyPusher pusher : FilePropertyPusher.EP_NAME.getExtensionList()) {
                     if (pusher instanceof JavaLanguageLevelPusher languageLevelPusher) {
-                        String newMessage =
-                            languageLevelPusher.getInconsistencyLanguageLevelMessage(message.get(), element, level, file);
-                        if (newMessage != null) {
-                            return LocalizeValue.localizeTODO(newMessage);
+                        LocalizeValue newMessage = languageLevelPusher.getInconsistencyLanguageLevelMessage(message, element, level, file);
+                        if (newMessage != LocalizeValue.empty()) {
+                            return newMessage;
                         }
                     }
                 }
