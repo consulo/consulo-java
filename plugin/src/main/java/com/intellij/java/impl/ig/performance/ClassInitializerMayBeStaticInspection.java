@@ -68,11 +68,11 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
     private static class ClassInitializerCanBeStaticVisitor extends BaseInspectionVisitor {
         @Override
         public void visitClassInitializer(PsiClassInitializer initializer) {
-            if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
+            if (initializer.isStatic()) {
                 return;
             }
 
-            final PsiClass containingClass = ClassUtils.getContainingClass(initializer);
+            PsiClass containingClass = ClassUtils.getContainingClass(initializer);
             if (containingClass == null) {
                 return;
             }
@@ -81,12 +81,12 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
                     return;
                 }
             }
-            final PsiElement scope = containingClass.getScope();
-            if (!(scope instanceof PsiJavaFile) && !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
+            PsiElement scope = containingClass.getScope();
+            if (!(scope instanceof PsiJavaFile) && !containingClass.isStatic()) {
                 return;
             }
 
-            final MethodReferenceVisitor visitor = new MethodReferenceVisitor(initializer);
+            MethodReferenceVisitor visitor = new MethodReferenceVisitor(initializer);
             initializer.accept(visitor);
             if (!visitor.areReferencesStaticallyAccessible()) {
                 return;

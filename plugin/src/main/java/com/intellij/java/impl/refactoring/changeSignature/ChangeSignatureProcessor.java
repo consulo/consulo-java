@@ -43,7 +43,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
 import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -56,7 +55,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     public ChangeSignatureProcessor(
         Project project,
         PsiMethod method,
-        final boolean generateDelegate,
+        boolean generateDelegate,
         @PsiModifier.ModifierConstant String newVisibility,
         String newName,
         PsiType newType,
@@ -79,7 +78,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     public ChangeSignatureProcessor(
         Project project,
         PsiMethod method,
-        final boolean generateDelegate,
+        boolean generateDelegate,
         @PsiModifier.ModifierConstant String newVisibility,
         String newName,
         PsiType newType,
@@ -128,7 +127,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         );
     }
 
-    public ChangeSignatureProcessor(Project project, final JavaChangeInfo changeInfo) {
+    public ChangeSignatureProcessor(Project project, JavaChangeInfo changeInfo) {
         super(project, changeInfo);
         LOG.assertTrue(myChangeInfo.getMethod().isValid());
     }
@@ -194,7 +193,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         }
         MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<>();
         for (ChangeSignatureUsageProcessor usageProcessor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
-            final MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
+            MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
             for (PsiElement key : conflicts.keySet()) {
                 Collection<String> collection = conflictDescriptions.get(key);
                 if (collection.size() == 0) {
@@ -205,7 +204,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
             }
         }
 
-        final UsageInfo[] usagesIn = refUsages.get();
+        UsageInfo[] usagesIn = refUsages.get();
         RenameUtil.addConflictDescriptions(usagesIn, conflictDescriptions);
         Set<UsageInfo> usagesSet = new HashSet<>(Arrays.asList(usagesIn));
         RenameUtil.removeConflictUsages(usagesSet);
@@ -240,7 +239,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
             List<UsageInfo> covariantOverriderInfos = new ArrayList<>();
             for (UsageInfo usageInfo : usages) {
                 if (usageInfo instanceof OverriderUsageInfo) {
-                    final OverriderUsageInfo info = (OverriderUsageInfo)usageInfo;
+                    OverriderUsageInfo info = (OverriderUsageInfo)usageInfo;
                     PsiMethod overrider = info.getElement();
                     PsiMethod baseMethod = info.getBaseMethod();
                     PsiSubstitutor substitutor = calculateSubstitutor(overrider, baseMethod);
@@ -252,7 +251,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
                         LOG.error(e);
                         return;
                     }
-                    final PsiType overriderType = overrider.getReturnType();
+                    PsiType overriderType = overrider.getReturnType();
                     if (overriderType != null && type.isAssignableFrom(overriderType)) {
                         covariantOverriderInfos.add(usageInfo);
                     }
@@ -272,7 +271,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         }
     }
 
-    protected void preprocessCovariantOverriders(final List<UsageInfo> covariantOverriderInfos) {
+    protected void preprocessCovariantOverriders(List<UsageInfo> covariantOverriderInfos) {
     }
 
     @RequiredUIAccess
@@ -285,7 +284,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         ) == DialogWrapper.OK_EXIT_CODE;
     }
 
-    public static void makeEmptyBody(final PsiElementFactory factory, final PsiMethod delegate) throws IncorrectOperationException {
+    public static void makeEmptyBody(PsiElementFactory factory, PsiMethod delegate) throws IncorrectOperationException {
         PsiCodeBlock body = delegate.getBody();
         if (body != null) {
             body.replace(factory.createCodeBlock());
@@ -297,34 +296,29 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     }
 
     @Nullable
-    public static PsiCallExpression addDelegatingCallTemplate(
-        final PsiMethod delegate,
-        final String newName
-    ) throws IncorrectOperationException {
+    public static PsiCallExpression addDelegatingCallTemplate(PsiMethod delegate, String newName) throws IncorrectOperationException {
         Project project = delegate.getProject();
         PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
         PsiCodeBlock body = delegate.getBody();
         assert body != null;
-        final PsiCallExpression callExpression;
+        PsiCallExpression callExpression;
         if (delegate.isConstructor()) {
             PsiElement callStatement = factory.createStatementFromText("this();", null);
             callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
             callStatement = body.add(callStatement);
             callExpression = (PsiCallExpression)((PsiExpressionStatement)callStatement).getExpression();
         }
+        else if (PsiType.VOID.equals(delegate.getReturnType())) {
+            PsiElement callStatement = factory.createStatementFromText(newName + "();", null);
+            callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
+            callStatement = body.add(callStatement);
+            callExpression = (PsiCallExpression)((PsiExpressionStatement)callStatement).getExpression();
+        }
         else {
-            if (PsiType.VOID.equals(delegate.getReturnType())) {
-                PsiElement callStatement = factory.createStatementFromText(newName + "();", null);
-                callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
-                callStatement = body.add(callStatement);
-                callExpression = (PsiCallExpression)((PsiExpressionStatement)callStatement).getExpression();
-            }
-            else {
-                PsiElement callStatement = factory.createStatementFromText("return " + newName + "();", null);
-                callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
-                callStatement = body.add(callStatement);
-                callExpression = (PsiCallExpression)((PsiReturnStatement)callStatement).getReturnValue();
-            }
+            PsiElement callStatement = factory.createStatementFromText("return " + newName + "();", null);
+            callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
+            callStatement = body.add(callStatement);
+            callExpression = (PsiCallExpression)((PsiReturnStatement)callStatement).getReturnValue();
         }
         return callExpression;
     }
@@ -335,14 +329,14 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
             substitutor = PsiSubstitutor.EMPTY;
         }
         else {
-            final PsiClass baseClass = baseMethod.getContainingClass();
-            final PsiClass derivedClass = derivedMethod.getContainingClass();
+            PsiClass baseClass = baseMethod.getContainingClass();
+            PsiClass derivedClass = derivedMethod.getContainingClass();
             if (baseClass != null && derivedClass != null && InheritanceUtil.isInheritorOrSelf(derivedClass, baseClass, true)) {
-                final PsiSubstitutor superClassSubstitutor =
+                PsiSubstitutor superClassSubstitutor =
                     TypeConversionUtil.getSuperClassSubstitutor(baseClass, derivedClass, PsiSubstitutor.EMPTY);
-                final MethodSignature superMethodSignature = baseMethod.getSignature(superClassSubstitutor);
-                final MethodSignature methodSignature = derivedMethod.getSignature(PsiSubstitutor.EMPTY);
-                final PsiSubstitutor superMethodSubstitutor =
+                MethodSignature superMethodSignature = baseMethod.getSignature(superClassSubstitutor);
+                MethodSignature methodSignature = derivedMethod.getSignature(PsiSubstitutor.EMPTY);
+                PsiSubstitutor superMethodSubstitutor =
                     MethodSignatureUtil.getSuperMethodSignatureSubstitutor(methodSignature, superMethodSignature);
                 substitutor = superMethodSubstitutor != null ? superMethodSubstitutor : superClassSubstitutor;
             }

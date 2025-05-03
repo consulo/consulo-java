@@ -26,13 +26,11 @@ import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.find.FindUsagesOptions;
 import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiComment;
@@ -44,9 +42,10 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.util.function.Predicate;
 
 import static consulo.language.psi.search.PsiSearchHelper.SearchCostResult.TOO_MANY_OCCURRENCES;
 
@@ -71,10 +70,10 @@ public class UnusedSymbolUtil {
     }
 
     public static boolean isImplicitRead(@Nonnull Project project, @Nonnull PsiVariable element, @Nullable ProgressIndicator progress) {
-        return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
+        return project.getExtensionPoint(ImplicitUsageProvider.class).anyMatchSafe(provider -> {
             ProgressManager.checkCanceled();
             return provider.isImplicitRead(element);
-        }) != null || isInjected(project, element);
+        }) || isInjected(project, element);
     }
 
     public static boolean isImplicitWrite(@Nonnull PsiVariable variable) {
@@ -82,20 +81,23 @@ public class UnusedSymbolUtil {
     }
 
     public static boolean isImplicitWrite(@Nonnull Project project, @Nonnull PsiVariable element, @Nullable ProgressIndicator progress) {
-        return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
+        return project.getExtensionPoint(ImplicitUsageProvider.class).anyMatchSafe(provider -> {
             ProgressManager.checkCanceled();
             return provider.isImplicitWrite(element);
-        }) != null || isInjected(project, element);
+        }) || isInjected(project, element);
     }
 
     @Nullable
+    @RequiredReadAction
     public static HighlightInfo createUnusedSymbolInfo(
         @Nonnull PsiElement element,
         @Nonnull String message,
-        @Nonnull final HighlightInfoType highlightInfoType
+        @Nonnull HighlightInfoType highlightInfoType
     ) {
-        HighlightInfo info = HighlightInfo.newHighlightInfo(highlightInfoType).range(element).descriptionAndTooltip
-            (message).create();
+        HighlightInfo info = HighlightInfo.newHighlightInfo(highlightInfoType)
+            .range(element)
+            .descriptionAndTooltip(message).create();
+
         if (info == null) {
             return null; //filtered out
         }
@@ -103,12 +105,13 @@ public class UnusedSymbolUtil {
         for (UnusedDeclarationFixProvider provider : UnusedDeclarationFixProvider.EP_NAME.getExtensionList()) {
             IntentionAction[] fixes = provider.getQuickFixes(element);
             for (IntentionAction fix : fixes) {
-                QuickFixAction.registerQuickFixAction(info, fix);
+                info.registerFix(fix, null, null, null, null);
             }
         }
         return info;
     }
 
+    @RequiredReadAction
     public static boolean isFieldUnused(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
@@ -119,12 +122,14 @@ public class UnusedSymbolUtil {
         if (helper.isLocallyUsed(field)) {
             return false;
         }
+        //noinspection SimplifiableIfStatement
         if (field instanceof PsiEnumConstant && isEnumValuesMethodUsed(project, containingFile, field, progress, helper)) {
             return false;
         }
         return weAreSureThereAreNoUsages(project, containingFile, field, progress, helper);
     }
 
+    @RequiredReadAction
     public static boolean isMethodReferenced(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
@@ -136,7 +141,7 @@ public class UnusedSymbolUtil {
             return true;
         }
 
-        boolean isPrivate = method.hasModifierProperty(PsiModifier.PRIVATE);
+        boolean isPrivate = method.isPrivate();
         PsiClass containingClass = method.getContainingClass();
         if (JavaHighlightUtil.isSerializationRelatedMethod(method, containingClass)) {
             return true;
@@ -170,10 +175,11 @@ public class UnusedSymbolUtil {
         return false;
     }
 
+    @RequiredReadAction
     private static boolean weAreSureThereAreNoUsages(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
-        @Nonnull final PsiMember member,
+        @Nonnull PsiMember member,
         @Nonnull ProgressIndicator progress,
         @Nonnull GlobalUsageHelper helper
     ) {
@@ -183,11 +189,15 @@ public class UnusedSymbolUtil {
             return false;
         }
 
-        final PsiFile ignoreFile = helper.isCurrentFileAlreadyChecked() ? containingFile : null;
+        PsiFile ignoreFile = helper.isCurrentFileAlreadyChecked() ? containingFile : null;
 
-        boolean sure = processUsages(project, containingFile, member, progress, ignoreFile, new Processor<UsageInfo>() {
-            @Override
-            public boolean process(UsageInfo info) {
+        boolean sure = processUsages(
+            project,
+            containingFile,
+            member,
+            progress,
+            ignoreFile,
+            info -> {
                 PsiFile psiFile = info.getFile();
                 if (psiFile == ignoreFile || psiFile == null) {
                     return true; // ignore usages in containingFile because isLocallyUsed() method would have caught
@@ -202,7 +212,7 @@ public class UnusedSymbolUtil {
                 log("*     " + member.getName() + ": usage :" + element);
                 return inComment; // ignore comments
             }
-        });
+        );
         log("*     " + member.getName() + ": result:" + sure);
         return sure;
     }
@@ -219,7 +229,7 @@ public class UnusedSymbolUtil {
         @Nonnull PsiMember member,
         @Nonnull ProgressIndicator progress,
         @Nullable PsiFile ignoreFile,
-        @Nonnull Processor<UsageInfo> usageInfoProcessor
+        @Nonnull @RequiredReadAction Predicate<UsageInfo> usageInfoProcessor
     ) {
         String name = member.getName();
         if (name == null) {
@@ -227,7 +237,7 @@ public class UnusedSymbolUtil {
             return false;
         }
         SearchScope useScope = member.getUseScope();
-        PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(project);
+        PsiSearchHelper searchHelper = project.getInstance(PsiSearchHelper.class);
         if (useScope instanceof GlobalSearchScope globalSearchScope) {
             // some classes may have references from within XML outside dependent modules, e.g. our actions
             if (member instanceof PsiClass) {
@@ -294,6 +304,7 @@ public class UnusedSymbolUtil {
         return JavaFindUsagesHelper.processElementUsages(member, options, usageInfoProcessor);
     }
 
+    @RequiredReadAction
     private static boolean isEnumValuesMethodUsed(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
@@ -301,7 +312,7 @@ public class UnusedSymbolUtil {
         @Nonnull ProgressIndicator progress,
         @Nonnull GlobalUsageHelper helper
     ) {
-        final PsiClass containingClass = member.getContainingClass();
+        PsiClass containingClass = member.getContainingClass();
         if (!(containingClass instanceof PsiClassImpl)) {
             return true;
         }
@@ -314,8 +325,7 @@ public class UnusedSymbolUtil {
 
             PsiMethod valuesMethod = null;
             for (PsiMethod psiMethod : methodsByName) {
-                if (psiMethod.getParameterList().getParametersCount() == 0 && psiMethod.hasModifierProperty
-                    (PsiModifier.STATIC)) {
+                if (psiMethod.getParameterList().getParametersCount() == 0 && psiMethod.isStatic()) {
                     valuesMethod = psiMethod;
                     break;
                 }
@@ -337,12 +347,14 @@ public class UnusedSymbolUtil {
         if (member instanceof PsiField) {
             return false;  //Java field cannot be referenced by anything but its name
         }
+        //noinspection SimplifiableIfStatement
         if (member instanceof PsiMethod method) {
             return PropertyUtil.isSimplePropertyAccessor(method);  //Java accessors can be referenced by field name from Groovy
         }
         return false;
     }
 
+    @RequiredReadAction
     public static boolean isClassUsed(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
@@ -358,6 +370,7 @@ public class UnusedSymbolUtil {
         return result;
     }
 
+    @RequiredReadAction
     private static boolean isReallyUsed(
         @Nonnull Project project,
         @Nonnull PsiFile containingFile,
@@ -369,9 +382,9 @@ public class UnusedSymbolUtil {
             return true;
         }
         if (helper.isCurrentFileAlreadyChecked()) {
-            if (aClass.getContainingClass() != null && aClass.hasModifierProperty(PsiModifier.PRIVATE) ||
-                aClass.getParent() instanceof PsiDeclarationStatement ||
-                aClass instanceof PsiTypeParameter) {
+            if (aClass.getContainingClass() != null && aClass.isPrivate()
+                || aClass.getParent() instanceof PsiDeclarationStatement
+                || aClass instanceof PsiTypeParameter) {
                 return false;
             }
         }
