@@ -414,6 +414,7 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @RequiredReadAction
     public static HighlightInfo checkInterfaceMultipleInheritance(PsiClass aClass) {
         PsiClassType[] types = aClass.getSuperTypes();
         if (types.length < 2) {
@@ -1587,6 +1588,7 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @RequiredReadAction
     public static HighlightInfo checkEnumMustNotBeLocal(PsiClass aClass) {
         if (!aClass.isEnum()) {
             return null;
@@ -1602,6 +1604,7 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @RequiredReadAction
     public static HighlightInfo checkEnumWithoutConstantsCantHaveAbstractMethods(PsiClass aClass) {
         if (!aClass.isEnum()) {
             return null;
@@ -1787,6 +1790,7 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @RequiredReadAction
     public static HighlightInfo areSupersAccessible(@Nonnull PsiClass aClass) {
         return areSupersAccessible(aClass, aClass.getResolveScope(), HighlightNamesUtil.getClassDeclarationTextRange(aClass), true);
     }
