@@ -2041,6 +2041,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
+    @RequiredReadAction
     public void visitTypeElement(@Nonnull PsiTypeElement type) {
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkIllegalType(type));
@@ -2054,7 +2055,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
-    public void visitTypeCastExpression(PsiTypeCastExpression typeCast) {
+    @RequiredReadAction
+    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression typeCast) {
         super.visitTypeCastExpression(typeCast);
         try {
             if (!myHolder.hasErrorResults()) {
@@ -2069,6 +2071,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
+    @RequiredReadAction
     public void visitTypeParameterList(PsiTypeParameterList list) {
         PsiTypeParameter[] typeParameters = list.getTypeParameters();
         if (typeParameters.length > 0) {
@@ -2080,7 +2083,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
-    public void visitVariable(PsiVariable variable) {
+    @RequiredReadAction
+    public void visitVariable(@Nonnull PsiVariable variable) {
         super.visitVariable(variable);
         try {
             if (!myHolder.hasErrorResults()) {
@@ -2109,20 +2113,21 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
-    public void visitConditionalExpression(PsiConditionalExpression expression) {
+    @RequiredReadAction
+    public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
         super.visitConditionalExpression(expression);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8) && PsiPolyExpressionUtil.isPolyExpression(expression)) {
-            final PsiExpression thenExpression = expression.getThenExpression();
-            final PsiExpression elseExpression = expression.getElseExpression();
+            PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
             if (thenExpression != null && elseExpression != null) {
-                final PsiType conditionalType = expression.getType();
+                PsiType conditionalType = expression.getType();
                 if (conditionalType != null) {
-                    final PsiExpression[] sides = {
+                    PsiExpression[] sides = {
                         thenExpression,
                         elseExpression
                     };
                     for (PsiExpression side : sides) {
-                        final PsiType sideType = side.getType();
+                        PsiType sideType = side.getType();
                         if (sideType != null && !TypeConversionUtil.isAssignable(conditionalType, sideType)) {
                             myHolder.add(HighlightUtil.checkAssignability(conditionalType, sideType, side, side));
                         }
