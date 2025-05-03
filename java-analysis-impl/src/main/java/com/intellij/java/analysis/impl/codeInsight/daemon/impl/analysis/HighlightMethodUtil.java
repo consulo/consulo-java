@@ -151,24 +151,26 @@ public class HighlightMethodUtil {
             else {
                 textRange = TextRange.EMPTY_RANGE;
             }
-            HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(textRange)
                 .descriptionAndTooltip(JavaErrorLocalize.weakerPrivileges(
                     createClashMethodMessage(method, superMethod, true),
                     VisibilityUtil.toPresentableText(accessModifier),
                     PsiUtil.getAccessModifier(superAccessLevel)
                 ))
-                .create();
-            QuickFixAction.registerQuickFixAction(
-                highlightInfo,
-                QuickFixFactory.getInstance().createModifierListFix(
-                    method,
-                    PsiUtil.getAccessModifier(superAccessLevel),
-                    true,
-                    false
+                .registerFix(
+                    QuickFixFactory.getInstance().createModifierListFix(
+                        method,
+                        PsiUtil.getAccessModifier(superAccessLevel),
+                        true,
+                        false
+                    ),
+                    null,
+                    null,
+                    null,
+                    null
                 )
-            );
-            return highlightInfo;
+                .create();
         }
         return null;
     }
@@ -1979,10 +1981,11 @@ public class HighlightMethodUtil {
         if (unhandled.isEmpty()) {
             return null;
         }
-        String description = HighlightUtil.getUnhandledExceptionsDescriptor(unhandled);
         TextRange textRange = HighlightNamesUtil.getMethodDeclarationTextRange(method);
-        HighlightInfo highlightInfo =
-            HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(textRange).descriptionAndTooltip(description).create();
+        HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            .range(textRange)
+            .descriptionAndTooltip(HighlightUtil.getUnhandledExceptionsDescriptor(unhandled))
+            .create();
         for (PsiClassType exception : unhandled) {
             QuickFixAction.registerQuickFixAction(
                 highlightInfo,

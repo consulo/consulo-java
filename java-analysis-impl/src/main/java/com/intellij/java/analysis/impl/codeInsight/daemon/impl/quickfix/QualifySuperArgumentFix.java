@@ -25,6 +25,8 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiManager;
@@ -33,42 +35,49 @@ import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
-  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
-    super(expression, psiClass);
-  }
-
-  @Override
-  protected String getQualifierText() {
-    return "super";
-  }
-
-  @Override
-  protected PsiExpression getQualifier(PsiManager manager) {
-    return RefactoringChangeUtil.createSuperExpression(manager, myPsiClass);
-  }
-
-  public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo highlightInfo) {
-    LOG.assertTrue(expr.getQualifier() == null);
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);
-    if (containingClass != null && containingClass.isInterface()) {
-      final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(expr,
-          PsiMethodCallExpression.class);
-      if (callExpression != null) {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(callExpression.getProject());
-        for (PsiClass superClass : containingClass.getSupers()) {
-          if (superClass.isInterface()) {
-            final PsiMethodCallExpression copy = (PsiMethodCallExpression) callExpression.copy();
-            final PsiExpression superQualifierCopy = copy.getMethodExpression().getQualifierExpression();
-            LOG.assertTrue(superQualifierCopy != null);
-            superQualifierCopy.delete();
-            if (((PsiMethodCallExpression) elementFactory.createExpressionFromText(copy.getText(),
-                superClass)).resolveMethod() != null) {
-              QuickFixAction.registerQuickFixAction(highlightInfo, new QualifySuperArgumentFix(expr,
-                  superClass));
-            }
-          }
-        }
-      }
+    public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+        super(expression, psiClass);
     }
-  }
+
+    @Override
+    protected String getQualifierText() {
+        return "super";
+    }
+
+    @Override
+    @RequiredWriteAction
+    protected PsiExpression getQualifier(PsiManager manager) {
+        return RefactoringChangeUtil.createSuperExpression(manager, myPsiClass);
+    }
+
+    @RequiredReadAction
+    public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo highlightInfo) {
+        LOG.assertTrue(expr.getQualifier() == null);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);
+        if (containingClass != null && containingClass.isInterface()) {
+            PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(
+                expr,
+                PsiMethodCallExpression.class
+            );
+            if (callExpression != null) {
+                PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(callExpression.getProject());
+                for (PsiClass superClass : containingClass.getSupers()) {
+                    if (superClass.isInterface()) {
+                        PsiMethodCallExpression copy = (PsiMethodCallExpression)callExpression.copy();
+                        PsiExpression superQualifierCopy = copy.getMethodExpression().getQualifierExpression();
+                        LOG.assertTrue(superQualifierCopy != null);
+                        superQualifierCopy.delete();
+                      PsiMethodCallExpression expressionFromText =
+                          (PsiMethodCallExpression)elementFactory.createExpressionFromText(copy.getText(), superClass);
+                      if (expressionFromText.resolveMethod() != null) {
+                            QuickFixAction.registerQuickFixAction(
+                                highlightInfo,
+                                new QualifySuperArgumentFix(expr, superClass)
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
