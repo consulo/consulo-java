@@ -81,7 +81,7 @@ public class ModuleHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(statement)
                 .descriptionAndTooltip(JavaErrorLocalize.moduleNoPackage())
-                .registerFix(factory().createDeleteFix(statement), null, null, null, null)
+                .registerFix(factory().createDeleteFix(statement))
                 .create();
         }
 
@@ -108,7 +108,7 @@ public class ModuleHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(range(element))
                 .descriptionAndTooltip(JavaErrorLocalize.moduleFileWrongName())
-                .registerFix(factory().createRenameFileFix(MODULE_INFO_FILE), null, null, null, null)
+                .registerFix(factory().createRenameFileFix(MODULE_INFO_FILE))
                 .create();
         }
 
@@ -200,8 +200,8 @@ public class ModuleHighlightUtil {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(statement)
                     .descriptionAndTooltip(descriptionTemplate.apply(refText))
-                    .registerFix(factory().createDeleteFix(statement), null, null, null, null)
-                    .registerFix(MergeModuleStatementsFix.createFix(statement), null, null, null, null)
+                    .registerFix(factory().createDeleteFix(statement))
+                    .registerFix(MergeModuleStatementsFix.createFix(statement))
                     .create();
                 results.add(info);
             }
@@ -256,7 +256,7 @@ public class ModuleHighlightUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WARNING)
                     .range(range(element))
                     .descriptionAndTooltip(JavaErrorLocalize.moduleFileWrongLocation())
-                    .registerFix(new MoveFileFix(vFile, root, JavaQuickFixLocalize.moveFileToSourceRootText().get()), null, null, null, null)
+                    .registerFix(new MoveFileFix(vFile, root, JavaQuickFixLocalize.moveFileToSourceRootText().get()))
                     .create();
             }
         }
@@ -306,8 +306,8 @@ public class ModuleHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(statement)
                 .descriptionAndTooltip(JavaErrorLocalize.moduleOpensInWeakModule())
-                .registerFix(factory().createModifierListFix(javaModule, PsiModifier.OPEN, false, false), null, null, null, null)
-                .registerFix(factory().createDeleteFix(statement), null, null, null, null)
+                .registerFix(factory().createRemoveModifierFix(javaModule, PsiModifier.OPEN))
+                .registerFix(factory().createDeleteFix(statement))
                 .create();
         }
 
@@ -361,13 +361,7 @@ public class ModuleHighlightUtil {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(refElement)
                     .descriptionAndTooltip(message)
-                    .registerFix(
-                        factory().createDeleteFix(refElement, JavaQuickFixLocalize.deleteReferenceFixText().get()),
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                    .registerFix(factory().createDeleteFix(refElement, JavaQuickFixLocalize.deleteReferenceFixText().get()))
                     .create();
                 results.add(info);
             }
@@ -423,7 +417,7 @@ public class ModuleHighlightUtil {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(implRef)
                     .descriptionAndTooltip(JavaErrorLocalize.moduleDuplicateImpl(refText))
-                    .registerFix(factory().createDeleteFix(implRef, JavaQuickFixLocalize.deleteReferenceFixText().get()), null, null, null, null)
+                    .registerFix(factory().createDeleteFix(implRef, JavaQuickFixLocalize.deleteReferenceFixText().get()))
                     .create();
                 results.add(info);
                 continue;
@@ -552,7 +546,7 @@ public class ModuleHighlightUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
                     .descriptionAndTooltip(JavaErrorLocalize.moduleNotInRequirements(refModuleName, requiredName))
-                    .registerFix(new AddRequiredModuleFix(refModule, requiredName), null, null, null, null)
+                    .registerFix(new AddRequiredModuleFix(refModule, requiredName))
                     .create();
             }
         }

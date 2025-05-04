@@ -1075,7 +1075,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(keyword)
                 .descriptionAndTooltip(JavaErrorLocalize.incompatibleModifiers(modifier, incompatible))
-                .registerFix(QuickFixFactory.getInstance().createModifierListFix(modifierList, modifier, false, false))
+                .registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(modifierList, modifier))
                 .create();
         }
 
@@ -1219,7 +1219,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(keyword)
                 .descriptionAndTooltip(JavaErrorLocalize.modifierNotAllowed(modifier))
-                .registerFix(QuickFixFactory.getInstance().createModifierListFix(modifierList, modifier, false, false))
+                .registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(modifierList, modifier))
                 .create();
         }
 
@@ -2186,15 +2186,11 @@ public class HighlightUtil extends HighlightUtilBase {
         HighlightInfo errorResult,
         @Nonnull PsiJavaCodeReferenceElement place
     ) {
+        QuickFixFactory factory = QuickFixFactory.getInstance();
         if (refElement instanceof PsiModifierListOwner modifierListOwner) {
             QuickFixAction.registerQuickFixAction(
                 errorResult,
-                QuickFixFactory.getInstance().createModifierListFix(
-                    modifierListOwner,
-                    PsiModifier.STATIC,
-                    true,
-                    false
-                )
+                factory.createAddModifierFix(modifierListOwner, PsiModifier.STATIC)
             );
         }
         // make context non static
@@ -2202,14 +2198,13 @@ public class HighlightUtil extends HighlightUtilBase {
         if (staticParent != null && isInstanceReference(place)) {
             QuickFixAction.registerQuickFixAction(
                 errorResult,
-                QuickFixFactory.getInstance()
-                    .createModifierListFix(staticParent, PsiModifier.STATIC, false, false)
+                factory.createRemoveModifierFix(staticParent, PsiModifier.STATIC)
             );
         }
         if (place instanceof PsiReferenceExpression placeRefExpr && refElement instanceof PsiField) {
             QuickFixAction.registerQuickFixAction(
                 errorResult,
-                QuickFixFactory.getInstance().createCreateFieldFromUsageFix(placeRefExpr)
+                factory.createCreateFieldFromUsageFix(placeRefExpr)
             );
         }
     }
