@@ -2193,9 +2193,10 @@ public class HighlightUtil extends HighlightUtilBase {
     }
 
     @Nonnull
+    @RequiredReadAction
     public static LocalizeValue buildProblemWithStaticDescription(@Nonnull PsiElement refElement) {
         String type = FindUsagesProvider.forLanguage(JavaLanguage.INSTANCE).getType(refElement);
-        String name = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
+        LocalizeValue name = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
         return JavaErrorLocalize.nonStaticSymbolReferencedFromStaticContext(type, name);
     }
 
@@ -2268,14 +2269,14 @@ public class HighlightUtil extends HighlightUtilBase {
     ) {
         assert resolved instanceof PsiModifierListOwner : resolved;
         PsiModifierListOwner refElement = (PsiModifierListOwner)resolved;
-        String symbolName = HighlightMessageUtil.getSymbolName(refElement, result.getSubstitutor());
+        LocalizeValue symbolName = HighlightMessageUtil.getSymbolName(refElement, result.getSubstitutor());
 
         if (refElement.hasModifierProperty(PsiModifier.PRIVATE)) {
-            String containerName = getContainerName(refElement, result.getSubstitutor());
+            LocalizeValue containerName = getContainerName(refElement, result.getSubstitutor());
             return JavaErrorLocalize.privateSymbol(symbolName, containerName);
         }
         else if (refElement.hasModifierProperty(PsiModifier.PROTECTED)) {
-            String containerName = getContainerName(refElement, result.getSubstitutor());
+            LocalizeValue containerName = getContainerName(refElement, result.getSubstitutor());
             return JavaErrorLocalize.protectedSymbol(symbolName, containerName);
         }
         else {
@@ -2285,11 +2286,11 @@ public class HighlightUtil extends HighlightUtilBase {
                 symbolName = HighlightMessageUtil.getSymbolName(refElement, result.getSubstitutor());
             }
             if (refElement.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) || packageLocalClass != null) {
-                String containerName = getContainerName(refElement, result.getSubstitutor());
+                LocalizeValue containerName = getContainerName(refElement, result.getSubstitutor());
                 return JavaErrorLocalize.packageLocalSymbol(symbolName, containerName);
             }
             else {
-                String containerName = getContainerName(refElement, result.getSubstitutor());
+                LocalizeValue containerName = getContainerName(refElement, result.getSubstitutor());
                 return JavaErrorLocalize.visibilityAccessProblem(symbolName, containerName);
             }
         }
@@ -2305,9 +2306,9 @@ public class HighlightUtil extends HighlightUtilBase {
         return refElement.getParent();
     }
 
-    private static String getContainerName(PsiModifierListOwner refElement, PsiSubstitutor substitutor) {
-        PsiElement container = getContainer(refElement);
-        return container == null ? "?" : HighlightMessageUtil.getSymbolName(container, substitutor);
+    @RequiredReadAction
+    private static LocalizeValue getContainerName(PsiModifierListOwner refElement, PsiSubstitutor substitutor) {
+        return HighlightMessageUtil.getSymbolName(getContainer(refElement), substitutor);
     }
 
     @Nullable

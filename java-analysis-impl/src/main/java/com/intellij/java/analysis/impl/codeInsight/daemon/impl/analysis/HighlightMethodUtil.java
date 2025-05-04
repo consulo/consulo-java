@@ -563,9 +563,10 @@ public class HighlightMethodUtil {
             }
             else if (candidateInfo != null && !candidateInfo.isApplicable()) {
                 if (candidateInfo.isTypeArgumentsApplicable()) {
-                    String methodName = HighlightMessageUtil.getSymbolName(resolved, substitutor);
+                    LocalizeValue methodName = HighlightMessageUtil.getSymbolName(resolved, substitutor);
                     PsiElement parent = resolved.getParent();
-                    String containerName = parent == null ? "" : HighlightMessageUtil.getSymbolName(parent, substitutor);
+                    LocalizeValue containerName =
+                        parent == null ? LocalizeValue.empty() : HighlightMessageUtil.getSymbolName(parent, substitutor);
                     String argTypes = buildArgTypesList(list);
                     String description = JavaErrorLocalize.wrongMethodArguments(methodName, containerName, argTypes).get();
                     SimpleReference<PsiElement> elementToHighlight = SimpleReference.create(list);
@@ -2192,8 +2193,8 @@ public class HighlightMethodUtil {
                 holder.add(buildAccessProblem(classReference, result, constructor));
             }
             else if (!applicable) {
-                String constructorName = HighlightMessageUtil.getSymbolName(constructor, result.getSubstitutor());
-                String containerName = HighlightMessageUtil.getSymbolName(constructor.getContainingClass(), result.getSubstitutor());
+                LocalizeValue constructorName = HighlightMessageUtil.getSymbolName(constructor, result.getSubstitutor());
+                LocalizeValue containerName = HighlightMessageUtil.getSymbolName(constructor.getContainingClass(), result.getSubstitutor());
                 String argTypes = buildArgTypesList(list);
                 String toolTip = createMismatchedArgumentsHtmlTooltip(result, list);
 

@@ -774,3 +774,31 @@ error.cannot.resolve.class:
   text: Cannot resolve class ''{0}''
 error.cannot.resolve.class.or.package:
   text: Cannot resolve class or package ''{0}''
+generic.extend.exception:
+  text: Generic class may not extend 'java.lang.Throwable'
+type.parameter.has.incompatible.upper.bounds:
+  text: "Type parameter {0} has incompatible upper bounds: {1}"
+actual.type.argument.contradict.inferred.type:
+  text: Actual type argument and inferred type contradict each other
+type.parameter.cannot.be.followed.by.other.bounds:
+  text: Type parameter cannot be followed by other bounds
+text.class.inherits.abstract.and.default:
+  text: "{0} inherits abstract and default for {1} from types {2} and {3}"
+text.class.inherits.unrelated.defaults:
+  text: "{0} inherits unrelated defaults for {1} from types {2}"
+cannot.select.from.parameterized.type:
+  text: Cannot access class object of parameterized type
+class.cannot.inherit.from.its.type.parameter:
+  text: Class cannot inherit from its type parameter
+text.improper.formed.type:
+  text: Improper formed type; some type parameters are missing
+safevarargs.not.allowed.on.methods.with.fixed.arity:
+  text: "@SafeVarargs is not allowed on methods with fixed arity"
+safevararg.annotation.cannot.be.applied.for.record.component:
+  text: "@SafeVarargs is not allowed on a record component"
+safevarargs.not.suppress.potentially.unsafe.operations:
+  text: "@SafeVarargs do not suppress potentially unsafe operations"
+safevarargs.not.applicable.for.reifiable.types:
+  text: "@SafeVarargs is not applicable for reifiable types"
+safevarargs.not.allowed.non.final.instance.methods:
+  text: "@SafeVarargs is not allowed on non-final instance methods"

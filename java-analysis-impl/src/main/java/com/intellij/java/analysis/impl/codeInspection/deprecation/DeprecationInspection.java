@@ -35,6 +35,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -311,7 +312,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
     String description = null;
 
-    String symbolName = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
+    LocalizeValue symbolName = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
     PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiModifierListOwner) refElement, DeprecationInfo.class.getName());
     if (annotation != null) {
       String value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
