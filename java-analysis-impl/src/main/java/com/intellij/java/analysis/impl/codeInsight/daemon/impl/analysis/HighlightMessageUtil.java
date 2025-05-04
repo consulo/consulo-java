@@ -18,54 +18,48 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
-import consulo.language.LangBundle;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 public class HighlightMessageUtil {
+    private static final LocalizeValue QUESTION_MARK = LocalizeValue.of("?");
+
     private HighlightMessageUtil() {
     }
 
-    @Nullable
-    public static String getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
-        String symbolName = null;
-
-        if (symbol instanceof PsiClass) {
-            if (symbol instanceof PsiAnonymousClass) {
-                symbolName = LangBundle.message("java.terms.anonymous.class");
-            }
-            else {
-                symbolName = ((PsiClass)symbol).getQualifiedName();
-                if (symbolName == null) {
-                    symbolName = ((PsiClass)symbol).getName();
+    @Nonnull
+    @RequiredReadAction
+    public static LocalizeValue getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
+        return switch (symbol) {
+            case PsiAnonymousClass ac -> LanguageLocalize.javaTermsAnonymousClass();
+            case PsiClass c -> {
+                String n = c.getQualifiedName();
+                if (n == null) {
+                    n = c.getName();
                 }
+                yield LocalizeValue.of(n);
             }
-        }
-        else if (symbol instanceof PsiMethod) {
-            symbolName = PsiFormatUtil.formatMethod((PsiMethod)symbol,
-                substitutor, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+            case PsiMethod m -> LocalizeValue.of(PsiFormatUtil.formatMethod(
+                m,
+                substitutor,
+                PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
                 PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_FQ_CLASS_NAMES
-            );
-        }
-        else if (symbol instanceof PsiVariable) {
-            symbolName = ((PsiVariable)symbol).getName();
-        }
-        else if (symbol instanceof PsiJavaPackage) {
-            symbolName = ((PsiJavaPackage)symbol).getQualifiedName();
-        }
-        else if (symbol instanceof PsiFile) {
-            PsiDirectory directory = ((PsiFile)symbol).getContainingDirectory();
-            PsiJavaPackage aPackage = directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
-            symbolName = aPackage == null ? null : aPackage.getQualifiedName();
-        }
-        else if (symbol instanceof PsiDirectory) {
-            symbolName = ((PsiDirectory)symbol).getName();
-        }
-
-        return symbolName;
+            ));
+            case PsiVariable v -> LocalizeValue.of(v.getName());
+            case PsiJavaPackage jp -> LocalizeValue.of(jp.getQualifiedName());
+            case PsiFile f -> {
+                PsiDirectory directory = f.getContainingDirectory();
+                PsiJavaPackage aPackage = directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
+                yield aPackage == null ? QUESTION_MARK : LocalizeValue.of(aPackage.getQualifiedName());
+            }
+            case PsiDirectory d -> LocalizeValue.of(d.getName());
+            default -> QUESTION_MARK;
+        };
     }
 }

@@ -63,6 +63,7 @@ import consulo.language.file.FileViewProvider;
 import consulo.language.pom.PomNamedTarget;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -525,7 +526,7 @@ public class PostHighlightingVisitor {
     else {
       key = method.isConstructor() ? "constructor.is.not.used" : "method.is.not.used";
     }
-    String symbolName = HighlightMessageUtil.getSymbolName(method, PsiSubstitutor.EMPTY);
+    LocalizeValue symbolName = HighlightMessageUtil.getSymbolName(method, PsiSubstitutor.EMPTY);
     String message = JavaErrorBundle.message(key, symbolName);
     final HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
     QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createSafeDeleteFix(method), myDeadCodeKey);
