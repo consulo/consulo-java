@@ -21,6 +21,7 @@ import com.intellij.java.analysis.impl.find.findUsages.JavaVariableFindUsagesOpt
 import com.intellij.java.language.psi.PsiField;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 
@@ -33,7 +34,7 @@ public class FindVariableUsagesDialog extends JavaFindUsagesDialog<JavaVariableF
 
   @Override
   public JComponent getPreferredFocusedControl() {
-    return myCbToSkipResultsWhenOneUsage;
+    return (JComponent) TargetAWT.to(myCbToSkipResultsWhenOneUsage.getComponent());
   }
 
   @Override

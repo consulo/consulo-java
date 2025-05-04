@@ -23,18 +23,21 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.find.localize.FindLocalize;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
+import consulo.ui.ex.StateRestoringCheckBoxWrapper;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindUsagesOptions> {
-  private StateRestoringCheckBox myCbUsages;
-  private StateRestoringCheckBox myCbImplementingMethods;
-  private StateRestoringCheckBox myCbOverridingMethods;
+  private StateRestoringCheckBoxWrapper myCbUsages;
+  private StateRestoringCheckBoxWrapper myCbImplementingMethods;
+  private StateRestoringCheckBoxWrapper myCbOverridingMethods;
   private boolean myHasFindWhatPanel;
 
   public FindMethodUsagesDialog(PsiElement element, Project project, FindUsagesOptions findUsagesOptions, boolean toShowInNewTab, boolean mustOpenInNewTab,
@@ -46,7 +49,7 @@ public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindU
   @Override
   @Nullable
   public JComponent getPreferredFocusedControl() {
-    return myHasFindWhatPanel ? myCbUsages : null;
+    return myHasFindWhatPanel ? (JComponent) TargetAWT.to(myCbUsages.getComponent()) : null;
   }
 
   @Override
@@ -69,7 +72,7 @@ public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindU
     findWhatPanel.setBorder(IdeBorderFactory.createTitledBorder(FindBundle.message("find.what.group"), true));
     findWhatPanel.setLayout(new BoxLayout(findWhatPanel, BoxLayout.Y_AXIS));
 
-    myCbUsages = addCheckboxToPanel(FindBundle.message("find.what.usages.checkbox"), getFindUsagesOptions().isUsages, findWhatPanel, true);
+    myCbUsages = addCheckboxToPanel(FindLocalize.findWhatUsagesCheckbox(), getFindUsagesOptions().isUsages, findWhatPanel, true);
 
     PsiMethod method = (PsiMethod) getPsiElement();
     PsiClass aClass = method.getContainingClass();
@@ -81,9 +84,9 @@ public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindU
             !(aClass instanceof PsiAnonymousClass) &&
             !aClass.hasModifierProperty(PsiModifier.FINAL)) {
       if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        myCbImplementingMethods = addCheckboxToPanel(FindBundle.message("find.what.implementing.methods.checkbox"), getFindUsagesOptions().isImplementingMethods, findWhatPanel, true);
+        myCbImplementingMethods = addCheckboxToPanel(FindLocalize.findWhatImplementingMethodsCheckbox(), getFindUsagesOptions().isImplementingMethods, findWhatPanel, true);
       } else {
-        myCbOverridingMethods = addCheckboxToPanel(FindBundle.message("find.what.overriding.methods.checkbox"), getFindUsagesOptions().isOverridingMethods, findWhatPanel, true);
+        myCbOverridingMethods = addCheckboxToPanel(FindLocalize.findWhatOverridingMethodsCheckbox(), getFindUsagesOptions().isOverridingMethods, findWhatPanel, true);
       }
     } else {
       myHasFindWhatPanel = false;

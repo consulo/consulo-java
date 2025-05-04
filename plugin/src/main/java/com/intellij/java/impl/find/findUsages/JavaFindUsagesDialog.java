@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import consulo.find.FindBundle;
-import consulo.find.FindSettings;
-import consulo.find.ui.CommonFindUsagesDialog;
-import consulo.find.FindUsagesHandler;
-import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaFindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaMethodFindUsagesOptions;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.project.Project;
+import consulo.find.FindSettings;
+import consulo.find.FindUsagesHandler;
+import consulo.find.FindUsagesOptions;
+import consulo.find.localize.FindLocalize;
+import consulo.find.ui.CommonFindUsagesDialog;
 import consulo.language.psi.PsiElement;
-import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.project.Project;
+import consulo.ui.ex.StateRestoringCheckBoxWrapper;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> extends CommonFindUsagesDialog {
-  private StateRestoringCheckBox myCbIncludeOverloadedMethods;
+  private StateRestoringCheckBoxWrapper myCbIncludeOverloadedMethods;
   private boolean myIncludeOverloadedMethodsAvailable;
 
   protected JavaFindUsagesDialog(@Nonnull PsiElement element,
@@ -54,7 +54,7 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   public void calcFindUsagesOptions(T options) {
     if (options instanceof JavaMethodFindUsagesOptions) {
       ((JavaMethodFindUsagesOptions)options).isIncludeOverloadUsages =
-        myIncludeOverloadedMethodsAvailable && isToChange(myCbIncludeOverloadedMethods) && myCbIncludeOverloadedMethods.isSelected();
+        myIncludeOverloadedMethodsAvailable && isToChange(myCbIncludeOverloadedMethods) && myCbIncludeOverloadedMethods.getValue();
     }
   }
 
@@ -68,7 +68,7 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   protected void doOKAction() {
     if (shouldDoOkAction()) {
       if (myIncludeOverloadedMethodsAvailable) {
-        FindSettings.getInstance().setSearchOverloadedMethods(myCbIncludeOverloadedMethods.isSelected());
+        FindSettings.getInstance().setSearchOverloadedMethods(myCbIncludeOverloadedMethods.getValue());
       }
     }
     else {
@@ -81,7 +81,7 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   protected void addUsagesOptions(JPanel optionsPanel) {
     super.addUsagesOptions(optionsPanel);
     if (myIncludeOverloadedMethodsAvailable) {
-      myCbIncludeOverloadedMethods = addCheckboxToPanel(FindBundle.message("find.options.include.overloaded.methods.checkbox"),
+      myCbIncludeOverloadedMethods = addCheckboxToPanel(FindLocalize.findOptionsIncludeOverloadedMethodsCheckbox(),
                                                         FindSettings.getInstance().isSearchOverloadedMethods(), optionsPanel, false);
 
     }

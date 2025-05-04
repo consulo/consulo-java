@@ -19,16 +19,19 @@ import consulo.find.FindBundle;
 import consulo.find.FindUsagesHandler;
 import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaPackageFindUsagesOptions;
+import consulo.find.localize.FindLocalize;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
+import consulo.ui.ex.StateRestoringCheckBoxWrapper;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 
 public class FindPackageUsagesDialog extends JavaFindUsagesDialog<JavaPackageFindUsagesOptions> {
-  private StateRestoringCheckBox myCbUsages;
-  private StateRestoringCheckBox myCbClassesUsages;
+  private StateRestoringCheckBoxWrapper myCbUsages;
+  private StateRestoringCheckBoxWrapper myCbClassesUsages;
 
   public FindPackageUsagesDialog(PsiElement element,
                                  Project project,
@@ -40,7 +43,7 @@ public class FindPackageUsagesDialog extends JavaFindUsagesDialog<JavaPackageFin
 
   @Override
   public JComponent getPreferredFocusedControl() {
-    return myCbUsages;
+    return (JComponent) TargetAWT.to(myCbUsages.getComponent());
   }
 
   @Override
@@ -61,8 +64,8 @@ public class FindPackageUsagesDialog extends JavaFindUsagesDialog<JavaPackageFin
     findWhatPanel.setBorder(IdeBorderFactory.createTitledBorder(FindBundle.message("find.what.group"), true));
     findWhatPanel.setLayout(new BoxLayout(findWhatPanel, BoxLayout.Y_AXIS));
 
-    myCbUsages = addCheckboxToPanel(FindBundle.message("find.what.usages.checkbox"), getFindUsagesOptions().isUsages, findWhatPanel, true);
-    myCbClassesUsages = addCheckboxToPanel(FindBundle.message("find.what.usages.of.classes.and.interfaces"), getFindUsagesOptions().isClassesUsages, findWhatPanel, true);
+    myCbUsages = addCheckboxToPanel(FindLocalize.findWhatUsagesCheckbox(), getFindUsagesOptions().isUsages, findWhatPanel, true);
+    myCbClassesUsages = addCheckboxToPanel(FindLocalize.findWhatUsagesOfClassesAndInterfaces(), getFindUsagesOptions().isClassesUsages, findWhatPanel, true);
 
     return findWhatPanel;
   }
