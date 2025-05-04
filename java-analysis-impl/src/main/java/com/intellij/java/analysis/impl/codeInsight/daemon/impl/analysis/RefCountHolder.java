@@ -75,14 +75,14 @@ final class RefCountHolder {
 
     private RefCountHolder(
         @Nonnull PsiFile file,
-        @Nonnull MultiMap<PsiElement, PsiReference> myLocalRefsMap,
-        @Nonnull Set<PsiAnchor> myDclsUsedMap,
-        @Nonnull Map<PsiReference, PsiImportStatementBase> myImportStatements
+        @Nonnull MultiMap<PsiElement, PsiReference> localRefsMap,
+        @Nonnull Set<PsiAnchor> dclsUsedMap,
+        @Nonnull Map<PsiReference, PsiImportStatementBase> importStatements
     ) {
         myFile = file;
-        this.myLocalRefsMap = myLocalRefsMap;
-        this.myDclsUsedMap = myDclsUsedMap;
-        this.myImportStatements = myImportStatements;
+        myLocalRefsMap = localRefsMap;
+        myDclsUsedMap = dclsUsedMap;
+        myImportStatements = importStatements;
         log("c: created for ", file);
     }
 
