@@ -271,10 +271,9 @@ public class AnnotationsHighlightUtil {
                 PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(owner);
                 PsiAnnotation.TargetType applicable = AnnotationTargetUtil.findAnnotationTarget(container, targets);
                 if (applicable == null) {
-                    String target = JavaErrorBundle.message("annotation.target." + targets[0]);
                     return annotationError(
                         annotationToCheck,
-                        JavaErrorLocalize.annotationContainerNotApplicable(container.getName(), target)
+                        JavaErrorLocalize.annotationContainerNotApplicable(container.getName(), targets[0].getPresentableText())
                     );
                 }
             }
@@ -446,8 +445,7 @@ public class AnnotationsHighlightUtil {
         }
 
         if (applicable == null) {
-            String target = JavaErrorBundle.message("annotation.target." + targets[0]);
-            return annotationError(annotation, JavaErrorLocalize.annotationNotApplicable(nameRef.getText(), target));
+            return annotationError(annotation, JavaErrorLocalize.annotationNotApplicable(nameRef.getText(), targets[0].getPresentableText()));
         }
 
         if (applicable == PsiAnnotation.TargetType.TYPE_USE) {
