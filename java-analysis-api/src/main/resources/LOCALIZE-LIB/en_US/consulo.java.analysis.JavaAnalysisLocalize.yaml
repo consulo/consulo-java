@@ -1,29 +1,5 @@
 add.explicit.type.arguments:
   text: Add explicit type arguments
-annotation.target.ANNOTATION_TYPE:
-  text: annotation type
-annotation.target.CONSTRUCTOR:
-  text: constructor
-annotation.target.FIELD:
-  text: field
-annotation.target.LOCAL_VARIABLE:
-  text: local variable
-annotation.target.METHOD:
-  text: method
-annotation.target.MODULE:
-  text: module
-annotation.target.PACKAGE:
-  text: package
-annotation.target.PARAMETER:
-  text: parameter
-annotation.target.RECORD_COMPONENT:
-  text: record component
-annotation.target.TYPE:
-  text: type
-annotation.target.TYPE_PARAMETER:
-  text: type parameter
-annotation.target.TYPE_USE:
-  text: type use
 change.type.arguments:
   text: Change type arguments
 change.type.arguments.to.0:

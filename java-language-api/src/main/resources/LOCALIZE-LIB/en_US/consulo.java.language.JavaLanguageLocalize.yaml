@@ -505,3 +505,27 @@ filetype.description.class:
   text: Java class files
 filetype.description.java:
   text: Java source files
+annotation.target.annotation.type:
+  text: annotation type
+annotation.target.constructor:
+  text: constructor
+annotation.target.field:
+  text: field
+annotation.target.local.variable:
+  text: local variable
+annotation.target.method:
+  text: method
+annotation.target.module:
+  text: module
+annotation.target.package:
+  text: package
+annotation.target.parameter:
+  text: parameter
+annotation.target.record.component:
+  text: record component
+annotation.target.type:
+  text: type
+annotation.target.type.parameter:
+  text: type parameter
+annotation.target.type.use:
+  text: type use

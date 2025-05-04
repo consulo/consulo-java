@@ -56,26 +56,6 @@ annotation.container.wrong.place:
   text: Container annotation ''{0}'' must not be present at the same time as the element it contains
 annotation.container.not.applicable:
   text: Container annotation ''@{0}'' is not applicable to {1}
-annotation.target.ANNOTATION_TYPE:
-  text: annotation type
-annotation.target.TYPE:
-  text: type
-annotation.target.TYPE_USE:
-  text: type use
-annotation.target.TYPE_PARAMETER:
-  text: type parameter
-annotation.target.CONSTRUCTOR:
-  text: constructor
-annotation.target.METHOD:
-  text: method
-annotation.target.FIELD:
-  text: field
-annotation.target.PARAMETER:
-  text: parameter
-annotation.target.LOCAL_VARIABLE:
-  text: local variable
-annotation.target.PACKAGE:
-  text: package
 generics.holder.type:
   text: Type
 generics.holder.method:

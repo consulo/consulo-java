@@ -560,25 +560,26 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
+    @RequiredReadAction
     public void visitJavaToken(@Nonnull PsiJavaToken token) {
         super.visitJavaToken(token);
-        if (!myHolder.hasErrorResults() && token.getTokenType() == JavaTokenType.RBRACE && token.getParent() instanceof PsiCodeBlock) {
-
-            PsiElement gParent = token.getParent().getParent();
+        if (!myHolder.hasErrorResults()
+            && token.getTokenType() == JavaTokenType.RBRACE
+            && token.getParent() instanceof PsiCodeBlock tokenCodeBlock) {
+            PsiElement gParent = tokenCodeBlock.getParent();
             PsiCodeBlock codeBlock;
             PsiType returnType;
-            if (gParent instanceof PsiMethod) {
-                PsiMethod method = (PsiMethod)gParent;
+            if (gParent instanceof PsiMethod method) {
                 codeBlock = method.getBody();
                 returnType = method.getReturnType();
             }
-            else if (gParent instanceof PsiLambdaExpression) {
-                PsiElement body = ((PsiLambdaExpression)gParent).getBody();
-                if (!(body instanceof PsiCodeBlock)) {
+            else if (gParent instanceof PsiLambdaExpression lambda) {
+                PsiElement body = lambda.getBody();
+                if (!(body instanceof PsiCodeBlock lambdaCodeBlock)) {
                     return;
                 }
-                codeBlock = (PsiCodeBlock)body;
-                returnType = LambdaUtil.getFunctionalInterfaceReturnType((PsiLambdaExpression)gParent);
+                codeBlock = lambdaCodeBlock;
+                returnType = LambdaUtil.getFunctionalInterfaceReturnType(lambda);
             }
             else {
                 return;

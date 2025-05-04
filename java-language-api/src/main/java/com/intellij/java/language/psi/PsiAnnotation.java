@@ -18,12 +18,13 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.jvm.JvmAnnotation;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationAttribute;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayFactory;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.lang.annotation.ElementType;
 import java.util.Arrays;
@@ -42,7 +43,6 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 
     ArrayFactory<PsiAnnotation> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiAnnotation[count];
 
-    @NonNls
     String DEFAULT_REFERENCED_METHOD_NAME = "value";
 
     /**
@@ -50,22 +50,34 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
      */
     enum TargetType {
         // see java.lang.annotation.ElementType
-        TYPE,
-        FIELD,
-        METHOD,
-        PARAMETER,
-        CONSTRUCTOR,
-        LOCAL_VARIABLE,
-        ANNOTATION_TYPE,
-        PACKAGE,
-        TYPE_USE,
-        TYPE_PARAMETER,
-        MODULE,
-        RECORD_COMPONENT,
+        TYPE(JavaLanguageLocalize.annotationTargetType()),
+        FIELD(JavaLanguageLocalize.annotationTargetField()),
+        METHOD(JavaLanguageLocalize.annotationTargetMethod()),
+        PARAMETER(JavaLanguageLocalize.annotationTargetParameter()),
+        CONSTRUCTOR(JavaLanguageLocalize.annotationTargetConstructor()),
+        LOCAL_VARIABLE(JavaLanguageLocalize.annotationTargetLocalVariable()),
+        ANNOTATION_TYPE(JavaLanguageLocalize.annotationTargetAnnotationType()),
+        PACKAGE(JavaLanguageLocalize.annotationTargetPackage()),
+        TYPE_USE(JavaLanguageLocalize.annotationTargetTypeUse()),
+        TYPE_PARAMETER(JavaLanguageLocalize.annotationTargetTypeParameter()),
+        MODULE(JavaLanguageLocalize.annotationTargetModule()),
+        RECORD_COMPONENT(JavaLanguageLocalize.annotationTargetRecordComponent()),
         // auxiliary value, used when it's impossible to determine annotation's targets
-        UNKNOWN;
+        UNKNOWN(LocalizeValue.of("?"));
 
         public static final TargetType[] EMPTY_ARRAY = {};
+
+        @Nonnull
+        private final LocalizeValue myPresentableText;
+
+        TargetType(@Nonnull LocalizeValue presentableText) {
+            myPresentableText = presentableText;
+        }
+
+        @Nonnull
+        public LocalizeValue getPresentableText() {
+            return myPresentableText;
+        }
     }
 
     /**
@@ -82,7 +94,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
      * @return the class name, or null if the annotation is unresolved.
      */
     @Nullable
-    @NonNls
+    @Override
     String getQualifiedName();
 
     /**
@@ -161,9 +173,6 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
     default PsiClass resolveAnnotationType() {
         PsiJavaCodeReferenceElement element = getNameReferenceElement();
         PsiElement declaration = element == null ? null : element.resolve();
-        if (!(declaration instanceof PsiClass) || !((PsiClass)declaration).isAnnotationType()) {
-            return null;
-        }
-        return (PsiClass)declaration;
+        return declaration instanceof PsiClass annotationClass && annotationClass.isAnnotationType() ? annotationClass : null;
     }
 }
