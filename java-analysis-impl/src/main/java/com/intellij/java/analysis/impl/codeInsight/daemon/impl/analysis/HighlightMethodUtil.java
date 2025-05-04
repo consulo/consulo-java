@@ -290,6 +290,7 @@ public class HighlightMethodUtil {
         return builder.create();
     }
 
+    @RequiredReadAction
     public static HighlightInfo checkMethodOverridesFinal(
         MethodSignatureBackedByPsiMethod methodSignature,
         List<HierarchicalMethodSignature> superMethodSignatures
