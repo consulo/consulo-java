@@ -37,137 +37,157 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntentionAction {
-  private final PsiLiteralExpression myLiteral;
-  private final PsiCall myCall;
+    private final PsiLiteralExpression myLiteral;
+    private final PsiCall myCall;
 
-  public ChangeStringLiteralToCharInMethodCallFix(final PsiLiteralExpression literal, final PsiCall methodCall) {
-    myLiteral = literal;
-    myCall = methodCall;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    final String convertedValue = convertedValue();
-    final boolean isString = isString(myLiteral.getType());
-    return JavaQuickFixBundle.message("fix.single.character.string.to.char.literal.text", myLiteral.getText(),
-        quote(convertedValue, !isString), isString ? PsiType.CHAR.getCanonicalText() : "String");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
-    return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
-  }
-
-  @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-
-    final Object value = myLiteral.getValue();
-    if (value != null && value.toString().length() == 1) {
-      final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-
-      final PsiExpression newExpression = factory.createExpressionFromText(quote(convertedValue(), !isString(myLiteral.getType())),
-          myLiteral.getParent());
-      myLiteral.replace(newExpression);
-    }
-  }
-
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
-
-  private static String quote(final String value, final boolean doubleQuotes) {
-    final char quote = doubleQuotes ? '"' : '\'';
-    return quote + value + quote;
-  }
-
-  private String convertedValue() {
-    String value = String.valueOf(myLiteral.getValue());
-    final StringBuilder builder = new StringBuilder();
-    StringUtil.escapeStringCharacters(value.length(), value, "\"'", builder);
-    return builder.toString();
-  }
-
-  public static void registerFixes(@Nonnull final PsiMethod[] candidates, @Nonnull final PsiConstructorCall call,
-                                   @Nonnull final HighlightInfo out) {
-    final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
-    if (call.getArgumentList() == null) {
-      return;
-    }
-    boolean exactMatch = false;
-    for (PsiMethod method : candidates) {
-      exactMatch |= findMatchingExpressions(call.getArgumentList().getExpressions(), method, literals);
-    }
-    if (!exactMatch) {
-      processLiterals(literals, call, out);
-    }
-  }
-
-  public static void registerFixes(@Nonnull final CandidateInfo[] candidates,
-                                   @Nonnull final PsiMethodCallExpression methodCall,
-                                   @Nullable final HighlightInfo info) {
-    if (info == null) return;
-    final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
-    boolean exactMatch = false;
-    for (CandidateInfo candidate : candidates) {
-      if (candidate instanceof MethodCandidateInfo) {
-        final PsiMethod method = ((MethodCandidateInfo) candidate).getElement();
-        exactMatch |= findMatchingExpressions(methodCall.getArgumentList().getExpressions(), method, literals);
-      }
-    }
-    if (!exactMatch) {
-      processLiterals(literals, methodCall, info);
-    }
-  }
-
-  private static void processLiterals(@Nonnull final Set<PsiLiteralExpression> literals,
-                                      @Nonnull final PsiCall call,
-                                      @Nonnull final HighlightInfo info) {
-    for (PsiLiteralExpression literal : literals) {
-      final ChangeStringLiteralToCharInMethodCallFix fix = new ChangeStringLiteralToCharInMethodCallFix(literal, call);
-      QuickFixAction.registerQuickFixAction(info, fix);
-    }
-  }
-
-  /**
-   * @return <code>true</code> if exact TYPEs match
-   */
-  private static boolean findMatchingExpressions(final PsiExpression[] arguments, final PsiMethod existingMethod,
-                                                 final Set<PsiLiteralExpression> result) {
-    final PsiParameterList parameterList = existingMethod.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
-
-    if (arguments.length != parameters.length) {
-      return false;
+    public ChangeStringLiteralToCharInMethodCallFix(final PsiLiteralExpression literal, final PsiCall methodCall) {
+        myLiteral = literal;
+        myCall = methodCall;
     }
 
-    boolean typeMatch = true;
-    for (int i = 0; i < parameters.length && i < arguments.length; i++) {
-      final PsiParameter parameter = parameters[i];
-      final PsiType parameterType = parameter.getType();
-      final PsiType argumentType = arguments[i].getType();
+    @Override
+    @Nonnull
+    public String getText() {
+        final String convertedValue = convertedValue();
+        final boolean isString = isString(myLiteral.getType());
+        return JavaQuickFixBundle.message(
+            "fix.single.character.string.to.char.literal.text",
+            myLiteral.getText(),
+            quote(convertedValue, !isString),
+            isString ? PsiType.CHAR.getCanonicalText() : "String"
+        );
+    }
 
-      typeMatch &= Comparing.equal(parameterType, argumentType);
+    @Override
+    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+        return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
+    }
 
-      if (arguments[i] instanceof PsiLiteralExpression && !result.contains(arguments[i]) &&
-          (charToString(parameterType, argumentType) || charToString(argumentType, parameterType))) {
-
-        final String value = String.valueOf(((PsiLiteralExpression) arguments[i]).getValue());
-        if (value != null && value.length() == 1) {
-          result.add((PsiLiteralExpression) arguments[i]);
+    @Override
+    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
         }
-      }
+
+        final Object value = myLiteral.getValue();
+        if (value != null && value.toString().length() == 1) {
+            final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+
+            final PsiExpression newExpression = factory.createExpressionFromText(
+                quote(convertedValue(), !isString(myLiteral.getType())),
+                myLiteral.getParent()
+            );
+            myLiteral.replace(newExpression);
+        }
     }
-    return typeMatch;
-  }
 
-  private static boolean charToString(final PsiType firstType, final PsiType secondType) {
-    return Comparing.equal(PsiType.CHAR, firstType) && isString(secondType);
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 
-  private static boolean isString(final PsiType type) {
-    return type != null && "java.lang.String".equals(type.getCanonicalText());
-  }
+    private static String quote(final String value, final boolean doubleQuotes) {
+        final char quote = doubleQuotes ? '"' : '\'';
+        return quote + value + quote;
+    }
+
+    private String convertedValue() {
+        String value = String.valueOf(myLiteral.getValue());
+        final StringBuilder builder = new StringBuilder();
+        StringUtil.escapeStringCharacters(value.length(), value, "\"'", builder);
+        return builder.toString();
+    }
+
+    public static void registerFixes(
+        @Nonnull final PsiMethod[] candidates,
+        @Nonnull final PsiConstructorCall call,
+        @Nonnull final HighlightInfo out
+    ) {
+        final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
+        if (call.getArgumentList() == null) {
+            return;
+        }
+        boolean exactMatch = false;
+        for (PsiMethod method : candidates) {
+            exactMatch |= findMatchingExpressions(call.getArgumentList().getExpressions(), method, literals);
+        }
+        if (!exactMatch) {
+            processLiterals(literals, call, out);
+        }
+    }
+
+    public static void registerFixes(
+        @Nonnull final CandidateInfo[] candidates,
+        @Nonnull final PsiMethodCallExpression methodCall,
+        @Nullable final HighlightInfo info
+    ) {
+        if (info == null) {
+            return;
+        }
+        final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
+        boolean exactMatch = false;
+        for (CandidateInfo candidate : candidates) {
+            if (candidate instanceof MethodCandidateInfo) {
+                final PsiMethod method = ((MethodCandidateInfo)candidate).getElement();
+                exactMatch |= findMatchingExpressions(methodCall.getArgumentList().getExpressions(), method, literals);
+            }
+        }
+        if (!exactMatch) {
+            processLiterals(literals, methodCall, info);
+        }
+    }
+
+    private static void processLiterals(
+        @Nonnull final Set<PsiLiteralExpression> literals,
+        @Nonnull final PsiCall call,
+        @Nonnull final HighlightInfo info
+    ) {
+        for (PsiLiteralExpression literal : literals) {
+            final ChangeStringLiteralToCharInMethodCallFix fix = new ChangeStringLiteralToCharInMethodCallFix(literal, call);
+            QuickFixAction.registerQuickFixAction(info, fix);
+        }
+    }
+
+    /**
+     * @return <code>true</code> if exact TYPEs match
+     */
+    private static boolean findMatchingExpressions(
+        final PsiExpression[] arguments,
+        final PsiMethod existingMethod,
+        final Set<PsiLiteralExpression> result
+    ) {
+        final PsiParameterList parameterList = existingMethod.getParameterList();
+        final PsiParameter[] parameters = parameterList.getParameters();
+
+        if (arguments.length != parameters.length) {
+            return false;
+        }
+
+        boolean typeMatch = true;
+        for (int i = 0; i < parameters.length && i < arguments.length; i++) {
+            final PsiParameter parameter = parameters[i];
+            final PsiType parameterType = parameter.getType();
+            final PsiType argumentType = arguments[i].getType();
+
+            typeMatch &= Comparing.equal(parameterType, argumentType);
+
+            if (arguments[i] instanceof PsiLiteralExpression && !result.contains(arguments[i]) &&
+                (charToString(parameterType, argumentType) || charToString(argumentType, parameterType))) {
+
+                final String value = String.valueOf(((PsiLiteralExpression)arguments[i]).getValue());
+                if (value != null && value.length() == 1) {
+                    result.add((PsiLiteralExpression)arguments[i]);
+                }
+            }
+        }
+        return typeMatch;
+    }
+
+    private static boolean charToString(final PsiType firstType, final PsiType secondType) {
+        return Comparing.equal(PsiType.CHAR, firstType) && isString(secondType);
+    }
+
+    private static boolean isString(final PsiType type) {
+        return type != null && "java.lang.String".equals(type.getCanonicalText());
+    }
 }

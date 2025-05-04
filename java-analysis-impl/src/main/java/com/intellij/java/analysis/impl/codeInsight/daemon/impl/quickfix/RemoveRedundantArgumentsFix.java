@@ -39,92 +39,119 @@ import java.util.Arrays;
  * @author Danila Ponomarenko
  */
 public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
-  private final PsiMethod myTargetMethod;
-  private final PsiExpression[] myArguments;
-  private final PsiSubstitutor mySubstitutor;
+    private final PsiMethod myTargetMethod;
+    private final PsiExpression[] myArguments;
+    private final PsiSubstitutor mySubstitutor;
 
-  private RemoveRedundantArgumentsFix(@Nonnull PsiMethod targetMethod,
-                                      @Nonnull PsiExpression[] arguments,
-                                      @Nonnull PsiSubstitutor substitutor) {
-    myTargetMethod = targetMethod;
-    myArguments = arguments;
-    mySubstitutor = substitutor;
-  }
-
-  @Nonnull
-  @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;
-    for (PsiExpression expression : myArguments) {
-      if (!expression.isValid()) return false;
-    }
-    if (!mySubstitutor.isValid()) return false;
-
-    return findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor) != null;
-  }
-
-  @Nullable
-  private static PsiExpression[] findRedundantArgument(@Nonnull PsiExpression[] arguments,
-                                                       @Nonnull PsiParameter[] parameters,
-                                                       @Nonnull PsiSubstitutor substitutor) {
-    if (arguments.length <= parameters.length) return null;
-
-    for (int i = 0; i < parameters.length; i++) {
-      final PsiExpression argument = arguments[i];
-      final PsiParameter parameter = parameters[i];
-
-      final PsiType argumentType = argument.getType();
-      if (argumentType == null) return null;
-      final PsiType parameterType = substitutor.substitute(parameter.getType());
-
-      if (!TypeConversionUtil.isAssignable(parameterType, argumentType)) {
-        return null;
-      }
+    private RemoveRedundantArgumentsFix(
+        @Nonnull PsiMethod targetMethod,
+        @Nonnull PsiExpression[] arguments,
+        @Nonnull PsiSubstitutor substitutor
+    ) {
+        myTargetMethod = targetMethod;
+        myArguments = arguments;
+        mySubstitutor = substitutor;
     }
 
-    return Arrays.copyOfRange(arguments, parameters.length, arguments.length);
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiExpression[] redundantArguments = findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor);
-    if (redundantArguments != null) {
-      for (PsiExpression argument : redundantArguments) {
-        argument.delete();
-      }
+    @Nonnull
+    @Override
+    public String getText() {
+        return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
     }
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) {
+            return false;
+        }
+        for (PsiExpression expression : myArguments) {
+            if (!expression.isValid()) {
+                return false;
+            }
+        }
+        if (!mySubstitutor.isValid()) {
+            return false;
+        }
 
-  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
-                                        @Nonnull PsiExpressionList arguments,
-                                        @Nullable HighlightInfo highlightInfo,
-                                        TextRange fixRange) {
-    for (JavaResolveResult candidate : candidates) {
-      registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
+        return findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor) != null;
     }
-  }
 
-  private static void registerIntention(@Nonnull PsiExpressionList arguments,
-                                        @Nullable HighlightInfo highlightInfo,
-                                        TextRange fixRange,
-                                        @Nonnull JavaResolveResult candidate,
-                                        @Nonnull PsiElement context) {
-    if (!candidate.isStaticsScopeCorrect()) return;
-    PsiMethod method = (PsiMethod) candidate.getElement();
-    PsiSubstitutor substitutor = candidate.getSubstitutor();
-    if (method != null && context.getManager().isInProject(method)) {
-      QuickFixAction.registerQuickFixAction(highlightInfo, fixRange, new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor));
+    @Nullable
+    private static PsiExpression[] findRedundantArgument(
+        @Nonnull PsiExpression[] arguments,
+        @Nonnull PsiParameter[] parameters,
+        @Nonnull PsiSubstitutor substitutor
+    ) {
+        if (arguments.length <= parameters.length) {
+            return null;
+        }
+
+        for (int i = 0; i < parameters.length; i++) {
+            final PsiExpression argument = arguments[i];
+            final PsiParameter parameter = parameters[i];
+
+            final PsiType argumentType = argument.getType();
+            if (argumentType == null) {
+                return null;
+            }
+            final PsiType parameterType = substitutor.substitute(parameter.getType());
+
+            if (!TypeConversionUtil.isAssignable(parameterType, argumentType)) {
+                return null;
+            }
+        }
+
+        return Arrays.copyOfRange(arguments, parameters.length, arguments.length);
     }
-  }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
+        }
+        final PsiExpression[] redundantArguments =
+            findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor);
+        if (redundantArguments != null) {
+            for (PsiExpression argument : redundantArguments) {
+                argument.delete();
+            }
+        }
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
+
+    public static void registerIntentions(
+        @Nonnull JavaResolveResult[] candidates,
+        @Nonnull PsiExpressionList arguments,
+        @Nullable HighlightInfo highlightInfo,
+        TextRange fixRange
+    ) {
+        for (JavaResolveResult candidate : candidates) {
+            registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
+        }
+    }
+
+    private static void registerIntention(
+        @Nonnull PsiExpressionList arguments,
+        @Nullable HighlightInfo highlightInfo,
+        TextRange fixRange,
+        @Nonnull JavaResolveResult candidate,
+        @Nonnull PsiElement context
+    ) {
+        if (!candidate.isStaticsScopeCorrect()) {
+            return;
+        }
+        PsiMethod method = (PsiMethod)candidate.getElement();
+        PsiSubstitutor substitutor = candidate.getSubstitutor();
+        if (method != null && context.getManager().isInProject(method)) {
+            QuickFixAction.registerQuickFixAction(
+                highlightInfo,
+                fixRange,
+                new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor)
+            );
+        }
+    }
 }
