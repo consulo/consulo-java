@@ -398,7 +398,7 @@ public class GenericsHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(element)
                 .descriptionAndTooltip(JavaErrorLocalize.interfaceExpected())
-                .registerFix(QuickFixFactory.getInstance().createMoveBoundClassToFrontFix(aClass, type), null, null, null, null)
+                .registerFix(QuickFixFactory.getInstance().createMoveBoundClassToFrontFix(aClass, type))
                 .create();
         }
         else if (referenceElements.length != 0 && element != referenceElements[0]
@@ -408,7 +408,7 @@ public class GenericsHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(element)
                 .descriptionAndTooltip(JavaErrorLocalize.typeParameterCannotBeFollowedByOtherBounds())
-                .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, type, false), null, null, null, null)
+                .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, type, false))
                 .create();
         }
         return null;
@@ -598,7 +598,7 @@ public class GenericsHighlightUtil {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
                         .descriptionAndTooltip(message)
-                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass), null, null, null, null)
+                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass))
                         .create();
                 }
                 if (isInterface || abstracts == null || unrelatedMethodContainingClass.isInterface()) {
@@ -623,7 +623,7 @@ public class GenericsHighlightUtil {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
                         .descriptionAndTooltip(description)
-                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass), null, null, null, null)
+                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass))
                         .create();
                 }
             }
@@ -992,7 +992,7 @@ public class GenericsHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
                 .descriptionAndTooltip(JavaErrorLocalize.foreachNotApplicable(JavaHighlightUtil.formatType(expression.getType())))
-                .registerFix(QuickFixFactory.getInstance().createNotIterableForEachLoopFix(expression), null, null, null, null)
+                .registerFix(QuickFixFactory.getInstance().createNotIterableForEachLoopFix(expression))
                 .create();
         }
         return null;
@@ -1293,13 +1293,7 @@ public class GenericsHighlightUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(overrideAnnotation)
                     .descriptionAndTooltip(JavaErrorBundle.message("override.not.allowed.in.interfaces"))
-                    .registerFix(
-                        QuickFixFactory.getInstance().createIncreaseLanguageLevelFix(LanguageLevel.JDK_1_6),
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                    .registerFix(QuickFixFactory.getInstance().createIncreaseLanguageLevelFix(LanguageLevel.JDK_1_6))
                     .create();
             }
             return null;
@@ -1424,7 +1418,7 @@ public class GenericsHighlightUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(parameter)
                     .descriptionAndTooltip(JavaErrorLocalize.varargNotLastParameter())
-                    .registerFix(QuickFixFactory.getInstance().createMakeVarargParameterLastFix(parameter), null, null, null, null)
+                    .registerFix(QuickFixFactory.getInstance().createMakeVarargParameterLastFix(parameter))
                     .create();
             }
         }
@@ -1581,7 +1575,7 @@ public class GenericsHighlightUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(referenceElement)
                     .descriptionAndTooltip(JavaErrorLocalize.genericExtendException())
-                    .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, classType, false), null, null, null, null)
+                    .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, classType, false))
                     .create();
             }
         }

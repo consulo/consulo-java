@@ -59,12 +59,44 @@ public abstract class QuickFixFactory {
     );
 
     @Nonnull
+    public LocalQuickFixAndIntentionActionOnPsiElement createAddModifierFix(
+        @Nonnull PsiModifierList modifierList,
+        @PsiModifier.ModifierConstant @Nonnull String modifier
+    ) {
+        return createModifierListFix(modifierList, modifier, true, false);
+    }
+
+    @Nonnull
+    public LocalQuickFixAndIntentionActionOnPsiElement createRemoveModifierFix(
+        @Nonnull PsiModifierList modifierList,
+        @PsiModifier.ModifierConstant @Nonnull String modifier
+    ) {
+        return createModifierListFix(modifierList, modifier, false, false);
+    }
+
+    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
         @Nonnull PsiModifierListOwner owner,
         @PsiModifier.ModifierConstant @Nonnull String modifier,
         boolean shouldHave,
         final boolean showContainingClass
     );
+
+    @Nonnull
+    public LocalQuickFixAndIntentionActionOnPsiElement createAddModifierFix(
+        @Nonnull PsiModifierListOwner owner,
+        @PsiModifier.ModifierConstant @Nonnull String modifier
+    ) {
+        return createModifierListFix(owner, modifier, true, false);
+    }
+
+    @Nonnull
+    public LocalQuickFixAndIntentionActionOnPsiElement createRemoveModifierFix(
+        @Nonnull PsiModifierListOwner owner,
+        @PsiModifier.ModifierConstant @Nonnull String modifier
+    ) {
+        return createModifierListFix(owner, modifier, false, false);
+    }
 
     @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(

@@ -49,6 +49,7 @@ final class RefCountHolder {
     private static final Key<Reference<RefCountHolder>> REF_COUNT_HOLDER_IN_FILE_KEY = Key.create("REF_COUNT_HOLDER_IN_FILE_KEY");
     private volatile boolean ready; // true when analysis completed and inner maps can be queried
 
+    @RequiredReadAction
     static RefCountHolder get(@Nonnull PsiFile file, @Nonnull TextRange dirtyScope) {
         Reference<RefCountHolder> ref = file.getUserData(REF_COUNT_HOLDER_IN_FILE_KEY);
         RefCountHolder storedHolder = consulo.util.lang.ref.SoftReference.dereference(ref);
@@ -59,11 +60,11 @@ final class RefCountHolder {
         }
         return storedHolder == null || wholeFile
             ? new RefCountHolder(
-                file,
-                MultiMap.createConcurrentSet(),
-                Sets.newConcurrentHashSet(HashingStrategy.canonical()),
-                new ConcurrentHashMap<>()
-            )
+            file,
+            MultiMap.createConcurrentSet(),
+            Sets.newConcurrentHashSet(HashingStrategy.canonical()),
+            new ConcurrentHashMap<>()
+        )
             : storedHolder.removeInvalidRefs();
     }
 
@@ -128,6 +129,7 @@ final class RefCountHolder {
         return new GlobalUsageHelperBase();
     }
 
+    @RequiredReadAction
     void registerLocallyReferenced(@Nonnull PsiNamedElement result) {
         myDclsUsedMap.add(PsiAnchor.create(result));
     }
@@ -181,6 +183,7 @@ final class RefCountHolder {
     }
 
     @Nonnull
+    @RequiredReadAction
     private RefCountHolder removeInvalidRefs() {
         assert ready;
         boolean changed = false;
@@ -234,6 +237,7 @@ final class RefCountHolder {
         return myDclsUsedMap.contains(PsiAnchor.create(element));
     }
 
+    @RequiredReadAction
     private boolean isClassUsedForInnerImports(@Nonnull PsiElement element, @Nonnull Collection<? extends PsiReference> array) {
         assert ready;
         if (!(element instanceof PsiClass)) {
@@ -249,39 +253,34 @@ final class RefCountHolder {
             imports.add(importStmt);
         }
 
-        return ContainerUtil.all(imports, importStmt -> {
-            PsiElement importedMember = importStmt.resolve();
-            if (importedMember != null && PsiTreeUtil.isAncestor(element, importedMember, false)) {
-                for (PsiReference memberReference : myLocalRefsMap.get(importedMember)) {
-                    if (!PsiTreeUtil.isAncestor(element, memberReference.getElement(), false)) {
-                        return false;
+        return ContainerUtil.all(
+            imports,
+            importStmt -> {
+                PsiElement importedMember = importStmt.resolve();
+                if (importedMember != null && PsiTreeUtil.isAncestor(element, importedMember, false)) {
+                    for (PsiReference memberReference : myLocalRefsMap.get(importedMember)) {
+                        if (!PsiTreeUtil.isAncestor(element, memberReference.getElement(), false)) {
+                            return false;
+                        }
                     }
+                    return true;
                 }
-                return true;
+                return false;
             }
-            return false;
-        });
+        );
     }
 
     @RequiredReadAction
     private static boolean isParameterUsedRecursively(@Nonnull PsiElement element, @Nonnull Collection<? extends PsiReference> array) {
-        if (!(element instanceof PsiParameter)) {
+        if (!(element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method)) {
             return false;
         }
-        PsiParameter parameter = (PsiParameter)element;
-        PsiElement scope = parameter.getDeclarationScope();
-        if (!(scope instanceof PsiMethod)) {
-            return false;
-        }
-        PsiMethod method = (PsiMethod)scope;
         int paramIndex = ArrayUtil.find(method.getParameterList().getParameters(), parameter);
 
         for (PsiReference reference : array) {
-            if (!(reference instanceof PsiElement)) {
+            if (!(reference instanceof PsiElement argument)) {
                 return false;
             }
-            PsiElement argument = (PsiElement)reference;
-
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)new PsiMatcherImpl(argument)
                 .dot(PsiMatchers.hasClass(PsiReferenceExpression.class))
                 .parent(PsiMatchers.hasClass(PsiExpressionList.class))
@@ -365,7 +364,7 @@ final class RefCountHolder {
         return false;
     }
 
-    private static void log(@NonNls @Nonnull Object... info) {
+    private static void log(@Nonnull Object... info) {
         //FileStatusMap.log(info);
     }
 
@@ -381,6 +380,7 @@ final class RefCountHolder {
         }
 
         @Override
+        @RequiredReadAction
         public boolean isLocallyUsed(@Nonnull PsiNamedElement member) {
             return isReferenced(member);
         }

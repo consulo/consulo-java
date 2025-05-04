@@ -35,13 +35,14 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyMemberType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.AutoImportHelper;
@@ -84,6 +85,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     @Override
+    @RequiredReadAction
     public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
         @Nonnull PsiModifierList modifierList,
         @Nonnull String modifier,
@@ -95,6 +97,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     @Override
+    @RequiredReadAction
     public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
         @Nonnull PsiModifierListOwner owner,
         @Nonnull final String modifier,
@@ -166,6 +169,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     }
 
     @Override
+    @RequiredReadAction
     public LocalQuickFixAndIntentionActionOnPsiElement createAddConstructorFix(@Nonnull PsiClass aClass, @Nonnull String modifier) {
         return aClass.getName() != null ? new AddDefaultConstructorFix(aClass, modifier) : null;
     }
@@ -716,6 +720,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
             }
 
             @Override
+            @RequiredReadAction
             public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
                 return (!onTheFly || timeToOptimizeImports(file)) && fix.isAvailable(project, editor, file);
             }
@@ -738,7 +743,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
         UnusedDeclarationInspectionBase unusedParametersInspection =
             (UnusedDeclarationInspectionBase)profile.getUnwrappedTool(UnusedSymbolLocalInspectionBase.SHORT_NAME, parameter);
-        LOG.assertTrue(ApplicationManager.getApplication().isUnitTestMode() || unusedParametersInspection != null);
+        LOG.assertTrue(Application.get().isUnitTestMode() || unusedParametersInspection != null);
         List<IntentionAction> options = new ArrayList<>();
         HighlightDisplayKey myUnusedSymbolKey = HighlightDisplayKey.find(UnusedSymbolLocalInspectionBase.SHORT_NAME);
         options.addAll(IntentionManager.getInstance().getStandardIntentionOptions(myUnusedSymbolKey, parameter));
@@ -764,8 +769,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     ) {
         final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
         return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(
-            JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName),
-            JavaQuickFixBundle.message("fix.unused.symbol.injection.family"),
+            JavaQuickFixLocalize.fixUnusedSymbolInjectionText(element, qualifiedName).get(),
+            JavaQuickFixLocalize.fixUnusedSymbolInjectionFamily().get(),
             entryPointsManager.ADDITIONAL_ANNOTATIONS,
             qualifiedName
         );
@@ -816,6 +821,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nullable
     @Override
+    @RequiredReadAction
     public List<LocalQuickFix> registerOrderEntryFixes(@Nonnull PsiReference reference) {
         return OrderEntryFix.registerFixes(reference);
     }
@@ -827,8 +833,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
             return;
         }
         final long stamp = document.getModificationStamp();
-        DumbService.getInstance(file.getProject()).smartInvokeLater(() ->
-        {
+        DumbService.getInstance(file.getProject()).smartInvokeLater(() -> {
             if (project.isDisposed() || document.getModificationStamp() != stamp) {
                 return;
             }
@@ -845,7 +850,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
                 String afterText = file.getText();
                 if (Comparing.strEqual(beforeText, afterText)) {
                     LOG.error(
-                        "Import optimizer  hasn't optimized any imports",
+                        "Import optimizer hasn't optimized any imports",
                         file.getViewProvider().getVirtualFile().getPath(),
                         AttachmentFactoryUtil.createAttachment(file.getViewProvider().getVirtualFile())
                     );
@@ -910,6 +915,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         return AddAnnotationAttributeNameFix.createFixes(pair);
     }
 
+    @RequiredReadAction
     private static boolean timeToOptimizeImports(@Nonnull PsiFile file) {
         if (!CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY) {
             return false;
@@ -930,6 +936,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         return !errors && AutoImportHelper.getInstance(project).canChangeFileSilently(file);
     }
 
+    @RequiredReadAction
     private static boolean containsErrorsPreventingOptimize(@Nonnull PsiFile file) {
         Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
         if (document == null) {
@@ -938,20 +945,19 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         // ignore unresolved imports errors
         PsiImportList importList = ((PsiJavaFile)file).getImportList();
         final TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
-        boolean hasErrorsExceptUnresolvedImports =
-            !DaemonCodeAnalyzer.processHighlights(
-                document,
-                file.getProject(),
-                HighlightSeverity.ERROR,
-                0,
-                document.getTextLength(),
-                error -> {
-                    int infoStart = error.getActualStartOffset();
-                    int infoEnd = error.getActualEndOffset();
+        boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzer.processHighlights(
+            document,
+            file.getProject(),
+            HighlightSeverity.ERROR,
+            0,
+            document.getTextLength(),
+            error -> {
+                int infoStart = error.getActualStartOffset();
+                int infoEnd = error.getActualEndOffset();
 
-                    return importsRange.containsRange(infoStart, infoEnd) && error.getType().equals(HighlightInfoType.WRONG_REF);
-                }
-            );
+                return importsRange.containsRange(infoStart, infoEnd) && error.getType().equals(HighlightInfoType.WRONG_REF);
+            }
+        );
 
         return hasErrorsExceptUnresolvedImports;
     }

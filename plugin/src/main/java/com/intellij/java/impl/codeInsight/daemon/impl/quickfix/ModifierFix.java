@@ -35,6 +35,7 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -97,7 +98,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @RequiredReadAction
     private String format(PsiVariable variable, PsiModifierList modifierList) {
-        String name = null;
+        String name;
         PsiElement parent = variable == null ? modifierList == null ? null : modifierList.getParent() : variable;
         if (parent instanceof PsiClass psiClass) {
             name = psiClass.getName();
@@ -112,22 +113,27 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
             }
             else if (parent instanceof PsiClassInitializer classInitializer) {
                 PsiClass containingClass = classInitializer.getContainingClass();
-                String className = containingClass instanceof PsiAnonymousClass anonymousClass
-                    ? JavaQuickFixBundle.message("anonymous.class.presentation", anonymousClass.getBaseClassType().getPresentableText())
-                    : containingClass != null ? containingClass.getName() : "unknown";
-                name = JavaQuickFixBundle.message("class.initializer.presentation", className);
+                LocalizeValue className = containingClass instanceof PsiAnonymousClass anonymousClass
+                    ? JavaQuickFixLocalize.anonymousClassPresentation(anonymousClass.getBaseClassType().getPresentableText())
+                    : containingClass != null ? LocalizeValue.of(containingClass.getName()) : LocalizeValue.localizeTODO("unknown");
+                name = JavaQuickFixLocalize.classInitializerPresentation(className).get();
+            }
+            else {
+                name = "?";
             }
         }
 
         String modifierText = VisibilityUtil.toPresentableText(myModifier);
 
-        return JavaQuickFixBundle.message(myShouldHave ? "add.modifier.fix" : "remove.modifier.fix", name, modifierText);
+        return myShouldHave
+            ? JavaQuickFixLocalize.addModifierFix(name, modifierText).get()
+            : JavaQuickFixLocalize.removeModifierFix(name, modifierText).get();
     }
 
     @Nonnull
     @Override
     public String getFamilyName() {
-        return JavaQuickFixBundle.message("fix.modifiers.family");
+        return JavaQuickFixLocalize.fixModifiersFamily().get();
     }
 
     @Override
@@ -210,8 +216,8 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         if (!modifierLists.isEmpty()) {
             if (Messages.showYesNoDialog(
                 project,
-                JavaQuickFixBundle.message("change.inheritors.visibility.warning.text"),
-                JavaQuickFixBundle.message("change.inheritors.visibility.warning.title"),
+                JavaQuickFixLocalize.changeInheritorsVisibilityWarningText().get(),
+                JavaQuickFixLocalize.changeInheritorsVisibilityWarningTitle().get(),
                 UIUtil.getQuestionIcon()
             ) == DialogWrapper.OK_EXIT_CODE) {
                 project.getApplication().runWriteAction(() -> {
