@@ -27,38 +27,45 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class HighlightMessageUtil {
-  private HighlightMessageUtil() {
-  }
-
-  @Nullable
-  public static String getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
-    String symbolName = null;
-
-    if (symbol instanceof PsiClass) {
-      if (symbol instanceof PsiAnonymousClass) {
-        symbolName = LangBundle.message("java.terms.anonymous.class");
-      } else {
-        symbolName = ((PsiClass) symbol).getQualifiedName();
-        if (symbolName == null) {
-          symbolName = ((PsiClass) symbol).getName();
-        }
-      }
-    } else if (symbol instanceof PsiMethod) {
-      symbolName = PsiFormatUtil.formatMethod((PsiMethod) symbol,
-          substitutor, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
-          PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_FQ_CLASS_NAMES);
-    } else if (symbol instanceof PsiVariable) {
-      symbolName = ((PsiVariable) symbol).getName();
-    } else if (symbol instanceof PsiJavaPackage) {
-      symbolName = ((PsiJavaPackage) symbol).getQualifiedName();
-    } else if (symbol instanceof PsiFile) {
-      PsiDirectory directory = ((PsiFile) symbol).getContainingDirectory();
-      PsiJavaPackage aPackage = directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
-      symbolName = aPackage == null ? null : aPackage.getQualifiedName();
-    } else if (symbol instanceof PsiDirectory) {
-      symbolName = ((PsiDirectory) symbol).getName();
+    private HighlightMessageUtil() {
     }
 
-    return symbolName;
-  }
+    @Nullable
+    public static String getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
+        String symbolName = null;
+
+        if (symbol instanceof PsiClass) {
+            if (symbol instanceof PsiAnonymousClass) {
+                symbolName = LangBundle.message("java.terms.anonymous.class");
+            }
+            else {
+                symbolName = ((PsiClass)symbol).getQualifiedName();
+                if (symbolName == null) {
+                    symbolName = ((PsiClass)symbol).getName();
+                }
+            }
+        }
+        else if (symbol instanceof PsiMethod) {
+            symbolName = PsiFormatUtil.formatMethod((PsiMethod)symbol,
+                substitutor, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+                PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_FQ_CLASS_NAMES
+            );
+        }
+        else if (symbol instanceof PsiVariable) {
+            symbolName = ((PsiVariable)symbol).getName();
+        }
+        else if (symbol instanceof PsiJavaPackage) {
+            symbolName = ((PsiJavaPackage)symbol).getQualifiedName();
+        }
+        else if (symbol instanceof PsiFile) {
+            PsiDirectory directory = ((PsiFile)symbol).getContainingDirectory();
+            PsiJavaPackage aPackage = directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
+            symbolName = aPackage == null ? null : aPackage.getQualifiedName();
+        }
+        else if (symbol instanceof PsiDirectory) {
+            symbolName = ((PsiDirectory)symbol).getName();
+        }
+
+        return symbolName;
+    }
 }
