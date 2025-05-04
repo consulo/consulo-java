@@ -21,7 +21,7 @@ annotation.non.constant.attribute.value:
 annotation.non.class.literal.attribute.value:
   text: Attribute value must be a class literal
 annotation.invalid.annotation.member.type:
-  text: Invalid type for annotation member
+  text: Invalid type ''{0}'' for annotation member
 annotation.cyclic.element.type:
   text: Cyclic annotation element type
 annotation.annotation.type.expected:
@@ -802,3 +802,39 @@ safevarargs.not.applicable.for.reifiable.types:
   text: "@SafeVarargs is not applicable for reifiable types"
 safevarargs.not.allowed.non.final.instance.methods:
   text: "@SafeVarargs is not allowed on non-final instance methods"
+qualifier.must.be.expression:
+  text: Qualifier must be an expression
+expected.class.or.package:
+  text: Expected class or package
+unexpected.type.class.expected:
+  text: "Unexpected type: class is expected"
+repeated.interface:
+  text: Repeated interface
+class.cannot.be.inherited.with.different.arguments:
+  text: "{0} cannot be inherited with different arguments: {1}"
+declaration.not.allowed:
+  text: Declaration not allowed here
+different.case.kinds.in.switch:
+  text: Different case kinds used in the switch
+resource.variable.must.be.final:
+  text: Variable used as a try-with-resources resource should be final or effectively final
+declaration.or.variable.expected:
+  text: Declaration, final or effectively final variable expected
+illegal.initializer:
+  text: Illegal initializer for ''{0}''
+switch.expr.empty:
+  text: "'switch' expression does not have any case clauses"
+switch.expr.incomplete:
+  text: "'switch' expression does not cover all possible input values"
+illegal.self.reference:
+  text: "Cannot read value of field ''{0}'' from inside the fields''s definition"
+receiver.wrong.context:
+  text: Receivers are not allowed outside of method parameter list
+receiver.static.context:
+  text: The receiver cannot be used in a static context
+receiver.wrong.position:
+  text: The receiver should be the first parameter
+receiver.type.mismatch:
+  text: The receiver type does not match the enclosing class type
+receiver.name.mismatch:
+  text: The receiver name does not match the enclosing class type
