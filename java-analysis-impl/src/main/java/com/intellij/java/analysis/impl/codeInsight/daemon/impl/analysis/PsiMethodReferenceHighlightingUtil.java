@@ -26,21 +26,22 @@ import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 public class PsiMethodReferenceHighlightingUtil {
-  public static HighlightInfo checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {
-    if (expression.isConstructor()) {
-      PsiType[] typeParameters = expression.getTypeParameters();
-      if (typeParameters.length > 0) {
-        PsiElement qualifier = expression.getQualifier();
-        if (qualifier instanceof PsiReferenceExpression) {
-          PsiElement resolve = ((PsiReferenceExpression) qualifier).resolve();
-          if (resolve instanceof PsiClass && ((PsiClass) resolve).hasTypeParameters()) {
-            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression)
-                .descriptionAndTooltip("Raw constructor reference with explicit type parameters for " +
-                    "constructor").create();
-          }
+    public static HighlightInfo checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {
+        if (expression.isConstructor()) {
+            PsiType[] typeParameters = expression.getTypeParameters();
+            if (typeParameters.length > 0) {
+                PsiElement qualifier = expression.getQualifier();
+                if (qualifier instanceof PsiReferenceExpression) {
+                    PsiElement resolve = ((PsiReferenceExpression)qualifier).resolve();
+                    if (resolve instanceof PsiClass && ((PsiClass)resolve).hasTypeParameters()) {
+                        return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                            .range(expression)
+                            .descriptionAndTooltip("Raw constructor reference with explicit type parameters for constructor")
+                            .create();
+                    }
+                }
+            }
         }
-      }
+        return null;
     }
-    return null;
-  }
 }
