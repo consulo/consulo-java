@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class InsertConstructorCallFix implements SyntheticIntentionAction, HighPriorityAction {

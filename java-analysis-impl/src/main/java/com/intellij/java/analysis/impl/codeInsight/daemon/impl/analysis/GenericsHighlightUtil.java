@@ -52,7 +52,6 @@ import consulo.util.collection.*;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -470,19 +469,25 @@ public class GenericsHighlightUtil {
 
         Set<MethodSignature> foundProblems = Sets.newHashSet(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
         for (HierarchicalMethodSignature signature : signaturesWithSupers) {
-            HighlightInfo info = checkSameErasureNotSubSignatureInner(signature, manager, aClass, sameErasureMethods);
-            if (info != null && foundProblems.add(signature)) {
-                result.add(info);
+            HighlightInfo.Builder hlBuilder = checkSameErasureNotSubSignatureInner(signature, manager, aClass, sameErasureMethods);
+            if (hlBuilder != null && foundProblems.add(signature)) {
+                HighlightInfo hlInfo = hlBuilder.create();
+                if (hlInfo != null) {
+                    result.add(hlInfo);
+                }
             }
             if (aClass instanceof PsiTypeParameter) {
-                info = HighlightMethodUtil.checkMethodIncompatibleReturnType(
+                hlBuilder = HighlightMethodUtil.checkMethodIncompatibleReturnType(
                     signature,
                     signature.getSuperSignatures(),
                     true,
                     HighlightNamesUtil.getClassDeclarationTextRange(aClass)
                 );
-                if (info != null) {
-                    result.add(info);
+                if (hlBuilder != null) {
+                    HighlightInfo hlInfo = hlBuilder.create();
+                    if (hlInfo != null) {
+                        result.add(hlInfo);
+                    }
                 }
             }
         }
@@ -514,8 +519,9 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkUnrelatedDefaultMethods(@Nonnull PsiClass aClass, @Nonnull PsiIdentifier classIdentifier) {
+    public static HighlightInfo.Builder checkUnrelatedDefaultMethods(@Nonnull PsiClass aClass, @Nonnull PsiIdentifier classIdentifier) {
         Map<? extends MethodSignature, Set<PsiMethod>> overrideEquivalent = PsiSuperMethodUtil.collectOverrideEquivalents(aClass);
 
         boolean isInterface = aClass.isInterface();
@@ -568,8 +574,7 @@ public class GenericsHighlightUtil {
                             PsiSubstitutor.EMPTY
                         )),
                         defaultMethod.getSignature(PsiSubstitutor.EMPTY)
-                    )
-                    ) {
+                    )) {
                         continue;
                     }
                     String c1 = HighlightUtil.formatClass(aClass, false);
@@ -581,8 +586,7 @@ public class GenericsHighlightUtil {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
                         .descriptionAndTooltip(message)
-                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass))
-                        .create();
+                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass));
                 }
                 if (isInterface || abstracts == null || unrelatedMethodContainingClass.isInterface()) {
                     List<PsiClass> defaultContainingClasses = ContainerUtil.mapNotNull(defaults, PsiMethod::getContainingClass);
@@ -606,8 +610,7 @@ public class GenericsHighlightUtil {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
                         .descriptionAndTooltip(description)
-                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass))
-                        .create();
+                        .registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(aClass));
                 }
             }
         }
@@ -618,10 +621,8 @@ public class GenericsHighlightUtil {
         @Nonnull PsiClass defaultMethodContainingClass,
         @Nonnull PsiClass unrelatedMethodContainingClass
     ) {
-        return defaultMethodContainingClass.isInheritor(unrelatedMethodContainingClass, true) || unrelatedMethodContainingClass.isInheritor(
-            defaultMethodContainingClass,
-            true
-        );
+        return defaultMethodContainingClass.isInheritor(unrelatedMethodContainingClass, true)
+            || unrelatedMethodContainingClass.isInheritor(defaultMethodContainingClass, true);
     }
 
     private static boolean hasNotOverriddenAbstract(
@@ -648,8 +649,9 @@ public class GenericsHighlightUtil {
         return null;
     }
 
+    @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkUnrelatedConcrete(@Nonnull PsiClass psiClass, @Nonnull PsiIdentifier classIdentifier) {
+    public static HighlightInfo.Builder checkUnrelatedConcrete(@Nonnull PsiClass psiClass, @Nonnull PsiIdentifier classIdentifier) {
         PsiClass superClass = psiClass.getSuperClass();
         if (superClass != null && superClass.hasTypeParameters()) {
             Collection<HierarchicalMethodSignature> visibleSignatures = superClass.getVisibleSignatures();
@@ -681,18 +683,15 @@ public class GenericsHighlightUtil {
                     && !foundMethod.isAbstract()
                     && !foundMethod.hasModifierProperty(PsiModifier.DEFAULT)
                     && (foundMethodContainingClass = foundMethod.getContainingClass()) != null) {
-                    String description = "Methods " +
-                        JavaHighlightUtil.formatMethod(foundMethod) + " from " + HighlightUtil.formatClass(foundMethodContainingClass) +
-                        " and " +
-                        JavaHighlightUtil.formatMethod(method) + " from " + HighlightUtil.formatClass(containingClass) +
-                        " are inherited with the same signature";
-
-                    HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    //TODO: override fix
+                    return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
-                        .descriptionAndTooltip(description)
-                        .create();
-                    //todo override fix
-                    return info;
+                        .descriptionAndTooltip(JavaErrorLocalize.classInheritanceMethodClash(
+                            JavaHighlightUtil.formatMethod(foundMethod),
+                            HighlightUtil.formatClass(foundMethodContainingClass),
+                            JavaHighlightUtil.formatMethod(method),
+                            HighlightUtil.formatClass(containingClass)
+                        ));
                 }
                 overrideEquivalent.put(signature, method);
             }
@@ -702,7 +701,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkSameErasureNotSubSignatureInner(
+    private static HighlightInfo.Builder checkSameErasureNotSubSignatureInner(
         @Nonnull HierarchicalMethodSignature signature,
         @Nonnull PsiManager manager,
         @Nonnull PsiClass aClass,
@@ -715,7 +714,7 @@ public class GenericsHighlightUtil {
         }
         MethodSignature signatureToErase = method.getSignature(PsiSubstitutor.EMPTY);
         MethodSignatureBackedByPsiMethod sameErasure = sameErasureMethods.get(signatureToErase);
-        HighlightInfo info;
+        HighlightInfo.Builder hlBuilder;
         if (sameErasure != null) {
             if (aClass instanceof PsiTypeParameter
                 || MethodSignatureUtil.findMethodBySuperMethod(aClass, sameErasure.getMethod(), false) != null
@@ -725,9 +724,9 @@ public class GenericsHighlightUtil {
                 true
             )
                 || InheritanceUtil.isInheritorOrSelf(method.getContainingClass(), sameErasure.getMethod().getContainingClass(), true))) {
-                info = checkSameErasureNotSubSignatureOrSameClass(sameErasure, signature, aClass, method);
-                if (info != null) {
-                    return info;
+                hlBuilder = checkSameErasureNotSubSignatureOrSameClass(sameErasure, signature, aClass, method);
+                if (hlBuilder != null) {
+                    return hlBuilder;
                 }
             }
         }
@@ -736,9 +735,9 @@ public class GenericsHighlightUtil {
         }
         List<HierarchicalMethodSignature> supers = signature.getSuperSignatures();
         for (HierarchicalMethodSignature superSignature : supers) {
-            info = checkSameErasureNotSubSignatureInner(superSignature, manager, aClass, sameErasureMethods);
-            if (info != null) {
-                return info;
+            hlBuilder = checkSameErasureNotSubSignatureInner(superSignature, manager, aClass, sameErasureMethods);
+            if (hlBuilder != null) {
+                return hlBuilder;
             }
 
             if (superSignature.isRaw() && !signature.isRaw()) {
@@ -762,7 +761,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkSameErasureNotSubSignatureOrSameClass(
+    private static HighlightInfo.Builder checkSameErasureNotSubSignatureOrSameClass(
         MethodSignatureBackedByPsiMethod signatureToCheck,
         HierarchicalMethodSignature superSignature,
         PsiClass aClass,
@@ -817,7 +816,7 @@ public class GenericsHighlightUtil {
             PsiType[] erasedTypes = signatureToCheck.getErasedParameterTypes();
             boolean erasure = erasedTypes.length > 0;
             for (PsiType type : superSignature.getParameterTypes()) {
-                erasure &= Comparing.equal(type, erasedTypes[idx]);
+                erasure &= Objects.equals(type, erasedTypes[idx]);
                 idx++;
             }
 
@@ -847,7 +846,8 @@ public class GenericsHighlightUtil {
         }
     }
 
-    private static HighlightInfo getSameErasureMessage(
+    @Nonnull
+    private static HighlightInfo.Builder getSameErasureMessage(
         boolean sameClass,
         @Nonnull PsiMethod method,
         @Nonnull PsiMethod superMethod,
@@ -861,8 +861,7 @@ public class GenericsHighlightUtil {
             : JavaErrorLocalize.genericsMethodsHaveSameErasureOverride(clashMethodMessage);
         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(textRange)
-            .descriptionAndTooltip(description)
-            .create();
+            .descriptionAndTooltip(description);
     }
 
     @RequiredReadAction
@@ -1099,7 +1098,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkTypeParametersList(
+    public static HighlightInfo.Builder checkTypeParametersList(
         PsiTypeParameterList list,
         PsiTypeParameter[] parameters,
         @Nonnull LanguageLevel level
@@ -1108,25 +1107,22 @@ public class GenericsHighlightUtil {
         if (parent instanceof PsiClass psiClass && psiClass.isEnum()) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(list)
-                .descriptionAndTooltip(JavaErrorLocalize.genericsEnumMayNotHaveTypeParameters())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.genericsEnumMayNotHaveTypeParameters());
         }
         if (PsiUtil.isAnnotationMethod(parent)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(list)
-                .descriptionAndTooltip(JavaErrorLocalize.genericsAnnotationMembersMayNotHaveTypeParameters())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.genericsAnnotationMembersMayNotHaveTypeParameters());
         }
         if (parent instanceof PsiClass psiClass && psiClass.isAnnotationType()) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(list)
-                .descriptionAndTooltip(JavaErrorLocalize.annotationMayNotHaveTypeParameters())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.annotationMayNotHaveTypeParameters());
         }
 
         for (int i = 0; i < parameters.length; i++) {
             PsiTypeParameter typeParameter1 = parameters[i];
-            HighlightInfo cyclicInheritance = HighlightClassUtil.checkCyclicInheritance(typeParameter1);
+            HighlightInfo.Builder cyclicInheritance = HighlightClassUtil.checkCyclicInheritance(typeParameter1);
             if (cyclicInheritance != null) {
                 return cyclicInheritance;
             }
@@ -1137,8 +1133,7 @@ public class GenericsHighlightUtil {
                 if (Comparing.strEqual(name1, name2)) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(typeParameter2)
-                        .descriptionAndTooltip(JavaErrorLocalize.genericsDuplicateTypeParameter(name1))
-                        .create();
+                        .descriptionAndTooltip(JavaErrorLocalize.genericsDuplicateTypeParameter(name1));
                 }
             }
             if (!level.isAtLeast(LanguageLevel.JDK_1_7)) {
@@ -1146,8 +1141,7 @@ public class GenericsHighlightUtil {
                     if (referenceElement.resolve() instanceof PsiTypeParameter typeParam && ArrayUtil.find(parameters, typeParam) > i) {
                         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(referenceElement.getTextRange())
-                            .descriptionAndTooltip(JavaErrorLocalize.illegalForwardReference())
-                            .create();
+                            .descriptionAndTooltip(JavaErrorLocalize.illegalForwardReference());
                     }
                 }
             }
@@ -1177,8 +1171,9 @@ public class GenericsHighlightUtil {
         return result;
     }
 
+    @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkInstanceOfGenericType(PsiInstanceOfExpression expression) {
+    public static HighlightInfo.Builder checkInstanceOfGenericType(PsiInstanceOfExpression expression) {
         PsiTypeElement checkTypeElement = expression.getCheckType();
         if (checkTypeElement == null) {
             return null;
@@ -1190,20 +1185,19 @@ public class GenericsHighlightUtil {
      * 15.20.2 Type Comparison Operator instanceof
      * ReferenceType mentioned after the instanceof operator is reifiable
      */
+    @Nullable
     @RequiredReadAction
-    private static HighlightInfo isIllegalForInstanceOf(PsiType type, PsiTypeElement typeElement) {
+    private static HighlightInfo.Builder isIllegalForInstanceOf(PsiType type, PsiTypeElement typeElement) {
         if (PsiUtil.resolveClassInClassTypeOnly(type) instanceof PsiTypeParameter) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(typeElement)
-                .descriptionAndTooltip(JavaErrorLocalize.genericsCannotInstanceofTypeParameters())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.genericsCannotInstanceofTypeParameters());
         }
 
         if (!JavaGenericsUtil.isReifiableType(type)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(typeElement)
-                .descriptionAndTooltip(JavaErrorLocalize.illegalGenericTypeForInstanceof())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.illegalGenericTypeForInstanceof());
         }
 
         return null;

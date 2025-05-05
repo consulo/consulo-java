@@ -818,3 +818,9 @@ receiver.type.mismatch:
   text: The receiver type does not match the enclosing class type
 receiver.name.mismatch:
   text: The receiver name does not match the enclosing class type
+method.static.in.interface.should.have.body:
+  text: Static methods in interfaces should have a body
+method.private.in.interface.should.have.body:
+  text: Private methods in interfaces should have a body
+class.inheritance.method.clash:
+  text: Methods {0} from {1} and {2} from {3} are inherited with the same signature
