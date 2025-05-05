@@ -22,24 +22,26 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiMatcherExpression;
 
 public class JavaMatchers {
-  public static PsiMatcherExpression isConstructor(final boolean shouldBe) {
-    return new PsiMatcherExpression() {
-      @Override
-      public Boolean match(PsiElement element) {
-        return element instanceof PsiMethod && ((PsiMethod) element).isConstructor() == shouldBe;
-      }
-    };
-  }
+    public static PsiMatcherExpression isConstructor(final boolean shouldBe) {
+        return new PsiMatcherExpression() {
+            @Override
+            public Boolean match(PsiElement element) {
+                return element instanceof PsiMethod && ((PsiMethod)element).isConstructor() == shouldBe;
+            }
+        };
+    }
 
-  public static PsiMatcherExpression hasModifier(@PsiModifier.ModifierConstant final String modifier, final boolean shouldHave) {
-    return new PsiMatcherExpression() {
-      @Override
-      public Boolean match(PsiElement element) {
-        PsiModifierListOwner owner = element instanceof PsiModifierListOwner ? (PsiModifierListOwner) element : null;
+    public static PsiMatcherExpression hasModifier(@PsiModifier.ModifierConstant final String modifier, final boolean shouldHave) {
+        return new PsiMatcherExpression() {
+            @Override
+            public Boolean match(PsiElement element) {
+                PsiModifierListOwner owner = element instanceof PsiModifierListOwner ? (PsiModifierListOwner)element : null;
 
-        if (owner != null && owner.hasModifierProperty(modifier) == shouldHave) return Boolean.TRUE;
-        return Boolean.FALSE;
-      }
-    };
-  }
+                if (owner != null && owner.hasModifierProperty(modifier) == shouldHave) {
+                    return Boolean.TRUE;
+                }
+                return Boolean.FALSE;
+            }
+        };
+    }
 }
