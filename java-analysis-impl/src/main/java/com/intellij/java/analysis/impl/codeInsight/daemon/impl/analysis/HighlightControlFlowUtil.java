@@ -28,7 +28,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -100,7 +100,7 @@ public class HighlightControlFlowUtil {
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkUnreachableStatement(@Nullable PsiCodeBlock codeBlock) {
+    public static HighlightInfo.Builder checkUnreachableStatement(@Nullable PsiCodeBlock codeBlock) {
         if (codeBlock == null) {
             return null;
         }
@@ -123,9 +123,8 @@ public class HighlightControlFlowUtil {
                     .descriptionAndTooltip(JavaErrorLocalize.unreachableStatement())
                     .registerFix(QuickFixFactory.getInstance().createDeleteFix(
                         unreachableStatement,
-                        JavaQuickFixBundle.message("delete.unreachable.statement.fix.text")
-                    ))
-                    .create();
+                        JavaQuickFixLocalize.deleteUnreachableStatementFixText()
+                    ));
             }
         }
         catch (AnalysisCanceledException | IndexNotReadyException e) {
@@ -277,22 +276,23 @@ public class HighlightControlFlowUtil {
         }
 
         TextRange range = HighlightNamesUtil.getFieldDeclarationTextRange(field);
+        QuickFixFactory factory = QuickFixFactory.getInstance();
         HighlightInfo.Builder highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(range)
             .descriptionAndTooltip(JavaErrorLocalize.variableNotInitialized(field.getName()))
             .registerFix(
-                QuickFixFactory.getInstance().createCreateConstructorParameterFromFieldFix(field),
+                factory.createCreateConstructorParameterFromFieldFix(field),
                 HighlightMethodUtil.getFixRange(field)
             )
             .registerFix(
-                QuickFixFactory.getInstance().createInitializeFinalFieldInConstructorFix(field),
+                factory.createInitializeFinalFieldInConstructorFix(field),
                 HighlightMethodUtil.getFixRange(field)
             );
         PsiClass containingClass = field.getContainingClass();
         if (containingClass != null && !containingClass.isInterface()) {
-            highlightInfo.registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(field, PsiModifier.FINAL));
+            highlightInfo.registerFix(factory.createModifierFixBuilder(field).remove(PsiModifier.FINAL).create());
         }
-        return highlightInfo.registerFix(QuickFixFactory.getInstance().createAddVariableInitializerFix(field))
+        return highlightInfo.registerFix(factory.createAddVariableInitializerFix(field))
             .create();
     }
 
@@ -496,17 +496,18 @@ public class HighlightControlFlowUtil {
         }
         if (codeBlockProblems.contains(expression)) {
             String name = expression.getElement().getText();
-            HighlightInfo.Builder highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            QuickFixFactory factory = QuickFixFactory.getInstance();
+            HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
                 .descriptionAndTooltip(JavaErrorLocalize.variableNotInitialized(name))
-                .registerFix(QuickFixFactory.getInstance().createAddVariableInitializerFix(variable));
+                .registerFix(factory.createAddVariableInitializerFix(variable));
             if (variable instanceof PsiLocalVariable) {
                 //highlightInfo.registerFix(HighlightFixUtil.createInsertSwitchDefaultFix(variable, topBlock, expression));
             }
             if (variable instanceof PsiField) {
-                highlightInfo.registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(variable, PsiModifier.FINAL));
+                hlBuilder.registerFix(factory.createModifierFixBuilder(variable).remove(PsiModifier.FINAL).create());
             }
-            return highlightInfo.create();
+            return hlBuilder.create();
         }
 
         return null;
@@ -677,7 +678,7 @@ public class HighlightControlFlowUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
                 .descriptionAndTooltip(JavaErrorLocalize.variableAlreadyAssigned(variable.getName()))
-                .registerFix(factory.createRemoveModifierFix(variable, PsiModifier.FINAL))
+                .registerFix(factory.createModifierFixBuilder(variable).remove(PsiModifier.FINAL).create())
                 .registerFix(factory.createDeferFinalAssignmentFix(variable, expression))
                 .create();
         }
@@ -715,7 +716,7 @@ public class HighlightControlFlowUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
                 .descriptionAndTooltip(JavaErrorLocalize.variableAssignedInLoop(((PsiVariable)resolved).getName()))
-                .registerFix(QuickFixFactory.getInstance().createRemoveModifierFix((PsiVariable)resolved, PsiModifier.FINAL))
+                .registerFix(QuickFixFactory.getInstance().createModifierFixBuilder((PsiVariable)resolved).remove(PsiModifier.FINAL).create())
                 .create();
         }
         return null;
@@ -761,13 +762,14 @@ public class HighlightControlFlowUtil {
                 ? JavaErrorLocalize.variableNotInitialized(name)
                 : JavaErrorLocalize.assignmentToFinalVariable(name);
             PsiElement innerClass = getInnerClassVariableReferencedFrom(variable, expression);
+            QuickFixFactory factory = QuickFixFactory.getInstance();
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(reference.getTextRange())
                 .descriptionAndTooltip(description)
                 .registerFix(
                     innerClass == null || variable instanceof PsiField
-                        ? QuickFixFactory.getInstance().createRemoveModifierFix(variable, PsiModifier.FINAL)
-                        : QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, innerClass)
+                        ? factory.createModifierFixBuilder(variable).remove(PsiModifier.FINAL).create()
+                        : factory.createVariableAccessFromInnerClassFix(variable, innerClass)
                 )
                 .create();
         }
