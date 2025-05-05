@@ -34,7 +34,7 @@ import consulo.document.util.TextRange;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.FileIndexFacade;
-import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoHolder;
@@ -69,7 +69,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkInferredTypeArguments(
+    public static HighlightInfo.Builder checkInferredTypeArguments(
         PsiTypeParameterListOwner listOwner,
         PsiElement call,
         PsiSubstitutor substitutor
@@ -79,7 +79,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkInferredTypeArguments(
+    private static HighlightInfo.Builder checkInferredTypeArguments(
         PsiTypeParameter[] typeParameters,
         PsiElement call,
         PsiSubstitutor substitutor
@@ -99,8 +99,7 @@ public class GenericsHighlightUtil {
                 : JavaErrorLocalize.genericsInferredTypeForTypeParameterIsNotWithinItsBoundImplement(c, t1, t2);
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(call)
-                .descriptionAndTooltip(description)
-                .create();
+                .descriptionAndTooltip(description);
         }
 
         return null;
@@ -108,7 +107,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkParameterizedReferenceTypeArguments(
+    public static HighlightInfo.Builder checkParameterizedReferenceTypeArguments(
         PsiElement resolved,
         PsiJavaCodeReferenceElement referenceElement,
         PsiSubstitutor substitutor,
@@ -128,7 +127,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkReferenceTypeArgumentList(
+    public static HighlightInfo.Builder checkReferenceTypeArgumentList(
         PsiTypeParameterListOwner typeParameterListOwner,
         PsiReferenceParameterList referenceParameterList,
         PsiSubstitutor substitutor,
@@ -143,8 +142,7 @@ public class GenericsHighlightUtil {
                 if (!typeParameterListOwner.hasTypeParameters()) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(referenceParameterList)
-                        .descriptionAndTooltip(JavaErrorLocalize.genericsDiamondNotApplicable())
-                        .create();
+                        .descriptionAndTooltip(JavaErrorLocalize.genericsDiamondNotApplicable());
                 }
                 inferenceResult = diamondType.resolveInferredTypes();
                 String errorMessage = inferenceResult.getErrorMessage();
@@ -154,14 +152,13 @@ public class GenericsHighlightUtil {
                     && expectedClassType.isRaw())) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(referenceParameterList)
-                        .descriptionAndTooltip(errorMessage)
-                        .create();
+                        .descriptionAndTooltip(errorMessage);
                 }
             }
         }
 
         if (registerIntentions) {
-            HighlightInfo wrongParamNumberHighlightInfo =
+            HighlightInfo.Builder wrongParamNumberHighlightInfo =
                 checkForWrongNumberOfTypeParameters(typeParameterListOwner, referenceParameterList, javaSdkVersion);
             if (wrongParamNumberHighlightInfo != null) {
                 return wrongParamNumberHighlightInfo;
@@ -177,30 +174,30 @@ public class GenericsHighlightUtil {
                 PsiType[] types = inferenceResult.getTypes();
                 for (int i = 0; i < typeParameters.length; i++) {
                     PsiType type = types[i];
-                    HighlightInfo highlightInfo = checkTypeParameterWithinItsBound(
+                    HighlightInfo.Builder hlBuilder = checkTypeParameterWithinItsBound(
                         typeParameters[i],
                         substitutor,
                         type,
                         referenceElements[0],
                         referenceParameterList
                     );
-                    if (highlightInfo != null) {
-                        return highlightInfo;
+                    if (hlBuilder != null) {
+                        return hlBuilder;
                     }
                 }
             }
             else {
                 for (int i = 0; i < typeParameters.length; i++) {
                     PsiTypeElement typeElement = referenceElements[i];
-                    HighlightInfo highlightInfo = checkTypeParameterWithinItsBound(
+                    HighlightInfo.Builder hlBuilder = checkTypeParameterWithinItsBound(
                         typeParameters[i],
                         substitutor,
                         typeElement.getType(),
                         typeElement,
                         referenceParameterList
                     );
-                    if (highlightInfo != null) {
-                        return highlightInfo;
+                    if (hlBuilder != null) {
+                        return hlBuilder;
                     }
                 }
             }
@@ -211,7 +208,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkForWrongNumberOfTypeParameters(
+    private static HighlightInfo.Builder checkForWrongNumberOfTypeParameters(
         PsiTypeParameterListOwner typeParameterListOwner,
         PsiReferenceParameterList referenceParameterList,
         @Nonnull JavaSdkVersion javaSdkVersion
@@ -241,28 +238,21 @@ public class GenericsHighlightUtil {
             description = JavaErrorLocalize.genericsWrongNumberOfTypeArguments(refParametersNum, targetParametersNum);
         }
 
-        HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+        HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(referenceParameterList)
-            .descriptionAndTooltip(description)
-            .create();
+            .descriptionAndTooltip(description);
         if (typeParameterListOwner instanceof PsiClass psiClass) {
-            QuickFixAction.registerQuickFixAction(
-                highlightInfo,
-                QuickFixFactory.getInstance().createChangeClassSignatureFromUsageFix(psiClass, referenceParameterList)
-            );
+            hlBuilder.registerFix(QuickFixFactory.getInstance().createChangeClassSignatureFromUsageFix(psiClass, referenceParameterList));
         }
 
         if (referenceParameterList.getParent().getParent() instanceof PsiTypeElement typeElem
             && typeElem.getParent() instanceof PsiVariable variable) {
             if (targetParametersNum == 0) {
-                QuickFixAction.registerQuickFixAction(
-                    highlightInfo,
-                    QuickFixFactory.getInstance().createRemoveTypeArgumentsFix(variable)
-                );
+                hlBuilder.registerFix(QuickFixFactory.getInstance().createRemoveTypeArgumentsFix(variable));
             }
-            registerVariableParameterizedTypeFixes(highlightInfo, variable, referenceParameterList, javaSdkVersion);
+            registerVariableParameterizedTypeFixes(hlBuilder, variable, referenceParameterList, javaSdkVersion);
         }
-        return highlightInfo;
+        return hlBuilder;
     }
 
     private static boolean hasSuperMethodsWithTypeParams(PsiMethod method) {
@@ -310,7 +300,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkTypeParameterWithinItsBound(
+    private static HighlightInfo.Builder checkTypeParameterWithinItsBound(
         PsiTypeParameter classParameter,
         PsiSubstitutor substitutor,
         PsiType type,
@@ -323,8 +313,7 @@ public class GenericsHighlightUtil {
             && GenericsUtil.checkNotInBounds(type, psiType, referenceParameterList)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(typeElement2Highlight)
-                .descriptionAndTooltip(JavaErrorLocalize.actualTypeArgumentContradictInferredType())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.actualTypeArgumentContradictInferredType());
         }
 
         PsiClassType[] bounds = classParameter.getSuperTypes();
@@ -341,17 +330,13 @@ public class GenericsHighlightUtil {
                     ? JavaErrorLocalize.genericsTypeParameterIsNotWithinItsBoundExtend(c, t)
                     : JavaErrorLocalize.genericsTypeParameterIsNotWithinItsBoundImplement(c, t);
 
-                HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(typeElement2Highlight)
-                    .descriptionAndTooltip(description)
-                    .create();
-                if (bound instanceof PsiClassType boundClassType && referenceClass != null && info != null) {
-                    QuickFixAction.registerQuickFixAction(
-                        info,
-                        QuickFixFactory.getInstance().createExtendsListFix(referenceClass, boundClassType, true), null
-                    );
+                    .descriptionAndTooltip(description);
+                if (bound instanceof PsiClassType boundClassType && referenceClass != null) {
+                    hlBuilder.registerFix(QuickFixFactory.getInstance().createExtendsListFix(referenceClass, boundClassType, true));
                 }
-                return info;
+                return hlBuilder;
             }
         }
         return null;
@@ -381,7 +366,7 @@ public class GenericsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkElementInTypeParameterExtendsList(
+    public static HighlightInfo.Builder checkElementInTypeParameterExtendsList(
         @Nonnull PsiReferenceList referenceList,
         @Nonnull PsiClass aClass,
         @Nonnull JavaResolveResult resolveResult,
@@ -398,8 +383,7 @@ public class GenericsHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(element)
                 .descriptionAndTooltip(JavaErrorLocalize.interfaceExpected())
-                .registerFix(QuickFixFactory.getInstance().createMoveBoundClassToFrontFix(aClass, type))
-                .create();
+                .registerFix(QuickFixFactory.getInstance().createMoveBoundClassToFrontFix(aClass, type));
         }
         else if (referenceElements.length != 0 && element != referenceElements[0]
             && referenceElements[0].resolve() instanceof PsiTypeParameter) {
@@ -408,8 +392,7 @@ public class GenericsHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(element)
                 .descriptionAndTooltip(JavaErrorLocalize.typeParameterCannotBeFollowedByOtherBounds())
-                .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, type, false))
-                .create();
+                .registerFix(QuickFixFactory.getInstance().createExtendsListFix(aClass, type, false));
         }
         return null;
     }
@@ -614,11 +597,11 @@ public class GenericsHighlightUtil {
                     LocalizeValue description = unrelatedDefaults != null
                         ? JavaErrorLocalize.textClassInheritsUnrelatedDefaults(c, m, unrelatedDefaults)
                         : JavaErrorLocalize.textClassInheritsAbstractAndDefault(
-                            c,
-                            m,
-                            HighlightUtil.formatClass(defaultMethodContainingClass),
-                            HighlightUtil.formatClass(unrelatedMethodContainingClass)
-                        );
+                        c,
+                        m,
+                        HighlightUtil.formatClass(defaultMethodContainingClass),
+                        HighlightUtil.formatClass(unrelatedMethodContainingClass)
+                    );
 
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(classIdentifier)
@@ -687,7 +670,8 @@ public class GenericsHighlightUtil {
                 if (containingClass == null) {
                     continue;
                 }
-                PsiSubstitutor containingClassSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(containingClass, psiClass, PsiSubstitutor.EMPTY);
+                PsiSubstitutor containingClassSubstitutor =
+                    TypeConversionUtil.getSuperClassSubstitutor(containingClass, psiClass, PsiSubstitutor.EMPTY);
                 PsiSubstitutor finalSubstitutor =
                     PsiSuperMethodUtil.obtainFinalSubstitutor(containingClass, containingClassSubstitutor, hms.getSubstitutor(), false);
                 MethodSignatureBackedByPsiMethod signature = MethodSignatureBackedByPsiMethod.create(method, finalSubstitutor, false);
@@ -938,7 +922,7 @@ public class GenericsHighlightUtil {
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkReferenceTypeUsedAsTypeArgument(PsiTypeElement typeElement, LanguageLevel level) {
+    public static HighlightInfo.Builder checkReferenceTypeUsedAsTypeArgument(PsiTypeElement typeElement, LanguageLevel level) {
         PsiType type = typeElement.getType();
         if (type != PsiType.NULL && type instanceof PsiPrimitiveType
             || type instanceof PsiWildcardType wildcardType && wildcardType.getBound() instanceof PsiPrimitiveType) {
@@ -954,10 +938,9 @@ public class GenericsHighlightUtil {
                 return null;
             }
 
-            HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(typeElement)
-                .descriptionAndTooltip(JavaErrorLocalize.genericsTypeArgumentCannotBeOfPrimitiveType())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.genericsTypeArgumentCannotBeOfPrimitiveType());
 
             PsiType toConvert = type;
             if (type instanceof PsiWildcardType wildcardType) {
@@ -966,40 +949,40 @@ public class GenericsHighlightUtil {
             if (toConvert instanceof PsiPrimitiveType primitiveType) {
                 PsiClassType boxedType = primitiveType.getBoxedType(typeElement);
                 if (boxedType != null) {
-                    QuickFixAction.registerQuickFixAction(
-                        highlightInfo,
-                        QuickFixFactory.getInstance().createReplacePrimitiveWithBoxedTypeAction(
-                            typeElement,
-                            toConvert.getPresentableText(),
-                            primitiveType.getBoxedTypeName()
-                        )
-                    );
+                    hlBuilder.registerFix(QuickFixFactory.getInstance().createReplacePrimitiveWithBoxedTypeAction(
+                        typeElement,
+                        toConvert.getPresentableText(),
+                        primitiveType.getBoxedTypeName()
+                    ));
                 }
             }
-            return highlightInfo;
+            return hlBuilder;
         }
 
         return null;
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkForeachExpressionTypeIsIterable(PsiExpression expression) {
+    public static HighlightInfo.Builder checkForeachExpressionTypeIsIterable(PsiExpression expression) {
         if (expression == null || expression.getType() == null) {
             return null;
         }
         PsiType itemType = JavaGenericsUtil.getCollectionItemType(expression);
         if (itemType == null) {
-            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
-                .descriptionAndTooltip(JavaErrorLocalize.foreachNotApplicable(JavaHighlightUtil.formatType(expression.getType())))
-                .registerFix(QuickFixFactory.getInstance().createNotIterableForEachLoopFix(expression))
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.foreachNotApplicable(JavaHighlightUtil.formatType(expression.getType())));
+            IntentionAction fix = QuickFixFactory.getInstance().createNotIterableForEachLoopFix(expression);
+            if (fix != null) {
+                hlBuilder.registerFix(fix);
+            }
+            return hlBuilder;
         }
         return null;
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkForEachParameterType(@Nonnull PsiForeachStatement statement, @Nonnull PsiParameter parameter) {
+    public static HighlightInfo.Builder checkForEachParameterType(@Nonnull PsiForeachStatement statement, @Nonnull PsiParameter parameter) {
         PsiExpression expression = statement.getIteratedValue();
         PsiType itemType = expression == null ? null : JavaGenericsUtil.getCollectionItemType(expression);
         if (itemType == null) {
@@ -1010,10 +993,10 @@ public class GenericsHighlightUtil {
         if (TypeConversionUtil.isAssignable(parameterType, itemType)) {
             return null;
         }
-        HighlightInfo highlightInfo =
+        HighlightInfo.Builder hlBuilder =
             HighlightUtil.createIncompatibleTypeHighlightInfo(itemType, parameterType, parameter.getTextRange(), 0);
-        HighlightUtil.registerChangeVariableTypeFixes(parameter, itemType, expression, highlightInfo);
-        return highlightInfo;
+        HighlightUtil.registerChangeVariableTypeFixes(parameter, itemType, expression, hlBuilder);
+        return hlBuilder;
     }
 
     //http://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2
@@ -1367,11 +1350,11 @@ public class GenericsHighlightUtil {
     ) {
         PsiClass containingClass = enumConstant.getContainingClass();
         if (enumConstant.getInitializingClass() == null) {
-            HighlightInfo highlightInfo =
+            HighlightInfo.Builder highlightInfo =
                 HighlightClassUtil.checkInstantiationOfAbstractClass(containingClass, enumConstant.getNameIdentifier());
             if (highlightInfo != null) {
-                QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createImplementMethodsFix(enumConstant));
-                holder.add(highlightInfo);
+                highlightInfo.registerFix(QuickFixFactory.getInstance().createImplementMethodsFix(enumConstant));
+                holder.add(highlightInfo.create());
                 return;
             }
             highlightInfo = HighlightClassUtil.checkClassWithAbstractMethods(
@@ -1380,7 +1363,7 @@ public class GenericsHighlightUtil {
                 enumConstant.getNameIdentifier().getTextRange()
             );
             if (highlightInfo != null) {
-                holder.add(highlightInfo);
+                holder.add(highlightInfo.create());
                 return;
             }
         }
@@ -1639,12 +1622,11 @@ public class GenericsHighlightUtil {
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkCannotInheritFromTypeParameter(PsiClass superClass, PsiJavaCodeReferenceElement toHighlight) {
+    public static HighlightInfo.Builder checkCannotInheritFromTypeParameter(PsiClass superClass, PsiJavaCodeReferenceElement toHighlight) {
         if (superClass instanceof PsiTypeParameter) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(toHighlight)
-                .descriptionAndTooltip(JavaErrorLocalize.classCannotInheritFromItsTypeParameter())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.classCannotInheritFromItsTypeParameter());
         }
         return null;
     }
@@ -1731,7 +1713,7 @@ public class GenericsHighlightUtil {
 
     @RequiredReadAction
     private static void registerVariableParameterizedTypeFixes(
-        @Nullable HighlightInfo highlightInfo,
+        @Nullable HighlightInfo.Builder highlightInfo,
         @Nonnull PsiVariable variable,
         @Nonnull PsiReferenceParameterList parameterList,
         @Nonnull JavaSdkVersion version
@@ -1766,7 +1748,7 @@ public class GenericsHighlightUtil {
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkInferredIntersections(PsiSubstitutor substitutor, TextRange ref) {
+    public static HighlightInfo.Builder checkInferredIntersections(PsiSubstitutor substitutor, TextRange ref) {
         for (Map.Entry<PsiTypeParameter, PsiType> typeEntry : substitutor.getSubstitutionMap().entrySet()) {
             String parameterName = typeEntry.getKey().getName();
             if (typeEntry.getValue() instanceof PsiIntersectionType intersectionType) {
@@ -1776,8 +1758,7 @@ public class GenericsHighlightUtil {
                         .descriptionAndTooltip(
                             JavaErrorLocalize.typeParameterHasIncompatibleUpperBounds(parameterName, conflictingConjunctsMessage)
                         )
-                        .range(ref)
-                        .create();
+                        .range(ref);
                 }
             }
         }

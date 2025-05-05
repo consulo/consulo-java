@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -31,6 +32,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 
 import jakarta.annotation.Nonnull;
@@ -68,6 +70,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
     }
 
     @Override
+    @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
@@ -75,12 +78,13 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
         myCall.getArgumentList().replace(myPermutation.getArgumentList());
     }
 
-    public static void registerFix(HighlightInfo info, PsiCall callExpression, final CandidateInfo[] candidates, final TextRange fixRange) {
+    @RequiredReadAction
+    public static void registerFix(HighlightInfo.Builder hlBuilder, PsiCall callExpression, CandidateInfo[] candidates, TextRange fixRange) {
         PsiExpression[] expressions = callExpression.getArgumentList().getExpressions();
-        if (expressions.length < 2) {
+        if (hlBuilder == null || expressions.length < 2) {
             return;
         }
-        List<PsiCall> permutations = new ArrayList<PsiCall>();
+        List<PsiCall> permutations = new ArrayList<>();
 
         for (CandidateInfo candidate : candidates) {
             if (candidate instanceof MethodCandidateInfo) {
@@ -133,18 +137,18 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
             }
         }
         if (permutations.size() == 1) {
-            PermuteArgumentsFix fix = new PermuteArgumentsFix(callExpression, permutations.get(0));
-            QuickFixAction.registerQuickFixAction(info, fixRange, fix);
+            hlBuilder.registerFix(new PermuteArgumentsFix(callExpression, permutations.get(0)), fixRange);
         }
     }
 
+    @RequiredReadAction
     private static void registerShiftFixes(
-        final PsiExpression[] expressions,
-        final PsiCall callExpression,
-        final List<PsiCall> permutations,
-        final MethodCandidateInfo methodCandidate,
-        final int minIncompatibleIndex,
-        final int maxIncompatibleIndex
+        PsiExpression[] expressions,
+        PsiCall callExpression,
+        List<PsiCall> permutations,
+        MethodCandidateInfo methodCandidate,
+        int minIncompatibleIndex,
+        int maxIncompatibleIndex
     )
         throws IncorrectOperationException {
         PsiMethod method = methodCandidate.getElement();
@@ -195,14 +199,15 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
         }
     }
 
+    @RequiredReadAction
     private static void registerSwapFixes(
-        final PsiExpression[] expressions,
-        final PsiCall callExpression,
-        final List<PsiCall> permutations,
+        PsiExpression[] expressions,
+        PsiCall callExpression,
+        List<PsiCall> permutations,
         MethodCandidateInfo candidate,
-        final int incompatibilitiesCount,
-        final int minIncompatibleIndex,
-        final int maxIncompatibleIndex
+        int incompatibilitiesCount,
+        int minIncompatibleIndex,
+        int maxIncompatibleIndex
     ) throws IncorrectOperationException {
         PsiMethod method = candidate.getElement();
         PsiSubstitutor substitutor = candidate.getSubstitutor();

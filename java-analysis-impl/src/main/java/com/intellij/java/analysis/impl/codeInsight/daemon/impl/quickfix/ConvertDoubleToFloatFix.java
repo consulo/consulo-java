@@ -17,9 +17,10 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
@@ -31,8 +32,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
- * User: anna
- * Date: 2/10/12
+ * @author anna
+ * @since 2012-02-10
  */
 public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     private final PsiExpression myExpression;
@@ -43,30 +44,33 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
 
     @Nonnull
     @Override
+    @RequiredReadAction
     public String getText() {
         return "Convert '" + myExpression.getText() + "' to float";
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         if (myExpression.isValid()) {
             if (!StringUtil.endsWithIgnoreCase(myExpression.getText(), "f")) {
-                final PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
+                PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
                 final Object value = expression.getValue();
-                return value instanceof Float
-                    && !((Float)value).isInfinite()
-                    && !(((Float)value).floatValue() == 0
-                    && !TypeConversionUtil.isFPZero(expression.getText()));
+                return value instanceof Float floatValue
+                    && !floatValue.isInfinite()
+                    && !(floatValue == 0 && !TypeConversionUtil.isFPZero(expression.getText()));
             }
         }
         return false;
     }
 
     @Override
+    @RequiredWriteAction
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         myExpression.replace(createFloatingPointExpression(project));
     }
 
+    @RequiredReadAction
     private PsiExpression createFloatingPointExpression(Project project) {
         final String text = myExpression.getText();
         if (StringUtil.endsWithIgnoreCase(text, "d")) {
@@ -86,21 +90,21 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     public static void registerIntentions(
         @Nonnull JavaResolveResult[] candidates,
         @Nonnull PsiExpressionList list,
-        @Nullable HighlightInfo highlightInfo,
+        @Nullable HighlightInfo.Builder hlBuilder,
         TextRange fixRange
     ) {
-        if (candidates.length == 0) {
+        if (hlBuilder == null || candidates.length == 0) {
             return;
         }
         PsiExpression[] expressions = list.getExpressions();
         for (JavaResolveResult candidate : candidates) {
-            registerIntention(expressions, highlightInfo, fixRange, candidate, list);
+            registerIntention(expressions, hlBuilder, fixRange, candidate, list);
         }
     }
 
     private static void registerIntention(
         @Nonnull PsiExpression[] expressions,
-        @Nullable HighlightInfo highlightInfo,
+        @Nonnull HighlightInfo.Builder hlBuilder,
         TextRange fixRange,
         @Nonnull JavaResolveResult candidate,
         @Nonnull PsiElement context
@@ -110,15 +114,15 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
         }
         PsiMethod method = (PsiMethod)candidate.getElement();
         if (method != null && context.getManager().isInProject(method)) {
-            final PsiParameter[] parameters = method.getParameterList().getParameters();
+            PsiParameter[] parameters = method.getParameterList().getParameters();
             if (parameters.length == expressions.length) {
                 for (int i = 0, length = parameters.length; i < length; i++) {
                     PsiParameter parameter = parameters[i];
-                    final PsiExpression expression = expressions[i];
+                    PsiExpression expression = expressions[i];
                     if (expression instanceof PsiLiteralExpression
                         && PsiType.FLOAT.equals(parameter.getType())
                         && PsiType.DOUBLE.equals(expression.getType())) {
-                        QuickFixAction.registerQuickFixAction(highlightInfo, fixRange, new ConvertDoubleToFloatFix(expression));
+                        hlBuilder.registerFix(new ConvertDoubleToFloatFix(expression), fixRange);
                     }
                 }
             }

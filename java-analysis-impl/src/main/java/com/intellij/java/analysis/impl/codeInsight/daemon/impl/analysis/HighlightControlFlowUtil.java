@@ -31,7 +31,6 @@ import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.language.ast.IElementType;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
@@ -283,17 +282,11 @@ public class HighlightControlFlowUtil {
             .descriptionAndTooltip(JavaErrorLocalize.variableNotInitialized(field.getName()))
             .registerFix(
                 QuickFixFactory.getInstance().createCreateConstructorParameterFromFieldFix(field),
-                null,
-                null,
-                HighlightMethodUtil.getFixRange(field),
-                null
+                HighlightMethodUtil.getFixRange(field)
             )
             .registerFix(
                 QuickFixFactory.getInstance().createInitializeFinalFieldInConstructorFix(field),
-                null,
-                null,
-                HighlightMethodUtil.getFixRange(field),
-                null
+                HighlightMethodUtil.getFixRange(field)
             );
         PsiClass containingClass = field.getContainingClass();
         if (containingClass != null && !containingClass.isInterface()) {
@@ -831,7 +824,7 @@ public class HighlightControlFlowUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkVariableMustBeFinal(
+    public static HighlightInfo.Builder checkVariableMustBeFinal(
         @Nonnull PsiVariable variable,
         @Nonnull PsiJavaCodeReferenceElement context,
         @Nonnull LanguageLevel languageLevel
@@ -857,14 +850,14 @@ public class HighlightControlFlowUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(context)
                 .descriptionAndTooltip(description)
-                .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, innerClass))
-                .create();
+                .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, innerClass));
         }
         return checkWriteToFinalInsideLambda(variable, context);
     }
 
+    @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkWriteToFinalInsideLambda(
+    private static HighlightInfo.Builder checkWriteToFinalInsideLambda(
         @Nonnull PsiVariable variable,
         @Nonnull PsiJavaCodeReferenceElement context
     ) {
@@ -878,8 +871,7 @@ public class HighlightControlFlowUtil {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(context)
                     .descriptionAndTooltip(JavaErrorLocalize.lambdaVariableMustBeFinal())
-                    .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, lambdaExpression))
-                    .create();
+                    .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, lambdaExpression));
             }
         }
         return null;

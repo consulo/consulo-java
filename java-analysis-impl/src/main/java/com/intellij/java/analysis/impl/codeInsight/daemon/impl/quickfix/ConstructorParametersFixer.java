@@ -26,15 +26,15 @@ import jakarta.annotation.Nonnull;
  * in the constructor invocation
  * E.g.
  *
- * User: cdr
- * Date: Nov 13, 2002
+ * @author cdr
+ * @since 2002-11-13
  */
 public class ConstructorParametersFixer {
     public static void registerFixActions(
         @Nonnull PsiJavaCodeReferenceElement ctrRef,
         PsiConstructorCall constructorCall,
-        HighlightInfo highlightInfo,
-        final TextRange fixRange
+        @Nonnull HighlightInfo.Builder highlightInfo,
+        TextRange fixRange
     ) {
         JavaResolveResult resolved = ctrRef.advancedResolve(false);
         PsiClass aClass = (PsiClass)resolved.getElement();

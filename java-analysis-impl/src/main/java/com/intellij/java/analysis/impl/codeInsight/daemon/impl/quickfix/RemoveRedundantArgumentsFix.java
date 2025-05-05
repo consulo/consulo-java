@@ -20,16 +20,14 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -56,7 +54,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     @Nonnull
     @Override
     public String getText() {
-        return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
+        return JavaQuickFixLocalize.removeRedundantArgumentsText(JavaHighlightUtil.formatMethod(myTargetMethod)).get();
     }
 
     @Override
@@ -69,6 +67,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
                 return false;
             }
         }
+        //noinspection SimplifiableIfStatement
         if (!mySubstitutor.isValid()) {
             return false;
         }
@@ -126,17 +125,20 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     public static void registerIntentions(
         @Nonnull JavaResolveResult[] candidates,
         @Nonnull PsiExpressionList arguments,
-        @Nullable HighlightInfo highlightInfo,
+        @Nullable HighlightInfo.Builder hlBuilder,
         TextRange fixRange
     ) {
+        if (hlBuilder == null) {
+            return;
+        }
         for (JavaResolveResult candidate : candidates) {
-            registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
+            registerIntention(arguments, hlBuilder, fixRange, candidate, arguments);
         }
     }
 
     private static void registerIntention(
         @Nonnull PsiExpressionList arguments,
-        @Nullable HighlightInfo highlightInfo,
+        @Nonnull HighlightInfo.Builder hlBuilder,
         TextRange fixRange,
         @Nonnull JavaResolveResult candidate,
         @Nonnull PsiElement context
@@ -147,11 +149,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
         PsiMethod method = (PsiMethod)candidate.getElement();
         PsiSubstitutor substitutor = candidate.getSubstitutor();
         if (method != null && context.getManager().isInProject(method)) {
-            QuickFixAction.registerQuickFixAction(
-                highlightInfo,
-                fixRange,
-                new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor)
-            );
+            hlBuilder.registerFix(new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor), fixRange);
         }
     }
 }

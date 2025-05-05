@@ -28,10 +28,10 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -65,6 +65,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
     }
 
     @Override
+    @RequiredWriteAction
     public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
         myExpression.replace(RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myPsiClass));
     }
@@ -72,17 +73,17 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
     public static void registerQuickFixAction(
         CandidateInfo[] candidates,
         PsiCall call,
-        HighlightInfo highlightInfo,
+        HighlightInfo.Builder highlightInfo,
         final TextRange fixRange
     ) {
         if (candidates.length == 0) {
             return;
         }
 
-        final Set<PsiClass> containingClasses = new HashSet<PsiClass>();
+        final Set<PsiClass> containingClasses = new HashSet<>();
         PsiClass parentClass = PsiTreeUtil.getParentOfType(call, PsiClass.class);
         while (parentClass != null) {
-            if (parentClass.hasModifierProperty(PsiModifier.STATIC)) {
+            if (parentClass.isStatic()) {
                 break;
             }
             if (!(parentClass instanceof PsiAnonymousClass)) {
@@ -123,11 +124,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
                     if (!TypeConversionUtil.isAssignable(parameterType, exprType)) {
                         final PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(parameterType);
                         if (psiClass != null && containingClasses.contains(psiClass)) {
-                            QuickFixAction.registerQuickFixAction(
-                                highlightInfo,
-                                fixRange,
-                                new QualifyThisArgumentFix((PsiThisExpression)expression, psiClass)
-                            );
+                            highlightInfo.registerFix(new QualifyThisArgumentFix((PsiThisExpression)expression, psiClass), fixRange);
                         }
                     }
                 }

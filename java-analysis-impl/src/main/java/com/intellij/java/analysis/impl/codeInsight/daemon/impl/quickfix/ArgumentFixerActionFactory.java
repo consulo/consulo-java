@@ -35,13 +35,13 @@ public abstract class ArgumentFixerActionFactory {
     private static final Logger LOG = Logger.getInstance(ArgumentFixerActionFactory.class);
 
     @Nullable
-    protected abstract PsiExpression getModifiedArgument(PsiExpression expression, final PsiType toType) throws IncorrectOperationException;
+    protected abstract PsiExpression getModifiedArgument(PsiExpression expression, PsiType toType) throws IncorrectOperationException;
 
-    public void registerCastActions(CandidateInfo[] candidates, PsiCall call, HighlightInfo highlightInfo, final TextRange fixRange) {
+    public void registerCastActions(CandidateInfo[] candidates, PsiCall call, HighlightInfo.Builder hlBuilder, TextRange fixRange) {
         if (candidates.length == 0) {
             return;
         }
-        List<CandidateInfo> methodCandidates = new ArrayList<CandidateInfo>(Arrays.asList(candidates));
+        List<CandidateInfo> methodCandidates = new ArrayList<>(Arrays.asList(candidates));
         PsiExpressionList list = call.getArgumentList();
         PsiExpression[] expressions = list.getExpressions();
         if (expressions.length == 0) {
@@ -82,7 +82,7 @@ public abstract class ArgumentFixerActionFactory {
             for (int i = 0; i < expressions.length; i++) {
                 PsiExpression expression = expressions[i];
                 PsiType exprType = expression.getType();
-                Set<String> suggestedCasts = new HashSet<String>();
+                Set<String> suggestedCasts = new HashSet<>();
                 // find to which type we can cast this param to get valid method call
                 for (CandidateInfo candidate : methodCandidates) {
                     PsiMethod method = (PsiMethod)candidate.getElement();
@@ -113,7 +113,7 @@ public abstract class ArgumentFixerActionFactory {
                     JavaResolveResult resolveResult = newCall.resolveMethodGenerics();
                     if (resolveResult.getElement() != null && resolveResult.isValidResult()) {
                         suggestedCasts.add(parameterType.getCanonicalText());
-                        QuickFixAction.registerQuickFixAction(highlightInfo, fixRange, createFix(list, i, parameterType));
+                        hlBuilder.registerFix(createFix(list, i, parameterType), fixRange);
                     }
                 }
             }
@@ -123,7 +123,7 @@ public abstract class ArgumentFixerActionFactory {
         }
     }
 
-    public abstract boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, final PsiElement context);
+    public abstract boolean areTypesConvertible(PsiType exprType, PsiType parameterType, PsiElement context);
 
-    public abstract MethodArgumentFix createFix(final PsiExpressionList list, final int i, final PsiType parameterType);
+    public abstract MethodArgumentFix createFix(PsiExpressionList list, int i, PsiType parameterType);
 }

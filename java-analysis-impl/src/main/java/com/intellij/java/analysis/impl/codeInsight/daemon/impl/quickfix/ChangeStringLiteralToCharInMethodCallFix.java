@@ -18,10 +18,11 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiFile;
@@ -29,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,22 +40,22 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     private final PsiLiteralExpression myLiteral;
     private final PsiCall myCall;
 
-    public ChangeStringLiteralToCharInMethodCallFix(final PsiLiteralExpression literal, final PsiCall methodCall) {
+    public ChangeStringLiteralToCharInMethodCallFix(PsiLiteralExpression literal, final PsiCall methodCall) {
         myLiteral = literal;
         myCall = methodCall;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public String getText() {
-        final String convertedValue = convertedValue();
-        final boolean isString = isString(myLiteral.getType());
-        return JavaQuickFixBundle.message(
-            "fix.single.character.string.to.char.literal.text",
+        String convertedValue = convertedValue();
+        boolean isString = isString(myLiteral.getType());
+        return JavaQuickFixLocalize.fixSingleCharacterStringToCharLiteralText(
             myLiteral.getText(),
             quote(convertedValue, !isString),
             isString ? PsiType.CHAR.getCanonicalText() : "String"
-        );
+        ).get();
     }
 
     @Override
@@ -99,11 +99,11 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     public static void registerFixes(
-        @Nonnull final PsiMethod[] candidates,
-        @Nonnull final PsiConstructorCall call,
-        @Nonnull final HighlightInfo out
+        @Nonnull PsiMethod[] candidates,
+        @Nonnull PsiConstructorCall call,
+        @Nonnull HighlightInfo.Builder hlBuilder
     ) {
-        final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
+        Set<PsiLiteralExpression> literals = new HashSet<>();
         if (call.getArgumentList() == null) {
             return;
         }
@@ -112,39 +112,38 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
             exactMatch |= findMatchingExpressions(call.getArgumentList().getExpressions(), method, literals);
         }
         if (!exactMatch) {
-            processLiterals(literals, call, out);
+            processLiterals(literals, call, hlBuilder);
         }
     }
 
     public static void registerFixes(
-        @Nonnull final CandidateInfo[] candidates,
-        @Nonnull final PsiMethodCallExpression methodCall,
-        @Nullable final HighlightInfo info
+        @Nonnull CandidateInfo[] candidates,
+        @Nonnull PsiMethodCallExpression methodCall,
+        @Nullable HighlightInfo.Builder hlBuilder
     ) {
-        if (info == null) {
+        if (hlBuilder == null) {
             return;
         }
-        final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
+        Set<PsiLiteralExpression> literals = new HashSet<>();
         boolean exactMatch = false;
         for (CandidateInfo candidate : candidates) {
-            if (candidate instanceof MethodCandidateInfo) {
-                final PsiMethod method = ((MethodCandidateInfo)candidate).getElement();
+            if (candidate instanceof MethodCandidateInfo methodCandidateInfo) {
+                PsiMethod method = methodCandidateInfo.getElement();
                 exactMatch |= findMatchingExpressions(methodCall.getArgumentList().getExpressions(), method, literals);
             }
         }
         if (!exactMatch) {
-            processLiterals(literals, methodCall, info);
+            processLiterals(literals, methodCall, hlBuilder);
         }
     }
 
     private static void processLiterals(
-        @Nonnull final Set<PsiLiteralExpression> literals,
-        @Nonnull final PsiCall call,
-        @Nonnull final HighlightInfo info
+        @Nonnull Set<PsiLiteralExpression> literals,
+        @Nonnull PsiCall call,
+        @Nonnull HighlightInfo.Builder hlBuilder
     ) {
         for (PsiLiteralExpression literal : literals) {
-            final ChangeStringLiteralToCharInMethodCallFix fix = new ChangeStringLiteralToCharInMethodCallFix(literal, call);
-            QuickFixAction.registerQuickFixAction(info, fix);
+            hlBuilder.registerFix(new ChangeStringLiteralToCharInMethodCallFix(literal, call));
         }
     }
 
@@ -152,12 +151,12 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
      * @return <code>true</code> if exact TYPEs match
      */
     private static boolean findMatchingExpressions(
-        final PsiExpression[] arguments,
-        final PsiMethod existingMethod,
-        final Set<PsiLiteralExpression> result
+        PsiExpression[] arguments,
+        PsiMethod existingMethod,
+        Set<PsiLiteralExpression> result
     ) {
-        final PsiParameterList parameterList = existingMethod.getParameterList();
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameterList parameterList = existingMethod.getParameterList();
+        PsiParameter[] parameters = parameterList.getParameters();
 
         if (arguments.length != parameters.length) {
             return false;
@@ -165,16 +164,16 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
 
         boolean typeMatch = true;
         for (int i = 0; i < parameters.length && i < arguments.length; i++) {
-            final PsiParameter parameter = parameters[i];
-            final PsiType parameterType = parameter.getType();
-            final PsiType argumentType = arguments[i].getType();
+            PsiParameter parameter = parameters[i];
+            PsiType parameterType = parameter.getType();
+            PsiType argumentType = arguments[i].getType();
 
             typeMatch &= Comparing.equal(parameterType, argumentType);
 
-            if (arguments[i] instanceof PsiLiteralExpression && !result.contains(arguments[i]) &&
-                (charToString(parameterType, argumentType) || charToString(argumentType, parameterType))) {
+            if (arguments[i] instanceof PsiLiteralExpression && !result.contains(arguments[i])
+                && (charToString(parameterType, argumentType) || charToString(argumentType, parameterType))) {
 
-                final String value = String.valueOf(((PsiLiteralExpression)arguments[i]).getValue());
+                String value = String.valueOf(((PsiLiteralExpression)arguments[i]).getValue());
                 if (value != null && value.length() == 1) {
                     result.add((PsiLiteralExpression)arguments[i]);
                 }
@@ -183,11 +182,11 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
         return typeMatch;
     }
 
-    private static boolean charToString(final PsiType firstType, final PsiType secondType) {
+    private static boolean charToString(PsiType firstType, PsiType secondType) {
         return Comparing.equal(PsiType.CHAR, firstType) && isString(secondType);
     }
 
-    private static boolean isString(final PsiType type) {
-        return type != null && "java.lang.String".equals(type.getCanonicalText());
+    private static boolean isString(PsiType type) {
+        return type != null && JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
     }
 }
