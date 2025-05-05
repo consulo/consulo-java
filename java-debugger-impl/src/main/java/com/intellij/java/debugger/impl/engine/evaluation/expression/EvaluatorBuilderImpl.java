@@ -1326,11 +1326,14 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 		@Override
 		public void visitLiteralExpression(PsiLiteralExpression expression)
 		{
-			final HighlightInfo parsingError = HighlightUtil.checkLiteralExpressionParsingError(expression, null, null);
+			final HighlightInfo.Builder parsingError = HighlightUtil.checkLiteralExpressionParsingError(expression, null, null);
 			if(parsingError != null)
 			{
-				throwEvaluateException(parsingError.getDescription());
-				return;
+				HighlightInfo hlInfo = parsingError.create();
+				if (hlInfo != null) {
+					throwEvaluateException(hlInfo.getDescription());
+					return;
+				}
 			}
 
 			final PsiType type = expression.getType();

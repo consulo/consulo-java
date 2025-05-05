@@ -60,11 +60,11 @@ final class RefCountHolder {
         }
         return storedHolder == null || wholeFile
             ? new RefCountHolder(
-            file,
-            MultiMap.createConcurrentSet(),
-            Sets.newConcurrentHashSet(HashingStrategy.canonical()),
-            new ConcurrentHashMap<>()
-        )
+                file,
+                MultiMap.createConcurrentSet(),
+                Sets.newConcurrentHashSet(HashingStrategy.canonical()),
+                new ConcurrentHashMap<>()
+            )
             : storedHolder.removeInvalidRefs();
     }
 

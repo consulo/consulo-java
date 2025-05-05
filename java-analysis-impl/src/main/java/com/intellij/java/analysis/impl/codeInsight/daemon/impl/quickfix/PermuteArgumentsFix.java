@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -31,9 +32,11 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,147 +44,195 @@ import java.util.List;
  * @author cdr
  */
 public class PermuteArgumentsFix implements SyntheticIntentionAction {
-  private static final Logger LOG = Logger.getInstance(PermuteArgumentsFix.class);
-  private final PsiCall myCall;
-  private final PsiCall myPermutation;
+    private static final Logger LOG = Logger.getInstance(PermuteArgumentsFix.class);
+    private final PsiCall myCall;
+    private final PsiCall myPermutation;
 
-  private PermuteArgumentsFix(@Nonnull PsiCall call, @Nonnull PsiCall permutation) {
-    myCall = call;
-    myPermutation = permutation;
-  }
+    private PermuteArgumentsFix(@Nonnull PsiCall call, @Nonnull PsiCall permutation) {
+        myCall = call;
+        myPermutation = permutation;
+    }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 
+    @Override
+    @Nonnull
+    public String getText() {
+        return JavaQuickFixBundle.message("permute.arguments");
+    }
 
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("permute.arguments");
-  }
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return !project.isDisposed() && myCall.isValid() && myCall.getManager().isInProject(myCall);
+    }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return !project.isDisposed() && myCall.isValid() && myCall.getManager().isInProject(myCall);
-  }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
+        }
+        myCall.getArgumentList().replace(myPermutation.getArgumentList());
+    }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    myCall.getArgumentList().replace(myPermutation.getArgumentList());
-  }
+    @RequiredReadAction
+    public static void registerFix(HighlightInfo.Builder hlBuilder, PsiCall callExpression, CandidateInfo[] candidates, TextRange fixRange) {
+        PsiExpression[] expressions = callExpression.getArgumentList().getExpressions();
+        if (hlBuilder == null || expressions.length < 2) {
+            return;
+        }
+        List<PsiCall> permutations = new ArrayList<>();
 
-  public static void registerFix(HighlightInfo info, PsiCall callExpression, final CandidateInfo[] candidates, final TextRange fixRange) {
-    PsiExpression[] expressions = callExpression.getArgumentList().getExpressions();
-    if (expressions.length < 2) return;
-    List<PsiCall> permutations = new ArrayList<PsiCall>();
+        for (CandidateInfo candidate : candidates) {
+            if (candidate instanceof MethodCandidateInfo) {
+                MethodCandidateInfo methodCandidate = (MethodCandidateInfo)candidate;
+                PsiMethod method = methodCandidate.getElement();
+                PsiSubstitutor substitutor = methodCandidate.getSubstitutor();
 
-    for (CandidateInfo candidate : candidates) {
-      if (candidate instanceof MethodCandidateInfo) {
-        MethodCandidateInfo methodCandidate = (MethodCandidateInfo) candidate;
+                PsiParameter[] parameters = method.getParameterList().getParameters();
+                if (expressions.length != parameters.length || parameters.length == 0) {
+                    continue;
+                }
+                int minIncompatibleIndex = parameters.length;
+                int maxIncompatibleIndex = 0;
+                int incompatibilitiesCount = 0;
+                for (int i = 0; i < parameters.length; i++) {
+                    PsiParameter parameter = parameters[i];
+                    PsiType type = substitutor.substitute(parameter.getType());
+                    if (TypeConversionUtil.areTypesAssignmentCompatible(type, expressions[i])) {
+                        continue;
+                    }
+                    if (minIncompatibleIndex == parameters.length) {
+                        minIncompatibleIndex = i;
+                    }
+                    maxIncompatibleIndex = i;
+                    incompatibilitiesCount++;
+                }
+
+                try {
+                    registerSwapFixes(
+                        expressions,
+                        callExpression,
+                        permutations,
+                        methodCandidate,
+                        incompatibilitiesCount,
+                        minIncompatibleIndex,
+                        maxIncompatibleIndex
+                    );
+                    registerShiftFixes(
+                        expressions,
+                        callExpression,
+                        permutations,
+                        methodCandidate,
+                        minIncompatibleIndex,
+                        maxIncompatibleIndex
+                    );
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            }
+        }
+        if (permutations.size() == 1) {
+            hlBuilder.registerFix(new PermuteArgumentsFix(callExpression, permutations.get(0)), fixRange);
+        }
+    }
+
+    @RequiredReadAction
+    private static void registerShiftFixes(
+        PsiExpression[] expressions,
+        PsiCall callExpression,
+        List<PsiCall> permutations,
+        MethodCandidateInfo methodCandidate,
+        int minIncompatibleIndex,
+        int maxIncompatibleIndex
+    )
+        throws IncorrectOperationException {
         PsiMethod method = methodCandidate.getElement();
         PsiSubstitutor substitutor = methodCandidate.getSubstitutor();
+        // shift range should include both incompatible indexes
+        for (int i = 0; i <= minIncompatibleIndex; i++) {
+            for (int j = Math.max(i + 2, maxIncompatibleIndex); j < expressions.length; j++) { // if j=i+1 the shift is equal to swap
+                {
+                    ArrayUtil.rotateLeft(expressions, i, j);
+                    if (PsiUtil.isApplicable(method, substitutor, expressions)) {
+                        PsiCall copy = (PsiCall)callExpression.copy();
+                        PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
+                        for (int k = i; k < copyExpressions.length; k++) {
+                            copyExpressions[k].replace(expressions[k]);
+                        }
 
-        PsiParameter[] parameters = method.getParameterList().getParameters();
-        if (expressions.length != parameters.length || parameters.length == 0) continue;
-        int minIncompatibleIndex = parameters.length;
-        int maxIncompatibleIndex = 0;
-        int incompatibilitiesCount = 0;
-        for (int i = 0; i < parameters.length; i++) {
-          PsiParameter parameter = parameters[i];
-          PsiType type = substitutor.substitute(parameter.getType());
-          if (TypeConversionUtil.areTypesAssignmentCompatible(type, expressions[i])) continue;
-          if (minIncompatibleIndex == parameters.length) minIncompatibleIndex = i;
-          maxIncompatibleIndex = i;
-          incompatibilitiesCount++;
-        }
+                        JavaResolveResult result = copy.resolveMethodGenerics();
+                        if (result.getElement() != null && result.isValidResult()) {
+                            permutations.add(copy);
+                            if (permutations.size() > 1) {
+                                return;
+                            }
+                        }
+                    }
+                    ArrayUtil.rotateRight(expressions, i, j);
+                }
 
-        try {
-          registerSwapFixes(expressions, callExpression, permutations, methodCandidate, incompatibilitiesCount, minIncompatibleIndex, maxIncompatibleIndex);
-          registerShiftFixes(expressions, callExpression, permutations, methodCandidate, minIncompatibleIndex, maxIncompatibleIndex);
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
-        }
-      }
-    }
-    if (permutations.size() == 1) {
-      PermuteArgumentsFix fix = new PermuteArgumentsFix(callExpression, permutations.get(0));
-      QuickFixAction.registerQuickFixAction(info, fixRange, fix);
-    }
-  }
+                {
+                    ArrayUtil.rotateRight(expressions, i, j);
+                    if (PsiUtil.isApplicable(method, substitutor, expressions)) {
+                        PsiCall copy = (PsiCall)callExpression.copy();
+                        PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
+                        for (int k = i; k < copyExpressions.length; k++) {
+                            copyExpressions[k].replace(expressions[k]);
+                        }
 
-  private static void registerShiftFixes(final PsiExpression[] expressions, final PsiCall callExpression, final List<PsiCall> permutations,
-                                         final MethodCandidateInfo methodCandidate, final int minIncompatibleIndex, final int maxIncompatibleIndex)
-      throws IncorrectOperationException {
-    PsiMethod method = methodCandidate.getElement();
-    PsiSubstitutor substitutor = methodCandidate.getSubstitutor();
-    // shift range should include both incompatible indexes
-    for (int i = 0; i <= minIncompatibleIndex; i++) {
-      for (int j = Math.max(i + 2, maxIncompatibleIndex); j < expressions.length; j++) { // if j=i+1 the shift is equal to swap
-        {
-          ArrayUtil.rotateLeft(expressions, i, j);
-          if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-            PsiCall copy = (PsiCall) callExpression.copy();
-            PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
-            for (int k = i; k < copyExpressions.length; k++) {
-              copyExpressions[k].replace(expressions[k]);
+                        JavaResolveResult result = copy.resolveMethodGenerics();
+                        if (result.getElement() != null && result.isValidResult()) {
+                            permutations.add(copy);
+                            if (permutations.size() > 1) {
+                                return;
+                            }
+                        }
+                    }
+                    ArrayUtil.rotateLeft(expressions, i, j);
+                }
             }
-
-            JavaResolveResult result = copy.resolveMethodGenerics();
-            if (result.getElement() != null && result.isValidResult()) {
-              permutations.add(copy);
-              if (permutations.size() > 1) return;
-            }
-          }
-          ArrayUtil.rotateRight(expressions, i, j);
         }
-
-        {
-          ArrayUtil.rotateRight(expressions, i, j);
-          if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-            PsiCall copy = (PsiCall) callExpression.copy();
-            PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
-            for (int k = i; k < copyExpressions.length; k++) {
-              copyExpressions[k].replace(expressions[k]);
-            }
-
-            JavaResolveResult result = copy.resolveMethodGenerics();
-            if (result.getElement() != null && result.isValidResult()) {
-              permutations.add(copy);
-              if (permutations.size() > 1) return;
-            }
-          }
-          ArrayUtil.rotateLeft(expressions, i, j);
-        }
-      }
     }
-  }
 
-  private static void registerSwapFixes(final PsiExpression[] expressions, final PsiCall callExpression, final List<PsiCall> permutations,
-                                        MethodCandidateInfo candidate, final int incompatibilitiesCount, final int minIncompatibleIndex,
-                                        final int maxIncompatibleIndex) throws IncorrectOperationException {
-    PsiMethod method = candidate.getElement();
-    PsiSubstitutor substitutor = candidate.getSubstitutor();
-    if (incompatibilitiesCount >= 3) return; // no way we can fix it by swapping
-
-    for (int i = minIncompatibleIndex; i < maxIncompatibleIndex; i++) {
-      for (int j = i + 1; j <= maxIncompatibleIndex; j++) {
-        ArrayUtil.swap(expressions, i, j);
-        if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-          PsiCall copy = (PsiCall) callExpression.copy();
-          PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
-          copyExpressions[i].replace(expressions[i]);
-          copyExpressions[j].replace(expressions[j]);
-          JavaResolveResult result = copy.resolveMethodGenerics();
-          if (result.getElement() != null && result.isValidResult()) {
-            permutations.add(copy);
-            if (permutations.size() > 1) return;
-          }
+    @RequiredReadAction
+    private static void registerSwapFixes(
+        PsiExpression[] expressions,
+        PsiCall callExpression,
+        List<PsiCall> permutations,
+        MethodCandidateInfo candidate,
+        int incompatibilitiesCount,
+        int minIncompatibleIndex,
+        int maxIncompatibleIndex
+    ) throws IncorrectOperationException {
+        PsiMethod method = candidate.getElement();
+        PsiSubstitutor substitutor = candidate.getSubstitutor();
+        if (incompatibilitiesCount >= 3) {
+            return; // no way we can fix it by swapping
         }
-        ArrayUtil.swap(expressions, i, j);
-      }
+
+        for (int i = minIncompatibleIndex; i < maxIncompatibleIndex; i++) {
+            for (int j = i + 1; j <= maxIncompatibleIndex; j++) {
+                ArrayUtil.swap(expressions, i, j);
+                if (PsiUtil.isApplicable(method, substitutor, expressions)) {
+                    PsiCall copy = (PsiCall)callExpression.copy();
+                    PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
+                    copyExpressions[i].replace(expressions[i]);
+                    copyExpressions[j].replace(expressions[j]);
+                    JavaResolveResult result = copy.resolveMethodGenerics();
+                    if (result.getElement() != null && result.isValidResult()) {
+                        permutations.add(copy);
+                        if (permutations.size() > 1) {
+                            return;
+                        }
+                    }
+                }
+                ArrayUtil.swap(expressions, i, j);
+            }
+        }
     }
-  }
 }

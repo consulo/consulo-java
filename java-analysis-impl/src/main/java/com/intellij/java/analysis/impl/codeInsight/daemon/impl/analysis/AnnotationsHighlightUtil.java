@@ -220,7 +220,10 @@ public class AnnotationsHighlightUtil {
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkDuplicateAnnotations(@Nonnull PsiAnnotation annotationToCheck, @Nonnull LanguageLevel languageLevel) {
+    public static HighlightInfo.Builder checkDuplicateAnnotations(
+        @Nonnull PsiAnnotation annotationToCheck,
+        @Nonnull LanguageLevel languageLevel
+    ) {
         PsiAnnotationOwner owner = annotationToCheck.getOwner();
         if (owner == null) {
             return null;
@@ -244,8 +247,7 @@ public class AnnotationsHighlightUtil {
             if (!languageLevel.isAtLeast(LanguageLevel.JDK_1_8)) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(element)
-                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateAnnotation())
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateAnnotation());
             }
 
             PsiAnnotation metaAnno =
@@ -254,16 +256,14 @@ public class AnnotationsHighlightUtil {
                 LocalizeValue explanation = JavaErrorLocalize.annotationNonRepeatable(annotationType.getQualifiedName());
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(element)
-                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateExplained(explanation))
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateExplained(explanation));
             }
 
             String explanation = doCheckRepeatableAnnotation(metaAnno);
             if (explanation != null) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(element)
-                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateExplained(explanation))
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.annotationDuplicateExplained(explanation));
             }
 
             PsiClass container = getRepeatableContainer(metaAnno);
@@ -381,14 +381,13 @@ public class AnnotationsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkConstantExpression(PsiExpression expression) {
+    public static HighlightInfo.Builder checkConstantExpression(PsiExpression expression) {
         PsiElement parent = expression.getParent();
         if (PsiUtil.isAnnotationMethod(parent) || parent instanceof PsiNameValuePair || parent instanceof PsiArrayInitializerMemberValue) {
             if (!PsiUtil.isConstantExpression(expression)) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(expression)
-                    .descriptionAndTooltip(JavaErrorLocalize.annotationNonConstantAttributeValue())
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.annotationNonConstantAttributeValue());
             }
         }
 
@@ -416,7 +415,11 @@ public class AnnotationsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkApplicability(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel level, @Nonnull PsiFile file) {
+    public static HighlightInfo.Builder checkApplicability(
+        @Nonnull PsiAnnotation annotation,
+        @Nonnull LanguageLevel level,
+        @Nonnull PsiFile file
+    ) {
         if (ANY_ANNOTATION_ALLOWED.accepts(annotation)) {
             return null;
         }
@@ -433,9 +436,9 @@ public class AnnotationsHighlightUtil {
         }
 
         if (!(owner instanceof PsiModifierList)) {
-            HighlightInfo info = HighlightUtil.checkFeature(annotation, JavaFeature.TYPE_ANNOTATIONS, level, file);
-            if (info != null) {
-                return info;
+            HighlightInfo.Builder hlBuilder = HighlightUtil.checkFeature(annotation, JavaFeature.TYPE_ANNOTATIONS, level, file);
+            if (hlBuilder != null) {
+                return hlBuilder;
             }
         }
 
@@ -445,15 +448,18 @@ public class AnnotationsHighlightUtil {
         }
 
         if (applicable == null) {
-            return annotationError(annotation, JavaErrorLocalize.annotationNotApplicable(nameRef.getText(), targets[0].getPresentableText()));
+            return annotationError(
+                annotation,
+                JavaErrorLocalize.annotationNotApplicable(nameRef.getText(), targets[0].getPresentableText())
+            );
         }
 
         if (applicable == PsiAnnotation.TargetType.TYPE_USE) {
             if (owner instanceof PsiClassReferenceType classRefType) {
                 PsiJavaCodeReferenceElement ref = classRefType.getReference();
-                HighlightInfo info = checkReferenceTarget(annotation, ref);
-                if (info != null) {
-                    return info;
+                HighlightInfo.Builder hlBuilder = checkReferenceTarget(annotation, ref);
+                if (hlBuilder != null) {
+                    return hlBuilder;
                 }
             }
             else if (owner instanceof PsiModifierList modifierList) {
@@ -467,9 +473,9 @@ public class AnnotationsHighlightUtil {
                     }
                     if (!(type instanceof PsiPrimitiveType)) {
                         PsiJavaCodeReferenceElement ref = getOutermostReferenceElement(typeElement.getInnermostComponentReferenceElement());
-                        HighlightInfo info = checkReferenceTarget(annotation, ref);
-                        if (info != null) {
-                            return info;
+                        HighlightInfo.Builder hlBuilder = checkReferenceTarget(annotation, ref);
+                        if (hlBuilder != null) {
+                            return hlBuilder;
                         }
                     }
                 }
@@ -486,17 +492,16 @@ public class AnnotationsHighlightUtil {
     }
 
     @RequiredReadAction
-    private static HighlightInfo annotationError(PsiAnnotation annotation, LocalizeValue message) {
+    private static HighlightInfo.Builder annotationError(PsiAnnotation annotation, LocalizeValue message) {
         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(annotation)
             .descriptionAndTooltip(message)
-            .registerFix(new DeleteAnnotationAction(annotation))
-            .create();
+            .registerFix(new DeleteAnnotationAction(annotation));
     }
 
     @Nullable
     @RequiredReadAction
-    private static HighlightInfo checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref) {
+    private static HighlightInfo.Builder checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref) {
         if (ref == null) {
             return null;
         }
