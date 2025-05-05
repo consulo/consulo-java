@@ -21,49 +21,49 @@ import consulo.logging.Logger;
 import jakarta.annotation.Nullable;
 
 public class EvaluateException extends Exception {
-  private static final Logger LOG = Logger.getInstance(EvaluateException.class);
-  private ObjectReference myTargetException;
+    private static final Logger LOG = Logger.getInstance(EvaluateException.class);
+    private ObjectReference myTargetException;
 
-  public EvaluateException(final String message) {
-    super(message);
-    if (LOG.isDebugEnabled()) {
-      LOG.debug(message);
+    public EvaluateException(final String message) {
+        super(message);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(message);
+        }
     }
-  }
 
-  public EvaluateException(String msg, Throwable th) {
-    super(msg, th);
-    if (th instanceof EvaluateException) {
-      myTargetException = ((EvaluateException)th).getExceptionFromTargetVM();
+    public EvaluateException(String msg, Throwable th) {
+        super(msg, th);
+        if (th instanceof EvaluateException) {
+            myTargetException = ((EvaluateException)th).getExceptionFromTargetVM();
+        }
+        else if (th instanceof InvocationException) {
+            InvocationException invocationException = (InvocationException)th;
+            myTargetException = invocationException.exception();
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(msg);
+        }
     }
-    else if(th instanceof InvocationException){
-      InvocationException invocationException = (InvocationException) th;
-      myTargetException = invocationException.exception();
-    }
-    if (LOG.isDebugEnabled()) {
-      LOG.debug(msg);
-    }
-  }
-  
-  @Nullable
-  public ObjectReference getExceptionFromTargetVM() {
-    return myTargetException;
-  }
 
-  public void setTargetException(final ObjectReference targetException) {
-    myTargetException = targetException;
-  }
+    @Nullable
+    public ObjectReference getExceptionFromTargetVM() {
+        return myTargetException;
+    }
 
-  public String getMessage() {
-    final String errorMessage = super.getMessage();
-    if (errorMessage != null) {
-      return errorMessage;
+    public void setTargetException(final ObjectReference targetException) {
+        myTargetException = targetException;
     }
-    final Throwable cause = getCause();
-    final String causeMessage = cause != null? cause.getMessage() : null;
-    if (causeMessage != null) {
-      return causeMessage;
+
+    public String getMessage() {
+        final String errorMessage = super.getMessage();
+        if (errorMessage != null) {
+            return errorMessage;
+        }
+        final Throwable cause = getCause();
+        final String causeMessage = cause != null ? cause.getMessage() : null;
+        if (causeMessage != null) {
+            return causeMessage;
+        }
+        return "unknown error";
     }
-    return "unknown error";
-  }
 }

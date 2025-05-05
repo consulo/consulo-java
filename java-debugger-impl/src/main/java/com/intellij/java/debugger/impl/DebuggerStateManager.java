@@ -18,34 +18,34 @@ package com.intellij.java.debugger.impl;
 import consulo.proxy.EventDispatcher;
 import jakarta.annotation.Nonnull;
 
-public abstract class DebuggerStateManager
-{
-	private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
+public abstract class DebuggerStateManager {
+    private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
 
-	@Nonnull
-	public abstract DebuggerContextImpl getContext();
+    @Nonnull
+    public abstract DebuggerContextImpl getContext();
 
-	public abstract void setState(@Nonnull DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description);
+    public abstract void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event,
+        String description
+    );
 
-	//we allow add listeners inside DebuggerContextListener.changeEvent
-	public void addListener(DebuggerContextListener listener)
-	{
-		myEventDispatcher.addListener(listener);
-	}
+    //we allow add listeners inside DebuggerContextListener.changeEvent
+    public void addListener(DebuggerContextListener listener) {
+        myEventDispatcher.addListener(listener);
+    }
 
-	//we allow remove listeners inside DebuggerContextListener.changeEvent
-	public void removeListener(DebuggerContextListener listener)
-	{
-		myEventDispatcher.removeListener(listener);
-	}
+    //we allow remove listeners inside DebuggerContextListener.changeEvent
+    public void removeListener(DebuggerContextListener listener) {
+        myEventDispatcher.removeListener(listener);
+    }
 
-	protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
-	{
-		myEventDispatcher.getMulticaster().changeEvent(newContext, event);
-	}
+    protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event) {
+        myEventDispatcher.getMulticaster().changeEvent(newContext, event);
+    }
 
-	void dispose()
-	{
-		myEventDispatcher.getListeners().clear();
-	}
+    void dispose() {
+        myEventDispatcher.getListeners().clear();
+    }
 }
