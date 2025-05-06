@@ -75,7 +75,7 @@ public class EvaluateExceptionUtil {
     private static LocalizeValue reason(Throwable th) {
         if (th instanceof InvalidTypeException) {
             String originalReason = th.getMessage();
-            return LocalizeValue.join(JavaDebuggerLocalize.evaluationErrorTypeMismatch(), LocalizeValue.ofNullable(originalReason));
+            return LocalizeValue.join(JavaDebuggerLocalize.evaluationErrorTypeMismatch(), LocalizeValue.space(), LocalizeValue.ofNullable(originalReason));
         }
         else if (th instanceof AbsentInformationException) {
             return JavaDebuggerLocalize.evaluationErrorDebugInfoUnavailable();

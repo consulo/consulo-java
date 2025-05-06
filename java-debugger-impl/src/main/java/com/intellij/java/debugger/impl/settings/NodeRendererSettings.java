@@ -531,6 +531,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
             catch (EvaluateException ex) {
                 LocalizeValue message = LocalizeValue.join(
                     JavaDebuggerLocalize.errorUnableToEvaluateExpression(),
+                    LocalizeValue.space(),
                     LocalizeValue.ofNullable(ex.getMessage())
                 );
                 throw new EvaluateException(message.get(), ex);
