@@ -15,6 +15,7 @@
  */
 package com.intellij.java.debugger;
 
+import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.DeprecationInfo;
 import consulo.annotation.internal.MigratedExtensionsTo;
@@ -27,14 +28,16 @@ import com.intellij.java.execution.configurations.RemoteConnection;
 @MigratedExtensionsTo(JavaDebuggerLocalize.class)
 public class DebuggerBundle extends AbstractBundle
 {
+	@Deprecated
 	public static String getAddressDisplayName(final RemoteConnection connection)
 	{
-		return connection.isUseSockets() ? connection.getHostName() + ":" + connection.getAddress() : connection.getAddress();
+		return DebuggerUtils.getAddressDisplayName(connection);
 	}
 
+	@Deprecated
 	public static String getTransportName(final RemoteConnection connection)
 	{
-		return connection.isUseSockets() ? message("transport.name.socket") : message("transport.name.shared.memory");
+		return DebuggerUtils.getTransportName(connection).get();
 	}
 
 	private static final DebuggerBundle ourInstance = new DebuggerBundle();

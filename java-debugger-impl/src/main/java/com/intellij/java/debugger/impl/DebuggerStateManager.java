@@ -15,37 +15,58 @@
  */
 package com.intellij.java.debugger.impl;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.localize.LocalizeValue;
 import consulo.proxy.EventDispatcher;
 import jakarta.annotation.Nonnull;
 
-public abstract class DebuggerStateManager
-{
-	private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
+public abstract class DebuggerStateManager {
+    private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
 
-	@Nonnull
-	public abstract DebuggerContextImpl getContext();
+    @Nonnull
+    public abstract DebuggerContextImpl getContext();
 
-	public abstract void setState(@Nonnull DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description);
+    public void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event,
+        @Nonnull LocalizeValue description
+    ) {
+        setState(context, state, event, description.get());
+    }
 
-	//we allow add listeners inside DebuggerContextListener.changeEvent
-	public void addListener(DebuggerContextListener listener)
-	{
-		myEventDispatcher.addListener(listener);
-	}
+    public void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event
+    ) {
+        setState(context, state, event, (String)null);
+    }
 
-	//we allow remove listeners inside DebuggerContextListener.changeEvent
-	public void removeListener(DebuggerContextListener listener)
-	{
-		myEventDispatcher.removeListener(listener);
-	}
+    @Deprecated
+    @DeprecationInfo("Use variant with LocalizeValue")
+    public abstract void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event,
+        String description
+    );
 
-	protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
-	{
-		myEventDispatcher.getMulticaster().changeEvent(newContext, event);
-	}
+    //we allow add listeners inside DebuggerContextListener.changeEvent
+    public void addListener(DebuggerContextListener listener) {
+        myEventDispatcher.addListener(listener);
+    }
 
-	void dispose()
-	{
-		myEventDispatcher.getListeners().clear();
-	}
+    //we allow remove listeners inside DebuggerContextListener.changeEvent
+    public void removeListener(DebuggerContextListener listener) {
+        myEventDispatcher.removeListener(listener);
+    }
+
+    protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event) {
+        myEventDispatcher.getMulticaster().changeEvent(newContext, event);
+    }
+
+    void dispose() {
+        myEventDispatcher.getListeners().clear();
+    }
 }

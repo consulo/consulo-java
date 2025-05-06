@@ -20,12 +20,13 @@ import consulo.application.Application;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.project.Project;
 import consulo.ui.ModalityState;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
-    public static void swingInvokeLater(final Project project, @Nonnull final Runnable runnable) {
+    public static void swingInvokeLater(final Project project, @Nonnull @RequiredUIAccess Runnable runnable) {
         SwingUtilities.invokeLater(() -> {
             if (project != null && !project.isDisposed()) {
                 runnable.run();
