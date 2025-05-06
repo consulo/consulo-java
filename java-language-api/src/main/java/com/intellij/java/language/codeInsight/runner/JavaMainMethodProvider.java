@@ -28,9 +28,9 @@ import consulo.component.extension.ExtensionPointName;
 public interface JavaMainMethodProvider {
     ExtensionPointName<JavaMainMethodProvider> EP_NAME = ExtensionPointName.create(JavaMainMethodProvider.class);
 
-    boolean isApplicable(final PsiClass clazz);
+    boolean isApplicable(PsiClass clazz);
 
-    boolean hasMainMethod(final PsiClass clazz);
+    boolean hasMainMethod(PsiClass clazz);
 
-    PsiMethod findMainInClass(final PsiClass clazz);
+    PsiMethod findMainInClass(PsiClass clazz);
 }

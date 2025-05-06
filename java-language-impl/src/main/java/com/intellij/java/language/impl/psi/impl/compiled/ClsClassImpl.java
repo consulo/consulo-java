@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.util.Queryable;
-import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
 import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
 import consulo.java.language.module.util.JavaClassNames;
@@ -37,7 +36,6 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -49,16 +47,16 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
     private final ClassInnerStuffCache myInnersCache = new ClassInnerStuffCache(this);
 
-    public ClsClassImpl(final PsiClassStub stub) {
+    public ClsClassImpl(PsiClassStub stub) {
         super(stub);
         putUserData(JavaEnumAugmentProvider.FLAG, Boolean.TRUE);
     }
 
-    @RequiredReadAction
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
-        List<PsiElement> children = ContainerUtil.newArrayList();
+        List<PsiElement> children = new ArrayList<>();
         ContainerUtil.addAll(
             children,
             getChildren(getDocComment(), getModifierListInternal(), getNameIdentifier(), getExtendsList(), getImplementsList())
@@ -88,12 +86,12 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
     private boolean isLocalClass() {
         PsiClassStub<?> stub = getStub();
-        return stub instanceof PsiClassStubImpl && ((PsiClassStubImpl)stub).isLocalClassInner();
+        return stub instanceof PsiClassStubImpl classStub && classStub.isLocalClassInner();
     }
 
     private boolean isAnonymousClass() {
         PsiClassStub<?> stub = getStub();
-        return stub instanceof PsiClassStubImpl && ((PsiClassStubImpl)stub).isAnonymousInner();
+        return stub instanceof PsiClassStubImpl classStub && classStub.isAnonymousInner();
     }
 
     private boolean isAnonymousOrLocalClass() {
@@ -179,8 +177,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
     @Override
     public PsiClass getContainingClass() {
-        PsiElement parent = getParent();
-        return parent instanceof PsiClass ? (PsiClass)parent : null;
+        return getParent() instanceof PsiClass containingClass ? containingClass : null;
     }
 
     @Override
@@ -235,7 +232,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
         int anonymousOrLocalClassesCount = 0;
         for (PsiClass aClass : classes) {
-            if (aClass instanceof ClsClassImpl && ((ClsClassImpl)aClass).isAnonymousOrLocalClass()) {
+            if (aClass instanceof ClsClassImpl clsClass && clsClass.isAnonymousOrLocalClass()) {
                 ++anonymousOrLocalClassesCount;
             }
         }
@@ -245,7 +242,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
         ArrayList<PsiClass> result = new ArrayList<>(classes.length - anonymousOrLocalClassesCount);
         for (PsiClass aClass : classes) {
-            if (!(aClass instanceof ClsClassImpl) || !((ClsClassImpl)aClass).isAnonymousOrLocalClass()) {
+            if (!(aClass instanceof ClsClassImpl clsClass) || !clsClass.isAnonymousOrLocalClass()) {
                 result.add(aClass);
             }
         }
@@ -326,14 +323,15 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         return getStub().isDeprecated() || PsiImplUtil.isDeprecatedByAnnotation(this);
     }
 
+    @RequiredReadAction
     public String getSourceFileName() {
-        final String sfn = getStub().getSourceFileName();
+        String sfn = getStub().getSourceFileName();
         return sfn != null ? sfn : obtainSourceFileNameFromClassFileName();
     }
 
-    @NonNls
+    @RequiredReadAction
     private String obtainSourceFileNameFromClassFileName() {
-        final String name = getContainingFile().getName();
+        String name = getContainingFile().getName();
         int i = name.indexOf('$');
         if (i < 0) {
             i = name.indexOf('.');
@@ -370,7 +368,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     }
 
     @Override
-    public void appendMirrorText(final int indentLevel, @Nonnull @NonNls final StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
         appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
 
         appendText(getModifierListInternal(), indentLevel, buffer);
@@ -469,8 +467,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         setMirror(getExtendsList(), mirror.getExtendsList());
         setMirror(getImplementsList(), mirror.getImplementsList());
 
-        if (mirror instanceof PsiExtensibleClass) {
-            PsiExtensibleClass extMirror = (PsiExtensibleClass)mirror;
+        if (mirror instanceof PsiExtensibleClass extMirror) {
             setMirrors(getOwnFields(), extMirror.getOwnFields());
             setMirrors(getOwnMethods(), extMirror.getOwnMethods());
             setMirrors(getOwnInnerClasses(), extMirror.getOwnInnerClasses());
@@ -484,20 +481,21 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitClass(this);
+        if (visitor instanceof JavaElementVisitor javaElementVisitor) {
+            javaElementVisitor.visitClass(this);
         }
         else {
             visitor.visitElement(this);
         }
     }
 
-    @NonNls
+    @Override
     public String toString() {
         return "PsiClass:" + getName();
     }
 
     @Override
+    @RequiredReadAction
     public boolean processDeclarations(
         @Nonnull PsiScopeProcessor processor,
         @Nonnull ResolveState state,
@@ -505,7 +503,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         @Nonnull PsiElement place
     ) {
         LanguageLevel level =
-            processor instanceof MethodsProcessor ? ((MethodsProcessor)processor).getLanguageLevel() : PsiUtil.getLanguageLevel(place);
+            processor instanceof MethodsProcessor methodsProcessor ? methodsProcessor.getLanguageLevel() : PsiUtil.getLanguageLevel(place);
         return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, level, false);
     }
 
@@ -525,20 +523,21 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     }
 
     @Nullable
+    @RequiredReadAction
     public PsiClass getSourceMirrorClass() {
-        final PsiClass delegate = getUserData(DELEGATE_KEY);
-        if (delegate instanceof ClsClassImpl) {
-            return ((ClsClassImpl)delegate).getSourceMirrorClass();
+        PsiClass delegate = getUserData(DELEGATE_KEY);
+        if (delegate instanceof ClsClassImpl clsClass) {
+            return clsClass.getSourceMirrorClass();
         }
 
-        final String name = getName();
-        final PsiElement parent = getParent();
+        String name = getName();
+        PsiElement parent = getParent();
         if (parent instanceof PsiFile) {
-            if (!(parent instanceof PsiClassOwner)) {
+            if (!(parent instanceof PsiClassOwner classOwner)) {
                 return null;
             }
 
-            PsiClassOwner fileNavigationElement = (PsiClassOwner)parent.getNavigationElement();
+            PsiClassOwner fileNavigationElement = (PsiClassOwner)classOwner.getNavigationElement();
             if (fileNavigationElement == parent) {
                 return null;
             }
@@ -569,10 +568,11 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         return null;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement getNavigationElement() {
-        for (ClsCustomNavigationPolicy navigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME)) {
+        for (ClsCustomNavigationPolicy navigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensions()) {
             try {
                 PsiElement navigationElement = navigationPolicy.getNavigationElement(this);
                 if (navigationElement != null) {
@@ -590,12 +590,8 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
             }
 
             if ("package-info".equals(getName())) {
-                PsiElement parent = getParent();
-                if (parent instanceof ClsFileImpl) {
-                    PsiElement sourceFile = parent.getNavigationElement();
-                    if (sourceFile instanceof PsiJavaFile) {
-                        return sourceFile;
-                    }
+                if (getParent() instanceof ClsFileImpl clsFile && clsFile.getNavigationElement() instanceof PsiJavaFile javaFile) {
+                    return javaFile;
                 }
             }
         }
@@ -611,7 +607,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     }
 
     @Override
-    public boolean isEquivalentTo(final PsiElement another) {
+    public boolean isEquivalentTo(PsiElement another) {
         return PsiClassImplUtil.isClassEquivalentTo(this, another);
     }
 
@@ -633,10 +629,9 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         return header == null ? PsiRecordComponent.EMPTY_ARRAY : header.getRecordComponents();
     }
 
-    @Override
-    public
     @Nullable
-    PsiRecordHeader getRecordHeader() {
+    @Override
+    public PsiRecordHeader getRecordHeader() {
         PsiRecordHeaderStub headerStub = getStub().findChildStubByType(JavaStubElementTypes.RECORD_HEADER);
         return headerStub == null ? null : headerStub.getPsi();
     }

@@ -19,18 +19,17 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
-import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -41,18 +40,13 @@ import java.util.stream.Stream;
 @Singleton
 @ServiceImpl
 public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
-    private static final SmartTypePointer NULL_POINTER = new SmartTypePointer() {
-        @Override
-        public PsiType getType() {
-            return null;
-        }
-    };
+    private static final SmartTypePointer NULL_POINTER = () -> null;
 
     private final SmartPointerManager myPsiPointerManager;
     private final Project myProject;
 
     @Inject
-    public SmartTypePointerManagerImpl(final SmartPointerManager psiPointerManager, final Project project) {
+    public SmartTypePointerManagerImpl(SmartPointerManager psiPointerManager, Project project) {
         myPsiPointerManager = psiPointerManager;
         myProject = project;
     }
@@ -60,7 +54,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     @Override
     @Nonnull
     public SmartTypePointer createSmartTypePointer(@Nonnull PsiType type) {
-        final SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
+        SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
         return pointer != null ? pointer : NULL_POINTER;
     }
 
@@ -88,7 +82,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
         @Nullable
         @Override
         protected PsiArrayType calcType() {
-            final PsiType type = myComponentTypePointer.getType();
+            PsiType type = myComponentTypePointer.getType();
             return type == null ? null : new PsiArrayType(type);
         }
     }
@@ -111,7 +105,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
                 return PsiWildcardType.createUnbounded(myManager);
             }
             else {
-                final PsiType type = myBoundPointer.getType();
+                PsiType type = myBoundPointer.getType();
                 assert type != null : myBoundPointer;
                 if (myIsExtending) {
                     return PsiWildcardType.createExtends(myManager, type);
@@ -142,13 +136,13 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
         }
 
         @Override
+        @RequiredReadAction
         protected PsiClassType calcType() {
-            final PsiElement classElement = myClass.getElement();
-            if (!(classElement instanceof PsiClass)) {
+            if (!(myClass.getElement() instanceof PsiClass classElement)) {
                 return null;
             }
             Map<PsiTypeParameter, PsiType> resurrected = new HashMap<>();
-            final Set<Map.Entry<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer>> set = myMap.entrySet();
+            Set<Map.Entry<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer>> set = myMap.entrySet();
             for (Map.Entry<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> entry : set) {
                 PsiTypeParameter element = entry.getKey().getElement();
                 if (element != null) {
@@ -156,16 +150,18 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
                     resurrected.put(element, typePointer == null ? null : typePointer.getType());
                 }
             }
-            for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable((PsiClass)classElement)) {
+            for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(classElement)) {
                 if (!resurrected.containsKey(typeParameter)) {
                     resurrected.put(typeParameter, null);
                 }
             }
-            final PsiSubstitutor resurrectedSubstitutor = PsiSubstitutor.createSubstitutor(resurrected);
+            PsiSubstitutor resurrectedSubstitutor = PsiSubstitutor.createSubstitutor(resurrected);
 
-            PsiAnnotation[] resurrectedAnnotations =
-                Stream.of(myAnnotations).map(SmartPsiElementPointer::getElement).filter(Objects::nonNull).toArray(PsiAnnotation[]::new);
-            return new PsiImmediateClassType((PsiClass)classElement, resurrectedSubstitutor, myLevel, resurrectedAnnotations);
+            PsiAnnotation[] resurrectedAnnotations = Stream.of(myAnnotations)
+                .map(SmartPsiElementPointer::getElement)
+                .filter(Objects::nonNull)
+                .toArray(PsiAnnotation[]::new);
+            return new PsiImmediateClassType(classElement, resurrectedSubstitutor, myLevel, resurrectedAnnotations);
         }
     }
 
@@ -179,7 +175,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
 
         @Override
         protected PsiDisjunctionType calcType() {
-            final List<PsiType> types = ContainerUtil.map(myPointers, SmartTypePointer::getType);
+            List<PsiType> types = ContainerUtil.map(myPointers, SmartTypePointer::getType);
             return new PsiDisjunctionType(types, PsiManager.getInstance(myProject));
         }
     }
@@ -192,31 +188,31 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
 
         @Override
         public SmartTypePointer visitArrayType(PsiArrayType arrayType) {
-            final SmartTypePointer componentTypePointer = arrayType.getComponentType().accept(this);
+            SmartTypePointer componentTypePointer = arrayType.getComponentType().accept(this);
             return componentTypePointer != null ? new ArrayTypePointer(arrayType, componentTypePointer) : null;
         }
 
         @Override
         public SmartTypePointer visitWildcardType(PsiWildcardType wildcardType) {
-            final PsiType bound = wildcardType.getBound();
-            final SmartTypePointer boundPointer = bound == null ? null : bound.accept(this);
+            PsiType bound = wildcardType.getBound();
+            SmartTypePointer boundPointer = bound == null ? null : bound.accept(this);
             return new WildcardTypePointer(wildcardType, boundPointer);
         }
 
         @Override
         public SmartTypePointer visitClassType(PsiClassType classType) {
-            final PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
-            final PsiClass aClass = resolveResult.getElement();
+            PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+            PsiClass aClass = resolveResult.getElement();
             if (aClass == null) {
                 return createClassReferenceTypePointer(classType);
             }
-            final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-            final HashMap<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> pointerMap = new HashMap<>();
-            final Map<PsiTypeParameter, PsiType> map = new HashMap<>();
+            PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+            HashMap<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> pointerMap = new HashMap<>();
+            Map<PsiTypeParameter, PsiType> map = new HashMap<>();
             for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(aClass)) {
-                final PsiType substitutionResult = substitutor.substitute(typeParameter);
+                PsiType substitutionResult = substitutor.substitute(typeParameter);
                 if (substitutionResult != null) {
-                    final SmartPsiElementPointer<PsiTypeParameter> pointer =
+                    SmartPsiElementPointer<PsiTypeParameter> pointer =
                         myPsiPointerManager.createSmartPsiElementPointer(typeParameter);
                     SmartTypePointer typePointer = substitutionResult.accept(this);
                     pointerMap.put(pointer, typePointer);

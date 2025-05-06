@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: yole
- * Date: 31.01.2007
- * Time: 13:56:12
- */
 package com.intellij.java.execution.impl;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunConfigurationExtensionBase;
 import consulo.execution.configuration.RunnerSettings;
@@ -38,13 +30,17 @@ import jakarta.annotation.Nonnull;
 
 import jakarta.annotation.Nullable;
 
+/*
+ * @author yole
+ * @since 2007-01-31
+ */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase> {
     public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = ExtensionPointName.create(RunConfigurationExtension.class);
 
     public abstract <T extends RunConfigurationBase> void updateJavaParameters(
-        final T configuration,
-        final OwnJavaParameters params,
+        T configuration,
+        OwnJavaParameters params,
         RunnerSettings runnerSettings
     ) throws ExecutionException;
 
@@ -88,7 +84,7 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
         RunConfigurationBase runConfigurationBase,
         RefactoringElementListener listener
     ) {
-        for (RunConfigurationExtension extension : Extensions.getExtensions(EP_NAME)) {
+        for (RunConfigurationExtension extension : EP_NAME.getExtensions()) {
             listener = extension.wrapElementListener(element, runConfigurationBase, listener);
         }
         return listener;

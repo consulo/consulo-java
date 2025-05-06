@@ -18,7 +18,6 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
-import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
@@ -26,11 +25,11 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.util.AtomicNotNullLazyValue;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.NotNullLazyValue;
-import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.impl.ast.TreeElement;
@@ -53,22 +52,22 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     private final NotNullLazyValue<PsiTypeElement> myReturnType;
     private final NotNullLazyValue<PsiAnnotationMemberValue> myDefaultValue;
 
-    public ClsMethodImpl(final PsiMethodStub stub) {
+    public ClsMethodImpl(PsiMethodStub stub) {
         super(stub);
 
-        myReturnType = isConstructor() ? null : new AtomicNotNullLazyValue<PsiTypeElement>() {
+        myReturnType = isConstructor() ? null : new AtomicNotNullLazyValue<>() {
             @Nonnull
             @Override
             protected PsiTypeElement compute() {
                 PsiMethodStub stub = getStub();
-                String typeText = TypeInfo.createTypeText(stub.getReturnTypeText());
+                String typeText = stub.getReturnTypeText().text();
                 assert typeText != null : stub;
                 return new ClsTypeElementImpl(ClsMethodImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
             }
         };
 
         final String text = getStub().getDefaultValueText();
-        myDefaultValue = StringUtil.isEmptyOrSpaces(text) ? null : new AtomicNotNullLazyValue<PsiAnnotationMemberValue>() {
+        myDefaultValue = StringUtil.isEmptyOrSpaces(text) ? null : new AtomicNotNullLazyValue<>() {
             @Nonnull
             @Override
             protected PsiAnnotationMemberValue compute() {
@@ -77,8 +76,9 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         };
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
         return getChildren(
             getDocComment(),
@@ -263,8 +263,8 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitMethod(this);
+        if (visitor instanceof JavaElementVisitor javaElementVisitor) {
+            javaElementVisitor.visitMethod(this);
         }
         else {
             visitor.visitElement(this);
@@ -287,7 +287,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
             return false;
         }
 
-        final PsiParameter[] parameters = getParameterList().getParameters();
+        PsiParameter[] parameters = getParameterList().getParameters();
         for (PsiParameter parameter : parameters) {
             if (!processor.execute(parameter, state)) {
                 return false;
@@ -311,6 +311,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Nullable
+    @RequiredReadAction
     private PsiMethod calcSourceMirrorMethod() {
         PsiClass sourceClassMirror = ((ClsClassImpl)getParent()).getSourceMirrorClass();
         if (sourceClassMirror == null) {
@@ -327,7 +328,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     @Override
     @Nonnull
     public PsiElement getNavigationElement() {
-        for (ClsCustomNavigationPolicy customNavigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME)) {
+        for (ClsCustomNavigationPolicy customNavigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensions()) {
             try {
                 PsiElement navigationElement = customNavigationPolicy.getNavigationElement(this);
                 if (navigationElement != null) {
@@ -339,7 +340,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         }
 
         try {
-            final PsiMethod method = getSourceMirrorMethod();
+            PsiMethod method = getSourceMirrorMethod();
             return method != null ? method.getNavigationElement() : this;
         }
         catch (IndexNotReadyException e) {
@@ -364,12 +365,13 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    public boolean isEquivalentTo(final PsiElement another) {
+    public boolean isEquivalentTo(PsiElement another) {
         return PsiClassImplUtil.isMethodEquivalentTo(this, another);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public SearchScope getUseScope() {
         return PsiImplUtil.getMemberUseScope(this);
     }

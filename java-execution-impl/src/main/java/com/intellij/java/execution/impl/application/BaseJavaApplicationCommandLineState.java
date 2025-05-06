@@ -34,7 +34,7 @@ import jakarta.annotation.Nonnull;
 public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase & CommonJavaRunConfigurationParameters> extends JavaCommandLineState {
     protected final T myConfiguration;
 
-    public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration) {
+    public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull T configuration) {
         super(environment);
         myConfiguration = configuration;
     }

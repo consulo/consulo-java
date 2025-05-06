@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -31,29 +31,30 @@ public class PsiMethodUtil {
         if (psiClass instanceof PsiAnonymousClass) {
             return false;
         }
+        //noinspection SimplifiableIfStatement
         if (psiClass.isInterface()) {
             return false;
         }
-        return psiClass.getContainingClass() == null || psiClass.hasModifierProperty(PsiModifier.STATIC);
+        return psiClass.getContainingClass() == null || psiClass.isStatic();
     };
 
     private PsiMethodUtil() {
     }
 
     @Nullable
-    public static PsiMethod findMainMethod(final PsiClass aClass) {
+    public static PsiMethod findMainMethod(PsiClass aClass) {
         for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
             if (provider.isApplicable(aClass)) {
                 return provider.findMainInClass(aClass);
             }
         }
-        final PsiMethod[] mainMethods = aClass.findMethodsByName("main", true);
+        PsiMethod[] mainMethods = aClass.findMethodsByName("main", true);
         return findMainMethod(mainMethods);
     }
 
     @Nullable
-    private static PsiMethod findMainMethod(final PsiMethod[] mainMethods) {
-        for (final PsiMethod mainMethod : mainMethods) {
+    private static PsiMethod findMainMethod(PsiMethod[] mainMethods) {
+        for (PsiMethod mainMethod : mainMethods) {
             if (isMainMethod(mainMethod)) {
                 return mainMethod;
             }
@@ -61,32 +62,32 @@ public class PsiMethodUtil {
         return null;
     }
 
-    public static boolean isMainMethod(final PsiMethod method) {
+    public static boolean isMainMethod(PsiMethod method) {
         if (method == null || method.getContainingClass() == null) {
             return false;
         }
         if (!PsiType.VOID.equals(method.getReturnType())) {
             return false;
         }
-        if (!method.hasModifierProperty(PsiModifier.STATIC)) {
+        if (!method.isStatic()) {
             return false;
         }
-        if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+        if (!method.isPublic()) {
             return false;
         }
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
+        PsiParameter[] parameters = method.getParameterList().getParameters();
         if (parameters.length != 1) {
             return false;
         }
-        final PsiType type = parameters[0].getType();
-        if (!(type instanceof PsiArrayType)) {
+        PsiType type = parameters[0].getType();
+        if (!(type instanceof PsiArrayType arrayType)) {
             return false;
         }
-        final PsiType componentType = ((PsiArrayType) type).getComponentType();
-        return componentType.equalsToText("java.lang.String");
+        PsiType componentType = arrayType.getComponentType();
+        return componentType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
     }
 
-    public static boolean hasMainMethod(final PsiClass psiClass) {
+    public static boolean hasMainMethod(PsiClass psiClass) {
         for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
             if (provider.isApplicable(psiClass)) {
                 return provider.hasMainMethod(psiClass);
@@ -101,15 +102,12 @@ public class PsiMethodUtil {
      * @param aClass the class to check for a main method.
      * @return true if the class has a main method, false otherwise.
      */
-    public static boolean hasMainInClass(@Nonnull final PsiClass aClass) {
-        if (!MAIN_CLASS.test(aClass)) {
-            return false;
-        }
-        return hasMainMethod(aClass);
+    public static boolean hasMainInClass(@Nonnull PsiClass aClass) {
+        return MAIN_CLASS.test(aClass) && hasMainMethod(aClass);
     }
 
     @Nullable
-    public static PsiMethod findMainInClass(final PsiClass aClass) {
+    public static PsiMethod findMainInClass(PsiClass aClass) {
         if (!MAIN_CLASS.test(aClass)) {
             return null;
         }
