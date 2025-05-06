@@ -41,8 +41,8 @@ public class FormatUtils {
     formatMethodNames.add("format");
     formatMethodNames.add("printf");
 
-    formatClassNames.add("java.io.PrintWriter");
-    formatClassNames.add("java.io.PrintStream");
+    formatClassNames.add(JavaClassNames.JAVA_IO_PRINT_WRITER);
+    formatClassNames.add(JavaClassNames.JAVA_IO_PRINT_STREAM);
     formatClassNames.add("java.util.Formatter");
     formatClassNames.add(JavaClassNames.JAVA_LANG_STRING);
   }

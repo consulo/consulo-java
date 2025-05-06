@@ -10,6 +10,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
 import consulo.virtualFileSystem.VirtualFile;
@@ -243,7 +244,7 @@ public abstract class ConstantValuesTest extends PsiTestCase
 		assertNotNull(field);
 		PsiLiteralExpression initializer = (PsiLiteralExpression) field.getInitializer();
 		assertNotNull(initializer);
-		assertTrue(initializer.getType().equalsToText("java.lang.String"));
+		assertTrue(initializer.getType().equalsToText(JavaClassNames.JAVA_LANG_STRING));
 		assertEquals("a\r\n\"bcd", initializer.getValue());
 		assertEquals("\"a\\r\\n\\\"bcd\"", initializer.getText());
 

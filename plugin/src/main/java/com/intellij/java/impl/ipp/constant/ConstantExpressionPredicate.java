@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ipp.constant;
 
 import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
@@ -37,7 +38,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
     final PsiType expressionType = expression.getType();
-    if (expressionType == null || expressionType.equalsToText("java.lang.String")) {
+    if (expressionType == null || expressionType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
       // intention disabled for string concatenations because of performance issues on
       // relatively common large string expressions.
       return false;
@@ -48,7 +49,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
         return false;
       }
       final PsiType type = operand.getType();
-      if (type == null || type.equalsToText("java.lang.String")) {
+      if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         return false;
       }
     }

@@ -231,7 +231,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     HashMap<PsiClass, HashSet<PsiElement>> reportedUpcasts = new HashMap<PsiClass, HashSet<PsiElement>>();
     //    HashSet reportedObjectUpcasts = new HashSet();
 
-    //    final String nameJavaLangObject = ConflictsUtil.htmlEmphasize("java.lang.Object");
+    //    final String nameJavaLangObject = ConflictsUtil.htmlEmphasize(JavaClassNames.JAVA_LANG_OBJECT);
     final String classDescription = RefactoringUIUtil.getDescription(myClass, false);
 
     for (UsageInfo aUsage : usage) {

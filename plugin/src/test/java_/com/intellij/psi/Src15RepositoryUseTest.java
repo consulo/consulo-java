@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileFilter;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -119,17 +120,17 @@ public abstract class Src15RepositoryUseTest extends PsiTestCase {
     final PsiElement element1 = classReference1.resolveTargetClass();
     assertNotNull(element1);
     assertTrue(element1 instanceof PsiClass);
-    assertEquals("java.util.Arrays", ((PsiClass)element1).getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, ((PsiClass)element1).getQualifiedName());
 
     final PsiImportStaticStatement classReference3 = importStaticStatements[3];
     final PsiElement element3 = classReference3.resolveTargetClass();
     assertNotNull(element3);
     assertTrue(element3 instanceof PsiClass);
-    assertEquals("java.util.Arrays", ((PsiClass)element3).getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, ((PsiClass)element3).getQualifiedName());
 
     if (okToLoadTree) {
-      assertEquals("java.util.Collections", getText(importStaticStatements[0]));
-      assertEquals("java.util.Arrays", getText(importStaticStatements[1]));
+      assertEquals(JavaClassNames.JAVA_UTIL_COLLECTIONS, getText(importStaticStatements[0]));
+      assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, getText(importStaticStatements[1]));
       assertEquals("java.util.Collections.sort", getText(importStaticStatements[2]));
       assertEquals("java.util.Arrays.sort", getText(importStaticStatements[3]));
     }
@@ -146,14 +147,14 @@ public abstract class Src15RepositoryUseTest extends PsiTestCase {
     assertTrue(enumClass.isEnum());
     final PsiClass superClass = enumClass.getSuperClass();
     assertNotNull(superClass);
-    assertEquals("java.lang.Enum", superClass.getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_ENUM, superClass.getQualifiedName());
     assertTrue(enumClass.isInheritor(superClass, false));
     final PsiClassType[] superTypes = enumClass.getSuperTypes();
     assertEquals(1, superTypes.length);
     assertEquals("java.lang.Enum<enums.OurEnum>", superTypes[0].getCanonicalText());
     final PsiClass[] supers = enumClass.getSupers();
     assertEquals(1, supers.length);
-    assertEquals("java.lang.Enum", supers[0].getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_ENUM, supers[0].getQualifiedName());
     final PsiClassType[] extendsListTypes = enumClass.getExtendsListTypes();
     assertEquals(1, extendsListTypes.length);
     assertEquals("java.lang.Enum<enums.OurEnum>", extendsListTypes[0].getCanonicalText());

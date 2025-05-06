@@ -3,6 +3,7 @@ package com.intellij.codeInsight.template;
 import com.intellij.codeInsight.template.impl.*;
 import com.intellij.java.impl.codeInsight.template.macro.VariableOfTypeMacro;
 import com.intellij.testFramework.LightIdeaTestCase;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author yole
@@ -24,7 +25,7 @@ public abstract class MacroParserTest extends LightIdeaTestCase {
     assertEquals(1, parameters.length);
     assertTrue(parameters [0] instanceof ConstantNode);
     ConstantNode cn = (ConstantNode) parameters [0];
-    assertEquals("java.util.Collection", cn.calculateResult(null).toString());
+    assertEquals(JavaClassNames.JAVA_UTIL_COLLECTION, cn.calculateResult(null).toString());
   }
 
   public void testVariable() {

@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -164,7 +165,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
       final Set<PsiAnnotation> annotationsSet = new HashSet<PsiAnnotation>(Arrays.asList(superAnnotations));
       for (PsiAnnotation annotation : annotations) {
         final String qualifiedName = annotation.getQualifiedName();
-        if ("java.lang.Override".equals(qualifiedName)) {
+        if (JavaClassNames.JAVA_LANG_OVERRIDE.equals(qualifiedName)) {
           continue;
         }
         if (!annotationsSet.contains(annotation)) {

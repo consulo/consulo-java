@@ -43,6 +43,7 @@ import consulo.ide.impl.idea.ui.TableColumnAnimator;
 import consulo.ide.impl.idea.util.ui.table.JBListTable;
 import consulo.ide.impl.idea.util.ui.table.JBTableRow;
 import consulo.ide.impl.idea.util.ui.table.JBTableRowEditor;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -630,7 +631,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         }
 
         PsiClassType throwable = JavaPsiFacade.getInstance(myProject).getElementFactory()
-          .createTypeByFQClassName("java.lang.Throwable", type.getResolveScope());
+          .createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, type.getResolveScope());
         if (!throwable.isAssignableFrom(type)) {
           return RefactoringLocalize.changesignatureNotThrowableType(typeCodeFragment.getText()).get();
         }

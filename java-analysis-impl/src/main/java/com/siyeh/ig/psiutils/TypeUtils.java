@@ -245,15 +245,19 @@ public class TypeUtils {
     if (type == null) {
       return null;
     }
-    if (type.equalsToText("java.lang.Byte") || type.equalsToText("java.lang.Short") ||
-        type.equalsToText("java.lang.Character") || type.equalsToText("java.lang.Integer") ||
-        type.equals(PsiType.BYTE) || type.equals(PsiType.SHORT) || type.equals(PsiType.CHAR)) {
+    if (type.equalsToText(JavaClassNames.JAVA_LANG_BYTE)
+        || type.equalsToText(JavaClassNames.JAVA_LANG_SHORT)
+        || type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER)
+        || type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER)
+        || type.equals(PsiType.BYTE)
+        || type.equals(PsiType.SHORT)
+        || type.equals(PsiType.CHAR)) {
       return PsiType.INT;
-    } else if (type.equalsToText("java.lang.Long")) {
+    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_LONG)) {
       return PsiType.LONG;
-    } else if (type.equalsToText("java.lang.Float")) {
+    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_FLOAT)) {
       return PsiType.FLOAT;
-    } else if (type.equalsToText("java.lang.Double")) {
+    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_DOUBLE)) {
       return PsiType.DOUBLE;
     }
     return type;

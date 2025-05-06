@@ -298,7 +298,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName("java.lang.Exception", method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -312,7 +312,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName("java.io.IOException", method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_IO_IO_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -326,8 +326,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName("java.lang.RuntimeException", method
-								.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -341,7 +340,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName("java.lang.Exception", method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);

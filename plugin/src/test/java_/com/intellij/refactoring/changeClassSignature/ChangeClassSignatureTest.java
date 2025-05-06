@@ -2,6 +2,7 @@ package com.intellij.refactoring.changeClassSignature;
 
 import static org.junit.Assert.assertTrue;
 
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureProcessor;
@@ -33,7 +34,7 @@ public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase 
       @Override
       public TypeParameterInfo[] gen(PsiClass aClass) throws IncorrectOperationException {
         return new TypeParameterInfo[]{
-          new TypeParameterInfo(aClass, "T", "java.lang.String")
+          new TypeParameterInfo(aClass, "T", JavaClassNames.JAVA_LANG_STRING)
         };
       }
     });
@@ -44,7 +45,7 @@ public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase 
       @Override
       public TypeParameterInfo[] gen(PsiClass aClass) throws IncorrectOperationException {
         return new TypeParameterInfo[]{
-          new TypeParameterInfo(aClass, "T", "java.lang.String")
+          new TypeParameterInfo(aClass, "T", JavaClassNames.JAVA_LANG_STRING)
         };
       }
     });
@@ -97,7 +98,7 @@ public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase 
       @Override
       public TypeParameterInfo[] gen(PsiClass aClass) throws IncorrectOperationException {
         return new TypeParameterInfo[]{
-          new TypeParameterInfo(aClass, "T", "java.lang.String")
+          new TypeParameterInfo(aClass, "T", JavaClassNames.JAVA_LANG_STRING)
         };
       }
     }, "Zero.java", "OneString.java");

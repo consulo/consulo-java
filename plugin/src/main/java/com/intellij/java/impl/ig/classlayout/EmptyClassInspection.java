@@ -27,6 +27,7 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiFile;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -162,7 +163,7 @@ public class EmptyClassInspection extends BaseInspection {
       if (AnnotationUtil.isAnnotated(aClass, ignorableAnnotations)) {
         return;
       }
-      if (ignoreThrowables && InheritanceUtil.isInheritor(aClass, "java.lang.Throwable")) {
+      if (ignoreThrowables && InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       registerClassError(aClass, aClass);

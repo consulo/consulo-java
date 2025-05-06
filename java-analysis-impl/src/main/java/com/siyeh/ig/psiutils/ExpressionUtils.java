@@ -50,8 +50,8 @@ import java.util.stream.Stream;
 import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class ExpressionUtils {
-    static final Set<String> STRING_BUILDER_CLASS_NAMES = Set.of("java.lang.StringBuilder", "java.lang.StringBuffer");
-    static final Set<String> PRINT_CLASS_NAMES = Set.of("java.io.PrintStream", "java.io.PrintWriter");
+    static final Set<String> STRING_BUILDER_CLASS_NAMES = Set.of(JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER);
+    static final Set<String> PRINT_CLASS_NAMES = Set.of(JavaClassNames.JAVA_IO_PRINT_STREAM, JavaClassNames.JAVA_IO_PRINT_WRITER);
     static final Set<String> PRINT_METHOD_NAMES = Set.of("print", "println");
     static final Set<String> SLF4J_LOGGING_CLASS_NAMES = Set.of("org.slf4j.Logger");
     static final Set<String> SLF4J_LOGGING_METHOD_NAMES = Set.of("trace", "debug", "info", "warn", "error");

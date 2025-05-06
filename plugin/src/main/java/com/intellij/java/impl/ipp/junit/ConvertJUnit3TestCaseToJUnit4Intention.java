@@ -20,6 +20,7 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -97,7 +98,7 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
     if (!modifierList.hasModifierProperty(PsiModifier.PUBLIC)) {
       modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
     }
-    final PsiAnnotation overrideAnnotation = modifierList.findAnnotation("java.lang.Override");
+    final PsiAnnotation overrideAnnotation = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
     if (overrideAnnotation != null) {
       overrideAnnotation.delete();
     }

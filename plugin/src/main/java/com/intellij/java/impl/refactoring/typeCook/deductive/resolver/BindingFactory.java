@@ -358,10 +358,10 @@ public class BindingFactory {
 
               if (kindX + kindY == 5) {
                 try {
-                  final PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
-                  final PsiType cloneable = f.createTypeFromText("java.lang.Cloneable", null);
-                  final PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
-                  final PsiType serializable = f.createTypeFromText("java.io.Serializable", null);
+                  PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
+                  PsiType cloneable = f.createTypeFromText(JavaClassNames.JAVA_LANG_CLONEABLE, null);
+                  PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
+                  PsiType serializable = f.createTypeFromText(JavaClassNames.JAVA_IO_SERIALIZABLE, null);
 
                   PsiType type;
                   int flag;
@@ -1062,12 +1062,12 @@ public class BindingFactory {
         if (x instanceof PsiArrayType || y instanceof PsiArrayType) {
           if (x instanceof PsiClassType || y instanceof PsiClassType) {
             try {
-              final PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
-              final PsiType keyType = x instanceof PsiClassType ? x : y;
+              PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
+              PsiType keyType = x instanceof PsiClassType ? x : y;
 
-              final PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
-              final PsiType cloneable = f.createTypeFromText("java.lang.Cloneable", null);
-              final PsiType serializable = f.createTypeFromText("java.io.Serializable", null);
+              PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
+              PsiType cloneable = f.createTypeFromText(JavaClassNames.JAVA_LANG_CLONEABLE, null);
+              PsiType serializable = f.createTypeFromText(JavaClassNames.JAVA_IO_SERIALIZABLE, null);
 
               intersect(keyType, object, list);
               intersect(keyType, cloneable, list);

@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
@@ -184,7 +185,7 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
       CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     if (codeStyleSettings.INSERT_OVERRIDE_ANNOTATION &&
         PsiUtil.isLanguageLevel6OrHigher(aClass)) {
-      modifierList.addAnnotation("java.lang.Override");
+      modifierList.addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
     }
     final PsiElementFactory factory =
       JavaPsiFacade.getElementFactory(project);

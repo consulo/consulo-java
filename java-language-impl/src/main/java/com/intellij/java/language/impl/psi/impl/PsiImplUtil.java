@@ -33,6 +33,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
 import consulo.content.scope.SearchScope;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.FileASTNode;
 import consulo.language.ast.IElementType;
@@ -326,9 +327,9 @@ public class PsiImplUtil {
     public static PsiType getType(@Nonnull PsiClassObjectAccessExpression classAccessExpression) {
         GlobalSearchScope resolveScope = classAccessExpression.getResolveScope();
         PsiManager manager = classAccessExpression.getManager();
-        PsiClass classClass = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.lang.Class", resolveScope);
+        PsiClass classClass = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_CLASS, resolveScope);
         if (classClass == null) {
-            return new PsiClassReferenceType(new LightClassReference(manager, "Class", "java.lang.Class", resolveScope), null);
+            return new PsiClassReferenceType(new LightClassReference(manager, "Class", JavaClassNames.JAVA_LANG_CLASS, resolveScope), null);
         }
         if (!PsiUtil.isLanguageLevel5OrHigher(classAccessExpression)) {
             //Raw java.lang.Class
@@ -341,7 +342,7 @@ public class PsiImplUtil {
             if (PsiType.VOID.equals(primitiveType)) {
                 operandType = JavaPsiFacade.getInstance(manager.getProject())
                     .getElementFactory()
-                    .createTypeByFQClassName("java.lang.Void", classAccessExpression.getResolveScope());
+                    .createTypeByFQClassName(JavaClassNames.JAVA_LANG_VOID, classAccessExpression.getResolveScope());
             }
             else {
                 operandType = primitiveType.getBoxedType(classAccessExpression);
@@ -545,7 +546,7 @@ public class PsiImplUtil {
 
     public static boolean isDeprecatedByAnnotation(@Nonnull PsiModifierListOwner owner) {
         PsiModifierList modifierList = owner.getModifierList();
-        return modifierList != null && modifierList.findAnnotation("java.lang.Deprecated") != null;
+        return modifierList != null && modifierList.findAnnotation(JavaClassNames.JAVA_LANG_DEPRECATED) != null;
     }
 
     public static boolean isDeprecatedByDocTag(@Nonnull PsiJavaDocumentedElement owner) {

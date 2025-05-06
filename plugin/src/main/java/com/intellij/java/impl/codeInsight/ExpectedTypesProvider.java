@@ -551,7 +551,7 @@ public class ExpectedTypesProvider {
 
       PsiManager manager = statement.getManager();
       PsiClassType enumType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory()
-                                           .createTypeByFQClassName("java.lang.Enum", statement.getResolveScope());
+                                           .createTypeByFQClassName(JavaClassNames.JAVA_LANG_ENUM, statement.getResolveScope());
       myResult.add(createInfoImpl(enumType, enumType));
     }
 
@@ -988,7 +988,7 @@ public class ExpectedTypesProvider {
       if (statement.getException() == myExpr) {
         PsiManager manager = statement.getManager();
         PsiType throwableType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory()
-                                             .createTypeByFQClassName("java.lang.Throwable", myExpr.getResolveScope());
+                                             .createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, myExpr.getResolveScope());
         PsiElement container = PsiTreeUtil.getParentOfType(statement, PsiMethod.class,
                                                            PsiLambdaExpression.class, PsiClass.class);
         PsiType[] throwsTypes = PsiType.EMPTY_ARRAY;
@@ -1004,7 +1004,7 @@ public class ExpectedTypesProvider {
 
         if (throwsTypes.length == 0) {
           final PsiClassType exceptionType = JavaPsiFacade.getInstance(manager.getProject())
-                                                          .getElementFactory().createTypeByFQClassName("java.lang.Exception",
+                                                          .getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION,
                                                                                                        myExpr.getResolveScope());
           throwsTypes = new PsiClassType[]{exceptionType};
         }

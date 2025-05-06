@@ -39,7 +39,6 @@ import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
 import consulo.language.editor.localize.DaemonLocalize;

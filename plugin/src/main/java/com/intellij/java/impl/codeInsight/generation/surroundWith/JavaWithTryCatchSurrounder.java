@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
@@ -57,7 +58,7 @@ public class JavaWithTryCatchSurrounder extends JavaStatementsSurrounder {
     if (exceptions.isEmpty()) {
       exceptions = ExceptionUtil.getThrownExceptions(statements);
       if (exceptions.isEmpty()) {
-        exceptions = Collections.singletonList(factory.createTypeByFQClassName("java.lang.Exception", container.getResolveScope()));
+        exceptions = Collections.singletonList(factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, container.getResolveScope()));
       }
     }
 

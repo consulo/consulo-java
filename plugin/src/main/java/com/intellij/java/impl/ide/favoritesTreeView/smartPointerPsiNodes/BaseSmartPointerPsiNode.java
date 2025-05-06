@@ -70,9 +70,8 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
             return null;
         }
         else {
-            return file.isDirectory()
-                ? PsiManager.getInstance(getProject()).findDirectory(file)
-                : PsiManager.getInstance(getProject()).findFile(file);
+            PsiManager psiManager = PsiManager.getInstance(getProject());
+            return file.isDirectory() ? psiManager.findDirectory(file) : psiManager.findFile(file);
         }
     }
 
@@ -93,6 +92,7 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
         PsiElement value = getPsiElement();
         if (value == null || !value.isValid()) {
             setValue(null);
+            return;
         }
         if (getPsiElement() == null) {
             return;
@@ -140,12 +140,12 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
 
     @Override
     public boolean canNavigate() {
-        return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigate();
+        return getPsiElement() instanceof NavigationItem navItem && navItem.canNavigate();
     }
 
     @Override
     public boolean canNavigateToSource() {
-        return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigateToSource();
+        return getPsiElement() instanceof NavigationItem navItem && navItem.canNavigateToSource();
     }
 
     protected PsiElement getPsiElement() {

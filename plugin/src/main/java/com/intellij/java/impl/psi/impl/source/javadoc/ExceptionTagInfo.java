@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl.source.javadoc;
 
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -56,7 +57,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
     final PsiClass exceptionClass = (PsiClass)element;
 
 
-    final PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass("java.lang.Throwable", value.getResolveScope());
+    final PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, value.getResolveScope());
 
     if (throwable != null) {
       if (!exceptionClass.equals(throwable) && !exceptionClass.isInheritor(throwable, true)) {
@@ -65,14 +66,15 @@ class ExceptionTagInfo implements JavadocTagInfo {
     }
 
     final PsiClass runtimeException =
-      JavaPsiFacade.getInstance(value.getProject()).findClass("java.lang.RuntimeException", value.getResolveScope());
+      JavaPsiFacade.getInstance(value.getProject()).findClass(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, value.getResolveScope());
 
     if (runtimeException != null &&
         (exceptionClass.isInheritor(runtimeException, true) || exceptionClass.equals(runtimeException))) {
       return null;
     }
 
-    final PsiClass errorException = JavaPsiFacade.getInstance(value.getProject()).findClass("java.lang.Error", value.getResolveScope());
+    PsiClass errorException = JavaPsiFacade.getInstance(value.getProject())
+        .findClass(JavaClassNames.JAVA_LANG_ERROR, value.getResolveScope());
 
     if (errorException != null &&
         (exceptionClass.isInheritor(errorException, true) || exceptionClass.equals(errorException))) {

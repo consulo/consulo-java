@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -124,7 +125,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         if (psiMethod != null) {
-          new AddAnnotationPsiFix("java.lang.SafeVarargs", psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
+          new AddAnnotationPsiFix(JavaClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
         }
       }
     }
@@ -149,7 +150,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         psiMethod.getModifierList().setModifierProperty(PsiModifier.FINAL, true);
-        new AddAnnotationPsiFix("java.lang.SafeVarargs", psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
+        new AddAnnotationPsiFix(JavaClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
       }
     }
   }
@@ -159,7 +160,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!PsiUtil.getLanguageLevel(method).isAtLeast(LanguageLevel.JDK_1_7)) return;
-      if (AnnotationUtil.isAnnotated(method, "java.lang.SafeVarargs", false)) return;
+      if (AnnotationUtil.isAnnotated(method, JavaClassNames.JAVA_LANG_SAFE_VARARGS, false)) return;
       if (!method.isVarArgs()) return;
 
       final PsiParameter psiParameter = method.getParameterList().getParameters()[method.getParameterList().getParametersCount() - 1];

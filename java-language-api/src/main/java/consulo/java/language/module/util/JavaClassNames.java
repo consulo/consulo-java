@@ -22,6 +22,9 @@ public interface JavaClassNames {
     String DEFAULT_PACKAGE = "java.lang";
     String JAVA_IO_EXTERNALIZABLE = "java.io.Externalizable";
     String JAVA_IO_FILE = "java.io.File";
+    String JAVA_IO_IO_EXCEPTION = "java.io.IOException";
+    String JAVA_IO_PRINT_STREAM = "java.io.PrintStream";
+    String JAVA_IO_PRINT_WRITER = "java.io.PrintWriter";
     String JAVA_IO_SERIALIZABLE = "java.io.Serializable";
     String JAVA_LANG_ABSTRACT_STRING_BUILDER = "java.lang.AbstractStringBuilder";
     String JAVA_LANG_ANNOTATION_ANNOTATION = "java.lang.annotation.Annotation";
@@ -29,6 +32,7 @@ public interface JavaClassNames {
     String JAVA_LANG_ANNOTATION_REPEATABLE = "java.lang.annotation.Repeatable";
     String JAVA_LANG_ANNOTATION_RETENTION = "java.lang.annotation.Retention";
     String JAVA_LANG_ANNOTATION_TARGET = "java.lang.annotation.Target";
+    String JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION = "java.lang.ArrayIndexOutOfBoundsException";
     String JAVA_LANG_ASSERTION_ERROR = "java.lang.AssertionError";
     String JAVA_LANG_AUTO_CLOSEABLE = "java.lang.AutoCloseable";
     String JAVA_LANG_BOOLEAN = "java.lang.Boolean";
@@ -36,6 +40,7 @@ public interface JavaClassNames {
     String JAVA_LANG_CHARACTER = "java.lang.Character";
     String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";
     String JAVA_LANG_CLASS = "java.lang.Class";
+    String JAVA_LANG_CLASS_CAST_EXCEPTION = "java.lang.ClassCastException";
     String JAVA_LANG_CLONEABLE = "java.lang.Cloneable";
     String JAVA_LANG_COMPARABLE = "java.lang.Comparable";
     String JAVA_LANG_DEPRECATED = "java.lang.Deprecated";
@@ -50,6 +55,7 @@ public interface JavaClassNames {
     String JAVA_LANG_INVOKE_MH_POLYMORPHIC = "java.lang.invoke.MethodHandle.PolymorphicSignature";
     String JAVA_LANG_ITERABLE = "java.lang.Iterable";
     String JAVA_LANG_LONG = "java.lang.Long";
+    String JAVA_LANG_MATH = "java.lang.Math";
     String JAVA_LANG_NULL_POINTER_EXCEPTION = "java.lang.NullPointerException";
     String JAVA_LANG_NUMBER = "java.lang.Number";
     String JAVA_LANG_OBJECT = "java.lang.Object";
@@ -84,7 +90,6 @@ public interface JavaClassNames {
     String JAVA_UTIL_FUNCTION_PREDICATE = "java.util.function.Predicate";
     String JAVA_UTIL_FUNCTION_CONSUMER = "java.util.function.Consumer";
     String JAVA_UTIL_FUNCTION_FUNCTION = "java.util.function.Function";
-    String JAVA_UTIL_FUNCTION_BIFUNCTION = "java.util.function.BiFunction";
     String JAVA_UTIL_HASH_MAP = "java.util.HashMap";
     String JAVA_UTIL_HASH_SET = "java.util.HashSet";
     String JAVA_UTIL_LIST = "java.util.List";
@@ -96,6 +101,7 @@ public interface JavaClassNames {
     String JAVA_UTIL_PROPERTY_RESOURCE_BUNDLE = "java.util.PropertyResourceBundle";
     String JAVA_UTIL_QUEUE = "java.util.Queue";
     String JAVA_UTIL_SET = "java.util.Set";
+    String JAVA_UTIL_SORTED_MAP = "java.util.SortedMap";
     String JAVA_UTIL_SORTED_SET = "java.util.SortedSet";
     String JAVA_UTIL_STREAM_BASE_STREAM = "java.util.stream.BaseStream";
     String JAVA_UTIL_STREAM_STREAM = "java.util.stream.Stream";

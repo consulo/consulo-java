@@ -482,8 +482,8 @@ class JavaDependencyProcessor {
     final IntObjectMap<AnnotationConstantValue> oldAnnotations = fetchAllAnnotations(oldCache);
     final IntObjectMap<AnnotationConstantValue> newAnnotations = fetchAllAnnotations(newCache);
     // filter certain known annotation which are processed separately
-    final int retentionAnnotation = myJavaDependencyCache.getSymbolTable().getId("java.lang.annotation.Retention");
-    final int targetAnnotation = myJavaDependencyCache.getSymbolTable().getId("java.lang.annotation.Target");
+    final int retentionAnnotation = myJavaDependencyCache.getSymbolTable().getId(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+    final int targetAnnotation = myJavaDependencyCache.getSymbolTable().getId(JavaClassNames.JAVA_LANG_ANNOTATION_TARGET);
     oldAnnotations.remove(retentionAnnotation);
     oldAnnotations.remove(targetAnnotation);
     newAnnotations.remove(retentionAnnotation);

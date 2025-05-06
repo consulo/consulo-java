@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -134,7 +135,7 @@ public class PsiAdapter {
    * @return true if it's a Collection type.
    */
   public static boolean isCollectionType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, "java.util.Collection");
+    return isTypeOf(factory, type, JAVA_UTIL_COLLECTION);
   }
 
   /**
@@ -200,7 +201,7 @@ public class PsiAdapter {
    * @return true if it's a Date type.
    */
   public static boolean isDateType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, "java.util.Date");
+    return isTypeOf(factory, type, JAVA_UTIL_DATE);
   }
 
   /**
@@ -211,7 +212,7 @@ public class PsiAdapter {
    * @return true if it's a Calendar type.
    */
   public static boolean isCalendarType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, "java.util.Calendar");
+    return isTypeOf(factory, type, JAVA_UTIL_CALENDAR);
   }
 
   /**
@@ -246,7 +247,7 @@ public class PsiAdapter {
       return "byte".equals(s) || "double".equals(s) || "float".equals(s) || "int".equals(s) || "long".equals(s) || "short".equals(s);
     } else {
       // test for Object type of numeric
-      return isTypeOf(factory, type, "java.lang.Number");
+      return isTypeOf(factory, type, JAVA_LANG_NUMBER);
     }
   }
 

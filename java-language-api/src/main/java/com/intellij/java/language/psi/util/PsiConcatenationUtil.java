@@ -16,6 +16,7 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -48,12 +49,12 @@ public class PsiConcatenationUtil {
     }
     else if (expression instanceof PsiPolyadicExpression) {
       final PsiType type = expression.getType();
-      if (type != null && type.equalsToText("java.lang.String")) {
+      if (type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
         final PsiPolyadicExpression binaryExpression =
           (PsiPolyadicExpression)expression;
         PsiExpression[] operands = binaryExpression.getOperands();
         PsiType left = operands[0].getType();
-        boolean stringStarted = left != null && left.equalsToText("java.lang.String");
+        boolean stringStarted = left != null && left.equalsToText(JavaClassNames.JAVA_LANG_STRING);
         if (stringStarted) {
           buildFormatString(operands[0], formatString, formatParameters, printfFormat);
         }
@@ -61,7 +62,7 @@ public class PsiConcatenationUtil {
           PsiExpression op = operands[i];
           PsiType optype = op.getType();
           PsiType r = TypeConversionUtil.calcTypeForBinaryExpression(left, optype, binaryExpression.getOperationTokenType(), true);
-          if (r != null && r.equalsToText("java.lang.String") && !stringStarted) {
+          if (r != null && r.equalsToText(JavaClassNames.JAVA_LANG_STRING) && !stringStarted) {
             stringStarted = true;
             PsiElement element = binaryExpression.getTokenBeforeOperand(op);
             if (element.getPrevSibling() instanceof PsiWhiteSpace) element = element.getPrevSibling();
@@ -71,7 +72,7 @@ public class PsiConcatenationUtil {
             addFormatParameter(subExpression, formatString, formatParameters, printfFormat);
           }
           if (stringStarted) {
-            if (optype != null && (optype.equalsToText("java.lang.String") || PsiType.CHAR.equals(optype))) {
+            if (optype != null && (optype.equalsToText(JavaClassNames.JAVA_LANG_STRING) || PsiType.CHAR.equals(optype))) {
               buildFormatString(op, formatString, formatParameters, printfFormat);
             }
             else {
@@ -100,8 +101,8 @@ public class PsiConcatenationUtil {
     else if (type != null &&
       (type.equalsToText("long") ||
         type.equalsToText("int") ||
-        type.equalsToText("java.lang.Long") ||
-        type.equalsToText("java.lang.Integer"))) {
+        type.equalsToText(JavaClassNames.JAVA_LANG_LONG) ||
+        type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER))) {
       formatString.append("%d");
     }
     else {

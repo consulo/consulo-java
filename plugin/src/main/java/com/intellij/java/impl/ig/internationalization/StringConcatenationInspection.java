@@ -32,6 +32,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -207,7 +208,7 @@ public class StringConcatenationInspection extends BaseInspection {
           PsiTreeUtil.getParentOfType(expression, PsiNewExpression.class, true, PsiCodeBlock.class, PsiClass.class);
         if (newExpression != null) {
           final PsiType newExpressionType = newExpression.getType();
-          if (InheritanceUtil.isInheritor(newExpressionType, "java.lang.Throwable")) {
+          if (InheritanceUtil.isInheritor(newExpressionType, JavaClassNames.JAVA_LANG_THROWABLE)) {
             return;
           }
         } else {

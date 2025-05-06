@@ -48,13 +48,13 @@ public abstract class CollectionsListSettings
 	static
 	{
 		final SortedSet<String> set = new TreeSet<>();
-		set.add("java.util.concurrent.ConcurrentHashMap");
+		set.add(JavaClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP);
 		set.add("java.util.concurrent.PriorityBlockingQueue");
 		set.add("java.util.ArrayDeque");
-		set.add("java.util.ArrayList");
-		set.add("java.util.HashMap");
+		set.add(JavaClassNames.JAVA_UTIL_ARRAY_LIST);
+		set.add(JavaClassNames.JAVA_UTIL_HASH_MAP);
 		set.add("java.util.Hashtable");
-		set.add("java.util.HashSet");
+		set.add(JavaClassNames.JAVA_UTIL_HASH_SET);
 		set.add("java.util.IdentityHashMap");
 		set.add("java.util.LinkedHashMap");
 		set.add("java.util.LinkedHashSet");

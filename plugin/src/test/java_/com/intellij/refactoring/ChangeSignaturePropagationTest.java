@@ -9,6 +9,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
@@ -131,7 +132,8 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   private void exceptionPropagationTest(final PsiMethod method, final Set<PsiMethod> methodsToPropagateExceptions) throws Exception {
-    PsiClassType newExceptionType = JavaPsiFacade.getElementFactory(getProject()).createTypeByFQClassName("java.lang.Exception", GlobalSearchScope.allScope(getProject()));
+    PsiClassType newExceptionType = JavaPsiFacade.getElementFactory(getProject())
+      .createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, GlobalSearchScope.allScope(getProject()));
     final ThrownExceptionInfo[] newExceptions = new ThrownExceptionInfo[]{new JavaThrownExceptionInfo(-1, newExceptionType)};
     doTest(new ParameterInfoImpl[0], newExceptions, null, methodsToPropagateExceptions, method);
   }

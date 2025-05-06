@@ -25,76 +25,83 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.*;
 
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Feb 8, 2010
+ * @since 2010-02-08
  */
-public class BoxingEvaluator implements Evaluator{
-  private final Evaluator myOperand;
+public class BoxingEvaluator implements Evaluator {
+    private final Evaluator myOperand;
 
-  public BoxingEvaluator(Evaluator operand) {
-    myOperand = DisableGC.create(operand);
-  }
-
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    final Object result = myOperand.evaluate(context);
-    if (result == null || result instanceof ObjectReference) {
-      return result;
+    public BoxingEvaluator(Evaluator operand) {
+        myOperand = DisableGC.create(operand);
     }
 
-    if (result instanceof BooleanValue) {
-      return convertToWrapper(context, (BooleanValue)result, "java.lang.Boolean");
-    }
-    if (result instanceof ByteValue) {
-      return convertToWrapper(context, (ByteValue)result, "java.lang.Byte");
-    }
-    if (result instanceof CharValue) {
-      return convertToWrapper(context, (CharValue)result, "java.lang.Character");
-    }
-    if (result instanceof ShortValue) {
-      return convertToWrapper(context, (ShortValue)result, "java.lang.Short");
-    }
-    if (result instanceof IntegerValue) {
-      return convertToWrapper(context, (IntegerValue)result, "java.lang.Integer");
-    }
-    if (result instanceof LongValue) {
-      return convertToWrapper(context, (LongValue)result, "java.lang.Long");
-    }
-    if (result instanceof FloatValue) {
-      return convertToWrapper(context, (FloatValue)result, "java.lang.Float");
-    }
-    if (result instanceof DoubleValue) {
-      return convertToWrapper(context, (DoubleValue)result, "java.lang.Double");
-    }
-    throw new EvaluateException("Cannot perform boxing conversion for a value of type " + ((Value)result).type().name());
-  }
+    @Override
+    public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
+        Object result = myOperand.evaluate(context);
+        if (result == null || result instanceof ObjectReference) {
+            return result;
+        }
 
-  @Nullable
-  public Modifier getModifier() {
-    return null;
-  }
-
-  private static Value convertToWrapper(EvaluationContextImpl context, PrimitiveValue value, String wrapperTypeName) throws
-                                                                                                                            EvaluateException {
-    final DebugProcessImpl process = context.getDebugProcess();
-    final ClassType wrapperClass = (ClassType)process.findClass(context, wrapperTypeName, null);
-    final String methodSignature = "(" + JVMNameUtil.getPrimitiveSignature(value.type().name()) + ")L" + wrapperTypeName.replace('.', '/') + ";";
-
-    List<Method> methods = wrapperClass.methodsByName("valueOf", methodSignature);
-    if (methods.size() == 0) { // older JDK version
-      methods = wrapperClass.methodsByName("<init>", methodSignature);
+        if (result instanceof BooleanValue booleanValue) {
+            return convertToWrapper(context, booleanValue, JavaClassNames.JAVA_LANG_BOOLEAN);
+        }
+        if (result instanceof ByteValue byteValue) {
+            return convertToWrapper(context, byteValue, JavaClassNames.JAVA_LANG_BYTE);
+        }
+        if (result instanceof CharValue charValue) {
+            return convertToWrapper(context, charValue, JavaClassNames.JAVA_LANG_CHARACTER);
+        }
+        if (result instanceof ShortValue shortValue) {
+            return convertToWrapper(context, shortValue, JavaClassNames.JAVA_LANG_SHORT);
+        }
+        if (result instanceof IntegerValue integerValue) {
+            return convertToWrapper(context, integerValue, JavaClassNames.JAVA_LANG_INTEGER);
+        }
+        if (result instanceof LongValue longValue) {
+            return convertToWrapper(context, longValue, JavaClassNames.JAVA_LANG_LONG);
+        }
+        if (result instanceof FloatValue floatValue) {
+            return convertToWrapper(context, floatValue, JavaClassNames.JAVA_LANG_FLOAT);
+        }
+        if (result instanceof DoubleValue doubleValue) {
+            return convertToWrapper(context, doubleValue, JavaClassNames.JAVA_LANG_DOUBLE);
+        }
+        throw new EvaluateException("Cannot perform boxing conversion for a value of type " + ((Value)result).type().name());
     }
-    if (methods.size() == 0) {
-      throw new EvaluateException("Cannot construct wrapper object for value of type " + value.type() + ": Unable to find either valueOf() or constructor method");
-    }
-    
-    final Method factoryMethod = methods.get(0);
 
-    final ArrayList args = new ArrayList();
-    args.add(value);
-    
-    return process.invokeMethod(context, wrapperClass, factoryMethod, args);
-  }
+    @Nullable
+    @Override
+    public Modifier getModifier() {
+        return null;
+    }
+
+    private static Value convertToWrapper(EvaluationContextImpl context, PrimitiveValue value, String wrapperTypeName)
+        throws EvaluateException {
+        DebugProcessImpl process = context.getDebugProcess();
+        ClassType wrapperClass = (ClassType)process.findClass(context, wrapperTypeName, null);
+        String methodSignature = "(" + JVMNameUtil.getPrimitiveSignature(value.type().name()) + ")" +
+            "L" + wrapperTypeName.replace('.', '/') + ";";
+
+        List<Method> methods = wrapperClass.methodsByName("valueOf", methodSignature);
+        if (methods.size() == 0) { // older JDK version
+            methods = wrapperClass.methodsByName("<init>", methodSignature);
+        }
+        if (methods.size() == 0) {
+            throw new EvaluateException(
+                "Cannot construct wrapper object for value of type " + value.type() +
+                    ": Unable to find either valueOf() or constructor method"
+            );
+        }
+
+        Method factoryMethod = methods.get(0);
+
+        List<Value> args = new ArrayList<>();
+        args.add(value);
+
+        return process.invokeMethod(context, wrapperClass, factoryMethod, args);
+    }
 }

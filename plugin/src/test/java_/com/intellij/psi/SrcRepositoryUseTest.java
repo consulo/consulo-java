@@ -114,7 +114,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     assertEquals(params[0].getName(), "A");
     assertEquals(params[1].getName(), "B");
 
-    assertEquals("java.lang.String", params[0].getSupers()[0].getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_LANG_STRING, params[0].getSupers()[0].getQualifiedName());
     assertEquals(JavaClassNames.JAVA_LANG_OBJECT, params[1].getSupers()[0].getQualifiedName());
 
     teardownLoadingFilter();
@@ -519,7 +519,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     PsiClassType[] refs = list.getReferencedTypes();
     assertEquals(2, refs.length);
     assertEquals("Exception", refs[0].getPresentableText());
-    assertEquals("java.io.IOException", refs[1].getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_IO_IO_EXCEPTION, refs[1].getCanonicalText());
 
     teardownLoadingFilter();
   }
@@ -577,7 +577,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
   public void testAnonymousClass() throws Exception {
     setupLoadingFilter();
 
-    PsiClass cloneableClass = myJavaFacade.findClass("java.lang.Cloneable", GlobalSearchScope.allScope(myProject));
+    PsiClass cloneableClass = myJavaFacade.findClass(JavaClassNames.JAVA_LANG_CLONEABLE, GlobalSearchScope.allScope(myProject));
     PsiClass[] inheritors = ClassInheritorsSearch.search(cloneableClass, GlobalSearchScope.projectScope(myProject), true).toArray(PsiClass.EMPTY_ARRAY);
     assertEquals(2, inheritors.length);
     assertTrue(inheritors[0] instanceof PsiAnonymousClass || inheritors[1] instanceof PsiAnonymousClass);
@@ -586,7 +586,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     PsiClassType baseClassRef = anonClass.getBaseClassType();
     assertEquals("Cloneable", baseClassRef.getPresentableText());
     assertEquals(cloneableClass, baseClassRef.resolve());
-    assertEquals("java.lang.Cloneable", baseClassRef.getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_CLONEABLE, baseClassRef.getCanonicalText());
 
     teardownLoadingFilter();
 
@@ -604,7 +604,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
   public void testAnonymousClass2() throws Exception {
     setupLoadingFilter();
 
-    PsiClass throwable = myJavaFacade.findClass("java.lang.Throwable", GlobalSearchScope.allScope(myProject));
+    PsiClass throwable = myJavaFacade.findClass(JavaClassNames.JAVA_LANG_THROWABLE, GlobalSearchScope.allScope(myProject));
     PsiClass[] inheritors = ClassInheritorsSearch.search(throwable, GlobalSearchScope.projectScope(myProject), true).toArray(PsiClass.EMPTY_ARRAY);
     assertEquals(1, inheritors.length);
     assertTrue(inheritors[0] instanceof PsiAnonymousClass);
@@ -613,7 +613,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     PsiClassType baseClassRef = anonClass.getBaseClassType();
     assertEquals("Throwable", baseClassRef.getPresentableText());
     assertEquals(throwable, baseClassRef.resolve());
-    assertEquals("java.lang.Throwable", baseClassRef.getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_THROWABLE, baseClassRef.getCanonicalText());
 
     teardownLoadingFilter();
 
@@ -623,7 +623,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
   public void testLocalClass() throws Exception {
     setupLoadingFilter();
 
-    PsiClass cloneableClass = myJavaFacade.findClass("java.lang.Cloneable", GlobalSearchScope.allScope(myProject));
+    PsiClass cloneableClass = myJavaFacade.findClass(JavaClassNames.JAVA_LANG_CLONEABLE, GlobalSearchScope.allScope(myProject));
     PsiClass[] inheritors = ClassInheritorsSearch.search(cloneableClass, GlobalSearchScope.projectScope(myProject), true).toArray(PsiClass.EMPTY_ARRAY);
     assertEquals(2, inheritors.length);
     assertTrue(inheritors[0] instanceof PsiAnonymousClass || inheritors[1] instanceof PsiAnonymousClass);

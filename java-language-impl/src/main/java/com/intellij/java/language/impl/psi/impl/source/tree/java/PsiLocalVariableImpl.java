@@ -25,6 +25,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
 import consulo.content.scope.SearchScope;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
@@ -156,7 +157,7 @@ public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLoca
 
     PsiType type = getType();
     // javac rejects all non primitive and non String constants, although JLS states constants "variables whose initializers are constant expressions"
-    if (!(type instanceof PsiPrimitiveType) && !type.equalsToText("java.lang.String")) return null;
+    if (!(type instanceof PsiPrimitiveType) && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) return null;
 
     PsiExpression initializer = getInitializer();
     if (initializer == null) return null;

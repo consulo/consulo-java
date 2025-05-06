@@ -26,6 +26,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -84,7 +85,7 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
           break;
         }
       }
-      if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, "java.lang.Throwable")) {
+      if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       registerClassError(aClass);

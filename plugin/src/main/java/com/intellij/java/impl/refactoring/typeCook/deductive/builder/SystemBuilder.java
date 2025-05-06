@@ -1014,7 +1014,7 @@ public class SystemBuilder {
         final PsiClass clazz = resolveResult.getElement();
         if (clazz != null) {
           final PsiClass iterableClass =
-            JavaPsiFacade.getInstance(clazz.getProject()).findClass("java.lang.Iterable", clazz.getResolveScope());
+            JavaPsiFacade.getInstance(clazz.getProject()).findClass(JavaClassNames.JAVA_LANG_ITERABLE, clazz.getResolveScope());
           if (iterableClass != null) {
             final PsiTypeParameter[] typeParameters = iterableClass.getTypeParameters();
             if (typeParameters.length == 1) {

@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -67,7 +68,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     if (type == null) {
       final Project project = psiClass.getProject();
       final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiClass aClass = facade.findClass("java.lang.String", GlobalSearchScope.allScope(project));
+      final PsiClass aClass = facade.findClass(JavaClassNames.JAVA_LANG_STRING, GlobalSearchScope.allScope(project));
       if (aClass == null) {
         return NO_FIXES;
       }

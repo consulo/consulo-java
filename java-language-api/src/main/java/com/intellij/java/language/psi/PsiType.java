@@ -31,23 +31,23 @@ import jakarta.annotation.Nullable;
  */
 public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType {
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", "java.lang.Byte");
+  public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", JavaClassNames.JAVA_LANG_BYTE);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType CHAR = new PsiPrimitiveType("char", "java.lang.Character");
+  public static final PsiPrimitiveType CHAR = new PsiPrimitiveType("char", JavaClassNames.JAVA_LANG_CHARACTER);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType DOUBLE = new PsiPrimitiveType("double", "java.lang.Double");
+  public static final PsiPrimitiveType DOUBLE = new PsiPrimitiveType("double", JavaClassNames.JAVA_LANG_DOUBLE);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType FLOAT = new PsiPrimitiveType("float", "java.lang.Float");
+  public static final PsiPrimitiveType FLOAT = new PsiPrimitiveType("float", JavaClassNames.JAVA_LANG_FLOAT);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType INT = new PsiPrimitiveType("int", "java.lang.Integer");
+  public static final PsiPrimitiveType INT = new PsiPrimitiveType("int", JavaClassNames.JAVA_LANG_INTEGER);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType LONG = new PsiPrimitiveType("long", "java.lang.Long");
+  public static final PsiPrimitiveType LONG = new PsiPrimitiveType("long", JavaClassNames.JAVA_LANG_LONG);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType SHORT = new PsiPrimitiveType("short", "java.lang.Short");
+  public static final PsiPrimitiveType SHORT = new PsiPrimitiveType("short", JavaClassNames.JAVA_LANG_SHORT);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType BOOLEAN = new PsiPrimitiveType("boolean", "java.lang.Boolean");
+  public static final PsiPrimitiveType BOOLEAN = new PsiPrimitiveType("boolean", JavaClassNames.JAVA_LANG_BOOLEAN);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", "java.lang.Void");
+  public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", JavaClassNames.JAVA_LANG_VOID);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
   public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String) null);
 

@@ -63,7 +63,7 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   public void testAddBoundInTheMiddle() throws Exception {
     final PsiTypeParameter typeParameter = getTypeParameter();
     final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass("java.lang.Cloneable");
+    final PsiClass cloneableClass = getJavaFacade().findClass(JavaClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
     final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addAfter(reference, extendsList.getReferenceElements()[0]);
@@ -73,7 +73,7 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   public void testAddBoundInFront() throws Exception {
     final PsiTypeParameter typeParameter = getTypeParameter();
     final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass("java.lang.Cloneable");
+    final PsiClass cloneableClass = getJavaFacade().findClass(JavaClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
     final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addBefore(reference, extendsList.getReferenceElements()[0]);
@@ -83,7 +83,7 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   public void testAddBoundInEnd() throws Exception {
     final PsiTypeParameter typeParameter = getTypeParameter();
     final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass("java.lang.Cloneable");
+    final PsiClass cloneableClass = getJavaFacade().findClass(JavaClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
     final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addBefore(reference, null);

@@ -922,8 +922,8 @@ public class TypeConversionUtil {
           return false;
         }
         if (lClass.isInterface()) {
-          final String qualifiedName = lClass.getQualifiedName();
-          return "java.io.Serializable".equals(qualifiedName) || "java.lang.Cloneable".equals(qualifiedName);
+          String qualifiedName = lClass.getQualifiedName();
+          return JavaClassNames.JAVA_IO_SERIALIZABLE.equals(qualifiedName) || JavaClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName);
         } else {
           return left.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
         }
@@ -1377,14 +1377,14 @@ public class TypeConversionUtil {
   private static final Set<String> PRIMITIVE_WRAPPER_TYPES = new HashSet<String>(8);
 
   static {
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Byte");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Character");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Double");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Float");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Long");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Integer");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Short");
-    PRIMITIVE_WRAPPER_TYPES.add("java.lang.Boolean");
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_BYTE);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_CHARACTER);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_DOUBLE);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_FLOAT);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_LONG);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_INTEGER);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_SHORT);
+    PRIMITIVE_WRAPPER_TYPES.add(JavaClassNames.JAVA_LANG_BOOLEAN);
   }
 
   public static boolean isIntegerNumber(String typeName) {

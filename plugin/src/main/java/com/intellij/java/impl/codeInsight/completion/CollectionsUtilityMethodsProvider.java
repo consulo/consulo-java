@@ -73,8 +73,8 @@ class CollectionsUtilityMethodsProvider {
       addCollectionMethod(JAVA_UTIL_LIST, "unmodifiableList", collectionsClass);
       addCollectionMethod(JAVA_UTIL_SET, "unmodifiableSet", collectionsClass);
       addCollectionMethod(JAVA_UTIL_MAP, "unmodifiableMap", collectionsClass);
-      addCollectionMethod("java.util.SortedSet", "unmodifiableSortedSet", collectionsClass);
-      addCollectionMethod("java.util.SortedMap", "unmodifiableSortedMap", collectionsClass);
+      addCollectionMethod(JAVA_UTIL_SORTED_SET, "unmodifiableSortedSet", collectionsClass);
+      addCollectionMethod(JAVA_UTIL_SORTED_MAP, "unmodifiableSortedMap", collectionsClass);
     }
 
   }
@@ -109,5 +109,4 @@ class CollectionsUtilityMethodsProvider {
     }
     return false;
   }
-
 }

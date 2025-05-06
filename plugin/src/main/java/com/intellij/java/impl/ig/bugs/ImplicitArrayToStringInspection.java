@@ -308,12 +308,10 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
             JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
           return true;
         }
-        if (InheritanceUtil.isInheritor(containingClass,
-                                        "java.io.PrintStream")) {
+        if (InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_IO_PRINT_STREAM)) {
           return true;
         }
-        else if (InheritanceUtil.isInheritor(containingClass,
-                                             "java.io.PrintWriter")) {
+        else if (InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_IO_PRINT_WRITER)) {
           return true;
         }
       }

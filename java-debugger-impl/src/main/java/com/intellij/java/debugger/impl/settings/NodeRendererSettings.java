@@ -111,7 +111,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         new ListObjectRenderer(this),
         createCompoundReferenceRenderer(
             "Collection",
-            "java.util.Collection",
+            JavaClassNames.JAVA_UTIL_COLLECTION,
             createLabelRenderer(" size = ", "size()", null),
             createExpressionChildrenRenderer("toArray()", "!isEmpty()")
         )

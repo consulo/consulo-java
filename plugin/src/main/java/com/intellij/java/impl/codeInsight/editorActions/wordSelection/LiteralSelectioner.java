@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.action.SelectWordUtil;
 import consulo.language.lexer.StringLiteralLexer;
 import consulo.codeEditor.Editor;
@@ -37,7 +38,7 @@ public class LiteralSelectioner extends BasicSelectioner {
 
   private static boolean isStringLiteral(PsiElement element) {
     return element instanceof PsiLiteralExpression &&
-           ((PsiLiteralExpression)element).getType().equalsToText("java.lang.String") && element.getText().startsWith("\"") && element.getText().endsWith("\"");
+           ((PsiLiteralExpression)element).getType().equalsToText(JavaClassNames.JAVA_LANG_STRING) && element.getText().startsWith("\"") && element.getText().endsWith("\"");
   }
 
   @Override
