@@ -18,6 +18,8 @@ package com.intellij.java.analysis.codeInsight.intention;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyMemberType;
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
@@ -30,9 +32,9 @@ import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,57 +48,30 @@ import java.util.Set;
  */
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class QuickFixFactory {
+    public interface ModifierFixBuilder {
+        default ModifierFixBuilder add(@PsiModifier.ModifierConstant String modifier) {
+            return toggle(modifier, true);
+        }
+
+        default ModifierFixBuilder remove(@PsiModifier.ModifierConstant String modifier) {
+            return toggle(modifier, false);
+        }
+
+        ModifierFixBuilder toggle(@PsiModifier.ModifierConstant String modifier, boolean shouldHave);
+
+        ModifierFixBuilder showContainingClass();
+
+        @RequiredReadAction
+        public abstract LocalQuickFixAndIntentionActionOnPsiElement create();
+    }
+
     public static QuickFixFactory getInstance() {
         return ServiceManager.getService(QuickFixFactory.class);
     }
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierList modifierList,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
-        boolean shouldHave,
-        final boolean showContainingClass
-    );
+    public abstract ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierList modifierList);
 
-    @Nonnull
-    public LocalQuickFixAndIntentionActionOnPsiElement createAddModifierFix(
-        @Nonnull PsiModifierList modifierList,
-        @PsiModifier.ModifierConstant @Nonnull String modifier
-    ) {
-        return createModifierListFix(modifierList, modifier, true, false);
-    }
-
-    @Nonnull
-    public LocalQuickFixAndIntentionActionOnPsiElement createRemoveModifierFix(
-        @Nonnull PsiModifierList modifierList,
-        @PsiModifier.ModifierConstant @Nonnull String modifier
-    ) {
-        return createModifierListFix(modifierList, modifier, false, false);
-    }
-
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierListOwner owner,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
-        boolean shouldHave,
-        final boolean showContainingClass
-    );
-
-    @Nonnull
-    public LocalQuickFixAndIntentionActionOnPsiElement createAddModifierFix(
-        @Nonnull PsiModifierListOwner owner,
-        @PsiModifier.ModifierConstant @Nonnull String modifier
-    ) {
-        return createModifierListFix(owner, modifier, true, false);
-    }
-
-    @Nonnull
-    public LocalQuickFixAndIntentionActionOnPsiElement createRemoveModifierFix(
-        @Nonnull PsiModifierListOwner owner,
-        @PsiModifier.ModifierConstant @Nonnull String modifier
-    ) {
-        return createModifierListFix(owner, modifier, false, false);
-    }
+    public abstract ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierListOwner owner);
 
     @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(
@@ -472,7 +447,7 @@ public abstract class QuickFixFactory {
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element);
 
     @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull @Nls String text);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text);
 
     @Nonnull
     public abstract IntentionAction createDeleteSideEffectAwareFix(@Nonnull PsiExpressionStatement statement);
@@ -538,4 +513,37 @@ public abstract class QuickFixFactory {
     @Nonnull
     public abstract IntentionAction createWrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement rule);
 
+    @Deprecated
+    @DeprecationInfo("Use #fixModifiers()...#build()")
+    @Nonnull
+    @RequiredReadAction
+    public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
+        @Nonnull PsiModifierList modifierList,
+        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        boolean shouldHave,
+        boolean showContainingClass
+    ) {
+        ModifierFixBuilder builder = createModifierFixBuilder(modifierList).toggle(modifier, shouldHave);
+        if (showContainingClass) {
+            builder.showContainingClass();
+        }
+        return builder.create();
+    }
+
+    @Deprecated
+    @DeprecationInfo("Use #fixModifiers()...#build()")
+    @Nonnull
+    @RequiredReadAction
+    public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
+        @Nonnull PsiModifierListOwner owner,
+        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        boolean shouldHave,
+        boolean showContainingClass
+    ) {
+        ModifierFixBuilder builder = createModifierFixBuilder(owner).toggle(modifier, shouldHave);
+        if (showContainingClass) {
+            builder.showContainingClass();
+        }
+        return builder.create();
+    }
 }

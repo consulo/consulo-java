@@ -19,28 +19,25 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.psi.PsiElement;
 
 import jakarta.annotation.Nonnull;
 
 public class PsiMethodReferenceHighlightingUtil {
-  public static HighlightInfo checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {
-    if (expression.isConstructor()) {
-      PsiType[] typeParameters = expression.getTypeParameters();
-      if (typeParameters.length > 0) {
-        PsiElement qualifier = expression.getQualifier();
-        if (qualifier instanceof PsiReferenceExpression) {
-          PsiElement resolve = ((PsiReferenceExpression) qualifier).resolve();
-          if (resolve instanceof PsiClass && ((PsiClass) resolve).hasTypeParameters()) {
-            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression)
-                .descriptionAndTooltip("Raw constructor reference with explicit type parameters for " +
-                    "constructor").create();
-          }
+    @RequiredReadAction
+    public static HighlightInfo.Builder checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {
+        if (expression.isConstructor()) {
+            PsiType[] typeParameters = expression.getTypeParameters();
+            if (typeParameters.length > 0
+                && expression.getQualifier() instanceof PsiReferenceExpression qualifierRefExpr
+                && qualifierRefExpr.resolve() instanceof PsiClass psiClass && psiClass.hasTypeParameters()) {
+                return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(expression)
+                    .descriptionAndTooltip("Raw constructor reference with explicit type parameters for constructor");
+            }
         }
-      }
+        return null;
     }
-    return null;
-  }
 }

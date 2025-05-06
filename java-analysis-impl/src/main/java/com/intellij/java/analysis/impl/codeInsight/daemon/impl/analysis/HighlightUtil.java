@@ -311,9 +311,13 @@ public class HighlightUtil extends HighlightUtilBase {
 
         PsiClass packageLocalClassInTheMiddle = getPackageLocalClassInTheMiddle(place);
         if (packageLocalClassInTheMiddle != null) {
-            IntentionAction fix = QuickFixFactory.getInstance()
-                .createModifierListFix(packageLocalClassInTheMiddle, PsiModifier.PUBLIC, true, true);
-            hlBuilder.registerFix(fix);
+            hlBuilder.registerFix(
+                QuickFixFactory.getInstance()
+                    .createModifierFixBuilder(packageLocalClassInTheMiddle)
+                    .add(PsiModifier.PUBLIC)
+                    .showContainingClass()
+                    .create()
+            );
             return;
         }
 
@@ -343,13 +347,15 @@ public class HighlightUtil extends HighlightUtilBase {
                 String modifier = modifiers[i];
                 modifierListCopy.setModifierProperty(modifier, true);
                 if (facade.getResolveHelper().isAccessible(refElement, modifierListCopy, place, accessObjectClass, fileResolveScope)) {
-                    IntentionAction fix = QuickFixFactory.getInstance().createModifierListFix(refElement, modifier, true, true);
                     TextRange fixRange = hlRange;
                     PsiElement ref = place.getReferenceNameElement();
                     if (ref != null) {
                         fixRange = fixRange.union(ref.getTextRange());
                     }
-                    hlBuilder.registerFix(fix, fixRange);
+                    hlBuilder.registerFix(
+                        QuickFixFactory.getInstance().createModifierFixBuilder(refElement).add(modifier).showContainingClass().create(),
+                        fixRange
+                    );
                 }
             }
         }
@@ -1045,7 +1051,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(keyword)
                 .descriptionAndTooltip(JavaErrorLocalize.incompatibleModifiers(modifier, incompatible))
-                .registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(modifierList, modifier))
+                .registerFix(QuickFixFactory.getInstance().createModifierFixBuilder(modifierList).remove(modifier).create())
                 .create();
         }
 
@@ -1189,7 +1195,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(keyword)
                 .descriptionAndTooltip(JavaErrorLocalize.modifierNotAllowed(modifier))
-                .registerFix(QuickFixFactory.getInstance().createRemoveModifierFix(modifierList, modifier))
+                .registerFix(QuickFixFactory.getInstance().createModifierFixBuilder(modifierList).remove(modifier).create())
                 .create();
         }
 
@@ -2125,12 +2131,12 @@ public class HighlightUtil extends HighlightUtilBase {
     ) {
         QuickFixFactory factory = QuickFixFactory.getInstance();
         if (refElement instanceof PsiModifierListOwner modifierListOwner) {
-            hlBuilder.registerFix(factory.createAddModifierFix(modifierListOwner, PsiModifier.STATIC));
+            hlBuilder.registerFix(factory.createModifierFixBuilder(modifierListOwner).add(PsiModifier.STATIC).create());
         }
         // make context non static
         PsiModifierListOwner staticParent = PsiUtil.getEnclosingStaticElement(place, null);
         if (staticParent != null && isInstanceReference(place)) {
-            hlBuilder.registerFix(factory.createRemoveModifierFix(staticParent, PsiModifier.STATIC));
+            hlBuilder.registerFix(factory.createModifierFixBuilder(staticParent).remove(PsiModifier.STATIC).create());
         }
         if (place instanceof PsiReferenceExpression placeRefExpr && refElement instanceof PsiField) {
             hlBuilder.registerFix(factory.createCreateFieldFromUsageFix(placeRefExpr));

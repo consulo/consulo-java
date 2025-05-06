@@ -530,3 +530,5 @@ extract.side.effects.multiple:
   text: Extract side effects
 extract.side.effects.family.name:
   text: Delete statement extracting side effects
+delete.unreachable.statement.fix.text:
+  text: Delete unreachable statement

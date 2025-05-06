@@ -306,7 +306,7 @@ public class ModuleHighlightUtil {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(statement)
                 .descriptionAndTooltip(JavaErrorLocalize.moduleOpensInWeakModule())
-                .registerFix(factory().createRemoveModifierFix(javaModule, PsiModifier.OPEN))
+                .registerFix(factory().createModifierFixBuilder(javaModule).remove(PsiModifier.OPEN).create())
                 .registerFix(factory().createDeleteFix(statement))
                 .create();
         }
@@ -361,7 +361,7 @@ public class ModuleHighlightUtil {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(refElement)
                     .descriptionAndTooltip(message)
-                    .registerFix(factory().createDeleteFix(refElement, JavaQuickFixLocalize.deleteReferenceFixText().get()))
+                    .registerFix(factory().createDeleteFix(refElement, JavaQuickFixLocalize.deleteReferenceFixText()))
                     .create();
                 results.add(info);
             }
@@ -417,7 +417,7 @@ public class ModuleHighlightUtil {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(implRef)
                     .descriptionAndTooltip(JavaErrorLocalize.moduleDuplicateImpl(refText))
-                    .registerFix(factory().createDeleteFix(implRef, JavaQuickFixLocalize.deleteReferenceFixText().get()))
+                    .registerFix(factory().createDeleteFix(implRef, JavaQuickFixLocalize.deleteReferenceFixText()))
                     .create();
                 results.add(info);
                 continue;

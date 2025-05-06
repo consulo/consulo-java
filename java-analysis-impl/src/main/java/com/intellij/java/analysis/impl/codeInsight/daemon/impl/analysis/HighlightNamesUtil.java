@@ -266,16 +266,14 @@ public class HighlightNamesUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo highlightReassignedVariable(@Nonnull PsiVariable variable, @Nonnull PsiElement elementToHighlight) {
+    public static HighlightInfo.Builder highlightReassignedVariable(@Nonnull PsiVariable variable, @Nonnull PsiElement elementToHighlight) {
         if (variable instanceof PsiLocalVariable) {
             return HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.REASSIGNED_LOCAL_VARIABLE)
-                .range(elementToHighlight)
-                .create();
+                .range(elementToHighlight);
         }
         if (variable instanceof PsiParameter) {
             return HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.REASSIGNED_PARAMETER)
-                .range(elementToHighlight)
-                .create();
+                .range(elementToHighlight);
         }
         return null;
     }
@@ -290,7 +288,7 @@ public class HighlightNamesUtil {
         List<Pair<NamedScope, NamedScopesHolder>> scopes = validationManager.getScopeBasedHighlightingCachedScopes();
         for (Pair<NamedScope, NamedScopesHolder> scope : scopes) {
             NamedScope namedScope = scope.getFirst();
-            TextAttributesKey scopeKey = ScopeAttributesUtil.getScopeTextAttributeKey(namedScope.getName());
+            TextAttributesKey scopeKey = ScopeAttributesUtil.getScopeTextAttributeKey(namedScope);
             TextAttributes attributes = colorsScheme.getAttributes(scopeKey);
             if (attributes == null || attributes.isEmpty()) {
                 continue;

@@ -37,7 +37,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyMemberType;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
@@ -60,6 +59,7 @@ import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
 import consulo.language.util.AttachmentFactoryUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.DumbService;
@@ -71,7 +71,6 @@ import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
-import org.jetbrains.annotations.Nls;
 
 import java.util.*;
 
@@ -81,30 +80,78 @@ import java.util.*;
 @Singleton
 @ServiceImpl
 public class QuickFixFactoryImpl extends QuickFixFactory {
-    private static final Logger LOG = Logger.getInstance(QuickFixFactoryImpl.class);
+    private final class ModifierFixBuilderImpl implements ModifierFixBuilder {
+        private final PsiModifierList myModifierList;
+        private final PsiModifierListOwner myOwner;
+        private @PsiModifier.ModifierConstant String myModifier = null;
+        private boolean myShouldHave;
+        private boolean myShowContainingClass;
 
-    @Nonnull
-    @Override
-    @RequiredReadAction
-    public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierList modifierList,
-        @Nonnull String modifier,
-        boolean shouldHave,
-        boolean showContainingClass
-    ) {
-        return new ModifierFix(modifierList, modifier, shouldHave, showContainingClass);
+        public ModifierFixBuilderImpl(@Nonnull PsiModifierListOwner owner) {
+            myModifierList = null;
+            myOwner = owner;
+        }
+
+        public ModifierFixBuilderImpl(@Nonnull PsiModifierList modifierList) {
+            myModifierList = modifierList;
+            myOwner = null;
+        }
+
+        @Override
+        public ModifierFixBuilder add(@PsiModifier.ModifierConstant String modifier) {
+            return toggle(modifier, true);
+        }
+
+        @Override
+        public ModifierFixBuilder remove(@PsiModifier.ModifierConstant String modifier) {
+            return toggle(modifier, false);
+        }
+
+        @Override
+        public ModifierFixBuilder toggle(@PsiModifier.ModifierConstant String modifier, boolean shouldHave) {
+            if (myModifier != null) {
+                throw new IllegalStateException();
+            }
+            myModifier = modifier;
+            myShouldHave = shouldHave;
+            return this;
+        }
+
+        @Override
+        public ModifierFixBuilder showContainingClass() {
+            if (myShowContainingClass) {
+                throw new IllegalStateException();
+            }
+            myShowContainingClass = true;
+            return this;
+        }
+
+        @Override
+        @RequiredReadAction
+        public LocalQuickFixAndIntentionActionOnPsiElement create() {
+            if (myModifier == null) {
+                throw new IllegalStateException("Should have called add/remove/toggle() to specify modifier");
+            }
+            if (myOwner != null) {
+                return new ModifierFix(myOwner, myModifier, myShouldHave, myShowContainingClass);
+            }
+            else {
+                assert myModifierList != null;
+                return new ModifierFix(myModifierList, myModifier, myShouldHave, myShowContainingClass);
+            }
+        }
     }
 
-    @Nonnull
+    private static final Logger LOG = Logger.getInstance(QuickFixFactoryImpl.class);
+
     @Override
-    @RequiredReadAction
-    public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierListOwner owner,
-        @Nonnull final String modifier,
-        final boolean shouldHave,
-        final boolean showContainingClass
-    ) {
-        return new ModifierFix(owner, modifier, shouldHave, showContainingClass);
+    public ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierList modifierList) {
+        return new ModifierFixBuilderImpl(modifierList);
+    }
+
+    @Override
+    public ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierListOwner owner) {
+        return new ModifierFixBuilderImpl(owner);
     }
 
     @Nonnull
@@ -743,7 +790,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
         UnusedDeclarationInspectionBase unusedParametersInspection =
             (UnusedDeclarationInspectionBase)profile.getUnwrappedTool(UnusedSymbolLocalInspectionBase.SHORT_NAME, parameter);
-        LOG.assertTrue(Application.get().isUnitTestMode() || unusedParametersInspection != null);
+        LOG.assertTrue(parameter.getApplication().isUnitTestMode() || unusedParametersInspection != null);
         List<IntentionAction> options = new ArrayList<>();
         HighlightDisplayKey myUnusedSymbolKey = HighlightDisplayKey.find(UnusedSymbolLocalInspectionBase.SHORT_NAME);
         options.addAll(IntentionManager.getInstance().getStandardIntentionOptions(myUnusedSymbolKey, parameter));
@@ -808,9 +855,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     }
 
     @Nonnull
-    @Override
-    public LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nls @Nonnull String text) {
-        return new DeleteElementFix(element, text);
+    public LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text) {
+        return new DeleteElementFix(element, text.get());
     }
 
     @Nonnull

@@ -154,6 +154,7 @@ public class HighlightMethodUtil {
             else {
                 textRange = TextRange.EMPTY_RANGE;
             }
+            QuickFixFactory factory = QuickFixFactory.getInstance();
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(textRange)
                 .descriptionAndTooltip(JavaErrorLocalize.weakerPrivileges(
@@ -161,7 +162,7 @@ public class HighlightMethodUtil {
                     VisibilityUtil.toPresentableText(accessModifier),
                     PsiUtil.getAccessModifier(superAccessLevel)
                 ))
-                .registerFix(QuickFixFactory.getInstance().createAddModifierFix(method, PsiUtil.getAccessModifier(superAccessLevel)));
+                .registerFix(factory.createModifierFixBuilder(method).add(PsiUtil.getAccessModifier(superAccessLevel)).create());
         }
         return null;
     }
@@ -314,6 +315,7 @@ public class HighlightMethodUtil {
     private static HighlightInfo.Builder checkSuperMethodIsFinal(PsiMethod method, PsiMethod superMethod) {
         // strange things happen when super method is from Object and method from interface
         if (superMethod.isFinal()) {
+            QuickFixFactory factory = QuickFixFactory.getInstance();
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(HighlightNamesUtil.getMethodDeclarationTextRange(method))
                 .descriptionAndTooltip(JavaErrorLocalize.finalMethodOverride(
@@ -321,12 +323,7 @@ public class HighlightMethodUtil {
                     JavaHighlightUtil.formatMethod(superMethod),
                     HighlightUtil.formatClass(superMethod.getContainingClass())
                 ))
-                .registerFix(QuickFixFactory.getInstance().createModifierListFix(
-                    superMethod,
-                    PsiModifier.FINAL,
-                    false,
-                    true
-                ));
+                .registerFix(factory.createModifierFixBuilder(superMethod).remove(PsiModifier.FINAL).showContainingClass().create());
         }
         return null;
     }
@@ -1038,7 +1035,7 @@ public class HighlightMethodUtil {
         QuickFixFactory factory = QuickFixFactory.getInstance();
         if (methodCall.getMethodExpression().getQualifierExpression() instanceof PsiReferenceExpression qualifierExpr
             && qualifierExpr.resolve() instanceof PsiClass psiClass && psiClass.getContainingClass() != null && !psiClass.isStatic()) {
-            hlBuilder.registerFix(factory.createAddModifierFix(psiClass, PsiModifier.STATIC));
+            hlBuilder.registerFix(factory.createModifierFixBuilder(psiClass).add(PsiModifier.STATIC).create());
         }
 
         hlBuilder.registerFix(factory.createCreateMethodFromUsageFix(methodCall), fixRange)
@@ -1363,7 +1360,7 @@ public class HighlightMethodUtil {
                 .range(start, end)
                 .descriptionAndTooltip(JavaErrorLocalize.missingMethodBody());
             if (HighlightUtil.getIncompatibleModifier(PsiModifier.ABSTRACT, method.getModifierList()) == null) {
-                errorResult.registerFix(factory.createAddModifierFix(method, PsiModifier.ABSTRACT));
+                errorResult.registerFix(factory.createModifierFixBuilder(method).add(PsiModifier.ABSTRACT).create());
             }
             return errorResult.registerFix(factory.createAddMethodBodyFix(method))
                 .create();
@@ -1381,10 +1378,10 @@ public class HighlightMethodUtil {
                 .range(elementToHighlight)
                 .descriptionAndTooltip(JavaErrorLocalize.abstractMethodInNonAbstractClass());
             if (method.getBody() != null) {
-                errorResult.registerFix(factory.createRemoveModifierFix(method, PsiModifier.ABSTRACT));
+                errorResult.registerFix(factory.createModifierFixBuilder(method).remove(PsiModifier.ABSTRACT).create());
             }
             return errorResult.registerFix(factory.createAddMethodBodyFix(method))
-                .registerFix(factory.createAddModifierFix(aClass, PsiModifier.ABSTRACT))
+                .registerFix(factory.createModifierFixBuilder(aClass).add(PsiModifier.ABSTRACT).create())
                 .create();
         }
         return null;
@@ -1480,8 +1477,8 @@ public class HighlightMethodUtil {
             if (!isExtension && !isStatic && !isPrivate) {
                 description = JavaErrorLocalize.interfaceMethodsCannotHaveBody();
                 if (languageLevel.isAtLeast(LanguageLevel.JDK_1_8)) {
-                    additionalFixes.add(factory.createAddModifierFix(method, PsiModifier.DEFAULT));
-                    additionalFixes.add(factory.createAddModifierFix(method, PsiModifier.STATIC));
+                    additionalFixes.add(factory.createModifierFixBuilder(method).add(PsiModifier.DEFAULT).create());
+                    additionalFixes.add(factory.createModifierFixBuilder(method).add(PsiModifier.STATIC).create());
                 }
             }
             else {
@@ -1508,7 +1505,7 @@ public class HighlightMethodUtil {
             info.registerFix(factory.createDeleteMethodBodyFix(method));
         }
         if (method.isAbstract() && !isInterface) {
-            info.registerFix(factory.createRemoveModifierFix(method, PsiModifier.ABSTRACT));
+            info.registerFix(factory.createModifierFixBuilder(method).remove(PsiModifier.ABSTRACT).create());
         }
         for (IntentionAction intentionAction : additionalFixes) {
             info.registerFix(intentionAction);
@@ -1677,21 +1674,22 @@ public class HighlightMethodUtil {
                 .range(HighlightNamesUtil.getMethodDeclarationTextRange(method))
                 .descriptionAndTooltip(description);
             if (!isSuperMethodStatic || HighlightUtil.getIncompatibleModifier(PsiModifier.STATIC, modifierList) == null) {
-                hlBuilder.registerFix(QuickFixFactory.getInstance().createModifierListFix(
-                    method,
-                    PsiModifier.STATIC,
-                    isSuperMethodStatic,
-                    false
-                ));
+                hlBuilder.registerFix(
+                    QuickFixFactory.getInstance()
+                        .createModifierFixBuilder(method)
+                        .toggle(PsiModifier.STATIC, isSuperMethodStatic)
+                        .create()
+                );
             }
             if (manager.isInProject(superMethod)
                 && (!isMethodStatic || HighlightUtil.getIncompatibleModifier(PsiModifier.STATIC, superModifierList) == null)) {
-                hlBuilder.registerFix(QuickFixFactory.getInstance().createModifierListFix(
-                    superMethod,
-                    PsiModifier.STATIC,
-                    isMethodStatic,
-                    true
-                ));
+                hlBuilder.registerFix(
+                    QuickFixFactory.getInstance()
+                        .createModifierFixBuilder(superMethod)
+                        .toggle(PsiModifier.STATIC, isMethodStatic)
+                        .showContainingClass()
+                        .create()
+                );
             }
             return hlBuilder;
         }
@@ -1868,8 +1866,9 @@ public class HighlightMethodUtil {
         return null;
     }
 
+    @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkConstructorHandleSuperClassExceptions(PsiMethod method) {
+    public static HighlightInfo.Builder checkConstructorHandleSuperClassExceptions(PsiMethod method) {
         if (!method.isConstructor()) {
             return null;
         }
@@ -1899,18 +1898,17 @@ public class HighlightMethodUtil {
                 )
             ));
         }
-        return highlightInfo.create();
+        return highlightInfo;
     }
 
     @RequiredReadAction
-    public static HighlightInfo checkRecursiveConstructorInvocation(@Nonnull PsiMethod method) {
+    public static HighlightInfo.Builder checkRecursiveConstructorInvocation(@Nonnull PsiMethod method) {
         if (!HighlightControlFlowUtil.isRecursivelyCalledConstructor(method)) {
             return null;
         }
         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(HighlightNamesUtil.getMethodDeclarationTextRange(method))
-            .descriptionAndTooltip(JavaErrorLocalize.recursiveConstructorInvocation())
-            .create();
+            .descriptionAndTooltip(JavaErrorLocalize.recursiveConstructorInvocation());
     }
 
     @Nonnull
