@@ -30,7 +30,6 @@ import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.application.Application;
-import consulo.component.extension.Extensions;
 import consulo.component.macro.PathMacroUtil;
 import consulo.content.bundle.Sdk;
 import consulo.disposer.Disposer;
@@ -162,14 +161,14 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     @Nonnull
     @Override
     public ExecutionResult execute(@Nonnull Executor executor, @Nonnull ProgramRunner runner) throws ExecutionException {
-        final RunnerSettings runnerSettings = getRunnerSettings();
+        RunnerSettings runnerSettings = getRunnerSettings();
 
-        final SMTRunnerConsoleProperties testConsoleProperties = getConfiguration().createTestConsoleProperties(executor);
+        SMTRunnerConsoleProperties testConsoleProperties = getConfiguration().createTestConsoleProperties(executor);
         testConsoleProperties.setIdBasedTestTree(isIdBasedTestTree());
         testConsoleProperties.setIfUndefined(TestConsoleProperties.HIDE_PASSED_TESTS, false);
 
-        final BaseTestsOutputConsoleView consoleView = SMTestRunnerConnectionUtil.createConsole(getFrameworkName(), testConsoleProperties);
-        final SMTestRunnerResultsForm viewer = ((SMTRunnerConsoleView)consoleView).getResultsViewer();
+        BaseTestsOutputConsoleView consoleView = SMTestRunnerConnectionUtil.createConsole(getFrameworkName(), testConsoleProperties);
+        SMTestRunnerResultsForm viewer = ((SMTRunnerConsoleView)consoleView).getResultsViewer();
         Disposer.register(getConfiguration().getProject(), consoleView);
 
         final ProcessHandler handler = createHandler(executor);
@@ -187,7 +186,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             @Override
             public void startNotified(@Nonnull ProcessEvent event) {
                 if (getConfiguration().isSaveOutputToFile()) {
-                    final File file = OutputFileUtil.getOutputFile(getConfiguration());
+                    File file = OutputFileUtil.getOutputFile(getConfiguration());
                     root.setOutputFilePath(file != null ? file.getAbsolutePath() : null);
                 }
             }
@@ -209,7 +208,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         LOG.assertTrue(rerunFailedTestsAction != null);
         rerunFailedTestsAction.setModelProvider(() -> viewer);
 
-        final DefaultExecutionResult result = new DefaultExecutionResult(consoleView, handler);
+        DefaultExecutionResult result = new DefaultExecutionResult(consoleView, handler);
         result.setRestartActions(rerunFailedTestsAction, new ToggleAutoTestAction() {
             @Override
             public boolean isDelayApplicable() {
@@ -230,14 +229,14 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
     @Override
     protected OwnJavaParameters createJavaParameters() throws ExecutionException {
-        final OwnJavaParameters javaParameters = new OwnJavaParameters();
+        OwnJavaParameters javaParameters = new OwnJavaParameters();
         Project project = getConfiguration().getProject();
-        final Module module = getConfiguration().getConfigurationModule().getModule();
+        Module module = getConfiguration().getConfigurationModule().getModule();
 
         Sdk jdk = module == null ? null : ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
         javaParameters.setJdk(jdk);
 
-        final String parameters = getConfiguration().getProgramParameters();
+        String parameters = getConfiguration().getProgramParameters();
         getConfiguration().setProgramParameters(null);
         try {
             JavaParametersUtil.configureConfiguration(javaParameters, getConfiguration());
@@ -248,7 +247,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         javaParameters.getClassPath().addFirst(JavaSdkUtil.getJavaRtJarPath());
         configureClasspath(javaParameters);
 
-        final JavaTestPatcher[] patchers = JavaTestPatcher.EP_NAME.getExtensions();
+        JavaTestPatcher[] patchers = JavaTestPatcher.EP_NAME.getExtensions();
         for (JavaTestPatcher patcher : patchers) {
             patcher.patchJavaParameters(module, javaParameters);
         }
@@ -291,18 +290,20 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     }
 
     private boolean isExecutorDisabledInForkedMode() {
-        final RunnerSettings settings = getRunnerSettings();
+        RunnerSettings settings = getRunnerSettings();
         return settings != null && !(settings instanceof GenericDebuggerRunnerSettings);
     }
 
     protected void appendForkInfo(Executor executor) throws ExecutionException {
-        final String forkMode = getForkMode();
+        String forkMode = getForkMode();
         if (Comparing.strEqual(forkMode, "none")) {
             if (forkPerModule()) {
                 if (isExecutorDisabledInForkedMode()) {
-                    final String actionName = executor.getStartActionText().map(Presentation.NO_MNEMONIC).get();
-                    throw new CantRunException("'" + actionName + "' is disabled when per-module working directory is configured.<br/>" + "Please specify single working directory, or change test " +
-                        "scope to single module.");
+                    String actionName = executor.getStartActionText().map(Presentation.NO_MNEMONIC).get();
+                    throw new CantRunException(
+                        "'" + actionName + "' is disabled when per-module working directory is configured.<br/>" +
+                            "Please specify single working directory, or change test scope to single module."
+                    );
                 }
             }
             else {
@@ -310,18 +311,20 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             }
         }
         else if (isExecutorDisabledInForkedMode()) {
-            final String actionName = executor.getStartActionText().toLowerCase().map(Presentation.NO_MNEMONIC).get();
-            throw new CantRunException(actionName + " is disabled in fork mode.<br/>Please change fork mode to &lt;none&gt; to " + actionName + ".");
+            String actionName = executor.getStartActionText().toLowerCase().map(Presentation.NO_MNEMONIC).get();
+            throw new CantRunException(
+                actionName + " is disabled in fork mode.<br/>Please change fork mode to &lt;none&gt; to " + actionName + "."
+            );
         }
 
-        final OwnJavaParameters javaParameters = getJavaParameters();
-        final Sdk jdk = javaParameters.getJdk();
+        OwnJavaParameters javaParameters = getJavaParameters();
+        Sdk jdk = javaParameters.getJdk();
         if (jdk == null) {
             throw new ExecutionException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
         }
 
         try {
-            final File tempFile = FileUtil.createTempFile("command.line", "", true);
+            File tempFile = FileUtil.createTempFile("command.line", "", true);
             try (PrintWriter writer = new PrintWriter(tempFile, CharsetToolkit.UTF8)) {
                 if (forkPerModule()) {
                     writer.println("use classpath jar");
@@ -354,11 +357,11 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     protected abstract void passForkMode(String forkMode, File tempFile, OwnJavaParameters parameters) throws ExecutionException;
 
     protected void collectListeners(OwnJavaParameters javaParameters, StringBuilder buf, Class epName, String delimiter) {
-        final T configuration = getConfiguration();
-        final Object[] listeners = Application.get().getExtensionPoint(epName).getExtensions();
-        for (final Object listener : listeners) {
+        T configuration = getConfiguration();
+        Object[] listeners = Application.get().getExtensionPoint(epName).getExtensions();
+        for (Object listener : listeners) {
             boolean enabled = true;
-            for (RunConfigurationExtension ext : Extensions.getExtensions(RunConfigurationExtension.EP_NAME)) {
+            for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensions()) {
                 if (ext.isListenerDisabled(configuration, listener, getRunnerSettings())) {
                     enabled = false;
                     break;
@@ -368,19 +371,19 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
                 if (buf.length() > 0) {
                     buf.append(delimiter);
                 }
-                final Class classListener = listener.getClass();
+                Class classListener = listener.getClass();
                 buf.append(classListener.getName());
                 javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(classListener));
             }
         }
     }
 
-    protected void configureClasspath(final OwnJavaParameters javaParameters) throws CantRunException {
+    protected void configureClasspath(OwnJavaParameters javaParameters) throws CantRunException {
         configureRTClasspath(javaParameters);
         RunConfigurationModule module = getConfiguration().getConfigurationModule();
-        final String alternativeJreName =
+        String alternativeJreName =
             getConfiguration().isAlternativeJrePathEnabled() ? getConfiguration().getAlternativeJrePath() : null;
-        final int pathType = OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS;
+        int pathType = OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS;
         if (configureByModule(module.getModule())) {
             JavaParametersUtil.configureModule(module, javaParameters, pathType, alternativeJreName);
         }
@@ -399,18 +402,18 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         }
     }
 
-    protected boolean spansMultipleModules(final String qualifiedName) {
+    protected boolean spansMultipleModules(String qualifiedName) {
         if (qualifiedName != null) {
-            final Project project = getConfiguration().getProject();
-            final PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qualifiedName);
+            Project project = getConfiguration().getProject();
+            PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qualifiedName);
             if (aPackage != null) {
-                final TestSearchScope scope = getScope();
+                TestSearchScope scope = getScope();
                 if (scope != null) {
-                    final SourceScope sourceScope = scope.getSourceScope(getConfiguration());
+                    SourceScope sourceScope = scope.getSourceScope(getConfiguration());
                     if (sourceScope != null) {
-                        final GlobalSearchScope configurationSearchScope =
+                        GlobalSearchScope configurationSearchScope =
                             GlobalSearchScopesCore.projectTestScope(project).intersectWith(sourceScope.getGlobalSearchScope());
-                        final PsiDirectory[] directories = aPackage.getDirectories(configurationSearchScope);
+                        PsiDirectory[] directories = aPackage.getDirectories(configurationSearchScope);
                         return Arrays.stream(directories)
                             .map(dir -> ModuleUtilCore.findModuleForFile(dir.getVirtualFile(), project))
                             .filter(Objects::nonNull)
@@ -427,9 +430,10 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
      * Configuration based on package which spans multiple modules
      */
     protected boolean forkPerModule() {
-        final String workingDirectory = getConfiguration().getWorkingDirectory();
-        return getScope() != TestSearchScope.SINGLE_MODULE && ("$" + PathMacroUtil.MODULE_DIR_MACRO_NAME + "$").equals(workingDirectory) && spansMultipleModules(
-            getConfiguration().getPackage());
+        String workingDirectory = getConfiguration().getWorkingDirectory();
+        return getScope() != TestSearchScope.SINGLE_MODULE
+            && ("$" + PathMacroUtil.MODULE_DIR_MACRO_NAME + "$").equals(workingDirectory)
+            && spansMultipleModules(getConfiguration().getPackage());
     }
 
     protected void createTempFiles(OwnJavaParameters javaParameters) {
@@ -445,13 +449,10 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         }
     }
 
-    protected void writeClassesPerModule(
-        String packageName,
-        OwnJavaParameters javaParameters,
-        Map<Module, List<String>> perModule
-    ) throws FileNotFoundException, UnsupportedEncodingException, CantRunException {
+    protected void writeClassesPerModule(String packageName, OwnJavaParameters javaParameters, Map<Module, List<String>> perModule)
+        throws FileNotFoundException, UnsupportedEncodingException, CantRunException {
         if (perModule != null) {
-            final String classpath = getScope() == TestSearchScope.WHOLE_PROJECT ? null : javaParameters.getClassPath().getPathsString();
+            String classpath = getScope() == TestSearchScope.WHOLE_PROJECT ? null : javaParameters.getClassPath().getPathsString();
 
             try (PrintWriter wWriter = new PrintWriter(myWorkingDirsFile, CharsetToolkit.UTF8)) {
                 wWriter.println(packageName);
@@ -460,7 +461,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
                     wWriter.println(module.getName());
 
                     if (classpath == null) {
-                        final OwnJavaParameters parameters = new OwnJavaParameters();
+                        OwnJavaParameters parameters = new OwnJavaParameters();
                         parameters.getClassPath().add(JavaSdkUtil.getJavaRtJarPath());
                         configureRTClasspath(parameters);
                         JavaParametersUtil.configureModule(
@@ -476,7 +477,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
                         wWriter.println(classpath);
                     }
 
-                    final List<String> classNames = perModule.get(module);
+                    List<String> classNames = perModule.get(module);
                     wWriter.println(classNames.size());
                     for (String className : classNames) {
                         wWriter.println(className);

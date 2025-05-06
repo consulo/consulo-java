@@ -62,8 +62,8 @@ public class I18nizeAction extends AnAction {
 
     @Nullable
     @RequiredReadAction
-    public static I18nQuickFixHandler getHandler(final AnActionEvent e) {
-        final Editor editor = getEditor(e);
+    public static I18nQuickFixHandler getHandler(AnActionEvent e) {
+        Editor editor = getEditor(e);
         if (editor == null) {
             return null;
         }
@@ -78,7 +78,7 @@ public class I18nizeAction extends AnAction {
             return null;
         }
 
-        final PsiLiteralExpression literalExpression = getEnclosingStringLiteral(psiFile, editor);
+        PsiLiteralExpression literalExpression = getEnclosingStringLiteral(psiFile, editor);
         PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
         if (element == null) {
             return null;
@@ -102,7 +102,7 @@ public class I18nizeAction extends AnAction {
 
     @Nullable
     @RequiredReadAction
-    public static PsiLiteralExpression getEnclosingStringLiteral(final PsiFile psiFile, final Editor editor) {
+    public static PsiLiteralExpression getEnclosingStringLiteral(PsiFile psiFile, Editor editor) {
         PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
         if (psiElement == null) {
             return null;
@@ -114,16 +114,16 @@ public class I18nizeAction extends AnAction {
         return expression;
     }
 
-    private static Editor getEditor(final AnActionEvent e) {
+    private static Editor getEditor(AnActionEvent e) {
         return e.getData(Editor.KEY);
     }
 
     @RequiredUIAccess
     public static void doI18nSelectedString(
-        final @Nonnull Project project,
-        final @Nonnull Editor editor,
-        final @Nonnull PsiFile psiFile,
-        final @Nonnull I18nQuickFixHandler handler
+        @Nonnull Project project,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile psiFile,
+        @Nonnull I18nQuickFixHandler handler
     ) {
         try {
             handler.checkApplicability(psiFile, editor);
@@ -133,7 +133,7 @@ public class I18nizeAction extends AnAction {
             return;
         }
 
-        final JavaI18nizeQuickFixDialog dialog = handler.createDialog(project, editor, psiFile);
+        JavaI18nizeQuickFixDialog dialog = handler.createDialog(project, editor, psiFile);
         if (dialog == null) {
             return;
         }
@@ -145,16 +145,19 @@ public class I18nizeAction extends AnAction {
         if (!FileModificationService.getInstance().prepareFileForWrite(psiFile)) {
             return;
         }
-        final Collection<PropertiesFile> propertiesFiles = dialog.getAllPropertiesFiles();
+        Collection<PropertiesFile> propertiesFiles = dialog.getAllPropertiesFiles();
         for (PropertiesFile file : propertiesFiles) {
             if (!FileModificationService.getInstance().prepareFileForWrite(file.getContainingFile())) {
                 return;
             }
         }
 
-        project.getApplication().runWriteAction(() -> CommandProcessor.getInstance().executeCommand(
-            project,
-            () -> {
+        CommandProcessor.getInstance().newCommand()
+            .project(project)
+            .name(CodeInsightLocalize.quickfixI18nCommandName())
+            .groupId(project)
+            .inWriteAction()
+            .run(() -> {
                 try {
                     handler.performI18nization(
                         psiFile,
@@ -171,23 +174,20 @@ public class I18nizeAction extends AnAction {
                 catch (IncorrectOperationException e) {
                     LOG.error(e);
                 }
-            },
-            CodeInsightLocalize.quickfixI18nCommandName().get(),
-            project
-        ));
+            });
     }
 
     @Override
     @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {
-        final Editor editor = getEditor(e);
-        final Project project = editor.getProject();
+        Editor editor = getEditor(e);
+        Project project = editor.getProject();
         assert project != null;
-        final PsiFile psiFile = e.getData(PsiFile.KEY);
+        PsiFile psiFile = e.getData(PsiFile.KEY);
         if (psiFile == null) {
             return;
         }
-        final I18nQuickFixHandler handler = getHandler(e);
+        I18nQuickFixHandler handler = getHandler(e);
         if (handler == null) {
             return;
         }

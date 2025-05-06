@@ -8,6 +8,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.infos.PatternCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.PsiManager;
@@ -27,6 +28,7 @@ import java.util.Objects;
 public class PsiClassReferenceType extends PsiClassType.Stub {
     private final ClassReferencePointer myReference;
 
+    @RequiredReadAction
     public PsiClassReferenceType(@Nonnull PsiJavaCodeReferenceElement reference, LanguageLevel level) {
         this(reference, level, collectAnnotations(reference));
     }
@@ -54,20 +56,22 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
     }
 
     @Nonnull
+    @RequiredReadAction
     private static PsiAnnotation[] collectAnnotations(PsiJavaCodeReferenceElement reference) {
         List<PsiAnnotation> result = null;
         for (PsiElement child = reference.getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child instanceof PsiAnnotation) {
+            if (child instanceof PsiAnnotation annotation) {
                 if (result == null) {
                     result = new SmartList<>();
                 }
-                result.add((PsiAnnotation)child);
+                result.add(annotation);
             }
         }
         return result == null ? PsiAnnotation.EMPTY_ARRAY : result.toArray(PsiAnnotation.EMPTY_ARRAY);
     }
 
     @Override
+    @RequiredReadAction
     public boolean isValid() {
         PsiJavaCodeReferenceElement reference = myReference.retrieveReference();
         if (reference != null && reference.isValid()) {
@@ -94,12 +98,14 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
         return getReference().getResolveScope();
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiAnnotation[] getAnnotations() {
         return getAnnotations(true);
     }
 
+    @RequiredReadAction
     private PsiAnnotation[] getAnnotations(boolean merge) {
         PsiAnnotation[] annotations = super.getAnnotations();
 
@@ -122,10 +128,10 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
         return annotations;
     }
 
-    @Override
-    public
     @Nonnull
-    LanguageLevel getLanguageLevel() {
+    @Override
+    @RequiredReadAction
+    public LanguageLevel getLanguageLevel() {
         if (myLanguageLevel != null) {
             return myLanguageLevel;
         }
@@ -135,7 +141,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
     @Override
     public
     @Nonnull
-    PsiClassType setLanguageLevel(final @Nonnull LanguageLevel languageLevel) {
+    PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel) {
         if (languageLevel.equals(myLanguageLevel)) {
             return this;
         }
@@ -189,46 +195,44 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
         @Override
         @Nullable
         public String getInferenceError() {
-            return myDelegate instanceof PatternCandidateInfo ? ((PatternCandidateInfo)myDelegate).getInferenceError() : null;
+            return myDelegate instanceof PatternCandidateInfo patternCandidateInfo ? patternCandidateInfo.getInferenceError() : null;
         }
 
         @Override
         public PsiClass getElement() {
-            final PsiElement element = myDelegate.getElement();
-            return element instanceof PsiClass ? (PsiClass)element : null;
+            return myDelegate.getElement() instanceof PsiClass psiClass ? psiClass : null;
         }
     }
 
-    @Override
     @Nonnull
+    @Override
     public ClassResolveResult resolveGenerics() {
         PsiJavaCodeReferenceElement reference = getReference();
         if (!reference.isValid()) {
-            if (reference instanceof LightClassTypeReference) {
-                PsiUtil.ensureValidType(((LightClassTypeReference)reference).getType());
+            if (reference instanceof LightClassTypeReference lightClassTypeRef) {
+                PsiUtil.ensureValidType(lightClassTypeRef.getType());
             }
             throw new PsiInvalidElementAccessException(
                 reference,
                 myReference.toString() + "; augmenters=" + PsiAugmentProvider.EP_NAME.getExtensionList()
             );
         }
-        final JavaResolveResult result = reference.advancedResolve(false);
+        JavaResolveResult result = reference.advancedResolve(false);
         return result.getElement() == null ? ClassResolveResult.EMPTY : new DelegatingClassResolveResult(result);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiClassType rawType() {
         PsiJavaCodeReferenceElement reference = getReference();
-        PsiElement resolved = reference.resolve();
-        if (resolved instanceof PsiClass) {
-            PsiClass aClass = (PsiClass)resolved;
+        if (reference.resolve() instanceof PsiClass aClass) {
             if (!PsiUtil.typeParametersIterable(aClass).iterator().hasNext()) {
                 return this;
             }
             PsiManager manager = reference.getManager();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(manager.getProject());
-            final PsiSubstitutor rawSubstitutor = factory.createRawSubstitutor(aClass);
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(manager.getProject());
+            PsiSubstitutor rawSubstitutor = factory.createRawSubstitutor(aClass);
             return new PsiImmediateClassType(aClass, rawSubstitutor, getLanguageLevel(), getAnnotationProvider());
         }
         String qualifiedName = reference.getQualifiedName();
@@ -252,10 +256,10 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
         return getReference().getTypeParameters();
     }
 
-    @Override
-    public
     @Nonnull
-    String getPresentableText(boolean annotated) {
+    @Override
+    @RequiredReadAction
+    public String getPresentableText(boolean annotated) {
         PsiJavaCodeReferenceElement ref = getReference();
         if (!annotated) {
             return PsiNameHelper.getPresentableText(ref);
@@ -272,24 +276,24 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
         return PsiNameHelper.getPresentableText(ref.getReferenceName(), annotations, ref.getTypeParameters());
     }
 
-    @Override
-    public
     @Nonnull
-    String getCanonicalText(boolean annotated) {
+    @Override
+    @RequiredReadAction
+    public String getCanonicalText(boolean annotated) {
         return getText(annotated);
     }
 
-    @Override
-    public
     @Nonnull
-    String getInternalCanonicalText() {
+    @Override
+    @RequiredReadAction
+    public String getInternalCanonicalText() {
         return getCanonicalText(true);
     }
 
+    @RequiredReadAction
     private String getText(boolean annotated) {
         PsiJavaCodeReferenceElement reference = getReference();
-        if (reference instanceof PsiAnnotatedJavaCodeReferenceElement) {
-            PsiAnnotatedJavaCodeReferenceElement ref = (PsiAnnotatedJavaCodeReferenceElement)reference;
+        if (reference instanceof PsiAnnotatedJavaCodeReferenceElement ref) {
             PsiAnnotation[] annotations = annotated ? getAnnotations(false) : PsiAnnotation.EMPTY_ARRAY;
             return ref.getCanonicalText(annotated, annotations.length == 0 ? null : annotations);
         }

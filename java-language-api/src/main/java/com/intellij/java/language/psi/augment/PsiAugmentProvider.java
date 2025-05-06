@@ -9,7 +9,6 @@ import consulo.application.dumb.DumbAware;
 import consulo.application.util.CachedValue;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.ConcurrentFactoryMap;
-import consulo.application.util.function.Processor;
 import consulo.component.ProcessCanceledException;
 import consulo.component.extension.ExtensionPointName;
 import consulo.component.util.PluginExceptionUtil;
@@ -23,7 +22,7 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 /**
  * Some code is not what it seems to be!
@@ -74,10 +74,14 @@ public abstract class PsiAugmentProvider {
         }
 
         // cache to emulate previous behavior where augmenters were called just once, not for each name hint separately
-        Map<Class, List> cache = LanguageCachedValueUtil.getCachedValue(element, myCacheKey, () -> {
-            Map<Class, List> map = ConcurrentFactoryMap.createMap(c -> getAugments(element, c));
-            return CachedValueProvider.Result.create(map, PsiModificationTracker.MODIFICATION_COUNT);
-        });
+        Map<Class, List> cache = LanguageCachedValueUtil.getCachedValue(
+            element,
+            myCacheKey,
+            () -> {
+                Map<Class, List> map = ConcurrentFactoryMap.createMap(c -> getAugments(element, c));
+                return CachedValueProvider.Result.create(map, PsiModificationTracker.MODIFICATION_COUNT);
+            }
+        );
         return (List<Psi>)cache.get(type);
     }
 
@@ -161,24 +165,27 @@ public abstract class PsiAugmentProvider {
     ) {
         List<Psi> result = new SmartList<>();
 
-        forEach(element.getProject(), provider -> {
-            List<? extends Psi> augments = provider.getAugments(element, type, nameHint);
-            for (Psi augment : augments) {
-                if (nameHint == null || !(augment instanceof PsiNamedElement) || nameHint.equals(((PsiNamedElement)augment).getName())) {
-                    try {
-                        PsiUtilCore.ensureValid(augment);
-                        result.add(augment);
-                    }
-                    catch (ProcessCanceledException e) {
-                        throw e;
-                    }
-                    catch (Throwable e) {
-                        PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+        forEach(
+            element.getProject(),
+            provider -> {
+                List<? extends Psi> augments = provider.getAugments(element, type, nameHint);
+                for (Psi augment : augments) {
+                    if (nameHint == null || !(augment instanceof PsiNamedElement namedElem) || nameHint.equals(namedElem.getName())) {
+                        try {
+                            PsiUtilCore.ensureValid(augment);
+                            result.add(augment);
+                        }
+                        catch (ProcessCanceledException e) {
+                            throw e;
+                        }
+                        catch (Throwable e) {
+                            PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+                        }
                     }
                 }
+                return true;
             }
-            return true;
-        });
+        );
 
         return result;
     }
@@ -207,27 +214,30 @@ public abstract class PsiAugmentProvider {
 
     @Nullable
     public static PsiType getInferredType(@Nonnull PsiTypeElement typeElement) {
-        Ref<PsiType> result = Ref.create();
+        SimpleReference<PsiType> result = SimpleReference.create();
 
-        forEach(typeElement.getProject(), provider -> {
-            PsiType type = provider.inferType(typeElement);
-            if (type != null) {
-                try {
-                    PsiUtil.ensureValidType(type);
+        forEach(
+            typeElement.getProject(),
+            provider -> {
+                PsiType type = provider.inferType(typeElement);
+                if (type != null) {
+                    try {
+                        PsiUtil.ensureValidType(type);
+                    }
+                    catch (ProcessCanceledException e) {
+                        throw e;
+                    }
+                    catch (Throwable e) {
+                        PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
+                    }
+                    result.set(type);
+                    return false;
                 }
-                catch (ProcessCanceledException e) {
-                    throw e;
+                else {
+                    return true;
                 }
-                catch (Throwable e) {
-                    PluginExceptionUtil.logPluginError(LOG, e.getMessage(), e, provider.getClass());
-                }
-                result.set(type);
-                return false;
             }
-            else {
-                return true;
-            }
-        });
+        );
 
         return result.get();
     }
@@ -271,22 +281,25 @@ public abstract class PsiAugmentProvider {
         @Nonnull Project project,
         @Nonnull Set<String> modifiers
     ) {
-        Ref<Set<String>> result = Ref.create(modifiers);
+        SimpleReference<Set<String>> result = SimpleReference.create(modifiers);
 
-        forEach(project, provider -> {
-            result.set(provider.transformModifiers(modifierList, Collections.unmodifiableSet(result.get())));
-            return true;
-        });
+        forEach(
+            project,
+            provider -> {
+                result.set(provider.transformModifiers(modifierList, Collections.unmodifiableSet(result.get())));
+                return true;
+            }
+        );
 
         return result.get();
     }
 
-    private static void forEach(Project project, Processor<? super PsiAugmentProvider> processor) {
+    private static void forEach(Project project, Predicate<? super PsiAugmentProvider> processor) {
         boolean dumb = DumbService.isDumb(project);
         for (PsiAugmentProvider provider : EP_NAME.getExtensionList()) {
             if (!dumb || DumbService.isDumbAware(provider)) {
                 try {
-                    boolean goOn = processor.process(provider);
+                    boolean goOn = processor.test(provider);
                     if (!goOn) {
                         break;
                     }

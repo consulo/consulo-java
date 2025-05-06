@@ -62,7 +62,6 @@ import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.lang.ref.Reference;
@@ -135,13 +134,15 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return module != null ? new PsiElement[]{module} : getClasses();
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiClass[] getClasses() {
         return getStub().getClasses();
     }
 
     @Override
+    @RequiredReadAction
     public PsiPackageStatement getPackageStatement() {
         ClsPackageStatementImpl statement = myPackageStatement;
         if (statement == null) {
@@ -161,8 +162,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     private static String findPackageName(PsiClassHolderFileStub<?> stub) {
         String packageName = null;
 
-        if (stub instanceof PsiJavaFileStub) {
-            packageName = ((PsiJavaFileStub)stub).getPackageName();
+        if (stub instanceof PsiJavaFileStub javaFileStub) {
+            packageName = javaFileStub.getPackageName();
         }
         else {
             PsiClass[] psiClasses = stub.getClasses();
@@ -180,15 +181,16 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return !StringUtil.isEmpty(packageName) ? packageName : null;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public String getPackageName() {
         PsiPackageStatement statement = getPackageStatement();
         return statement == null ? "" : statement.getPackageName();
     }
 
     @Override
-    public void setPackageName(final String packageName) throws IncorrectOperationException {
+    public void setPackageName(String packageName) throws IncorrectOperationException {
         throw new IncorrectOperationException("Cannot set package name for compiled files");
     }
 
@@ -237,12 +239,13 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return null;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public LanguageLevel getLanguageLevel() {
         PsiClassHolderFileStub<?> stub = getStub();
-        if (stub instanceof PsiJavaFileStub) {
-            LanguageLevel level = ((PsiJavaFileStub)stub).getLanguageLevel();
+        if (stub instanceof PsiJavaFileStub javaFileStub) {
+            LanguageLevel level = javaFileStub.getLanguageLevel();
             if (level != null) {
                 return level;
             }
@@ -255,7 +258,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     @Override
     public PsiJavaModule getModuleDeclaration() {
         PsiClassHolderFileStub<?> stub = getStub();
-        return stub instanceof PsiJavaFileStub ? ((PsiJavaFileStub)stub).getModule() : null;
+        return stub instanceof PsiJavaFileStub javaFileStub ? javaFileStub.getModule() : null;
     }
 
     @RequiredWriteAction
@@ -308,11 +311,10 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     @RequiredReadAction
     private void setFileMirror(@Nonnull TreeElement element) {
         PsiElement mirrorElement = SourceTreeToPsiMap.treeToPsiNotNull(element);
-        if (!(mirrorElement instanceof PsiJavaFile)) {
+        if (!(mirrorElement instanceof PsiJavaFile mirrorFile)) {
             throw new InvalidMirrorException("Unexpected mirror file: " + mirrorElement);
         }
 
-        PsiJavaFile mirrorFile = (PsiJavaFile)mirrorElement;
         PsiJavaModule module = getModuleDeclaration();
         if (module != null) {
             ClsElementImpl.setMirror(module, mirrorFile.getModuleDeclaration());
@@ -360,7 +362,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
                     String fileName = (classes.length > 0 ? classes[0].getName() : file.getNameWithoutExtension()) +
                         JavaFileType.DOT_DEFAULT_EXTENSION;
 
-                    final Document document = FileDocumentManager.getInstance().getDocument(file);
+                    Document document = FileDocumentManager.getInstance().getDocument(file);
                     assert document != null : file.getUrl();
 
                     CharSequence mirrorText = document.getImmutableCharSequence();
@@ -371,7 +373,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
 
                     mirrorTreeElement = SourceTreeToPsiMap.psiToTreeNotNull(mirror);
                     try {
-                        final TreeElement finalMirrorTreeElement = mirrorTreeElement;
+                        TreeElement finalMirrorTreeElement = mirrorTreeElement;
                         ProgressManager.getInstance().executeNonCancelableSection(() -> {
                             setFileMirror(finalMirrorTreeElement);
                             putUserData(CLS_DOCUMENT_LINK_KEY, document);
@@ -428,41 +430,40 @@ public class ClsFileImpl extends PsiBinaryFileImpl
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitJavaFile(this);
+        if (visitor instanceof JavaElementVisitor javaElementVisitor) {
+            javaElementVisitor.visitJavaFile(this);
         }
         else {
             visitor.visitFile(this);
         }
     }
 
-    @RequiredReadAction
     @Override
-    @NonNls
+    @RequiredReadAction
     public String toString() {
         return "PsiFile:" + getName();
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public final TextRange getTextRange() {
         return TextRange.create(0, getTextLength());
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public final int getStartOffsetInParent() {
         return 0;
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public final PsiElement findElementAt(int offset) {
         return getMirror().findElementAt(offset);
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public PsiReference findReferenceAt(int offset) {
         return getMirror().findReferenceAt(offset);
     }
@@ -472,20 +473,21 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return 0;
     }
 
-    @RequiredReadAction
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public char[] textToCharArray() {
         return getMirror().textToCharArray();
     }
 
-    @RequiredReadAction
     @Nonnull
+    @RequiredReadAction
     public PsiClassHolderFileStub<?> getStub() {
         return (PsiClassHolderFileStub)getStubTree().getRoot();
     }
 
     @Override
+    @RequiredReadAction
     public boolean processDeclarations(
         @Nonnull PsiScopeProcessor processor,
         @Nonnull ResolveState state,
@@ -493,9 +495,9 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         @Nonnull PsiElement place
     ) {
         processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
-        final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
+        ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
         if (classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
-            final PsiClass[] classes = getClasses();
+            PsiClass[] classes = getClasses();
             for (PsiClass aClass : classes) {
                 if (!processor.execute(aClass, state)) {
                     return false;
@@ -585,8 +587,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     @Nonnull
     public static CharSequence decompile(@Nonnull VirtualFile file) {
         PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
-        final ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
-        final StringBuilder buffer = new StringBuilder();
+        ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
+        StringBuilder buffer = new StringBuilder();
         Application.get().runReadAction(() -> clsFile.appendMirrorText(buffer));
         return buffer;
     }

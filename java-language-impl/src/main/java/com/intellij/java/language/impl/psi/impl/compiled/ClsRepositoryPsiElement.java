@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.*;
 import consulo.language.psi.stub.IStubElementType;
 import consulo.language.psi.stub.PsiFileStub;
@@ -27,10 +28,11 @@ import java.util.List;
 public abstract class ClsRepositoryPsiElement<T extends StubElement> extends ClsElementImpl implements StubBasedPsiElement<T> {
     private final T myStub;
 
-    protected ClsRepositoryPsiElement(final T stub) {
+    protected ClsRepositoryPsiElement(T stub) {
         myStub = stub;
     }
 
+    @Nonnull
     @Override
     public IStubElementType getElementType() {
         return myStub.getStubType();
@@ -41,9 +43,10 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
         return myStub.getParentStub().getPsi();
     }
 
+    @Nonnull
     @Override
     public PsiManager getManager() {
-        final PsiFile file = getContainingFile();
+        PsiFile file = getContainingFile();
         if (file == null) {
             throw new PsiInvalidElementAccessException(this);
         }
@@ -69,10 +72,11 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
         return getContainingFile().isPhysical();
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
-        final List stubs = getStub().getChildrenStubs();
+        List stubs = getStub().getChildrenStubs();
         PsiElement[] children = new PsiElement[stubs.size()];
         for (int i = 0; i < stubs.size(); i++) {
             children[i] = ((StubElement)stubs.get(i)).getPsi();
@@ -81,8 +85,9 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
     }
 
     @Override
+    @RequiredReadAction
     public PsiElement getFirstChild() {
-        final List<StubElement> children = getStub().getChildrenStubs();
+        List<StubElement> children = getStub().getChildrenStubs();
         if (children.isEmpty()) {
             return null;
         }
@@ -90,8 +95,9 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
     }
 
     @Override
+    @RequiredReadAction
     public PsiElement getLastChild() {
-        final List<StubElement> children = getStub().getChildrenStubs();
+        List<StubElement> children = getStub().getChildrenStubs();
         if (children.isEmpty()) {
             return null;
         }
@@ -99,9 +105,10 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
     }
 
     @Override
+    @RequiredReadAction
     public PsiElement getNextSibling() {
-        final PsiElement[] psiElements = getParent().getChildren();
-        final int i = ArrayUtil.indexOf(psiElements, this);
+        PsiElement[] psiElements = getParent().getChildren();
+        int i = ArrayUtil.indexOf(psiElements, this);
         if (i < 0 || i >= psiElements.length - 1) {
             return null;
         }
@@ -110,9 +117,10 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
 
 
     @Override
+    @RequiredReadAction
     public PsiElement getPrevSibling() {
-        final PsiElement[] psiElements = getParent().getChildren();
-        final int i = ArrayUtil.indexOf(psiElements, this);
+        PsiElement[] psiElements = getParent().getChildren();
+        int i = ArrayUtil.indexOf(psiElements, this);
         if (i < 1) {
             return null;
         }

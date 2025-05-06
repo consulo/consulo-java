@@ -19,10 +19,10 @@ import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiConstantEvaluationHelperImpl;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiVariableEx;
-import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiFieldStub;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
@@ -52,7 +52,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
         super(stub);
         myTypeElement = LazyValue.atomicNotNull(() -> {
             PsiFieldStub s = getStub();
-            String typeText = TypeInfo.createTypeText(s.getType());
+            String typeText = s.getType().text();
             assert typeText != null : s;
             return new ClsTypeElementImpl(ClsFieldImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
         });
@@ -65,8 +65,9 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
         });
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
         return getChildren(getDocComment(), getModifierList(), getTypeElement(), getNameIdentifier());
     }
@@ -165,6 +166,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
     }
 
     @Override
+    @RequiredReadAction
     public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
         appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
         appendText(getModifierList(), indentLevel, buffer, "");
@@ -193,16 +195,17 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitField(this);
+        if (visitor instanceof JavaElementVisitor elementVisitor) {
+            elementVisitor.visitField(this);
         }
         else {
             visitor.visitElement(this);
         }
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     @SuppressWarnings({
         "Duplicates",
         "deprecation"
@@ -240,12 +243,13 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
     }
 
     @Override
-    public boolean isEquivalentTo(final PsiElement another) {
+    public boolean isEquivalentTo(PsiElement another) {
         return PsiClassImplUtil.isFieldEquivalentTo(this, another);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public SearchScope getUseScope() {
         return PsiImplUtil.getMemberUseScope(this);
     }
