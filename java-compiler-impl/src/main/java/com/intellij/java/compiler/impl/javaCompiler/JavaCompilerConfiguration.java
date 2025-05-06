@@ -17,6 +17,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
+import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
@@ -61,7 +62,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     private BackendCompiler myBackendCompilerCache;
 
     private final ProcessorConfigProfile myDefaultProcessorsProfile = new ProcessorConfigProfileImpl("Default");
-    private final List<ProcessorConfigProfile> myModuleProcessorProfiles = new ArrayList<ProcessorConfigProfile>();
+    private final List<ProcessorConfigProfile> myModuleProcessorProfiles = new ArrayList<>();
 
     // the map is calculated by module processor profiles list for faster access to module settings
     private Map<Module, ProcessorConfigProfile> myProcessorsProfilesMap = null;
@@ -72,7 +73,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
     @Deprecated
     @DeprecationInfo("We used JavaModuleExtension for store info about bytecode version")
-    private final Map<String, String> myModuleBytecodeTarget = new HashMap<String, String>();
+    private final Map<String, String> myModuleBytecodeTarget = new HashMap<>();
 
     @Inject
     public JavaCompilerConfiguration(@Nonnull Project project) {
@@ -124,11 +125,11 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     public Element getState() {
         Element parentNode = new Element("state");
 
-        final Element annotationProcessingSettings = addChild(parentNode, ANNOTATION_PROCESSING);
-        final Element defaultProfileElem = addChild(annotationProcessingSettings, "profile").setAttribute("default", "true");
+        Element annotationProcessingSettings = addChild(parentNode, ANNOTATION_PROCESSING);
+        Element defaultProfileElem = addChild(annotationProcessingSettings, "profile").setAttribute("default", "true");
         AnnotationProcessorProfileSerializer.writeExternal(myDefaultProcessorsProfile, defaultProfileElem);
         for (ProcessorConfigProfile profile : myModuleProcessorProfiles) {
-            final Element profileElem = addChild(annotationProcessingSettings, "profile").setAttribute("default", "false");
+            Element profileElem = addChild(annotationProcessingSettings, "profile").setAttribute("default", "false");
             AnnotationProcessorProfileSerializer.writeExternal(profile, profileElem);
         }
 
@@ -141,17 +142,17 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         }
 
         if (!StringUtil.isEmpty(myBytecodeTargetLevel) || !myModuleBytecodeTarget.isEmpty()) {
-            final Element bytecodeTarget = addChild(parentNode, BYTECODE_TARGET_LEVEL);
+            Element bytecodeTarget = addChild(parentNode, BYTECODE_TARGET_LEVEL);
             if (!StringUtil.isEmpty(myBytecodeTargetLevel)) {
                 bytecodeTarget.setAttribute(TARGET_ATTRIBUTE, myBytecodeTargetLevel);
             }
             if (!myModuleBytecodeTarget.isEmpty()) {
-                final List<String> moduleNames = new ArrayList<String>(myModuleBytecodeTarget.keySet());
+                List<String> moduleNames = new ArrayList<>(myModuleBytecodeTarget.keySet());
                 Collections.sort(moduleNames, String.CASE_INSENSITIVE_ORDER);
                 for (String name : moduleNames) {
-                    final Element moduleElement = addChild(bytecodeTarget, MODULE);
+                    Element moduleElement = addChild(bytecodeTarget, MODULE);
                     moduleElement.setAttribute(NAME, name);
-                    final String value = myModuleBytecodeTarget.get(name);
+                    String value = myModuleBytecodeTarget.get(name);
                     moduleElement.setAttribute(TARGET_ATTRIBUTE, value != null ? value : "");
                 }
             }
@@ -159,8 +160,8 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         return parentNode;
     }
 
-    private static Element addChild(Element parent, final String childName) {
-        final Element child = new Element(childName);
+    private static Element addChild(Element parent, String childName) {
+        Element child = new Element(childName);
         parent.addContent(child);
         return child;
     }
@@ -170,18 +171,18 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         myBackendCompilerCache = findCompiler(parentNode.getAttributeValue("compiler"));
         myAddNotNullAssertions = Boolean.parseBoolean(parentNode.getAttributeValue(ADD_NOTNULL_ASSERTIONS, String.valueOf(Boolean.FALSE)));
 
-        final Element annotationProcessingSettings = parentNode.getChild(ANNOTATION_PROCESSING);
+        Element annotationProcessingSettings = parentNode.getChild(ANNOTATION_PROCESSING);
         if (annotationProcessingSettings != null) {
-            final List profiles = annotationProcessingSettings.getChildren("profile");
+            List profiles = annotationProcessingSettings.getChildren("profile");
             if (!profiles.isEmpty()) {
                 for (Object elem : profiles) {
-                    final Element profileElement = (Element)elem;
-                    final boolean isDefault = "true".equals(profileElement.getAttributeValue("default"));
+                    Element profileElement = (Element)elem;
+                    boolean isDefault = "true".equals(profileElement.getAttributeValue("default"));
                     if (isDefault) {
                         AnnotationProcessorProfileSerializer.readExternal(myDefaultProcessorsProfile, profileElement);
                     }
                     else {
-                        final ProcessorConfigProfile profile = new ProcessorConfigProfileImpl("");
+                        ProcessorConfigProfile profile = new ProcessorConfigProfileImpl("");
                         AnnotationProcessorProfileSerializer.readExternal(profile, profileElement);
                         myModuleProcessorProfiles.add(profile);
                     }
@@ -215,16 +216,16 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
     private void loadProfilesFromOldFormat(Element processing) {
         // collect data
-        final boolean isEnabled = Boolean.parseBoolean(processing.getAttributeValue(ENABLED, "false"));
-        final boolean isUseClasspath = Boolean.parseBoolean(processing.getAttributeValue("useClasspath", "true"));
-        final StringBuilder processorPath = new StringBuilder();
-        final Set<String> optionPairs = new HashSet<String>();
-        final Set<String> processors = new HashSet<String>();
-        final List<Pair<String, String>> modulesToProcess = new ArrayList<Pair<String, String>>();
+        boolean isEnabled = Boolean.parseBoolean(processing.getAttributeValue(ENABLED, "false"));
+        boolean isUseClasspath = Boolean.parseBoolean(processing.getAttributeValue("useClasspath", "true"));
+        StringBuilder processorPath = new StringBuilder();
+        Set<String> optionPairs = new HashSet<>();
+        Set<String> processors = new HashSet<>();
+        List<Pair<String, String>> modulesToProcess = new ArrayList<>();
 
         for (Object child : processing.getChildren("processorPath")) {
-            final Element pathElement = (Element)child;
-            final String path = pathElement.getAttributeValue("value", (String)null);
+            Element pathElement = (Element)child;
+            String path = pathElement.getAttributeValue("value", (String)null);
             if (path != null) {
                 if (processorPath.length() > 0) {
                     processorPath.append(File.pathSeparator);
@@ -234,26 +235,26 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         }
 
         for (Object child : processing.getChildren("processor")) {
-            final Element processorElement = (Element)child;
-            final String proc = processorElement.getAttributeValue(NAME, (String)null);
+            Element processorElement = (Element)child;
+            String proc = processorElement.getAttributeValue(NAME, (String)null);
             if (proc != null) {
                 processors.add(proc);
             }
-            final StringTokenizer tokenizer = new StringTokenizer(processorElement.getAttributeValue("options", ""), " ", false);
+            StringTokenizer tokenizer = new StringTokenizer(processorElement.getAttributeValue("options", ""), " ", false);
             while (tokenizer.hasMoreTokens()) {
-                final String pair = tokenizer.nextToken();
+                String pair = tokenizer.nextToken();
                 optionPairs.add(pair);
             }
         }
 
         for (Object child : processing.getChildren("processModule")) {
-            final Element moduleElement = (Element)child;
-            final String name = moduleElement.getAttributeValue(NAME, (String)null);
+            Element moduleElement = (Element)child;
+            String name = moduleElement.getAttributeValue(NAME, (String)null);
             if (name == null) {
                 continue;
             }
-            final String dir = moduleElement.getAttributeValue("generatedDirName", (String)null);
-            modulesToProcess.add(Pair.create(name, dir));
+            String dir = moduleElement.getAttributeValue("generatedDirName", (String)null);
+            modulesToProcess.add(Couple.of(name, dir));
         }
 
         myDefaultProcessorsProfile.setEnabled(false);
@@ -263,7 +264,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         }
         if (!optionPairs.isEmpty()) {
             for (String pair : optionPairs) {
-                final int index = pair.indexOf("=");
+                int index = pair.indexOf("=");
                 if (index > 0) {
                     myDefaultProcessorsProfile.setOption(pair.substring(0, index), pair.substring(index + 1));
                 }
@@ -273,12 +274,12 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
             myDefaultProcessorsProfile.addProcessor(processor);
         }
 
-        final Map<String, Set<String>> dirNameToModulesMap = new HashMap<String, Set<String>>();
+        Map<String, Set<String>> dirNameToModulesMap = new HashMap<>();
         for (Pair<String, String> moduleDirPair : modulesToProcess) {
-            final String dir = moduleDirPair.getSecond();
+            String dir = moduleDirPair.getSecond();
             Set<String> set = dirNameToModulesMap.get(dir);
             if (set == null) {
-                set = new HashSet<String>();
+                set = new HashSet<>();
                 dirNameToModulesMap.put(dir, set);
             }
             set.add(moduleDirPair.getFirst());
@@ -286,8 +287,8 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
         int profileIndex = 0;
         for (Map.Entry<String, Set<String>> entry : dirNameToModulesMap.entrySet()) {
-            final String dirName = entry.getKey();
-            final ProcessorConfigProfile profile = new ProcessorConfigProfileImpl(myDefaultProcessorsProfile);
+            String dirName = entry.getKey();
+            ProcessorConfigProfile profile = new ProcessorConfigProfileImpl(myDefaultProcessorsProfile);
             profile.setName("Profile" + (++profileIndex));
             profile.setEnabled(isEnabled);
             profile.setGeneratedSourcesDirectoryName(dirName, false);
@@ -299,18 +300,19 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     }
 
     @Nonnull
+    @RequiredReadAction
     public ProcessorConfigProfile getAnnotationProcessingConfiguration(Module module) {
         Map<Module, ProcessorConfigProfile> map = myProcessorsProfilesMap;
         if (map == null) {
-            map = new HashMap<Module, ProcessorConfigProfile>();
-            final Map<String, Module> namesMap = new HashMap<String, Module>();
+            map = new HashMap<>();
+            Map<String, Module> namesMap = new HashMap<>();
             for (Module m : ModuleManager.getInstance(module.getProject()).getModules()) {
                 namesMap.put(m.getName(), m);
             }
             if (!namesMap.isEmpty()) {
                 for (ProcessorConfigProfile profile : myModuleProcessorProfiles) {
                     for (String name : profile.getModuleNames()) {
-                        final Module mod = namesMap.get(name);
+                        Module mod = namesMap.get(name);
                         if (mod != null) {
                             map.put(mod, profile);
                         }
@@ -319,7 +321,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
             }
             myProcessorsProfilesMap = map;
         }
-        final ProcessorConfigProfile profile = map.get(module);
+        ProcessorConfigProfile profile = map.get(module);
         return profile != null ? profile : myDefaultProcessorsProfile;
     }
 

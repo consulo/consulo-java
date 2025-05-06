@@ -15,6 +15,8 @@
  */
 package com.intellij.java.debugger.impl;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.localize.LocalizeValue;
 import consulo.proxy.EventDispatcher;
 import jakarta.annotation.Nonnull;
 
@@ -24,6 +26,25 @@ public abstract class DebuggerStateManager {
     @Nonnull
     public abstract DebuggerContextImpl getContext();
 
+    public void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event,
+        @Nonnull LocalizeValue description
+    ) {
+        setState(context, state, event, description.get());
+    }
+
+    public void setState(
+        @Nonnull DebuggerContextImpl context,
+        DebuggerSession.State state,
+        DebuggerSession.Event event
+    ) {
+        setState(context, state, event, (String)null);
+    }
+
+    @Deprecated
+    @DeprecationInfo("Use variant with LocalizeValue")
     public abstract void setState(
         @Nonnull DebuggerContextImpl context,
         DebuggerSession.State state,

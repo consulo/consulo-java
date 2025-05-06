@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.DebugProcess;
+import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
@@ -30,6 +30,7 @@ import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
 import com.intellij.java.language.psi.PsiElementFinder;
@@ -51,6 +52,7 @@ import consulo.internal.com.sun.jdi.request.StepRequest;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.localize.ActionLocalize;
 import consulo.process.ExecutionException;
@@ -181,12 +183,11 @@ public class DebuggerSession implements AbstractDebuggerSession {
          */
         @Override
         @RequiredUIAccess
-        public void setState(@Nonnull final DebuggerContextImpl context, final State state, final Event event, final String description) {
+        public void setState(@Nonnull DebuggerContextImpl context, State state, Event event, String description) {
             Application.get().assertIsDispatchThread();
-            final DebuggerSession session = context.getDebuggerSession();
+            DebuggerSession session = context.getDebuggerSession();
             LOG.assertTrue(session == DebuggerSession.this || session == null);
-            final Runnable setStateRunnable = () ->
-            {
+            Runnable setStateRunnable = () -> {
                 LOG.assertTrue(myDebuggerContext.isInitialised());
                 myDebuggerContext = context;
                 if (LOG.isDebugEnabled()) {
@@ -219,9 +220,10 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
     }
 
+    @RequiredUIAccess
     static DebuggerSession create(
         String sessionName,
-        @Nonnull final DebugProcessImpl debugProcess,
+        @Nonnull DebugProcessImpl debugProcess,
         DebugEnvironment environment
     ) throws ExecutionException {
         DebuggerSession session = new DebuggerSession(sessionName, debugProcess, environment);
@@ -235,7 +237,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
         return session;
     }
 
-    private DebuggerSession(String sessionName, @Nonnull final DebugProcessImpl debugProcess, DebugEnvironment environment) {
+    private DebuggerSession(String sessionName, @Nonnull DebugProcessImpl debugProcess, DebugEnvironment environment) {
         mySessionName = sessionName;
         myDebugProcess = debugProcess;
         SESSION_EMPTY_CONTEXT = DebuggerContextImpl.createDebuggerContext(this, null, null, null);
@@ -288,29 +290,29 @@ public class DebuggerSession implements AbstractDebuggerSession {
 
         switch (myState.myState) {
             case STOPPED:
-                return DebuggerBundle.message("status.debug.stopped");
+                return JavaDebuggerLocalize.statusDebugStopped().get();
             case RUNNING:
-                return DebuggerBundle.message("status.app.running");
+                return JavaDebuggerLocalize.statusAppRunning().get();
             case WAITING_ATTACH:
                 RemoteConnection connection = getProcess().getConnection();
-                final String addressDisplayName = DebuggerBundle.getAddressDisplayName(connection);
-                final String transportName = DebuggerBundle.getTransportName(connection);
+                String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
+                LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
                 return connection.isServerMode()
-                    ? DebuggerBundle.message("status.listening", addressDisplayName, transportName)
-                    : DebuggerBundle.message("status.connecting", addressDisplayName, transportName);
+                    ? JavaDebuggerLocalize.statusListening(addressDisplayName, transportName).get()
+                    : JavaDebuggerLocalize.statusConnecting(addressDisplayName, transportName).get();
             case PAUSED:
-                return DebuggerBundle.message("status.paused");
+                return JavaDebuggerLocalize.statusPaused().get();
             case WAIT_EVALUATION:
-                return DebuggerBundle.message("status.waiting.evaluation.result");
+                return JavaDebuggerLocalize.statusWaitingEvaluationResult().get();
             case DISPOSED:
-                return DebuggerBundle.message("status.debug.stopped");
+                return JavaDebuggerLocalize.statusDebugStopped().get();
         }
         return null;
     }
 
     /* Stepping */
-    private void resumeAction(final DebugProcessImpl.ResumeCommand command, Event event) {
-        getContextManager().setState(SESSION_EMPTY_CONTEXT, State.WAIT_EVALUATION, event, null);
+    private void resumeAction(DebugProcessImpl.ResumeCommand command, Event event) {
+        getContextManager().setState(SESSION_EMPTY_CONTEXT, State.WAIT_EVALUATION, event);
         myDebugProcess.getManagerThread().schedule(command);
     }
 
@@ -359,8 +361,8 @@ public class DebuggerSession implements AbstractDebuggerSession {
     }
 
     @RequiredUIAccess
-    public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter, int stepSize) {
-        final SuspendContextImpl suspendContext = getSuspendContext();
+    public void stepInto(boolean ignoreFilters, @Nullable MethodFilter smartStepFilter, int stepSize) {
+        SuspendContextImpl suspendContext = getSuspendContext();
         DebugProcessImpl.ResumeCommand cmd = null;
         for (JvmSteppingCommandProvider handler : JvmSteppingCommandProvider.EP_NAME.getExtensions()) {
             cmd = handler.getStepIntoCommand(suspendContext, ignoreFilters, smartStepFilter, stepSize);
@@ -376,12 +378,12 @@ public class DebuggerSession implements AbstractDebuggerSession {
     }
 
     @RequiredUIAccess
-    public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter) {
+    public void stepInto(boolean ignoreFilters, @Nullable MethodFilter smartStepFilter) {
         stepInto(ignoreFilters, smartStepFilter, StepRequest.STEP_LINE);
     }
 
     @RequiredUIAccess
-    public void runToCursor(@Nonnull XSourcePosition position, final boolean ignoreBreakpoints) {
+    public void runToCursor(@Nonnull XSourcePosition position, boolean ignoreBreakpoints) {
         try {
             DebugProcessImpl.ResumeCommand runToCursorCommand =
                 myDebugProcess.createRunToCursorCommand(getSuspendContext(), position, ignoreBreakpoints);
@@ -395,7 +397,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
 
     @RequiredUIAccess
     public void resume() {
-        final SuspendContextImpl suspendContext = getSuspendContext();
+        SuspendContextImpl suspendContext = getSuspendContext();
         if (suspendContext != null) {
             clearSteppingThrough();
             resumeAction(myDebugProcess.createResumeCommand(suspendContext), Event.RESUME);
@@ -424,26 +426,28 @@ public class DebuggerSession implements AbstractDebuggerSession {
     @RequiredUIAccess
     public void showExecutionPoint() {
         getContextManager()
-            .setState(DebuggerContextUtil.createDebuggerContext(this, getSuspendContext()), State.PAUSED, Event.REFRESH, null);
+            .setState(DebuggerContextUtil.createDebuggerContext(this, getSuspendContext()), State.PAUSED, Event.REFRESH);
     }
 
     @RequiredUIAccess
-    public void refresh(final boolean refreshWithStack) {
-        final State state = getState();
+    public void refresh(boolean refreshWithStack) {
+        State state = getState();
         DebuggerContextImpl context = myContextManager.getContext();
         DebuggerContextImpl newContext =
             DebuggerContextImpl.createDebuggerContext(this, context.getSuspendContext(), context.getThreadProxy(), context.getFrameProxy());
-        myContextManager.setState(newContext, state, refreshWithStack ? Event.REFRESH_WITH_STACK : Event.REFRESH, null);
+        myContextManager.setState(newContext, state, refreshWithStack ? Event.REFRESH_WITH_STACK : Event.REFRESH);
     }
 
     public void dispose() {
         getProcess().dispose();
         Disposer.dispose(myUpdateAlarm);
-        DebuggerInvocationUtil.swingInvokeLater(getProject(), () ->
-        {
-            myContextManager.setState(SESSION_EMPTY_CONTEXT, State.DISPOSED, Event.DISPOSE, null);
-            myContextManager.dispose();
-        });
+        DebuggerInvocationUtil.swingInvokeLater(
+            getProject(),
+            () -> {
+                myContextManager.setState(SESSION_EMPTY_CONTEXT, State.DISPOSED, Event.DISPOSE);
+                myContextManager.dispose();
+            }
+        );
     }
 
     // ManagerCommands
@@ -480,16 +484,17 @@ public class DebuggerSession implements AbstractDebuggerSession {
     }
 
     @Nullable
+    @RequiredUIAccess
     private ExecutionResult attach(DebugEnvironment environment) throws ExecutionException {
         RemoteConnection remoteConnection = environment.getRemoteConnection();
-        final String addressDisplayName = DebuggerBundle.getAddressDisplayName(remoteConnection);
-        final String transportName = DebuggerBundle.getTransportName(remoteConnection);
-        final ExecutionResult executionResult = myDebugProcess.attachVirtualMachine(environment, this);
+        String addressDisplayName = DebuggerUtils.getAddressDisplayName(remoteConnection);
+        LocalizeValue transportName = DebuggerUtils.getTransportName(remoteConnection);
+        ExecutionResult executionResult = myDebugProcess.attachVirtualMachine(environment, this);
         getContextManager().setState(
             SESSION_EMPTY_CONTEXT,
             State.WAITING_ATTACH,
             Event.START_WAIT_ATTACH,
-            DebuggerBundle.message("status.waiting.attach", addressDisplayName, transportName)
+            JavaDebuggerLocalize.statusWaitingAttach(addressDisplayName, transportName)
         );
         return executionResult;
     }
@@ -497,27 +502,34 @@ public class DebuggerSession implements AbstractDebuggerSession {
     private class MyDebugProcessListener extends DebugProcessAdapterImpl {
         private final DebugProcessImpl myDebugProcess;
 
-        public MyDebugProcessListener(final DebugProcessImpl debugProcess) {
+        public MyDebugProcessListener(DebugProcessImpl debugProcess) {
             myDebugProcess = debugProcess;
         }
 
         //executed in manager thread
         @Override
         public void connectorIsReady() {
-            DebuggerInvocationUtil.invokeLater(getProject(), () ->
-            {
-                RemoteConnection connection = myDebugProcess.getConnection();
-                final String addressDisplayName = DebuggerBundle.getAddressDisplayName(connection);
-                final String transportName = DebuggerBundle.getTransportName(connection);
-                final String connectionStatusMessage = connection.isServerMode()
-                    ? DebuggerBundle.message("status.listening", addressDisplayName, transportName)
-                    : DebuggerBundle.message("status.connecting", addressDisplayName, transportName);
-                getContextManager().setState(SESSION_EMPTY_CONTEXT, State.WAITING_ATTACH, Event.START_WAIT_ATTACH, connectionStatusMessage);
-            });
+            DebuggerInvocationUtil.invokeLater(
+                getProject(),
+                () -> {
+                    RemoteConnection connection = myDebugProcess.getConnection();
+                    String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
+                    LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
+                    LocalizeValue connectionStatusMessage = connection.isServerMode()
+                        ? JavaDebuggerLocalize.statusListening(addressDisplayName, transportName)
+                        : JavaDebuggerLocalize.statusConnecting(addressDisplayName, transportName);
+                    getContextManager().setState(
+                        SESSION_EMPTY_CONTEXT,
+                        State.WAITING_ATTACH,
+                        Event.START_WAIT_ATTACH,
+                        connectionStatusMessage
+                    );
+                }
+            );
         }
 
         @Override
-        public void paused(final SuspendContextImpl suspendContext) {
+        public void paused(SuspendContextImpl suspendContext) {
             LOG.debug("paused");
 
             ThreadReferenceProxyImpl currentThread = suspendContext.getThread();
@@ -533,8 +545,8 @@ public class DebuggerSession implements AbstractDebuggerSession {
                         DebuggerUtilsEx.getEventDescriptors(suspendContext);
                     if (!descriptors.isEmpty()) {
                         XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(
-                            DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()),
-                            DebuggerBundle.message("status.breakpoint.reached.in.thread.switch"),
+                            JavaDebuggerLocalize.statusBreakpointReachedInThread(thread.name()).get(),
+                            JavaDebuggerLocalize.statusBreakpointReachedInThreadSwitch().get(),
                             NotificationType.INFORMATION,
                             (notification, event) -> {
                                 if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
@@ -542,11 +554,13 @@ public class DebuggerSession implements AbstractDebuggerSession {
                                     getProcess().getManagerThread().schedule(new SuspendContextCommandImpl(suspendContext) {
                                         @Override
                                         public void contextAction() throws Exception {
-                                            final DebuggerContextImpl debuggerContext =
+                                            DebuggerContextImpl debuggerContext =
                                                 DebuggerContextUtil.createDebuggerContext(DebuggerSession.this, suspendContext);
 
-                                            DebuggerInvocationUtil.invokeLater(getProject(), () -> getContextManager()
-                                                .setState(debuggerContext, State.PAUSED, Event.PAUSE, null));
+                                            DebuggerInvocationUtil.invokeLater(
+                                                getProject(),
+                                                () -> getContextManager().setState(debuggerContext, State.PAUSED, Event.PAUSE)
+                                            );
                                         }
                                     });
                                 }
@@ -565,7 +579,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                 setSteppingThrough(currentThread);
             }
 
-            final StackFrameContext positionContext;
+            StackFrameContext positionContext;
 
             if (currentThread == null) {
                 //Pause pressed
@@ -577,9 +591,9 @@ public class DebuggerSession implements AbstractDebuggerSession {
                 }
 
                 if (currentThread == null) {
-                    final Collection<ThreadReferenceProxyImpl> allThreads = getProcess().getVirtualMachineProxy().allThreads();
+                    Collection<ThreadReferenceProxyImpl> allThreads = getProcess().getVirtualMachineProxy().allThreads();
                     // heuristics: try to pre-select EventDispatchThread
-                    for (final ThreadReferenceProxyImpl thread : allThreads) {
+                    for (ThreadReferenceProxyImpl thread : allThreads) {
                         if (ThreadState.isEDT(thread.name())) {
                             currentThread = thread;
                             break;
@@ -587,7 +601,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                     }
                     if (currentThread == null) {
                         // heuristics: display the first thread with RUNNABLE status
-                        for (final ThreadReferenceProxyImpl thread : allThreads) {
+                        for (ThreadReferenceProxyImpl thread : allThreads) {
                             currentThread = thread;
                             if (currentThread.status() == ThreadReference.THREAD_STATUS_RUNNING) {
                                 break;
@@ -622,7 +636,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
 
             if (currentThread != null) {
                 try {
-                    final int frameCount = currentThread.frameCount();
+                    int frameCount = currentThread.frameCount();
                     if (frameCount == 0 || (frameCount <= myIgnoreFiltersFrameCountThreshold)) {
                         resetIgnoreStepFiltersFlag();
                     }
@@ -636,24 +650,24 @@ public class DebuggerSession implements AbstractDebuggerSession {
             SourcePosition position = ContextUtil.getSourcePosition(positionContext);
 
             if (position != null) {
-                final List<Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event>> eventDescriptors =
+                List<Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event>> eventDescriptors =
                     DebuggerUtilsEx.getEventDescriptors(suspendContext);
-                final RequestManagerImpl requestsManager = suspendContext.getDebugProcess().getRequestsManager();
-                final PsiFile foundFile = position.getFile();
-                final boolean sourceMissing = foundFile instanceof PsiCompiledElement;
+                RequestManagerImpl requestsManager = suspendContext.getDebugProcess().getRequestsManager();
+                PsiFile foundFile = position.getFile();
+                boolean sourceMissing = foundFile instanceof PsiCompiledElement;
                 for (Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event> eventDescriptor : eventDescriptors) {
                     Breakpoint breakpoint = eventDescriptor.getFirst();
                     if (breakpoint instanceof LineBreakpoint) {
-                        final SourcePosition breakpointPosition = ((BreakpointWithHighlighter)breakpoint).getSourcePosition();
+                        SourcePosition breakpointPosition = ((BreakpointWithHighlighter)breakpoint).getSourcePosition();
                         if (breakpointPosition == null || (!sourceMissing && breakpointPosition.getLine() != position.getLine())) {
                             requestsManager.deleteRequest(breakpoint);
-                            requestsManager.setInvalid(breakpoint, DebuggerBundle.message("error.invalid.breakpoint.source.changed"));
+                            requestsManager.setInvalid(breakpoint, JavaDebuggerLocalize.errorInvalidBreakpointSourceChanged().get());
                             breakpoint.updateUI();
                         }
                         else if (sourceMissing) {
                             // adjust position to be position of the breakpoint in order to show the real originator of the event
                             position = breakpointPosition;
-                            final StackFrameProxy frameProxy = positionContext.getFrameProxy();
+                            StackFrameProxy frameProxy = positionContext.getFrameProxy();
                             String className;
                             try {
                                 className = frameProxy != null ? frameProxy.location().declaringType().name() : "";
@@ -663,7 +677,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                             }
                             requestsManager.setInvalid(
                                 breakpoint,
-                                DebuggerBundle.message("error.invalid.breakpoint.source.not.found", className)
+                                JavaDebuggerLocalize.errorInvalidBreakpointSourceNotFound(className).get()
                             );
                             breakpoint.updateUI();
                         }
@@ -671,7 +685,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                 }
             }
 
-            final DebuggerContextImpl debuggerContext =
+            DebuggerContextImpl debuggerContext =
                 DebuggerContextImpl.createDebuggerContext(DebuggerSession.this, suspendContext, currentThread, null);
             if (suspendContext.getThread() == currentThread) {
                 debuggerContext.setPositionCache(position);
@@ -683,17 +697,17 @@ public class DebuggerSession implements AbstractDebuggerSession {
             );
         }
 
-        private boolean shouldSetAsActiveContext(final SuspendContextImpl suspendContext) {
-            final ThreadReferenceProxyImpl newThread = suspendContext.getThread();
+        private boolean shouldSetAsActiveContext(SuspendContextImpl suspendContext) {
+            ThreadReferenceProxyImpl newThread = suspendContext.getThread();
             if (newThread == null || suspendContext.getSuspendPolicy() == EventRequest.SUSPEND_ALL || isSteppingThrough(newThread)) {
                 return true;
             }
-            final SuspendContextImpl currentSuspendContext = getContextManager().getContext().getSuspendContext();
+            SuspendContextImpl currentSuspendContext = getContextManager().getContext().getSuspendContext();
             if (currentSuspendContext == null) {
                 return mySteppingThroughThread.get() == null;
             }
             if (enableBreakpointsDuringEvaluation()) {
-                final ThreadReferenceProxyImpl currentThread = currentSuspendContext.getThread();
+                ThreadReferenceProxyImpl currentThread = currentSuspendContext.getThread();
                 return currentThread == null || Comparing.equal(currentThread.getThreadReference(), newThread.getThreadReference());
             }
             return false;
@@ -709,13 +723,13 @@ public class DebuggerSession implements AbstractDebuggerSession {
                 suspendContext.getThread())) {
                 steppingThread = suspendContext.getThread();
             }
-            final DebuggerContextImpl debuggerContext = context != null
+            DebuggerContextImpl debuggerContext = context != null
                 ? DebuggerContextImpl.createDebuggerContext(
-                    DebuggerSession.this,
-                    context,
-                    steppingThread != null ? steppingThread : context.getThread(),
-                    null
-                )
+                DebuggerSession.this,
+                context,
+                steppingThread != null ? steppingThread : context.getThread(),
+                null
+            )
                 : null;
 
             DebuggerInvocationUtil.invokeLater(
@@ -725,18 +739,18 @@ public class DebuggerSession implements AbstractDebuggerSession {
                         getContextManager().setState(debuggerContext, State.PAUSED, Event.CONTEXT, getDescription(debuggerContext));
                     }
                     else {
-                        getContextManager().setState(SESSION_EMPTY_CONTEXT, State.RUNNING, Event.CONTEXT, null);
+                        getContextManager().setState(SESSION_EMPTY_CONTEXT, State.RUNNING, Event.CONTEXT);
                     }
                 }
             );
         }
 
         @Override
-        public void processAttached(final DebugProcessImpl process) {
-            final RemoteConnection connection = getProcess().getConnection();
-            final String addressDisplayName = DebuggerBundle.getAddressDisplayName(connection);
-            final String transportName = DebuggerBundle.getTransportName(connection);
-            final String message = DebuggerBundle.message("status.connected", addressDisplayName, transportName);
+        public void processAttached(DebugProcessImpl process) {
+            RemoteConnection connection = getProcess().getConnection();
+            String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
+            LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
+            LocalizeValue message = JavaDebuggerLocalize.statusConnected(addressDisplayName, transportName);
 
             process.printToConsole(message + "\n");
             DebuggerInvocationUtil.invokeLater(
@@ -746,17 +760,16 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
 
         @Override
-        public void attachException(final RunProfileState state, final ExecutionException exception, final RemoteConnection remoteConnection) {
+        public void attachException(RunProfileState state, ExecutionException exception, RemoteConnection remoteConnection) {
             DebuggerInvocationUtil.invokeLater(
                 getProject(),
                 () -> {
                     String message = "";
                     if (state instanceof RemoteState) {
-                        message = DebuggerBundle.message(
-                            "status.connect.failed",
-                            DebuggerBundle.getAddressDisplayName(remoteConnection),
-                            DebuggerBundle.getTransportName(remoteConnection)
-                        );
+                        message = JavaDebuggerLocalize.statusConnectFailed(
+                            DebuggerUtils.getAddressDisplayName(remoteConnection),
+                            DebuggerUtils.getTransportName(remoteConnection)
+                        ).get();
                     }
                     message += exception.getMessage();
                     getContextManager().setState(SESSION_EMPTY_CONTEXT, State.STOPPED, Event.DETACHED, message);
@@ -765,31 +778,33 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
 
         @Override
-        public void processDetached(final DebugProcessImpl debugProcess, boolean closedByUser) {
+        public void processDetached(DebugProcessImpl debugProcess, boolean closedByUser) {
             if (!closedByUser) {
                 ProcessHandler processHandler = debugProcess.getProcessHandler();
                 if (processHandler != null) {
-                    final RemoteConnection connection = getProcess().getConnection();
-                    final String addressDisplayName = DebuggerBundle.getAddressDisplayName(connection);
-                    final String transportName = DebuggerBundle.getTransportName(connection);
+                    RemoteConnection connection = getProcess().getConnection();
+                    String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
+                    LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
                     processHandler.notifyTextAvailable(
-                        DebuggerBundle.message("status.disconnected", addressDisplayName, transportName) + "\n",
+                        JavaDebuggerLocalize.statusDisconnected(addressDisplayName, transportName) + "\n",
                         ProcessOutputTypes.SYSTEM
                     );
                 }
             }
-            DebuggerInvocationUtil.invokeLater(getProject(), () ->
-            {
-                final RemoteConnection connection = getProcess().getConnection();
-                final String addressDisplayName = DebuggerBundle.getAddressDisplayName(connection);
-                final String transportName = DebuggerBundle.getTransportName(connection);
-                getContextManager().setState(
-                    SESSION_EMPTY_CONTEXT,
-                    State.STOPPED,
-                    Event.DETACHED,
-                    DebuggerBundle.message("status.disconnected", addressDisplayName, transportName)
-                );
-            });
+            DebuggerInvocationUtil.invokeLater(
+                getProject(),
+                () -> {
+                    RemoteConnection connection = getProcess().getConnection();
+                    String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
+                    LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
+                    getContextManager().setState(
+                        SESSION_EMPTY_CONTEXT,
+                        State.STOPPED,
+                        Event.DETACHED,
+                        JavaDebuggerLocalize.statusDisconnected(addressDisplayName, transportName).get()
+                    );
+                }
+            );
             clearSteppingThrough();
         }
 
@@ -814,11 +829,14 @@ public class DebuggerSession implements AbstractDebuggerSession {
         private void notifyThreadsRefresh() {
             if (!myUpdateAlarm.isDisposed()) {
                 myUpdateAlarm.cancelAllRequests();
-                myUpdateAlarm.addRequest(() ->
-                {
-                    final DebuggerStateManager contextManager = getContextManager();
-                    contextManager.fireStateChanged(contextManager.getContext(), Event.THREADS_REFRESH);
-                }, 100, Application.get().getNoneModalityState());
+                myUpdateAlarm.addRequest(
+                    () -> {
+                        DebuggerStateManager contextManager = getContextManager();
+                        contextManager.fireStateChanged(contextManager.getContext(), Event.THREADS_REFRESH);
+                    },
+                    100,
+                    Application.get().getNoneModalityState()
+                );
             }
         }
     }
@@ -826,7 +844,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
     private static String getDescription(DebuggerContextImpl debuggerContext) {
         SuspendContextImpl suspendContext = debuggerContext.getSuspendContext();
         if (suspendContext != null && debuggerContext.getThreadProxy() != suspendContext.getThread()) {
-            return DebuggerBundle.message("status.paused.in.another.thread");
+            return JavaDebuggerLocalize.statusPausedInAnotherThread().get();
         }
         return null;
     }
@@ -838,7 +856,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
 
         @Override
-        public void evaluationFinished(final SuspendContextImpl context) {
+        public void evaluationFinished(SuspendContextImpl context) {
             myIsEvaluating = false;
             //seems to be not required after move to xdebugger
             //DebuggerInvocationUtil.invokeLater(

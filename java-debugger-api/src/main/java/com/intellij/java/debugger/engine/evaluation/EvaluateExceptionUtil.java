@@ -16,7 +16,11 @@
 package com.intellij.java.debugger.engine.evaluation;
 
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.DeprecationInfo;
 import consulo.internal.com.sun.jdi.*;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
@@ -53,46 +57,53 @@ public class EvaluateExceptionUtil {
     }
 
     public static EvaluateException createEvaluateException(String msg, Throwable th) {
-        final String message = msg != null ? msg + ": " + reason(th) : reason(th);
+        String message = msg != null ? msg + ": " + reason(th) : reason(th).get();
         return new EvaluateException(message, th instanceof EvaluateException ? th.getCause() : th);
     }
 
+    public static EvaluateException createEvaluateException(@Nonnull LocalizeValue reason) {
+        return new EvaluateException(reason.get(), null);
+    }
+
+    @Deprecated
+    @DeprecationInfo("Use variant with LocalizeValue")
     public static EvaluateException createEvaluateException(String reason) {
         return new EvaluateException(reason, null);
     }
 
-    private static String reason(Throwable th) {
+    @Nonnull
+    private static LocalizeValue reason(Throwable th) {
         if (th instanceof InvalidTypeException) {
-            final String originalReason = th.getMessage();
-            return DebuggerBundle.message("evaluation.error.type.mismatch") + (originalReason != null ? " " + originalReason : "");
+            String originalReason = th.getMessage();
+            return LocalizeValue.localizeTODO(JavaDebuggerLocalize.evaluationErrorTypeMismatch() + (originalReason != null ? " " + originalReason : ""));
         }
         else if (th instanceof AbsentInformationException) {
-            return DebuggerBundle.message("evaluation.error.debug.info.unavailable");
+            return JavaDebuggerLocalize.evaluationErrorDebugInfoUnavailable();
         }
-        else if (th instanceof ClassNotLoadedException) {
-            return DebuggerBundle.message("evaluation.error.class.not.loaded", ((ClassNotLoadedException)th).className());
+        else if (th instanceof ClassNotLoadedException cnle) {
+            return JavaDebuggerLocalize.evaluationErrorClassNotLoaded(cnle.className());
         }
         else if (th instanceof ClassNotPreparedException) {
-            return th.getMessage();
+            return LocalizeValue.ofNullable(th.getLocalizedMessage());
         }
         else if (th instanceof IncompatibleThreadStateException) {
-            return DebuggerBundle.message("evaluation.error.thread.not.at.breakpoint");
+            return JavaDebuggerLocalize.evaluationErrorThreadNotAtBreakpoint();
         }
         else if (th instanceof InconsistentDebugInfoException) {
-            return DebuggerBundle.message("evaluation.error.inconsistent.debug.info");
+            return JavaDebuggerLocalize.evaluationErrorInconsistentDebugInfo();
         }
         else if (th instanceof ObjectCollectedException) {
-            return DebuggerBundle.message("evaluation.error.object.collected");
+            return JavaDebuggerLocalize.evaluationErrorObjectCollected();
         }
-        else if (th instanceof InvocationException) {
-            InvocationException invocationException = (InvocationException)th;
-            return DebuggerBundle.message("evaluation.error.method.exception", invocationException.exception().referenceType().name());
+        else if (th instanceof InvocationException ie) {
+            return JavaDebuggerLocalize.evaluationErrorMethodException(ie.exception().referenceType().name());
         }
         else if (th instanceof EvaluateException) {
-            return th.getMessage();
+            return LocalizeValue.of(th.getMessage());
         }
         else {
-            return th.getClass().getName() + " : " + (th.getMessage() != null ? th.getMessage() : "");
+            String message = th.getLocalizedMessage();
+            return LocalizeValue.of(th.getClass().getName() + " : " + (message != null ? message : ""));
         }
     }
 }

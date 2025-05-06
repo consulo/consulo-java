@@ -73,37 +73,40 @@ public class RequestHint {
     private boolean myRestoreBreakpoints = false;
 
     public RequestHint(
-        final ThreadReferenceProxyImpl stepThread,
-        final SuspendContextImpl suspendContext,
+        ThreadReferenceProxyImpl stepThread,
+        SuspendContextImpl suspendContext,
         @Nonnull MethodFilter methodFilter
     ) {
         this(stepThread, suspendContext, StepRequest.STEP_LINE, StepRequest.STEP_INTO, methodFilter);
     }
 
     public RequestHint(
-        final ThreadReferenceProxyImpl stepThread,
-        final SuspendContextImpl suspendContext,
+        ThreadReferenceProxyImpl stepThread,
+        SuspendContextImpl suspendContext,
         @MagicConstant(intValues = {
             StepRequest.STEP_INTO,
             StepRequest.STEP_OVER,
             StepRequest.STEP_OUT
-        }) int depth
+        })
+        int depth
     ) {
         this(stepThread, suspendContext, StepRequest.STEP_LINE, depth, null);
     }
 
     protected RequestHint(
-        final ThreadReferenceProxyImpl stepThread,
-        final SuspendContextImpl suspendContext,
+        ThreadReferenceProxyImpl stepThread,
+        SuspendContextImpl suspendContext,
         @MagicConstant(intValues = {
             StepRequest.STEP_MIN,
             StepRequest.STEP_LINE
-        }) int stepSize,
+        })
+        int stepSize,
         @MagicConstant(intValues = {
             StepRequest.STEP_INTO,
             StepRequest.STEP_OVER,
             StepRequest.STEP_OUT
-        }) int depth,
+        })
+        int depth,
         @Nullable MethodFilter methodFilter
     ) {
         mySize = stepSize;
@@ -197,7 +200,7 @@ public class RequestHint {
         if (mySteppedOut) {
             return false;
         }
-        final ThreadReferenceProxyImpl contextThread = context.getThread();
+        ThreadReferenceProxyImpl contextThread = context.getThread();
         if (contextThread != null) {
             try {
                 int currentDepth = contextThread.frameCount();
@@ -226,9 +229,9 @@ public class RequestHint {
         return mySteppedOut;
     }
 
-    public int getNextStepDepth(final SuspendContextImpl context) {
+    public int getNextStepDepth(SuspendContextImpl context) {
         try {
-            final StackFrameProxyImpl frameProxy = context.getFrameProxy();
+            StackFrameProxyImpl frameProxy = context.getFrameProxy();
 
             // smart step feature stop check
             if (myMethodFilter != null && frameProxy != null && !(myMethodFilter instanceof BreakpointStepMethodFilter)
@@ -248,17 +251,17 @@ public class RequestHint {
                         return null;
                     });
                     if (resultDepth != null) {
-                        return resultDepth.intValue();
+                        return resultDepth;
                     }
                 }
             }
 
             // Now check filters
 
-            final DebuggerSettings settings = DebuggerSettings.getInstance();
+            DebuggerSettings settings = DebuggerSettings.getInstance();
 
             if ((myMethodFilter != null || (settings.SKIP_SYNTHETIC_METHODS && !myIgnoreFilters)) && frameProxy != null) {
-                final Location location = frameProxy.location();
+                Location location = frameProxy.location();
                 if (location != null) {
                     if (DebuggerUtils.isSynthetic(location.method())) {
                         return myDepth;
@@ -268,11 +271,10 @@ public class RequestHint {
 
             if (!myIgnoreFilters) {
                 if (settings.SKIP_GETTERS) {
-                    boolean isGetter = ReadAction.compute(() ->
-                    {
+                    boolean isGetter = ReadAction.compute(() -> {
                         PsiElement contextElement = ContextUtil.getContextElement(context);
                         return contextElement != null && DebuggerUtils.isInsideSimpleGetter(contextElement);
-                    }).booleanValue();
+                    });
 
                     if (isGetter) {
                         return StepRequest.STEP_OUT;
@@ -281,9 +283,9 @@ public class RequestHint {
 
                 if (frameProxy != null) {
                     if (settings.SKIP_CONSTRUCTORS) {
-                        final Location location = frameProxy.location();
+                        Location location = frameProxy.location();
                         if (location != null) {
-                            final Method method = location.method();
+                            Method method = location.method();
                             if (method != null && method.isConstructor()) {
                                 return StepRequest.STEP_OUT;
                             }
@@ -291,7 +293,7 @@ public class RequestHint {
                     }
 
                     if (settings.SKIP_CLASSLOADERS) {
-                        final Location location = frameProxy.location();
+                        Location location = frameProxy.location();
                         if (location != null && DebuggerUtilsEx.isAssignableFrom("java.lang.ClassLoader", location.declaringType())) {
                             return StepRequest.STEP_OUT;
                         }
@@ -321,5 +323,4 @@ public class RequestHint {
         }
         return STOP;
     }
-
 }

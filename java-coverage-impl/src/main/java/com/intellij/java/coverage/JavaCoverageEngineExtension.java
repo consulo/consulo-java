@@ -15,8 +15,8 @@ import java.io.File;
 import java.util.Set;
 
 /**
- * User: anna
- * Date: 2/14/11
+ * @author anna
+ * @since 2011-02-14
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaCoverageEngineExtension {
@@ -30,11 +30,11 @@ public abstract class JavaCoverageEngineExtension {
     }
 
     public boolean collectOutputFiles(
-        @Nonnull final PsiFile srcFile,
-        @Nullable final VirtualFile output,
-        @Nullable final VirtualFile testoutput,
-        @Nonnull final CoverageSuitesBundle suite,
-        @Nonnull final Set<File> classFiles
+        @Nonnull PsiFile srcFile,
+        @Nullable VirtualFile output,
+        @Nullable VirtualFile testoutput,
+        @Nonnull CoverageSuitesBundle suite,
+        @Nonnull Set<File> classFiles
     ) {
         return false;
     }

@@ -60,16 +60,14 @@ public class DebuggerPanelsManager {
                         getContextManager().setState(
                             session.getContextManager().getContext(),
                             session.getState(),
-                            DebuggerSession.Event.CONTEXT,
-                            null
+                            DebuggerSession.Event.CONTEXT
                         );
                     }
                     else {
                         getContextManager().setState(
                             DebuggerContextImpl.EMPTY_CONTEXT,
                             DebuggerSession.State.DISPOSED,
-                            DebuggerSession.Event.CONTEXT,
-                            null
+                            DebuggerSession.Event.CONTEXT
                         );
                     }
                 }
@@ -97,13 +95,13 @@ public class DebuggerPanelsManager {
 
     @Nullable
     public RunContentDescriptor attachVirtualMachine(DebugUIEnvironment environment) throws ExecutionException {
-        final DebugEnvironment modelEnvironment = environment.getEnvironment();
-        final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(myProject).attachVirtualMachine(modelEnvironment);
+        DebugEnvironment modelEnvironment = environment.getEnvironment();
+        DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(myProject).attachVirtualMachine(modelEnvironment);
         if (debuggerSession == null) {
             return null;
         }
 
-        final DebugProcessImpl debugProcess = debuggerSession.getProcess();
+        DebugProcessImpl debugProcess = debuggerSession.getProcess();
         if (debugProcess.isDetached() || debugProcess.isDetaching()) {
             debuggerSession.dispose();
             return null;
