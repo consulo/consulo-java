@@ -489,16 +489,12 @@ public class GenerateMembersUtil {
     }
 
     private static PsiClassType toClassType(PsiType type) {
-        if (type instanceof PsiClassType) {
-            return (PsiClassType)type;
-        }
-        if (type instanceof PsiCapturedWildcardType) {
-            return toClassType(((PsiCapturedWildcardType)type).getUpperBound());
-        }
-        if (type instanceof PsiWildcardType) {
-            return toClassType(((PsiWildcardType)type).getBound());
-        }
-        return null;
+        return switch (type) {
+            case PsiClassType classType -> classType;
+            case PsiCapturedWildcardType capturedWildcardType -> toClassType(capturedWildcardType.getUpperBound());
+            case PsiWildcardType wildcardType -> toClassType(wildcardType.getBound());
+            default -> null;
+        };
     }
 
     @RequiredWriteAction
@@ -534,8 +530,8 @@ public class GenerateMembersUtil {
             PsiParameter parameter = parameters[i];
             PsiType parameterType = parameter.getType();
             PsiElement declarationScope = parameter.getDeclarationScope();
-            PsiType substituted = declarationScope instanceof PsiTypeParameterListOwner
-                ? substituteType(substitutor, parameterType, (PsiTypeParameterListOwner)declarationScope, parameter.getModifierList())
+            PsiType substituted = declarationScope instanceof PsiTypeParameterListOwner typeParameterListOwner
+                ? substituteType(substitutor, parameterType, typeParameterListOwner, parameter.getModifierList())
                 : parameterType;
             String paramName = parameter.getName();
             boolean isBaseNameGenerated = true;
@@ -585,8 +581,8 @@ public class GenerateMembersUtil {
     @RequiredReadAction
     private static void copyDocComment(PsiMethod source, PsiMethod target, JVMElementFactory factory) {
         PsiElement navigationElement = source.getNavigationElement();
-        if (navigationElement instanceof PsiDocCommentOwner) {
-            PsiDocComment docComment = ((PsiDocCommentOwner)navigationElement).getDocComment();
+        if (navigationElement instanceof PsiDocCommentOwner docCommentOwner) {
+            PsiDocComment docComment = docCommentOwner.getDocComment();
             if (docComment != null) {
                 target.addAfter(factory.createDocCommentFromText(docComment.getText()), null);
             }
@@ -787,7 +783,7 @@ public class GenerateMembersUtil {
     public static String suggestGetterName(String name, PsiType type, Project project) {
         return suggestGetterName(JavaPsiFacade.getElementFactory(project).createField(
             name,
-            type instanceof PsiEllipsisType ? ((PsiEllipsisType)type).toArrayType() : type
+            type instanceof PsiEllipsisType ellipsisType ? ellipsisType.toArrayType() : type
         ));
     }
 
@@ -799,7 +795,7 @@ public class GenerateMembersUtil {
     public static String suggestSetterName(String name, PsiType type, Project project) {
         return suggestSetterName(JavaPsiFacade.getElementFactory(project).createField(
             name,
-            type instanceof PsiEllipsisType ? ((PsiEllipsisType)type).toArrayType() : type
+            type instanceof PsiEllipsisType ellipsisType ? ellipsisType.toArrayType() : type
         ));
     }
 
@@ -889,7 +885,7 @@ public class GenerateMembersUtil {
 
         @PsiModifier.ModifierConstant String newVisibility;
         if (VisibilityUtil.ESCALATE_VISIBILITY.equals(visibility)) {
-            PsiClass aClass = member instanceof PsiClass ? (PsiClass)member : member.getContainingClass();
+            PsiClass aClass = member instanceof PsiClass psiClass ? psiClass : member.getContainingClass();
             newVisibility = PsiUtil.getMaximumModifierForMember(aClass, false);
         }
         else {

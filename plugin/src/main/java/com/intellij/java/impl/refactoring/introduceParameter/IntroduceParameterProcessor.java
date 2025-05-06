@@ -176,13 +176,13 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 
             for (PsiReference ref1 : refs) {
                 PsiElement ref = ref1.getElement();
-                if (ref instanceof PsiMethod && ((PsiMethod)ref).isConstructor()) {
+                if (ref instanceof PsiMethod method && method.isConstructor()) {
                     DefaultConstructorImplicitUsageInfo implicitUsageInfo =
-                        new DefaultConstructorImplicitUsageInfo((PsiMethod)ref, ((PsiMethod)ref).getContainingClass(), myMethodToSearchFor);
+                        new DefaultConstructorImplicitUsageInfo(method, method.getContainingClass(), myMethodToSearchFor);
                     result.add(implicitUsageInfo);
                 }
-                else if (ref instanceof PsiClass) {
-                    result.add(new NoConstructorClassUsageInfo((PsiClass)ref));
+                else if (ref instanceof PsiClass psiClass) {
+                    result.add(new NoConstructorClassUsageInfo(psiClass));
                 }
                 else if (!IntroduceParameterUtil.insideMethodToBeReplaced(ref, myMethodToReplaceIn)) {
                     result.add(new ExternalUsageInfo(ref));
@@ -288,6 +288,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         return showConflicts(conflicts, usagesIn);
     }
 
+    @RequiredReadAction
     private void detectAccessibilityConflicts(UsageInfo[] usageArray, MultiMap<PsiElement, String> conflicts) {
         if (myParameterInitializer != null) {
             ReferencedElementsCollector collector = new ReferencedElementsCollector();
@@ -311,10 +312,11 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
                             }
                             if (element instanceof PsiMember member
                                 && !JavaPsiFacade.getInstance(myProject).getResolveHelper().isAccessible(member, place, null)) {
-                                LocalizeValue message = RefactoringLocalize.zeroIsNotAccessibleFrom1ValueForIntroducedParameterInThatMethodCallWillBeIncorrect(
-                                    RefactoringUIUtil.getDescription(element, true),
-                                    RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(place), true)
-                                );
+                                LocalizeValue message =
+                                    RefactoringLocalize.zeroIsNotAccessibleFrom1ValueForIntroducedParameterInThatMethodCallWillBeIncorrect(
+                                        RefactoringUIUtil.getDescription(element, true),
+                                        RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(place), true)
+                                    );
                                 conflicts.putValue(element, message.get());
                             }
                         }
@@ -438,8 +440,8 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
                         element = RefactoringUtil.outermostParenthesizedExpression(expression);
                     }
                     if (element != null) {
-                        if (element.getParent() instanceof PsiExpressionStatement) {
-                            element.getParent().delete();
+                        if (element.getParent() instanceof PsiExpressionStatement exprStmt) {
+                            exprStmt.delete();
                         }
                         else {
                             PsiExpression newExpr = factory.createExpressionFromText(myParameterName, element);
@@ -518,9 +520,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     }
 
     private void processChangedMethodCall(PsiElement element) throws IncorrectOperationException {
-        if (element.getParent() instanceof PsiMethodCallExpression) {
-            PsiMethodCallExpression methodCall = (PsiMethodCallExpression)element.getParent();
-
+        if (element.getParent() instanceof PsiMethodCallExpression methodCall) {
             if (myMethodToReplaceIn == myMethodToSearchFor && PsiTreeUtil.isAncestor(methodCall, myParameterInitializer, false)) {
                 return;
             }

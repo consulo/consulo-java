@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.rename;
 import com.intellij.java.language.psi.targets.AliasingPsiTarget;
 import com.intellij.java.language.psi.targets.AliasingPsiTargetMapper;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.component.extension.Extensions;
 import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
 import consulo.language.pom.PomService;
 import consulo.language.pom.PomTarget;
@@ -30,7 +29,6 @@ import java.util.Map;
 
 @ExtensionImpl
 public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
-
     @Override
     public boolean canProcessElement(@Nonnull PsiElement element) {
         return element instanceof PomTarget || element instanceof PomTargetPsiElement;
@@ -39,15 +37,15 @@ public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor 
     @Override
     public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
         PomTarget target = null;
-        if (element instanceof PomTargetPsiElement) {
-            target = ((PomTargetPsiElement)element).getTarget();
+        if (element instanceof PomTargetPsiElement targetPsiElement) {
+            target = targetPsiElement.getTarget();
         }
-        else if (element instanceof PomTarget) {
-            target = (PomTarget)element;
+        else if (element instanceof PomTarget pomTarget) {
+            target = pomTarget;
         }
 
         if (target != null) {
-            for (AliasingPsiTargetMapper mapper : Extensions.getExtensions(AliasingPsiTargetMapper.EP_NAME)) {
+            for (AliasingPsiTargetMapper mapper : AliasingPsiTargetMapper.EP_NAME.getExtensions()) {
                 for (AliasingPsiTarget psiTarget : mapper.getTargets(target)) {
                     PsiElement psiElement = PomService.convertToPsi(psiTarget);
                     String name = psiTarget.getNameAlias(newName);

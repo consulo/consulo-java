@@ -154,11 +154,11 @@ public class MoveClassesOrPackagesImpl {
                     return null;
                 }
                 if (isClassInnerOrLocal(aClass)) {
-                    String message =
-                        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.movingLocalClassesIsNotSupported().get());
                     CommonRefactoringUtil.showErrorMessage(
                         RefactoringLocalize.moveTitle().get(),
-                        message,
+                        RefactoringLocalize.cannotPerformRefactoringWithReason(
+                            RefactoringLocalize.movingLocalClassesIsNotSupported()
+                        ).get(),
                         HelpID.getMoveHelpID(element),
                         project
                     );

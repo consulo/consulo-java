@@ -240,8 +240,8 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
             Set<ObjectReference> exceptions = new HashSet<>();
             for (Pair<Breakpoint, Event> pair : DebuggerUtilsEx.getEventDescriptors(debuggerContext.getSuspendContext())) {
                 Event debugEvent = pair.getSecond();
-                if (debugEvent instanceof ExceptionEvent) {
-                    ObjectReference exception = ((ExceptionEvent)debugEvent).exception();
+                if (debugEvent instanceof ExceptionEvent exceptionEvent) {
+                    ObjectReference exception = exceptionEvent.exception();
                     if (exception != null) {
                         exceptions.add(exception);
                     }
@@ -523,8 +523,8 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
                     if (var instanceof PsiField field) {
                         if (myCollectExpressions && !DebuggerUtils.hasSideEffectsOrReferencesMissingVars(reference, myVisibleLocals)) {
                             /*
-                            if (var instanceof PsiEnumConstant && reference.getQualifier() == null) {
-                                PsiClass enumClass = ((PsiEnumConstant)var).getContainingClass();
+                            if (var instanceof PsiEnumConstant enumConst && reference.getQualifier() == null) {
+                                PsiClass enumClass = enumConst.getContainingClass();
                                 if (enumClass != null) {
                                     PsiExpression expression = JavaPsiFacade.getInstance(var.getProject()).getParserFacade()
                                         .createExpressionFromText(enumClass.getName() + "." + var.getName(), var);

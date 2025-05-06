@@ -107,19 +107,15 @@ public class MoveClassesOrPackagesUtil {
     }
 
     private static String getStringToSearch(PsiElement element) {
-        if (element instanceof PsiJavaPackage) {
-            return ((PsiJavaPackage)element).getQualifiedName();
-        }
-        else if (element instanceof PsiClass) {
-            return ((PsiClass)element).getQualifiedName();
-        }
-        else if (element instanceof PsiDirectory) {
-            return getStringToSearch(JavaDirectoryService.getInstance().getPackage((PsiDirectory)element));
-        }
-        else {
-            LOG.error("Unknown element type");
-            return null;
-        }
+        return switch (element) {
+            case PsiJavaPackage javaPackage -> javaPackage.getQualifiedName();
+            case PsiClass psiClass -> psiClass.getQualifiedName();
+            case PsiDirectory directory -> getStringToSearch(JavaDirectoryService.getInstance().getPackage(directory));
+            default -> {
+                LOG.error("Unknown element type");
+                yield null;
+            }
+        };
     }
 
     // Does not process non-code usages!

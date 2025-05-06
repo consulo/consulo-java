@@ -1984,17 +1984,16 @@ public class HighlightUtil extends HighlightUtilBase {
                 return HighlightClassUtil.reportIllegalEnclosingUsage(expr, null, aClass, expr);
             }
 
-            if (expr instanceof PsiSuperExpression) {
-                PsiElement resolved = ((PsiReferenceExpression)expr.getParent()).resolve();
-                //15.11.2
-                //The form T.super.Identifier refers to the field named Identifier of the lexically enclosing instance corresponding to T,
-                //but with that instance viewed as an instance of the superclass of T.
-                if (resolved instanceof PsiField) {
-                    return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
-                        .range(expr)
-                        .descriptionAndTooltip(JavaErrorLocalize.isNotAnEnclosingClass(formatClass(aClass)))
-                        .create();
-                }
+            //15.11.2
+            //The form T.super.Identifier refers to the field named Identifier of the lexically enclosing instance corresponding to T,
+            //but with that instance viewed as an instance of the superclass of T.
+            if (expr instanceof PsiSuperExpression
+                && expr.getParent() instanceof PsiReferenceExpression refExpr
+                && refExpr.resolve() instanceof PsiField) {
+                return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(expr)
+                    .descriptionAndTooltip(JavaErrorLocalize.isNotAnEnclosingClass(formatClass(aClass)))
+                    .create();
             }
         }
 
@@ -2157,7 +2156,7 @@ public class HighlightUtil extends HighlightUtilBase {
         if (q != null) {
             return true;
         }
-        String qname = ((PsiJavaCodeReferenceElement)qualifier).getQualifiedName();
+        String qname = codeReferenceElement.getQualifiedName();
         return qname == null || !Character.isLowerCase(qname.charAt(0));
     }
 
@@ -2527,18 +2526,15 @@ public class HighlightUtil extends HighlightUtilBase {
                 LocalizeValue message = values.isEmpty()
                     ? JavaErrorLocalize.switchExprEmpty()
                     : JavaErrorLocalize.switchExprIncomplete();
-                HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                QuickFixFactory factory = QuickFixFactory.getInstance();
+                HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(ObjectUtil.notNull(selectorExpression, switchBlock))
-                    .descriptionAndTooltip(message)
-                    .create();
+                    .descriptionAndTooltip(message);
                 if (!missingConstants.isEmpty()) {
-                    QuickFixAction.registerQuickFixAction(
-                        info,
-                        QuickFixFactory.getInstance().createAddMissingEnumBranchesFix(switchBlock, missingConstants)
-                    );
+                    hlBuilder.registerFix(factory.createAddMissingEnumBranchesFix(switchBlock, missingConstants));
                 }
-                QuickFixAction.registerQuickFixAction(info, QuickFixFactory.getInstance().createAddSwitchDefaultFix(switchBlock, null));
-                results.add(info);
+                hlBuilder.registerFix(factory.createAddSwitchDefaultFix(switchBlock, null));
+                results.add(hlBuilder.create());
             }
         }
 
@@ -3764,19 +3760,11 @@ public class HighlightUtil extends HighlightUtilBase {
         PsiClass lClass = PsiUtil.resolveClassInClassTypeOnly(lType);
         PsiClass rClass = PsiUtil.resolveClassInClassTypeOnly(rType);
 
-        if (rClass == null || lClass == null) {
-            return null;
-        }
-        if (rClass instanceof PsiAnonymousClass) {
-            return null;
-        }
-        if (rClass.isInheritor(lClass, true)) {
-            return null;
-        }
-        if (lClass.isInheritor(rClass, true)) {
-            return null;
-        }
-        if (lClass == rClass) {
+        if (rClass == null || lClass == null
+            || rClass instanceof PsiAnonymousClass
+            || rClass.isInheritor(lClass, true)
+            || lClass.isInheritor(rClass, true)
+            || lClass == rClass) {
             return null;
         }
 

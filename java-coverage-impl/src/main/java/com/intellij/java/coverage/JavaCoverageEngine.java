@@ -29,7 +29,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
@@ -155,7 +154,7 @@ public class JavaCoverageEngine extends CoverageEngine {
             return false;
         }
         // let's show coverage only for module files
-        Module module = psiFile.getApplication().runReadAction((Supplier<Module>)() -> ModuleUtilCore.findModuleForPsiElement(psiFile));
+        Module module = psiFile.getApplication().runReadAction((Supplier<Module>)psiFile::getModule);
         return module != null;
     }
 

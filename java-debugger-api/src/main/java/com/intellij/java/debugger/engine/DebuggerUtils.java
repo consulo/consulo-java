@@ -72,8 +72,8 @@ public abstract class DebuggerUtils {
             if (value == null) {
                 return "null";
             }
-            if (value instanceof StringReference) {
-                return ((StringReference)value).value();
+            if (value instanceof StringReference stringRef) {
+                return stringRef.value();
             }
             if (isInteger(value)) {
                 long v = ((PrimitiveValue)value).longValue();
@@ -83,19 +83,19 @@ public abstract class DebuggerUtils {
                 double v = ((PrimitiveValue)value).doubleValue();
                 return String.valueOf(v);
             }
-            if (value instanceof BooleanValue) {
-                boolean v = ((PrimitiveValue)value).booleanValue();
+            if (value instanceof BooleanValue booleanValue) {
+                boolean v = booleanValue.booleanValue();
                 return String.valueOf(v);
             }
-            if (value instanceof CharValue) {
-                char v = ((PrimitiveValue)value).charValue();
+            if (value instanceof CharValue charValue) {
+                char v = charValue.charValue();
                 return String.valueOf(v);
             }
-            if (value instanceof ObjectReference) {
-                if (value instanceof ArrayReference) {
+            if (value instanceof ObjectReference objRef) {
+                if (objRef instanceof ArrayReference arrayRef) {
                     StringBuilder builder = new StringBuilder();
                     builder.append("[");
-                    for (Iterator<Value> iterator = ((ArrayReference)value).getValues().iterator(); iterator.hasNext(); ) {
+                    for (Iterator<Value> iterator = arrayRef.getValues().iterator(); iterator.hasNext(); ) {
                         Value element = iterator.next();
                         builder.append(getValueAsString(evaluationContext, element));
                         if (iterator.hasNext()) {
@@ -106,7 +106,6 @@ public abstract class DebuggerUtils {
                     return builder.toString();
                 }
 
-                ObjectReference objRef = (ObjectReference)value;
                 DebugProcess debugProcess = evaluationContext.getDebugProcess();
                 Method toStringMethod = debugProcess.getUserData(TO_STRING_METHOD_KEY);
                 if (toStringMethod == null) {
@@ -133,7 +132,7 @@ public abstract class DebuggerUtils {
                 if (result == null) {
                     return "null";
                 }
-                return result instanceof StringReference ? ((StringReference)result).value() : result.toString();
+                return result instanceof StringReference stringRef ? stringRef.value() : result.toString();
             }
             throw EvaluateExceptionUtil.createEvaluateException(JavaDebuggerLocalize.evaluationErrorUnsupportedExpressionType());
         }
@@ -170,8 +169,8 @@ public abstract class DebuggerUtils {
 
         Method method = null;
         if (methodSignature != null) {
-            if (refType instanceof ClassType) {
-                method = ((ClassType)refType).concreteMethodByName(methodName, methodSignature);
+            if (refType instanceof ClassType classType) {
+                method = classType.concreteMethodByName(methodName, methodSignature);
             }
             if (method == null) {
                 List<Method> methods = refType.methodsByName(methodName, methodSignature);
@@ -193,16 +192,12 @@ public abstract class DebuggerUtils {
     }
 
     public static boolean isNumeric(Value value) {
-        return value != null && (isInteger(value) ||
-            value instanceof FloatValue ||
-            value instanceof DoubleValue);
+        return value != null && (isInteger(value) || value instanceof FloatValue || value instanceof DoubleValue);
     }
 
     public static boolean isInteger(Value value) {
-        return value != null && (value instanceof ByteValue ||
-            value instanceof ShortValue ||
-            value instanceof LongValue ||
-            value instanceof IntegerValue);
+        return value != null
+            && (value instanceof ByteValue || value instanceof ShortValue || value instanceof LongValue || value instanceof IntegerValue);
     }
 
     public static String translateStringValue(String str) {

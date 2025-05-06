@@ -611,12 +611,12 @@ public class JavaFindUsagesHelper {
 
     @RequiredReadAction
     private static boolean filterUsage(PsiElement usage, @Nonnull FindUsagesOptions options) {
-        if (!(usage instanceof PsiJavaCodeReferenceElement)) {
+        if (!(usage instanceof PsiJavaCodeReferenceElement javaCodeRef)) {
             return true;
         }
         if (options instanceof JavaPackageFindUsagesOptions packageOptions
             && !packageOptions.isIncludeSubpackages
-            && ((PsiReference)usage).resolve() instanceof PsiPackage
+            && javaCodeRef.resolve() instanceof PsiPackage
             && usage.getParent() instanceof PsiJavaCodeReferenceElement codeRef
             && codeRef.resolve() instanceof PsiPackage) {
             return false;
