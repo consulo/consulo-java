@@ -26,51 +26,58 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class InsertConstructorCallFix implements SyntheticIntentionAction, HighPriorityAction {
-  protected final PsiMethod myConstructor;
-  private final String myCall;
+    protected final PsiMethod myConstructor;
+    private final String myCall;
 
-  public InsertConstructorCallFix(@Nonnull PsiMethod constructor, String call) {
-    myConstructor = constructor;
-    myCall = call;
-  }
+    public InsertConstructorCallFix(@Nonnull PsiMethod constructor, String call) {
+        myConstructor = constructor;
+        myCall = call;
+    }
 
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("insert.super.constructor.call.text", myCall);
-  }
+    @Override
+    @Nonnull
+    public String getText() {
+        return JavaQuickFixBundle.message("insert.super.constructor.call.text", myCall);
+    }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return myConstructor.isValid() && myConstructor.getBody() != null && myConstructor.getBody().getLBrace() != null && myConstructor.getManager().isInProject(myConstructor);
-  }
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return myConstructor.isValid()
+            && myConstructor.getBody() != null
+            && myConstructor.getBody().getLBrace() != null
+            && myConstructor.getManager().isInProject(myConstructor);
+    }
 
-  @Nonnull
-  @Override
-  public PsiElement getElementToMakeWritable(@Nonnull PsiFile file) {
-    return myConstructor;
-  }
+    @Nonnull
+    @Override
+    public PsiElement getElementToMakeWritable(@Nonnull PsiFile file) {
+        return myConstructor;
+    }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    PsiStatement superCall = JavaPsiFacade.getInstance(myConstructor.getProject()).getElementFactory().createStatementFromText(myCall, null);
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        PsiStatement superCall =
+            JavaPsiFacade.getInstance(myConstructor.getProject()).getElementFactory().createStatementFromText(myCall, null);
 
-    PsiCodeBlock body = myConstructor.getBody();
-    PsiJavaToken lBrace = body.getLBrace();
-    body.addAfter(superCall, lBrace);
-    lBrace = (PsiJavaToken) new PsiMatcherImpl(body).firstChild(PsiMatchers.hasClass(PsiExpressionStatement.class)).firstChild(PsiMatchers.hasClass(PsiMethodCallExpression.class)).firstChild
-        (PsiMatchers.hasClass(PsiExpressionList.class)).firstChild(PsiMatchers.hasClass(PsiJavaToken.class)).dot(PsiMatchers.hasText("(")).getElement();
-    editor.getCaretModel().moveToOffset(lBrace.getTextOffset() + 1);
-    LanguageUndoUtil.markPsiFileForUndo(file);
-  }
+        PsiCodeBlock body = myConstructor.getBody();
+        PsiJavaToken lBrace = body.getLBrace();
+        body.addAfter(superCall, lBrace);
+        lBrace = (PsiJavaToken)new PsiMatcherImpl(body)
+            .firstChild(PsiMatchers.hasClass(PsiExpressionStatement.class))
+            .firstChild(PsiMatchers.hasClass(PsiMethodCallExpression.class))
+            .firstChild(PsiMatchers.hasClass(PsiExpressionList.class))
+            .firstChild(PsiMatchers.hasClass(PsiJavaToken.class))
+            .dot(PsiMatchers.hasText("("))
+            .getElement();
+        editor.getCaretModel().moveToOffset(lBrace.getTextOffset() + 1);
+        LanguageUndoUtil.markPsiFileForUndo(file);
+    }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
-
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }

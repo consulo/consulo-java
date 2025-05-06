@@ -390,7 +390,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkInstanceOfApplicable(@Nonnull PsiInstanceOfExpression expression) {
+    public static HighlightInfo.Builder checkInstanceOfApplicable(@Nonnull PsiInstanceOfExpression expression) {
         PsiExpression operand = expression.getOperand();
         PsiTypeElement typeElement = expression.getCheckType();
         if (typeElement == null) {
@@ -409,12 +409,10 @@ public class HighlightUtil extends HighlightUtilBase {
                 .descriptionAndTooltip(JavaErrorLocalize.inconvertibleTypeCast(
                     JavaHighlightUtil.formatType(operandType),
                     JavaHighlightUtil.formatType(checkType)
-                ))
-                .create();
+                ));
         }
         return null;
     }
-
 
     /**
      * 15.16 Cast Expressions
@@ -2682,14 +2680,13 @@ public class HighlightUtil extends HighlightUtilBase {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkIllegalVoidType(@Nonnull PsiKeyword type) {
+    public static HighlightInfo.Builder checkIllegalVoidType(@Nonnull PsiKeyword type) {
         if (!PsiKeyword.VOID.equals(type.getText())) {
             return null;
         }
 
-        PsiElement parent = type.getParent();
-        if (parent instanceof PsiTypeElement) {
-            PsiElement typeOwner = parent.getParent();
+        if (type.getParent() instanceof PsiTypeElement typeElem) {
+            PsiElement typeOwner = typeElem.getParent();
             if (typeOwner != null) {
                 // do not highlight incomplete declarations
                 if (PsiUtilCore.hasErrorElementChild(typeOwner)) {
@@ -2698,7 +2695,7 @@ public class HighlightUtil extends HighlightUtilBase {
             }
 
             if (typeOwner instanceof PsiMethod method) {
-                if (method.getReturnTypeElement() == parent && PsiType.VOID.equals(method.getReturnType())) {
+                if (method.getReturnTypeElement() == typeElem && PsiType.VOID.equals(method.getReturnType())) {
                     return null;
                 }
             }
@@ -2716,8 +2713,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(type)
-            .descriptionAndTooltip(JavaErrorLocalize.illegalTypeVoid())
-            .create();
+            .descriptionAndTooltip(JavaErrorLocalize.illegalTypeVoid());
     }
 
     @Nullable
@@ -3025,19 +3021,18 @@ public class HighlightUtil extends HighlightUtilBase {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkLabelWithoutStatement(@Nonnull PsiLabeledStatement statement) {
+    public static HighlightInfo.Builder checkLabelWithoutStatement(@Nonnull PsiLabeledStatement statement) {
         if (statement.getStatement() == null) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(statement)
-                .descriptionAndTooltip(JavaErrorLocalize.labelWithoutStatement())
-                .create();
+                .descriptionAndTooltip(JavaErrorLocalize.labelWithoutStatement());
         }
         return null;
     }
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkLabelAlreadyInUse(@Nonnull PsiLabeledStatement statement) {
+    public static HighlightInfo.Builder checkLabelAlreadyInUse(@Nonnull PsiLabeledStatement statement) {
         PsiIdentifier identifier = statement.getLabelIdentifier();
         String text = identifier.getText();
         PsiElement element = statement;
@@ -3049,8 +3044,7 @@ public class HighlightUtil extends HighlightUtilBase {
                 && Objects.equals(labeledStmt.getLabelIdentifier().getText(), text)) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(identifier)
-                    .descriptionAndTooltip(JavaErrorLocalize.duplicateLabel(text))
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.duplicateLabel(text));
             }
             element = element.getParent();
         }
