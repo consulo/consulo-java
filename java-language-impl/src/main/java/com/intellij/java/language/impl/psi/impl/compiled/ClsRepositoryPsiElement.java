@@ -25,91 +25,97 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public abstract class ClsRepositoryPsiElement<T extends StubElement> extends ClsElementImpl implements StubBasedPsiElement<T> {
-  private final T myStub;
+    private final T myStub;
 
-  protected ClsRepositoryPsiElement(final T stub) {
-    myStub = stub;
-  }
-
-  @Override
-  public IStubElementType getElementType() {
-    return myStub.getStubType();
-  }
-
-  @Override
-  public PsiElement getParent() {
-    return myStub.getParentStub().getPsi();
-  }
-
-  @Override
-  public PsiManager getManager() {
-    final PsiFile file = getContainingFile();
-    if (file == null) throw new PsiInvalidElementAccessException(this);
-    return file.getManager();
-  }
-
-  @Override
-  public PsiFile getContainingFile() {
-    StubElement p = myStub;
-    while (!(p instanceof PsiFileStub)) {
-      p = p.getParentStub();
+    protected ClsRepositoryPsiElement(final T stub) {
+        myStub = stub;
     }
-    return (PsiFile)p.getPsi();
-  }
 
-  @Override
-  public T getStub() {
-    return myStub;
-  }
-
-  @Override
-  public boolean isPhysical() {
-    return getContainingFile().isPhysical();
-  }
-
-  @Override
-  @Nonnull
-  public PsiElement[] getChildren() {
-    final List stubs = getStub().getChildrenStubs();
-    PsiElement[] children = new PsiElement[stubs.size()];
-    for (int i = 0; i < stubs.size(); i++) {
-      children[i] = ((StubElement)stubs.get(i)).getPsi();
+    @Override
+    public IStubElementType getElementType() {
+        return myStub.getStubType();
     }
-    return children;
-  }
 
-  @Override
-  public PsiElement getFirstChild() {
-    final List<StubElement> children = getStub().getChildrenStubs();
-    if (children.isEmpty()) return null;
-    return children.get(0).getPsi();
-  }
-
-  @Override
-  public PsiElement getLastChild() {
-    final List<StubElement> children = getStub().getChildrenStubs();
-    if (children.isEmpty()) return null;
-    return children.get(children.size() - 1).getPsi();
-  }
-
-  @Override
-  public PsiElement getNextSibling() {
-    final PsiElement[] psiElements = getParent().getChildren();
-    final int i = ArrayUtil.indexOf(psiElements, this);
-    if (i < 0 || i >= psiElements.length - 1) {
-      return null;
+    @Override
+    public PsiElement getParent() {
+        return myStub.getParentStub().getPsi();
     }
-    return psiElements[i + 1];
-  }
 
-
-  @Override
-  public PsiElement getPrevSibling() {
-    final PsiElement[] psiElements = getParent().getChildren();
-    final int i = ArrayUtil.indexOf(psiElements, this);
-    if (i < 1) {
-      return null;
+    @Override
+    public PsiManager getManager() {
+        final PsiFile file = getContainingFile();
+        if (file == null) {
+            throw new PsiInvalidElementAccessException(this);
+        }
+        return file.getManager();
     }
-    return psiElements[i - 1];
-  }
+
+    @Override
+    public PsiFile getContainingFile() {
+        StubElement p = myStub;
+        while (!(p instanceof PsiFileStub)) {
+            p = p.getParentStub();
+        }
+        return (PsiFile)p.getPsi();
+    }
+
+    @Override
+    public T getStub() {
+        return myStub;
+    }
+
+    @Override
+    public boolean isPhysical() {
+        return getContainingFile().isPhysical();
+    }
+
+    @Override
+    @Nonnull
+    public PsiElement[] getChildren() {
+        final List stubs = getStub().getChildrenStubs();
+        PsiElement[] children = new PsiElement[stubs.size()];
+        for (int i = 0; i < stubs.size(); i++) {
+            children[i] = ((StubElement)stubs.get(i)).getPsi();
+        }
+        return children;
+    }
+
+    @Override
+    public PsiElement getFirstChild() {
+        final List<StubElement> children = getStub().getChildrenStubs();
+        if (children.isEmpty()) {
+            return null;
+        }
+        return children.get(0).getPsi();
+    }
+
+    @Override
+    public PsiElement getLastChild() {
+        final List<StubElement> children = getStub().getChildrenStubs();
+        if (children.isEmpty()) {
+            return null;
+        }
+        return children.get(children.size() - 1).getPsi();
+    }
+
+    @Override
+    public PsiElement getNextSibling() {
+        final PsiElement[] psiElements = getParent().getChildren();
+        final int i = ArrayUtil.indexOf(psiElements, this);
+        if (i < 0 || i >= psiElements.length - 1) {
+            return null;
+        }
+        return psiElements[i + 1];
+    }
+
+
+    @Override
+    public PsiElement getPrevSibling() {
+        final PsiElement[] psiElements = getParent().getChildren();
+        final int i = ArrayUtil.indexOf(psiElements, this);
+        if (i < 1) {
+            return null;
+        }
+        return psiElements[i - 1];
+    }
 }
