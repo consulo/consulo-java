@@ -110,16 +110,13 @@ public class IntroduceParameterUtil {
             else if (usage instanceof NoConstructorClassUsageInfo) {
                 addDefaultConstructor(usage, usages, data);
             }
-            else {
-                PsiElement element = usage.getElement();
-                if (element instanceof PsiMethod) {
-                    if (!manager.areElementsEquivalent(element, data.getMethodToReplaceIn())) {
-                        methodUsages.add(usage);
-                    }
+            else if (usage.getElement() instanceof PsiMethod method) {
+                if (!manager.areElementsEquivalent(method, data.getMethodToReplaceIn())) {
+                    methodUsages.add(usage);
                 }
-                else if (!data.isGenerateDelegate()) {
-                    changeExternalUsage(usage, usages, data);
-                }
+            }
+            else if (!data.isGenerateDelegate()) {
+                changeExternalUsage(usage, usages, data);
             }
         }
 

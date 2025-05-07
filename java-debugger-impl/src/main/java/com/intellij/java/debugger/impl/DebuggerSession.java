@@ -657,8 +657,8 @@ public class DebuggerSession implements AbstractDebuggerSession {
                 boolean sourceMissing = foundFile instanceof PsiCompiledElement;
                 for (Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event> eventDescriptor : eventDescriptors) {
                     Breakpoint breakpoint = eventDescriptor.getFirst();
-                    if (breakpoint instanceof LineBreakpoint) {
-                        SourcePosition breakpointPosition = ((BreakpointWithHighlighter)breakpoint).getSourcePosition();
+                    if (breakpoint instanceof LineBreakpoint lineBreakpoint) {
+                        SourcePosition breakpointPosition = lineBreakpoint.getSourcePosition();
                         if (breakpointPosition == null || (!sourceMissing && breakpointPosition.getLine() != position.getLine())) {
                             requestsManager.deleteRequest(breakpoint);
                             requestsManager.setInvalid(breakpoint, JavaDebuggerLocalize.errorInvalidBreakpointSourceChanged().get());

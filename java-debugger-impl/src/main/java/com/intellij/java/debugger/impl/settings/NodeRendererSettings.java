@@ -564,7 +564,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
         @Override
         public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException {
-            LOG.assertTrue(node.getDescriptor() instanceof ArrayElementDescriptorImpl);
+            LOG.assertTrue(node.getDescriptor() instanceof ArrayElementDescriptorImpl arrayElementDescriptor);
             try {
                 return getChildValueExpression(
                     "this.get(" + ((ArrayElementDescriptorImpl)node.getDescriptor()).getIndex() + ")",

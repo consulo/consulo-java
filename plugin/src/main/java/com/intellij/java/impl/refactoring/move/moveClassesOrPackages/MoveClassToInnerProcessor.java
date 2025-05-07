@@ -355,15 +355,8 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     private static PsiElement[] collectPackageLocalMembers(PsiElement classToMove) {
         return PsiTreeUtil.collectElements(
             classToMove,
-            element -> {
-                if (element instanceof PsiMember) {
-                    PsiMember member = (PsiMember)element;
-                    if (VisibilityUtil.getVisibilityModifier(member.getModifierList()) == PsiModifier.PACKAGE_LOCAL) {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            element -> element instanceof PsiMember member
+                && VisibilityUtil.getVisibilityModifier(member.getModifierList()) == PsiModifier.PACKAGE_LOCAL
         );
     }
 

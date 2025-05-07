@@ -1088,15 +1088,15 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                             if (lastIndex >= 0 && myArgs.size() > lastIndex) { // at least one varargs param
                                 Object firstVararg = myArgs.get(lastIndex);
                                 if (myArgs.size() == lastIndex + 1) { // only one vararg param
-                                    if (firstVararg instanceof ArrayReference arrayRef) {
-                                        if (((ArrayType)arrayRef.referenceType()).componentType() instanceof InterfaceType) {
-                                            List<String> argTypes = myMethod.argumentTypeNames();
-                                            if (argTypes.size() > lastIndex
-                                                && argTypes.get(lastIndex).startsWith(JavaClassNames.JAVA_LANG_OBJECT)) {
-                                                // unwrap array of interfaces for vararg param
-                                                myArgs.remove(lastIndex);
-                                                myArgs.addAll(arrayRef.getValues());
-                                            }
+                                    if (firstVararg instanceof ArrayReference arrayRef
+                                        && arrayRef.referenceType() instanceof ArrayType arrayType
+                                        && arrayType.componentType() instanceof InterfaceType) {
+                                        List<String> argTypes = myMethod.argumentTypeNames();
+                                        if (argTypes.size() > lastIndex
+                                            && argTypes.get(lastIndex).startsWith(JavaClassNames.JAVA_LANG_OBJECT)) {
+                                            // unwrap array of interfaces for vararg param
+                                            myArgs.remove(lastIndex);
+                                            myArgs.addAll(arrayRef.getValues());
                                         }
                                     }
                                 }

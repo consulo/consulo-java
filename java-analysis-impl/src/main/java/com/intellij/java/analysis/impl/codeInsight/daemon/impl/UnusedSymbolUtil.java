@@ -245,9 +245,10 @@ public class UnusedSymbolUtil {
             }
 
             // if we've resolved all references, find usages will be fast
-            PsiSearchHelper.SearchCostResult cheapEnough = RefResolveService.ENABLED && RefResolveService.getInstance
-                (project).isUpToDate() ? PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES : searchHelper
-                .isCheapEnoughToSearch(name, (GlobalSearchScope)useScope, ignoreFile, progress);
+            PsiSearchHelper.SearchCostResult cheapEnough =
+                RefResolveService.ENABLED && RefResolveService.getInstance(project).isUpToDate()
+                    ? PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES
+                    : searchHelper.isCheapEnoughToSearch(name, globalSearchScope, ignoreFile, progress);
             if (cheapEnough == TOO_MANY_OCCURRENCES) {
                 log("* " + member.getName() + " too many usages; false");
                 return false;
@@ -263,18 +264,11 @@ public class UnusedSymbolUtil {
 
             if (member instanceof PsiMethod) {
                 String propertyName = PropertyUtil.getPropertyName(member);
-                if (propertyName != null) {
-                    SearchScope fileScope = containingFile.getUseScope();
-                    if (fileScope instanceof GlobalSearchScope
-                        && searchHelper.isCheapEnoughToSearch(
-                        propertyName,
-                        (GlobalSearchScope)fileScope,
-                        ignoreFile,
-                        progress
-                    ) == TOO_MANY_OCCURRENCES) {
-                        log("* " + member.getName() + " too many prop usages; false");
-                        return false;
-                    }
+                if (propertyName != null
+                    && containingFile.getUseScope() instanceof GlobalSearchScope fileScope
+                    && searchHelper.isCheapEnoughToSearch(propertyName, fileScope, ignoreFile, progress) == TOO_MANY_OCCURRENCES) {
+                    log("* " + member.getName() + " too many prop usages; false");
+                    return false;
                 }
             }
         }
