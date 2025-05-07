@@ -78,7 +78,7 @@ public class ClassUtils {
     immutableTypes.add("java.math.MathContext");
     immutableTypes.add("java.nio.channels.FileLock");
     immutableTypes.add("java.nio.charset.Charset");
-    immutableTypes.add("java.io.File");
+    immutableTypes.add(JavaClassNames.JAVA_IO_FILE);
     immutableTypes.add("java.net.URI");
     immutableTypes.add("java.util.regex.Pattern");
   }

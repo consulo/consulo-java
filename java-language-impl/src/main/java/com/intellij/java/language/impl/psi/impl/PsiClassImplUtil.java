@@ -1095,7 +1095,7 @@ public class PsiClassImplUtil {
           if (typeParam != -1) {
             name = name.substring(0, typeParam);
           }
-          // baseName=="ArrayList" classStub.getReferenceNames()[i]=="java.util.ArrayList"
+          // baseName=="ArrayList" classStub.getReferenceNames()[i]==JavaClassNames.JAVA_UTIL_ARRAY_LIST
           if (name.endsWith(baseName)) {
             PsiClassType[] referencedTypes = classStub.getReferencedTypes();
             PsiClass resolved = referencedTypes[i].resolve();

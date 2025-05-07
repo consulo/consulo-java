@@ -22,6 +22,7 @@ import java.util.HashMap;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import consulo.document.FileDocumentManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -49,7 +50,7 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
   }
 
   public void testLibraryClass() throws Exception {  // IDEADEV-28791
-    doTest("java.util.ArrayList", "Bar");
+    doTest(JavaClassNames.JAVA_UTIL_ARRAY_LIST, "Bar");
   }
 
   private void doTest(final String oldName, final String copyName) throws Exception {

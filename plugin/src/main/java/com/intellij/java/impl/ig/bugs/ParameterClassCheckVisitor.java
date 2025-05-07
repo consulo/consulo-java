@@ -195,7 +195,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 		for(PsiParameter parameter : parameters)
 		{
 			final PsiType type = parameter.getType();
-			if(type.equalsToText("java.lang.NullPointerException"))
+			if(type.equalsToText(JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION))
 			{
 				nullPointerExceptionFound = true;
 				if(classCastExceptionFound)
@@ -203,7 +203,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 					break;
 				}
 			}
-			else if(type.equalsToText("java.lang.ClassCastException"))
+			else if(type.equalsToText(JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION))
 			{
 				classCastExceptionFound = true;
 				if(nullPointerExceptionFound)

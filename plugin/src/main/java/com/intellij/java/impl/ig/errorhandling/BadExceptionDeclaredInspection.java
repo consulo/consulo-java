@@ -32,6 +32,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -51,16 +52,15 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
   /**
    * @noinspection PublicField
    */
-  public final ExternalizableStringSet exceptions =
-    new ExternalizableStringSet(
-      "java.lang.Throwable",
-      "java.lang.Exception",
-      "java.lang.Error",
-      "java.lang.RuntimeException",
-      "java.lang.NullPointerException",
-      "java.lang.ClassCastException",
-      "java.lang.ArrayIndexOutOfBoundsException"
-    );
+  public final ExternalizableStringSet exceptions = new ExternalizableStringSet(
+    JavaClassNames.JAVA_LANG_THROWABLE,
+    JavaClassNames.JAVA_LANG_EXCEPTION,
+    JavaClassNames.JAVA_LANG_ERROR,
+    JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+    JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
+    JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
+    JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
+  );
 
   /**
    * @noinspection PublicField
@@ -106,7 +106,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
     JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-      "java.lang.Throwable"
+        JavaClassNames.JAVA_LANG_THROWABLE
     );
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

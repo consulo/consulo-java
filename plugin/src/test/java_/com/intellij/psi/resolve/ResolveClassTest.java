@@ -17,6 +17,7 @@ package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.module.ModifiableModuleModel;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
@@ -122,7 +123,7 @@ public abstract class ResolveClassTest extends ResolveTestCase {
     PsiReference ref = configure();
     PsiElement target = ((PsiJavaReference)ref).advancedResolve(true).getElement();
     assertTrue(target instanceof PsiClass);
-    assertEquals("java.util.Date", ((PsiClass)target).getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_DATE, ((PsiClass)target).getQualifiedName());
   }
 
   public void testLocals1() throws Exception {

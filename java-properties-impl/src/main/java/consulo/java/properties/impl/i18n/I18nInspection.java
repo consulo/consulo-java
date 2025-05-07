@@ -313,7 +313,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
               createInheritanceClassChooser(
                 CodeInsightLocalize.inspectionI18nOptionIgnoreForSpecifiedExceptionConstructorArguments().get(),
                 scope,
-                JavaPsiFacade.getInstance(project).findClass("java.lang.Throwable", scope),
+                JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_THROWABLE, scope),
                 true,
                 true,
                 null
@@ -844,7 +844,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     return TO_STRING.equals(method.getName())
       && method.getParameterList().getParametersCount() == 0
       && returnType != null
-      && "java.lang.String".equals(returnType.getCanonicalText());
+      && JavaClassNames.JAVA_LANG_STRING.equals(returnType.getCanonicalText());
   }
 
   private static boolean isArgOfJUnitAssertion(PsiExpression expression) {

@@ -18,6 +18,7 @@ import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.application.util.CachedValueProvider;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
@@ -50,7 +51,7 @@ final class CustomMethodHandlers {
       staticCall(JAVA_LANG_FLOAT, "toString", "toHexString").parameterTypes("float"),
       staticCall(JAVA_LANG_BYTE, "toString").parameterTypes("byte"),
       staticCall(JAVA_LANG_SHORT, "toString").parameterTypes("short"),
-      staticCall(JAVA_LANG_BOOLEAN, "parseBoolean").parameterTypes("java.lang.String"),
+      staticCall(JAVA_LANG_BOOLEAN, "parseBoolean").parameterTypes(JavaClassNames.JAVA_LANG_STRING),
       staticCall(JAVA_LANG_INTEGER, "compare", "compareUnsigned").parameterTypes("int", "int"),
       staticCall(JAVA_LANG_LONG, "compare", "compareUnsigned").parameterTypes("long", "long"),
       staticCall(JAVA_LANG_DOUBLE, "compare").parameterTypes("double", "double"),

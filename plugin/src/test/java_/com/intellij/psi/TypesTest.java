@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
@@ -75,9 +76,9 @@ public abstract class TypesTest extends GenericsTestCase {
     final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
     final PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
     final PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
-    final PsiClassType typeA = factory.createTypeByFQClassName("java.lang.String");
+    final PsiClassType typeA = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_STRING);
     assertEquals(typeA, substitutedType);
-    assertTrue(typeA.equalsToText("java.lang.String"));
+    assertTrue(typeA.equalsToText(JavaClassNames.JAVA_LANG_STRING));
 
     final PsiType aListIteratorType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
     final PsiType aIteratorType = factory.createTypeFromText("test.Iterator<java.lang.String>", null);
@@ -132,7 +133,7 @@ public abstract class TypesTest extends GenericsTestCase {
     final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
     final PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
     final PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
-    final PsiType javaLangInteger = factory.createTypeFromText("java.lang.Integer", null);
+    final PsiType javaLangInteger = factory.createTypeFromText(JavaClassNames.JAVA_LANG_INTEGER, null);
     assertEquals(javaLangInteger, substitutedType);
 
     final PsiType intListIteratorReturnType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
@@ -322,7 +323,7 @@ public abstract class TypesTest extends GenericsTestCase {
     final PsiStatement[] statements = method.getBody().getStatements();
 
     final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[1]).getExpression();
-    isCollectionUtilSort(methodCallExpression, factory.createTypeFromText("java.lang.Integer", null));
+    isCollectionUtilSort(methodCallExpression, factory.createTypeFromText(JavaClassNames.JAVA_LANG_INTEGER, null));
 
     final PsiMethodCallExpression methodCallExpression1 = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[3]).getExpression();
     isCollectionUtilSort(methodCallExpression1, null);

@@ -27,6 +27,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -47,9 +48,9 @@ public class BadExceptionCaughtInspection extends BaseInspection {
    */
   public final ExternalizableStringSet exceptions =
     new ExternalizableStringSet(
-      "java.lang.NullPointerException",
+        JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
       "java.lang.IllegalMonitorStateException",
-      "java.lang.ArrayIndexOutOfBoundsException"
+        JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
     );
 
   public BadExceptionCaughtInspection() {
@@ -87,7 +88,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
     return UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-      "java.lang.Throwable"
+        JavaClassNames.JAVA_LANG_THROWABLE
     );
   }
 

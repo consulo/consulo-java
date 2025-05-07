@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ipp.constant;
 
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiElement;
@@ -51,7 +52,7 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
     final PsiType type = polyadicExpression.getType();
-    if (type == null || type.equalsToText("java.lang.String")) {
+    if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
       // handled by JoinConcatenatedStringLiteralsIntention
       return false;
     }

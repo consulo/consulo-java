@@ -162,7 +162,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
           if (expressions.length < 2 || !expression.equals(ParenthesesUtils.stripParentheses(expressions[1]))) {
             return true;
         }
-          if (!isCallToMethodIn(methodCallExpression, "java.lang.StringBuilder", "java.lang.StringBuffer")) {
+          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER)) {
             return true;
       }
 
@@ -170,11 +170,11 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
           if (expressions.length < 1 || !expression.equals(ParenthesesUtils.stripParentheses(expressions[0]))) {
             return true;
           }
-          if (!isCallToMethodIn(methodCallExpression, "java.lang.StringBuilder", "java.lang.StringBuffer")) {
+          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER)) {
             return true;
           }
         } else if ("print".equals(name) || "println".equals(name)) {
-          if (!isCallToMethodIn(methodCallExpression, "java.io.PrintStream", "java.io.PrintWriter")) {
+          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_IO_PRINT_STREAM, JavaClassNames.JAVA_IO_PRINT_WRITER)) {
             return true;
           }
         }

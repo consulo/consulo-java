@@ -17,6 +17,7 @@ package com.intellij.codeInsight.daemon;
 
 import static org.junit.Assert.assertNotNull;
 
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
@@ -320,7 +321,7 @@ public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCa
   public void testIDEA113225() throws Exception { doTest5(false); }
 
   public void testJavaUtilCollections_NoVerify() throws Exception {
-    PsiClass collectionsClass = getJavaFacade().findClass("java.util.Collections", GlobalSearchScope.moduleWithLibrariesScope(getModule()));
+    PsiClass collectionsClass = getJavaFacade().findClass(JavaClassNames.JAVA_UTIL_COLLECTIONS, GlobalSearchScope.moduleWithLibrariesScope(getModule()));
     assertNotNull(collectionsClass);
     collectionsClass = (PsiClass)collectionsClass.getNavigationElement();
     final String text = collectionsClass.getContainingFile().getText();

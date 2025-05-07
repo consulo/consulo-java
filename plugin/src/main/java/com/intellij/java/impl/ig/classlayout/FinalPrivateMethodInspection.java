@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -66,7 +67,7 @@ public class FinalPrivateMethodInspection extends BaseInspection {
           || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
       }
-      if (AnnotationUtil.isAnnotated(method, "java.lang.SafeVarargs", false) && method.isVarArgs()) {
+      if (AnnotationUtil.isAnnotated(method, JavaClassNames.JAVA_LANG_SAFE_VARARGS, false) && method.isVarArgs()) {
         return;
       }
       registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);

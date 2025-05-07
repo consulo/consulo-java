@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.*;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.psi.PsiElement;
@@ -1258,8 +1259,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     if (toPush == null) {
       toPush = myFactory.getObjectType(expression.getType(), Nullability.UNKNOWN);
     }
-    DfaControlTransferValue transfer =
-        shouldHandleException() ? myFactory.controlTransfer(myExceptionCache.get("java.lang.ArrayIndexOutOfBoundsException"), myTrapStack) : null;
+    DfaControlTransferValue transfer = shouldHandleException()
+        ? myFactory.controlTransfer(myExceptionCache.get(JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION), myTrapStack)
+        : null;
     addInstruction(new ArrayAccessInstruction(toPush, expression, transfer));
     addNullCheck(expression);
     finishElement(expression);
@@ -2022,8 +2024,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
 
     final PsiTypeElement typeElement = castExpression.getCastType();
     if (typeElement != null && operand != null && operand.getType() != null && !(typeElement.getType() instanceof PsiPrimitiveType)) {
-      DfaControlTransferValue transfer =
-          shouldHandleException() ? myFactory.controlTransfer(myExceptionCache.get("java.lang.ClassCastException"), myTrapStack) : null;
+      DfaControlTransferValue transfer = shouldHandleException()
+          ? myFactory.controlTransfer(myExceptionCache.get(JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION), myTrapStack)
+          : null;
       addInstruction(new TypeCastInstruction(castExpression, operand, typeElement.getType(), transfer));
     }
     finishElement(castExpression);

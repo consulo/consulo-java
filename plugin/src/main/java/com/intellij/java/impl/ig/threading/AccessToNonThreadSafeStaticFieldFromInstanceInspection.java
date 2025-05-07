@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
@@ -42,9 +43,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   public String nonThreadSafeTypes = "";
   @SuppressWarnings("PublicField")
   public final ExternalizableStringSet nonThreadSafeClasses =
-    new ExternalizableStringSet(
-      "java.text.SimpleDateFormat",
-      "java.util.Calendar");
+    new ExternalizableStringSet("java.text.SimpleDateFormat", JavaClassNames.JAVA_UTIL_CALENDAR);
 
   public AccessToNonThreadSafeStaticFieldFromInstanceInspection() {
     if (nonThreadSafeTypes.length() != 0) {

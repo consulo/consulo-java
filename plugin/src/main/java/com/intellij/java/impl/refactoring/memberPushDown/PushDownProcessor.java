@@ -33,6 +33,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
@@ -410,7 +411,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
           }
         }
         else { //abstract method: remove @Override
-          final PsiAnnotation annotation = AnnotationUtil.findAnnotation(methodBySignature, "java.lang.Override");
+          final PsiAnnotation annotation = AnnotationUtil.findAnnotation(methodBySignature, JavaClassNames.JAVA_LANG_OVERRIDE);
           if (annotation != null && !leaveOverrideAnnotation(substitutor, method)) {
             annotation.delete();
           }

@@ -27,6 +27,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -111,7 +112,7 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
     }
 
     private static boolean hasThrowableType(PsiExpression lastArgument) {
-      return InheritanceUtil.isInheritor(lastArgument.getType(), "java.lang.Throwable");
+      return InheritanceUtil.isInheritor(lastArgument.getType(), JavaClassNames.JAVA_LANG_THROWABLE);
     }
 
     public static int countPlaceholders(String value) {

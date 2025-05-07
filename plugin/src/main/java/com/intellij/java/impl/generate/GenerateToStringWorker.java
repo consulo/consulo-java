@@ -28,6 +28,7 @@ import com.intellij.java.analysis.impl.generate.config.Config;
 import com.intellij.java.analysis.impl.generate.config.DuplicationPolicy;
 import com.intellij.java.analysis.impl.generate.config.InsertWhere;
 import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.hint.HintManager;
 import jakarta.annotation.Nullable;
 import org.jetbrains.java.generate.GenerateToStringContext;
@@ -124,7 +125,7 @@ public class GenerateToStringWorker
 
 		if(hasOverrideAnnotation)
 		{
-			toStringMethod.getModifierList().addAnnotation("java.lang.Override");
+			toStringMethod.getModifierList().addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
 		}
 
 		// applyJavaDoc conflict resolution policy (add or keep existing)

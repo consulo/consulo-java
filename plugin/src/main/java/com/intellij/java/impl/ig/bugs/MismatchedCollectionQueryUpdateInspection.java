@@ -33,6 +33,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -58,19 +59,19 @@ public class MismatchedCollectionQueryUpdateInspection
     extends BaseInspection {
 
   private static final CallMatcher TRANSFORMED = CallMatcher.staticCall(
-      CommonClassNames.JAVA_UTIL_COLLECTIONS, "asLifoQueue", "checkedCollection", "checkedList", "checkedMap", "checkedNavigableMap",
+      JavaClassNames.JAVA_UTIL_COLLECTIONS, "asLifoQueue", "checkedCollection", "checkedList", "checkedMap", "checkedNavigableMap",
       "checkedNavigableSet", "checkedQueue", "checkedSet", "checkedSortedMap", "checkedSortedSet", "newSetFromMap", "synchronizedCollection",
       "synchronizedList", "synchronizedMap", "synchronizedNavigableMap", "synchronizedNavigableSet", "synchronizedSet",
       "synchronizedSortedMap", "synchronizedSortedSet");
   private static final CallMatcher DERIVED = CallMatcher.anyOf(
       CollectionUtils.DERIVED_COLLECTION,
-      CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_LIST, "subList"),
-      CallMatcher.instanceCall("java.util.SortedMap", "headMap", "tailMap", "subMap"),
-      CallMatcher.instanceCall("java.util.SortedSet", "headSet", "tailSet", "subSet"));
+      CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_LIST, "subList"),
+      CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_SORTED_MAP, "headMap", "tailMap", "subMap"),
+      CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_SORTED_SET, "headSet", "tailSet", "subSet"));
   private static final CallMatcher COLLECTION_SAFE_ARGUMENT_METHODS =
       CallMatcher.anyOf(
-          CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_COLLECTION, "addAll", "removeAll", "containsAll", "remove"),
-          CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "putAll", "remove")
+          CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_COLLECTION, "addAll", "removeAll", "containsAll", "remove"),
+          CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "putAll", "remove")
       );
   private static final Set<String> COLLECTIONS_QUERIES =
       Set.of("binarySearch", "disjoint", "indexOfSubList", "lastIndexOfSubList", "max", "min");

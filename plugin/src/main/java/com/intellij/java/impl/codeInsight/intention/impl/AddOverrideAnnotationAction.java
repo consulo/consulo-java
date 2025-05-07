@@ -24,6 +24,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.localize.CodeInsightLocalize;
@@ -40,8 +41,6 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddOverrideAnnotationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class AddOverrideAnnotationAction implements IntentionAction {
-  private static final String JAVA_LANG_OVERRIDE = "java.lang.Override";
-
   @Override
   @Nonnull
   public String getText() {
@@ -55,11 +54,11 @@ public class AddOverrideAnnotationAction implements IntentionAction {
     if (!file.getManager().isInProject(file)) return false;
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method == null) return false;
-    if (method.getModifierList().findAnnotation(JAVA_LANG_OVERRIDE) != null) return false;
+    if (method.getModifierList().findAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE) != null) return false;
     PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
       if (!superMethod.hasModifierProperty(PsiModifier.ABSTRACT)
-          && new AddAnnotationFix(JAVA_LANG_OVERRIDE, method).isAvailable(project, editor, file)) {
+          && new AddAnnotationFix(JavaClassNames.JAVA_LANG_OVERRIDE, method).isAvailable(project, editor, file)) {
         return true;
       }
     }
@@ -72,7 +71,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method != null) {
-      new AddAnnotationFix(JAVA_LANG_OVERRIDE, method).invoke(project, editor, file);
+      new AddAnnotationFix(JavaClassNames.JAVA_LANG_OVERRIDE, method).invoke(project, editor, file);
     }
   }
 

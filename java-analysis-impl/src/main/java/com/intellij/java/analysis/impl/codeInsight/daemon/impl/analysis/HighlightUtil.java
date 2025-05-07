@@ -3398,7 +3398,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return null;
         }
         PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
-        PsiClassType throwable = factory.createTypeByFQClassName("java.lang.Throwable", context.getResolveScope());
+        PsiClassType throwable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, context.getResolveScope());
         if (!TypeConversionUtil.isAssignable(throwable, type)) {
             HighlightInfo.Builder hlBuilder = createIncompatibleTypeHighlightInfo(throwable, type, context.getTextRange(), 0);
             if (addCastIntention && TypeConversionUtil.areTypesConvertible(type, throwable)

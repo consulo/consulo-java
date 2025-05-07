@@ -145,7 +145,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     if (ggParent instanceof PsiMethod) {
       PsiMethod method = (PsiMethod)ggParent;
       if (method.getThrowsList() == parent) {
-        superClassName = "java.lang.Exception";
+        superClassName = JavaClassNames.JAVA_LANG_EXCEPTION;
       }
     }
     else if (ggParent instanceof PsiClassObjectAccessExpression) {

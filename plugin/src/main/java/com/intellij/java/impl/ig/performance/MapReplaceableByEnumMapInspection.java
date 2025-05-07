@@ -94,7 +94,7 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
       final PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList != null) {
         final PsiExpression[] arguments = argumentList.getExpressions();
-        if (arguments.length > 0 && TypeUtils.expressionHasTypeOrSubtype(arguments[0], "java.util.Comparator")) {
+        if (arguments.length > 0 && TypeUtils.expressionHasTypeOrSubtype(arguments[0], JavaClassNames.JAVA_UTIL_COMPARATOR)) {
           return;
         }
       }

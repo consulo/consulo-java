@@ -28,6 +28,7 @@ import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.compiler.util.MakeUtil;
 import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.logging.Logger;
 import consulo.module.Module;
@@ -177,7 +178,7 @@ public class JavaMakeUtil extends MakeUtil {
                                          final int annotationQName,
                                          final SymbolTable symbolTable) throws CacheCorruptedException {
     final AnnotationConstantValue
-      targetAnnotation = findAnnotation("java.lang.annotation.Target", cache.getRuntimeVisibleAnnotations(annotationQName), symbolTable);
+      targetAnnotation = findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_TARGET, cache.getRuntimeVisibleAnnotations(annotationQName), symbolTable);
     if (targetAnnotation == null) {
       return AnnotationTargets.ALL; // all program elements are annotation targets by default
     }
@@ -223,7 +224,7 @@ public class JavaMakeUtil extends MakeUtil {
     final SymbolTable symbolTable
   ) throws CacheCorruptedException {
     final AnnotationConstantValue retentionPolicyAnnotation =
-      findAnnotation("java.lang.annotation.Retention", cache.getRuntimeVisibleAnnotations(annotationQName), symbolTable);
+      findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION, cache.getRuntimeVisibleAnnotations(annotationQName), symbolTable);
     if (retentionPolicyAnnotation == null) {
       return RetentionPolicies.CLASS; // default retention policy
     }

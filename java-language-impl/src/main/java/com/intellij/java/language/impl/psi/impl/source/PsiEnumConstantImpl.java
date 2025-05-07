@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -200,8 +201,8 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     PsiDocComment docComment = getDocComment();
-    return docComment != null && docComment.findTagByName("deprecated") != null || getModifierList().findAnnotation("java.lang.Deprecated") !=
-        null;
+    return docComment != null && docComment.findTagByName("deprecated") != null
+        || getModifierList().findAnnotation(JavaClassNames.JAVA_LANG_DEPRECATED) != null;
   }
 
   @Override

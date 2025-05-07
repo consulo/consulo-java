@@ -149,7 +149,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
     PsiMethod supConstructor = null;
     PsiClass superClass = targetClass.getSuperClass();
     if (superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()) &&
-        !"java.lang.Enum".equals(superClass.getQualifiedName())) {
+        !JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
       PsiMethod[] constructors = superClass.getConstructors();
       boolean hasDefaultConstructor = false;
 

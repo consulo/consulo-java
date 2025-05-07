@@ -30,7 +30,7 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
     assertEquals("isaURL", PropertyUtil.suggestGetterName(createField("aURL", "boolean")));
     assertEquals("getaURL", PropertyUtil.suggestGetterName(createField("aURL", "Object")));
-    assertEquals("getBool", PropertyUtil.suggestGetterName(createField("bool", "java.lang.Boolean")));
+    assertEquals("getBool", PropertyUtil.suggestGetterName(createField("bool", JavaClassNames.JAVA_LANG_BOOLEAN)));
   }
 
   public void testSuggestSetterName() throws Exception {
@@ -42,7 +42,7 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
     assertEquals("setaURL", PropertyUtil.suggestSetterName("aURL"));
     assertEquals("setaURL", PropertyUtil.suggestSetterName(createField("aURL", "Object")));
-    assertEquals("setBool", PropertyUtil.suggestSetterName(createField("bool", "java.lang.Boolean")));
+    assertEquals("setBool", PropertyUtil.suggestSetterName(createField("bool", JavaClassNames.JAVA_LANG_BOOLEAN)));
   }
 
   public void testSuggestPropertyName() throws Exception {

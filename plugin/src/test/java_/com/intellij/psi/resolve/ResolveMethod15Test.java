@@ -20,7 +20,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
-    assertEquals("java.util.Arrays", method.getContainingClass().getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportHidden() throws Exception {
@@ -41,7 +41,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
-    assertEquals("java.util.Arrays", method.getContainingClass().getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
     final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
@@ -62,7 +62,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("sort", method.getName());
-    assertEquals("java.util.Collections", method.getContainingClass().getQualifiedName());
+    assertEquals(JavaClassNames.JAVA_UTIL_COLLECTIONS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
     final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
@@ -451,12 +451,12 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
 
   public void testExplicitParams1() throws Exception {
     PsiReference ref = configureByFile();
-    assertGenericResolve(ref, "f", new String[] {"java.lang.String"}, "java.lang.String");
+    assertGenericResolve(ref, "f", new String[] {JavaClassNames.JAVA_LANG_STRING}, JavaClassNames.JAVA_LANG_STRING);
   }
 
   public void testExplicitParams2() throws Exception {
     PsiReference ref = configureByFile();
-    assertGenericResolve(ref, "f", new String[] {"java.lang.Integer"}, "Foo");
+    assertGenericResolve(ref, "f", new String[] {JavaClassNames.JAVA_LANG_INTEGER}, "Foo");
   }
 
   public void testConstructorExplicitParams() throws Exception {

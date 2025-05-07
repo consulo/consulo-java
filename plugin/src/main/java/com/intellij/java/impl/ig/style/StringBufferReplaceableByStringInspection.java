@@ -125,7 +125,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
           final PsiType type = argument.getType();
           if (!PsiType.INT.equals(type)) {
             result.append(argument.getText());
-            if (type != null && type.equalsToText("java.lang.CharSequence")) {
+            if (type != null && type.equalsToText(JavaClassNames.JAVA_LANG_CHAR_SEQUENCE)) {
               result.append(".toString()");
             }
           }

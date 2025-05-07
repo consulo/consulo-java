@@ -21,6 +21,7 @@ import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
 import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -97,8 +98,8 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
       return false;
     }
     final String qualifiedName = containingClass.getQualifiedName();
-    if (!"java.io.PrintStream".equals(qualifiedName) &&
-        !"java.io.Printwriter".equals(qualifiedName)) {
+    if (!JavaClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName) &&
+        !JavaClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
       return false;
     }
     final StringBuilder newExpression = new StringBuilder();

@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -147,7 +148,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
         return;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!"java.lang.Math".equals(qualifiedName) && !"java.lang.StrictMath".equals(qualifiedName)) {
+      if (!JavaClassNames.JAVA_LANG_MATH.equals(qualifiedName) && !JavaClassNames.JAVA_LANG_STRICT_MATH.equals(qualifiedName)) {
         return;
       }
       registerError(methodCallExpression, expression);

@@ -34,7 +34,8 @@ import java.util.List;
 public class JavaHighlightUtil {
   public static boolean isSerializable(@Nonnull PsiClass aClass) {
     PsiManager manager = aClass.getManager();
-    PsiClass serializableClass = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.io.Serializable", aClass.getResolveScope());
+    PsiClass serializableClass = JavaPsiFacade.getInstance(manager.getProject())
+        .findClass(JavaClassNames.JAVA_IO_SERIALIZABLE, aClass.getResolveScope());
     return serializableClass != null && aClass.isInheritor(serializableClass, true);
   }
 

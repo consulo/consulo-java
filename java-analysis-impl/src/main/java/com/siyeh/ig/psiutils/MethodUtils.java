@@ -61,7 +61,7 @@ public class MethodUtils {
       return false;
     }
     final PsiClassType stringType = TypeUtils.getStringType(method);
-    return methodMatches(method, "java.lang.String", PsiType.INT, "compareToIgnoreCase", stringType);
+    return methodMatches(method, JavaClassNames.JAVA_LANG_STRING, PsiType.INT, "compareToIgnoreCase", stringType);
   }
 
   @Contract("null -> false")
@@ -98,7 +98,7 @@ public class MethodUtils {
       return false;
     }
     final PsiClassType stringType = TypeUtils.getStringType(method);
-    return methodMatches(method, "java.lang.String", PsiType.BOOLEAN, HardcodedMethodConstants.EQUALS_IGNORE_CASE, stringType);
+    return methodMatches(method, JavaClassNames.JAVA_LANG_STRING, PsiType.BOOLEAN, HardcodedMethodConstants.EQUALS_IGNORE_CASE, stringType);
   }
 
   /**

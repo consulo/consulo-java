@@ -32,6 +32,7 @@ import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -130,7 +131,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 return false;
             }
             Query<PsiClass> search = ClassInheritorsSearch.search(containingClass, method.getUseScope(), true, true, false);
-            boolean[] result = new boolean[1];
+            SimpleReference<Boolean> result = SimpleReference.create(false);
             search.forEach(new Predicate<>() {
                 int count = 0;
 
@@ -138,7 +139,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 @RequiredReadAction
                 public boolean test(PsiClass subClass) {
                     if (++count > 5) {
-                        result[0] = true;
+                        result.set(true);
                         return false;
                     }
                     PsiReferenceList list = subClass.getImplementsList();
@@ -147,25 +148,17 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                     }
                     PsiJavaCodeReferenceElement[] referenceElements = list.getReferenceElements();
                     for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
-                        PsiElement target = referenceElement.resolve();
-                        if (!(target instanceof PsiClass)) {
-                            result[0] = true;
-                            return false;
-                        }
-                        PsiClass aClass = (PsiClass)target;
-                        if (!aClass.isInterface()) {
-                            result[0] = true;
-                            return false;
-                        }
-                        if (aClass.findMethodBySignature(method, true) != null) {
-                            result[0] = true;
+                        if (!(referenceElement.resolve() instanceof PsiClass aClass)
+                            || !aClass.isInterface()
+                            || aClass.findMethodBySignature(method, true) != null) {
+                            result.set(true);
                             return false;
                         }
                     }
                     return true;
                 }
             });
-            return result[0];
+            return result.get();
         }
 
         private boolean isExcluded(PsiMethod method) {
@@ -174,7 +167,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 if (!method.isPrivate()) {
                     return false;
                 }
-                if (!MethodUtils.hasInThrows(method, "java.io.IOException")) {
+                if (!MethodUtils.hasInThrows(method, JavaClassNames.JAVA_IO_IO_EXCEPTION)) {
                     return false;
                 }
                 PsiType returnType = method.getReturnType();
@@ -193,7 +186,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 if (!method.isPrivate()) {
                     return false;
                 }
-                if (!MethodUtils.hasInThrows(method, "java.io.IOException", "java.lang.ClassNotFoundException")) {
+                if (!MethodUtils.hasInThrows(method, JavaClassNames.JAVA_IO_IO_EXCEPTION, "java.lang.ClassNotFoundException")) {
                     return false;
                 }
                 PsiType returnType = method.getReturnType();

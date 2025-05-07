@@ -19,6 +19,7 @@ import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.util.lang.StringUtil;
@@ -95,7 +96,7 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
       }
     } else {
       PsiType collectionType = JavaPsiFacade.getInstance(variable.getProject()).getElementFactory()
-          .createTypeByFQClassName("java.util.Collection", variable.getResolveScope());
+          .createTypeByFQClassName(JavaClassNames.JAVA_UTIL_COLLECTION, variable.getResolveScope());
       if (!collectionType.isAssignableFrom(variable.getType())) return;
       final PsiTypeElement[] typeParameterElements = ref.getParameterList().getTypeParameterElements();
       for (PsiTypeElement typeParameterElement : typeParameterElements) {

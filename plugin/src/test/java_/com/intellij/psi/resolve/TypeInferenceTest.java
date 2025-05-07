@@ -23,7 +23,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals( "java.lang.String", paramTypes[0].getCanonicalText());
+    assertEquals( JavaClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInAssign2() throws Exception {
@@ -54,7 +54,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     PsiSubstitutor substitutor = resolveResult.getSubstitutor();
     PsiMethod method = (PsiMethod)resolveResult.getElement();
     PsiType type = substitutor.substitute(method.getTypeParameters()[0]);
-    assertEquals("java.lang.String", type.getCanonicalText());
+    assertEquals(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
   }
 
   private PsiReferenceExpression configure() throws Exception {
@@ -85,7 +85,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferWithWildcards1 () throws Exception {
-    checkResolvesTo("java.lang.String");
+    checkResolvesTo(JavaClassNames.JAVA_LANG_STRING);
   }
 
   public void testInferWithWildcards2 () throws Exception {
@@ -109,7 +109,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferAutoboxed () throws Exception {
-    checkResolvesTo("java.lang.Integer");
+    checkResolvesTo(JavaClassNames.JAVA_LANG_INTEGER);
   }
 
   public void testInferWithVarargs1 () throws Exception {

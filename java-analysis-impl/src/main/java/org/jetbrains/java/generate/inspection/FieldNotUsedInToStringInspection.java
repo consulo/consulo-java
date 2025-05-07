@@ -18,6 +18,7 @@ package org.jetbrains.java.generate.inspection;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -158,10 +159,10 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       }
       @NonNls final String qualifiedName = containingClass.getQualifiedName();
       if ("getDeclaredFields".equals(name)) {
-        return "java.lang.Class".equals(qualifiedName);
+        return JavaClassNames.JAVA_LANG_CLASS.equals(qualifiedName);
       } else if ("toString".equals(name)) {
         return "org.apache.commons.lang.builder.ReflectionToStringBuilder".equals(qualifiedName) ||
-            "java.util.Objects".equals(qualifiedName);
+            JavaClassNames.JAVA_UTIL_OBJECTS.equals(qualifiedName);
       }
       return false;
     }

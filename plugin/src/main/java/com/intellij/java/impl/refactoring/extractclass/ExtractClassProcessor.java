@@ -39,6 +39,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.application.Result;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -795,11 +796,11 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         PsiManager manager = sourceClass.getManager();
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
         if (usesDefaultSerialization(sourceClass)) {
-            PsiClass serializable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.io.Serializable", scope);
+            PsiClass serializable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_IO_SERIALIZABLE, scope);
             out.add(serializable);
         }
         if (usesDefaultClone(sourceClass)) {
-            PsiClass cloneable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.lang.Cloneable", scope);
+            PsiClass cloneable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_CLONEABLE, scope);
             out.add(cloneable);
         }
         return out;
@@ -819,7 +820,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         Project project = aClass.getProject();
         PsiManager manager = aClass.getManager();
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-        PsiClass cloneable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.lang.Cloneable", scope);
+        PsiClass cloneable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_CLONEABLE, scope);
         if (!InheritanceUtil.isInheritorOrSelf(aClass, cloneable, true)) {
             return false;
         }
@@ -838,7 +839,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         Project project = aClass.getProject();
         PsiManager manager = aClass.getManager();
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-        PsiClass serializable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.io.Serializable", scope);
+        PsiClass serializable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_IO_SERIALIZABLE, scope);
         if (!InheritanceUtil.isInheritorOrSelf(aClass, serializable, true)) {
             return false;
         }

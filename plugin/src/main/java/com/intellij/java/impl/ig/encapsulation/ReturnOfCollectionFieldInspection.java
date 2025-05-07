@@ -83,22 +83,22 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[1];
     final String text = referenceExpression.getText();
     if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_MAP)) {
-      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, "java.util.SortedMap")) {
-        return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableSortedMap(" + text + ')', "java.util.SortedMap");
+      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SORTED_MAP)) {
+        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedMap(" + text + ')', JavaClassNames.JAVA_UTIL_SORTED_MAP);
       }
-      return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableMap(" + text + ')', JavaClassNames.JAVA_UTIL_MAP);
+      return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableMap(" + text + ')', JavaClassNames.JAVA_UTIL_MAP);
     }
     else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_COLLECTION)) {
       if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SET)) {
-        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, "java.util.SortedSet")) {
-          return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableSortedSet(" + text + ')', "java.util.SortedSet");
+        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SORTED_SET)) {
+          return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedSet(" + text + ')', JavaClassNames.JAVA_UTIL_SORTED_SET);
         }
-        return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableSet(" + text + ')', JavaClassNames.JAVA_UTIL_SET);
+        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSet(" + text + ')', JavaClassNames.JAVA_UTIL_SET);
       }
       else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_LIST)) {
-        return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableList(" + text + ')', JavaClassNames.JAVA_UTIL_LIST);
+        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableList(" + text + ')', JavaClassNames.JAVA_UTIL_LIST);
       }
-      return new ReturnOfCollectionFieldFix("java.util.Collections.unmodifiableCollection(" + text + ')', "java.util.Collection");
+      return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableCollection(" + text + ')', JavaClassNames.JAVA_UTIL_COLLECTION);
     }
     return null;
   }

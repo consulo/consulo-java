@@ -43,6 +43,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.request.ExceptionRequest;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -184,7 +185,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 
     @Override
     public String getEventMessage(LocatableEvent event) {
-        String exceptionName = (getQualifiedName() != null) ? getQualifiedName() : "java.lang.Throwable";
+        String exceptionName = (getQualifiedName() != null) ? getQualifiedName() : JavaClassNames.JAVA_LANG_THROWABLE;
         String threadName = null;
         if (event instanceof ExceptionEvent) {
             ExceptionEvent exceptionEvent = (ExceptionEvent) event;

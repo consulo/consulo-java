@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
@@ -64,7 +65,7 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
       final String qualifiedName = superClass.getQualifiedName();
       if ("java.util.LinkedHashMap".equals(qualifiedName)) {
         final PsiMethod[] methods = aClass.findMethodsByName("removeEldestEntry", false);
-        final PsiClassType entryType = TypeUtils.getType("java.util.Map.Entry", aClass);
+        final PsiClassType entryType = TypeUtils.getType(JavaClassNames.JAVA_UTIL_MAP_ENTRY, aClass);
         for (PsiMethod method : methods) {
           if (!PsiType.BOOLEAN.equals(method.getReturnType())) {
             continue;

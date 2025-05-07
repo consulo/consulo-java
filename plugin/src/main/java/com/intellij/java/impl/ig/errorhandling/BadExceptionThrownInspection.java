@@ -26,6 +26,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
@@ -43,13 +44,13 @@ public class BadExceptionThrownInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public final ExternalizableStringSet exceptions =
     new ExternalizableStringSet(
-      "java.lang.Throwable",
-      "java.lang.Exception",
-      "java.lang.Error",
-      "java.lang.RuntimeException",
-      "java.lang.NullPointerException",
-      "java.lang.ClassCastException",
-      "java.lang.ArrayIndexOutOfBoundsException"
+      JavaClassNames.JAVA_LANG_THROWABLE,
+      JavaClassNames.JAVA_LANG_EXCEPTION,
+      JavaClassNames.JAVA_LANG_ERROR,
+      JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+      JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
+      JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
+      JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
     );
 
   public BadExceptionThrownInspection() {
@@ -82,7 +83,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
     return UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-      "java.lang.Throwable"
+        JavaClassNames.JAVA_LANG_THROWABLE
     );
   }
 

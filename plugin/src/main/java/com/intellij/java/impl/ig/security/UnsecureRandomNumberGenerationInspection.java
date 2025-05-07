@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -102,7 +103,7 @@ public class UnsecureRandomNumberGenerationInspection
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (!"java.lang.Math".equals(className)) {
+      if (!JavaClassNames.JAVA_LANG_MATH.equals(className)) {
         return;
       }
       registerMethodCallError(expression, expression);
