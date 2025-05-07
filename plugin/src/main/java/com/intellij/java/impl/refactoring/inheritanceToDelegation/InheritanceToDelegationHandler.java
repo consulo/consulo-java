@@ -39,6 +39,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -91,8 +92,9 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     Editor editor = dataContext.getData(Editor.KEY);
     if (aClass.isInterface()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.classIsInterface(aClass.getQualifiedName()).get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.classIsInterface(aClass.getQualifiedName()));
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
       return;
     }
 
@@ -106,10 +108,10 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     final PsiClass[] bases = aClass.getSupers();
     @NonNls final String javaLangObject = JavaClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
-      String message = RefactoringBundle.getCannotRefactorMessage(
-        RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName()).get()
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+        RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName())
       );
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
       return;
     }
 

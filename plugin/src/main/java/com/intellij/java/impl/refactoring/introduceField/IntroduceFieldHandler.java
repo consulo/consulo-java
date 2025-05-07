@@ -31,6 +31,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
@@ -54,8 +55,8 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
   protected boolean validClass(PsiClass parentClass, Editor editor) {
     if (parentClass.isInterface()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotIntroduceFieldInInterface().get());
-      CommonRefactoringUtil.showErrorHint(parentClass.getProject(), editor, message, REFACTORING_NAME, getHelpID());
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.cannotIntroduceFieldInInterface());
+      CommonRefactoringUtil.showErrorHint(parentClass.getProject(), editor, message.get(), REFACTORING_NAME, getHelpID());
       return false;
     }
     else {
@@ -200,9 +201,9 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
   protected boolean invokeImpl(final Project project, PsiLocalVariable localVariable, final Editor editor) {
     final PsiElement parent = localVariable.getParent();
     if (!(parent instanceof PsiDeclarationStatement)) {
-      String message =
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, getHelpID());
       return false;
     }
     LocalToFieldHandler localToFieldHandler = new LocalToFieldHandler(project, false) {

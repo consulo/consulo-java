@@ -177,11 +177,12 @@ public class MoveClassesOrPackagesImpl {
                 }
 
                 if (names.contains(name)) {
-                    String message = RefactoringBundle
-                        .getCannotRefactorMessage(RefactoringLocalize.thereAreGoingToBeMultipleDestinationFilesWithTheSameName().get());
+                    LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+                        RefactoringLocalize.thereAreGoingToBeMultipleDestinationFilesWithTheSameName()
+                    );
                     CommonRefactoringUtil.showErrorMessage(
                         RefactoringLocalize.moveTitle().get(),
-                        message,
+                        message.get(),
                         HelpID.getMoveHelpID(element),
                         project
                     );

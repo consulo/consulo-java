@@ -25,6 +25,7 @@ import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -58,8 +59,9 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     } else if (element instanceof PsiClass psiClass) {
       invoke(psiClass, editor);
     } else {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME.get(), HelpID.CHANGE_SIGNATURE);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.CHANGE_SIGNATURE);
     }
   }
 
@@ -107,8 +109,9 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     final PsiTypeParameterList typeParameterList = aClass.getTypeParameterList();
     Project project = aClass.getProject();
     if (typeParameterList == null) {
-      final String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.changeclasssignatureNoTypeParameters().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME.get(), HelpID.CHANGE_CLASS_SIGNATURE);
+      LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.changeclasssignatureNoTypeParameters());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.CHANGE_CLASS_SIGNATURE);
       return;
     }
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) {

@@ -45,6 +45,7 @@ import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -71,8 +72,8 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
         return;
       }
       if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
@@ -93,15 +94,16 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
     Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
     if (mySubclass.isInterface()) {
-      String message =
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
       return;
     }
 
     if (mySubclass.isEnum()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+      LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
       return;
     }
 

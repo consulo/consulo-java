@@ -83,7 +83,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
     final PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
     final String cannotRefactorMessage = getCannotRefactorMessage(member);
     if (cannotRefactorMessage != null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(cannotRefactorMessage);
+      String message = RefactoringLocalize.cannotPerformRefactoringWithReason(cannotRefactorMessage).get();
       showErrorMessage(message, project, editor);
       return;
     }

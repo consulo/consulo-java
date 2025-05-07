@@ -54,8 +54,8 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     if (element instanceof PsiIdentifier) element = element.getParent();
 
     if (!(element instanceof PsiMethod)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethod().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionMethod());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
     if (LOG.isDebugEnabled()) {
@@ -95,7 +95,7 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
       }
     }
     if (suitableParameters.isEmpty()) {
-      LocalizeValue message = null;
+      LocalizeValue message;
       if (!classTypesFound) {
         message = RefactoringLocalize.converttoinstancemethodNoParametersWithReferenceType();
       }
@@ -105,12 +105,15 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
       else if (!classesInProjectFound) {
         message = RefactoringLocalize.converttoinstancemethodAllReferenceTypeParametersAreNotInProject();
       }
-      LOG.assertTrue(message != null);
+      else {
+        LOG.assertTrue(false);
+        return;
+      }
       Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(message.get()),
+        RefactoringLocalize.cannotPerformRefactoringWithReason(message).get(),
         REFACTORING_NAME,
         HelpID.CONVERT_TO_INSTANCE_METHOD
       );

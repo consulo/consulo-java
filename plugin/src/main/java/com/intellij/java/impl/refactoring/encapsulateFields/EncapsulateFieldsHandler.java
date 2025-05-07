@@ -19,6 +19,7 @@ import java.util.HashSet;
 
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
@@ -46,14 +47,14 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
         return;
       }
       if (element instanceof PsiField field) {
         if (field.getContainingClass() == null) {
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.theFieldShouldBeDeclaredInAClass().get());
-          CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
+          LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.theFieldShouldBeDeclaredInAClass());
+          CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
           return;
         }
         invoke(project, new PsiElement[]{element}, dataContext);
@@ -98,10 +99,11 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
             preselectedFields.add(field);
           }
           else {
-            String message = RefactoringBundle.getCannotRefactorMessage(
-              RefactoringLocalize.fieldsToBeRefactoredShouldBelongToTheSameClass().get());
+            LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+                RefactoringLocalize.fieldsToBeRefactoredShouldBelongToTheSameClass()
+            );
             Editor editor = dataContext.getData(Editor.KEY);
-            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
+            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
             return;
           }
         }
@@ -122,10 +124,11 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     }
 
     if (aClass.isInterface()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(
-        RefactoringLocalize.encapsulateFieldsRefactoringCannotBeAppliedToInterface().get());
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+        RefactoringLocalize.encapsulateFieldsRefactoringCannotBeAppliedToInterface()
+      );
       Editor editor = dataContext.getData(Editor.KEY);
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
       return;
     }
 

@@ -39,6 +39,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
@@ -59,9 +60,10 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
 
   private void invokeOnElements(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
     if (elements.length == 0) {
-      String message = RefactoringBundle
-        .getCannotRefactorMessage(RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, ExtractMethodObjectProcessor.REFACTORING_NAME, HelpID.EXTRACT_METHOD_OBJECT);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+        RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression()
+      );
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), ExtractMethodObjectProcessor.REFACTORING_NAME, HelpID.EXTRACT_METHOD_OBJECT);
       return;
     }
 
