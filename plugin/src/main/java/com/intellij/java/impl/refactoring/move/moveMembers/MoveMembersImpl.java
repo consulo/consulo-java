@@ -61,9 +61,9 @@ public class MoveMembersImpl {
     final Set<PsiMember> preselectMembers = new HashSet<PsiMember>();
     for (PsiElement element : elements) {
       if (element instanceof PsiMember && !sourceClass.equals(((PsiMember)element).getContainingClass())) {
-        String message = RefactoringBundle.getCannotRefactorMessage(
-          RefactoringLocalize.membersToBeMovedShouldBelongToTheSameClass().get());
-        CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+          RefactoringLocalize.membersToBeMovedShouldBelongToTheSameClass());
+        CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, project);
         return;
       }
       if (element instanceof PsiField) {

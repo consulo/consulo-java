@@ -66,9 +66,11 @@ import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
@@ -97,6 +99,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     myIsConstant = isConstant;
   }
 
+  @RequiredUIAccess
   protected boolean invokeImpl(final Project project, @Nonnull final PsiExpression selectedExpr, final Editor editor) {
     final PsiElement element = getPhysicalElement(selectedExpr);
 
@@ -109,14 +112,14 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
 
     final PsiType tempType = getTypeByExpression(selectedExpr);
     if (tempType == null || LambdaUtil.notInferredType(tempType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.unknownExpressionType().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, getRefactoringName(), getHelpID());
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.unknownExpressionType());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), getRefactoringName(), getHelpID());
       return false;
     }
 
     if (PsiType.VOID.equals(tempType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedExpressionHasVoidType().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, getRefactoringName(), getHelpID());
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedExpressionHasVoidType());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), getRefactoringName(), getHelpID());
       return false;
     }
 

@@ -82,12 +82,12 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     final PsiAnonymousClass anonymousClass = findAnonymousClass(file, offset);
     if (anonymousClass == null) {
-      showErrorMessage(editor, RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionAnonymous().get()));
+      showErrorMessage(editor, RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionAnonymous()).get());
       return;
     }
     final PsiElement parent = anonymousClass.getParent();
     if (parent instanceof PsiEnumConstant) {
-      showErrorMessage(editor, RefactoringBundle.getCannotRefactorMessage("Enum constant can't be converted to inner class"));
+      showErrorMessage(editor, RefactoringLocalize.cannotPerformRefactoringWithReason(LocalizeValue.localizeTODO("Enum constant can't be converted to inner class")).get());
       return;
     }
     invoke(project, editor, anonymousClass);

@@ -532,7 +532,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     if (expr != null) {
       final String errorMessage = getErrorMessage(expr);
       if (errorMessage != null) {
-        showErrorMessage(project, editor, RefactoringBundle.getCannotRefactorMessage(errorMessage));
+        showErrorMessage(project, editor, RefactoringLocalize.cannotPerformRefactoringWithReason(errorMessage).get());
         return false;
       }
     }
@@ -549,23 +549,24 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         return false;
       }
       if (expr == null) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedBlockShouldRepresentAnExpression().get());
-        showErrorMessage(project, editor, message);
+        LocalizeValue message =
+            RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedBlockShouldRepresentAnExpression());
+        showErrorMessage(project, editor, message.get());
         return false;
       }
     }
 
 
-    final PsiType originalType = RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
+    PsiType originalType = RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
     if (originalType == null || LambdaUtil.notInferredType(originalType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.unknownExpressionType().get());
-      showErrorMessage(project, editor, message);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.unknownExpressionType());
+      showErrorMessage(project, editor, message.get());
       return false;
     }
 
     if (PsiType.VOID.equals(originalType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedExpressionHasVoidType().get());
-      showErrorMessage(project, editor, message);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedExpressionHasVoidType());
+      showErrorMessage(project, editor, message.get());
       return false;
     }
 
@@ -591,8 +592,9 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     }
 
     if (!NotInSuperCallOccurrenceFilter.INSTANCE.isOK(expr)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotIntroduceVariableInSuperConstructorCall().get());
-      showErrorMessage(project, editor, message);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.cannotIntroduceVariableInSuperConstructorCall());
+      showErrorMessage(project, editor, message.get());
       return false;
     }
 
@@ -1126,8 +1128,8 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         PsiMethod method = ((PsiMethodCallExpression) enclosingExpr).resolveMethod();
         if (method != null && method.isConstructor()) {
           //This is either 'this' or 'super', both must be the first in the respective contructor
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invalidExpressionContext().get());
-          CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpID);
+          LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.invalidExpressionContext());
+          CommonRefactoringUtil.showErrorHint(project, editor, message.get(), refactoringName, helpID);
           return true;
         }
       }

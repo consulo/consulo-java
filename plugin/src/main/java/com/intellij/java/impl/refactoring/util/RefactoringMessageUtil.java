@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDirectory;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
 import consulo.virtualFileSystem.VirtualFile;
@@ -75,7 +75,8 @@ public class RefactoringMessageUtil {
   }
 
   public static void showNotSupportedForJspClassesError(final Project project, Editor editor, final String refactoringName, final String helpId) {
-    String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.refactoringIsNotSupportedForJspClasses().get());
-    CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpId);
+    LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.refactoringIsNotSupportedForJspClasses());
+    CommonRefactoringUtil.showErrorHint(project, editor, message.get(), refactoringName, helpId);
   }
 }

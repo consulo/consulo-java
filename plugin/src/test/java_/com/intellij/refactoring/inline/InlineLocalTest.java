@@ -7,6 +7,8 @@ import static org.junit.Assert.fail;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.inline.InlineLocalHandler;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiElement;
@@ -94,8 +96,9 @@ public abstract class InlineLocalTest extends LightCodeInsightTestCase {
     catch(RuntimeException ex) {
       exception = ex.getMessage();
     }
-    String error = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.is.accessed.for.writing", "text"));
-    assertEquals(error, exception);
+    LocalizeValue error =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting("text"));
+    assertEquals(error.get(), exception);
   }
 
   public void testUsedInInnerClass() throws Exception {       // IDEADEV-28786

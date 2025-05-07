@@ -33,6 +33,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
@@ -49,8 +50,8 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
         return;
       }
       if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
@@ -71,10 +72,10 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
     ArrayList basesList = RefactoringHierarchyUtil.createBasesList(subClass, true, true);
 
     if (basesList.isEmpty()) {
-      String message =
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.interfaceDoesNotHaveBaseInterfaces(subClass.getQualifiedName()).get());
+      LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.interfaceDoesNotHaveBaseInterfaces(subClass.getQualifiedName()));
       Editor editor = dataContext.getData(Editor.KEY);
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
       return;
     }
 

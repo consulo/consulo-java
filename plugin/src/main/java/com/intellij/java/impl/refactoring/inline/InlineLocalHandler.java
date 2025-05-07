@@ -123,8 +123,10 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
 
     final PsiCodeBlock containerBlock = PsiTreeUtil.getParentOfType(local, PsiCodeBlock.class);
     if (containerBlock == null) {
-      final String message = RefactoringBundle.getCannotRefactorMessage("Variable is declared outside a code block");
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+          LocalizeValue.localizeTODO("Variable is declared outside a code block")
+      );
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
       return;
     }
 
@@ -132,12 +134,12 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         ? getDefToInline(local, refExpr, containerBlock)
         : getDefToInline(local, innerClassesWithUsages.get(0), containerBlock);
     if (defToInline == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
         refExpr == null
-          ? RefactoringLocalize.variableHasNoInitializer(localName).get()
-          : RefactoringBundle.message("variable.has.no.dominating.definition", localName)
+          ? RefactoringLocalize.variableHasNoInitializer(localName)
+          : LocalizeValue.localizeTODO(RefactoringBundle.message("variable.has.no.dominating.definition", localName))
       );
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
       return;
     }
 
@@ -162,8 +164,9 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       final PsiElement[] defs = DefUseUtil.getDefs(containerBlock, local, refExpr);
       LOG.assertTrue(defs.length > 0);
       highlightManager.addOccurrenceHighlights(editor, defs, attributes, true, null);
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsAccessedForWriting(localName).get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
       WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
       return;
     }
@@ -203,9 +206,9 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       if (!isSameDefinition) {
         highlightManager.addOccurrenceHighlights(editor, defs, writeAttributes, true, null);
         highlightManager.addOccurrenceHighlights(editor, new PsiElement[]{ref}, attributes, true, null);
-        String message =
-          RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsAccessedForWritingAndUsedWithInlined(localName).get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+            RefactoringLocalize.variableIsAccessedForWritingAndUsedWithInlined(localName));
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
         WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }
@@ -214,8 +217,9 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     final PsiElement writeAccess = checkRefsInAugmentedAssignmentOrUnaryModified(refsToInline);
     if (writeAccess != null) {
       HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{writeAccess}, writeAttributes, true, null);
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsAccessedForWriting(localName).get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+      LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
       WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
       return;
     }

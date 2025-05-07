@@ -54,7 +54,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrVariableName().get()),
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionMethodOrVariableName()).get(),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );
@@ -68,7 +68,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invertBooleanWrongType().get()),
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.invertBooleanWrongType()).get(),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );
@@ -100,7 +100,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invertBooleanWrongType().get()),
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.invertBooleanWrongType()).get(),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );

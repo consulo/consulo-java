@@ -33,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.dataholder.Key;
@@ -195,8 +196,8 @@ public class ElementToWorkOn {
         }
       }
       if (expr == null) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpId);
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName());
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), refactoringName, helpId);
         return null;
       }
     }

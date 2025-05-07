@@ -35,6 +35,7 @@ import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -76,8 +77,9 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 
 		if (!(element instanceof PsiMethod))
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethod().get());
-			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
+			LocalizeValue message =
+				RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionMethod());
+			CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
 			return;
 		}
 		if (LOG.isDebugEnabled())
@@ -175,7 +177,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		CommonRefactoringUtil.showErrorHint(
 			project,
 			editor,
-			RefactoringBundle.getCannotRefactorMessage(message),
+			RefactoringLocalize.cannotPerformRefactoringWithReason(message).get(),
 			REFACTORING_NAME,
 			HelpID.MOVE_INSTANCE_METHOD
 		);

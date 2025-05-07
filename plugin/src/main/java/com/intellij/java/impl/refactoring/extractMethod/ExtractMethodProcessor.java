@@ -79,6 +79,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
@@ -1685,10 +1686,10 @@ public class ExtractMethodProcessor implements MatchProvider {
       EditorColorsManager manager = EditorColorsManager.getInstance();
       TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       highlightManager.addOccurrenceHighlights(myEditor, exitStatementsArray, attributes, true, null);
-      String message = RefactoringBundle.getCannotRefactorMessage(
-        RefactoringLocalize.thereAreMultipleExitPointsInTheSelectedCodeFragment().get()
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+        RefactoringLocalize.thereAreMultipleExitPointsInTheSelectedCodeFragment()
       );
-      CommonRefactoringUtil.showErrorHint(myProject, myEditor, message, myRefactoringName, myHelpId);
+      CommonRefactoringUtil.showErrorHint(myProject, myEditor, message.get(), myRefactoringName, myHelpId);
       WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
     }
   }
@@ -1697,9 +1698,9 @@ public class ExtractMethodProcessor implements MatchProvider {
   private void showMultipleOutputMessage(PsiType expressionType) {
     if (myShowErrorDialogs) {
       StringBuilder buffer = new StringBuilder();
-      buffer.append(
-        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.thereAreMultipleOutputValuesForTheSelectedCodeFragment().get())
-      );
+      buffer.append(RefactoringLocalize.cannotPerformRefactoringWithReason(
+          RefactoringLocalize.thereAreMultipleOutputValuesForTheSelectedCodeFragment()
+      ));
       buffer.append("\n");
       if (myHasExpressionOutput) {
         buffer.append("    ").append(RefactoringLocalize.expressionResult()).append(": ");

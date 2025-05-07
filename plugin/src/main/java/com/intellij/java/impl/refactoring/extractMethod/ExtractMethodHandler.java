@@ -45,6 +45,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
@@ -167,10 +168,10 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
   ) {
     if (elements == null || elements.length == 0) {
       if (showErrorMessages) {
-        String message = RefactoringBundle.getCannotRefactorMessage(
-          RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression().get()
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+          RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression()
         );
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_METHOD);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_METHOD);
       }
       return null;
     }
@@ -178,10 +179,10 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     for (PsiElement element : elements) {
       if (element instanceof PsiStatement statement && JavaHighlightUtil.isSuperOrThisCall(statement, true, true)) {
         if (showErrorMessages) {
-          String message = RefactoringBundle.getCannotRefactorMessage(
-            RefactoringLocalize.selectedBlockContainsInvocationOfAnotherClassConstructor().get()
+          LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+            RefactoringLocalize.selectedBlockContainsInvocationOfAnotherClassConstructor()
           );
-          CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_METHOD);
+          CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_METHOD);
         }
         return null;
       }

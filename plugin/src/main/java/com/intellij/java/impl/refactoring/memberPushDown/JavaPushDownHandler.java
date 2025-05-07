@@ -20,6 +20,7 @@ import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.HelpID;
@@ -47,10 +48,10 @@ public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHa
 
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(
-          RefactoringLocalize.theCaretShouldBePositionedInsideAClassToPushMembersFrom().get()
+        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+          RefactoringLocalize.theCaretShouldBePositionedInsideAClassToPushMembersFrom()
         );
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MEMBERS_PUSH_DOWN);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.MEMBERS_PUSH_DOWN);
         return;
       }
 

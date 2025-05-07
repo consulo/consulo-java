@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
@@ -200,9 +201,9 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
     final PsiClass targetClass =
       JavaPsiFacade.getInstance(manager.getProject()).findClass(targetClassName, GlobalSearchScope.allScope(project));
     if (targetClass == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.class0NotFound(targetClassName).get());
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.class0NotFound(targetClassName));
       CommonRefactoringUtil.showErrorMessage(ReplaceConstructorWithFactoryHandler.REFACTORING_NAME,
-                                              message, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY, project);
+                                              message.get(), HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY, project);
       return;
     }
 

@@ -71,8 +71,9 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (!(element instanceof PsiLocalVariable)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalName().get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+      LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalName());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
 
@@ -88,8 +89,9 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     String localName = local.getName();
     final PsiExpression initializer = local.getInitializer();
     if (initializer == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableHasNoInitializer(localName).get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+      LocalizeValue message =
+        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableHasNoInitializer(localName));
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
 
@@ -97,8 +99,8 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       .toArray(new PsiReference[0]);
 
     if (refs.length == 0) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsNeverUsed(localName).get());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsNeverUsed(localName));
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
 
@@ -114,8 +116,9 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       if (!array.isEmpty()) {
         PsiReference[] refsForWriting = array.toArray(new PsiReference[array.size()]);
         highlightManager.addOccurrenceHighlights(editor, refsForWriting, attributes, true, null);
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsAccessedForWriting(localName).get());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+        LocalizeValue message =
+          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
         WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }

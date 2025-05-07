@@ -39,6 +39,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -72,8 +73,9 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 		if (!(element instanceof PsiTypeParameterListOwner))
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName().get());
-			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MAKE_METHOD_STATIC);
+			LocalizeValue message =
+				RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName());
+			CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.MAKE_METHOD_STATIC);
 			return;
 		}
 		if (LOG.isDebugEnabled())
@@ -158,35 +160,35 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	}
 
 	@Nullable
-	public static String validateTarget(final PsiTypeParameterListOwner member)
+	public static String validateTarget(PsiTypeParameterListOwner member)
 	{
-		final PsiClass containingClass = member.getContainingClass();
+		PsiClass containingClass = member.getContainingClass();
 
 		// Checking various preconditions
 		if (member instanceof PsiMethod && ((PsiMethod) member).isConstructor())
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.constructorCannotBeMadeStatic().get());
+			return RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.constructorCannotBeMadeStatic()).get();
 		}
 
 		if (member.getContainingClass() == null)
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.thisMemberDoesNotSeemToBelongToAnyClass().get());
+			return RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.thisMemberDoesNotSeemToBelongToAnyClass()).get();
 		}
 
-		if (member.hasModifierProperty(PsiModifier.STATIC))
+		if (member.isStatic())
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.memberIsAlreadyStatic().get());
+			return RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.memberIsAlreadyStatic()).get();
 		}
 
-		if (member instanceof PsiMethod && member.hasModifierProperty(PsiModifier.ABSTRACT))
+		if (member instanceof PsiMethod && member.isAbstract())
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotMakeAbstractMethodStatic().get());
+			return RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.cannotMakeAbstractMethodStatic()).get();
 		}
 
 		if (containingClass instanceof PsiAnonymousClass
-			|| (containingClass.getContainingClass() != null && !containingClass.hasModifierProperty(PsiModifier.STATIC)))
+			|| (containingClass.getContainingClass() != null && !containingClass.isStatic()))
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.innerClassesCannotHaveStaticMembers().get());
+			return RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.innerClassesCannotHaveStaticMembers()).get();
 		}
 		return null;
 	}
