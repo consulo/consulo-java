@@ -8,6 +8,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -60,15 +62,15 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
             return;
         }
         String typeParameters = "";
-        if (myCollectionName.equals(CommonClassNames.JAVA_UTIL_HASH_MAP)) {
-            PsiType keyParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_UTIL_MAP, 0, false);
-            PsiType valueParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_UTIL_MAP, 1, false);
+        if (myCollectionName.equals(JavaClassNames.JAVA_UTIL_HASH_MAP)) {
+            PsiType keyParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_MAP, 0, false);
+            PsiType valueParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_MAP, 1, false);
             if (keyParameter != null && valueParameter != null) {
                 typeParameters = "<" + keyParameter.getCanonicalText() + "," + valueParameter.getCanonicalText() + ">";
             }
         }
         else {
-            PsiType elementParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_LANG_ITERABLE, 0, false);
+            PsiType elementParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_LANG_ITERABLE, 0, false);
             if (elementParameter != null) {
                 typeParameters = "<" + elementParameter.getCanonicalText() + ">";
             }
@@ -83,6 +85,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
     }
 
     @Nullable
+    @RequiredReadAction
     public static WrapWithMutableCollectionFix createFix(@Nonnull PsiElement anchor, boolean onTheFly) {
         PsiLocalVariable variable = getVariable(anchor);
         if (variable == null) {
@@ -107,23 +110,21 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
     }
 
     @Nullable
+    @RequiredReadAction
     private static PsiLocalVariable getVariable(@Nonnull PsiElement anchor) {
-        if (anchor.getParent() instanceof PsiReferenceExpression && anchor.getParent().getParent() instanceof PsiCallExpression) {
-            anchor = ((PsiReferenceExpression)anchor.getParent()).getQualifierExpression();
+        if (anchor.getParent() instanceof PsiReferenceExpression refExpr && refExpr.getParent() instanceof PsiCallExpression) {
+            anchor = refExpr.getQualifierExpression();
         }
-        if (!(anchor instanceof PsiExpression)) {
-            return null;
-        }
-        return ExpressionUtils.resolveLocalVariable((PsiExpression)anchor);
+        return anchor instanceof PsiExpression expression ? ExpressionUtils.resolveLocalVariable(expression) : null;
     }
 
     @Contract("null -> null")
     @Nullable
     private static String getWrapperByType(PsiType type) {
-        if (!(type instanceof PsiClassType)) {
+        if (!(type instanceof PsiClassType classType)) {
             return null;
         }
-        PsiClass aClass = ((PsiClassType)type).resolve();
+        PsiClass aClass = classType.resolve();
         if (aClass == null) {
             return null;
         }
@@ -131,16 +132,12 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
         if (name == null) {
             return null;
         }
-        switch (name) {
-            case CommonClassNames.JAVA_LANG_ITERABLE:
-            case CommonClassNames.JAVA_UTIL_COLLECTION:
-            case CommonClassNames.JAVA_UTIL_LIST:
-                return CommonClassNames.JAVA_UTIL_ARRAY_LIST;
-            case CommonClassNames.JAVA_UTIL_SET:
-                return CommonClassNames.JAVA_UTIL_HASH_SET;
-            case CommonClassNames.JAVA_UTIL_MAP:
-                return CommonClassNames.JAVA_UTIL_HASH_MAP;
-        }
-        return null;
+        return switch (name) {
+            case JavaClassNames.JAVA_LANG_ITERABLE, JavaClassNames.JAVA_UTIL_COLLECTION, JavaClassNames.JAVA_UTIL_LIST ->
+                JavaClassNames.JAVA_UTIL_ARRAY_LIST;
+            case JavaClassNames.JAVA_UTIL_SET -> JavaClassNames.JAVA_UTIL_HASH_SET;
+            case JavaClassNames.JAVA_UTIL_MAP -> JavaClassNames.JAVA_UTIL_HASH_MAP;
+            default -> null;
+        };
     }
 }

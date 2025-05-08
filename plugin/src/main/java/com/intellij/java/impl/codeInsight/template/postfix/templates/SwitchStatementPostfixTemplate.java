@@ -6,11 +6,13 @@ import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTempl
 import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.DumbAware;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.impl.JavaBundle;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionSelector;
@@ -36,7 +38,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
         }
 
         return DumbService.getInstance(expression.getProject()).computeWithAlternativeResolveEnabled(() -> {
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
 
             if (type == null) {
                 return false;
@@ -49,13 +51,13 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                     return true;
                 }
 
-                final PsiClass psiClass = classType.resolve();
+                PsiClass psiClass = classType.resolve();
                 if (psiClass != null && psiClass.isEnum()) {
                     return true;
                 }
             }
 
-            if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING) && expression.getContainingFile() instanceof PsiJavaFile javaFile) {
+            if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING) && expression.getContainingFile() instanceof PsiJavaFile javaFile) {
                 if (PsiUtil.isAvailable(JavaFeature.STRING_SWITCH, javaFile)) {
                     return true;
                 }
@@ -79,6 +81,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
             }
 
             @Override
+            @RequiredReadAction
             public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException {
                 PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
                 CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
@@ -98,6 +101,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
             }
 
             @Nonnull
+            @RequiredReadAction
             private static TextRange postprocessSwitch(
                 Editor editor,
                 PsiExpression expr,
@@ -135,6 +139,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
     public static PostfixTemplateExpressionSelector selectorTopmost(Predicate<? super PsiElement> additionalFilter) {
         return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
             @Override
+            @RequiredReadAction
             protected List<PsiElement> getNonFilteredExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
                 boolean isEnhancedSwitchAvailable = PsiUtil.isAvailable(JavaFeature.ENHANCED_SWITCH, context);
                 List<PsiElement> result = new ArrayList<>();
@@ -145,10 +150,11 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                     if (parent instanceof PsiExpressionStatement) {
                         result.add(element);
                     }
-                    else if (isEnhancedSwitchAvailable && (isVariableInitializer(element, parent) ||
-                        isRightSideOfAssignment(element, parent) ||
-                        isReturnValue(element, parent) ||
-                        isArgumentList(parent))) {
+                    else if (isEnhancedSwitchAvailable
+                        && (isVariableInitializer(element, parent)
+                        || isRightSideOfAssignment(element, parent)
+                        || isReturnValue(element, parent)
+                        || isArgumentList(parent))) {
                         result.add(element);
                     }
                 }
@@ -167,15 +173,15 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
             }
 
             private static boolean isVariableInitializer(PsiElement element, PsiElement parent) {
-                return parent instanceof PsiVariable && ((PsiVariable)parent).getInitializer() == element;
+                return parent instanceof PsiVariable variable && variable.getInitializer() == element;
             }
 
             private static boolean isRightSideOfAssignment(PsiElement element, PsiElement parent) {
-                return parent instanceof PsiAssignmentExpression && ((PsiAssignmentExpression)parent).getRExpression() == element;
+                return parent instanceof PsiAssignmentExpression assignment && assignment.getRExpression() == element;
             }
 
             private static boolean isReturnValue(PsiElement element, PsiElement parent) {
-                return parent instanceof PsiReturnStatement && ((PsiReturnStatement)parent).getReturnValue() == element;
+                return parent instanceof PsiReturnStatement returnStmt && returnStmt.getReturnValue() == element;
             }
 
             private static boolean isArgumentList(PsiElement parent) {

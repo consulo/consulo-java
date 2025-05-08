@@ -2,10 +2,10 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 public class TransformInliner implements CallInliner {
@@ -23,7 +23,7 @@ public class TransformInliner implements CallInliner {
         CallMatcher.instanceCall("io.reactivex.rxjava3.core.Maybe", "to").parameterCount(1),
         CallMatcher.instanceCall("io.reactivex.rxjava3.core.Observable", "to").parameterCount(1),
         CallMatcher.instanceCall("io.reactivex.rxjava3.core.Single", "to").parameterCount(1),
-        CallMatcher.instanceCall(CommonClassNames.JAVA_LANG_STRING, "transform").parameterCount(1),
+        CallMatcher.instanceCall(JavaClassNames.JAVA_LANG_STRING, "transform").parameterCount(1),
         CallMatcher.instanceCall("one.util.streamex.BaseStreamEx", "chain").parameterCount(1)
     );
 
