@@ -34,6 +34,7 @@ import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoi
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.execution.configurations.RemoteConnection;
+import consulo.application.Application;
 import consulo.component.ProcessCanceledException;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.breakpoint.XBreakpoint;
@@ -74,13 +75,12 @@ public class DebugProcessEvents extends DebugProcessImpl {
     }
 
     @Override
-    @RequiredUIAccess
     protected void commitVM(VirtualMachine vm) {
         super.commitVM(vm);
         if (vm != null) {
             vmAttached();
             myEventThread = new DebuggerEventThread();
-            UIAccess.assertIsUIThread();
+            Application.get().executeOnPooledThread(myEventThread);
         }
     }
 

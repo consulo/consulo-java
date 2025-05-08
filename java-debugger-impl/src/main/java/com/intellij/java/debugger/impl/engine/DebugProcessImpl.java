@@ -297,7 +297,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
     private static final String ourTrace = Platform.current().jvm().getRuntimeProperty("idea.debugger.trace");
 
-    @RequiredUIAccess
     @SuppressWarnings({"HardCodedStringLiteral"})
     protected void commitVM(VirtualMachine vm) {
         if (!isInInitialState()) {
@@ -643,7 +642,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         return null;
     }
 
-    @RequiredUIAccess
     private void checkVirtualMachineVersion(VirtualMachine vm) {
         String version = vm.version();
         if ("1.4.0".equals(version)) {
