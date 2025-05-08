@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.progress.ProgressManager;
@@ -52,8 +53,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
-import consulo.ui.UIAccess;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.IdeActions;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
@@ -93,11 +92,13 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     private final Option myServiceOption =
         new Option("java.service", JavaLocalize.gutterService().get(), JavaPsiImplIconGroup.gutterJava9service());
 
+    protected final Application myApplication;
     protected final DaemonCodeAnalyzerSettings myDaemonSettings;
     protected final EditorColorsManager myColorsManager;
 
     @Inject
-    public JavaLineMarkerProvider(DaemonCodeAnalyzerSettings daemonSettings, EditorColorsManager colorsManager) {
+    public JavaLineMarkerProvider(Application application, DaemonCodeAnalyzerSettings daemonSettings, EditorColorsManager colorsManager) {
+        myApplication = application;
         myDaemonSettings = daemonSettings;
         myColorsManager = colorsManager;
     }
@@ -216,9 +217,9 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     }
 
     @Override
-    @RequiredUIAccess
+    @RequiredReadAction
     public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
-        UIAccess.assertIsUIThread();
+        myApplication.assertReadAccessAllowed();
 
         List<Supplier<List<LineMarkerInfo<PsiElement>>>> tasks = new ArrayList<>();
 
