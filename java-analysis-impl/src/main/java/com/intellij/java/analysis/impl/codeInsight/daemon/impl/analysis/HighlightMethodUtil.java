@@ -515,16 +515,14 @@ public class HighlightMethodUtil {
                     hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .descriptionAndTooltip(errorMessage)
                         .range(fixRange);
-                    if (hlBuilder != null) {
-                        registerMethodCallIntentions(hlBuilder, methodCall, list, resolveHelper);
-                        registerMethodReturnFixAction(hlBuilder, (MethodCandidateInfo)resolveResult, methodCall);
-                        registerTargetTypeFixesBasedOnApplicabilityInference(
-                            methodCall,
-                            (MethodCandidateInfo)resolveResult,
-                            (PsiMethod)resolved,
-                            hlBuilder
-                        );
-                    }
+                    registerMethodCallIntentions(hlBuilder, methodCall, list, resolveHelper);
+                    registerMethodReturnFixAction(hlBuilder, (MethodCandidateInfo)resolveResult, methodCall);
+                    registerTargetTypeFixesBasedOnApplicabilityInference(
+                        methodCall,
+                        (MethodCandidateInfo)resolveResult,
+                        (PsiMethod)resolved,
+                        hlBuilder
+                    );
                 }
             }
         }
@@ -559,18 +557,16 @@ public class HighlightMethodUtil {
                         toolTip = description;
                     }
                     PsiElement element = elementToHighlight.get();
-                    int navigationShift =
-                        element instanceof PsiExpressionList ? +1 : 0; // argument list starts with paren which there is no need to highlight
+                    // argument list starts with paren which there is no need to highlight
+                    int navigationShift = element instanceof PsiExpressionList ? +1 : 0;
                     hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(element)
                         .description(description)
                         .escapedToolTip(toolTip)
                         .navigationShift(navigationShift);
-                    if (hlBuilder != null) {
-                        registerMethodCallIntentions(hlBuilder, methodCall, list, resolveHelper);
-                        registerMethodReturnFixAction(hlBuilder, candidateInfo, methodCall);
-                        registerTargetTypeFixesBasedOnApplicabilityInference(methodCall, candidateInfo, resolvedMethod, hlBuilder);
-                    }
+                    registerMethodCallIntentions(hlBuilder, methodCall, list, resolveHelper);
+                    registerMethodReturnFixAction(hlBuilder, candidateInfo, methodCall);
+                    registerTargetTypeFixesBasedOnApplicabilityInference(methodCall, candidateInfo, resolvedMethod, hlBuilder);
                 }
                 else {
                     PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
@@ -2305,7 +2301,7 @@ public class HighlightMethodUtil {
         @Nonnull JavaResolveResult[] candidates,
         @Nonnull PsiExpressionList list,
         @Nullable HighlightInfo.Builder highlightInfo,
-        TextRange fixRange
+        @Nullable TextRange fixRange
     ) {
         if (candidates.length == 0) {
             return;
@@ -2318,19 +2314,19 @@ public class HighlightMethodUtil {
 
     private static void registerChangeMethodSignatureFromUsageIntention(
         @Nonnull PsiExpression[] expressions,
-        @Nullable HighlightInfo.Builder highlightInfo,
-        TextRange fixRange,
+        @Nullable HighlightInfo.Builder hlBuilder,
+        @Nullable TextRange fixRange,
         @Nonnull JavaResolveResult candidate,
         @Nonnull PsiElement context
     ) {
-        if (highlightInfo == null || !candidate.isStaticsScopeCorrect()) {
+        if (hlBuilder == null || !candidate.isStaticsScopeCorrect()) {
             return;
         }
         PsiMethod method = (PsiMethod)candidate.getElement();
         PsiSubstitutor substitutor = candidate.getSubstitutor();
         if (method != null && context.getManager().isInProject(method)) {
             QuickFixFactory factory = QuickFixFactory.getInstance();
-            highlightInfo.registerFix(
+            hlBuilder.registerFix(
                 factory.createChangeMethodSignatureFromUsageFix(
                     method,
                     expressions,
@@ -2339,9 +2335,12 @@ public class HighlightMethodUtil {
                     false,
                     2
                 ),
-                fixRange
+                null,
+                null,
+                fixRange,
+                null
             );
-            highlightInfo.registerFix(
+            hlBuilder.registerFix(
                 factory.createChangeMethodSignatureFromUsageReverseOrderFix(
                     method,
                     expressions,
@@ -2350,7 +2349,10 @@ public class HighlightMethodUtil {
                     false,
                     2
                 ),
-                fixRange
+                null,
+                null,
+                fixRange,
+                null
             );
         }
     }
