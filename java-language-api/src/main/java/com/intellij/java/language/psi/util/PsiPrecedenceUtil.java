@@ -2,8 +2,9 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.PsiElement;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
@@ -32,28 +33,28 @@ public class PsiPrecedenceUtil {
     public static final int LAMBDA_PRECEDENCE = 17; // jls-15.2
     public static final int NUM_PRECEDENCES = 18;
 
-    private static final Map<IElementType, Integer> s_binaryOperatorPrecedence = new HashMap<>(NUM_PRECEDENCES);
+    private static final Map<IElementType, Integer> S_BINARY_OPERATOR_PRECEDENCE = new HashMap<>(NUM_PRECEDENCES);
 
     static {
-        s_binaryOperatorPrecedence.put(JavaTokenType.PLUS, ADDITIVE_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.MINUS, ADDITIVE_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.ASTERISK, MULTIPLICATIVE_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.DIV, MULTIPLICATIVE_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.PERC, MULTIPLICATIVE_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.ANDAND, AND_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.OROR, OR_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.AND, BINARY_AND_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.OR, BINARY_OR_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.XOR, BINARY_XOR_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.LTLT, SHIFT_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.GTGT, SHIFT_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.GTGTGT, SHIFT_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.GT, RELATIONAL_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.GE, RELATIONAL_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.LT, RELATIONAL_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.LE, RELATIONAL_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.EQEQ, EQUALITY_PRECEDENCE);
-        s_binaryOperatorPrecedence.put(JavaTokenType.NE, EQUALITY_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.PLUS, ADDITIVE_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.MINUS, ADDITIVE_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.ASTERISK, MULTIPLICATIVE_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.DIV, MULTIPLICATIVE_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.PERC, MULTIPLICATIVE_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.ANDAND, AND_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.OROR, OR_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.AND, BINARY_AND_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.OR, BINARY_OR_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.XOR, BINARY_XOR_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.LTLT, SHIFT_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.GTGT, SHIFT_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.GTGTGT, SHIFT_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.GT, RELATIONAL_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.GE, RELATIONAL_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.LT, RELATIONAL_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.LE, RELATIONAL_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.EQEQ, EQUALITY_PRECEDENCE);
+        S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.NE, EQUALITY_PRECEDENCE);
     }
 
     public static boolean isCommutativeOperator(@Nonnull IElementType token) {
@@ -63,26 +64,26 @@ public class PsiPrecedenceUtil {
     }
 
     public static boolean isCommutativeOperation(PsiPolyadicExpression expression) {
-        final IElementType tokenType = expression.getOperationTokenType();
+        IElementType tokenType = expression.getOperationTokenType();
         if (!isCommutativeOperator(tokenType)) {
             return false;
         }
-        final PsiType type = expression.getType();
-        return type != null && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
+        PsiType type = expression.getType();
+        return type != null && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
     }
 
     public static boolean isAssociativeOperation(PsiPolyadicExpression expression) {
-        final IElementType tokenType = expression.getOperationTokenType();
-        final PsiType type = expression.getType();
-        final PsiPrimitiveType primitiveType;
+        IElementType tokenType = expression.getOperationTokenType();
+        PsiType type = expression.getType();
+        PsiPrimitiveType primitiveType;
         if (type instanceof PsiClassType) {
             primitiveType = PsiPrimitiveType.getUnboxedType(type);
             if (primitiveType == null) {
                 return false;
             }
         }
-        else if (type instanceof PsiPrimitiveType) {
-            primitiveType = (PsiPrimitiveType)type;
+        else if (type instanceof PsiPrimitiveType primitiveType1) {
+            primitiveType = primitiveType1;
         }
         else {
             return false;
@@ -104,17 +105,16 @@ public class PsiPrecedenceUtil {
     }
 
     public static int getPrecedence(PsiExpression expression) {
-        if (expression instanceof PsiThisExpression ||
-            expression instanceof PsiLiteralExpression ||
-            expression instanceof PsiSuperExpression ||
-            expression instanceof PsiClassObjectAccessExpression ||
-            expression instanceof PsiArrayAccessExpression ||
-            expression instanceof PsiArrayInitializerExpression) {
+        if (expression instanceof PsiThisExpression
+            || expression instanceof PsiLiteralExpression
+            || expression instanceof PsiSuperExpression
+            || expression instanceof PsiClassObjectAccessExpression
+            || expression instanceof PsiArrayAccessExpression
+            || expression instanceof PsiArrayInitializerExpression) {
             return LITERAL_PRECEDENCE;
         }
-        if (expression instanceof PsiReferenceExpression) {
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
-            if (referenceExpression.getQualifier() != null) {
+        if (expression instanceof PsiReferenceExpression refExpr) {
+            if (refExpr.getQualifier() != null) {
                 return METHOD_CALL_PRECEDENCE;
             }
             else {
@@ -133,8 +133,7 @@ public class PsiPrecedenceUtil {
         if (expression instanceof PsiPostfixExpression || expression instanceof PsiSwitchExpression) {
             return POSTFIX_PRECEDENCE;
         }
-        if (expression instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
+        if (expression instanceof PsiPolyadicExpression polyadicExpression) {
             return getPrecedenceForOperator(polyadicExpression.getOperationTokenType());
         }
         if (expression instanceof PsiInstanceOfExpression) {
@@ -156,19 +155,19 @@ public class PsiPrecedenceUtil {
     }
 
     public static int getPrecedenceForOperator(@Nonnull IElementType operator) {
-        final Integer precedence = s_binaryOperatorPrecedence.get(operator);
+        Integer precedence = S_BINARY_OPERATOR_PRECEDENCE.get(operator);
         if (precedence == null) {
             throw new IllegalArgumentException("unknown operator: " + operator);
         }
-        return precedence.intValue();
+        return precedence;
     }
 
     public static boolean areParenthesesNeeded(PsiParenthesizedExpression expression, boolean ignoreClarifyingParentheses) {
-        final PsiElement parent = expression.getParent();
+        PsiElement parent = expression.getParent();
         if (!(parent instanceof PsiExpression)) {
             return false;
         }
-        final PsiExpression child = expression.getExpression();
+        PsiExpression child = expression.getExpression();
         return child == null || areParenthesesNeeded(child, (PsiExpression)parent, ignoreClarifyingParentheses);
     }
 
@@ -180,12 +179,11 @@ public class PsiPrecedenceUtil {
         if (parentExpression instanceof PsiParenthesizedExpression || parentExpression instanceof PsiArrayInitializerExpression) {
             return false;
         }
-        if (parentExpression instanceof PsiArrayAccessExpression) {
-            final PsiArrayAccessExpression arrayAccessExpression = (PsiArrayAccessExpression)parentExpression;
-            return PsiTreeUtil.isAncestor(arrayAccessExpression.getArrayExpression(), expression, false);
+        if (parentExpression instanceof PsiArrayAccessExpression arrayAccess) {
+            return PsiTreeUtil.isAncestor(arrayAccess.getArrayExpression(), expression, false);
         }
-        final int parentPrecedence = getPrecedence(parentExpression);
-        final int childPrecedence = getPrecedence(expression);
+        int parentPrecedence = getPrecedence(parentExpression);
+        int childPrecedence = getPrecedence(expression);
         if (parentPrecedence > childPrecedence) {
             if (ignoreClarifyingParentheses) {
                 if (expression instanceof PsiPolyadicExpression) {
@@ -201,20 +199,18 @@ public class PsiPrecedenceUtil {
             }
             return false;
         }
-        if (parentExpression instanceof PsiPolyadicExpression && expression instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression parentPolyadicExpression = (PsiPolyadicExpression)parentExpression;
-            final PsiType parentType = parentPolyadicExpression.getType();
+        if (parentExpression instanceof PsiPolyadicExpression parentPolyadic && expression instanceof PsiPolyadicExpression childPolyadic) {
+            PsiType parentType = parentPolyadic.getType();
             if (parentType == null) {
                 return true;
             }
-            final PsiPolyadicExpression childPolyadicExpression = (PsiPolyadicExpression)expression;
-            final PsiType childType = childPolyadicExpression.getType();
+            PsiType childType = childPolyadic.getType();
             if (!parentType.equals(childType)) {
                 return true;
             }
-            if (childType.equalsToText(CommonClassNames.JAVA_LANG_STRING) &&
-                !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true)) {
-                final PsiExpression[] operands = childPolyadicExpression.getOperands();
+            if (childType.equalsToText(JavaClassNames.JAVA_LANG_STRING)
+                && !PsiTreeUtil.isAncestor(parentPolyadic.getOperands()[0], childPolyadic, true)) {
+                PsiExpression[] operands = childPolyadic.getOperands();
                 for (PsiExpression operand : operands) {
                     if (!childType.equals(operand.getType())) {
                         return true;
@@ -222,52 +218,49 @@ public class PsiPrecedenceUtil {
                 }
             }
             else if (childType.equals(PsiType.BOOLEAN)) {
-                final PsiExpression[] operands = childPolyadicExpression.getOperands();
+                PsiExpression[] operands = childPolyadic.getOperands();
                 for (PsiExpression operand : operands) {
                     if (!PsiType.BOOLEAN.equals(operand.getType())) {
                         return true;
                     }
                 }
             }
-            final IElementType parentOperator = parentPolyadicExpression.getOperationTokenType();
-            final IElementType childOperator = childPolyadicExpression.getOperationTokenType();
+            IElementType parentOperator = parentPolyadic.getOperationTokenType();
+            IElementType childOperator = childPolyadic.getOperationTokenType();
             if (ignoreClarifyingParentheses) {
                 if (!childOperator.equals(parentOperator)) {
                     return true;
                 }
             }
-            final PsiExpression[] parentOperands = parentPolyadicExpression.getOperands();
+            PsiExpression[] parentOperands = parentPolyadic.getOperands();
             if (!PsiTreeUtil.isAncestor(parentOperands[0], expression, false)) {
-                if (!isAssociativeOperation(parentPolyadicExpression) ||
+                if (!isAssociativeOperation(parentPolyadic) ||
                     JavaTokenType.DIV == childOperator || JavaTokenType.PERC == childOperator) {
                     return true;
                 }
             }
         }
-        else if (parentExpression instanceof PsiConditionalExpression && expression instanceof PsiConditionalExpression) {
-            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)parentExpression;
-            final PsiExpression condition = conditionalExpression.getCondition();
+        else if (parentExpression instanceof PsiConditionalExpression parentConditional && expression instanceof PsiConditionalExpression) {
+            PsiExpression condition = parentConditional.getCondition();
             return PsiTreeUtil.isAncestor(condition, expression, true);
         }
         else if (expression instanceof PsiLambdaExpression) { // jls-15.16
             if (parentExpression instanceof PsiTypeCastExpression) {
                 return false;
             }
-            else if (parentExpression instanceof PsiConditionalExpression) { // jls-15.25
-                final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)parentExpression;
-                return PsiTreeUtil.isAncestor(conditionalExpression.getCondition(), expression, true);
+            else if (parentExpression instanceof PsiConditionalExpression conditional) { // jls-15.25
+                return PsiTreeUtil.isAncestor(conditional.getCondition(), expression, true);
             }
         }
         return parentPrecedence < childPrecedence;
     }
 
     public static boolean areParenthesesNeeded(PsiJavaToken compoundAssignmentToken, PsiExpression rhs) {
-        if (rhs instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression)rhs;
-            final int precedence1 = getPrecedenceForOperator(binaryExpression.getOperationTokenType());
-            final IElementType signTokenType = compoundAssignmentToken.getTokenType();
-            final IElementType newOperatorToken = TypeConversionUtil.convertEQtoOperation(signTokenType);
-            final int precedence2 = getPrecedenceForOperator(newOperatorToken);
+        if (rhs instanceof PsiPolyadicExpression binaryExpression) {
+            int precedence1 = getPrecedenceForOperator(binaryExpression.getOperationTokenType());
+            IElementType signTokenType = compoundAssignmentToken.getTokenType();
+            IElementType newOperatorToken = TypeConversionUtil.convertEQtoOperation(signTokenType);
+            int precedence2 = getPrecedenceForOperator(newOperatorToken);
             return precedence1 >= precedence2 || !isCommutativeOperator(newOperatorToken);
         }
         else {

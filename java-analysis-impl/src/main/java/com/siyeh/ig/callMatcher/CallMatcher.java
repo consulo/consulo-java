@@ -6,6 +6,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
@@ -220,7 +222,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
         static final Simple ENUM_VALUES =
             new Simple("", Collections.singleton("values"), ArrayUtil.EMPTY_STRING_ARRAY, CallType.ENUM_STATIC);
         static final Simple ENUM_VALUE_OF =
-            new Simple("", Collections.singleton("valueOf"), new String[]{CommonClassNames.JAVA_LANG_STRING}, CallType.ENUM_STATIC);
+            new Simple("", Collections.singleton("valueOf"), new String[]{JavaClassNames.JAVA_LANG_STRING}, CallType.ENUM_STATIC);
         @Nonnull
         private final String myClassName;
         @Nonnull
@@ -283,6 +285,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
 
         @Contract(pure = true)
         @Override
+        @RequiredReadAction
         public boolean methodReferenceMatches(PsiMethodReferenceExpression methodRef) {
             if (methodRef == null) {
                 return false;
@@ -351,8 +354,8 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
             if (aClass == null) {
                 return false;
             }
-            return myCallType.matches(aClass, myClassName, method.hasModifierProperty(PsiModifier.STATIC)) &&
-                parametersMatch(method.getParameterList());
+            return myCallType.matches(aClass, myClassName, method.isStatic())
+                && parametersMatch(method.getParameterList());
         }
 
         @Override

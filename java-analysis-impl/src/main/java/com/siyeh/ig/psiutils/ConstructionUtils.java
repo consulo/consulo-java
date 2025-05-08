@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nullable;
@@ -34,7 +35,8 @@ import java.util.stream.Stream;
 public class ConstructionUtils {
     private static final Set<String> GUAVA_UTILITY_CLASSES =
         Set.of("com.google.common.collect.Maps", "com.google.common.collect.Lists", "com.google.common.collect.Sets");
-    private static final CallMatcher ENUM_SET_NONE_OF = CallMatcher.staticCall("java.util.EnumSet", "noneOf").parameterCount(1);
+    private static final CallMatcher ENUM_SET_NONE_OF =
+        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_ENUM_SET, "noneOf").parameterCount(1);
 
     /**
      * Checks that given expression initializes empty StringBuilder or StringBuffer (either with explicit default capacity or not)
@@ -43,6 +45,7 @@ public class ConstructionUtils {
      * @return true if the initializer is empty StringBuilder or StringBuffer initializer
      */
     @Contract("null -> false")
+    @RequiredReadAction
     public static boolean isEmptyStringBuilderInitializer(PsiExpression initializer) {
         return "\"\"".equals(getStringBuilderInitializerText(initializer));
     }
@@ -55,38 +58,37 @@ public class ConstructionUtils {
      * construction expression
      */
     @Contract("null -> null")
+    @RequiredReadAction
     public static String getStringBuilderInitializerText(PsiExpression construction) {
         construction = PsiUtil.skipParenthesizedExprDown(construction);
-        if (!(construction instanceof PsiNewExpression)) {
+        if (!(construction instanceof PsiNewExpression newExpr)) {
             return null;
         }
-        final PsiNewExpression newExpression = (PsiNewExpression)construction;
-        final PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
+        PsiJavaCodeReferenceElement classReference = newExpr.getClassReference();
         if (classReference == null) {
             return null;
         }
-        final PsiElement target = classReference.resolve();
-        if (!(target instanceof PsiClass)) {
+        PsiElement target = classReference.resolve();
+        if (!(target instanceof PsiClass aClass)) {
             return null;
         }
-        final PsiClass aClass = (PsiClass)target;
-        final String qualifiedName = aClass.getQualifiedName();
+        String qualifiedName = aClass.getQualifiedName();
         if (!JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) && !JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
             return null;
         }
-        final PsiExpressionList argumentList = newExpression.getArgumentList();
+        PsiExpressionList argumentList = newExpr.getArgumentList();
         if (argumentList == null) {
             return null;
         }
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         if (arguments.length == 0) {
             return "\"\"";
         }
         if (arguments.length != 1) {
             return null;
         }
-        final PsiExpression argument = arguments[0];
-        final PsiType argumentType = argument.getType();
+        PsiExpression argument = arguments[0];
+        PsiType argumentType = argument.getType();
         if (PsiType.INT.equals(argumentType)) {
             return "\"\"";
         }
@@ -102,8 +104,8 @@ public class ConstructionUtils {
     @Contract("null -> false")
     public static boolean isEmptyCollectionInitializer(PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);
-        if (expression instanceof PsiNewExpression) {
-            PsiExpressionList argumentList = ((PsiNewExpression)expression).getArgumentList();
+        if (expression instanceof PsiNewExpression newExpr) {
+            PsiExpressionList argumentList = newExpr.getArgumentList();
             if (argumentList != null && argumentList.getExpressions().length == 0) {
                 PsiType type = expression.getType();
                 return InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_COLLECTION)
@@ -139,12 +141,12 @@ public class ConstructionUtils {
     @Contract("null -> false")
     public static boolean isCustomizedEmptyCollectionInitializer(PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);
-        if (expression instanceof PsiNewExpression) {
-            PsiExpressionList argumentList = ((PsiNewExpression)expression).getArgumentList();
+        if (expression instanceof PsiNewExpression newExpr) {
+            PsiExpressionList argumentList = newExpr.getArgumentList();
             if (argumentList == null || argumentList.getExpressions().length == 0) {
                 return false;
             }
-            PsiMethod constructor = ((PsiNewExpression)expression).resolveConstructor();
+            PsiMethod constructor = newExpr.resolveConstructor();
             if (constructor == null) {
                 return false;
             }
@@ -160,8 +162,7 @@ public class ConstructionUtils {
                 t -> t instanceof PsiPrimitiveType || InheritanceUtil.isInheritor(t, JavaClassNames.JAVA_LANG_CLASS);
             return Stream.of(constructor.getParameterList().getParameters()).map(PsiParameter::getType).allMatch(allowedParameterType);
         }
-        if (expression instanceof PsiMethodCallExpression) {
-            PsiMethodCallExpression call = (PsiMethodCallExpression)expression;
+        if (expression instanceof PsiMethodCallExpression call) {
             if (ENUM_SET_NONE_OF.test(call)) {
                 return true;
             }
@@ -186,12 +187,12 @@ public class ConstructionUtils {
 
     public static boolean isPrepopulatedCollectionInitializer(PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);
-        if (expression instanceof PsiNewExpression) {
-            PsiExpressionList args = ((PsiNewExpression)expression).getArgumentList();
+        if (expression instanceof PsiNewExpression newExpr) {
+            PsiExpressionList args = newExpr.getArgumentList();
             if (args == null || args.isEmpty()) {
                 return false;
             }
-            PsiMethod ctor = ((PsiNewExpression)expression).resolveMethod();
+            PsiMethod ctor = newExpr.resolveMethod();
             if (ctor == null) {
                 return false;
             }
@@ -207,15 +208,14 @@ public class ConstructionUtils {
                 PsiType type = parameter.getType();
                 if (type instanceof PsiClassType) {
                     PsiClassType rawType = ((PsiClassType)type).rawType();
-                    if (rawType.equalsToText(CommonClassNames.JAVA_UTIL_COLLECTION) ||
-                        rawType.equalsToText(CommonClassNames.JAVA_UTIL_MAP)) {
+                    if (rawType.equalsToText(JavaClassNames.JAVA_UTIL_COLLECTION)
+                        || rawType.equalsToText(JavaClassNames.JAVA_UTIL_MAP)) {
                         return true;
                     }
                 }
             }
         }
-        if (expression instanceof PsiMethodCallExpression) {
-            PsiMethodCallExpression call = (PsiMethodCallExpression)expression;
+        if (expression instanceof PsiMethodCallExpression call) {
             String name = call.getMethodExpression().getReferenceName();
             PsiExpressionList argumentList = call.getArgumentList();
             if (name != null && name.startsWith("new") && !argumentList.isEmpty()) {
@@ -238,8 +238,8 @@ public class ConstructionUtils {
                     }
                     if (type instanceof PsiClassType) {
                         PsiClassType rawType = ((PsiClassType)type).rawType();
-                        if (rawType.equalsToText(CommonClassNames.JAVA_LANG_ITERABLE) ||
-                            rawType.equalsToText(CommonClassNames.JAVA_UTIL_ITERATOR)) {
+                        if (rawType.equalsToText(JavaClassNames.JAVA_LANG_ITERABLE)
+                            || rawType.equalsToText(JavaClassNames.JAVA_UTIL_ITERATOR)) {
                             return true;
                         }
                     }
@@ -255,23 +255,23 @@ public class ConstructionUtils {
      * @param expression expression to test
      * @return true if supplied expression is an empty array initializer
      */
+    @RequiredReadAction
     public static boolean isEmptyArrayInitializer(@Nullable PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);
-        if (!(expression instanceof PsiNewExpression)) {
+        if (!(expression instanceof PsiNewExpression newExpr)) {
             return false;
         }
-        final PsiNewExpression newExpression = (PsiNewExpression)expression;
-        final PsiExpression[] dimensions = newExpression.getArrayDimensions();
+        PsiExpression[] dimensions = newExpr.getArrayDimensions();
         if (dimensions.length == 0) {
-            final PsiArrayInitializerExpression arrayInitializer = newExpression.getArrayInitializer();
+            PsiArrayInitializerExpression arrayInitializer = newExpr.getArrayInitializer();
             if (arrayInitializer == null) {
                 return false;
             }
-            final PsiExpression[] initializers = arrayInitializer.getInitializers();
+            PsiExpression[] initializers = arrayInitializer.getInitializers();
             return initializers.length == 0;
         }
         for (PsiExpression dimension : dimensions) {
-            final String dimensionText = dimension.getText();
+            String dimensionText = dimension.getText();
             if (!"0".equals(dimensionText)) {
                 return false;
             }

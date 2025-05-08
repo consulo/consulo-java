@@ -19,29 +19,24 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
 public class CollectionUtils {
-
     /**
      * @noinspection StaticCollection
      */
-    @NonNls
     private static final Set<String> s_allCollectionClassesAndInterfaces;
     /**
      * @noinspection StaticCollection
      */
-    @NonNls
     private static final Map<String, String> s_interfaceForCollection = new HashMap<>();
 
     static {
-        final Set<String> allCollectionClassesAndInterfaces = new HashSet<>();
+        Set<String> allCollectionClassesAndInterfaces = new HashSet<>();
         allCollectionClassesAndInterfaces.add("java.util.AbstractCollection");
         allCollectionClassesAndInterfaces.add("java.util.AbstractList");
         allCollectionClassesAndInterfaces.add("java.util.AbstractMap");
@@ -123,7 +118,7 @@ public class CollectionUtils {
         s_interfaceForCollection.put("WeakHashMap", "Map");
         s_interfaceForCollection.put(JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_LIST);
         s_interfaceForCollection.put("java.util.EnumMap", JavaClassNames.JAVA_UTIL_MAP);
-        s_interfaceForCollection.put("java.util.EnumSet", JavaClassNames.JAVA_UTIL_SET);
+        s_interfaceForCollection.put(JavaClassNames.JAVA_UTIL_ENUM_SET, JavaClassNames.JAVA_UTIL_SET);
         s_interfaceForCollection.put(JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_MAP);
         s_interfaceForCollection.put(JavaClassNames.JAVA_UTIL_HASH_SET, JavaClassNames.JAVA_UTIL_SET);
         s_interfaceForCollection.put("java.util.Hashtable", JavaClassNames.JAVA_UTIL_MAP);
@@ -150,7 +145,7 @@ public class CollectionUtils {
      * Matches a call which creates collection of the same size as the qualifier collection
      */
     public static final CallMatcher DERIVED_COLLECTION = CallMatcher.anyOf(
-        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "keySet", "values", "entrySet").parameterCount(0),
+        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "keySet", "values", "entrySet").parameterCount(0),
         CallMatcher.instanceCall("java.util.NavigableMap", "descendingKeySet", "descendingMap", "navigableKeySet")
             .parameterCount(0),
         CallMatcher.instanceCall("java.util.NavigableSet", "descendingSet").parameterCount(0)
@@ -167,11 +162,10 @@ public class CollectionUtils {
 
     @Contract("null -> false")
     public static boolean isConcreteCollectionClass(@Nullable PsiType type) {
-        if (!(type instanceof PsiClassType)) {
+        if (!(type instanceof PsiClassType classType)) {
             return false;
         }
-        final PsiClassType classType = (PsiClassType)type;
-        final PsiClass resolved = classType.resolve();
+        PsiClass resolved = classType.resolve();
         if (resolved == null) {
             return false;
         }
@@ -180,30 +174,29 @@ public class CollectionUtils {
 
     @Contract("null -> false")
     public static boolean isConcreteCollectionClass(PsiClass aClass) {
-        if (aClass == null || aClass.isEnum() || aClass.isInterface() || aClass.isAnnotationType() || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+        if (aClass == null || aClass.isEnum() || aClass.isInterface() || aClass.isAnnotationType() || aClass.isAbstract()) {
             return false;
         }
         if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION)
             && !InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_MAP)) {
             return false;
         }
-        @NonNls final String name = aClass.getQualifiedName();
+        String name = aClass.getQualifiedName();
         return name != null && name.startsWith("java.util.");
     }
 
     public static boolean isCollectionClassOrInterface(@Nullable PsiType type) {
-        if (!(type instanceof PsiClassType)) {
+        if (!(type instanceof PsiClassType classType)) {
             return false;
         }
-        final PsiClassType classType = (PsiClassType)type;
-        final PsiClass resolved = classType.resolve();
+        PsiClass resolved = classType.resolve();
         if (resolved == null) {
             return false;
         }
-        return InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_COLLECTION) ||
-            InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_MAP) ||
-            InheritanceUtil.isInheritor(resolved, "com.google.common.collect.Multimap") ||
-            InheritanceUtil.isInheritor(resolved, "com.google.common.collect.Table");
+        return InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_COLLECTION)
+            || InheritanceUtil.isInheritor(resolved, JavaClassNames.JAVA_UTIL_MAP)
+            || InheritanceUtil.isInheritor(resolved, "com.google.common.collect.Multimap")
+            || InheritanceUtil.isInheritor(resolved, "com.google.common.collect.Table");
     }
 
     public static boolean isCollectionClassOrInterface(PsiClass aClass) {
@@ -218,11 +211,11 @@ public class CollectionUtils {
         if (!visitedClasses.add(aClass)) {
             return false;
         }
-        final String className = aClass.getQualifiedName();
+        String className = aClass.getQualifiedName();
         if (s_allCollectionClassesAndInterfaces.contains(className)) {
             return true;
         }
-        final PsiClass[] supers = aClass.getSupers();
+        PsiClass[] supers = aClass.getSupers();
         for (PsiClass aSuper : supers) {
             if (isCollectionClassOrInterface(aSuper, visitedClasses)) {
                 return true;
@@ -235,29 +228,25 @@ public class CollectionUtils {
         if (!(type instanceof PsiClassType)) {
             return false;
         }
-        final String typeText = type.getCanonicalText();
+        String typeText = type.getCanonicalText();
         return "java.util.WeakHashMap".equals(typeText);
     }
 
     public static boolean isConstantEmptyArray(@Nonnull PsiField field) {
-        if (!field.hasModifierProperty(PsiModifier.STATIC) || !field.hasModifierProperty(PsiModifier.FINAL)) {
-            return false;
-        }
-        return isEmptyArray(field);
+        return field.isStatic() && field.isFinal() && isEmptyArray(field);
     }
 
     public static boolean isEmptyArray(PsiVariable variable) {
-        final PsiExpression initializer = variable.getInitializer();
-        if (initializer instanceof PsiArrayInitializerExpression) {
-            final PsiArrayInitializerExpression arrayInitializerExpression = (PsiArrayInitializerExpression)initializer;
-            final PsiExpression[] initializers = arrayInitializerExpression.getInitializers();
+        PsiExpression initializer = variable.getInitializer();
+        if (initializer instanceof PsiArrayInitializerExpression arrayInitializerExpr) {
+            PsiExpression[] initializers = arrayInitializerExpr.getInitializers();
             return initializers.length == 0;
         }
         return ConstructionUtils.isEmptyArrayInitializer(initializer);
     }
 
     public static boolean isArrayOrCollectionField(@Nonnull PsiField field) {
-        final PsiType type = field.getType();
+        PsiType type = field.getType();
         if (isCollectionClassOrInterface(type)) {
             return true;
         }
@@ -269,14 +258,8 @@ public class CollectionUtils {
     }
 
     public static String getInterfaceForClass(String name) {
-        final int parameterStart = name.indexOf((int)'<');
-        final String baseName;
-        if (parameterStart >= 0) {
-            baseName = name.substring(0, parameterStart).trim();
-        }
-        else {
-            baseName = name;
-        }
+        int parameterStart = name.indexOf((int)'<');
+        String baseName = parameterStart >= 0 ? name.substring(0, parameterStart).trim() : name;
         return s_interfaceForCollection.get(baseName);
     }
 }
