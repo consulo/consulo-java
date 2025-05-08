@@ -14,20 +14,21 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ThreeState;
-import one.util.streamex.EntryStream;
-import one.util.streamex.StreamEx;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.EntryStream;
+import one.util.streamex.StreamEx;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -42,7 +43,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     private final Map<PsiCallExpression, Boolean> myFailingCalls = new HashMap<>();
     private final Map<ExpressionChunk, ConstantResult> myConstantExpressions = new HashMap<>();
     private final Map<PsiElement, ThreeState> myOfNullableCalls = new HashMap<>();
-    private final Map<PsiAssignmentExpression, Pair<PsiType, PsiType>> myArrayStoreProblems = new HashMap<>();
+    private final Map<PsiAssignmentExpression, Couple<PsiType>> myArrayStoreProblems = new HashMap<>();
     private final Map<PsiMethodReferenceExpression, ConstantResult> myMethodReferenceResults = new HashMap<>();
     private final Map<PsiArrayAccessExpression, ThreeState> myOutOfBoundsArrayAccesses = new HashMap<>();
     private final Set<PsiElement> myReceiverMutabilityViolation = new HashSet<>();
@@ -54,15 +55,16 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     private final List<DfaMemoryState> myEndOfInitializerStates = new ArrayList<>();
 
     private static final CallMatcher USELESS_SAME_ARGUMENTS = CallMatcher.anyOf(
-        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_MATH, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_INTEGER, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_LONG, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_FLOAT, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_DOUBLE, "min", "max").parameterCount(2),
-        CallMatcher.instanceCall(CommonClassNames.JAVA_LANG_STRING, "replace").parameterCount(2)
+        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_MATH, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_INTEGER, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_LONG, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_FLOAT, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_DOUBLE, "min", "max").parameterCount(2),
+        CallMatcher.instanceCall(JavaClassNames.JAVA_LANG_STRING, "replace").parameterCount(2)
     );
 
     @Override
+    @RequiredReadAction
     public DfaInstructionState[] visitAssign(AssignInstruction instruction, DataFlowRunner runner, DfaMemoryState memState) {
         PsiExpression left = instruction.getLExpression();
         if (left != null && !Boolean.FALSE.equals(mySameValueAssigned.get(left))) {
@@ -75,12 +77,12 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
                 DfaValue value = memState.peek();
                 DfaValue target = memState.getStackValue(1);
                 DfType dfType = memState.getDfType(value);
-                if (target != null && memState.areEqual(value, target) &&
-                    !(dfType instanceof DfConstantType && isFloatingZero(((DfConstantType<?>)dfType).getValue())) &&
+                if (target != null && memState.areEqual(value, target)
+                    && !(dfType instanceof DfConstantType && isFloatingZero(((DfConstantType<?>)dfType).getValue()))
                     // Reporting strings is skipped because string reassignment might be intentionally used to deduplicate the heap objects
                     // (we compare strings by contents)
-                    !(TypeUtils.isJavaLangString(left.getType()) && !memState.isNull(value)) &&
-                    !isAssignmentToDefaultValueInConstructor(instruction, runner, target)) {
+                    && !(TypeUtils.isJavaLangString(left.getType()) && !memState.isNull(value))
+                    && !isAssignmentToDefaultValueInConstructor(instruction, runner, target)) {
                     mySameValueAssigned.merge(left, Boolean.TRUE, Boolean::logicalAnd);
                 }
                 else {
@@ -100,10 +102,9 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     }
 
     private static boolean isAssignmentToDefaultValueInConstructor(AssignInstruction instruction, DataFlowRunner runner, DfaValue target) {
-        if (!(target instanceof DfaVariableValue)) {
+        if (!(target instanceof DfaVariableValue var)) {
             return false;
         }
-        DfaVariableValue var = (DfaVariableValue)target;
         if (!(var.getPsiVariable() instanceof PsiField) || var.getQualifier() == null ||
             !(var.getQualifier().getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor)) {
             return false;
@@ -111,9 +112,9 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
 
         // chained assignment like this.a = this.b = 0; is also supported
         PsiExpression rExpression = instruction.getRExpression();
-        while (rExpression instanceof PsiAssignmentExpression &&
-            ((PsiAssignmentExpression)rExpression).getOperationTokenType().equals(JavaTokenType.EQ)) {
-            rExpression = ((PsiAssignmentExpression)rExpression).getRExpression();
+        while (rExpression instanceof PsiAssignmentExpression rAssignment
+            && rAssignment.getOperationTokenType().equals(JavaTokenType.EQ)) {
+            rExpression = rAssignment.getRExpression();
         }
         DfaValue dest = runner.getFactory().createValue(rExpression);
         if (dest == null) {
@@ -134,11 +135,12 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     // Reporting of floating zero is skipped, because this produces false-positives on the code like
     // if(x == -0.0) x = 0.0;
     private static boolean isFloatingZero(Object value) {
-        if (value instanceof Double) {
-            return ((Double)value).doubleValue() == 0.0;
+        if (value instanceof Double doubleValue) {
+            return doubleValue == 0.0;
         }
-        if (value instanceof Float) {
-            return ((Float)value).floatValue() == 0.0f;
+        //noinspection SimplifiableIfStatement
+        if (value instanceof Float floatValue) {
+            return floatValue == 0.0f;
         }
         return false;
     }
@@ -160,7 +162,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         return StreamEx.ofKeys(myStateInfos, StateInfo::shouldReport);
     }
 
-    public Map<PsiAssignmentExpression, Pair<PsiType, PsiType>> getArrayStoreProblems() {
+    public Map<PsiAssignmentExpression, Couple<PsiType>> getArrayStoreProblems() {
         return myArrayStoreProblems;
     }
 
@@ -210,10 +212,10 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     }
 
     boolean isAlwaysReturnsNotNull(Instruction[] instructions) {
-        return myAlwaysReturnsNotNull &&
-            ContainerUtil.exists(
+        return myAlwaysReturnsNotNull
+            && ContainerUtil.exists(
                 instructions,
-                i -> i instanceof ReturnInstruction && ((ReturnInstruction)i).getAnchor() instanceof PsiReturnStatement
+                i -> i instanceof ReturnInstruction returnInsn && returnInsn.getAnchor() instanceof PsiReturnStatement
             );
     }
 
@@ -222,8 +224,9 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         if (expression == null || myUsefulInstanceofs.contains(instruction) || !myReachable.contains(instruction)) {
             return false;
         }
-        ConstantResult result = expression instanceof PsiMethodReferenceExpression ?
-            myMethodReferenceResults.get(expression) : myConstantExpressions.get(new ExpressionChunk(expression, null));
+        ConstantResult result = expression instanceof PsiMethodReferenceExpression
+            ? myMethodReferenceResults.get(expression)
+            : myConstantExpressions.get(new ExpressionChunk(expression, null));
         return result != ConstantResult.TRUE && result != ConstantResult.FALSE;
     }
 
@@ -235,16 +238,16 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         @Nonnull DfaMemoryState memState
     ) {
         if (!expression.isPhysical()) {
-            Application application = ApplicationManager.getApplication();
+            Application application = Application.get();
             if (application.isEAP() || application.isInternal() || application.isUnitTestMode()) {
                 throw new IllegalStateException("Non-physical expression is passed");
             }
         }
         expression.accept(new ExpressionVisitor(value, memState));
         PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
-        if (parent instanceof PsiTypeCastExpression) {
+        if (parent instanceof PsiTypeCastExpression typeCastExpr) {
             TypeConstraint fact = TypeConstraint.fromDfType(memState.getDfType(value));
-            myRealOperandTypes.merge((PsiTypeCastExpression)parent, fact, TypeConstraint::join);
+            myRealOperandTypes.merge(typeCastExpr, fact, TypeConstraint::join);
         }
         reportConstantExpressionValue(value, memState, expression, range);
     }
@@ -268,6 +271,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     }
 
     @Override
+    @RequiredReadAction
     protected void beforeMethodReferenceResultPush(
         @Nonnull DfaValue value,
         @Nonnull PsiMethodReferenceExpression methodRef,
@@ -309,7 +313,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     @Override
     protected void processArrayStoreTypeMismatch(PsiAssignmentExpression assignmentExpression, PsiType fromType, PsiType toType) {
         if (assignmentExpression != null) {
-            myArrayStoreProblems.put(assignmentExpression, Pair.create(fromType, toType));
+            myArrayStoreProblems.put(assignmentExpression, Couple.of(fromType, toType));
         }
     }
 
@@ -361,11 +365,11 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     @Override
     protected void reportMutabilityViolation(boolean receiver, @Nonnull PsiElement anchor) {
         if (receiver) {
-            if (anchor instanceof PsiMethodReferenceExpression) {
-                anchor = ((PsiMethodReferenceExpression)anchor).getReferenceNameElement();
+            if (anchor instanceof PsiMethodReferenceExpression methodRefExpr) {
+                anchor = methodRefExpr.getReferenceNameElement();
             }
-            else if (anchor instanceof PsiMethodCallExpression) {
-                anchor = ((PsiMethodCallExpression)anchor).getMethodExpression().getReferenceNameElement();
+            else if (anchor instanceof PsiMethodCallExpression methodCall) {
+                anchor = methodCall.getMethodExpression().getReferenceNameElement();
             }
             if (anchor != null) {
                 myReceiverMutabilityViolation.add(anchor);
@@ -417,7 +421,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
 
         @Override
-        public void visitMethodCallExpression(PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             if (OptionalUtil.OPTIONAL_OF_NULLABLE.test(call)) {
                 processOfNullableResult(myValue, myMemState, call.getArgumentList().getExpressions()[0]);
@@ -425,7 +429,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
 
         @Override
-        public void visitCallExpression(PsiCallExpression call) {
+        public void visitCallExpression(@Nonnull PsiCallExpression call) {
             super.visitCallExpression(call);
             Boolean isFailing = myFailingCalls.get(call);
             if (isFailing != null || hasNonTrivialFailingContracts(call)) {
@@ -466,6 +470,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
 
         @Override
+        @RequiredReadAction
         public String toString() {
             String text = myExpression.getText();
             return myRange == null ? text : myRange.substring(text);

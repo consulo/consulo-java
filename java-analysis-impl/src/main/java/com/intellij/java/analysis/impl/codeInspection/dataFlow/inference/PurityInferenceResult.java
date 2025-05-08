@@ -20,6 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContrac
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -28,6 +29,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -43,6 +45,7 @@ class PurityInferenceResult {
         this.singleCall = singleCall;
     }
 
+    @RequiredReadAction
     public boolean isPure(PsiMethod method, Supplier<PsiCodeBlock> body) {
         return !mutatesNonLocals(method, body) && callsOnlyPureMethods(method, body);
     }
@@ -77,17 +80,14 @@ class PurityInferenceResult {
         if (method != null) {
             return method.equals(currentMethod) || JavaMethodContractUtil.isPure(method);
         }
-        else if (psiCall instanceof PsiNewExpression && psiCall.getArgumentList() != null
+        else if (psiCall instanceof PsiNewExpression newExpr && psiCall.getArgumentList() != null
             && psiCall.getArgumentList().getExpressionCount() == 0) {
 
-            PsiJavaCodeReferenceElement classOrAnonymousClassReference = ((PsiNewExpression)psiCall).getClassOrAnonymousClassReference();
-            PsiElement resolved = classOrAnonymousClassReference == null ? null : classOrAnonymousClassReference.resolve();
-
-            PsiClass psiClass = resolved instanceof PsiClass ? (PsiClass)resolved : null;
-
-            if (psiClass != null) {
+            PsiJavaCodeReferenceElement classOrAnonymousClassReference = newExpr.getClassOrAnonymousClassReference();
+            if (classOrAnonymousClassReference != null
+                && classOrAnonymousClassReference.resolve() instanceof PsiClass psiClass) {
                 PsiClass superClass = psiClass.getSuperClass();
-                return superClass == null || CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName());
+                return superClass == null || JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName());
             }
         }
 
@@ -96,15 +96,13 @@ class PurityInferenceResult {
 
     @RequiredReadAction
     private boolean isLocalVarReference(PsiExpression expression, PsiMethod scope) {
-        if (expression instanceof PsiReferenceExpression) {
-            PsiElement resolve = ((PsiReferenceExpression)expression).resolve();
+        if (expression instanceof PsiReferenceExpression refExpr) {
+            PsiElement resolve = refExpr.resolve();
             return resolve instanceof PsiLocalVariable || resolve instanceof PsiParameter;
         }
-        else if (expression instanceof PsiArrayAccessExpression) {
-            PsiExpression arrayExpression = ((PsiArrayAccessExpression)expression).getArrayExpression();
-            if (arrayExpression instanceof PsiReferenceExpression) {
-                PsiElement resolve = ((PsiReferenceExpression)arrayExpression).resolve();
-                return resolve instanceof PsiLocalVariable && isLocallyCreatedArray(scope, (PsiLocalVariable)resolve);
+        else if (expression instanceof PsiArrayAccessExpression arrayAccess) {
+            if (arrayAccess.getArrayExpression() instanceof PsiReferenceExpression arrayRefExpr) {
+                return arrayRefExpr.resolve() instanceof PsiLocalVariable localVar && isLocallyCreatedArray(scope, localVar);
             }
         }
         return false;
@@ -117,8 +115,8 @@ class PurityInferenceResult {
         }
 
         for (PsiReference ref : ReferencesSearch.search(target, new LocalSearchScope(scope)).findAll()) {
-            if (ref instanceof PsiReferenceExpression && PsiUtil.isAccessedForWriting((PsiExpression)ref)) {
-                PsiAssignmentExpression assign = PsiTreeUtil.getParentOfType((PsiReferenceExpression)ref, PsiAssignmentExpression.class);
+            if (ref instanceof PsiReferenceExpression refExpr && PsiUtil.isAccessedForWriting(refExpr)) {
+                PsiAssignmentExpression assign = PsiTreeUtil.getParentOfType(refExpr, PsiAssignmentExpression.class);
                 if (assign == null || !(assign.getRExpression() instanceof PsiNewExpression)) {
                     return false;
                 }
@@ -138,20 +136,13 @@ class PurityInferenceResult {
 
         PurityInferenceResult that = (PurityInferenceResult)o;
 
-        if (mutableRefs != null ? !mutableRefs.equals(that.mutableRefs) : that.mutableRefs != null) {
-            return false;
-        }
-        if (singleCall != null ? !singleCall.equals(that.singleCall) : that.singleCall != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(mutableRefs, that.mutableRefs)
+            && Objects.equals(singleCall, that.singleCall);
     }
 
     @Override
     public int hashCode() {
         int result = mutableRefs != null ? mutableRefs.hashCode() : 0;
-        result = 31 * result + (singleCall != null ? singleCall.hashCode() : 0);
-        return result;
+        return 31 * result + (singleCall != null ? singleCall.hashCode() : 0);
     }
 }

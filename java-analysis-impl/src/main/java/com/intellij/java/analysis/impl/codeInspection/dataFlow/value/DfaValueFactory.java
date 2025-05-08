@@ -14,7 +14,9 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValueProvider;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -26,11 +28,9 @@ import consulo.project.Project;
 import consulo.util.collection.FList;
 import consulo.util.collection.FactoryMap;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -39,19 +39,15 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiParameter;
 import static consulo.language.pattern.StandardPatterns.or;
 
 public class DfaValueFactory {
-    private final
     @Nonnull
-    List<DfaValue> myValues = new ArrayList<>();
+    private final List<DfaValue> myValues = new ArrayList<>();
     private final boolean myUnknownMembersAreNullable;
-    private final
     @Nonnull
-    FieldChecker myFieldChecker;
-    private final
+    private final FieldChecker myFieldChecker;
     @Nonnull
-    Project myProject;
-    private
+    private final Project myProject;
     @Nullable
-    DfaVariableValue myAssertionDisabled;
+    private DfaVariableValue myAssertionDisabled;
 
     /**
      * @param project                   a project in which context the analysis is performed
@@ -116,6 +112,7 @@ public class DfaValueFactory {
 
     @Nullable
     @Contract("null -> null")
+    @RequiredReadAction
     public DfaValue createValue(PsiExpression psiExpression) {
         return myExpressionFactory.getExpressionDfaValue(psiExpression);
     }
@@ -179,6 +176,7 @@ public class DfaValueFactory {
      * @return a value that represents a constant created from variable; null if variable cannot be represented as a constant
      */
     @Nullable
+    @RequiredReadAction
     public DfaValue getConstantFromVariable(PsiVariable variable) {
         if (!variable.hasModifierProperty(PsiModifier.FINAL) || DfaUtil.ignoreInitializer(variable)) {
             return null;
@@ -196,10 +194,10 @@ public class DfaValueFactory {
             }
             PsiExpression initializer = PsiFieldImpl.getDetachedInitializer(variable);
             initializer = PsiUtil.skipParenthesizedExprDown(initializer);
-            if (initializer instanceof PsiLiteralExpression && initializer.textMatches(PsiKeyword.NULL)) {
+            if (initializer instanceof PsiLiteralExpression literal && literal.textMatches(PsiKeyword.NULL)) {
                 return getNull();
             }
-            if (variable instanceof PsiField && variable.hasModifierProperty(PsiModifier.STATIC) && ExpressionUtils.isNewObject(initializer)) {
+            if (variable instanceof PsiField field && field.isStatic() && ExpressionUtils.isNewObject(initializer)) {
                 return getConstant(variable, type);
             }
             return null;
@@ -213,15 +211,16 @@ public class DfaValueFactory {
     }
 
     @Nullable
-    private static Boolean computeJavaLangBooleanFieldReference(final PsiVariable variable) {
-        if (!(variable instanceof PsiField)) {
+    @RequiredReadAction
+    private static Boolean computeJavaLangBooleanFieldReference(PsiVariable variable) {
+        if (!(variable instanceof PsiField field)) {
             return null;
         }
-        PsiClass psiClass = ((PsiField)variable).getContainingClass();
-        if (psiClass == null || !CommonClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName())) {
+        PsiClass psiClass = field.getContainingClass();
+        if (psiClass == null || !JavaClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName())) {
             return null;
         }
-        @NonNls String name = variable.getName();
+        String name = variable.getName();
         return "TRUE".equals(name) ? Boolean.TRUE : "FALSE".equals(name) ? Boolean.FALSE : null;
     }
 
@@ -275,6 +274,7 @@ public class DfaValueFactory {
     }
 
     @Nonnull
+    @RequiredReadAction
     public DfaValue createCommonValue(@Nonnull PsiExpression[] expressions, PsiType targetType) {
         DfaValue loopElement = null;
         for (PsiExpression expression : expressions) {
@@ -292,20 +292,22 @@ public class DfaValueFactory {
 
     private static class ClassInitializationInfo {
         private static final CallMatcher SAFE_CALLS =
-            CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_OBJECTS, "requireNonNull");
+            CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_OBJECTS, "requireNonNull");
 
         final boolean myCanInstantiateItself;
         final boolean myCtorsCallMethods;
         final boolean mySuperCtorsCallMethods;
 
+        @RequiredReadAction
         ClassInitializationInfo(@Nonnull PsiClass psiClass) {
             // Indirect instantiation via other class is still possible, but hopefully unlikely
             boolean canInstantiateItself = false;
             for (PsiElement child = psiClass.getFirstChild(); child != null; child = child.getNextSibling()) {
-                if (child instanceof PsiMember && ((PsiMember)child).hasModifierProperty(PsiModifier.STATIC) &&
-                    SyntaxTraverser.psiTraverser(child).filter(PsiNewExpression.class)
-                        .filterMap(PsiNewExpression::getClassReference)
-                        .find(classRef -> classRef.isReferenceTo(psiClass)) != null) {
+                if (child instanceof PsiMember member && member.isStatic()
+                    && SyntaxTraverser.psiTraverser(child)
+                    .filter(PsiNewExpression.class)
+                    .filterMap(PsiNewExpression::getClassReference)
+                    .find(classRef -> classRef.isReferenceTo(psiClass)) != null) {
                     canInstantiateItself = true;
                     break;
                 }
@@ -316,18 +318,18 @@ public class DfaValueFactory {
             myCtorsCallMethods = canCallMethodsInConstructors(psiClass, false);
         }
 
+        @RequiredReadAction
         private static boolean canCallMethodsInConstructors(@Nonnull PsiClass aClass, boolean virtual) {
             boolean inByteCode = false;
             if (aClass instanceof PsiCompiledElement) {
                 inByteCode = true;
-                PsiElement navigationElement = aClass.getNavigationElement();
-                if (navigationElement instanceof PsiClass) {
-                    aClass = (PsiClass)navigationElement;
+                if (aClass.getNavigationElement() instanceof PsiClass navigationClass) {
+                    aClass = navigationClass;
                 }
             }
             for (PsiMethod constructor : aClass.getConstructors()) {
-                if (inByteCode && JavaMethodContractUtil.isPure(constructor) &&
-                    !JavaMethodContractUtil.hasExplicitContractAnnotation(constructor)) {
+                if (inByteCode && JavaMethodContractUtil.isPure(constructor)
+                    && !JavaMethodContractUtil.hasExplicitContractAnnotation(constructor)) {
                     // While pure constructor may call pure overridable method, our current implementation
                     // of bytecode inference will not infer the constructor purity in this case.
                     // So if we inferred a constructor purity from bytecode we can currently rely that
@@ -374,17 +376,22 @@ public class DfaValueFactory {
 
         FieldChecker(PsiElement context) {
             PsiMethod method = context instanceof PsiClass ? null : PsiTreeUtil.getParentOfType(context, PsiMethod.class);
-            PsiClass contextClass = method != null ? method.getContainingClass() : context instanceof PsiClass ? (PsiClass)context : null;
+            PsiClass contextClass = method != null ? method.getContainingClass() : context instanceof PsiClass psiClass ? psiClass : null;
             myClass = contextClass;
             if (method == null || myClass == null) {
                 myTrustDirectFieldInitializers = myTrustFieldInitializersInConstructors = myCanInstantiateItself = false;
                 return;
             }
             // Indirect instantiation via other class is still possible, but hopefully unlikely
-            ClassInitializationInfo info = LanguageCachedValueUtil.getCachedValue(contextClass, () -> CachedValueProvider.Result
-                .create(new ClassInitializationInfo(contextClass), PsiModificationTracker.MODIFICATION_COUNT));
+            ClassInitializationInfo info = LanguageCachedValueUtil.getCachedValue(
+                contextClass,
+                () -> CachedValueProvider.Result.create(
+                    new ClassInitializationInfo(contextClass),
+                    PsiModificationTracker.MODIFICATION_COUNT
+                )
+            );
             myCanInstantiateItself = info.myCanInstantiateItself;
-            if (method.hasModifierProperty(PsiModifier.STATIC) || method.isConstructor()) {
+            if (method.isStatic() || method.isConstructor()) {
                 myTrustDirectFieldInitializers = true;
                 myTrustFieldInitializersInConstructors = false;
                 return;
@@ -395,7 +402,8 @@ public class DfaValueFactory {
 
         boolean canTrustFieldInitializer(PsiField field) {
             if (field.hasInitializer()) {
-                boolean staticField = field.hasModifierProperty(PsiModifier.STATIC);
+                boolean staticField = field.isStatic();
+                //noinspection SimplifiableIfStatement
                 if (staticField && myClass != null && field.getContainingClass() != myClass) {
                     return true;
                 }

@@ -14,15 +14,13 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.ui.ex.awt.*;
@@ -209,7 +207,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
     @Override
     public void readSettings(@Nonnull Element node) throws InvalidDataException {
-        final Element element = node.getChild(EFFECTIVE_LL);
+        Element element = node.getChild(EFFECTIVE_LL);
         if (element != null) {
             myEffectiveLanguageLevel = LanguageLevel.valueOf(element.getAttributeValue("value"));
         }
@@ -218,7 +216,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     @Override
     public void writeSettings(@Nonnull Element node) throws WriteExternalException {
         if (myEffectiveLanguageLevel != null) {
-            final Element llElement = new Element(EFFECTIVE_LL);
+            Element llElement = new Element(EFFECTIVE_LL);
             llElement.setAttribute("value", myEffectiveLanguageLevel.toString());
             node.addContent(llElement);
         }
@@ -235,7 +233,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         return new MyVisitor(holder, isOnTheFly);
     }
 
-    private static boolean isInProject(final PsiElement elt) {
+    private static boolean isInProject(PsiElement elt) {
         return elt.getManager().isInProject(elt);
     }
 
@@ -247,28 +245,29 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         private final ProblemsHolder myHolder;
         private final boolean myOnTheFly;
 
-        MyVisitor(final ProblemsHolder holder, boolean onTheFly) {
+        MyVisitor(ProblemsHolder holder, boolean onTheFly) {
             myHolder = holder;
             myOnTheFly = onTheFly;
         }
 
         @Override
-        public void visitDocComment(PsiDocComment comment) {
+        public void visitDocComment(@Nonnull PsiDocComment comment) {
             // No references inside doc comment are of interest.
         }
 
         @Override
+        @RequiredReadAction
         public void visitClass(PsiClass aClass) {
             // Don't go into classes (anonymous, locals).
-            if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT) && !(aClass instanceof PsiTypeParameter)) {
-                final Module module = ModuleUtilCore.findModuleForPsiElement(aClass);
-                final LanguageLevel effectiveLanguageLevel = module != null ? getEffectiveLanguageLevel(module) : null;
+            if (!aClass.isAbstract() && !(aClass instanceof PsiTypeParameter)) {
+                Module module = aClass.getModule();
+                LanguageLevel effectiveLanguageLevel = module != null ? getEffectiveLanguageLevel(module) : null;
                 if (effectiveLanguageLevel != null && !effectiveLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8)) {
-                    final JavaSdkVersion version = JavaVersionService.getInstance().getJavaSdkVersion(aClass);
+                    JavaSdkVersion version = JavaVersionService.getInstance().getJavaSdkVersion(aClass);
                     if (version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8)) {
-                        final List<PsiMethod> methods = new ArrayList<>();
+                        List<PsiMethod> methods = new ArrayList<>();
                         for (HierarchicalMethodSignature methodSignature : aClass.getVisibleSignatures()) {
-                            final PsiMethod method = methodSignature.getMethod();
+                            PsiMethod method = methodSignature.getMethod();
                             if (ourDefaultMethods.contains(getSignature(method))) {
                                 methods.add(method);
                             }
@@ -278,23 +277,23 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
                             PsiElement element2Highlight = aClass.getNameIdentifier();
                             if (element2Highlight == null) {
                                 element2Highlight =
-                                    aClass instanceof PsiAnonymousClass ? ((PsiAnonymousClass)aClass).getBaseClassReference() : aClass;
+                                    aClass instanceof PsiAnonymousClass anonymousClass ? anonymousClass.getBaseClassReference() : aClass;
                             }
-                            myHolder.registerProblem(
-                                element2Highlight,
-                                methods.size() == 1
-                                    ? InspectionsBundle.message(
-                                        "inspection.1.8.problem.single.descriptor",
-                                        methods.get(0).getName(),
-                                        getJdkName(effectiveLanguageLevel)
-                                    )
-                                    : InspectionsBundle.message(
-                                        "inspection.1.8.problem.descriptor",
-                                        methods.size(),
-                                        getJdkName(effectiveLanguageLevel)
-                                    ),
-                                QuickFixFactory.getInstance().createImplementMethodsFix(aClass)
-                            );
+                            String descriptionTemplate = methods.size() == 1
+                                ? InspectionsBundle.message(
+                                    "inspection.1.8.problem.single.descriptor",
+                                    methods.get(0).getName(),
+                                    getJdkName(effectiveLanguageLevel)
+                                )
+                                : InspectionsBundle.message(
+                                    "inspection.1.8.problem.descriptor",
+                                    methods.size(),
+                                    getJdkName(effectiveLanguageLevel)
+                                );
+                            myHolder.newProblem(LocalizeValue.of(descriptionTemplate))
+                                .range(element2Highlight)
+                                .withFixes(QuickFixFactory.getInstance().createImplementMethodsFix(aClass))
+                                .create();
                         }
                     }
                 }
@@ -302,22 +301,23 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         }
 
         @Override
-        public void visitReferenceExpression(PsiReferenceExpression expression) {
+        @RequiredReadAction
+        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
             visitReferenceElement(expression);
         }
 
         @Override
         @RequiredReadAction
-        public void visitNameValuePair(PsiNameValuePair pair) {
+        public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
             super.visitNameValuePair(pair);
             PsiReference reference = pair.getReference();
             if (reference != null) {
                 PsiElement resolve = reference.resolve();
-                if (resolve instanceof PsiCompiledElement && resolve instanceof PsiAnnotationMethod) {
-                    final Module module = ModuleUtilCore.findModuleForPsiElement(pair);
+                if (resolve instanceof PsiCompiledElement && resolve instanceof PsiAnnotationMethod annotationMethod) {
+                    Module module = pair.getModule();
                     if (module != null) {
-                        final LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
-                        LanguageLevel sinceLanguageLevel = getLastIncompatibleLanguageLevel((PsiMember)resolve, languageLevel);
+                        LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
+                        LanguageLevel sinceLanguageLevel = getLastIncompatibleLanguageLevel(annotationMethod, languageLevel);
                         if (sinceLanguageLevel != null) {
                             registerError(ObjectUtil.notNull(pair.getNameIdentifier(), pair), sinceLanguageLevel);
                         }
@@ -327,18 +327,19 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         }
 
         @Override
-        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+        @RequiredReadAction
+        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
-            final PsiElement resolved = reference.resolve();
+            PsiElement resolved = reference.resolve();
 
-            if (resolved instanceof PsiCompiledElement && resolved instanceof PsiMember) {
-                final Module module = ModuleUtilCore.findModuleForPsiElement(reference.getElement());
+            if (resolved instanceof PsiCompiledElement && resolved instanceof PsiMember member) {
+                Module module = reference.getElement().getModule();
                 if (module != null) {
-                    final LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
-                    LanguageLevel sinceLanguageLevel = getLastIncompatibleLanguageLevel((PsiMember)resolved, languageLevel);
+                    LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
+                    LanguageLevel sinceLanguageLevel = getLastIncompatibleLanguageLevel(member, languageLevel);
                     if (sinceLanguageLevel != null) {
                         PsiClass psiClass = null;
-                        final PsiElement qualifier = reference.getQualifier();
+                        PsiElement qualifier = reference.getQualifier();
                         if (qualifier != null) {
                             if (qualifier instanceof PsiExpression) {
                                 psiClass = PsiUtil.resolveClassInType(((PsiExpression)qualifier).getType());
@@ -359,12 +360,12 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
                         }
                         registerError(reference, sinceLanguageLevel);
                     }
-                    else if (resolved instanceof PsiClass && isInProject(reference) && !languageLevel.isAtLeast(LanguageLevel.JDK_1_7)) {
-                        final PsiReferenceParameterList parameterList = reference.getParameterList();
+                    else if (resolved instanceof PsiClass psiClass && isInProject(reference) && !languageLevel.isAtLeast(LanguageLevel.JDK_1_7)) {
+                        PsiReferenceParameterList parameterList = reference.getParameterList();
                         if (parameterList != null && parameterList.getTypeParameterElements().length > 0) {
                             for (String generifiedClass : ourGenerifiedClasses) {
-                                if (InheritanceUtil.isInheritor((PsiClass)resolved, generifiedClass) &&
-                                    !isRawInheritance(generifiedClass, (PsiClass)resolved, new HashSet<>())) {
+                                if (InheritanceUtil.isInheritor(psiClass, generifiedClass)
+                                    && !isRawInheritance(generifiedClass, psiClass, new HashSet<>())) {
                                     String message =
                                         InspectionsBundle.message("inspection.1.7.problem.descriptor", getJdkName(languageLevel));
                                     myHolder.registerProblem(reference, message);
@@ -382,8 +383,8 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
                 if (classType.isRaw()) {
                     return true;
                 }
-                final PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
-                final PsiClass superClass = resolveResult.getElement();
+                PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+                PsiClass superClass = resolveResult.getElement();
                 if (visited.add(superClass) && InheritanceUtil.isInheritor(superClass, generifiedClassQName)) {
                     if (isRawInheritance(generifiedClassQName, superClass, visited)) {
                         return true;
@@ -394,18 +395,18 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         }
 
         private boolean isIgnored(PsiClass psiClass) {
-            final String qualifiedName = psiClass.getQualifiedName();
+            String qualifiedName = psiClass.getQualifiedName();
             return qualifiedName != null && ourIgnored16ClassesAPI.get().contains(qualifiedName);
         }
 
         @Override
         @RequiredReadAction
-        public void visitNewExpression(@Nonnull final PsiNewExpression expression) {
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiMethod constructor = expression.resolveConstructor();
-            final Module module = ModuleUtilCore.findModuleForPsiElement(expression);
+            PsiMethod constructor = expression.resolveConstructor();
+            Module module = expression.getModule();
             if (module != null) {
-                final LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
+                LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
                 if (constructor instanceof PsiCompiledElement) {
                     LanguageLevel sinceLanguageLevel = getLastIncompatibleLanguageLevel(constructor, languageLevel);
                     if (sinceLanguageLevel != null) {
@@ -420,13 +421,13 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
             PsiAnnotation annotation = !method.isConstructor()
-                ? AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE) : null;
+                ? AnnotationUtil.findAnnotation(method, JavaClassNames.JAVA_LANG_OVERRIDE) : null;
             if (annotation != null) {
-                final Module module = ModuleUtilCore.findModuleForPsiElement(annotation);
+                Module module = annotation.getModule();
                 LanguageLevel sinceLanguageLevel = null;
                 if (module != null) {
-                    final LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
-                    final PsiMethod[] methods = method.findSuperMethods();
+                    LanguageLevel languageLevel = getEffectiveLanguageLevel(module);
+                    PsiMethod[] methods = method.findSuperMethods();
                     for (PsiMethod superMethod : methods) {
                         if (superMethod instanceof PsiCompiledElement) {
                             sinceLanguageLevel = getLastIncompatibleLanguageLevel(superMethod, languageLevel);
@@ -450,18 +451,16 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
             return myEffectiveLanguageLevel != null ? myEffectiveLanguageLevel : EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
         }
 
+        @RequiredReadAction
         private void registerError(PsiElement reference, LanguageLevel api) {
             if (reference != null && isInProject(reference)) {
-                myHolder.registerProblem(
-                    reference,
-                    InspectionLocalize.inspection15ProblemDescriptor(getShortName(api)).get(),
-                    myOnTheFly
-                        ? new LocalQuickFix[]{
-                            (LocalQuickFix)QuickFixFactory.getInstance()
-                                .createIncreaseLanguageLevelFix(LanguageLevel.values()[api.ordinal() + 1])
-                        }
-                        : null
-                );
+                ProblemBuilder builder = myHolder.newProblem(InspectionLocalize.inspection15ProblemDescriptor(getShortName(api)))
+                    .range(reference);
+                if (myOnTheFly) {
+                    QuickFixFactory factory = QuickFixFactory.getInstance();
+                    builder.withFix((LocalQuickFix)factory.createIncreaseLanguageLevelFix(LanguageLevel.values()[api.ordinal() + 1]));
+                }
+                builder.create();
             }
         }
     }
