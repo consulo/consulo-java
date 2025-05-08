@@ -29,64 +29,51 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SetReplaceableByEnumSetInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.setReplaceableByEnumSetDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.setReplaceableByEnumSetProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SetReplaceableByEnumSetVisitor();
-  }
-
-  private static class SetReplaceableByEnumSetVisitor
-    extends BaseInspectionVisitor {
+    @Override
+    @Nonnull
+    public String getDisplayName() {
+        return InspectionGadgetsLocalize.setReplaceableByEnumSetDisplayName().get();
+    }
 
     @Override
-    public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
-      super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
-      if (!(type instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClassType classType = (PsiClassType)type;
-      if (!classType.hasParameters()) {
-        return;
-      }
-      final PsiType[] typeArguments = classType.getParameters();
-      if (typeArguments.length != 1) {
-        return;
-      }
-      final PsiType argumentType = typeArguments[0];
-      if (!(argumentType instanceof PsiClassType)) {
-        return;
-      }
-      if (!TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                JavaClassNames.JAVA_UTIL_SET)) {
-        return;
-      }
-      if (TypeUtils.expressionHasTypeOrSubtype(expression,
-                                               "java.util.EnumSet")) {
-        return;
-      }
-      final PsiClassType argumentClassType = (PsiClassType)argumentType;
-      final PsiClass argumentClass = argumentClassType.resolve();
-      if (argumentClass == null) {
-        return;
-      }
-      if (!argumentClass.isEnum()) {
-        return;
-      }
-      registerNewExpressionError(expression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.setReplaceableByEnumSetProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SetReplaceableByEnumSetVisitor();
+    }
+
+    private static class SetReplaceableByEnumSetVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            super.visitNewExpression(expression);
+            PsiType type = expression.getType();
+            if (!(type instanceof PsiClassType classType) || !classType.hasParameters()) {
+                return;
+            }
+            PsiType[] typeArguments = classType.getParameters();
+            if (typeArguments.length != 1) {
+                return;
+            }
+            PsiType argumentType = typeArguments[0];
+            if (!(argumentType instanceof PsiClassType argumentClassType)) {
+                return;
+            }
+            if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_SET)
+                || TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_ENUM_SET)) {
+                return;
+            }
+            PsiClass argumentClass = argumentClassType.resolve();
+            if (argumentClass == null) {
+                return;
+            }
+            if (!argumentClass.isEnum()) {
+                return;
+            }
+            registerNewExpressionError(expression);
+        }
+    }
 }

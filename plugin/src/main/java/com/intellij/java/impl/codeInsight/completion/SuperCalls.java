@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.impl.codeInsight.completion.scope.CompletionElement;
 import com.intellij.java.impl.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.completion.lookup.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
@@ -27,69 +28,85 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.function.Condition;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author peter
  */
 class SuperCalls {
-  static Set<LookupElement> suggestQualifyingSuperCalls(PsiElement element,
-                                                        PsiJavaReference javaReference,
-                                                        ElementFilter elementFilter,
-                                                        JavaCompletionProcessor.Options options,
-                                                        Condition<String> nameCondition) {
-    Set<LookupElement> set = new LinkedHashSet<>();
-    for (final String className : getContainingClassNames(element)) {
-      PsiReferenceExpression fakeSuper = JavaCompletionUtil.createReference(className + ".super.rulez", element);
-      PsiElement leaf = ObjectUtil.assertNotNull(fakeSuper.getReferenceNameElement());
+    @RequiredReadAction
+    static Set<LookupElement> suggestQualifyingSuperCalls(
+        PsiElement element,
+        PsiJavaReference javaReference,
+        ElementFilter elementFilter,
+        JavaCompletionProcessor.Options options,
+        Predicate<String> nameCondition
+    ) {
+        Set<LookupElement> set = new LinkedHashSet<>();
+        for (String className : getContainingClassNames(element)) {
+            PsiReferenceExpression fakeSuper = JavaCompletionUtil.createReference(className + ".super.rulez", element);
+            PsiElement leaf = ObjectUtil.assertNotNull(fakeSuper.getReferenceNameElement());
 
-      JavaCompletionProcessor superProcessor = new JavaCompletionProcessor(leaf, elementFilter, options, nameCondition);
-      fakeSuper.processVariants(superProcessor);
+            JavaCompletionProcessor superProcessor = new JavaCompletionProcessor(leaf, elementFilter, options, nameCondition);
+            fakeSuper.processVariants(superProcessor);
 
-      for (CompletionElement completionElement : superProcessor.getResults()) {
-        for (LookupElement item : JavaCompletionUtil.createLookupElements(completionElement, javaReference)) {
-          set.add(withQualifiedSuper(className, item));
+            for (CompletionElement completionElement : superProcessor.getResults()) {
+                for (LookupElement item : JavaCompletionUtil.createLookupElements(completionElement, javaReference)) {
+                    set.add(withQualifiedSuper(className, item));
+                }
+            }
         }
-      }
+        return set;
     }
-    return set;
-  }
 
-  @Nonnull
-  private static LookupElement withQualifiedSuper(final String className, LookupElement item) {
-    return PrioritizedLookupElement.withExplicitProximity(new LookupElementDecorator<LookupElement>(item) {
+    @Nonnull
+    @RequiredReadAction
+    private static LookupElement withQualifiedSuper(final String className, LookupElement item) {
+        return PrioritizedLookupElement.withExplicitProximity(
+            new LookupElementDecorator<LookupElement>(item) {
 
-      @Override
-      public void renderElement(LookupElementPresentation presentation) {
-        super.renderElement(presentation);
-        presentation.setItemText(className + ".super." + presentation.getItemText());
-      }
+                @Override
+                public void renderElement(LookupElementPresentation presentation) {
+                    super.renderElement(presentation);
+                    presentation.setItemText(className + ".super." + presentation.getItemText());
+                }
 
-      @Override
-      public void handleInsert(InsertionContext context) {
-        context.commitDocument();
-        PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiJavaCodeReferenceElement.class, false);
-        if (ref != null) {
-          context.getDocument().insertString(ref.getTextRange().getStartOffset(), className + ".");
+                @Override
+                public void handleInsert(InsertionContext context) {
+                    context.commitDocument();
+                    PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(
+                        context.getFile(),
+                        context.getStartOffset(),
+                        PsiJavaCodeReferenceElement.class,
+                        false
+                    );
+                    if (ref != null) {
+                        context.getDocument().insertString(ref.getTextRange().getStartOffset(), className + ".");
+                    }
+
+                    super.handleInsert(context);
+                }
+            },
+            -1
+        );
+    }
+
+    @RequiredReadAction
+    private static Set<String> getContainingClassNames(PsiElement position) {
+        Set<String> result = new LinkedHashSet<>();
+        boolean add = false;
+        while (position != null) {
+            if (position instanceof PsiAnonymousClass) {
+                add = true;
+            }
+            else if (add && position instanceof PsiClass psiClass) {
+                ContainerUtil.addIfNotNull(result, psiClass.getName());
+            }
+            position = position.getParent();
         }
-
-        super.handleInsert(context);
-      }
-    }, -1);
-  }
-
-  private static Set<String> getContainingClassNames(PsiElement position) {
-    Set<String> result = new LinkedHashSet<>();
-    boolean add = false;
-    while (position != null) {
-      if (position instanceof PsiAnonymousClass) {
-        add = true;
-      } else if (add && position instanceof PsiClass) {
-        ContainerUtil.addIfNotNull(result, ((PsiClass) position).getName());
-      }
-      position = position.getParent();
+        return result;
     }
-    return result;
-  }
 }

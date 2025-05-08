@@ -9,17 +9,19 @@ import jakarta.annotation.Nonnull;
 import java.util.Collections;
 
 public class ThrowExceptionPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public ThrowExceptionPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
-    super("throw",
-          "throw $EXPR$;$END$",
-          "throw expr",
-          Collections.singleton(
-            new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateExpressionFqnCondition(CommonClassNames.JAVA_LANG_THROWABLE)),
-          LanguageLevel.JDK_1_3, true, provider);
-  }
+    public ThrowExceptionPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
+        super("throw",
+            "throw $EXPR$;$END$",
+            "throw expr",
+            Collections.singleton(
+                new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateExpressionFqnCondition(CommonClassNames.JAVA_LANG_THROWABLE)
+            ),
+            LanguageLevel.JDK_1_3, true, provider
+        );
+    }
 
-  @Override
-  public boolean isBuiltin() {
-    return true;
-  }
+    @Override
+    public boolean isBuiltin() {
+        return true;
+    }
 }
