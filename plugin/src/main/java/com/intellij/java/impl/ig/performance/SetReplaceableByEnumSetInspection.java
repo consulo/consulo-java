@@ -50,30 +50,23 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
         @Override
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiType type = expression.getType();
-            if (!(type instanceof PsiClassType)) {
+            PsiType type = expression.getType();
+            if (!(type instanceof PsiClassType classType) || !classType.hasParameters()) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType)type;
-            if (!classType.hasParameters()) {
-                return;
-            }
-            final PsiType[] typeArguments = classType.getParameters();
+            PsiType[] typeArguments = classType.getParameters();
             if (typeArguments.length != 1) {
                 return;
             }
-            final PsiType argumentType = typeArguments[0];
-            if (!(argumentType instanceof PsiClassType)) {
+            PsiType argumentType = typeArguments[0];
+            if (!(argumentType instanceof PsiClassType argumentClassType)) {
                 return;
             }
-            if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_SET)) {
+            if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_SET)
+                || TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_ENUM_SET)) {
                 return;
             }
-            if (TypeUtils.expressionHasTypeOrSubtype(expression, "java.util.EnumSet")) {
-                return;
-            }
-            final PsiClassType argumentClassType = (PsiClassType)argumentType;
-            final PsiClass argumentClass = argumentClassType.resolve();
+            PsiClass argumentClass = argumentClassType.resolve();
             if (argumentClass == null) {
                 return;
             }

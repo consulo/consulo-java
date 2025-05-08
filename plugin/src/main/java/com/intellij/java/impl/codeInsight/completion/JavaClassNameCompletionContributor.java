@@ -24,17 +24,17 @@ import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.LangBundle;
 import consulo.language.Language;
 import consulo.language.custom.CustomSyntaxTableFileType;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.InsertHandler;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.plain.psi.PsiPlainTextFile;
 import consulo.language.psi.PsiComment;
@@ -52,8 +52,6 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -61,6 +59,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.intellij.java.impl.codeInsight.completion.JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
@@ -78,14 +77,16 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         psiElement().inside(psiElement(PsiReferenceList.class).withParent(psiClass()));
 
     @Override
-    public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull final CompletionResultSet _result) {
+    @RequiredReadAction
+    public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet _result) {
         if (parameters.getCompletionType() == CompletionType.CLASS_NAME
             || parameters.isExtendedCompletion() && mayContainClassName(parameters)) {
             addAllClasses(parameters, _result);
         }
     }
 
-    static void addAllClasses(CompletionParameters parameters, final CompletionResultSet _result) {
+    @RequiredReadAction
+    static void addAllClasses(CompletionParameters parameters, CompletionResultSet _result) {
         CompletionResultSet result = _result.withPrefixMatcher(CompletionUtilCore.findReferenceOrAlphanumericPrefix(parameters));
         addAllClasses(parameters, parameters.getInvocationCount() <= 1, result.getPrefixMatcher(), _result);
     }
@@ -100,12 +101,10 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
             return true;
         }
         PsiComment comment = PsiTreeUtil.getParentOfType(position, PsiComment.class, false);
-        if (comment != null && !(comment instanceof PsiDocComment)) {
-            return true;
-        }
-        return false;
+        return comment != null && !(comment instanceof PsiDocComment);
     }
 
+    @RequiredReadAction
     public static void addAllClasses(
         @Nonnull CompletionParameters parameters,
         final boolean filterByScope,
@@ -116,13 +115,16 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
 
         if (JavaCompletionContributor.ANNOTATION_NAME.accepts(insertedElement)) {
             MultiMap<String, PsiClass> annoMap = getAllAnnotationClasses(insertedElement, matcher);
-            Processor<PsiClass> processor = new LimitedAccessibleClassPreprocessor(parameters, filterByScope, anno ->
-            {
-                JavaPsiClassReferenceElement item = AllClassesGetter.createLookupItem(anno, JAVA_CLASS_INSERT_HANDLER);
-                item.addLookupStrings(getClassNameWithContainers(anno));
-                consumer.accept(item);
-                return true;
-            });
+            Predicate<PsiClass> processor = new LimitedAccessibleClassPreprocessor(
+                parameters,
+                filterByScope,
+                anno -> {
+                    JavaPsiClassReferenceElement item = AllClassesGetter.createLookupItem(anno, JAVA_CLASS_INSERT_HANDLER);
+                    item.addLookupStrings(getClassNameWithContainers(anno));
+                    consumer.accept(item);
+                    return true;
+                }
+            );
             for (String name : matcher.sortMatching(annoMap.keySet())) {
                 if (!ContainerUtil.process(annoMap.get(name), processor)) {
                     break;
@@ -140,16 +142,16 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         final boolean inJavaContext = parameters.getPosition() instanceof PsiIdentifier;
         final boolean afterNew = AFTER_NEW.accepts(insertedElement);
         if (afterNew) {
-            final PsiExpression expr = PsiTreeUtil.getContextOfType(insertedElement, PsiExpression.class, true);
-            for (final ExpectedTypeInfo info : ExpectedTypesProvider.getExpectedTypes(expr, true)) {
-                final PsiType type = info.getType();
-                final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+            PsiExpression expr = PsiTreeUtil.getContextOfType(insertedElement, PsiExpression.class, true);
+            for (ExpectedTypeInfo info : ExpectedTypesProvider.getExpectedTypes(expr, true)) {
+                PsiType type = info.getType();
+                PsiClass psiClass = PsiUtil.resolveClassInType(type);
                 if (psiClass != null && psiClass.getName() != null) {
                     consumer.accept(createClassLookupItem(psiClass, inJavaContext));
                 }
-                final PsiType defaultType = info.getDefaultType();
+                PsiType defaultType = info.getDefaultType();
                 if (!defaultType.equals(type)) {
-                    final PsiClass defClass = PsiUtil.resolveClassInType(defaultType);
+                    PsiClass defClass = PsiUtil.resolveClassInType(defaultType);
                     if (defClass != null && defClass.getName() != null) {
                         consumer.accept(createClassLookupItem(defClass, true));
                     }
@@ -158,73 +160,78 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         }
 
         final boolean pkgContext = JavaCompletionUtil.inSomePackage(insertedElement);
-        AllClassesGetter.processJavaClasses(parameters, matcher, filterByScope, new Consumer<PsiClass>() {
-            @Override
-            public void accept(PsiClass psiClass) {
-                processClass(psiClass, null, "");
-            }
-
-            private void processClass(PsiClass psiClass, @Nullable Set<PsiClass> visited, String prefix) {
-                boolean isInnerClass = StringUtil.isNotEmpty(prefix);
-                if (isInnerClass && isProcessedIndependently(psiClass)) {
-                    return;
+        AllClassesGetter.processJavaClasses(
+            parameters,
+            matcher,
+            filterByScope,
+            new Consumer<>() {
+                @Override
+                @RequiredReadAction
+                public void accept(PsiClass psiClass) {
+                    processClass(psiClass, null, "");
                 }
 
-                if (filter.isAcceptable(psiClass, insertedElement)) {
-                    if (!inJavaContext) {
-                        JavaPsiClassReferenceElement element = AllClassesGetter.createLookupItem(psiClass, AllClassesGetter.TRY_SHORTENING);
-                        element.setLookupString(prefix + element.getLookupString());
-                        consumer.accept(element);
+                @RequiredReadAction
+                private void processClass(PsiClass psiClass, @Nullable Set<PsiClass> visited, String prefix) {
+                    boolean isInnerClass = StringUtil.isNotEmpty(prefix);
+                    if (isInnerClass && isProcessedIndependently(psiClass)) {
+                        return;
                     }
-                    else {
-                        Condition<PsiClass> condition = eachClass -> filter.isAcceptable(eachClass, insertedElement) && AllClassesGetter.isAcceptableInContext(
-                            insertedElement,
-                            eachClass,
-                            filterByScope,
-                            pkgContext
-                        );
-                        for (JavaPsiClassReferenceElement element
-                            : createClassLookupItems(psiClass, afterNew, JAVA_CLASS_INSERT_HANDLER, condition)) {
+
+                    if (filter.isAcceptable(psiClass, insertedElement)) {
+                        if (!inJavaContext) {
+                            JavaPsiClassReferenceElement element =
+                                AllClassesGetter.createLookupItem(psiClass, AllClassesGetter.TRY_SHORTENING);
                             element.setLookupString(prefix + element.getLookupString());
-                            JavaConstructorCallElement.wrap(element, insertedElement).forEach(consumer::accept);
+                            consumer.accept(element);
+                        }
+                        else {
+                            Predicate<PsiClass> condition = eachClass -> filter.isAcceptable(eachClass, insertedElement)
+                                && AllClassesGetter.isAcceptableInContext(insertedElement, eachClass, filterByScope, pkgContext);
+                            for (JavaPsiClassReferenceElement element
+                                : createClassLookupItems(psiClass, afterNew, JAVA_CLASS_INSERT_HANDLER, condition)) {
+                                element.setLookupString(prefix + element.getLookupString());
+                                JavaConstructorCallElement.wrap(element, insertedElement).forEach(consumer::accept);
+                            }
                         }
                     }
-                }
-                else {
-                    String name = psiClass.getName();
-                    if (name != null) {
-                        PsiClass[] innerClasses = psiClass.getInnerClasses();
-                        if (innerClasses.length > 0) {
-                            if (visited == null) {
-                                visited = new HashSet<>();
-                            }
+                    else {
+                        String name = psiClass.getName();
+                        if (name != null) {
+                            PsiClass[] innerClasses = psiClass.getInnerClasses();
+                            if (innerClasses.length > 0) {
+                                if (visited == null) {
+                                    visited = new HashSet<>();
+                                }
 
-                            for (PsiClass innerClass : innerClasses) {
-                                if (visited.add(innerClass)) {
-                                    processClass(innerClass, visited, prefix + name + ".");
+                                for (PsiClass innerClass : innerClasses) {
+                                    if (visited.add(innerClass)) {
+                                        processClass(innerClass, visited, prefix + name + ".");
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            private boolean isProcessedIndependently(PsiClass psiClass) {
-                String innerName = psiClass.getName();
-                return innerName != null && matcher.prefixMatches(innerName);
+                @RequiredReadAction
+                private boolean isProcessedIndependently(PsiClass psiClass) {
+                    String innerName = psiClass.getName();
+                    return innerName != null && matcher.prefixMatches(innerName);
+                }
             }
-        });
+        );
     }
 
     @Nonnull
+    @RequiredReadAction
     private static MultiMap<String, PsiClass> getAllAnnotationClasses(PsiElement context, PrefixMatcher matcher) {
         MultiMap<String, PsiClass> map = new MultiMap<>();
         GlobalSearchScope scope = context.getResolveScope();
         PsiClass annotation =
             JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope);
         if (annotation != null) {
-            DirectClassInheritorsSearch.search(annotation, scope, false).forEach(psiClass ->
-            {
+            DirectClassInheritorsSearch.search(annotation, scope, false).forEach(psiClass -> {
                 if (!psiClass.isAnnotationType() || psiClass.getQualifiedName() == null) {
                     return true;
                 }
@@ -244,6 +251,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
     }
 
     @Nonnull
+    @RequiredReadAction
     private static String getClassNameWithContainers(@Nonnull PsiClass psiClass) {
         String name = ObjectUtil.assertNotNull(psiClass.getName());
         for (PsiClass parent : JBIterable.generate(psiClass, PsiClass::getContainingClass)) {
@@ -256,24 +264,25 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         return JavaCompletionUtil.highlightIfNeeded(null, element, element.getObject(), parameters.getPosition());
     }
 
-    public static JavaPsiClassReferenceElement createClassLookupItem(final PsiClass psiClass, final boolean inJavaContext) {
+    public static JavaPsiClassReferenceElement createClassLookupItem(PsiClass psiClass, boolean inJavaContext) {
         return AllClassesGetter.createLookupItem(psiClass, inJavaContext ? JAVA_CLASS_INSERT_HANDLER : AllClassesGetter.TRY_SHORTENING);
     }
 
+    @RequiredReadAction
     public static List<JavaPsiClassReferenceElement> createClassLookupItems(
-        final PsiClass psiClass,
+        PsiClass psiClass,
         boolean withInners,
         InsertHandler<JavaPsiClassReferenceElement> insertHandler,
-        Condition<PsiClass> condition
+        Predicate<PsiClass> condition
     ) {
         List<JavaPsiClassReferenceElement> result = new SmartList<>();
-        if (condition.value(psiClass)) {
+        if (condition.test(psiClass)) {
             result.add(AllClassesGetter.createLookupItem(psiClass, insertHandler));
         }
         String name = psiClass.getName();
         if (withInners && name != null) {
             for (PsiClass inner : psiClass.getInnerClasses()) {
-                if (inner.hasModifierProperty(PsiModifier.STATIC)) {
+                if (inner.isStatic()) {
                     for (JavaPsiClassReferenceElement lookupInner : createClassLookupItems(inner, true, insertHandler, condition)) {
                         String forced = lookupInner.getForcedPresentableName();
                         String qualifiedName = name + "." + (forced != null ? forced : inner.getName());
@@ -287,25 +296,25 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         return result;
     }
 
-
     @Override
-    public String handleEmptyLookup(@Nonnull final CompletionParameters parameters, final Editor editor) {
+    @RequiredReadAction
+    public String handleEmptyLookup(@Nonnull CompletionParameters parameters, Editor editor) {
         if (!(parameters.getOriginalFile() instanceof PsiJavaFile)) {
             return null;
         }
 
         if (shouldShowSecondSmartCompletionHint(parameters)) {
-            return LangBundle.message("completion.no.suggestions") + "; " + StringUtil.decapitalize(CompletionBundle.message(
+            return LanguageLocalize.completionNoSuggestions() + "; " + StringUtil.decapitalize(CompletionBundle.message(
                 "completion.class.name.hint.2",
-                getActionShortcut(IdeActions
-                    .ACTION_CODE_COMPLETION)
+                getActionShortcut(IdeActions.ACTION_CODE_COMPLETION)
             ));
         }
 
         return null;
     }
 
-    private static boolean shouldShowSecondSmartCompletionHint(final CompletionParameters parameters) {
+    @RequiredReadAction
+    private static boolean shouldShowSecondSmartCompletionHint(CompletionParameters parameters) {
         return parameters.getCompletionType() == CompletionType.BASIC
             && parameters.getInvocationCount() == 2
             && parameters.getOriginalFile().getLanguage().isKindOf(JavaLanguage.INSTANCE);

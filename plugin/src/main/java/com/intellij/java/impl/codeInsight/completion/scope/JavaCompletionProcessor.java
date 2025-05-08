@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.*;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.resolve.BaseScopeProcessor;
@@ -34,8 +35,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,11 +42,11 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
- * User: ik
- * Date: 20.01.2003
- * Time: 16:13:27
+ * @author ik
+ * @since 2003-01-20
  */
 public class JavaCompletionProcessor extends BaseScopeProcessor implements ElementClassHint {
     private final boolean myInJavaDoc;
@@ -65,15 +64,16 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     private boolean myQualified;
     private PsiType myQualifierType;
     private PsiClass myQualifierClass;
-    private final Condition<String> myMatcher;
+    private final Predicate<String> myMatcher;
     private final Options myOptions;
     private final boolean myAllowStaticWithInstanceQualifier;
 
+    @RequiredReadAction
     public JavaCompletionProcessor(
         @Nonnull PsiElement element,
         ElementFilter filter,
         Options options,
-        @Nonnull Condition<String> nameCondition
+        @Nonnull Predicate<String> nameCondition
     ) {
         myOptions = options;
         myElement = element;
@@ -89,27 +89,24 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
         }
         myScope = scope;
 
-        PsiElement elementParent = element.getContext();
-        if (elementParent instanceof PsiReferenceExpression) {
-            PsiExpression qualifier = ((PsiReferenceExpression)elementParent).getQualifierExpression();
-            if (qualifier instanceof PsiSuperExpression) {
-                final PsiJavaCodeReferenceElement qSuper = ((PsiSuperExpression)qualifier).getQualifier();
+        if (element.getContext() instanceof PsiReferenceExpression refExpr) {
+            PsiExpression qualifier = refExpr.getQualifierExpression();
+            if (qualifier instanceof PsiSuperExpression superExpr) {
+                PsiJavaCodeReferenceElement qSuper = superExpr.getQualifier();
                 if (qSuper == null) {
                     myQualifierClass = JavaResolveUtil.getContextClass(myElement);
                 }
                 else {
-                    final PsiElement target = qSuper.resolve();
-                    myQualifierClass = target instanceof PsiClass ? (PsiClass)target : null;
+                    PsiElement target = qSuper.resolve();
+                    myQualifierClass = target instanceof PsiClass psiClass ? psiClass : null;
                 }
             }
             else if (qualifier != null) {
                 myQualified = true;
                 setQualifierType(qualifier.getType());
-                if (myQualifierType == null && qualifier instanceof PsiJavaCodeReferenceElement) {
-                    final PsiElement target = ((PsiJavaCodeReferenceElement)qualifier).resolve();
-                    if (target instanceof PsiClass) {
-                        myQualifierClass = (PsiClass)target;
-                    }
+                if (myQualifierType == null && qualifier instanceof PsiJavaCodeReferenceElement javaCodeRef
+                    && javaCodeRef.resolve() instanceof PsiClass psiClass) {
+                    myQualifierClass = psiClass;
                 }
             }
             else {
@@ -140,32 +137,30 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     }
 
     @Override
+    @RequiredReadAction
     public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
-        if (element instanceof PsiPackage && !isQualifiedContext()) {
+        if (element instanceof PsiPackage psiPackage && !isQualifiedContext()) {
             if (myScope instanceof PsiClass) {
                 return true;
             }
-            if (((PsiPackage)element).getQualifiedName().contains(".")
+            if (psiPackage.getQualifiedName().contains(".")
                 && PsiTreeUtil.getParentOfType(myElement, PsiImportStatementBase.class) != null) {
                 return true;
             }
         }
 
-        if (element instanceof PsiMethod) {
-            PsiMethod method = (PsiMethod)element;
-            if (PsiTypesUtil.isGetClass(method) && PsiUtil.isLanguageLevel5OrHigher(myElement)) {
-                PsiType patchedType = PsiTypesUtil.createJavaLangClassType(myElement, myQualifierType, false);
-                if (patchedType != null) {
-                    element = new LightMethodBuilder(element.getManager(), method.getName()).
-                        addModifier(PsiModifier.PUBLIC).
-                        setMethodReturnType(patchedType).
-                        setContainingClass(method.getContainingClass());
-                }
+        if (element instanceof PsiMethod method && PsiTypesUtil.isGetClass(method) && PsiUtil.isLanguageLevel5OrHigher(myElement)) {
+            PsiType patchedType = PsiTypesUtil.createJavaLangClassType(myElement, myQualifierType, false);
+            if (patchedType != null) {
+                element = new LightMethodBuilder(element.getManager(), method.getName()).
+                    addModifier(PsiModifier.PUBLIC).
+                    setMethodReturnType(patchedType).
+                    setContainingClass(method.getContainingClass());
             }
         }
 
-        if (element instanceof PsiVariable) {
-            String name = ((PsiVariable)element).getName();
+        if (element instanceof PsiVariable variable) {
+            String name = variable.getName();
             if (myShadowedNames.contains(name)) {
                 return true;
             }
@@ -174,8 +169,8 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
             }
         }
 
-        if (element instanceof PsiMethod) {
-            myCurrentScopeMethodNames.add(((PsiMethod)element).getName());
+        if (element instanceof PsiMethod method) {
+            myCurrentScopeMethodNames.add(method.getName());
         }
 
         if (!satisfies(element, state) || !isAccessible(element)) {
@@ -200,13 +195,13 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     }
 
     @Nonnull
+    @RequiredReadAction
     private String getCallQualifierText(@Nonnull PsiElement element) {
-        if (element instanceof PsiMethod) {
-            PsiMethod method = (PsiMethod)element;
+        if (element instanceof PsiMethod method) {
             if (myFinishedScopesMethodNames.contains(method.getName())) {
-                String className = myDeclarationHolder instanceof PsiClass ? ((PsiClass)myDeclarationHolder).getName() : null;
+                String className = myDeclarationHolder instanceof PsiClass psiClass ? psiClass.getName() : null;
                 if (className != null) {
-                    return className + (method.hasModifierProperty(PsiModifier.STATIC) ? "." : ".this.");
+                    return className + (method.isStatic() ? "." : ".this.");
                 }
             }
         }
@@ -214,41 +209,36 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     }
 
     private boolean isQualifiedContext() {
-        final PsiElement elementParent = myElement.getParent();
-        return elementParent instanceof PsiQualifiedReference && ((PsiQualifiedReference)elementParent).getQualifier() != null;
+        PsiElement elementParent = myElement.getParent();
+        return elementParent instanceof PsiQualifiedReference qualifiedRef && qualifiedRef.getQualifier() != null;
     }
 
     private StaticProblem getStaticProblem(PsiElement element) {
         if (myOptions.showInstanceInStaticContext && !isQualifiedContext()) {
             return StaticProblem.none;
         }
-        if (element instanceof PsiModifierListOwner) {
-            PsiModifierListOwner modifierListOwner = (PsiModifierListOwner)element;
+        if (element instanceof PsiModifierListOwner modifierListOwner) {
             if (myStatic) {
                 if (!(element instanceof PsiClass) && !modifierListOwner.hasModifierProperty(PsiModifier.STATIC)) {
                     // we don't need non static method in static context.
                     return StaticProblem.instanceAfterStatic;
                 }
             }
-            else {
-                if (!myAllowStaticWithInstanceQualifier && modifierListOwner.hasModifierProperty(PsiModifier.STATIC) && !myMembersFlag) {
-                    // according settings we don't need to process such fields/methods
-                    return StaticProblem.staticAfterInstance;
-                }
+            else if (!myAllowStaticWithInstanceQualifier && modifierListOwner.hasModifierProperty(PsiModifier.STATIC) && !myMembersFlag) {
+                // according settings we don't need to process such fields/methods
+                return StaticProblem.staticAfterInstance;
             }
         }
         return StaticProblem.none;
     }
 
     public boolean satisfies(@Nonnull PsiElement element, @Nonnull ResolveState state) {
-        final String name = PsiUtilCore.getName(element);
-        if (name != null && StringUtil.isNotEmpty(name) && myMatcher.value(name)) {
-            if (myFilter.isClassAcceptable(element.getClass())
-                && myFilter.isAcceptable(new CandidateInfo(element, state.get(PsiSubstitutor.KEY)), myElement)) {
-                return true;
-            }
-        }
-        return false;
+        String name = PsiUtilCore.getName(element);
+        return name != null
+            && StringUtil.isNotEmpty(name)
+            && myMatcher.test(name)
+            && myFilter.isClassAcceptable(element.getClass())
+            && myFilter.isAcceptable(new CandidateInfo(element, state.get(PsiSubstitutor.KEY)), myElement);
     }
 
     public void setQualifierType(@Nullable PsiType qualifierType) {
@@ -261,20 +251,19 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
         return myQualifierType;
     }
 
-    public boolean isAccessible(@Nullable final PsiElement element) {
+    public boolean isAccessible(@Nullable PsiElement element) {
         // if checkAccess is false, we only show inaccessible source elements because their access modifiers can be changed later by the user.
         // compiled element can't be changed so we don't pollute the completion with them. In Javadoc, everything is allowed.
         if (!myOptions.checkAccess && myInJavaDoc) {
             return true;
         }
-        if (!(element instanceof PsiMember)) {
+        if (!(element instanceof PsiMember member)) {
             return true;
         }
 
-        PsiMember member = (PsiMember)element;
         PsiClass accessObjectClass = myQualified ? myQualifierClass : null;
-        if (JavaPsiFacade.getInstance(element.getProject())
-            .getResolveHelper()
+        //noinspection SimplifiableIfStatement
+        if (JavaPsiFacade.getInstance(element.getProject()).getResolveHelper()
             .isAccessible(member, member.getModifierList(), myElement, accessObjectClass, myDeclarationHolder)) {
             return true;
         }

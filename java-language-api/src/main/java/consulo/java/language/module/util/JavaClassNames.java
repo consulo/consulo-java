@@ -86,6 +86,7 @@ public interface JavaClassNames {
     String JAVA_UTIL_COMPARATOR = "java.util.Comparator";
     String JAVA_UTIL_DATE = "java.util.Date";
     String JAVA_UTIL_DICTIONARY = "java.util.Dictionary";
+    String JAVA_UTIL_ENUM_SET = "java.util.EnumSet";
     String JAVA_UTIL_FUNCTION_BI_FUNCTION = "java.util.function.BiFunction";
     String JAVA_UTIL_FUNCTION_PREDICATE = "java.util.function.Predicate";
     String JAVA_UTIL_FUNCTION_CONSUMER = "java.util.function.Consumer";
