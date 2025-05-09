@@ -17,14 +17,10 @@ package com.intellij.java.impl.psi.filters.getters;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaSmartCompletionParameters;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.java.language.psi.PsiWildcardType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.matcher.PrefixMatcher;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
@@ -41,11 +37,11 @@ public class ClassLiteralGetter {
   public static void addCompletions(@Nonnull final JavaSmartCompletionParameters parameters,
                                     @Nonnull Consumer<LookupElement> result, final PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
-    if (!InheritanceUtil.isInheritor(expectedType, JavaClassNames.JAVA_LANG_CLASS)) {
+    if (!InheritanceUtil.isInheritor(expectedType, CommonClassNames.JAVA_LANG_CLASS)) {
       return;
     }
 
-    PsiType classParameter = PsiUtil.substituteTypeParameter(expectedType, JavaClassNames.JAVA_LANG_CLASS, 0, false);
+    PsiType classParameter = PsiUtil.substituteTypeParameter(expectedType, CommonClassNames.JAVA_LANG_CLASS, 0, false);
 
     boolean addInheritors = false;
     PsiElement position = parameters.getPosition();
@@ -70,7 +66,7 @@ public class ClassLiteralGetter {
                                                 final PsiType classParameter,
                                                 final Consumer<LookupElement> result, PrefixMatcher matcher) {
     final String canonicalText = classParameter.getCanonicalText();
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(canonicalText) && StringUtil.isEmpty(matcher.getPrefix())) {
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(canonicalText) && StringUtil.isEmpty(matcher.getPrefix())) {
       return;
     }
 

@@ -15,21 +15,18 @@
  */
 package com.siyeh.ig.psiutils;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 public class CloneUtils {
 
   private CloneUtils() {}
 
   public static boolean isCloneable(@Nonnull PsiClass aClass) {
-    return InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_CLONEABLE);
+    return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_CLONEABLE);
   }
 
   public static boolean isDirectlyCloneable(@Nonnull PsiClass aClass) {
@@ -39,7 +36,7 @@ public class CloneUtils {
         continue;
       }
       final String qualifiedName = anInterface.getQualifiedName();
-      if (JavaClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
+      if (CommonClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
         return true;
       }
     }

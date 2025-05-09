@@ -7,15 +7,13 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Collections;
 import java.util.Set;
@@ -222,7 +220,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
         static final Simple ENUM_VALUES =
             new Simple("", Collections.singleton("values"), ArrayUtil.EMPTY_STRING_ARRAY, CallType.ENUM_STATIC);
         static final Simple ENUM_VALUE_OF =
-            new Simple("", Collections.singleton("valueOf"), new String[]{JavaClassNames.JAVA_LANG_STRING}, CallType.ENUM_STATIC);
+            new Simple("", Collections.singleton("valueOf"), new String[]{CommonClassNames.JAVA_LANG_STRING}, CallType.ENUM_STATIC);
         @Nonnull
         private final String myClassName;
         @Nonnull

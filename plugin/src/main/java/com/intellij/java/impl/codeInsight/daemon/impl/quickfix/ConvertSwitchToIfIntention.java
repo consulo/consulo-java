@@ -15,7 +15,6 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.PsiElement;
@@ -98,7 +97,7 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
             return;
         }
         CommentTracker commentTracker = new CommentTracker();
-        boolean isSwitchOnString = switchExpressionType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+        boolean isSwitchOnString = switchExpressionType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
         boolean useEquals = isSwitchOnString;
         if (!useEquals) {
             PsiClass aClass = PsiUtil.resolveClassInType(switchExpressionType);

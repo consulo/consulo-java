@@ -15,13 +15,9 @@
  */
 package com.intellij.java.impl.ipp.psiutils;
 
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.*;
+import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
 
 public class ConcatenationUtils {
 
@@ -49,11 +45,11 @@ public class ConcatenationUtils {
       }
       return false;
     }
-    return type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+    return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
   }
 
   private static boolean hasStringType(PsiExpression expression) {
     final PsiType type = expression.getType();
-    return type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+    return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
   }
 }

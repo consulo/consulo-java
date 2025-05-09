@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiKeyword;
@@ -24,7 +25,6 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -74,8 +74,8 @@ public class CharacterComparisonInspection extends BaseInspection {
     }
 
     private static boolean isCharacter(@Nullable PsiExpression expression) {
-      return ExpressionUtils.hasType(expression, PsiKeyword.CHAR) ||
-             ExpressionUtils.hasType(expression, JavaClassNames.JAVA_LANG_CHARACTER);
+      return ExpressionUtils.hasType(expression, PsiKeyword.CHAR)
+          || ExpressionUtils.hasType(expression, CommonClassNames.JAVA_LANG_CHARACTER);
     }
   }
 }

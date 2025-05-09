@@ -22,7 +22,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -112,17 +111,13 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
       super.visitMethodCallExpression(expression);
       final Project project = expression.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass stringClass =
-        psiFacade.findClass(JavaClassNames.JAVA_LANG_STRING,
-                            expression.getResolveScope());
+      final PsiClass stringClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING, expression.getResolveScope());
       if (stringClass == null) {
         return;
       }
       final PsiClassType stringType =
         psiFacade.getElementFactory().createType(stringClass);
-      if (!MethodCallUtils.isCallToMethod(expression,
-                                          JavaClassNames.JAVA_LANG_STRING,
-                                          stringType, "concat", stringType)) {
+      if (!MethodCallUtils.isCallToMethod(expression, CommonClassNames.JAVA_LANG_STRING, stringType, "concat", stringType)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

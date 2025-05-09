@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
@@ -36,7 +35,7 @@ public class ConstructionUtils {
     private static final Set<String> GUAVA_UTILITY_CLASSES =
         Set.of("com.google.common.collect.Maps", "com.google.common.collect.Lists", "com.google.common.collect.Sets");
     private static final CallMatcher ENUM_SET_NONE_OF =
-        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_ENUM_SET, "noneOf").parameterCount(1);
+        CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_ENUM_SET, "noneOf").parameterCount(1);
 
     /**
      * Checks that given expression initializes empty StringBuilder or StringBuffer (either with explicit default capacity or not)
@@ -73,7 +72,7 @@ public class ConstructionUtils {
             return null;
         }
         String qualifiedName = aClass.getQualifiedName();
-        if (!JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) && !JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
+        if (!CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) && !CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
             return null;
         }
         PsiExpressionList argumentList = newExpr.getArgumentList();
@@ -108,8 +107,8 @@ public class ConstructionUtils {
             PsiExpressionList argumentList = newExpr.getArgumentList();
             if (argumentList != null && argumentList.getExpressions().length == 0) {
                 PsiType type = expression.getType();
-                return InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_COLLECTION)
-                    || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_MAP);
+                return InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_COLLECTION)
+                    || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_MAP);
             }
         }
         if (expression instanceof PsiMethodCallExpression) {
@@ -154,12 +153,12 @@ public class ConstructionUtils {
             if (aClass != null && (aClass.getQualifiedName() == null || !aClass.getQualifiedName().startsWith("java.util."))) {
                 return false;
             }
-            if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION)
-                && !InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_MAP)) {
+            if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COLLECTION)
+                && !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_MAP)) {
                 return false;
             }
             Predicate<PsiType> allowedParameterType =
-                t -> t instanceof PsiPrimitiveType || InheritanceUtil.isInheritor(t, JavaClassNames.JAVA_LANG_CLASS);
+                t -> t instanceof PsiPrimitiveType || InheritanceUtil.isInheritor(t, CommonClassNames.JAVA_LANG_CLASS);
             return Stream.of(constructor.getParameterList().getParameters()).map(PsiParameter::getType).allMatch(allowedParameterType);
         }
         if (expression instanceof PsiMethodCallExpression call) {
@@ -208,8 +207,8 @@ public class ConstructionUtils {
                 PsiType type = parameter.getType();
                 if (type instanceof PsiClassType) {
                     PsiClassType rawType = ((PsiClassType)type).rawType();
-                    if (rawType.equalsToText(JavaClassNames.JAVA_UTIL_COLLECTION)
-                        || rawType.equalsToText(JavaClassNames.JAVA_UTIL_MAP)) {
+                    if (rawType.equalsToText(CommonClassNames.JAVA_UTIL_COLLECTION)
+                        || rawType.equalsToText(CommonClassNames.JAVA_UTIL_MAP)) {
                         return true;
                     }
                 }
@@ -238,8 +237,8 @@ public class ConstructionUtils {
                     }
                     if (type instanceof PsiClassType) {
                         PsiClassType rawType = ((PsiClassType)type).rawType();
-                        if (rawType.equalsToText(JavaClassNames.JAVA_LANG_ITERABLE)
-                            || rawType.equalsToText(JavaClassNames.JAVA_UTIL_ITERATOR)) {
+                        if (rawType.equalsToText(CommonClassNames.JAVA_LANG_ITERABLE)
+                            || rawType.equalsToText(CommonClassNames.JAVA_UTIL_ITERATOR)) {
                             return true;
                         }
                     }

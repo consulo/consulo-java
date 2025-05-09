@@ -22,7 +22,6 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -108,7 +107,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_CLASS.equals(className)) {
+      if (!CommonClassNames.JAVA_LANG_CLASS.equals(className)) {
         return;
       }
       final PsiType[] parameters = classType.getParameters();

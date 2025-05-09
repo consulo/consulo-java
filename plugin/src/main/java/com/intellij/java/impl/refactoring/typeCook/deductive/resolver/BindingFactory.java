@@ -359,9 +359,9 @@ public class BindingFactory {
               if (kindX + kindY == 5) {
                 try {
                   PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
-                  PsiType cloneable = f.createTypeFromText(JavaClassNames.JAVA_LANG_CLONEABLE, null);
-                  PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
-                  PsiType serializable = f.createTypeFromText(JavaClassNames.JAVA_IO_SERIALIZABLE, null);
+                  PsiType cloneable = f.createTypeFromText(CommonClassNames.JAVA_LANG_CLONEABLE, null);
+                  PsiType object = f.createTypeFromText(CommonClassNames.JAVA_LANG_OBJECT, null);
+                  PsiType serializable = f.createTypeFromText(CommonClassNames.JAVA_IO_SERIALIZABLE, null);
 
                   PsiType type;
                   int flag;
@@ -684,7 +684,7 @@ public class BindingFactory {
                 }
                 else {
                   /* ? super T1, T2 */
-                  if (xType != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(xType.getCanonicalText())) {
+                  if (xType != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(xType.getCanonicalText())) {
                     return null;
                   }
                   return create();
@@ -1065,9 +1065,9 @@ public class BindingFactory {
               PsiElementFactory f = JavaPsiFacade.getInstance(myProject).getElementFactory();
               PsiType keyType = x instanceof PsiClassType ? x : y;
 
-              PsiType object = f.createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, null);
-              PsiType cloneable = f.createTypeFromText(JavaClassNames.JAVA_LANG_CLONEABLE, null);
-              PsiType serializable = f.createTypeFromText(JavaClassNames.JAVA_IO_SERIALIZABLE, null);
+              PsiType object = f.createTypeFromText(CommonClassNames.JAVA_LANG_OBJECT, null);
+              PsiType cloneable = f.createTypeFromText(CommonClassNames.JAVA_LANG_CLONEABLE, null);
+              PsiType serializable = f.createTypeFromText(CommonClassNames.JAVA_IO_SERIALIZABLE, null);
 
               intersect(keyType, object, list);
               intersect(keyType, cloneable, list);
@@ -1112,7 +1112,7 @@ public class BindingFactory {
             final PsiClass[] ancestors = GenericsUtil.getLeastUpperClasses(xClass, yClass);
 
             for (final PsiClass ancestor : ancestors) {
-              if (JavaClassNames.JAVA_LANG_OBJECT.equals(ancestor.getQualifiedName()) && ancestors.length > 1) {
+              if (CommonClassNames.JAVA_LANG_OBJECT.equals(ancestor.getQualifiedName()) && ancestors.length > 1) {
                 continue;
               }
 

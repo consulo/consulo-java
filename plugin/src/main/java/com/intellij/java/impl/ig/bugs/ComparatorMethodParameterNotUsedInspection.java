@@ -16,13 +16,12 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
@@ -63,9 +62,14 @@ public class ComparatorMethodParameterNotUsedInspection
     @Override
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
-      if (!MethodUtils.methodMatches(method,
-                                     JavaClassNames.JAVA_UTIL_COMPARATOR,
-                                     PsiType.INT, "compare", PsiType.NULL, PsiType.NULL)) {
+      if (!MethodUtils.methodMatches(
+          method,
+          CommonClassNames.JAVA_UTIL_COMPARATOR,
+          PsiType.INT,
+          "compare",
+          PsiType.NULL,
+          PsiType.NULL
+      )) {
         return;
       }
       final PsiCodeBlock body = method.getBody();

@@ -15,8 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
@@ -25,16 +23,18 @@ import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class CompoundTypeRenderer extends CompoundNodeRenderer
 {
@@ -47,7 +47,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 	public CompoundTypeRenderer(NodeRendererSettings rendererSettings, String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer)
 	{
 		super(rendererSettings, name, labelRenderer, childrenRenderer);
-		myProperties.setClassName(JavaClassNames.JAVA_LANG_OBJECT);
+		myProperties.setClassName(CommonClassNames.JAVA_LANG_OBJECT);
 		LOG.assertTrue(labelRenderer == null || labelRenderer instanceof TypeRenderer);
 		LOG.assertTrue(childrenRenderer == null || childrenRenderer instanceof TypeRenderer);
 	}

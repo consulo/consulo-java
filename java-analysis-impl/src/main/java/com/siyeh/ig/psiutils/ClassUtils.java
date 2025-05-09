@@ -19,14 +19,13 @@ import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCi
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,15 +61,15 @@ public class ClassUtils {
     primitiveNumericTypes.add(PsiType.FLOAT);
     primitiveNumericTypes.add(PsiType.DOUBLE);
 
-    immutableTypes.add(JavaClassNames.JAVA_LANG_BOOLEAN);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_CHARACTER);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_SHORT);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_LONG);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_FLOAT);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_DOUBLE);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_BYTE);
-    immutableTypes.add(JavaClassNames.JAVA_LANG_STRING);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_BOOLEAN);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_CHARACTER);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_SHORT);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_LONG);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_FLOAT);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_DOUBLE);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_BYTE);
+    immutableTypes.add(CommonClassNames.JAVA_LANG_STRING);
     immutableTypes.add("java.awt.Font");
     immutableTypes.add("java.awt.Color");
     immutableTypes.add("java.math.BigDecimal");
@@ -78,7 +77,7 @@ public class ClassUtils {
     immutableTypes.add("java.math.MathContext");
     immutableTypes.add("java.nio.channels.FileLock");
     immutableTypes.add("java.nio.charset.Charset");
-    immutableTypes.add(JavaClassNames.JAVA_IO_FILE);
+    immutableTypes.add(CommonClassNames.JAVA_IO_FILE);
     immutableTypes.add("java.net.URI");
     immutableTypes.add("java.util.regex.Pattern");
   }
@@ -93,7 +92,7 @@ public class ClassUtils {
 
   @Nullable
   public static PsiClass findObjectClass(PsiElement context) {
-    return findClass(JavaClassNames.JAVA_LANG_OBJECT, context);
+    return findClass(CommonClassNames.JAVA_LANG_OBJECT, context);
   }
 
   public static boolean isPrimitive(PsiType type) {

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -29,9 +28,8 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Bas Leijdekkers
@@ -62,8 +60,8 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     return JavaTokenType.PLUSEQ == myTokenType &&
            myAssignmentExpression.isValid() &&
            PsiManager.getInstance(project).isInProject(myAssignmentExpression) &&
-           (myLhsType.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUILDER) ||
-            myLhsType.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) ||
+           (myLhsType.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER) ||
+            myLhsType.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) ||
             myLhsType.equalsToText("java.lang.Appendable"));
   }
 
@@ -100,7 +98,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     if (type == null) {
       return null;
     }
-    if (concatenation instanceof PsiPolyadicExpression && type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (concatenation instanceof PsiPolyadicExpression && type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)concatenation;
       final PsiExpression[] operands = polyadicExpression.getOperands();
       boolean isConstant = true;
@@ -112,7 +110,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
             builder.append('+');
           }
           final PsiType operandType = operand.getType();
-          if (operandType != null && operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+          if (operandType != null && operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
             isString = true;
           }
           builder.append(operand.getText());
@@ -138,7 +136,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
       }
     }
     else {
-      append(concatenation.getText(), useStringValueOf && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING), out);
+      append(concatenation.getText(), useStringValueOf && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING), out);
     }
     return out;
   }

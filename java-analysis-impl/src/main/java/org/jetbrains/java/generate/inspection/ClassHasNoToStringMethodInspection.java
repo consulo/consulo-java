@@ -69,7 +69,7 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
           return;
         }
 
-        if (inspectionState.excludeException && InheritanceUtil.isInheritor(clazz, JavaClassNames.JAVA_LANG_THROWABLE)) {
+        if (inspectionState.excludeException && InheritanceUtil.isInheritor(clazz, CommonClassNames.JAVA_LANG_THROWABLE)) {
           return;
         }
         if (inspectionState.excludeDeprecated && clazz.isDeprecated()) {

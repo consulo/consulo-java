@@ -18,10 +18,7 @@ package com.intellij.java.impl.ig.errorhandling;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiReferenceList;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -53,13 +50,13 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
    * @noinspection PublicField
    */
   public final ExternalizableStringSet exceptions = new ExternalizableStringSet(
-    JavaClassNames.JAVA_LANG_THROWABLE,
-    JavaClassNames.JAVA_LANG_EXCEPTION,
-    JavaClassNames.JAVA_LANG_ERROR,
-    JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
-    JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
-    JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
-    JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
+    CommonClassNames.JAVA_LANG_THROWABLE,
+    CommonClassNames.JAVA_LANG_EXCEPTION,
+    CommonClassNames.JAVA_LANG_ERROR,
+    CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+    CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
+    CommonClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
+    CommonClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
   );
 
   /**
@@ -106,7 +103,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
     JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-        JavaClassNames.JAVA_LANG_THROWABLE
+        CommonClassNames.JAVA_LANG_THROWABLE
     );
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

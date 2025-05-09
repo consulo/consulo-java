@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
@@ -30,7 +31,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import jakarta.annotation.Nonnull;
@@ -148,7 +148,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
       if (returnType == null) {
         return;
       } else if (!returnType.equals(PsiType.BOOLEAN)) {
-        if (ignoreBooleanMethods || !returnType.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+        if (ignoreBooleanMethods || !returnType.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
           return;
         }
       }

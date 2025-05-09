@@ -15,12 +15,11 @@
  */
 package com.intellij.java.impl.ipp.chartostring;
 
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 class CharToStringPredicate implements PsiElementPredicate {
@@ -57,7 +56,7 @@ class CharToStringPredicate implements PsiElementPredicate {
         return false;
       }
       final String parentTypeText = parentType.getCanonicalText();
-      return JavaClassNames.JAVA_LANG_STRING.equals(parentTypeText);
+      return CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText);
     }
     else if (parent instanceof PsiAssignmentExpression) {
       final PsiAssignmentExpression parentExpression =
@@ -71,7 +70,7 @@ class CharToStringPredicate implements PsiElementPredicate {
         return false;
       }
       final String parentTypeText = parentType.getCanonicalText();
-      return JavaClassNames.JAVA_LANG_STRING.equals(parentTypeText);
+      return CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText);
     }
     else if (parent instanceof PsiExpressionList) {
       final PsiElement grandParent = parent.getParent();
@@ -97,8 +96,8 @@ class CharToStringPredicate implements PsiElementPredicate {
         return false;
       }
       final String className = type.getCanonicalText();
-      if (JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-          JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+      if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+          CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
         @NonNls final String methodName =
           methodExpression.getReferenceName();
         if (!"append".equals(methodName) &&
@@ -108,7 +107,7 @@ class CharToStringPredicate implements PsiElementPredicate {
         final PsiElement method = methodExpression.resolve();
         return method != null;
       }
-      else if (JavaClassNames.JAVA_LANG_STRING.equals(className)) {
+      else if (CommonClassNames.JAVA_LANG_STRING.equals(className)) {
         @NonNls final String methodName =
           methodExpression.getReferenceName();
         if (!"indexOf".equals(methodName) &&
