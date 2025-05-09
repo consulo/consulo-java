@@ -126,7 +126,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
       if (parent instanceof PsiPolyadicExpression) {
       final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
       final PsiType type = polyadicExpression.getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
           return true;
       }
       final PsiExpression[] operands = polyadicExpression.getOperands();
@@ -138,11 +138,11 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
         }
       }
       if (index > 0) {
-        if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
+        if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index - 1].getType())) {
             return true;
         }
       } else if (operands.length > 1) {
-        if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
+        if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, operands[index + 1].getType())) {
             return true;
         }
       } else {
@@ -162,7 +162,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
           if (expressions.length < 2 || !expression.equals(ParenthesesUtils.stripParentheses(expressions[1]))) {
             return true;
         }
-          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER)) {
+          if (!isCallToMethodIn(methodCallExpression, CommonClassNames.JAVA_LANG_STRING_BUILDER, CommonClassNames.JAVA_LANG_STRING_BUFFER)) {
             return true;
       }
 
@@ -170,11 +170,11 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
           if (expressions.length < 1 || !expression.equals(ParenthesesUtils.stripParentheses(expressions[0]))) {
             return true;
           }
-          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER)) {
+          if (!isCallToMethodIn(methodCallExpression, CommonClassNames.JAVA_LANG_STRING_BUILDER, CommonClassNames.JAVA_LANG_STRING_BUFFER)) {
             return true;
           }
         } else if ("print".equals(name) || "println".equals(name)) {
-          if (!isCallToMethodIn(methodCallExpression, JavaClassNames.JAVA_IO_PRINT_STREAM, JavaClassNames.JAVA_IO_PRINT_WRITER)) {
+          if (!isCallToMethodIn(methodCallExpression, CommonClassNames.JAVA_IO_PRINT_STREAM, CommonClassNames.JAVA_IO_PRINT_WRITER)) {
             return true;
           }
         }

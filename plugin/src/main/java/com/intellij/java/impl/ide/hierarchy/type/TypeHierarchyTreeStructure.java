@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.PsiClass;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public final class TypeHierarchyTreeStructure extends SubtypesHierarchyTreeStruc
         }
 
         ArrayList<PsiClass> superClasses = new ArrayList<>();
-        while (!JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
+        while (!CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
             PsiClass aClass1 = aClass;
             PsiClass[] superTypes = aClass1.getSupers();
             PsiClass superType = null;

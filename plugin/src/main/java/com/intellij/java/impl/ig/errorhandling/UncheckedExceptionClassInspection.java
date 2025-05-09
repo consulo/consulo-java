@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -49,14 +49,11 @@ public class UncheckedExceptionClassInspection extends BaseInspection {
 
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_THROWABLE)) {
+      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
-      if (InheritanceUtil.isInheritor(aClass,
-                                      JavaClassNames.JAVA_LANG_EXCEPTION) &&
-          !InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
+      if (InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION) &&
+          !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
         return;
       }
       registerClassError(aClass);

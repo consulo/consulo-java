@@ -27,7 +27,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.content.scope.SearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.psi.PsiAnchor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -907,7 +906,7 @@ public class SystemBuilder {
     if (elemenType != null) {
       addBoundConstraintsImpl(definedType, elemenType, system);
 
-      if (mySettings.cookObjects() && elemenType.getCanonicalText().equals(JavaClassNames.JAVA_LANG_OBJECT)) {
+      if (mySettings.cookObjects() && elemenType.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT)) {
         system.addSubtypeConstraint(definedType, elemenType);
       }
     }
@@ -1014,7 +1013,7 @@ public class SystemBuilder {
         final PsiClass clazz = resolveResult.getElement();
         if (clazz != null) {
           final PsiClass iterableClass =
-            JavaPsiFacade.getInstance(clazz.getProject()).findClass(JavaClassNames.JAVA_LANG_ITERABLE, clazz.getResolveScope());
+            JavaPsiFacade.getInstance(clazz.getProject()).findClass(CommonClassNames.JAVA_LANG_ITERABLE, clazz.getResolveScope());
           if (iterableClass != null) {
             final PsiTypeParameter[] typeParameters = iterableClass.getTypeParameters();
             if (typeParameters.length == 1) {

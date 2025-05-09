@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
@@ -80,7 +79,7 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
         }
         final PsiExpression[] arguments = argumentList.getExpressions();
         for (PsiExpression argument : arguments) {
-          if (TypeUtils.expressionHasTypeOrSubtype(argument, JavaClassNames.JAVA_LANG_RUNNABLE)) {
+          if (TypeUtils.expressionHasTypeOrSubtype(argument, CommonClassNames.JAVA_LANG_RUNNABLE)) {
             return;
           }
         }
@@ -109,7 +108,7 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
         }
         final PsiExpression[] arguments = argumentList.getExpressions();
         for (PsiExpression argument : arguments) {
-          if (TypeUtils.expressionHasTypeOrSubtype(argument, JavaClassNames.JAVA_LANG_RUNNABLE)) {
+          if (TypeUtils.expressionHasTypeOrSubtype(argument, CommonClassNames.JAVA_LANG_RUNNABLE)) {
             return;
           }
         }

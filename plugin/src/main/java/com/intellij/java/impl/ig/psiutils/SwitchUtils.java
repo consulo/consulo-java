@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiErrorElement;
@@ -147,8 +146,8 @@ public class SwitchUtils {
     if (PsiType.CHAR.equals(type) || PsiType.BYTE.equals(type) || PsiType.SHORT.equals(type) || PsiType.INT.equals(type)) {
       return true;
     } else if (type instanceof PsiClassType) {
-      if (type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER) || type.equalsToText(JavaClassNames.JAVA_LANG_BYTE) ||
-          type.equalsToText(JavaClassNames.JAVA_LANG_SHORT) || type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER)) {
+      if (type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER) || type.equalsToText(CommonClassNames.JAVA_LANG_BYTE) ||
+          type.equalsToText(CommonClassNames.JAVA_LANG_SHORT) || type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER)) {
         return true;
       }
       if (languageLevel.isAtLeast(LanguageLevel.JDK_1_5)) {
@@ -158,7 +157,7 @@ public class SwitchUtils {
           return true;
         }
       }
-      if (languageLevel.isAtLeast(LanguageLevel.JDK_1_7) && type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (languageLevel.isAtLeast(LanguageLevel.JDK_1_7) && type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return true;
       }
     }
@@ -211,7 +210,7 @@ public class SwitchUtils {
       return null;
     }
     final PsiType type = qualifierExpression.getType();
-    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return null;
     }
     final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
@@ -221,7 +220,7 @@ public class SwitchUtils {
     }
     final PsiExpression argument = arguments[0];
     final PsiType argumentType = argument.getType();
-    if (argumentType == null || !argumentType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (argumentType == null || !argumentType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return null;
     }
     if (PsiUtil.isConstantExpression(qualifierExpression)) {

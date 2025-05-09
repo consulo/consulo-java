@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.HighPriorityAction;
@@ -149,7 +148,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
         }
         PsiClassType.ClassResolveResult resolve = ((PsiClassType)parameterType).resolveGenerics();
         PsiClass resolvedClass = resolve.getElement();
-        if (resolvedClass == null || !JavaClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName())) {
+        if (resolvedClass == null || !CommonClassNames.JAVA_UTIL_OPTIONAL.equals(resolvedClass.getQualifiedName())) {
             return false;
         }
 
@@ -170,7 +169,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
         Project project = expression.getProject();
         Nullability nullability = NullabilityUtil.getExpressionNullability(expression, true);
         String methodName = nullability == Nullability.NOT_NULL ? "of" : "ofNullable";
-        String newExpressionText = JavaClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
+        String newExpressionText = CommonClassNames.JAVA_UTIL_OPTIONAL + "." + methodName + "(" + expression.getText() + ")";
         return JavaPsiFacade.getElementFactory(project).createExpressionFromText(newExpressionText, expression);
     }
 }

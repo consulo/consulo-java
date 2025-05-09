@@ -15,25 +15,19 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
+import com.intellij.java.language.psi.CommonClassNames;
+import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 import consulo.util.lang.Couple;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
-import java.util.HashMap;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.PrimitiveValue;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.Value;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Eugene Zhuravlev
@@ -48,14 +42,14 @@ public class UnBoxingEvaluator implements Evaluator
 
 	static
 	{
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_BOOLEAN, Couple.of("booleanValue", "()Z"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_BYTE, Couple.of("byteValue", "()B"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_CHARACTER, Couple.of("charValue", "()C"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_SHORT, Couple.of("shortValue", "()S"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_INTEGER, Couple.of("intValue", "()I"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_LONG, Couple.of("longValue", "()J"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_FLOAT, Couple.of("floatValue", "()F"));
-		TYPES_TO_CONVERSION_METHOD_MAP.put(JavaClassNames.JAVA_LANG_DOUBLE, Couple.of("doubleValue", "()D"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_BOOLEAN, Couple.of("booleanValue", "()Z"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_BYTE, Couple.of("byteValue", "()B"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_CHARACTER, Couple.of("charValue", "()C"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_SHORT, Couple.of("shortValue", "()S"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_INTEGER, Couple.of("intValue", "()I"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_LONG, Couple.of("longValue", "()J"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_FLOAT, Couple.of("floatValue", "()F"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_DOUBLE, Couple.of("doubleValue", "()D"));
 	}
 
 	public static boolean isTypeUnboxable(String typeName)

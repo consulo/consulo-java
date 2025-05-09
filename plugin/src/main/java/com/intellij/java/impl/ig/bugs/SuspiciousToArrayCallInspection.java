@@ -21,7 +21,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -76,8 +75,7 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
       final PsiClassType classType = (PsiClassType)type;
       final PsiClass aClass = classType.resolve();
       if (aClass == null ||
-          !InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_UTIL_COLLECTION)) {
+          !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

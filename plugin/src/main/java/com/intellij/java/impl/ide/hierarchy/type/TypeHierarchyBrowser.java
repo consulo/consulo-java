@@ -15,33 +15,30 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
-import java.text.MessageFormat;
-import java.util.Comparator;
-import java.util.Map;
-
+import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
-
-import javax.swing.JPanel;
-import javax.swing.JTree;
-
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserBaseEx;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
 import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
-import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.ui.ex.tree.NodeDescriptor;
-import consulo.ui.ex.action.IdeActions;
+import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.action.IdeActions;
+import consulo.ui.ex.tree.NodeDescriptor;
 import consulo.util.lang.Comparing;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import javax.swing.*;
+import java.text.MessageFormat;
+import java.util.Comparator;
+import java.util.Map;
 
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     private static final Logger LOG = Logger.getInstance(TypeHierarchyBrowser.class);
@@ -135,7 +132,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
         @Override
         protected boolean isEnabled(@Nonnull HierarchyBrowserBaseEx browser, @Nonnull PsiElement psiElement) {
             return super.isEnabled(browser, psiElement)
-                && !JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)psiElement).getQualifiedName());
+                && !CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)psiElement).getQualifiedName());
         }
     }
 

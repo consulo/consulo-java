@@ -19,11 +19,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -83,8 +81,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
 
     @Nullable
     private static PsiClass getJavaUtilList(final PsiElement context) {
-      return JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_UTIL_LIST,
-          context.getResolveScope());
+      return JavaPsiFacade.getInstance(context.getProject()).findClass(CommonClassNames.JAVA_UTIL_LIST, context.getResolveScope());
     }
 
     @Override

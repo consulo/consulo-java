@@ -25,7 +25,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.documentation.CodeDocumentationProvider;
 import consulo.language.editor.documentation.CompositeDocumentationProvider;
 import consulo.language.editor.documentation.DocumentationProvider;
@@ -195,7 +194,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
           continue;
         }
         final PsiClass aClass = (PsiClass)target;
-        if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
+        if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
           continue;
         }
         final String className = aClass.getName();

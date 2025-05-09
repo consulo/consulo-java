@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
@@ -84,10 +83,10 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
       if (type == null) {
         return;
       }
-      if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING) &&
-          !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN) &&
-          !type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER)) {
-        final PsiClassType javaLangNumberType = TypeUtils.getType(JavaClassNames.JAVA_LANG_NUMBER, statement);
+      if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING) &&
+          !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN) &&
+          !type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER)) {
+        final PsiClassType javaLangNumberType = TypeUtils.getType(CommonClassNames.JAVA_LANG_NUMBER, statement);
         if (!javaLangNumberType.isAssignableFrom(type)) {
           return;
         }

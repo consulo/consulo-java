@@ -26,7 +26,6 @@ import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.util.function.CommonProcessors;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;
@@ -38,8 +37,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -317,7 +316,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
 
   private PsiType getTargetTypeParameter(PsiClass iterableClass, PsiExpression value, TypeView typeView) {
     final Project project = iterableClass.getProject();
-    final PsiClass itClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_ITERABLE, GlobalSearchScope.allScope(project));
+    final PsiClass itClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_ITERABLE, GlobalSearchScope.allScope(project));
     if (itClass == null) {
       return null;
     }
