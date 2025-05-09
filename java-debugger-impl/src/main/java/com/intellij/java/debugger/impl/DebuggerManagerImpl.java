@@ -53,6 +53,7 @@ import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.Lists;
 import consulo.util.collection.SmartList;
@@ -150,7 +151,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
     @Override
     @RequiredUIAccess
     public DebuggerSession getSession(DebugProcess process) {
-        Application.get().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         return getSessions().stream().filter(debuggerSession -> process == debuggerSession.getProcess()).findFirst().orElse(null);
     }
 
@@ -175,7 +176,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
     @Nullable
     @RequiredUIAccess
     public DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException {
-        Application.get().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
         DebuggerSession session = DebuggerSession.create(environment.getSessionName(), debugProcess, environment);
         ExecutionResult executionResult = session.getProcess().getExecutionResult();
@@ -514,7 +515,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
             DebuggerSession.Event event,
             String description
         ) {
-            Application.get().assertIsDispatchThread();
+            UIAccess.assertIsUIThread();
             myDebuggerSession = context.getDebuggerSession();
             if (myDebuggerSession != null) {
                 myDebuggerSession.getContextManager().setState(context, state, event, description);

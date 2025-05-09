@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class BreakpointManager
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.impl.*;
@@ -44,6 +39,8 @@ import consulo.internal.com.sun.jdi.request.*;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
+import consulo.ui.UIAccess;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
@@ -55,6 +52,9 @@ import javax.swing.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * @author Jeka
+ */
 public class BreakpointManager {
     private static final Logger LOG = Logger.getInstance(BreakpointManager.class);
 
@@ -121,6 +121,7 @@ public class BreakpointManager {
     }
 
     @Nullable
+    @RequiredUIAccess
     public FieldBreakpoint addFieldBreakpoint(@Nonnull Document document, int offset) {
         PsiField field = FieldBreakpoint.findField(myProject, document, offset);
         if (field == null) {
@@ -137,8 +138,9 @@ public class BreakpointManager {
     }
 
     @Nullable
+    @RequiredUIAccess
     public FieldBreakpoint addFieldBreakpoint(Document document, int lineIndex, String fieldName) {
-        ApplicationManager.getApplication().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         XLineBreakpoint xBreakpoint = addXLineBreakpoint(JavaFieldBreakpointType.class, document, lineIndex);
         Breakpoint javaBreakpoint = getJavaBreakpoint(xBreakpoint);
         if (javaBreakpoint instanceof FieldBreakpoint) {
@@ -151,8 +153,9 @@ public class BreakpointManager {
     }
 
     @Nullable
+    @RequiredUIAccess
     public MethodBreakpoint addMethodBreakpoint(Document document, int lineIndex) {
-        ApplicationManager.getApplication().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
 
         XLineBreakpoint xBreakpoint = addXLineBreakpoint(JavaMethodBreakpointType.class, document, lineIndex);
         Breakpoint javaBreakpoint = getJavaBreakpoint(xBreakpoint);
@@ -316,15 +319,17 @@ public class BreakpointManager {
         }
     }
 
+    @RequiredUIAccess
     public void updateBreakpointsUI() {
-        ApplicationManager.getApplication().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         for (Breakpoint breakpoint : getBreakpoints()) {
             breakpoint.updateUI();
         }
     }
 
+    @RequiredUIAccess
     public void reloadBreakpoints() {
-        ApplicationManager.getApplication().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
 
         for (Breakpoint breakpoint : getBreakpoints()) {
             breakpoint.reload();

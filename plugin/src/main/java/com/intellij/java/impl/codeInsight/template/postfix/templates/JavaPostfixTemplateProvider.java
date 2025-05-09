@@ -30,6 +30,8 @@ import consulo.language.editor.completion.CompletionInitializationContext;
 import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import consulo.language.editor.postfixTemplate.PostfixTemplateProvider;
 import consulo.language.psi.*;
+import consulo.ui.UIAccess;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.dataholder.Key;
 
@@ -59,8 +61,9 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
   }
 
   @Override
+  @RequiredUIAccess
   public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
 
     file.putUserData(ADDED_SEMICOLON, null);
     if (isSemicolonNeeded(file, editor)) {

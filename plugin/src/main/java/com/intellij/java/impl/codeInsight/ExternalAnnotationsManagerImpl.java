@@ -71,6 +71,7 @@ import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.project.localize.ProjectLocalize;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.LocalizeAction;
@@ -164,8 +165,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     @Nonnull final PsiFile fromFile,
     @Nullable final PsiNameValuePair[] value
   ) {
+    UIAccess.assertIsUIThread();
     Application application = listOwner.getApplication();
-    application.assertIsDispatchThread();
     LOG.assertTrue(!application.isWriteAccessAllowed());
 
     final Project project = myPsiManager.getProject();
@@ -387,7 +388,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   @Override
   @RequiredUIAccess
   public boolean deannotate(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQN) {
-    listOwner.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
     return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
     {
       PsiElement parent = annotationTag.getParent();
@@ -408,9 +409,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     @Nonnull final String annotationFQN,
     @Nullable final PsiNameValuePair[] value
   ) {
-    listOwner.getApplication().assertIsDispatchThread();
-    return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
-    {
+    UIAccess.assertIsUIThread();
+    return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag -> {
       annotationTag.replace(
         XmlElementFactory.getInstance(myPsiManager.getProject()).createTagFromText(createAnnotationTag(annotationFQN, value))
       );
@@ -490,7 +490,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   @Nonnull
   @RequiredUIAccess
   public AnnotationPlace chooseAnnotationsPlace(@Nonnull final PsiElement element) {
-    element.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
     return chooseAnnotationsPlace(element, () -> confirmNewExternalAnnotationRoot(element));
   }
 

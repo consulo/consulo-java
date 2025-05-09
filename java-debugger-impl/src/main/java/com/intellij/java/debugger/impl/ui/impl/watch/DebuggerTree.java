@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class DebuggerTree
- * @author Jeka
- */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.LocalVariableProxyImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
@@ -44,31 +39,32 @@ import com.intellij.java.debugger.impl.ui.impl.DebuggerTreeBase;
 import com.intellij.java.debugger.impl.ui.impl.tree.TreeBuilder;
 import com.intellij.java.debugger.impl.ui.impl.tree.TreeBuilderNode;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.ArrayRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ChildrenBuilder;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import consulo.dataContext.DataProvider;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.application.ApplicationManager;
+import consulo.dataContext.DataProvider;
 import consulo.execution.debug.frame.XDebuggerTreeNodeHyperlink;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.util.lang.StringUtil;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.ui.ex.awt.speedSearch.SpeedSearchComparator;
-import consulo.ui.ex.awt.speedSearch.TreeSpeedSearch;
 import consulo.execution.debug.frame.XValueChildrenList;
 import consulo.execution.debug.setting.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.UIAccess;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.speedSearch.SpeedSearchComparator;
+import consulo.ui.ex.awt.speedSearch.TreeSpeedSearch;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
-
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -80,6 +76,9 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Jeka
+ */
 public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvider
 {
 	private static final Logger LOG = Logger.getInstance(DebuggerTree.class);
@@ -412,7 +411,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 
 	public void rebuild(final DebuggerContextImpl context)
 	{
-		ApplicationManager.getApplication().assertIsDispatchThread();
+		UIAccess.assertIsUIThread();
 		final DebugProcessImpl process = context.getDebugProcess();
 		if(process == null)
 		{

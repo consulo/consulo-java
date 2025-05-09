@@ -89,6 +89,7 @@ import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.proxy.EventDispatcher;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionsBundle;
 import consulo.ui.ex.action.Presentation;
@@ -1946,7 +1947,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         mySession = session;
         myWaitFor.down();
 
-        myProject.getApplication().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         LOG.assertTrue(isInInitialState());
 
         myConnection = environment.getRemoteConnection();
