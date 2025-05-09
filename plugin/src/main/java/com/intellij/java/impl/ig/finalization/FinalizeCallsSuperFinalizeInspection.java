@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -100,7 +99,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
         final PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
           final String superClassName = superClass.getQualifiedName();
-          if (JavaClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
+          if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
             return;
           }
         }

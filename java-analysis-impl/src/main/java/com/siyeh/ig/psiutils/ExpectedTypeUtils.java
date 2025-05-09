@@ -19,14 +19,12 @@ import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -291,7 +289,7 @@ public class ExpectedTypeUtils {
       }
       final PsiClassType classType = (PsiClassType) iteratedValueType;
       final PsiType[] parameters = classType.getParameters();
-      final PsiClass iterableClass = ClassUtils.findClass(JavaClassNames.JAVA_LANG_ITERABLE, statement);
+      final PsiClass iterableClass = ClassUtils.findClass(CommonClassNames.JAVA_LANG_ITERABLE, statement);
       if (iterableClass == null) {
         expectedType = null;
       } else {

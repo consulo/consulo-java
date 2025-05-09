@@ -16,7 +16,6 @@ import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValueProvider;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -217,7 +216,7 @@ public class DfaValueFactory {
             return null;
         }
         PsiClass psiClass = field.getContainingClass();
-        if (psiClass == null || !JavaClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName())) {
+        if (psiClass == null || !CommonClassNames.JAVA_LANG_BOOLEAN.equals(psiClass.getQualifiedName())) {
             return null;
         }
         String name = variable.getName();
@@ -292,7 +291,7 @@ public class DfaValueFactory {
 
     private static class ClassInitializationInfo {
         private static final CallMatcher SAFE_CALLS =
-            CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_OBJECTS, "requireNonNull");
+            CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_OBJECTS, "requireNonNull");
 
         final boolean myCanInstantiateItself;
         final boolean myCtorsCallMethods;

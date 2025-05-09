@@ -32,7 +32,6 @@ import consulo.application.Application;
 import consulo.application.util.registry.Registry;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -1112,7 +1111,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             && TRUE_OR_FALSE.contains(ref.getReferenceName())
             && ref.resolve() instanceof PsiField field) {
             PsiClass containingClass = field.getContainingClass();
-            if (containingClass != null && JavaClassNames.JAVA_LANG_BOOLEAN.equals(containingClass.getQualifiedName())) {
+            if (containingClass != null && CommonClassNames.JAVA_LANG_BOOLEAN.equals(containingClass.getQualifiedName())) {
                 return true;
             }
         }
@@ -1133,7 +1132,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         }
         // We assume all Void variables as null because you cannot instantiate it without dirty hacks
         // However reporting them as "always null" looks redundant (dereferences or comparisons will be reported though).
-        if (TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_VOID, expression.getType())) {
+        if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_VOID, expression.getType())) {
             return true;
         }
         if (isFlagCheck(anchor)) {
@@ -1257,7 +1256,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         }
 
         // no warnings for Void methods, where only null can be possibly returned
-        if (returnType == null || returnType.equalsToText(JavaClassNames.JAVA_LANG_VOID)) {
+        if (returnType == null || returnType.equalsToText(CommonClassNames.JAVA_LANG_VOID)) {
             return;
         }
 

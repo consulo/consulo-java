@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import jakarta.annotation.Nonnull;
@@ -78,8 +77,7 @@ public class ErrorRethrownInspection extends BaseInspection {
       if (aClass == null) {
         return;
       }
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_ERROR)) {
+      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_ERROR)) {
         return;
       }
       if (TypeUtils.typeEquals("java.lang.ThreadDeath", type)) {

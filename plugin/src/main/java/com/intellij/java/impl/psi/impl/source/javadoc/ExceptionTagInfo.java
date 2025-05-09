@@ -15,19 +15,14 @@
  */
 package com.intellij.java.impl.psi.impl.source.javadoc;
 
-import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiReference;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author mike
@@ -57,7 +52,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
     final PsiClass exceptionClass = (PsiClass)element;
 
 
-    final PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, value.getResolveScope());
+    final PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, value.getResolveScope());
 
     if (throwable != null) {
       if (!exceptionClass.equals(throwable) && !exceptionClass.isInheritor(throwable, true)) {
@@ -66,7 +61,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
     }
 
     final PsiClass runtimeException =
-      JavaPsiFacade.getInstance(value.getProject()).findClass(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, value.getResolveScope());
+      JavaPsiFacade.getInstance(value.getProject()).findClass(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, value.getResolveScope());
 
     if (runtimeException != null &&
         (exceptionClass.isInheritor(runtimeException, true) || exceptionClass.equals(runtimeException))) {
@@ -74,7 +69,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
     }
 
     PsiClass errorException = JavaPsiFacade.getInstance(value.getProject())
-        .findClass(JavaClassNames.JAVA_LANG_ERROR, value.getResolveScope());
+        .findClass(CommonClassNames.JAVA_LANG_ERROR, value.getResolveScope());
 
     if (errorException != null &&
         (exceptionClass.isInheritor(errorException, true) || exceptionClass.equals(errorException))) {

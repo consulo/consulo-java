@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -35,10 +34,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Dmitry Avdeev
@@ -68,7 +66,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     if (type == null) {
       final Project project = psiClass.getProject();
       final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiClass aClass = facade.findClass(JavaClassNames.JAVA_LANG_STRING, GlobalSearchScope.allScope(project));
+      final PsiClass aClass = facade.findClass(CommonClassNames.JAVA_LANG_STRING, GlobalSearchScope.allScope(project));
       if (aClass == null) {
         return NO_FIXES;
       }

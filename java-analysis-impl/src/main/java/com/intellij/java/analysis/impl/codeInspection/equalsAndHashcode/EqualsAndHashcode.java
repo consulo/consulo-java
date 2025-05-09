@@ -19,11 +19,9 @@ import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionToo
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
 import consulo.application.util.function.Computable;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -58,7 +56,7 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
             @Override
             @Nullable
             public PsiClass compute() {
-              return psiFacade.findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
+              return psiFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
             }
           }
       );

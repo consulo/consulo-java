@@ -19,15 +19,13 @@ import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
-import one.util.streamex.LongStreamEx;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.LongStreamEx;
+import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 import java.util.List;
@@ -439,13 +437,13 @@ public class DfaExpressionFactory {
 
     public static final class GetterDescriptor implements VariableDescriptor {
         private static final CallMatcher STABLE_METHODS = CallMatcher.anyOf(
-            CallMatcher.instanceCall(JavaClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0),
+            CallMatcher.instanceCall(CommonClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0),
             CallMatcher.instanceCall("java.lang.reflect.Member", "getName", "getModifiers", "getDeclaringClass", "isSynthetic"),
             CallMatcher.instanceCall("java.lang.reflect.Executable", "getParameterCount", "isVarArgs"),
             CallMatcher.instanceCall("java.lang.reflect.Field", "getType"),
             CallMatcher.instanceCall("java.lang.reflect.Method", "getReturnType"),
             CallMatcher.instanceCall(
-                JavaClassNames.JAVA_LANG_CLASS,
+                CommonClassNames.JAVA_LANG_CLASS,
                 "getName",
                 "isInterface",
                 "isArray",

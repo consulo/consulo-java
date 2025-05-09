@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.util.xml.actions;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
@@ -68,7 +69,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
       selectedClass = chooser.getSelected();
     }
     else {
-      selectedClass = getBaseClass(context, project, myBaseClass == null ? JavaClassNames.JAVA_LANG_OBJECT : myBaseClass);
+      selectedClass = getBaseClass(context, project, myBaseClass == null ? CommonClassNames.JAVA_LANG_OBJECT : myBaseClass);
     }
     if (selectedClass == null) return null;
 

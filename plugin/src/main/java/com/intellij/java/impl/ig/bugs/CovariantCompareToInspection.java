@@ -15,12 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.project.Project;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -28,7 +23,10 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CovariantCompareToInspection extends BaseInspection {
@@ -78,7 +76,7 @@ public class CovariantCompareToInspection extends BaseInspection {
       final Project project = method.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final GlobalSearchScope scope = method.getResolveScope();
-      final PsiClass comparableClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_COMPARABLE, scope);
+      final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
       PsiType substitutedTypeParam = null;
       if (comparableClass != null && comparableClass.getTypeParameters().length == 1) {
         final PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(comparableClass, aClass, PsiSubstitutor.EMPTY);

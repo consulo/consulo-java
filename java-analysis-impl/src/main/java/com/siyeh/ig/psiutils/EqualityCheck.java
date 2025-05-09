@@ -1,25 +1,20 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.siyeh.ig.psiutils;
 
-import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a model of PsiExpression which checks whether two expressions are equal (via Object.equals directly or indirectly).
  */
 public class EqualityCheck {
   private static final CallMatcher OBJECT_EQUALS = CallMatcher.anyOf(
-      CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_OBJECTS, "equals").parameterCount(2),
+      CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_OBJECTS, "equals").parameterCount(2),
       CallMatcher.staticCall("com.google.common.base.Objects", "equal").parameterCount(2));
   private final
   @Nonnull

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -24,7 +25,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -82,8 +82,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
       if (className.endsWith(exception)) {
         return;
       }
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_EXCEPTION)) {
+      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       registerClassError(aClass);

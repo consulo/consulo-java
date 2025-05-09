@@ -17,7 +17,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
@@ -55,12 +54,12 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     private final List<DfaMemoryState> myEndOfInitializerStates = new ArrayList<>();
 
     private static final CallMatcher USELESS_SAME_ARGUMENTS = CallMatcher.anyOf(
-        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_MATH, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_INTEGER, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_LONG, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_FLOAT, "min", "max").parameterCount(2),
-        CallMatcher.staticCall(JavaClassNames.JAVA_LANG_DOUBLE, "min", "max").parameterCount(2),
-        CallMatcher.instanceCall(JavaClassNames.JAVA_LANG_STRING, "replace").parameterCount(2)
+        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_MATH, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_INTEGER, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_LONG, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_FLOAT, "min", "max").parameterCount(2),
+        CallMatcher.staticCall(CommonClassNames.JAVA_LANG_DOUBLE, "min", "max").parameterCount(2),
+        CallMatcher.instanceCall(CommonClassNames.JAVA_LANG_STRING, "replace").parameterCount(2)
     );
 
     @Override

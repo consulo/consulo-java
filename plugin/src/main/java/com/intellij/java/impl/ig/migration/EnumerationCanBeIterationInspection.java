@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,7 +28,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -42,9 +40,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -204,7 +202,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
         newStatementText.append("final ");
       }
-      newStatementText.append(JavaClassNames.JAVA_UTIL_ITERATOR);
+      newStatementText.append(CommonClassNames.JAVA_UTIL_ITERATOR);
       if (parameterType != null) {
         final String typeText = parameterType.getCanonicalText();
         newStatementText.append('<');
@@ -346,8 +344,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
       final PsiElementFactory factory = facade.getElementFactory();
       final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-      final PsiClass iteratorClass =
-        facade.findClass(JavaClassNames.JAVA_UTIL_ITERATOR, scope);
+      final PsiClass iteratorClass = facade.findClass(CommonClassNames.JAVA_UTIL_ITERATOR, scope);
       if (iteratorClass == null) {
         return "iterator";
       }

@@ -35,7 +35,6 @@ import consulo.dataContext.DataContext;
 import consulo.ide.ServiceManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiElement;
@@ -110,7 +109,7 @@ public abstract class DebuggerUtils {
                 Method toStringMethod = debugProcess.getUserData(TO_STRING_METHOD_KEY);
                 if (toStringMethod == null) {
                     try {
-                        ReferenceType refType = objRef.virtualMachine().classesByName(JavaClassNames.JAVA_LANG_OBJECT).get(0);
+                        ReferenceType refType = objRef.virtualMachine().classesByName(CommonClassNames.JAVA_LANG_OBJECT).get(0);
                         toStringMethod = findMethod(refType, "toString", "()Ljava/lang/String;");
                         debugProcess.putUserData(TO_STRING_METHOD_KEY, toStringMethod);
                     }
@@ -161,7 +160,7 @@ public abstract class DebuggerUtils {
         if (refType instanceof ArrayType) {
             // for array types methodByName() in JDI always returns empty list
             Method method =
-                findMethod(refType.virtualMachine().classesByName(JavaClassNames.JAVA_LANG_OBJECT).get(0), methodName, methodSignature);
+                findMethod(refType.virtualMachine().classesByName(CommonClassNames.JAVA_LANG_OBJECT).get(0), methodName, methodSignature);
             if (method != null) {
                 return method;
             }
@@ -267,7 +266,7 @@ public abstract class DebuggerUtils {
             return InheritanceUtil.isInheritorOrSelf(psiNodeClass, psiRendererClass, true);
         }
         else if (nodeClass.dims > rendererClass.dims) {
-            return rendererClass.className.equals(JavaClassNames.JAVA_LANG_OBJECT);
+            return rendererClass.className.equals(CommonClassNames.JAVA_LANG_OBJECT);
         }
         return false;
     }
@@ -278,8 +277,8 @@ public abstract class DebuggerUtils {
             return null;
         }
 
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(superType)) {
-            List list = subType.virtualMachine().classesByName(JavaClassNames.JAVA_LANG_OBJECT);
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(superType)) {
+            List list = subType.virtualMachine().classesByName(CommonClassNames.JAVA_LANG_OBJECT);
             if (list.size() > 0) {
                 return (ReferenceType)list.get(0);
             }
@@ -355,8 +354,8 @@ public abstract class DebuggerUtils {
         }
 
         //only for interfaces and arrays
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(superType)) {
-            List list = subType.virtualMachine().classesByName(JavaClassNames.JAVA_LANG_OBJECT);
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(superType)) {
+            List list = subType.virtualMachine().classesByName(CommonClassNames.JAVA_LANG_OBJECT);
             if (list.size() > 0) {
                 return (ReferenceType)list.get(0);
             }

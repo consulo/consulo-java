@@ -24,7 +24,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -37,7 +36,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -148,8 +146,8 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(targetClass.getProject()).getElementFactory();
     PsiMethod supConstructor = null;
     PsiClass superClass = targetClass.getSuperClass();
-    if (superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()) &&
-        !JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
+    if (superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()) &&
+        !CommonClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
       PsiMethod[] constructors = superClass.getConstructors();
       boolean hasDefaultConstructor = false;
 
@@ -202,7 +200,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
       else {
         PsiReferenceList extendsList = targetClass.getExtendsList();
         assert extendsList != null : targetClass;
-        if (extendsList.getReferencedTypes().length == 0 && !JavaClassNames.JAVA_LANG_OBJECT.equals(classType.getCanonicalText())) {
+        if (extendsList.getReferencedTypes().length == 0 && !CommonClassNames.JAVA_LANG_OBJECT.equals(classType.getCanonicalText())) {
           extendsList.add(factory.createReferenceElementByType(classType));
         }
       }

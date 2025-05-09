@@ -19,12 +19,11 @@ import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,10 +36,10 @@ public class ExceptionUtils {
   private static final Set<String> s_genericExceptionTypes = new HashSet<>(4);
 
   static {
-    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_THROWABLE);
-    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_EXCEPTION);
-    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
-    s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_ERROR);
+    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_THROWABLE);
+    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_EXCEPTION);
+    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION);
+    s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
   }
 
   @Nonnull
@@ -209,7 +208,7 @@ public class ExceptionUtils {
     final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(expression, PsiNewExpression.class, true, PsiCodeBlock.class, PsiClass.class);
     if (newExpression != null) {
       final PsiType newExpressionType = newExpression.getType();
-      if (InheritanceUtil.isInheritor(newExpressionType, JavaClassNames.JAVA_LANG_THROWABLE)) {
+      if (InheritanceUtil.isInheritor(newExpressionType, CommonClassNames.JAVA_LANG_THROWABLE)) {
         return true;
       }
     } else {

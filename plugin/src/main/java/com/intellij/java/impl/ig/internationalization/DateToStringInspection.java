@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -25,7 +26,6 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -65,8 +65,7 @@ public class DateToStringInspection extends BaseInspection {
         return;
       }
       final PsiType targetType = MethodCallUtils.getTargetType(expression);
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_UTIL_DATE,
-                                targetType)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_UTIL_DATE, targetType)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

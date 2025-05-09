@@ -12,18 +12,16 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.*;
 
@@ -44,9 +42,9 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
     // Could be added via external annotations, but there are many signatures to handle
     // and we have troubles supporting external annotations for JDK 9+
     private static final CallMatcher IMMUTABLE_FACTORY = CallMatcher.anyOf(
-        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_LIST, "of", "copyOf"),
-        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_SET, "of", "copyOf"),
-        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_MAP, "of", "ofEntries", "copyOf", "entry")
+        CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_LIST, "of", "copyOf"),
+        CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_SET, "of", "copyOf"),
+        CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_MAP, "of", "ofEntries", "copyOf", "entry")
     );
     private final NullableNotNullManager myNullabilityManager;
 
@@ -213,10 +211,10 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
             PsiClass containingClass = method.getContainingClass();
             if (containingClass != null) {
                 String className = containingClass.getQualifiedName();
-                if (JavaClassNames.JAVA_UTIL_LIST.equals(className)
-                    || JavaClassNames.JAVA_UTIL_SET.equals(className)
-                    || JavaClassNames.JAVA_UTIL_MAP.equals(className)
-                    || JavaClassNames.JAVA_UTIL_ENUM_SET.equals(className)) {
+                if (CommonClassNames.JAVA_UTIL_LIST.equals(className)
+                    || CommonClassNames.JAVA_UTIL_SET.equals(className)
+                    || CommonClassNames.JAVA_UTIL_MAP.equals(className)
+                    || CommonClassNames.JAVA_UTIL_ENUM_SET.equals(className)) {
                     return ProjectBytecodeAnalysis.getInstance(myProject).getNotNullAnnotation();
                 }
             }

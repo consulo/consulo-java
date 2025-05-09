@@ -20,14 +20,12 @@ import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -119,7 +117,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     if (!isAvailableInContext(element)) return false;
     final String superClassName = getSuperClassName(element);
     if (superClassName != null) {
-      if (superClassName.equals(JavaClassNames.JAVA_LANG_ENUM) && myKind != CreateClassKind.ENUM) return false;
+      if (superClassName.equals(CommonClassNames.JAVA_LANG_ENUM) && myKind != CreateClassKind.ENUM) return false;
       final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(superClassName, GlobalSearchScope.allScope(project));
       if (psiClass != null && psiClass.hasModifierProperty(PsiModifier.FINAL)) return false;
     }
@@ -145,7 +143,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     if (ggParent instanceof PsiMethod) {
       PsiMethod method = (PsiMethod)ggParent;
       if (method.getThrowsList() == parent) {
-        superClassName = JavaClassNames.JAVA_LANG_EXCEPTION;
+        superClassName = CommonClassNames.JAVA_LANG_EXCEPTION;
       }
     }
     else if (ggParent instanceof PsiClassObjectAccessExpression) {
@@ -153,7 +151,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
       if (expectedTypes.length == 1) {
         final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType(expectedTypes[0].getType());
         final PsiClass psiClass = classResolveResult.getElement();
-        if (psiClass != null && JavaClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
+        if (psiClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
           final PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
           PsiType psiType = typeParameters.length == 1 ? classResolveResult.getSubstitutor().substitute(typeParameters[0]) : null;
           if (psiType instanceof PsiWildcardType && ((PsiWildcardType)psiType).isExtends()) {
