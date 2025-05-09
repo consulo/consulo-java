@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiDirectory;
@@ -29,10 +30,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.SmartList;
-import one.util.streamex.StreamEx;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -72,13 +72,17 @@ public class SideEffectChecker {
     }
 
     public static boolean mayHaveSideEffects(@Nonnull PsiExpression exp) {
-        final SideEffectsVisitor visitor = new SideEffectsVisitor(null, exp);
+        SideEffectsVisitor visitor = new SideEffectsVisitor(null, exp);
         exp.accept(visitor);
         return visitor.mayHaveSideEffects();
     }
 
-    public static boolean mayHaveSideEffects(@Nonnull PsiElement element, Predicate<? super PsiElement> shouldIgnoreElement) {
-        final SideEffectsVisitor visitor = new SideEffectsVisitor(null, element, shouldIgnoreElement);
+    @RequiredReadAction
+    public static boolean mayHaveSideEffects(
+        @Nonnull PsiElement element,
+        @RequiredReadAction Predicate<? super PsiElement> shouldIgnoreElement
+    ) {
+        SideEffectsVisitor visitor = new SideEffectsVisitor(null, element, shouldIgnoreElement);
         element.accept(visitor);
         return visitor.mayHaveSideEffects();
     }
@@ -90,14 +94,14 @@ public class SideEffectChecker {
      * @param element element to check
      * @return true if element execution may cause non-local side-effect.
      */
+    @RequiredReadAction
     public static boolean mayHaveNonLocalSideEffects(@Nonnull PsiElement element) {
         return mayHaveSideEffects(element, SideEffectChecker::isLocalSideEffect);
     }
 
+    @RequiredReadAction
     private static boolean isLocalSideEffect(PsiElement e) {
-        if (e instanceof PsiContinueStatement ||
-            e instanceof PsiReturnStatement ||
-            e instanceof PsiThrowStatement) {
+        if (e instanceof PsiContinueStatement || e instanceof PsiReturnStatement || e instanceof PsiThrowStatement) {
             return true;
         }
         if (e instanceof PsiLocalVariable) {
@@ -105,12 +109,11 @@ public class SideEffectChecker {
         }
 
         PsiReferenceExpression ref = null;
-        if (e instanceof PsiAssignmentExpression) {
-            PsiAssignmentExpression assignment = (PsiAssignmentExpression)e;
+        if (e instanceof PsiAssignmentExpression assignment) {
             ref = tryCast(PsiUtil.skipParenthesizedExprDown(assignment.getLExpression()), PsiReferenceExpression.class);
         }
-        if (e instanceof PsiUnaryExpression) {
-            PsiExpression operand = ((PsiUnaryExpression)e).getOperand();
+        if (e instanceof PsiUnaryExpression unaryExpr) {
+            PsiExpression operand = unaryExpr.getOperand();
             ref = tryCast(PsiUtil.skipParenthesizedExprDown(operand), PsiReferenceExpression.class);
         }
         if (ref != null) {
@@ -131,7 +134,7 @@ public class SideEffectChecker {
         @Nullable List<? super PsiElement> sideEffects,
         @Nonnull Predicate<? super PsiElement> ignoreElement
     ) {
-        final SideEffectsVisitor visitor = new SideEffectsVisitor(sideEffects, element, ignoreElement);
+        SideEffectsVisitor visitor = new SideEffectsVisitor(sideEffects, element, ignoreElement);
         element.accept(visitor);
         return visitor.mayHaveSideEffects();
     }
@@ -192,7 +195,7 @@ public class SideEffectChecker {
 
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (!isPure(method)) {
                 if (addSideEffect(expression)) {
                     return;
@@ -213,6 +216,7 @@ public class SideEffectChecker {
         }
 
         @Override
+        @RequiredReadAction
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             if (!expression.isArrayCreation() && !isSideEffectFreeConstructor(expression)) {
                 if (addSideEffect(expression)) {
@@ -224,7 +228,7 @@ public class SideEffectChecker {
 
         @Override
         public void visitUnaryExpression(@Nonnull PsiUnaryExpression expression) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (tokenType.equals(JavaTokenType.PLUSPLUS) || tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 if (addSideEffect(expression)) {
                     return;
@@ -234,7 +238,7 @@ public class SideEffectChecker {
         }
 
         @Override
-        public void visitVariable(PsiVariable variable) {
+        public void visitVariable(@Nonnull PsiVariable variable) {
             if (addSideEffect(variable)) {
                 return;
             }
@@ -253,7 +257,7 @@ public class SideEffectChecker {
         }
 
         @Override
-        public void visitClass(PsiClass aClass) {
+        public void visitClass(@Nonnull PsiClass aClass) {
             // local or anonymous class declaration is not side effect per se (unless it's instantiated)
         }
 
@@ -270,7 +274,7 @@ public class SideEffectChecker {
         }
 
         @Override
-        public void visitReturnStatement(PsiReturnStatement statement) {
+        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
             if (addSideEffect(statement)) {
                 return;
             }
@@ -278,7 +282,7 @@ public class SideEffectChecker {
         }
 
         @Override
-        public void visitThrowStatement(PsiThrowStatement statement) {
+        public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
             if (addSideEffect(statement)) {
                 return;
             }
@@ -286,7 +290,7 @@ public class SideEffectChecker {
         }
 
         @Override
-        public void visitLambdaExpression(PsiLambdaExpression expression) {
+        public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
             // lambda is not side effect per se (unless it's called)
         }
 
@@ -308,6 +312,7 @@ public class SideEffectChecker {
             return true;
         }
         PsiClass aClass = method.getContainingClass();
+        //noinspection SimplifiableIfStatement
         if (InheritanceUtil.isInheritor(aClass, "org.assertj.core.api.Descriptable")) {
             // See com.intellij.codeInsight.DefaultInferredAnnotationProvider#getHardcodedContractAnnotation
             return true;
@@ -317,6 +322,7 @@ public class SideEffectChecker {
             .anyMatch(mc -> mc.getReturnValue().isFail());
     }
 
+    @RequiredReadAction
     private static boolean isSideEffectFreeConstructor(@Nonnull PsiNewExpression newExpression) {
         PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
         if (anonymousClass != null && anonymousClass.getInitializers().length == 0) {
@@ -341,7 +347,7 @@ public class SideEffectChecker {
         String packageName = classPackage == null ? null : classPackage.getQualifiedName();
 
         // all Throwable descendants from java.lang are side effects free
-        if (CommonClassNames.DEFAULT_PACKAGE.equals(packageName) || "java.io".equals(packageName)) {
+        if (JavaClassNames.DEFAULT_PACKAGE.equals(packageName) || "java.io".equals(packageName)) {
             PsiClass throwableClass =
                 JavaPsiFacade.getInstance(aClass.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, aClass.getResolveScope());
             if (throwableClass != null && InheritanceUtil.isInheritorOrSelf(aClass, throwableClass, true)) {

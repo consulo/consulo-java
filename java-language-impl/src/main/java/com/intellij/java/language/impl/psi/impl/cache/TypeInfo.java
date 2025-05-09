@@ -3,8 +3,8 @@ package com.intellij.java.language.impl.psi.impl.cache;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiClassStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.*;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
@@ -48,10 +48,10 @@ public /*sealed*/ abstract class TypeInfo {
             "null",
             "short",
             "void",
-            CommonClassNames.JAVA_LANG_OBJECT_SHORT,
-            CommonClassNames.JAVA_LANG_OBJECT,
-            CommonClassNames.JAVA_LANG_STRING_SHORT,
-            CommonClassNames.JAVA_LANG_STRING
+            JavaClassNames.JAVA_LANG_OBJECT_SHORT,
+            JavaClassNames.JAVA_LANG_OBJECT,
+            JavaClassNames.JAVA_LANG_STRING_SHORT,
+            JavaClassNames.JAVA_LANG_STRING
         };
 
         ourFrequentTypeIndex = ObjectMaps.newObjectIntHashMap();
@@ -92,16 +92,16 @@ public /*sealed*/ abstract class TypeInfo {
         GENERIC,
 
         // References to widely used classes (skip encoding the class name)
-        JAVA_LANG_OBJECT(CommonClassNames.JAVA_LANG_OBJECT),
-        JAVA_LANG_STRING(CommonClassNames.JAVA_LANG_STRING),
-        JAVA_LANG_THROWABLE(CommonClassNames.JAVA_LANG_THROWABLE),
-        JAVA_LANG_EXCEPTION(CommonClassNames.JAVA_LANG_EXCEPTION),
-        JAVA_UTIL_COLLECTION(CommonClassNames.JAVA_UTIL_COLLECTION),
-        JAVA_UTIL_LIST(CommonClassNames.JAVA_UTIL_LIST),
-        JAVA_LANG_ITERABLE(CommonClassNames.JAVA_LANG_ITERABLE),
-        JAVA_UTIL_ITERATOR(CommonClassNames.JAVA_UTIL_ITERATOR),
-        JAVA_UTIL_MAP(CommonClassNames.JAVA_UTIL_MAP),
-        JAVA_LANG_ANNOTATION_ANNOTATION(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION),
+        JAVA_LANG_OBJECT(JavaClassNames.JAVA_LANG_OBJECT),
+        JAVA_LANG_STRING(JavaClassNames.JAVA_LANG_STRING),
+        JAVA_LANG_THROWABLE(JavaClassNames.JAVA_LANG_THROWABLE),
+        JAVA_LANG_EXCEPTION(JavaClassNames.JAVA_LANG_EXCEPTION),
+        JAVA_UTIL_COLLECTION(JavaClassNames.JAVA_UTIL_COLLECTION),
+        JAVA_UTIL_LIST(JavaClassNames.JAVA_UTIL_LIST),
+        JAVA_LANG_ITERABLE(JavaClassNames.JAVA_LANG_ITERABLE),
+        JAVA_UTIL_ITERATOR(JavaClassNames.JAVA_UTIL_ITERATOR),
+        JAVA_UTIL_MAP(JavaClassNames.JAVA_UTIL_MAP),
+        JAVA_LANG_ANNOTATION_ANNOTATION(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION),
 
         /**
          * Reference with outer class (which may probably be inner as well, or have generic parameters),
@@ -414,7 +414,7 @@ public /*sealed*/ abstract class TypeInfo {
         if (element.getTokenType() == JavaElementType.ENUM_CONSTANT) {
             return ((PsiClassStubImpl<?>)parentStub).getQualifiedNameTypeInfo();
         }
-        for (final LighterASTNode child : tree.getChildren(element)) {
+        for (LighterASTNode child : tree.getChildren(element)) {
             IElementType type = child.getTokenType();
             if (type == JavaElementType.TYPE) {
                 typeElement = child;
@@ -470,7 +470,7 @@ public /*sealed*/ abstract class TypeInfo {
             if (tokenType == JavaTokenType.EXTENDS_KEYWORD || tokenType == JavaTokenType.SUPER_KEYWORD) {
                 bound = true;
             }
-            if (tokenType == JavaElementType.TYPE && info instanceof DerivedTypeInfo) {
+            if (tokenType == JavaElementType.TYPE && info instanceof DerivedTypeInfo derivedTypeInfo) {
                 byte[] newPrefix;
                 if (bound) {
                     newPrefix = Arrays.copyOf(prefix, prefix.length + 1);
@@ -480,7 +480,7 @@ public /*sealed*/ abstract class TypeInfo {
                     newPrefix = Arrays.copyOf(prefix, prefix.length + arrayCount);
                     Arrays.fill(newPrefix, prefix.length, newPrefix.length, TypeAnnotationContainer.Collector.ARRAY_ELEMENT);
                 }
-                collectAnnotations(((DerivedTypeInfo)info).child(), collector, tree, child, newPrefix);
+                collectAnnotations(derivedTypeInfo.child(), collector, tree, child, newPrefix);
             }
             else if (tokenType == JavaTokenType.LBRACKET) {
                 nestingLevel++;
@@ -710,19 +710,19 @@ public /*sealed*/ abstract class TypeInfo {
         boolean hasTypeAnnotations = typeInfo.myTypeAnnotations != null && !typeInfo.myTypeAnnotations.isEmpty();
         dataStream.writeByte(typeInfo.kind.ordinal() | (hasTypeAnnotations ? HAS_TYPE_ANNOTATIONS : 0));
 
-        if (typeInfo instanceof DerivedTypeInfo) {
-            writeTYPE(dataStream, ((DerivedTypeInfo)typeInfo).myChild);
+        if (typeInfo instanceof DerivedTypeInfo derivedTypeInfo) {
+            writeTYPE(dataStream, derivedTypeInfo.myChild);
         }
-        else if (typeInfo instanceof RefTypeInfo && typeInfo.kind.text == null) {
+        else if (typeInfo instanceof RefTypeInfo refTypeInfo && typeInfo.kind.text == null) {
             if (typeInfo.kind == TypeKind.INNER_SIMPLE) {
-                dataStream.writeName(Objects.requireNonNull(((RefTypeInfo)typeInfo).myOuter).myName);
+                dataStream.writeName(Objects.requireNonNull(refTypeInfo.myOuter).myName);
             }
             if (typeInfo.kind == TypeKind.INNER || typeInfo.kind == TypeKind.INNER_GENERIC) {
-                writeTYPE(dataStream, Objects.requireNonNull(((RefTypeInfo)typeInfo).myOuter));
+                writeTYPE(dataStream, Objects.requireNonNull(refTypeInfo.myOuter));
             }
-            dataStream.writeName(((RefTypeInfo)typeInfo).myName);
+            dataStream.writeName(refTypeInfo.myName);
             if (typeInfo.kind == TypeKind.INNER_GENERIC || typeInfo.kind == TypeKind.GENERIC) {
-                TypeInfo[] components = ((RefTypeInfo)typeInfo).myComponents;
+                TypeInfo[] components = refTypeInfo.myComponents;
                 dataStream.writeByte(components.length);
                 for (TypeInfo component : components) {
                     writeTYPE(dataStream, component);
