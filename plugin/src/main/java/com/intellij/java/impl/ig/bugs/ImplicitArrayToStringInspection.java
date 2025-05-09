@@ -24,7 +24,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -263,8 +262,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
           if (arguments.length != 1) {
             return false;
           }
-          return InheritanceUtil.isInheritor(containingClass,
-                                             JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER);
+          return InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER);
         }
         else if ("valueOf".equals(methodName)) {
           if (arguments.length != 1) {
@@ -272,7 +270,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
           }
           final String qualifiedName =
             containingClass.getQualifiedName();
-          return JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName);
+          return CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName);
         }
         if (!"print".equals(methodName) &&
             !"println".equals(methodName)) {
@@ -305,13 +303,13 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         }
         final String qualifiedName = containingClass.getQualifiedName();
         if ("java.util.Formatter".equals(qualifiedName) ||
-            JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+            CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
           return true;
         }
-        if (InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_IO_PRINT_STREAM)) {
+        if (InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_IO_PRINT_STREAM)) {
           return true;
         }
-        else if (InheritanceUtil.isInheritor(containingClass, JavaClassNames.JAVA_IO_PRINT_WRITER)) {
+        else if (InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_IO_PRINT_WRITER)) {
           return true;
         }
       }

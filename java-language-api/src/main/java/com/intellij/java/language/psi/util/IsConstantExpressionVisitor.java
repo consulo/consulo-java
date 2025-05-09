@@ -16,7 +16,6 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 
@@ -65,7 +64,7 @@ public class IsConstantExpressionVisitor extends JavaElementVisitor {
     }
     PsiType type = element.getType();
     if (type instanceof PsiPrimitiveType) return;
-    if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) return;
+    if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) return;
     myIsConstant = false;
   }
 
@@ -90,7 +89,7 @@ public class IsConstantExpressionVisitor extends JavaElementVisitor {
       operand.accept(this);
       if (!myIsConstant) return;
       final PsiType type = operand.getType();
-      if (type != null && !(type instanceof PsiPrimitiveType) && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (type != null && !(type instanceof PsiPrimitiveType) && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         myIsConstant = false;
         return;
       }

@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.ipp.asserttoif;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
 
 class IfStatementPredicate implements PsiElementPredicate {
 
@@ -63,7 +62,7 @@ class IfStatementPredicate implements PsiElementPredicate {
       }
       final PsiClass aClass = (PsiClass)target;
       final String qualifiedName = aClass.getQualifiedName();
-      return JavaClassNames.JAVA_LANG_ASSERTION_ERROR.equals(qualifiedName);
+      return CommonClassNames.JAVA_LANG_ASSERTION_ERROR.equals(qualifiedName);
     }
     else if (element instanceof PsiBlockStatement) {
       final PsiBlockStatement blockStatement =

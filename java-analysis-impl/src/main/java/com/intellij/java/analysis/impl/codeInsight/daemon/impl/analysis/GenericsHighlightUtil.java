@@ -32,7 +32,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.document.util.TextRange;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
@@ -318,7 +317,7 @@ public class GenericsHighlightUtil {
         PsiClassType[] bounds = classParameter.getSuperTypes();
         for (PsiClassType type1 : bounds) {
             PsiType bound = substitutor.substitute(type1);
-            if (!bound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
+            if (!bound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
                 && GenericsUtil.checkNotInBounds(type, bound, referenceParameterList)) {
                 PsiClass boundClass = bound instanceof PsiClassType boundClassType ? boundClassType.resolve() : null;
 
@@ -507,7 +506,7 @@ public class GenericsHighlightUtil {
             for (HierarchicalMethodSignature methodSignature : sig.getSuperSignatures()) {
                 PsiMethod objectMethod = methodSignature.getMethod();
                 PsiClass containingClass = objectMethod.getContainingClass();
-                if (containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())
+                if (containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())
                     && objectMethod.isPublic()) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(methodIdentifier)
@@ -1247,7 +1246,7 @@ public class GenericsHighlightUtil {
                 PsiMethod psiMethod = superMethod.getMethod();
                 PsiClass containingClass = psiMethod.getContainingClass();
                 if (containingClass != null
-                    && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())
+                    && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())
                     && psiMethod.isProtected()) {
                     superMethod = null;
                 }
@@ -1279,7 +1278,7 @@ public class GenericsHighlightUtil {
     @RequiredReadAction
     public static HighlightInfo.Builder checkSafeVarargsAnnotation(PsiMethod method, LanguageLevel languageLevel) {
         PsiModifierList list = method.getModifierList();
-        PsiAnnotation safeVarargsAnnotation = list.findAnnotation(JavaClassNames.JAVA_LANG_SAFE_VARARGS);
+        PsiAnnotation safeVarargsAnnotation = list.findAnnotation(CommonClassNames.JAVA_LANG_SAFE_VARARGS);
         if (safeVarargsAnnotation == null) {
             return null;
         }
@@ -1505,7 +1504,7 @@ public class GenericsHighlightUtil {
     @Nullable
     @RequiredReadAction
     public static HighlightInfo.Builder checkCannotInheritFromEnum(PsiClass superClass, PsiElement elementToHighlight) {
-        if (JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(elementToHighlight)
                 .descriptionAndTooltip(JavaErrorLocalize.classesExtendsEnum());
@@ -1532,7 +1531,7 @@ public class GenericsHighlightUtil {
             }
             if (throwableClass == null) {
                 throwableClass = JavaPsiFacade.getInstance(aClass.getProject())
-                    .findClass(JavaClassNames.JAVA_LANG_THROWABLE, aClass.getResolveScope());
+                    .findClass(CommonClassNames.JAVA_LANG_THROWABLE, aClass.getResolveScope());
             }
             if (InheritanceUtil.isInheritorOrSelf(psiClass, throwableClass, true)) {
                 PsiClassType classType = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory()

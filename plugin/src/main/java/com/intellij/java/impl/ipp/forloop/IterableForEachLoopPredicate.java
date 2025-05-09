@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ipp.forloop;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 
 class IterableForEachLoopPredicate implements PsiElementPredicate {
 
@@ -44,7 +43,7 @@ class IterableForEachLoopPredicate implements PsiElementPredicate {
       return false;
     }
     final PsiType type = iteratedValue.getType();
-    if (!InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)) {
+    if (!InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) {
       return false;
     }
     return !ErrorUtil.containsError(foreachStatement);

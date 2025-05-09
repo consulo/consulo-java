@@ -36,7 +36,6 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.document.util.TextRange;
 import consulo.document.util.TextRangeUtil;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
@@ -242,7 +241,7 @@ public class HighlightMethodUtil {
         }
         PsiClass superContainingClass = superMethod.getContainingClass();
         if (superContainingClass != null
-            && JavaClassNames.JAVA_LANG_OBJECT.equals(superContainingClass.getQualifiedName())
+            && CommonClassNames.JAVA_LANG_OBJECT.equals(superContainingClass.getQualifiedName())
             && !superMethod.isPublic()) {
             PsiClass containingClass = method.getContainingClass();
             if (containingClass != null && containingClass.isInterface() && !superContainingClass.isInterface()) {

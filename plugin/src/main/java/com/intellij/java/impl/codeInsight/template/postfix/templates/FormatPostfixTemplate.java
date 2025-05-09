@@ -2,8 +2,8 @@
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.application.dumb.DumbAware;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
@@ -15,7 +15,7 @@ public class FormatPostfixTemplate extends JavaEditablePostfixTemplate implement
             "String.format($EXPR$, $END$)",
             "String.format(expr)",
             Collections.singleton(
-                new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateExpressionFqnCondition(JavaClassNames.JAVA_LANG_STRING)
+                new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateExpressionFqnCondition(CommonClassNames.JAVA_LANG_STRING)
             ),
             LanguageLevel.JDK_1_3, false, provider
         );

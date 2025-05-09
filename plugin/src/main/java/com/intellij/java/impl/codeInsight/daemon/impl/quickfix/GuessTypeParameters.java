@@ -20,7 +20,6 @@ import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -193,7 +192,7 @@ public class GuessTypeParameters {
     if (!types.isEmpty()) {
       Project project = typeElement.getProject();
       PsiType substituted = rawingSubstitutor.substitute(type);
-      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(substituted.getCanonicalText()) && (toplevel || substituted.equals(type))) {
+      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(substituted.getCanonicalText()) && (toplevel || substituted.equals(type))) {
         types.add(substituted);
       }
       

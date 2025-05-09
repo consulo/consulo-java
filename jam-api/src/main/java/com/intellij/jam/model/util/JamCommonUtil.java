@@ -38,7 +38,6 @@ import consulo.application.util.CachedValuesManager;
 import consulo.application.util.function.Processor;
 import consulo.dataContext.DataContext;
 import consulo.java.jam.util.JamCommonService;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.pom.PomTarget;
 import consulo.language.pom.PomTargetPsiElement;
@@ -69,10 +68,10 @@ import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlFile;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.util.xml.*;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.*;
@@ -136,7 +135,7 @@ public class JamCommonUtil {
     @Nonnull final Collection<PsiClass> supers,
     final Processor<PsiClass> processor
   ) {
-    for (PsiClass curClass = firstClass; curClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass()) {
+    for (PsiClass curClass = firstClass; curClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass()) {
       ProgressManager.checkCanceled();
       if (!processor.process(curClass)) {
         return false;
@@ -619,7 +618,7 @@ public class JamCommonUtil {
           .findClass(className, psiAnnotationMemberValue.getResolveScope());
       }
     }
-    if (psiClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+    if (psiClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
       return null;
     }
     return psiClass;

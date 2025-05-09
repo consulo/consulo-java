@@ -13,45 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author max
- */
 package com.intellij.java.impl.generate;
+
+import com.intellij.java.analysis.impl.generate.config.Config;
+import com.intellij.java.analysis.impl.generate.config.DuplicationPolicy;
+import com.intellij.java.analysis.impl.generate.config.InsertWhere;
+import com.intellij.java.impl.generate.config.*;
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.view.MethodExistsDialog;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.VisualPosition;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.undoRedo.CommandProcessor;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
+import org.jetbrains.java.generate.GenerateToStringContext;
+import org.jetbrains.java.generate.psi.PsiAdapter;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import com.intellij.java.analysis.impl.generate.config.Config;
-import com.intellij.java.analysis.impl.generate.config.DuplicationPolicy;
-import com.intellij.java.analysis.impl.generate.config.InsertWhere;
-import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.hint.HintManager;
-import jakarta.annotation.Nullable;
-import org.jetbrains.java.generate.GenerateToStringContext;
-import com.intellij.java.impl.generate.config.*;
-import com.intellij.java.impl.generate.exception.GenerateCodeException;
-import org.jetbrains.java.generate.psi.PsiAdapter;
-import com.intellij.java.impl.generate.template.TemplateResource;
-import com.intellij.java.impl.generate.view.MethodExistsDialog;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.codeEditor.VisualPosition;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JVMElementFactory;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.util.IncorrectOperationException;
-
+/**
+ * @author max
+ */
 public class GenerateToStringWorker
 {
 	private static final Logger logger = Logger.getInstance(GenerateToStringWorker.class);
@@ -125,7 +121,7 @@ public class GenerateToStringWorker
 
 		if(hasOverrideAnnotation)
 		{
-			toStringMethod.getModifierList().addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
+			toStringMethod.getModifierList().addAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
 		}
 
 		// applyJavaDoc conflict resolution policy (add or keep existing)

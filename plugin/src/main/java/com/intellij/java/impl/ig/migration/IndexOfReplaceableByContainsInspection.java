@@ -26,7 +26,6 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -247,9 +246,7 @@ public class IndexOfReplaceableByContainsInspection
         return false;
       }
       final PsiType argumentType = arguments[0].getType();
-      if (argumentType == null ||
-          !argumentType.equalsToText(
-            JavaClassNames.JAVA_LANG_STRING)) {
+      if (argumentType == null || !argumentType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return false;
       }
       final PsiExpression qualifier =
@@ -258,8 +255,7 @@ public class IndexOfReplaceableByContainsInspection
         return false;
       }
       final PsiType qualifierType = qualifier.getType();
-      return qualifierType != null &&
-             qualifierType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+      return qualifierType != null && qualifierType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
     }
   }
 }

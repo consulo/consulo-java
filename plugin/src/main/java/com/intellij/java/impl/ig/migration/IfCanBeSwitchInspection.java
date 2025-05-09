@@ -26,7 +26,6 @@ import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiComment;
@@ -221,7 +220,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       @NonNls final StringBuilder switchStatementText = new StringBuilder();
       switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
       final PsiType type = switchExpression.getType();
-      final boolean castToInt = type != null && type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER);
+      final boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
       for (IfStatementBranch branch : branches) {
         boolean hasConflicts = false;
         for (IfStatementBranch testBranch : branches) {
@@ -519,10 +518,10 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       final PsiType type = switchExpression.getType();
       if (!suggestIntSwitches) {
         if (type instanceof PsiClassType) {
-          if (type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER) ||
-              type.equalsToText(JavaClassNames.JAVA_LANG_SHORT) ||
-              type.equalsToText(JavaClassNames.JAVA_LANG_BYTE) ||
-              type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER)) {
+          if (type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER) ||
+              type.equalsToText(CommonClassNames.JAVA_LANG_SHORT) ||
+              type.equalsToText(CommonClassNames.JAVA_LANG_BYTE) ||
+              type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER)) {
             return;
           }
         }

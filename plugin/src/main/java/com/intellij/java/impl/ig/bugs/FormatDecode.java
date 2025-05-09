@@ -15,9 +15,8 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiType;
-import consulo.util.collection.ContainerUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,9 +186,9 @@ class FormatDecode {
       final String text = type.getCanonicalText();
 
       return PsiType.LONG.equals(type) ||
-             JavaClassNames.JAVA_LANG_LONG.equals(text) ||
-             JavaClassNames.JAVA_UTIL_DATE.equals(text) ||
-             JavaClassNames.JAVA_UTIL_CALENDAR.equals(text);
+             CommonClassNames.JAVA_LANG_LONG.equals(text) ||
+             CommonClassNames.JAVA_UTIL_DATE.equals(text) ||
+             CommonClassNames.JAVA_UTIL_CALENDAR.equals(text);
     }
 
     public String type() {
@@ -202,7 +201,7 @@ class FormatDecode {
     public boolean valid(PsiType type) {
       final String text = type.getCanonicalText();
       return PsiType.CHAR.equals(type) ||
-             JavaClassNames.JAVA_LANG_CHARACTER.equals(text);
+             CommonClassNames.JAVA_LANG_CHARACTER.equals(text);
     }
 
     public String type() {
@@ -215,13 +214,13 @@ class FormatDecode {
     public boolean valid(PsiType type) {
       final String text = type.getCanonicalText();
       return PsiType.INT.equals(type) ||
-             JavaClassNames.JAVA_LANG_INTEGER.equals(text) ||
+             CommonClassNames.JAVA_LANG_INTEGER.equals(text) ||
              PsiType.LONG.equals(type) ||
-             JavaClassNames.JAVA_LANG_LONG.equals(text) ||
+             CommonClassNames.JAVA_LANG_LONG.equals(text) ||
              PsiType.SHORT.equals(type) ||
-             JavaClassNames.JAVA_LANG_SHORT.equals(text) ||
+             CommonClassNames.JAVA_LANG_SHORT.equals(text) ||
              PsiType.BYTE.equals(type) ||
-             JavaClassNames.JAVA_LANG_BYTE.equals(text) ||
+             CommonClassNames.JAVA_LANG_BYTE.equals(text) ||
              "java.math.BigInteger".equals(text);
     }
 
@@ -235,9 +234,9 @@ class FormatDecode {
     public boolean valid(PsiType type) {
       final String text = type.getCanonicalText();
       return PsiType.DOUBLE.equals(type) ||
-             JavaClassNames.JAVA_LANG_DOUBLE.equals(text) ||
+             CommonClassNames.JAVA_LANG_DOUBLE.equals(text) ||
              PsiType.FLOAT.equals(type) ||
-             JavaClassNames.JAVA_LANG_FLOAT.equals(text) ||
+             CommonClassNames.JAVA_LANG_FLOAT.equals(text) ||
              "java.math.BigDecimal".equals(text);
     }
 

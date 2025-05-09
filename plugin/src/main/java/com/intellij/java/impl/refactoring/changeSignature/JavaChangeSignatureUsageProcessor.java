@@ -41,7 +41,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.ide.impl.idea.refactoring.changeSignature.DefaultValueChooser;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
@@ -1140,7 +1139,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
                     PsiType parameterType = info.createType(method, manager);
                     if (parameterType == null) {
                         parameterType = JavaPsiFacade.getElementFactory(method.getProject())
-                            .createTypeFromText(JavaClassNames.JAVA_LANG_OBJECT, method);
+                            .createTypeFromText(CommonClassNames.JAVA_LANG_OBJECT, method);
                     }
                     PsiParameter param = factory.createParameter(info.getName(), parameterType);
                     prototype.getParameterList().add(param);

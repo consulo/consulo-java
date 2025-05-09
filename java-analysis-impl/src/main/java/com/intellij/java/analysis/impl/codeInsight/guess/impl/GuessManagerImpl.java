@@ -18,7 +18,6 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.CachedValueProvider;
 import consulo.content.scope.SearchScope;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.*;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
@@ -462,7 +461,7 @@ public final class GuessManagerImpl extends GuessManager {
 
     private static class GuessTypeVisitor extends JavaElementVisitor {
         private static final CallMatcher OBJECT_GET_CLASS =
-            CallMatcher.exactInstanceCall(JavaClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0);
+            CallMatcher.exactInstanceCall(CommonClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0);
         @Nonnull
         private final PsiExpression myPlace;
         PsiType mySpecificType;

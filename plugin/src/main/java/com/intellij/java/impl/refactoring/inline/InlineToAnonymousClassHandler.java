@@ -27,7 +27,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -285,7 +284,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 				return "Class cannot be inlined because an interface implemented by it cannot be resolved";
 			}
 			final PsiClass superClass = psiClass.getSuperClass();
-			if (superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+			if (superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 			{
 				PsiClassType interfaceType = interfaces[0];
 				if (!isRedundantImplements(superClass, interfaceType))

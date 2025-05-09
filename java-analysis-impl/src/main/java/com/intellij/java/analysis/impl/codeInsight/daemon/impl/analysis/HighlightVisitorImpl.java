@@ -41,7 +41,6 @@ import consulo.colorScheme.TextAttributesScheme;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.Pass;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -282,7 +281,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         if (!myHolder.hasErrorResults()) {
             add(AnnotationsHighlightUtil.checkRepeatableAnnotation(annotation));
         }
-        if (JavaClassNames.JAVA_LANG_OVERRIDE.equals(annotation.getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OVERRIDE.equals(annotation.getQualifiedName())) {
             PsiAnnotationOwner owner = annotation.getOwner();
             PsiElement parent = owner instanceof PsiModifierList modifierList ? modifierList.getParent() : null;
             if (parent instanceof PsiMethod method) {

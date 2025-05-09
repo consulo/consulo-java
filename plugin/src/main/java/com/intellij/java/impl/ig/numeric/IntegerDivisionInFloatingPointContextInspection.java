@@ -16,17 +16,15 @@
 package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,11 +45,11 @@ public class IntegerDivisionInFloatingPointContextInspection
     s_integralTypes.add("short");
     s_integralTypes.add("byte");
     s_integralTypes.add("char");
-    s_integralTypes.add(JavaClassNames.JAVA_LANG_INTEGER);
-    s_integralTypes.add(JavaClassNames.JAVA_LANG_LONG);
-    s_integralTypes.add(JavaClassNames.JAVA_LANG_SHORT);
-    s_integralTypes.add(JavaClassNames.JAVA_LANG_BYTE);
-    s_integralTypes.add(JavaClassNames.JAVA_LANG_CHARACTER);
+    s_integralTypes.add(CommonClassNames.JAVA_LANG_INTEGER);
+    s_integralTypes.add(CommonClassNames.JAVA_LANG_LONG);
+    s_integralTypes.add(CommonClassNames.JAVA_LANG_SHORT);
+    s_integralTypes.add(CommonClassNames.JAVA_LANG_BYTE);
+    s_integralTypes.add(CommonClassNames.JAVA_LANG_CHARACTER);
   }
 
   @Override

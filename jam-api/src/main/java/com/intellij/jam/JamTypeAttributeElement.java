@@ -15,11 +15,7 @@
  */
 package com.intellij.jam;
 
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiAnnotationMemberValue;
-import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
-import com.intellij.java.language.psi.PsiType;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElementRef;
 import jakarta.annotation.Nonnull;
 
@@ -47,7 +43,7 @@ public class JamTypeAttributeElement extends JamAttributeElement<PsiType> {
     if (psiAnnotationMemberValue instanceof PsiClassObjectAccessExpression) {
       psiType = ((PsiClassObjectAccessExpression) psiAnnotationMemberValue).getOperand().getType();
     }
-    if (psiType != null && JavaClassNames.JAVA_LANG_OBJECT.equals(psiType.getCanonicalText())) {
+    if (psiType != null && CommonClassNames.JAVA_LANG_OBJECT.equals(psiType.getCanonicalText())) {
       return null;
     }
     return psiType;

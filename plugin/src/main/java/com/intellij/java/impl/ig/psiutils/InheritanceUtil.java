@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import consulo.application.progress.ProgressManager;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,11 +47,11 @@ public class InheritanceUtil {
     }
 
     final String className = class1.getQualifiedName();
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(className)) {
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
       return true;
     }
     final String class2Name = class2.getQualifiedName();
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(class2Name)) {
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(class2Name)) {
       return true;
     }
     if (class1.isInheritor(class2, true) ||

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
+import com.intellij.java.impl.generate.GenerationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
@@ -22,7 +23,6 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -35,7 +35,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.java.impl.generate.GenerationUtil;
 
 import java.util.*;
 
@@ -222,7 +221,7 @@ public class GenerateEqualsHelper implements Runnable {
     if (superEquals.hasModifierProperty(PsiModifier.ABSTRACT)) {
       return false;
     }
-    return !JavaClassNames.JAVA_LANG_OBJECT.equals(superEquals.getContainingClass().getQualifiedName());
+    return !CommonClassNames.JAVA_LANG_OBJECT.equals(superEquals.getContainingClass().getQualifiedName());
   }
 
   private PsiMethod createHashCode() throws IncorrectOperationException {
@@ -282,7 +281,7 @@ public class GenerateEqualsHelper implements Runnable {
       return false;
     }
     final String qName = psiClass.getQualifiedName();
-    return JavaClassNames.JAVA_LANG_OBJECT.equals(qName);
+    return CommonClassNames.JAVA_LANG_OBJECT.equals(qName);
   }
 
   public static MethodSignature getHashCodeSignature() {

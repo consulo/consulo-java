@@ -35,7 +35,6 @@ import consulo.application.HelpManager;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
@@ -260,7 +259,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     final PsiManager psiManager = PsiManager.getInstance(myProject);
     if (
       (
-        myTypeSelectorManager.isSuggestedType(JavaClassNames.JAVA_LANG_STRING)
+        myTypeSelectorManager.isSuggestedType(CommonClassNames.JAVA_LANG_STRING)
           || (myLocalVariable != null && AnnotationUtil.isAnnotated(myLocalVariable, AnnotationUtil.NON_NLS, false, false))
       )
       && PsiUtil.isLanguageLevel5OrHigher(myParentClass)

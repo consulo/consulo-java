@@ -37,7 +37,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -313,7 +312,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
               createInheritanceClassChooser(
                 CodeInsightLocalize.inspectionI18nOptionIgnoreForSpecifiedExceptionConstructorArguments().get(),
                 scope,
-                JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_THROWABLE, scope),
+                JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_THROWABLE, scope),
                 true,
                 true,
                 null
@@ -844,7 +843,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     return TO_STRING.equals(method.getName())
       && method.getParameterList().getParametersCount() == 0
       && returnType != null
-      && JavaClassNames.JAVA_LANG_STRING.equals(returnType.getCanonicalText());
+      && CommonClassNames.JAVA_LANG_STRING.equals(returnType.getCanonicalText());
   }
 
   private static boolean isArgOfJUnitAssertion(PsiExpression expression) {
@@ -913,7 +912,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
     final Project project = expression.getProject();
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    final PsiClass throwable = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_THROWABLE, scope);
+    final PsiClass throwable = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_THROWABLE, scope);
     return throwable != null && aClass.isInheritor(throwable, true);
   }
 

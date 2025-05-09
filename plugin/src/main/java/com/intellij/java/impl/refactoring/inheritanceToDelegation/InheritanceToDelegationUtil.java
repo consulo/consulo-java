@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -38,7 +38,7 @@ public class InheritanceToDelegationUtil {
       if (baseMethod != null) {
         PsiClass containingClass = baseMethod.getContainingClass();
         String qName = containingClass.getQualifiedName();
-        if (qName == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) return true;
+        if (qName == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) return true;
       }
     }
     return false;

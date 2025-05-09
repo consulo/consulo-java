@@ -27,9 +27,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.component.extension.ExtensionPoint;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.localize.CodeInsightLocalize;
@@ -265,7 +263,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     if (baseConstructor != null) {
       PsiClass superClass = aClass.getSuperClass();
       LOG.assertTrue(superClass != null);
-      if (!JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
+      if (!CommonClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
         isNotEnum = true;
         if (baseConstructor instanceof PsiCompiledElement) { // to get some parameter names
           PsiClass dummyClass = JVMElementFactories.requireFactory(baseConstructor.getLanguage(), baseConstructor.getProject())

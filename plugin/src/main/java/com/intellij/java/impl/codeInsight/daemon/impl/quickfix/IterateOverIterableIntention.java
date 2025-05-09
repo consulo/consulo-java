@@ -22,7 +22,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.SelectionModel;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.template.Template;
@@ -106,7 +105,7 @@ public class IterateOverIterableIntention implements IntentionAction {
       PsiElement parent = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
       if (parent instanceof PsiExpression) {
         final PsiType type = ((PsiExpression)parent).getType();
-        return type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)
+        return type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)
                ? (PsiExpression)parent
                : null;
       }
@@ -125,7 +124,7 @@ public class IterateOverIterableIntention implements IntentionAction {
       if (parent instanceof PsiMethodCallExpression) continue;
       if (!(parent instanceof PsiExpressionStatement)) return null;
       final PsiType type = ((PsiExpression)element).getType();
-      if (type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE)) return (PsiExpression)element;
+      if (type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) return (PsiExpression)element;
     }
     return null;
   }

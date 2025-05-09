@@ -35,7 +35,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
@@ -305,7 +304,7 @@ public class HighlightClassUtil {
     public static HighlightInfo.Builder checkClassAndPackageConflict(@Nonnull PsiClass aClass) {
         String name = aClass.getQualifiedName();
 
-        if (JavaClassNames.DEFAULT_PACKAGE.equals(name)) {
+        if (CommonClassNames.DEFAULT_PACKAGE.equals(name)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(HighlightNamesUtil.getClassDeclarationTextRange(aClass))
                 .descriptionAndTooltip(JavaErrorLocalize.classClashesWithPackage(name));
@@ -667,7 +666,7 @@ public class HighlightClassUtil {
             PsiClass[] superTypes = aClass.getSupers();
             for (PsiElement superType : superTypes) {
                 while (superType instanceof PsiClass) {
-                    if (!JavaClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)superType).getQualifiedName())) {
+                    if (!CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)superType).getQualifiedName())) {
                         PsiClass circularClass = getCircularClass((PsiClass)superType, usedClasses);
                         if (circularClass != null) {
                             return circularClass;

@@ -28,13 +28,11 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.FileDocumentManager;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.generation.ClassMember;
@@ -284,7 +282,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     JavaPsiFacade facade = JavaPsiFacade.getInstance(target.getProject());
     for (PsiMethod method : allMethods) {
       final PsiClass superClass = method.getContainingClass();
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
         continue;
       }
       if (method.isConstructor()) {
@@ -424,7 +422,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     final PsiMethod[] methods = aClass.getAllMethods();
     for (PsiMethod method : methods) {
       final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null || JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+      if (containingClass == null || CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
         continue;
       }
       final PsiType returnType = method.getReturnType();

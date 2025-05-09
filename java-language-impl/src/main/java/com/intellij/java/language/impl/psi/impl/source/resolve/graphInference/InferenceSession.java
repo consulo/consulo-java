@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.*;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiModificationTracker;
@@ -1203,10 +1202,10 @@ public class InferenceSession {
   private boolean isThrowable(List<PsiType> upperBounds) {
     boolean commonThrowable = false;
     for (PsiType upperBound : upperBounds) {
-      if (upperBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || !isProperType(upperBound)) {
+      if (upperBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || !isProperType(upperBound)) {
         continue;
       }
-      if (upperBound.equalsToText(JavaClassNames.JAVA_LANG_EXCEPTION) || upperBound.equalsToText(JavaClassNames.JAVA_LANG_THROWABLE)) {
+      if (upperBound.equalsToText(CommonClassNames.JAVA_LANG_EXCEPTION) || upperBound.equalsToText(CommonClassNames.JAVA_LANG_THROWABLE)) {
         commonThrowable = true;
       }
       else {

@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -118,8 +117,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
         final PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
           final String superClassName = superClass.getQualifiedName();
-          if (JavaClassNames.JAVA_LANG_OBJECT.equals(
-            superClassName)) {
+          if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
             return;
           }
         }
