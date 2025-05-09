@@ -1,25 +1,18 @@
 package com.intellij.refactoring;
 
-import jakarta.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.VisibilityUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
-import com.intellij.java.language.util.VisibilityUtil;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
@@ -134,7 +127,7 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
   }
 
   public void testResultedType() throws Exception {
-    checkDefaultType(JavaClassNames.JAVA_LANG_OBJECT);
+    checkDefaultType(CommonClassNames.JAVA_LANG_OBJECT);
   }
 
   public void testResultedTypeWhenNonLocal() throws Exception {

@@ -32,7 +32,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.completion.CompletionUtilCore;
@@ -269,7 +268,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
             arg = bound != null ? bound : ((PsiWildcardType) arg).getExtendsBound();
           }
           PsiType substitution = resolveHelper.getSubstitutionForTypeParameter(inheritorParameter, substituted, arg, true, PsiUtil.getLanguageLevel(context));
-          if (PsiType.NULL.equals(substitution) || substitution != null && substitution.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || substitution instanceof PsiWildcardType) {
+          if (PsiType.NULL.equals(substitution) || substitution != null && substitution.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || substitution instanceof PsiWildcardType) {
             continue;
           }
           if (substitution == null) {

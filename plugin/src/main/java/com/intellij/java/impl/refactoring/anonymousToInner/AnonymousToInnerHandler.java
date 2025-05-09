@@ -21,12 +21,9 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -43,12 +40,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -330,7 +325,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     }
     PsiJavaCodeReferenceElement baseClassRef = myAnonClass.getBaseClassReference();
     PsiClass baseClass = (PsiClass)baseClassRef.resolve();
-    if (baseClass == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())) {
+    if (baseClass == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())) {
       PsiReferenceList refList = baseClass != null && baseClass.isInterface() ?
                                  aClass.getImplementsList() :
                                  aClass.getExtendsList();

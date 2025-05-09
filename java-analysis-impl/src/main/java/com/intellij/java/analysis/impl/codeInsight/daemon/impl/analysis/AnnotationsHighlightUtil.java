@@ -30,7 +30,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -45,7 +44,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ObjectUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -138,7 +136,7 @@ public class AnnotationsHighlightUtil {
             return null;
         }
 
-        if (expectedType instanceof PsiClassType && expectedType.equalsToText(JavaClassNames.JAVA_LANG_CLASS)) {
+        if (expectedType instanceof PsiClassType && expectedType.equalsToText(CommonClassNames.JAVA_LANG_CLASS)) {
             if (!(value instanceof PsiClassObjectAccessExpression)) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(value)
@@ -251,7 +249,7 @@ public class AnnotationsHighlightUtil {
             }
 
             PsiAnnotation metaAnno =
-                PsiImplUtil.findAnnotation(annotationType.getModifierList(), JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE);
+                PsiImplUtil.findAnnotation(annotationType.getModifierList(), CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE);
             if (metaAnno == null) {
                 LocalizeValue explanation = JavaErrorLocalize.annotationNonRepeatable(annotationType.getQualifiedName());
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
@@ -303,7 +301,7 @@ public class AnnotationsHighlightUtil {
         if (contained == null || !contained.isAnnotationType()) {
             return null;
         }
-        if (PsiImplUtil.findAnnotation(contained.getModifierList(), JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE) == null) {
+        if (PsiImplUtil.findAnnotation(contained.getModifierList(), CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE) == null) {
             return null;
         }
 
@@ -584,8 +582,8 @@ public class AnnotationsHighlightUtil {
                 PsiClass containingClass = method.getContainingClass();
                 if (containingClass != null) {
                     String qualifiedName = containingClass.getQualifiedName();
-                    if (JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)
-                        || JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(qualifiedName)) {
+                    if (CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)
+                        || CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(qualifiedName)) {
                         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(nameIdentifier)
                             .descriptionAndTooltip(
@@ -644,7 +642,7 @@ public class AnnotationsHighlightUtil {
         }
 
         if (!(nameRef.resolve() instanceof PsiClass annotationClass)
-            || !JavaClassNames.JAVA_LANG_ANNOTATION_TARGET.equals(annotationClass.getQualifiedName())) {
+            || !CommonClassNames.JAVA_LANG_ANNOTATION_TARGET.equals(annotationClass.getQualifiedName())) {
             return null;
         }
 
@@ -678,7 +676,7 @@ public class AnnotationsHighlightUtil {
     @RequiredReadAction
     public static HighlightInfo.Builder checkFunctionalInterface(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel languageLevel) {
         if (languageLevel.isAtLeast(LanguageLevel.JDK_1_8)
-            && Comparing.strEqual(annotation.getQualifiedName(), JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE)) {
+            && Comparing.strEqual(annotation.getQualifiedName(), CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE)) {
             PsiAnnotationOwner owner = annotation.getOwner();
             if (owner instanceof PsiModifierList modifierList
                 && modifierList.getParent() instanceof PsiClass psiClass) {
@@ -700,7 +698,7 @@ public class AnnotationsHighlightUtil {
     @RequiredReadAction
     public static HighlightInfo.Builder checkRepeatableAnnotation(PsiAnnotation annotation) {
         String qualifiedName = annotation.getQualifiedName();
-        if (!JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName)) {
+        if (!CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName)) {
             return null;
         }
 
@@ -859,7 +857,7 @@ public class AnnotationsHighlightUtil {
     public static RetentionPolicy getRetentionPolicy(@Nonnull PsiClass annotation) {
         PsiModifierList modifierList = annotation.getModifierList();
         if (modifierList != null) {
-            PsiAnnotation retentionAnno = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+            PsiAnnotation retentionAnno = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
             if (retentionAnno == null) {
                 return RetentionPolicy.CLASS;
             }
@@ -906,7 +904,7 @@ public class AnnotationsHighlightUtil {
         public Boolean visitClassType(PsiClassType classType) {
             if (classType.getParameters().length > 0) {
                 PsiClassType rawType = classType.rawType();
-                return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
+                return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
             }
 
             PsiClass aClass = classType.resolve();
@@ -914,7 +912,7 @@ public class AnnotationsHighlightUtil {
                 return Boolean.TRUE;
             }
 
-            return classType.equalsToText(JavaClassNames.JAVA_LANG_CLASS) || classType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+            return classType.equalsToText(CommonClassNames.JAVA_LANG_CLASS) || classType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
         }
     }
 

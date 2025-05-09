@@ -20,7 +20,6 @@ import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.CompletionLocation;
 import consulo.language.editor.completion.CompletionPreselectSkipper;
 import consulo.language.editor.completion.CompletionStatistician;
@@ -93,8 +92,8 @@ public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
     if (toImplement > 0) return Result.ACCEPT;
 
     if (psiClass.hasModifierProperty(PsiModifier.ABSTRACT)) return Result.ABSTRACT;
-    if (!isDefaultType && JavaClassNames.JAVA_LANG_STRING.equals(psiClass.getQualifiedName())) return Result.STRING;
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return Result.NON_DEFAULT;
+    if (!isDefaultType && CommonClassNames.JAVA_LANG_STRING.equals(psiClass.getQualifiedName())) return Result.STRING;
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return Result.NON_DEFAULT;
 
     return Result.ACCEPT;
   }

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import com.intellij.java.language.psi.*;
 import consulo.undoRedo.UndoManager;
 import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
@@ -28,13 +29,7 @@ import consulo.logging.Logger;
 import consulo.language.impl.internal.psi.LoadTextUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiImportStatementBase;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -91,19 +86,19 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 					{
 						try
 						{
-							checkAddImport(file, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_LIST);
-							checkAddImport(file, JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_LIST);
-							checkAddImport(file, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST);
-							checkAddImport(file, JavaClassNames.JAVA_UTIL_SORTED_MAP, JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_SORTED_MAP);
-							checkAddImport(file, JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP);
-							checkAddImport(file, "java.util.AbstractList", "java.util.AbstractList", JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP);
-							checkAddImport(file, "java.util.AbstractList", "java.util.AbstractList", JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames
-									.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP);
-							checkAddImport(file, "java.util.TreeMap", "java.util.AbstractList", JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap");
-							checkAddImport(file, "java.util.concurrent.atomic.AtomicBoolean", "java.util.AbstractList", JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST,
-									JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap", "java.util.concurrent.atomic.AtomicBoolean");
-							checkAddImport(file, JavaClassNames.JAVA_IO_FILE, JavaClassNames.JAVA_IO_FILE, "java.util.AbstractList", JavaClassNames.JAVA_UTIL_ARRAY_LIST, JavaClassNames.JAVA_UTIL_HASH_MAP, JavaClassNames.JAVA_UTIL_LIST,
-									JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap", "java.util.concurrent.atomic.AtomicBoolean");
+							checkAddImport(file, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_LIST);
+							checkAddImport(file, CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_LIST);
+							checkAddImport(file, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST);
+							checkAddImport(file, CommonClassNames.JAVA_UTIL_SORTED_MAP, CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_SORTED_MAP);
+							checkAddImport(file, CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP);
+							checkAddImport(file, "java.util.AbstractList", "java.util.AbstractList", CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP);
+							checkAddImport(file, "java.util.AbstractList", "java.util.AbstractList", CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames
+									.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP);
+							checkAddImport(file, "java.util.TreeMap", "java.util.AbstractList", CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap");
+							checkAddImport(file, "java.util.concurrent.atomic.AtomicBoolean", "java.util.AbstractList", CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST,
+									CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap", "java.util.concurrent.atomic.AtomicBoolean");
+							checkAddImport(file, CommonClassNames.JAVA_IO_FILE, CommonClassNames.JAVA_IO_FILE, "java.util.AbstractList", CommonClassNames.JAVA_UTIL_ARRAY_LIST, CommonClassNames.JAVA_UTIL_HASH_MAP, CommonClassNames.JAVA_UTIL_LIST,
+									CommonClassNames.JAVA_UTIL_MAP, CommonClassNames.JAVA_UTIL_SORTED_MAP, "java.util.TreeMap", "java.util.concurrent.atomic.AtomicBoolean");
 						}
 						catch(Throwable e)
 						{
@@ -159,7 +154,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 								CodeStyleSettingsManager.getInstance(getProject()).dropTemporarySettings();
 							}
 
-							assertOrder(file, "java.awt.*", JavaClassNames.JAVA_UTIL_MAP, "static java.lang.Math.max", "static java.lang.Math.min", "static javax.swing.SwingConstants.CENTER");
+							assertOrder(file, "java.awt.*", CommonClassNames.JAVA_UTIL_MAP, "static java.lang.Math.max", "static java.lang.Math.min", "static javax.swing.SwingConstants.CENTER");
 
 						}
 						catch(Throwable e)

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiAnnotation.TargetType;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.dumb.IndexNotReadyException;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -263,7 +262,7 @@ public class AnnotationTargetUtil {
         if (modifierList == null) {
             return null;
         }
-        PsiAnnotation target = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_TARGET);
+        PsiAnnotation target = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_TARGET);
         if (target == null) {
             return DEFAULT_TARGETS;  // if omitted it is applicable to all but Java 8 TYPE_USE/TYPE_PARAMETERS targets
         }

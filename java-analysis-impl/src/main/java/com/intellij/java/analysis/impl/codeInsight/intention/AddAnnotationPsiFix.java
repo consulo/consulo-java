@@ -244,7 +244,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
             if (AnnotationsHighlightUtil.getRetentionPolicy(aClass) == RetentionPolicy.RUNTIME) {
                 return ExternalAnnotationsManager.AnnotationPlace.IN_CODE;
             }
-            if (!JavaClassNames.DEFAULT_PACKAGE.equals(StringUtil.getPackageName(myAnnotation))) {
+            if (!CommonClassNames.DEFAULT_PACKAGE.equals(StringUtil.getPackageName(myAnnotation))) {
                 PsiClass resolvedBySimpleName = JavaPsiFacade.getInstance(project).getResolveHelper()
                     .resolveReferencedClass(StringUtil.getShortName(myAnnotation), modifierListOwner);
                 if (resolvedBySimpleName != null && resolvedBySimpleName.getManager().areElementsEquivalent(resolvedBySimpleName, aClass)) {

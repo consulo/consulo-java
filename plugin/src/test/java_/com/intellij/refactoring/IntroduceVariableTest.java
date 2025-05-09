@@ -16,18 +16,18 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import com.intellij.java.impl.refactoring.introduceVariable.InputValidator;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSettings;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.testFramework.LightCodeInsightTestCase;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
@@ -55,11 +55,11 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testReplaceAll() throws Exception {
-    doTest(new MockIntroduceVariableHandler("s", true, true, true, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("s", true, true, true, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testIDEADEV3678() throws Exception {
-    doTest(new MockIntroduceVariableHandler("component", true, true, true, JavaClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("component", true, true, true, CommonClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testIDEADEV13369() throws Exception {
@@ -71,7 +71,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testAnonymousClass1() throws Exception {
-    doTest(new MockIntroduceVariableHandler("runnable", false, false, false, JavaClassNames.JAVA_LANG_RUNNABLE));
+    doTest(new MockIntroduceVariableHandler("runnable", false, false, false, CommonClassNames.JAVA_LANG_RUNNABLE));
   }
 
   public void testAnonymousClass2() throws Exception {
@@ -83,7 +83,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testMethodCall() throws Exception {
-    doTest(new MockIntroduceVariableHandler("temp", true, true, true, JavaClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("temp", true, true, true, CommonClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testMethodCallInSwitch() throws Exception {
@@ -95,11 +95,11 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testParenthizedOccurence1() throws Exception {
-    doTest(new MockIntroduceVariableHandler("s", true, true, true, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("s", true, true, true, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testConflictingField() throws Exception {
-    doTest(new MockIntroduceVariableHandler("name", true, false, true, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("name", true, false, true, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testConflictingFieldInExpression() throws Exception {
@@ -119,15 +119,15 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testSCR18295() throws Exception {
-    doTest(new MockIntroduceVariableHandler("it", true, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("it", true, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSCR18295a() throws Exception {
-    doTest(new MockIntroduceVariableHandler("it", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("it", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testFromInjected() throws Exception {
-    doTest(new MockIntroduceVariableHandler("regexp", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("regexp", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSCR10412() throws Exception {
@@ -135,11 +135,11 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testSCR22718() throws Exception {
-    doTest(new MockIntroduceVariableHandler("object", true, true, false, JavaClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("object", true, true, false, CommonClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testSCR26075() throws Exception {
-    doTest(new MockIntroduceVariableHandler("wrong", false, false, false, JavaClassNames.JAVA_LANG_STRING) {
+    doTest(new MockIntroduceVariableHandler("wrong", false, false, false, CommonClassNames.JAVA_LANG_STRING) {
       @Override
       protected void assertValidationResult(boolean validationResult) {
         assertFalse(validationResult);
@@ -157,7 +157,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testConflictingFieldInOuterClass() throws Exception {
-    doTest(new MockIntroduceVariableHandler("text", true, true, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("text", true, true, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSkipSemicolon() throws Exception {
@@ -165,11 +165,11 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testInsideIf() throws Exception {
-    doTest(new MockIntroduceVariableHandler("s1", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("s1", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testInsideElse() throws Exception {
-    doTest(new MockIntroduceVariableHandler("s1", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("s1", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testInsideWhile() throws Exception {
@@ -201,19 +201,19 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testSubLiteral() throws Exception {
-    doTest(new MockIntroduceVariableHandler("str", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("str", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSubLiteral1() throws Exception {
-    doTest(new MockIntroduceVariableHandler("str", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("str", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSubLiteralFromExpression() throws Exception {
-    doTest(new MockIntroduceVariableHandler("str", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("str", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSubExpressionFromIntellijidearulezzz() throws Exception {
-    doTest(new MockIntroduceVariableHandler("str", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("str", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testSubPrimitiveLiteral() throws Exception {
@@ -233,7 +233,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testFromFinalFieldOnAssignment() throws Exception {
-    doTest(new MockIntroduceVariableHandler("strs", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("strs", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testNoArrayFromVarargs() throws Exception {
@@ -268,7 +268,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testReturnStatementWithoutSemicolon() throws Exception {
-    doTest(new MockIntroduceVariableHandler("b", true, true, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("b", true, true, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testAndAndSubexpression() throws Exception {
@@ -284,7 +284,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testDifferentForeachParameters () throws Exception {
-    doTest(new MockIntroduceVariableHandler("tostr", true, true, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("tostr", true, true, false, CommonClassNames.JAVA_LANG_STRING));
   }
 
   public void testCollapsedToDiamond() throws Exception {
@@ -296,7 +296,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testFromForInitializer() throws Exception {
-    doTest(new MockIntroduceVariableHandler("list", true, true, true, JavaClassNames.JAVA_UTIL_LIST));
+    doTest(new MockIntroduceVariableHandler("list", true, true, true, CommonClassNames.JAVA_UTIL_LIST));
   }
 
   public void testInvalidPostfixExpr() throws Exception {
@@ -362,7 +362,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
 
   public void testIncorrectExpressionSelected() throws Exception {
     try {
-      doTest(new MockIntroduceVariableHandler("toString", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+      doTest(new MockIntroduceVariableHandler("toString", false, false, false, CommonClassNames.JAVA_LANG_STRING));
     }
     catch (Exception e) {
       assertEquals(e.getMessage(), "Error message:Cannot perform refactoring.\n" +
@@ -373,15 +373,15 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testMultiCatchSimple() throws Exception {
-    doTest(new MockIntroduceVariableHandler("e", true, true, false, JavaClassNames.JAVA_LANG_EXCEPTION, true));
+    doTest(new MockIntroduceVariableHandler("e", true, true, false, CommonClassNames.JAVA_LANG_EXCEPTION, true));
   }
 
   public void testMultiCatchTyped() throws Exception {
-    doTest(new MockIntroduceVariableHandler("b", true, true, false, JavaClassNames.JAVA_LANG_EXCEPTION, true));
+    doTest(new MockIntroduceVariableHandler("b", true, true, false, CommonClassNames.JAVA_LANG_EXCEPTION, true));
   }
 
   public void testBeforeVoidStatement() throws Exception {
-    doTest(new MockIntroduceVariableHandler("c", false, false, false, JavaClassNames.JAVA_LANG_OBJECT));
+    doTest(new MockIntroduceVariableHandler("c", false, false, false, CommonClassNames.JAVA_LANG_OBJECT));
   }
 
   public void testLambdaExpr() throws Exception {
@@ -397,7 +397,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   public void testOneLineLambdaVoidCompatible() throws Exception {
-    doTest(new MockIntroduceVariableHandler("c", false, false, false, JavaClassNames.JAVA_LANG_STRING));
+    doTest(new MockIntroduceVariableHandler("c", false, false, false, CommonClassNames.JAVA_LANG_STRING));
   }
   public void testOneLineLambdaValueCompatible() throws Exception {
     doTest(new MockIntroduceVariableHandler("c", false, false, false, "int"));

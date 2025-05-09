@@ -37,7 +37,6 @@ import consulo.application.util.function.Processor;
 import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.openapi.util.NullableComputable;
 import consulo.ide.impl.idea.util.NullableFunction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.completion.lookup.CommaTailType;
 import consulo.language.editor.completion.lookup.TailType;
@@ -49,13 +48,15 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Stack;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
+
+;
 
 /**
  * @author ven
@@ -551,7 +552,7 @@ public class ExpectedTypesProvider {
 
       PsiManager manager = statement.getManager();
       PsiClassType enumType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory()
-                                           .createTypeByFQClassName(JavaClassNames.JAVA_LANG_ENUM, statement.getResolveScope());
+                                           .createTypeByFQClassName(CommonClassNames.JAVA_LANG_ENUM, statement.getResolveScope());
       myResult.add(createInfoImpl(enumType, enumType));
     }
 
@@ -573,7 +574,7 @@ public class ExpectedTypesProvider {
     @Override
     public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
       PsiElementFactory factory = JavaPsiFacade.getInstance(statement.getProject()).getElementFactory();
-      PsiType objectType = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_OBJECT,
+      PsiType objectType = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT,
                                                            myExpr.getResolveScope());
       myResult.add(createInfoImpl(objectType, objectType));
     }
@@ -755,7 +756,7 @@ public class ExpectedTypesProvider {
         }
       }
       else if (i == JavaTokenType.PLUS) {
-        if (anotherType == null || anotherType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+        if (anotherType == null || anotherType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
           PsiClassType objectType = PsiType.getJavaLangObject(expr.getManager(), expr.getResolveScope());
           myResult.add(createInfoImpl(objectType, anotherType != null ? anotherType : objectType));
         }
@@ -988,7 +989,7 @@ public class ExpectedTypesProvider {
       if (statement.getException() == myExpr) {
         PsiManager manager = statement.getManager();
         PsiType throwableType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory()
-                                             .createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, myExpr.getResolveScope());
+                                             .createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE, myExpr.getResolveScope());
         PsiElement container = PsiTreeUtil.getParentOfType(statement, PsiMethod.class,
                                                            PsiLambdaExpression.class, PsiClass.class);
         PsiType[] throwsTypes = PsiType.EMPTY_ARRAY;
@@ -1004,7 +1005,7 @@ public class ExpectedTypesProvider {
 
         if (throwsTypes.length == 0) {
           final PsiClassType exceptionType = JavaPsiFacade.getInstance(manager.getProject())
-                                                          .getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION,
+                                                          .getElementFactory().createTypeByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION,
                                                                                                        myExpr.getResolveScope());
           throwsTypes = new PsiClassType[]{exceptionType};
         }
@@ -1236,7 +1237,7 @@ public class ExpectedTypesProvider {
 
       @NonNls final String name = method.getName();
       if ("contains".equals(name) || "remove".equals(name)) {
-        final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_COLLECTION,
+        final PsiType type = checkMethod(method, CommonClassNames.JAVA_UTIL_COLLECTION,
                                          new NullableFunction<PsiClass, PsiType>() {
                                            @Override
                                            public PsiType apply(@Nonnull final PsiClass psiClass) {
@@ -1249,7 +1250,7 @@ public class ExpectedTypesProvider {
       }
       if ("containsKey".equals(name) || "remove".equals(name) || "get".equals(name) || "containsValue".equals
         (name)) {
-        final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_MAP,
+        final PsiType type = checkMethod(method, CommonClassNames.JAVA_UTIL_MAP,
                                          new NullableFunction<PsiClass, PsiType>() {
                                            @Override
                                            public PsiType apply(@Nonnull final PsiClass psiClass) {
@@ -1264,7 +1265,7 @@ public class ExpectedTypesProvider {
 
       final PsiElementFactory factory = JavaPsiFacade.getElementFactory(containingClass.getProject());
       if ("equals".equals(name)) {
-        final PsiType type = checkMethod(method, JavaClassNames.JAVA_LANG_OBJECT,
+        final PsiType type = checkMethod(method, CommonClassNames.JAVA_LANG_OBJECT,
                                          new NullableFunction<PsiClass, PsiType>() {
                                            @Override
                                            public PsiType apply(final PsiClass psiClass) {
@@ -1292,7 +1293,7 @@ public class ExpectedTypesProvider {
       if ("assertEquals".equals(name) || "assertSame".equals(name) && method.getParameterList()
                                                                             .getParametersCount() == argCount) {
         if (argCount == 2 || argCount == 3 && method.getParameterList().getParameters()[0].getType()
-                                                                                          .equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+                                                                                          .equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
           int other = index == argCount - 1 ? index - 1 : index + 1;
           if (args.length > other) {
             ExpectedTypeInfo info = getEqualsType(args[other]);
@@ -1304,10 +1305,9 @@ public class ExpectedTypesProvider {
       }
       if ("Logger".equals(containingClass.getName()) || "Log".equals(containingClass.getName())) {
         if (parameterType instanceof PsiClassType) {
-          PsiType typeArg = PsiUtil.substituteTypeParameter(parameterType, JavaClassNames.JAVA_LANG_CLASS,
+          PsiType typeArg = PsiUtil.substituteTypeParameter(parameterType, CommonClassNames.JAVA_LANG_CLASS,
                                                             0, true);
-          if (typeArg != null && TypeConversionUtil.erasure(typeArg).equalsToText(JavaClassNames
-                                                                                    .JAVA_LANG_OBJECT)) {
+          if (typeArg != null && TypeConversionUtil.erasure(typeArg).equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
             PsiClass placeClass = PsiTreeUtil.getContextOfType(argument, PsiClass.class);
             PsiClass classClass = ((PsiClassType)parameterType).resolve();
             if (placeClass != null && classClass != null) {

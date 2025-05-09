@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -84,9 +83,7 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
       if (!(lhs instanceof PsiReferenceExpression)) {
         return;
       }
-      final String type = TypeUtils.expressionHasTypeOrSubtype(lhs,
-                                                               JavaClassNames.JAVA_UTIL_DATE,
-                                                               JavaClassNames.JAVA_UTIL_CALENDAR);
+      final String type = TypeUtils.expressionHasTypeOrSubtype(lhs, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }

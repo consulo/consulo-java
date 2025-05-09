@@ -15,12 +15,12 @@
  */
 package com.intellij.refactoring;
 
-import consulo.document.FileDocumentManager;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.document.FileDocumentManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
@@ -37,7 +37,7 @@ public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
   public void testInstanceOf() throws Exception { doTest("A", "I", false); }
   public void testFieldTest() throws Exception { doTest("Component1", "IDoSomething", false); }
   public void testScr34000() throws Exception { doTest("SimpleModel", "Model", false); }
-  public void testScr34020() throws Exception { doTest(JavaClassNames.JAVA_UTIL_LIST, JavaClassNames.JAVA_UTIL_COLLECTION, false); }
+  public void testScr34020() throws Exception { doTest(CommonClassNames.JAVA_UTIL_LIST, CommonClassNames.JAVA_UTIL_COLLECTION, false); }
   public void testCommonInheritor() throws Exception { doTest("Client.V", "Client.L", false); }
   public void testCommonInheritorFail() throws Exception { doTest("Client.V", "Client.L", false); }
   public void testCommonInheritorResults() throws Exception { doTest("Client.V", "Client.L", false); }

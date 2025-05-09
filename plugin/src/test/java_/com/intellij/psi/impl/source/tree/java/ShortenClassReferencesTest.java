@@ -15,19 +15,16 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import consulo.application.ApplicationManager;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.undoRedo.CommandProcessor;
+
+import static org.junit.Assert.*;
 
 /**
  * @author dsl
@@ -53,7 +50,7 @@ public abstract class ShortenClassReferencesTest extends LightCodeInsightFixture
     assertNotNull(body);
     PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)body.getStatements()[0];
     PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)declarationStatement.getFirstChild().getFirstChild();
-    PsiClass javaUtilListClass = facade.findClass(JavaClassNames.JAVA_UTIL_LIST);
+    PsiClass javaUtilListClass = facade.findClass(CommonClassNames.JAVA_UTIL_LIST);
     assertNotNull(javaUtilListClass);
     PsiElement resultingElement = referenceElement.bindToElement(javaUtilListClass);
     assertEquals("List<", resultingElement.getText());

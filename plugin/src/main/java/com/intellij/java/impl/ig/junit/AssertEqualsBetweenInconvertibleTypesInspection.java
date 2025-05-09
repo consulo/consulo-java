@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -88,7 +87,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
       final PsiExpressionList argumentList = expression.getArgumentList();
       final PsiExpression[] arguments = argumentList.getExpressions();
       final int argumentIndex;
-      if (firstParameterType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (firstParameterType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         if (arguments.length < 3) {
           return;
         }

@@ -185,7 +185,7 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
       CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
     if (codeStyleSettings.INSERT_OVERRIDE_ANNOTATION &&
         PsiUtil.isLanguageLevel6OrHigher(aClass)) {
-      modifierList.addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
+      modifierList.addAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
     }
     final PsiElementFactory factory =
       JavaPsiFacade.getElementFactory(project);

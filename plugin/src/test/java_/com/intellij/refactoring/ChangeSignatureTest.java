@@ -15,26 +15,25 @@
  */
 package com.intellij.refactoring;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-
-import com.intellij.java.language.psi.*;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nullable;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.JavaThrownExceptionInfo;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.changeSignature.ThrownExceptionInfo;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
+import com.intellij.java.language.psi.*;
+import consulo.codeInsight.TargetElementUtilEx;
+import consulo.java.language.module.util.CommonClassNames.*;
+import consulo.language.editor.TargetElementUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import consulo.language.editor.TargetElementUtil;
-import consulo.codeInsight.TargetElementUtilEx;
-import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.HashSet;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author dsl
@@ -279,7 +278,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 
 	public void testCovariantReturnType() throws Exception
 	{
-		doTest(JavaClassNames.JAVA_LANG_RUNNABLE, new ParameterInfoImpl[0], false);
+		doTest(CommonClassNames.JAVA_LANG_RUNNABLE, new ParameterInfoImpl[0], false);
 	}
 
 	public void testReorderExceptions() throws Exception
@@ -298,7 +297,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -312,7 +311,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_IO_IO_EXCEPTION, method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(CommonClassNames.JAVA_IO_IO_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -326,7 +325,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);
@@ -340,7 +339,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			public ThrownExceptionInfo[] genExceptions(PsiMethod method)
 			{
 				return new ThrownExceptionInfo[]{
-						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
+						new JavaThrownExceptionInfo(-1, JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, method.getResolveScope()))
 				};
 			}
 		}, false);

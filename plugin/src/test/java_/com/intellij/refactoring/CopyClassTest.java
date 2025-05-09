@@ -15,29 +15,29 @@
  */
 package com.intellij.refactoring;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import consulo.document.FileDocumentManager;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
+import com.intellij.java.impl.refactoring.copy.CopyClassesHandler;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.java.impl.refactoring.copy.CopyClassesHandler;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.document.FileDocumentManager;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * @author yole
@@ -50,7 +50,7 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
   }
 
   public void testLibraryClass() throws Exception {  // IDEADEV-28791
-    doTest(JavaClassNames.JAVA_UTIL_ARRAY_LIST, "Bar");
+    doTest(CommonClassNames.JAVA_UTIL_ARRAY_LIST, "Bar");
   }
 
   private void doTest(final String oldName, final String copyName) throws Exception {
