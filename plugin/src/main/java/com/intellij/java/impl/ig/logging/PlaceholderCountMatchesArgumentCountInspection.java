@@ -15,19 +15,14 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import consulo.java.language.module.util.JavaClassNames;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -112,7 +107,7 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
     }
 
     private static boolean hasThrowableType(PsiExpression lastArgument) {
-      return InheritanceUtil.isInheritor(lastArgument.getType(), JavaClassNames.JAVA_LANG_THROWABLE);
+      return InheritanceUtil.isInheritor(lastArgument.getType(), CommonClassNames.JAVA_LANG_THROWABLE);
     }
 
     public static int countPlaceholders(String value) {

@@ -25,16 +25,15 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,13 +45,13 @@ public class MethodUtils {
 
   @Contract("null -> false")
   public static boolean isComparatorCompare(@Nullable PsiMethod method) {
-    return method != null && methodMatches(method, JavaClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
+    return method != null && methodMatches(method, CommonClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
   }
 
   @Contract("null -> false")
   public static boolean isCompareTo(@Nullable PsiMethod method) {
     return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.COMPARE_TO, PsiType.NULL) && InheritanceUtil.isInheritor(method.getContainingClass(),
-        JavaClassNames.JAVA_LANG_COMPARABLE);
+        CommonClassNames.JAVA_LANG_COMPARABLE);
   }
 
   @Contract("null -> false")
@@ -61,7 +60,7 @@ public class MethodUtils {
       return false;
     }
     final PsiClassType stringType = TypeUtils.getStringType(method);
-    return methodMatches(method, JavaClassNames.JAVA_LANG_STRING, PsiType.INT, "compareToIgnoreCase", stringType);
+    return methodMatches(method, CommonClassNames.JAVA_LANG_STRING, PsiType.INT, "compareToIgnoreCase", stringType);
   }
 
   @Contract("null -> false")
@@ -98,7 +97,7 @@ public class MethodUtils {
       return false;
     }
     final PsiClassType stringType = TypeUtils.getStringType(method);
-    return methodMatches(method, JavaClassNames.JAVA_LANG_STRING, PsiType.BOOLEAN, HardcodedMethodConstants.EQUALS_IGNORE_CASE, stringType);
+    return methodMatches(method, CommonClassNames.JAVA_LANG_STRING, PsiType.BOOLEAN, HardcodedMethodConstants.EQUALS_IGNORE_CASE, stringType);
   }
 
   /**
@@ -424,6 +423,6 @@ public class MethodUtils {
       return false;
     }
     PsiClass aClass = method.getContainingClass();
-    return aClass != null && JavaClassNames.JAVA_LANG_STRING.equals(aClass.getQualifiedName());
+    return aClass != null && CommonClassNames.JAVA_LANG_STRING.equals(aClass.getQualifiedName());
   }
 }

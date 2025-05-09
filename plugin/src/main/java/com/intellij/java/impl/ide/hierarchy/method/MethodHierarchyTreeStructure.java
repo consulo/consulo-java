@@ -22,7 +22,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
@@ -129,7 +128,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
     }
 
     private static boolean isJavaLangObject(PsiClass aClass) {
-        return JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
+        return CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
     }
 
     private static PsiClass findSuitableBaseClass(PsiMethod method) {

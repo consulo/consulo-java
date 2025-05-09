@@ -16,16 +16,12 @@
 package com.intellij.java.impl.ig.serialization;
 
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -56,14 +52,22 @@ public class NonSerializableObjectBoundToHttpSessionInspection
     public void visitMethodCallExpression(
       PsiMethodCallExpression methodCallExpression) {
       super.visitMethodCallExpression(methodCallExpression);
-      if (!MethodCallUtils.isSimpleCallToMethod(methodCallExpression,
-                                                "javax.servlet.http.HttpSession", PsiType.VOID,
-                                                "putValue", JavaClassNames.JAVA_LANG_STRING,
-                                                JavaClassNames.JAVA_LANG_OBJECT) &&
-          !MethodCallUtils.isSimpleCallToMethod(methodCallExpression,
-                                                "javax.servlet.http.HttpSession", PsiType.VOID,
-                                                "setAttribute", JavaClassNames.JAVA_LANG_STRING,
-                                                JavaClassNames.JAVA_LANG_OBJECT)) {
+      if (!MethodCallUtils.isSimpleCallToMethod(
+        methodCallExpression,
+        "javax.servlet.http.HttpSession",
+        PsiType.VOID,
+        "putValue",
+        CommonClassNames.JAVA_LANG_STRING,
+        CommonClassNames.JAVA_LANG_OBJECT
+      )
+        && !MethodCallUtils.isSimpleCallToMethod(
+          methodCallExpression,
+          "javax.servlet.http.HttpSession",
+          PsiType.VOID,
+          "setAttribute",
+          CommonClassNames.JAVA_LANG_STRING,
+          CommonClassNames.JAVA_LANG_OBJECT
+        )) {
         return;
       }
       final PsiExpressionList argumentList =

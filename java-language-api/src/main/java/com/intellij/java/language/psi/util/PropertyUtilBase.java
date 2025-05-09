@@ -7,7 +7,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.util.PropertyKind;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -80,7 +79,7 @@ public class PropertyUtilBase {
             return false;
         }
         String className = psiClass.getQualifiedName();
-        return JavaClassNames.JAVA_LANG_OBJECT.equals(className);
+        return CommonClassNames.JAVA_LANG_OBJECT.equals(className);
     }
 
     @Nonnull
@@ -128,7 +127,7 @@ public class PropertyUtilBase {
         PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
         for (PsiMethod method : methods) {
-            if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+            if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
                 continue;
             }
 
@@ -147,7 +146,7 @@ public class PropertyUtilBase {
         PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
         for (PsiMethod method : methods) {
-            if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+            if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
                 continue;
             }
 

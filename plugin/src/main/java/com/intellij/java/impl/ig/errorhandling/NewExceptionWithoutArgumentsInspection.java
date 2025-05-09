@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
@@ -82,7 +81,7 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
         return;
       }
       final PsiClass aClass = (PsiClass)target;
-      if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_EXCEPTION)) {
+      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       if (ignoreWithoutParameters) {

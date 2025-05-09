@@ -19,7 +19,6 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -29,11 +28,11 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import kava.beans.Introspector;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 
 /**
@@ -174,7 +173,7 @@ public class PropertyUtil {
       return false;
     }
     final String className = psiClass.getQualifiedName();
-    return JavaClassNames.JAVA_LANG_OBJECT.equals(className);
+    return CommonClassNames.JAVA_LANG_OBJECT.equals(className);
   }
 
   @Nonnull
@@ -381,7 +380,7 @@ public class PropertyUtil {
     PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
     for (PsiMethod method : methods) {
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
         continue;
       }
 
@@ -400,7 +399,7 @@ public class PropertyUtil {
     PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
     for (PsiMethod method : methods) {
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
         continue;
       }
 

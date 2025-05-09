@@ -22,7 +22,6 @@ import com.intellij.java.language.jvm.types.JvmSubstitutor;
 import com.intellij.java.language.jvm.types.JvmType;
 import com.intellij.java.language.jvm.types.JvmTypeResolveResult;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
@@ -95,8 +94,8 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
     if (this == obj) return true;
     if (!(obj instanceof PsiClassType)) {
       return obj instanceof PsiCapturedWildcardType &&
-        ((PsiCapturedWildcardType)obj).getLowerBound().equalsToText(JavaClassNames.JAVA_LANG_OBJECT) &&
-        equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
+        ((PsiCapturedWildcardType)obj).getLowerBound().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) &&
+        equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
     }
     PsiClassType otherClassType = (PsiClassType)obj;
 

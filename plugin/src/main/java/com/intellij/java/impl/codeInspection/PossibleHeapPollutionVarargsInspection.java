@@ -15,12 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
@@ -29,20 +23,24 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
-
 /**
- * User: anna
- * Date: 1/28/11
+ * @author anna
+ * @since 2011-01-28
  */
 @ExtensionImpl
 public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
@@ -125,7 +123,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         if (psiMethod != null) {
-          new AddAnnotationPsiFix(JavaClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
+          new AddAnnotationPsiFix(CommonClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
         }
       }
     }
@@ -150,7 +148,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         psiMethod.getModifierList().setModifierProperty(PsiModifier.FINAL, true);
-        new AddAnnotationPsiFix(JavaClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
+        new AddAnnotationPsiFix(CommonClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
       }
     }
   }
@@ -160,7 +158,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!PsiUtil.getLanguageLevel(method).isAtLeast(LanguageLevel.JDK_1_7)) return;
-      if (AnnotationUtil.isAnnotated(method, JavaClassNames.JAVA_LANG_SAFE_VARARGS, false)) return;
+      if (AnnotationUtil.isAnnotated(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS, false)) return;
       if (!method.isVarArgs()) return;
 
       final PsiParameter psiParameter = method.getParameterList().getParameters()[method.getParameterList().getParametersCount() - 1];

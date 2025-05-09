@@ -37,7 +37,6 @@ import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.util.*;
 import consulo.content.scope.SearchScope;
 import consulo.ide.ServiceManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.impl.psi.ResolveScopeManager;
 import consulo.language.psi.*;
@@ -755,30 +754,30 @@ public class PsiClassImplUtil {
   @Nullable
   public static PsiClass getSuperClass(@Nonnull PsiClass psiClass) {
     if (psiClass.isInterface()) {
-      return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+      return findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
     }
     if (psiClass.isEnum()) {
-      return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_ENUM);
+      return findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_ENUM);
     }
     if (psiClass.isRecord()) {
-      return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_RECORD);
+      return findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_RECORD);
     }
 
     if (psiClass instanceof PsiAnonymousClass) {
       PsiClassType baseClassReference = ((PsiAnonymousClass)psiClass).getBaseClassType();
       PsiClass baseClass = baseClassReference.resolve();
-      if (baseClass == null || baseClass.isInterface()) return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+      if (baseClass == null || baseClass.isInterface()) return findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
       return baseClass;
     }
 
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return null;
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return null;
 
     PsiClassType[] referenceElements = psiClass.getExtendsListTypes();
 
-    if (referenceElements.length == 0) return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+    if (referenceElements.length == 0) return findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
 
     PsiClass psiResolved = referenceElements[0].resolve();
-    return psiResolved == null ? findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT) : psiResolved;
+    return psiResolved == null ? findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT) : psiResolved;
   }
 
   @Nullable
@@ -809,7 +808,7 @@ public class PsiClassImplUtil {
       PsiClass baseClass = baseClassReference.resolve();
       if (baseClass != null) {
         if (baseClass.isInterface()) {
-          PsiClass objectClass = findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+          PsiClass objectClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
           return objectClass != null ? new PsiClass[]{
               objectClass,
               baseClass
@@ -818,12 +817,12 @@ public class PsiClassImplUtil {
         return new PsiClass[]{baseClass};
       }
 
-      PsiClass objectClass = findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+      PsiClass objectClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
       return objectClass != null ? new PsiClass[]{objectClass} : PsiClass.EMPTY_ARRAY;
     }
     if (psiClass instanceof PsiTypeParameter) {
       if (extendsListTypes.length == 0) {
-        final PsiClass objectClass = findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+        final PsiClass objectClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
         return objectClass != null ? new PsiClass[]{objectClass} : PsiClass.EMPTY_ARRAY;
       }
       return resolveClassReferenceList(extendsListTypes, psiClass, false);
@@ -867,7 +866,7 @@ public class PsiClassImplUtil {
 
     System.arraycopy(extendsTypes, 0, result, 0, extendsTypes.length);
     if (!hasExtends) {
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
         return PsiClassType.EMPTY_ARRAY;
       }
       PsiManager manager = psiClass.getManager();
@@ -880,15 +879,15 @@ public class PsiClassImplUtil {
 
   @Nonnull
   private static PsiClassType getAnnotationSuperType(@Nonnull PsiClass psiClass, @Nonnull PsiElementFactory factory) {
-    return factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, psiClass.getResolveScope());
+    return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, psiClass.getResolveScope());
   }
 
   private static PsiClassType getEnumSuperType(@Nonnull PsiClass psiClass, @Nonnull PsiElementFactory factory) {
     PsiClassType superType;
-    final PsiClass enumClass = findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_ENUM);
+    final PsiClass enumClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_ENUM);
     if (enumClass == null) {
       try {
-        superType = (PsiClassType) factory.createTypeFromText(JavaClassNames.JAVA_LANG_ENUM, null);
+        superType = (PsiClassType) factory.createTypeFromText(CommonClassNames.JAVA_LANG_ENUM, null);
       } catch (IncorrectOperationException e) {
         superType = null;
       }
@@ -939,7 +938,7 @@ public class PsiClassImplUtil {
   private static PsiClass[] resolveClassReferenceList(@Nonnull PsiClassType[] listOfTypes, @Nonnull PsiClass psiClass, boolean includeObject) {
     PsiClass objectClass = null;
     if (includeObject) {
-      objectClass = findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
+      objectClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_OBJECT);
       if (objectClass == null) {
         includeObject = false;
       }
@@ -1054,10 +1053,10 @@ public class PsiClassImplUtil {
 
   static boolean isInExtendsList(@Nonnull PsiClass psiClass, @Nonnull PsiClass baseClass, @Nullable String baseName, @Nonnull PsiManager manager) {
     if (psiClass.isEnum()) {
-      return JavaClassNames.JAVA_LANG_ENUM.equals(baseClass.getQualifiedName());
+      return CommonClassNames.JAVA_LANG_ENUM.equals(baseClass.getQualifiedName());
     }
     if (psiClass.isAnnotationType()) {
-      return JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseClass.getQualifiedName());
+      return CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseClass.getQualifiedName());
     }
     PsiType upperBound = InferenceSession.getUpperBound(psiClass);
     if (upperBound == null && psiClass instanceof PsiTypeParameter) {
@@ -1095,7 +1094,7 @@ public class PsiClassImplUtil {
           if (typeParam != -1) {
             name = name.substring(0, typeParam);
           }
-          // baseName=="ArrayList" classStub.getReferenceNames()[i]==JavaClassNames.JAVA_UTIL_ARRAY_LIST
+          // baseName=="ArrayList" classStub.getReferenceNames()[i]==CommonClassNames.JAVA_UTIL_ARRAY_LIST
           if (name.endsWith(baseName)) {
             PsiClassType[] referencedTypes = classStub.getReferencedTypes();
             PsiClass resolved = referencedTypes[i].resolve();

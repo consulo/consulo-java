@@ -21,15 +21,14 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -209,7 +208,7 @@ public class MethodCallUtils {
       return false;
     }
     final String className = containingClass.getQualifiedName();
-    return JavaClassNames.JAVA_LANG_STRING.equals(className) || "java.util.regex.Pattern".equals(className);
+    return CommonClassNames.JAVA_LANG_STRING.equals(className) || "java.util.regex.Pattern".equals(className);
   }
 
   public static boolean isCallDuringObjectConstruction(PsiMethodCallExpression expression) {
@@ -389,7 +388,7 @@ public class MethodCallUtils {
       return false;
     }
     final PsiType type = argument.getType();
-    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return false;
     }
     if (considerStaticFinalConstant && argument instanceof PsiReferenceExpression) {

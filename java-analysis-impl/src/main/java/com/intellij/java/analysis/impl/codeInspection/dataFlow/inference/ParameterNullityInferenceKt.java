@@ -2,8 +2,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
 import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.*;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
@@ -183,10 +183,10 @@ class ParameterNullityInferenceKt {
         "Exception",
         "RuntimeException",
         "NullPointerException",
-        JavaClassNames.JAVA_LANG_THROWABLE,
-        JavaClassNames.JAVA_LANG_EXCEPTION,
-        JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
-        JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION
+        CommonClassNames.JAVA_LANG_THROWABLE,
+        CommonClassNames.JAVA_LANG_EXCEPTION,
+        CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+        CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION
     );
 
     private static boolean canCatchNpe(LighterAST tree, @Nullable LighterASTNode type) {

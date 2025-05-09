@@ -27,7 +27,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
@@ -375,7 +374,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
       final PsiMethod method = (PsiMethod) aClass.add(patternMethod);
       ChangeContextUtil.decodeContextInfo(method, null, null);
       if (canAddOverride && OverrideImplementUtil.isInsertOverride(method, aClass)) {
-        method.getModifierList().addAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
+        method.getModifierList().addAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
       }
       return method;
     } catch (IncorrectOperationException e) {

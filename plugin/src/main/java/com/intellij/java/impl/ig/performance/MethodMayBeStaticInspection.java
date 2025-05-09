@@ -30,7 +30,6 @@ import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
@@ -167,7 +166,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 if (!method.isPrivate()) {
                     return false;
                 }
-                if (!MethodUtils.hasInThrows(method, JavaClassNames.JAVA_IO_IO_EXCEPTION)) {
+                if (!MethodUtils.hasInThrows(method, CommonClassNames.JAVA_IO_IO_EXCEPTION)) {
                     return false;
                 }
                 PsiType returnType = method.getReturnType();
@@ -186,7 +185,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                 if (!method.isPrivate()) {
                     return false;
                 }
-                if (!MethodUtils.hasInThrows(method, JavaClassNames.JAVA_IO_IO_EXCEPTION, "java.lang.ClassNotFoundException")) {
+                if (!MethodUtils.hasInThrows(method, CommonClassNames.JAVA_IO_IO_EXCEPTION, "java.lang.ClassNotFoundException")) {
                     return false;
                 }
                 PsiType returnType = method.getReturnType();
@@ -206,7 +205,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
                     return false;
                 }
                 PsiType returnType = method.getReturnType();
-                if (returnType == null || !returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+                if (returnType == null || !returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
                     return false;
                 }
                 PsiParameterList parameterList = method.getParameterList();

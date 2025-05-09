@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.CompletionType;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.psi.filters.getters.MembersGetter;
 import com.intellij.java.impl.psi.util.proximity.KnownElementWeigher;
@@ -28,15 +25,17 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.function.Conditions;
-import consulo.util.lang.StringUtil;
+import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.ThreeState;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
 import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
@@ -90,7 +89,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
         }
       }
       if (thrownExceptions.isEmpty()) {
-        ContainerUtil.addIfNotNull(thrownExceptions, JavaPsiFacade.getInstance(position.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, position.getResolveScope()));
+        ContainerUtil.addIfNotNull(thrownExceptions, JavaPsiFacade.getInstance(position.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, position.getResolveScope()));
       }
       return psiClass ->
       {
@@ -102,11 +101,11 @@ public class PreferByKindWeigher extends LookupElementWeigher {
         return false;
       };
     } else if (JavaSmartCompletionContributor.AFTER_THROW_NEW.accepts(position) || INSIDE_METHOD_THROWS_CLAUSE.accepts(position)) {
-      return psiClass -> InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_THROWABLE);
+      return psiClass -> InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_THROWABLE);
     }
 
     if (IN_RESOURCE.accepts(position)) {
-      return psiClass -> InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE);
+      return psiClass -> InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE);
     }
 
     if (psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class).accepts(position)) {
@@ -170,11 +169,11 @@ public class PreferByKindWeigher extends LookupElementWeigher {
 
     if (object instanceof PsiMethod) {
       PsiClass containingClass = ((PsiMethod) object).getContainingClass();
-      if (containingClass != null && JavaClassNames.JAVA_UTIL_COLLECTIONS.equals(containingClass.getQualifiedName())) {
+      if (containingClass != null && CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(containingClass.getQualifiedName())) {
         return MyResult.collectionFactory;
       }
     }
-    if (object instanceof PsiClass && JavaClassNames.JAVA_LANG_STRING.equals(((PsiClass) object).getQualifiedName()) && JavaSmartCompletionContributor.AFTER_NEW.accepts(myPosition)) {
+    if (object instanceof PsiClass && CommonClassNames.JAVA_LANG_STRING.equals(((PsiClass) object).getQualifiedName()) && JavaSmartCompletionContributor.AFTER_NEW.accepts(myPosition)) {
       return MyResult.unlikelyClass;
     }
     Boolean expectedTypeMember = item.getUserData(MembersGetter.EXPECTED_TYPE_MEMBER);

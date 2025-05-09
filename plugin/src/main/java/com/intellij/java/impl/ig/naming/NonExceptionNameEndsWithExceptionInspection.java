@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -93,8 +92,7 @@ public class NonExceptionNameEndsWithExceptionInspection
       final PsiElementFactory factory = facade.getElementFactory();
       final GlobalSearchScope scope = aClass.getResolveScope();
       final PsiJavaCodeReferenceElement reference =
-        factory.createReferenceElementByFQClassName(
-          JavaClassNames.JAVA_LANG_EXCEPTION, scope);
+        factory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, scope);
       final PsiJavaCodeReferenceElement[] referenceElements =
         extendsList.getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement :
@@ -129,12 +127,10 @@ public class NonExceptionNameEndsWithExceptionInspection
       if (!className.endsWith(exception)) {
         return;
       }
-      if (InheritanceUtil.isInheritor(aClass,
-                                      JavaClassNames.JAVA_LANG_EXCEPTION)) {
+      if (InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
-      registerClassError(aClass, className,
-                         Boolean.valueOf(isOnTheFly()));
+      registerClassError(aClass, className, Boolean.valueOf(isOnTheFly()));
     }
   }
 }

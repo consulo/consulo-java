@@ -16,14 +16,12 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -488,7 +486,7 @@ public class ParenthesesUtils {
       if (!parentType.equals(childType)) {
         return true;
       }
-      if (childType.equalsToText(JavaClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true)) {
+      if (childType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true)) {
         final PsiExpression[] operands = childPolyadicExpression.getOperands();
         for (PsiExpression operand : operands) {
           if (!childType.equals(operand.getType())) {

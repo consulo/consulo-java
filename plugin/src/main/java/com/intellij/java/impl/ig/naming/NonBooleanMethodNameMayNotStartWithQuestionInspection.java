@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.BaseInspection;
@@ -29,7 +30,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
@@ -130,7 +130,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {
         return;
       }
-      if (ignoreBooleanMethods && returnType.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+      if (ignoreBooleanMethods && returnType.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
         return;
       }
       final String name = method.getName();

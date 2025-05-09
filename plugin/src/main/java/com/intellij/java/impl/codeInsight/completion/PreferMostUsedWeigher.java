@@ -15,27 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import com.intellij.java.language.patterns.PsiMethodPattern;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.PsiElement;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 
 class PreferMostUsedWeigher extends LookupElementWeigher
 {
-	private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod().withName(StandardPatterns.string().oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass",
-			"clone", "toString")).
-			inClass(JavaClassNames.JAVA_LANG_OBJECT);
+	private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod()
+		.withName(
+			StandardPatterns.string()
+				.oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass", "clone", "toString")
+		)
+		.inClass(CommonClassNames.JAVA_LANG_OBJECT);
 
 	private final boolean myConstructorSuggestion;
 
@@ -121,6 +123,6 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		{
 			return false;
 		}
-		return rawType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
+		return rawType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
 	}
 }

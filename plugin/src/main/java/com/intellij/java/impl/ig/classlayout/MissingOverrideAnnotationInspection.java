@@ -25,7 +25,6 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.CleanupLocalInspectionTool;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -172,8 +171,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
       if (modifierList == null) {
         return false;
       }
-      final PsiAnnotation annotation =
-        modifierList.findAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
+      final PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
       return annotation != null;
     }
 

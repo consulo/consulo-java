@@ -20,10 +20,10 @@ import com.intellij.java.execution.runners.ProcessProxy;
 import com.intellij.java.execution.runners.ProcessProxyFactory;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.annotation.component.ServiceImpl;
 import consulo.container.plugin.PluginManager;
 import consulo.java.execution.configurations.OwnJavaParameters;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.execution.application.AppMainV2Constants;
 import consulo.logging.Logger;
@@ -54,7 +54,7 @@ public class ProcessProxyFactoryImpl extends ProcessProxyFactory {
         try {
           ProcessProxyImpl proxy = new ProcessProxyImpl(StringUtil.getShortName(mainClass));
           String port = String.valueOf(proxy.getPortNumber());
-          String binPath = new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen").getPath();
+          String binPath = new File(PluginManager.getPluginPath(CommonClassNames.class), "breakgen").getPath();
 
           if (runtimeJarFile && JavaSdkUtil.isJdkAtLeast(javaParameters.getJdk(), JavaSdkVersion.JDK_1_5)) {
             javaParameters.getVMParametersList().add("-javaagent:" + rtJarPath + '=' + port + ':' + binPath);

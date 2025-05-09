@@ -20,7 +20,6 @@ import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionProvider;
 import consulo.language.editor.completion.CompletionResultSet;
@@ -64,7 +63,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
       @Override
       public PsiType visitType(PsiType type) {
         if (myProcessed.add(type)) {
-          int priority = type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? 1 : 1000 - myProcessed.size();
+          int priority = type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? 1 : 1000 - myProcessed.size();
           consumer.accept(PrioritizedLookupElement.withPriority(PsiTypeLookupItem.createLookupItem(type, position), priority));
         }
         return type;
