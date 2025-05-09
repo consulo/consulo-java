@@ -28,7 +28,6 @@ import com.intellij.java.debugger.impl.engine.requests.RequestManagerImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
-import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.configurations.RemoteConnection;
@@ -60,6 +59,7 @@ import consulo.process.ProcessHandler;
 import consulo.process.ProcessOutputTypes;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
@@ -184,7 +184,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
         @Override
         @RequiredUIAccess
         public void setState(@Nonnull DebuggerContextImpl context, State state, Event event, String description) {
-            Application.get().assertIsDispatchThread();
+            UIAccess.assertIsUIThread();
             DebuggerSession session = context.getDebuggerSession();
             LOG.assertTrue(session == DebuggerSession.this || session == null);
             Runnable setStateRunnable = () -> {
@@ -479,7 +479,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
 
     @RequiredUIAccess
     private SuspendContextImpl getSuspendContext() {
-        Application.get().assertIsDispatchThread();
+        UIAccess.assertIsUIThread();
         return getContextManager().getContext().getSuspendContext();
     }
 

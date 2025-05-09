@@ -27,6 +27,7 @@ import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.ui.wm.ToolWindowManager;
 import consulo.project.ui.wm.ToolWindowManagerListener;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.*;
@@ -109,7 +110,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     };
     project.getMessageBus().connect(this).subscribe(ToolWindowManagerListener.class, listener);
 
-    project.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
     myProject = project;
     myTree = createTree();
 
