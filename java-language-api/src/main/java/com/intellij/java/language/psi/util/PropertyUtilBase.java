@@ -6,6 +6,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.util.PropertyKind;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -14,54 +16,46 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import kava.beans.Introspector;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
 public class PropertyUtilBase {
-
-    @NonNls
     protected static final String GET_PREFIX = PropertyKind.GETTER.prefix;
-    @NonNls
     protected static final String IS_PREFIX = PropertyKind.BOOLEAN_GETTER.prefix;
     @Nonnull
     protected static final String SET_PREFIX = PropertyKind.SETTER.prefix;
 
     @Nullable
-    public static String getPropertyName(@NonNls @Nonnull String methodName) {
+    public static String getPropertyName(@Nonnull String methodName) {
         return StringUtil.getPropertyName(methodName);
     }
 
     @Nonnull
     public static Map<String, PsiMethod> getAllProperties(
-        @Nonnull final PsiClass psiClass,
-        final boolean acceptSetters,
-        final boolean acceptGetters
+        @Nonnull PsiClass psiClass,
+        boolean acceptSetters,
+        boolean acceptGetters
     ) {
         return getAllProperties(psiClass, acceptSetters, acceptGetters, true);
     }
 
     @Nonnull
     public static Map<String, PsiMethod> getAllProperties(
-        @Nonnull final PsiClass psiClass,
-        final boolean acceptSetters,
-        final boolean acceptGetters,
-        final boolean includeSuperClass
+        @Nonnull PsiClass psiClass,
+        boolean acceptSetters,
+        boolean acceptGetters,
+        boolean includeSuperClass
     ) {
         return getAllProperties(acceptSetters, acceptGetters, includeSuperClass ? psiClass.getAllMethods() : psiClass.getMethods());
     }
 
     @Nonnull
-    public static Map<String, PsiMethod> getAllProperties(
-        final boolean acceptSetters,
-        final boolean acceptGetters, PsiMethod[] methods
-    ) {
-        final Map<String, PsiMethod> map = new HashMap<>();
+    public static Map<String, PsiMethod> getAllProperties(boolean acceptSetters, boolean acceptGetters, PsiMethod[] methods) {
+        Map<String, PsiMethod> map = new HashMap<>();
 
         for (PsiMethod method : methods) {
             if (filterMethods(method)) {
@@ -76,8 +70,8 @@ public class PropertyUtilBase {
     }
 
 
-    private static boolean filterMethods(final PsiMethod method) {
-        if (method.hasModifierProperty(PsiModifier.STATIC) || !method.hasModifierProperty(PsiModifier.PUBLIC)) {
+    private static boolean filterMethods(PsiMethod method) {
+        if (method.isStatic() || !method.isPublic()) {
             return true;
         }
 
@@ -85,15 +79,15 @@ public class PropertyUtilBase {
         if (psiClass == null) {
             return false;
         }
-        final String className = psiClass.getQualifiedName();
-        return CommonClassNames.JAVA_LANG_OBJECT.equals(className);
+        String className = psiClass.getQualifiedName();
+        return JavaClassNames.JAVA_LANG_OBJECT.equals(className);
     }
 
     @Nonnull
-    public static List<PsiMethod> getSetters(@Nonnull final PsiClass psiClass, final String propertyName) {
-        final String setterName = suggestSetterName(propertyName);
-        final PsiMethod[] psiMethods = psiClass.findMethodsByName(setterName, true);
-        final ArrayList<PsiMethod> list = new ArrayList<>(psiMethods.length);
+    public static List<PsiMethod> getSetters(@Nonnull PsiClass psiClass, String propertyName) {
+        String setterName = suggestSetterName(propertyName);
+        PsiMethod[] psiMethods = psiClass.findMethodsByName(setterName, true);
+        ArrayList<PsiMethod> list = new ArrayList<>(psiMethods.length);
         for (PsiMethod method : psiMethods) {
             if (filterMethods(method)) {
                 continue;
@@ -106,11 +100,10 @@ public class PropertyUtilBase {
     }
 
     @Nonnull
-    public static List<PsiMethod> getGetters(@Nonnull final PsiClass psiClass, final String propertyName) {
-        final String[] names = suggestGetterNames(propertyName);
-        final ArrayList<PsiMethod> list = new ArrayList<>();
-        for (String name : names) {
-            final PsiMethod[] psiMethods = psiClass.findMethodsByName(name, true);
+    public static List<PsiMethod> getGetters(@Nonnull PsiClass psiClass, String propertyName) {
+        ArrayList<PsiMethod> list = new ArrayList<>();
+        for (String name : suggestGetterNames(propertyName)) {
+            PsiMethod[] psiMethods = psiClass.findMethodsByName(name, true);
             for (PsiMethod method : psiMethods) {
                 if (filterMethods(method)) {
                     continue;
@@ -124,7 +117,7 @@ public class PropertyUtilBase {
     }
 
     @Nonnull
-    public static List<PsiMethod> getAccessors(@Nonnull final PsiClass psiClass, final String propertyName) {
+    public static List<PsiMethod> getAccessors(@Nonnull PsiClass psiClass, String propertyName) {
         return ContainerUtil.concat(getGetters(psiClass, propertyName), getSetters(psiClass, propertyName));
     }
 
@@ -135,7 +128,7 @@ public class PropertyUtilBase {
         PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
         for (PsiMethod method : methods) {
-            if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+            if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
                 continue;
             }
 
@@ -154,7 +147,7 @@ public class PropertyUtilBase {
         PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
 
         for (PsiMethod method : methods) {
-            if (CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
+            if (JavaClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName())) {
                 continue;
             }
 
@@ -167,17 +160,16 @@ public class PropertyUtilBase {
     }
 
     @Nullable
-    public static PsiType getPropertyType(final PsiMember member) {
-        if (member instanceof PsiField) {
-            return ((PsiField)member).getType();
+    public static PsiType getPropertyType(PsiMember member) {
+        if (member instanceof PsiField field) {
+            return field.getType();
         }
-        if (member instanceof PsiMethod) {
-            final PsiMethod psiMethod = (PsiMethod)member;
-            if (isSimplePropertyGetter(psiMethod)) {
-                return psiMethod.getReturnType();
+        if (member instanceof PsiMethod method) {
+            if (isSimplePropertyGetter(method)) {
+                return method.getReturnType();
             }
-            else if (isSimplePropertySetter(psiMethod)) {
-                return psiMethod.getParameterList().getParameters()[0].getType();
+            else if (isSimplePropertySetter(method)) {
+                return method.getParameterList().getParameters()[0].getType();
             }
         }
         return null;
@@ -198,7 +190,7 @@ public class PropertyUtilBase {
         PsiMethod[] methods = aClass.findMethodsByName(setterName, checkSuperClasses);
 
         for (PsiMethod method : methods) {
-            if (method.hasModifierProperty(PsiModifier.STATIC) != isStatic) {
+            if (method.isStatic() != isStatic) {
                 continue;
             }
 
@@ -217,7 +209,7 @@ public class PropertyUtilBase {
         PsiField[] fields = aClass.getAllFields();
 
         for (PsiField field : fields) {
-            if (field.hasModifierProperty(PsiModifier.STATIC) != isStatic) {
+            if (field.isStatic() != isStatic) {
                 continue;
             }
             if (propertyName.equals(suggestPropertyName(field))) {
@@ -243,7 +235,7 @@ public class PropertyUtilBase {
         for (String getterCandidateName : getterCandidateNames) {
             PsiMethod[] getterCandidates = aClass.findMethodsByName(getterCandidateName, checkSuperClasses);
             for (PsiMethod method : getterCandidates) {
-                if (method.hasModifierProperty(PsiModifier.STATIC) != isStatic) {
+                if (method.isStatic() != isStatic) {
                     continue;
                 }
 
@@ -267,15 +259,13 @@ public class PropertyUtilBase {
     ) {
         while (methods.hasNext()) {
             PsiMethod method = methods.next();
-            if (method.hasModifierProperty(PsiModifier.STATIC) != isStatic) {
+            if (method.isStatic() != isStatic) {
                 continue;
             }
-            if (isSimplePropertyGetter(method)) {
-                if (getPropertyNameByGetter(method).equals(propertyName)) {
-                    if (type.equals(method.getReturnType())) {
-                        return method;
-                    }
-                }
+            if (isSimplePropertyGetter(method)
+                && getPropertyNameByGetter(method).equals(propertyName)
+                && type.equals(method.getReturnType())) {
+                return method;
             }
         }
         return null;
@@ -294,7 +284,7 @@ public class PropertyUtilBase {
     ) {
         while (methods.hasNext()) {
             PsiMethod method = methods.next();
-            if (method.hasModifierProperty(PsiModifier.STATIC) != isStatic) {
+            if (method.isStatic() != isStatic) {
                 continue;
             }
 
@@ -334,7 +324,7 @@ public class PropertyUtilBase {
     }
 
 
-    public static boolean hasGetterName(final PsiMethod method) {
+    public static boolean hasGetterName(PsiMethod method) {
         if (method == null) {
             return false;
         }
@@ -372,7 +362,7 @@ public class PropertyUtilBase {
         JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(field.getProject());
         VariableKind kind = codeStyleManager.getVariableKind(field);
         String name = codeStyleManager.variableNameToPropertyName(fieldName, kind);
-        if (!field.hasModifierProperty(PsiModifier.STATIC) && isBoolean(field.getType())) {
+        if (!field.isStatic() && isBoolean(field.getType())) {
             if (name.startsWith(IS_PREFIX) && name.length() > IS_PREFIX.length() && Character.isUpperCase(name.charAt(IS_PREFIX.length()))) {
                 name = Introspector.decapitalize(name.substring(IS_PREFIX.length()));
             }
@@ -391,7 +381,7 @@ public class PropertyUtilBase {
     }
 
     @Nullable
-    public static String getPropertyName(final PsiMember member) {
+    public static String getPropertyName(PsiMember member) {
         if (member instanceof PsiMethod) {
             return getPropertyName((PsiMethod)member);
         }
@@ -421,8 +411,9 @@ public class PropertyUtilBase {
             return false;
         }
 
-        final PsiType returnType = method.getReturnType();
+        PsiType returnType = method.getReturnType();
 
+        //noinspection SimplifiableIfStatement
         if (returnType == null || PsiType.VOID.equals(returnType)) {
             return true;
         }
@@ -447,7 +438,7 @@ public class PropertyUtilBase {
 
     @Nonnull
     public static String getPropertyNameByGetter(PsiMethod getterMethod) {
-        @NonNls String methodName = getterMethod.getName();
+        String methodName = getterMethod.getName();
         if (methodName.startsWith(GET_PREFIX)) {
             return StringUtil.decapitalize(methodName.substring(3));
         }
@@ -469,26 +460,25 @@ public class PropertyUtilBase {
             (methodName.length() == prefix.length() + 1 || Character.isLowerCase(methodName.charAt(prefix.length() + 1))));
     }
 
-    @NonNls
     @Nonnull
     public static String[] suggestGetterNames(@Nonnull String propertyName) {
-        final String str = StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName));
+        String str = StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName));
         return new String[]{
             IS_PREFIX + str,
             GET_PREFIX + str
         };
     }
 
-    public static String suggestGetterName(@NonNls @Nonnull String propertyName, @Nullable PsiType propertyType) {
+    public static String suggestGetterName(@Nonnull String propertyName, @Nullable PsiType propertyType) {
         return suggestGetterName(propertyName, propertyType, null);
     }
 
     public static String suggestGetterName(
         @Nonnull String propertyName,
         @Nullable PsiType propertyType,
-        @NonNls String existingGetterName
+        String existingGetterName
     ) {
-        @NonNls StringBuilder name =
+        StringBuilder name =
             new StringBuilder(StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName)));
         if (isBoolean(propertyType)) {
             if (existingGetterName == null || !existingGetterName.startsWith(GET_PREFIX)) {
@@ -506,16 +496,16 @@ public class PropertyUtilBase {
     }
 
 
-    public static String suggestSetterName(@NonNls @Nonnull String propertyName) {
+    public static String suggestSetterName(@Nonnull String propertyName) {
         return suggestSetterName(propertyName, SET_PREFIX);
     }
 
-    public static String suggestSetterName(@NonNls @Nonnull String propertyName, String setterPrefix) {
-        final String sanitizeJavaIdentifier = StringUtil.sanitizeJavaIdentifier(propertyName);
+    public static String suggestSetterName(@Nonnull String propertyName, String setterPrefix) {
+        String sanitizeJavaIdentifier = StringUtil.sanitizeJavaIdentifier(propertyName);
         if (StringUtil.isEmpty(setterPrefix)) {
             return sanitizeJavaIdentifier;
         }
-        @NonNls StringBuilder name = new StringBuilder(StringUtil.capitalizeWithJavaBeanConvention(sanitizeJavaIdentifier));
+        StringBuilder name = new StringBuilder(StringUtil.capitalizeWithJavaBeanConvention(sanitizeJavaIdentifier));
         name.insert(0, setterPrefix);
         return name.toString();
     }
@@ -533,7 +523,7 @@ public class PropertyUtilBase {
         String getName = suggestGetterName(field);
         PsiMethod getMethod = factory.createMethod(getName, field.getType());
         PsiUtil.setModifierProperty(getMethod, PsiModifier.PUBLIC, true);
-        if (field.hasModifierProperty(PsiModifier.STATIC)) {
+        if (field.isStatic()) {
             PsiUtil.setModifierProperty(getMethod, PsiModifier.STATIC, true);
         }
 
@@ -571,13 +561,14 @@ public class PropertyUtilBase {
      * to add @Override annotation
      */
     @Nonnull
+    @RequiredReadAction
     public static PsiMethod generateSetterPrototype(@Nonnull PsiField field, @Nonnull PsiClass containingClass, boolean returnSelf) {
         Project project = field.getProject();
         JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(field.getProject());
 
         String name = field.getName();
-        boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+        boolean isStatic = field.isStatic();
         VariableKind kind = codeStyleManager.getVariableKind(field);
         String propertyName = codeStyleManager.variableNameToPropertyName(name, kind);
         String setName = suggestSetterName(field);
@@ -594,7 +585,7 @@ public class PropertyUtilBase {
         PsiUtil.setModifierProperty(setMethod, PsiModifier.PUBLIC, true);
         PsiUtil.setModifierProperty(setMethod, PsiModifier.STATIC, isStatic);
 
-        @NonNls StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("{\n");
         if (name.equals(parameterName)) {
             if (!isStatic) {
@@ -623,62 +614,60 @@ public class PropertyUtilBase {
     }
 
     @Nullable
-    public static PsiTypeElement getPropertyTypeElement(final PsiMember member) {
-        if (member instanceof PsiField) {
-            return ((PsiField)member).getTypeElement();
+    public static PsiTypeElement getPropertyTypeElement(PsiMember member) {
+        if (member instanceof PsiField field) {
+            return field.getTypeElement();
         }
-        if (member instanceof PsiMethod) {
-            final PsiMethod psiMethod = (PsiMethod)member;
-            if (isSimplePropertyGetter(psiMethod)) {
-                return psiMethod.getReturnTypeElement();
+        if (member instanceof PsiMethod method) {
+            if (isSimplePropertyGetter(method)) {
+                return method.getReturnTypeElement();
             }
-            else if (isSimplePropertySetter(psiMethod)) {
-                return psiMethod.getParameterList().getParameters()[0].getTypeElement();
+            else if (isSimplePropertySetter(method)) {
+                return method.getParameterList().getParameters()[0].getTypeElement();
             }
         }
         return null;
     }
 
     @Nullable
-    public static PsiIdentifier getPropertyNameIdentifier(final PsiMember member) {
-        if (member instanceof PsiField) {
-            return ((PsiField)member).getNameIdentifier();
+    public static PsiIdentifier getPropertyNameIdentifier(PsiMember member) {
+        if (member instanceof PsiField field) {
+            return field.getNameIdentifier();
         }
-        if (member instanceof PsiMethod) {
-            return ((PsiMethod)member).getNameIdentifier();
+        if (member instanceof PsiMethod method) {
+            return method.getNameIdentifier();
         }
         return null;
     }
 
     @Nullable
-    public static PsiField findPropertyFieldByMember(final PsiMember psiMember) {
-        if (psiMember instanceof PsiField) {
-            return (PsiField)psiMember;
+    @RequiredReadAction
+    public static PsiField findPropertyFieldByMember(PsiMember member) {
+        if (member instanceof PsiField field) {
+            return field;
         }
-        if (psiMember instanceof PsiMethod) {
-            final PsiMethod psiMethod = (PsiMethod)psiMember;
-            final PsiType returnType = psiMethod.getReturnType();
+        if (member instanceof PsiMethod method) {
+            PsiType returnType = method.getReturnType();
             if (returnType == null) {
                 return null;
             }
-            final PsiCodeBlock body = psiMethod.getBody();
-            final PsiStatement[] statements = body == null ? null : body.getStatements();
-            final PsiStatement statement = statements == null || statements.length != 1 ? null : statements[0];
-            final PsiElement target;
+            PsiCodeBlock body = method.getBody();
+            PsiStatement[] statements = body == null ? null : body.getStatements();
+            PsiStatement statement = statements == null || statements.length != 1 ? null : statements[0];
+            PsiElement target;
             if (PsiType.VOID.equals(returnType)) {
-                final PsiExpression expression =
-                    statement instanceof PsiExpressionStatement ? ((PsiExpressionStatement)statement).getExpression() : null;
-                target = expression instanceof PsiAssignmentExpression ? ((PsiAssignmentExpression)expression).getLExpression() : null;
+                PsiExpression expression =
+                    statement instanceof PsiExpressionStatement exprStmt ? exprStmt.getExpression() : null;
+                target = expression instanceof PsiAssignmentExpression assignment ? assignment.getLExpression() : null;
             }
             else {
-                target = statement instanceof PsiReturnStatement ? ((PsiReturnStatement)statement).getReturnValue() : null;
+                target = statement instanceof PsiReturnStatement returnStmt ? returnStmt.getReturnValue() : null;
             }
-            final PsiElement resolved = target instanceof PsiReferenceExpression ? ((PsiReferenceExpression)target).resolve() : null;
-            if (resolved instanceof PsiField) {
-                final PsiField field = (PsiField)resolved;
-                PsiClass memberClass = psiMember.getContainingClass();
+            if (target instanceof PsiReferenceExpression refExpr && refExpr.resolve() instanceof PsiField field) {
+                PsiClass memberClass = member.getContainingClass();
                 PsiClass fieldClass = field.getContainingClass();
-                if (memberClass != null && fieldClass != null && (memberClass == fieldClass || memberClass.isInheritor(fieldClass, true))) {
+                if (memberClass != null && fieldClass != null
+                    && (memberClass == fieldClass || memberClass.isInheritor(fieldClass, true))) {
                     return field;
                 }
             }
@@ -687,16 +676,16 @@ public class PropertyUtilBase {
     }
 
     public static PsiMethod findSetterForField(PsiField field) {
-        final PsiClass containingClass = field.getContainingClass();
-        final String propertyName = suggestPropertyName(field);
-        final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+        PsiClass containingClass = field.getContainingClass();
+        String propertyName = suggestPropertyName(field);
+        boolean isStatic = field.isStatic();
         return findPropertySetter(containingClass, propertyName, isStatic, true);
     }
 
     public static PsiMethod findGetterForField(PsiField field) {
-        final PsiClass containingClass = field.getContainingClass();
-        final String propertyName = suggestPropertyName(field);
-        final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+        PsiClass containingClass = field.getContainingClass();
+        String propertyName = suggestPropertyName(field);
+        boolean isStatic = field.isStatic();
         return findPropertyGetter(containingClass, propertyName, isStatic, true);
     }
 
@@ -718,13 +707,13 @@ public class PropertyUtilBase {
 
     @Nullable
     public static PsiExpression getSingleReturnValue(@Nonnull PsiMethod method) {
-        final PsiCodeBlock body = method.getBody();
+        PsiCodeBlock body = method.getBody();
         if (body == null) {
             return null;
         }
-        final PsiStatement[] statements = body.getStatements();
-        final PsiStatement statement = statements.length != 1 ? null : statements[0];
-        return statement instanceof PsiReturnStatement ? ((PsiReturnStatement)statement).getReturnValue() : null;
+        PsiStatement[] statements = body.getStatements();
+        PsiStatement statement = statements.length != 1 ? null : statements[0];
+        return statement instanceof PsiReturnStatement returnStmt? returnStmt.getReturnValue() : null;
     }
 
     @Contract(pure = true)

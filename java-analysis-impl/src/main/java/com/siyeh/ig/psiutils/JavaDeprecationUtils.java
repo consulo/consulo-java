@@ -8,6 +8,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
 import consulo.util.lang.ObjectUtil;
@@ -19,7 +20,7 @@ public final class JavaDeprecationUtils {
     @Nonnull
     @RequiredReadAction
     private static ThreeState isDeprecatedByAnnotation(@Nonnull PsiModifierListOwner owner, @Nullable PsiElement context) {
-        PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, CommonClassNames.JAVA_LANG_DEPRECATED);
+        PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, JavaClassNames.JAVA_LANG_DEPRECATED);
         if (annotation == null) {
             return ThreeState.UNSURE;
         }
@@ -28,8 +29,8 @@ public final class JavaDeprecationUtils {
         }
         String since = null;
         PsiAnnotationMemberValue value = annotation.findAttributeValue("since");
-        if (value instanceof PsiLiteralExpression) {
-            since = ObjectUtil.tryCast(((PsiLiteralExpression)value).getValue(), String.class);
+        if (value instanceof PsiLiteralExpression literal) {
+            since = ObjectUtil.tryCast(literal.getValue(), String.class);
         }
         if (since == null || ModuleUtilCore.getSdk(owner, JavaModuleExtension.class) == null) {
             return ThreeState.YES;
@@ -51,17 +52,18 @@ public final class JavaDeprecationUtils {
      */
     @RequiredReadAction
     public static boolean isDeprecated(@Nonnull PsiElement psiElement, @Nullable PsiElement context) {
-        if (psiElement instanceof PsiModifierListOwner) {
-            ThreeState byAnnotation = isDeprecatedByAnnotation((PsiModifierListOwner)psiElement, context);
+        if (psiElement instanceof PsiModifierListOwner modifierListOwner) {
+            ThreeState byAnnotation = isDeprecatedByAnnotation(modifierListOwner, context);
             if (byAnnotation != ThreeState.UNSURE) {
                 return byAnnotation.toBoolean();
             }
         }
-        if (psiElement instanceof PsiDocCommentOwner) {
-            return ((PsiDocCommentOwner)psiElement).isDeprecated();
+        if (psiElement instanceof PsiDocCommentOwner docCommentOwner) {
+            return docCommentOwner.isDeprecated();
         }
-        if (psiElement instanceof PsiJavaDocumentedElement) {
-            return PsiImplUtil.isDeprecatedByDocTag((PsiJavaDocumentedElement)psiElement);
+        //noinspection SimplifiableIfStatement
+        if (psiElement instanceof PsiJavaDocumentedElement javaDocumentedElement) {
+            return PsiImplUtil.isDeprecatedByDocTag(javaDocumentedElement);
         }
         return false;
     }
