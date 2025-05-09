@@ -15,17 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints;
 
-import java.util.HashSet;
-import java.util.List;
-
-import com.intellij.java.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceBound;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
+
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * User: anna
@@ -68,7 +67,7 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 		{
 			if(myT == null)
 			{
-				return myS == null || myS.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
+				return myS == null || myS.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
 			}
 			if(myS == null)
 			{
@@ -81,7 +80,7 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 		{
 			return false;
 		}
-		if(PsiType.NULL.equals(myS) || myS == null || myT.equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
+		if(PsiType.NULL.equals(myS) || myS == null || myT.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
 		{
 			return true;
 		}

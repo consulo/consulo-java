@@ -122,7 +122,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
       return null;
     }
     PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
-    if (qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), JavaClassNames.JAVA_UTIL_STREAM_STREAM)) {
+    if (qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), CommonClassNames.JAVA_UTIL_STREAM_STREAM)) {
       return null;
     }
     return new StreamFilterNotNullFix();

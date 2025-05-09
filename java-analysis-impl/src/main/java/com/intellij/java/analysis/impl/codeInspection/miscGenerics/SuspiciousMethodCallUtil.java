@@ -10,7 +10,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.NullableLazyValue;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
@@ -19,10 +18,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -30,12 +28,12 @@ public class SuspiciousMethodCallUtil {
 
     // List.of/Set.of are unnecessary here as they don't accept nulls
     private static final CallMatcher.Simple SINGLETON_COLLECTION =
-        CallMatcher.staticCall(JavaClassNames.JAVA_UTIL_COLLECTIONS, "singletonList", "singleton").parameterCount(1);
+        CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_COLLECTIONS, "singletonList", "singleton").parameterCount(1);
 
     @RequiredReadAction
     private static void setupPatternMethods(PsiManager manager, GlobalSearchScope searchScope, List<? super PatternMethod> patternMethods) {
         JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(manager.getProject());
-        PsiClass collectionClass = javaPsiFacade.findClass(JavaClassNames.JAVA_UTIL_COLLECTION, searchScope);
+        PsiClass collectionClass = javaPsiFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, searchScope);
         PsiClassType object = PsiType.getJavaLangObject(manager, searchScope);
         PsiType[] javaLangObject = {object};
         PsiType[] twoObjects = {
@@ -58,13 +56,13 @@ public class SuspiciousMethodCallUtil {
             }
         }
 
-        PsiClass listClass = javaPsiFacade.findClass(JavaClassNames.JAVA_UTIL_LIST, searchScope);
+        PsiClass listClass = javaPsiFacade.findClass(CommonClassNames.JAVA_UTIL_LIST, searchScope);
         if (listClass != null) {
             addSingleParameterMethod(patternMethods, listClass, "indexOf", object);
             addSingleParameterMethod(patternMethods, listClass, "lastIndexOf", object);
         }
 
-        PsiClass mapClass = javaPsiFacade.findClass(JavaClassNames.JAVA_UTIL_MAP, searchScope);
+        PsiClass mapClass = javaPsiFacade.findClass(CommonClassNames.JAVA_UTIL_MAP, searchScope);
         if (mapClass != null) {
             PsiMethod remove = MethodSignatureUtil.findMethodBySignature(mapClass, removeSignature, false);
             addMethod(remove, 0, patternMethods, 0);
@@ -104,7 +102,7 @@ public class SuspiciousMethodCallUtil {
             addMethod(containsValue, 1, patternMethods, 0);
         }
 
-        PsiClass concurrentMapClass = javaPsiFacade.findClass(JavaClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP, searchScope);
+        PsiClass concurrentMapClass = javaPsiFacade.findClass(CommonClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP, searchScope);
         if (concurrentMapClass != null) {
             MethodSignature containsSignature =
                 MethodSignatureUtil.createMethodSignature("contains", javaLangObject, PsiTypeParameter.EMPTY_ARRAY, PsiSubstitutor.EMPTY);
@@ -276,7 +274,7 @@ public class SuspiciousMethodCallUtil {
 
         if (arg instanceof PsiConditionalExpression
             && argType != null
-            && argType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
+            && argType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
             && PsiPolyExpressionUtil.isPolyExpression(arg)) {
             return null;
         }
@@ -361,7 +359,7 @@ public class SuspiciousMethodCallUtil {
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (parameters.length == 1 && ("removeAll".equals(method.getName()) || "retainAll".equals(method.getName()))) {
                 PsiType paramType = parameters[0].getType();
-                if (InheritanceUtil.isInheritor(paramType, JavaClassNames.JAVA_UTIL_COLLECTION)) {
+                if (InheritanceUtil.isInheritor(paramType, CommonClassNames.JAVA_UTIL_COLLECTION)) {
                     PsiType qualifierType = qualifier.getType();
                     if (qualifierType != null) {
                         PsiType itemType = JavaGenericsUtil.getCollectionItemType(argType, calleeMethod.getResolveScope());
@@ -422,7 +420,7 @@ public class SuspiciousMethodCallUtil {
     }
 
     private static String getPreciseObjectTitle(PsiClass patternClass, int index) {
-        if (InheritanceUtil.isInheritor(patternClass, JavaClassNames.JAVA_UTIL_MAP)) {
+        if (InheritanceUtil.isInheritor(patternClass, CommonClassNames.JAVA_UTIL_MAP)) {
             return index == 0 ? "keys" : "values";
         }
 

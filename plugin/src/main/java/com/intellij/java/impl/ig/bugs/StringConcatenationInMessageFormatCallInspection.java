@@ -25,7 +25,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -171,7 +170,7 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
       }
       final PsiExpression formatArgument = arguments[formatArgumentIndex];
       final PsiType formatArgumentType = formatArgument.getType();
-      if (formatArgumentType == null || !formatArgumentType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (formatArgumentType == null || !formatArgumentType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return;
       }
       if (!(formatArgument instanceof PsiBinaryExpression)) {
@@ -183,7 +182,7 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
       final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)formatArgument;
       final PsiExpression lhs = binaryExpression.getLOperand();
       final PsiType lhsType = lhs.getType();
-      if (lhsType == null || !lhsType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (lhsType == null || !lhsType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return;
       }
       final PsiExpression rhs = binaryExpression.getROperand();

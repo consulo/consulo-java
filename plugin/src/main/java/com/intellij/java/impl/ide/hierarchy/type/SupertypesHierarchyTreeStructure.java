@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructure {
     public SupertypesHierarchyTreeStructure(Project project, PsiClass aClass) {
@@ -43,7 +42,7 @@ public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructu
             PsiClass[] supers = psiClass.getSupers();
             List<HierarchyNodeDescriptor> descriptors = new ArrayList<>();
             PsiClass objectClass =
-                JavaPsiFacade.getInstance(myProject).findClass(JavaClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
+                JavaPsiFacade.getInstance(myProject).findClass(CommonClassNames.JAVA_LANG_OBJECT, psiClass.getResolveScope());
             for (PsiClass aSuper : supers) {
                 if (!psiClass.isInterface() || !aSuper.equals(objectClass)) {
                     descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aSuper, false));

@@ -26,6 +26,7 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.XStringValuePresentation;
@@ -33,7 +34,6 @@ import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.internal.com.sun.jdi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.ColoredTextContainer;
@@ -194,7 +194,7 @@ public class StackFrameItem {
       ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
       String type = classRenderer.renderTypeName(myType);
       Image icon = myVarType == VariableItem.VarType.PARAM ? PlatformIconGroup.nodesParameter() : ExecutionDebugIconGroup.nodeValue();
-      if (myType != null && myType.startsWith(JavaClassNames.JAVA_LANG_STRING + "@")) {
+      if (myType != null && myType.startsWith(CommonClassNames.JAVA_LANG_STRING + "@")) {
         node.setPresentation(icon, new XStringValuePresentation(myValue) {
           @Nullable
           @Override

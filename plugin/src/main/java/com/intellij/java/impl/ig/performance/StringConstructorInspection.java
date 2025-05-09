@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -169,8 +168,7 @@ public class StringConstructorInspection extends BaseInspection {
       }
       final String className = aClass.getQualifiedName();
       @NonNls final String methodName = method.getName();
-      return JavaClassNames.JAVA_LANG_STRING.equals(className) &&
-             methodName.equals("substring");
+      return CommonClassNames.JAVA_LANG_STRING.equals(className) && methodName.equals("substring");
     }
   }
 }
