@@ -21,27 +21,26 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.ClassCandidateInfo;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
+import consulo.language.psi.FileContextUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.psi.resolve.ResolveState;
-import consulo.language.psi.FileContextUtil;
 import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.SmartList;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
-
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
+
 import java.util.Iterator;
 import java.util.List;
 
 public class ClassResolverProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint {
   private static final Logger LOG = Logger.getInstance(ClassResolverProcessor.class);
-  private static final String[] DEFAULT_PACKAGES = {JavaClassNames.DEFAULT_PACKAGE};
+  private static final String[] DEFAULT_PACKAGES = {CommonClassNames.DEFAULT_PACKAGE};
 
   private final String myClassName;
   @Nonnull

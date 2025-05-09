@@ -17,13 +17,9 @@ package com.intellij.java.impl.ipp.concatenation;
 
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
@@ -55,7 +51,7 @@ public class CopyConcatenatedStringToClipboardIntention extends Intention {
       return;
     }
     final PsiType type = concatenationExpression.getType();
-    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return;
     }
     final StringBuilder text = buildConcatenationText(concatenationExpression, new StringBuilder());

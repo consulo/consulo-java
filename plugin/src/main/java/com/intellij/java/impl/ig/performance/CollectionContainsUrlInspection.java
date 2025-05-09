@@ -121,10 +121,10 @@ public class CollectionContainsUrlInspection extends BaseInspection {
         return ClassType.OTHER;
       }
       @NonNls final String className = aClass.getQualifiedName();
-      if (JavaClassNames.JAVA_UTIL_SET.equals(className)) {
+      if (CommonClassNames.JAVA_UTIL_SET.equals(className)) {
         return ClassType.SET;
       }
-      else if (JavaClassNames.JAVA_UTIL_MAP.equals(className)) {
+      else if (CommonClassNames.JAVA_UTIL_MAP.equals(className)) {
         return ClassType.MAP;
       }
       final PsiClass[] supers = aClass.getSupers();

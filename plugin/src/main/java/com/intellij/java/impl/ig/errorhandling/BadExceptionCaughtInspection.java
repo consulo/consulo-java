@@ -16,10 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.impl.ig.ui.UiUtils;
-import com.intellij.java.language.psi.PsiCatchSection;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
@@ -27,7 +24,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -48,9 +44,9 @@ public class BadExceptionCaughtInspection extends BaseInspection {
    */
   public final ExternalizableStringSet exceptions =
     new ExternalizableStringSet(
-        JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
+        CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
       "java.lang.IllegalMonitorStateException",
-        JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
+        CommonClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
     );
 
   public BadExceptionCaughtInspection() {
@@ -88,7 +84,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
     return UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-        JavaClassNames.JAVA_LANG_THROWABLE
+        CommonClassNames.JAVA_LANG_THROWABLE
     );
   }
 

@@ -23,7 +23,6 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.util.Queryable;
 import consulo.content.scope.SearchScope;
 import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.*;
@@ -160,7 +159,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     @Override
     @Nonnull
     public PsiClass[] getSupers() {
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
             return PsiClass.EMPTY_ARRAY;
         }
         return PsiClassImplUtil.getSupers(this);
@@ -169,7 +168,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     @Override
     @Nonnull
     public PsiClassType[] getSuperTypes() {
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
             return PsiClassType.EMPTY_ARRAY;
         }
         return PsiClassImplUtil.getSuperTypes(this);

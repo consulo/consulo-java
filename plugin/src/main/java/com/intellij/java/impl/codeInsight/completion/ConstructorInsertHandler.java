@@ -16,7 +16,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.WriteCommandAction;
@@ -37,10 +36,10 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
 import consulo.undoRedo.UndoConfirmationPolicy;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -313,7 +312,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
   private static boolean shouldStartTypeTemplate(PsiTypeElement[] parameters) {
     if (parameters != null && parameters.length > 0) {
       for (PsiTypeElement parameter : parameters) {
-        if (parameter.getType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+        if (parameter.getType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
           return true;
         }
       }

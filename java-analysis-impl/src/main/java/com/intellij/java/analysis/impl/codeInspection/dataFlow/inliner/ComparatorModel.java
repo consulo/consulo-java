@@ -21,9 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.ObjectUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -147,7 +145,7 @@ abstract class ComparatorModel {
         if (expression instanceof PsiReferenceExpression ref && "CASE_INSENSITIVE_ORDER".equals(ref.getReferenceName())) {
             PsiField field = ObjectUtil.tryCast(ref.resolve(), PsiField.class);
             if (field != null && field.getContainingClass() != null
-                && JavaClassNames.JAVA_LANG_STRING.equals(field.getContainingClass().getQualifiedName())) {
+                && CommonClassNames.JAVA_LANG_STRING.equals(field.getContainingClass().getQualifiedName())) {
                 return new NullHostile();
             }
         }

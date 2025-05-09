@@ -15,17 +15,12 @@
  */
 package com.intellij.java.impl.ipp.constant;
 
-import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.language.psi.PsiElement;
 
 class ConstantExpressionPredicate implements PsiElementPredicate {
 
@@ -38,7 +33,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
     final PsiType expressionType = expression.getType();
-    if (expressionType == null || expressionType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (expressionType == null || expressionType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       // intention disabled for string concatenations because of performance issues on
       // relatively common large string expressions.
       return false;
@@ -49,7 +44,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
         return false;
       }
       final PsiType type = operand.getType();
-      if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return false;
       }
     }

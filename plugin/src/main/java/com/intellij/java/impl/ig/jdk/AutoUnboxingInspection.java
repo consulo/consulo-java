@@ -29,7 +29,6 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -228,7 +227,7 @@ public class AutoUnboxingInspection extends BaseInspection {
         }
       }
       final PsiType type = expression.getType();
-      if (type != null && type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+      if (type != null && type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
         return "((" + unboxedType.getBoxedTypeName() + ')' + expressionText + ")." + boxMethodName + "()";
       }
       return expressionText + '.' + boxMethodName + "()";
@@ -242,13 +241,13 @@ public class AutoUnboxingInspection extends BaseInspection {
       }
       final PsiExpression argument = arguments[0];
       final PsiType type = argument.getType();
-      return (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_INTEGER, null, "valueOf", PsiType.INT) && PsiType.INT.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_SHORT, null, "valueOf", PsiType.SHORT) && PsiType.SHORT.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_BYTE, null, "valueOf", PsiType.BYTE) && PsiType.BYTE.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_LONG, null, "valueOf", PsiType.LONG) && PsiType.LONG.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_CHARACTER, null, "valueOf", PsiType.CHAR) && PsiType.CHAR.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_DOUBLE, null, "valueOf", PsiType.DOUBLE) && PsiType.DOUBLE.equals(type)) ||
-          (MethodCallUtils.isCallToMethod(methodCallExpression, JavaClassNames.JAVA_LANG_FLOAT, null, "valueOf", PsiType.FLOAT) && PsiType.FLOAT.equals(type));
+      return (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_INTEGER, null, "valueOf", PsiType.INT) && PsiType.INT.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_SHORT, null, "valueOf", PsiType.SHORT) && PsiType.SHORT.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_BYTE, null, "valueOf", PsiType.BYTE) && PsiType.BYTE.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_LONG, null, "valueOf", PsiType.LONG) && PsiType.LONG.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_CHARACTER, null, "valueOf", PsiType.CHAR) && PsiType.CHAR.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_DOUBLE, null, "valueOf", PsiType.DOUBLE) && PsiType.DOUBLE.equals(type)) ||
+          (MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_LANG_FLOAT, null, "valueOf", PsiType.FLOAT) && PsiType.FLOAT.equals(type));
     }
 
     @NonNls
@@ -267,7 +266,7 @@ public class AutoUnboxingInspection extends BaseInspection {
         return null;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
+      if (!CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
         return null;
       }
       @NonNls final String name = field.getName();

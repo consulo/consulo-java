@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.serialization;
 
 import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -64,8 +65,7 @@ public class ComparatorNotSerializableInspection extends BaseInspection {
       if (aClass instanceof PsiAnonymousClass) {
         return;
       }
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_UTIL_COMPARATOR)) {
+      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COMPARATOR)) {
         return;
       }
       if (SerializationUtils.isSerializable(aClass)) {

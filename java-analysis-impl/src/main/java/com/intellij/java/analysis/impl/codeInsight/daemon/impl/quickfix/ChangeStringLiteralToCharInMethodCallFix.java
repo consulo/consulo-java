@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -187,6 +186,6 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     private static boolean isString(PsiType type) {
-        return type != null && JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
+        return type != null && CommonClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
     }
 }

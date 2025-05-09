@@ -15,53 +15,42 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.execution.debug.setting.XDebuggerSettingsManager;
-import jakarta.annotation.Nullable;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.impl.ui.tree.FieldDescriptor;
+import com.intellij.java.debugger.impl.ui.tree.*;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
-import com.intellij.java.debugger.impl.ui.tree.NodeManager;
-import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import consulo.execution.debug.setting.XDebuggerSettingsManager;
+import consulo.internal.com.sun.jdi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import consulo.util.lang.StringUtil;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.language.util.IncorrectOperationException;
-import java.util.HashSet;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 
-import consulo.internal.com.sun.jdi.*;
+import java.util.*;
 
 /**
- * User: lex
- * Date: Sep 17, 2003
- * Time: 2:04:00 PM
+ * @author lex
+ * @since 2003-09-17
  */
 public class ClassRenderer extends NodeRendererImpl
 {
@@ -366,7 +355,7 @@ public class ClassRenderer extends NodeRendererImpl
 				return null;
 			}
 		}
-		while(!(JavaClassNames.JAVA_LANG_ENUM.equals(classType.name())));
+		while(!(CommonClassNames.JAVA_LANG_ENUM.equals(classType.name())));
 		//noinspection HardCodedStringLiteral
 		final Field field = classType.fieldByName("name");
 		if(field == null)

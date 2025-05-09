@@ -15,27 +15,20 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import jakarta.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.util.collection.SmartList;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.util.collection.SmartList;
-import com.intellij.java.impl.ig.ui.UiUtils;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import jakarta.annotation.Nonnull;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
  * @author Dmitry Batkovich
@@ -48,13 +41,13 @@ public abstract class CollectionsListSettings
 	static
 	{
 		final SortedSet<String> set = new TreeSet<>();
-		set.add(JavaClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP);
+		set.add(CommonClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP);
 		set.add("java.util.concurrent.PriorityBlockingQueue");
 		set.add("java.util.ArrayDeque");
-		set.add(JavaClassNames.JAVA_UTIL_ARRAY_LIST);
-		set.add(JavaClassNames.JAVA_UTIL_HASH_MAP);
+		set.add(CommonClassNames.JAVA_UTIL_ARRAY_LIST);
+		set.add(CommonClassNames.JAVA_UTIL_HASH_MAP);
 		set.add("java.util.Hashtable");
-		set.add(JavaClassNames.JAVA_UTIL_HASH_SET);
+		set.add(CommonClassNames.JAVA_UTIL_HASH_SET);
 		set.add("java.util.IdentityHashMap");
 		set.add("java.util.LinkedHashMap");
 		set.add("java.util.LinkedHashSet");
@@ -118,6 +111,6 @@ public abstract class CollectionsListSettings
 	{
 		final String title = JavaQuickFixBundle.message("collection.addall.can.be.replaced.with.constructor.fix.options.title");
 		final ListTable table = new ListTable(new ListWrappingTableModel(myCollectionClassesRequiringCapacity, title));
-		return UiUtils.createAddRemoveTreeClassChooserPanel(table, title, JavaClassNames.JAVA_LANG_OBJECT);
+		return UiUtils.createAddRemoveTreeClassChooserPanel(table, title, CommonClassNames.JAVA_LANG_OBJECT);
 	}
 }

@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiErrorElement;
@@ -1176,7 +1175,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
         // if description is evaluated, the 'assert' statement cannot complete normally
         // though non-necessarily AssertionError will be thrown (description may throw something, or AssertionError ctor, etc.)
         PsiClassType exceptionClass = JavaPsiFacade.getElementFactory(statement.getProject())
-            .createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, statement.getResolveScope());
+            .createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE, statement.getResolveScope());
         addThrowInstructions(findThrowToBlocks(exceptionClass));
 
         myStartStatementStack.popStatement();

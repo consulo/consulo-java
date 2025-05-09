@@ -15,18 +15,12 @@
  */
 package com.intellij.java.impl.ipp.constant;
 
-import consulo.java.language.module.util.JavaClassNames;
-import jakarta.annotation.Nullable;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nullable;
 
 class ConstantSubexpressionPredicate implements PsiElementPredicate {
 
@@ -52,7 +46,7 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
     final PsiType type = polyadicExpression.getType();
-    if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       // handled by JoinConcatenatedStringLiteralsIntention
       return false;
     }

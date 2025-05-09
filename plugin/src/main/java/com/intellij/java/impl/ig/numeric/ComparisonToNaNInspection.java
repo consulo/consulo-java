@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -140,7 +139,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
         return false;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      return JavaClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || JavaClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
+      return CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
     }
   }
 }

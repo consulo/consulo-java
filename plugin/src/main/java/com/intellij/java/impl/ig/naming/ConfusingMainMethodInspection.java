@@ -24,7 +24,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -88,8 +87,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
       }
       final PsiParameter[] parameters = parameterList.getParameters();
       final PsiType parameterType = parameters[0].getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING + "[]",
-                                parameterType)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING + "[]", parameterType)) {
         registerMethodError(aMethod);
       }
     }

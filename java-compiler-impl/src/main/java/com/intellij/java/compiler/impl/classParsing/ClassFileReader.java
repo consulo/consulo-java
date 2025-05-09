@@ -23,10 +23,10 @@ package com.intellij.java.compiler.impl.classParsing;
 import com.intellij.java.compiler.impl.cache.SymbolTable;
 import com.intellij.java.compiler.impl.util.cls.BytePointer;
 import com.intellij.java.compiler.impl.util.cls.ClsUtil;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.localize.CompilerLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -211,7 +211,7 @@ public class ClassFileReader {
       BytePointer ptr = new BytePointer(getData(), getConstantPoolEnd() + 4);
       int index = ClsUtil.readU2(ptr);
       if (index == 0) {
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()) || "module-info".equals(getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName()) || "module-info".equals(getQualifiedName())) {
           mySuperClassName = "";
         }
         else {
@@ -222,7 +222,7 @@ public class ClassFileReader {
         ptr.offset = getOffsetInConstantPool(index);
         mySuperClassName = readClassInfo(ptr); // keep '$' in the name for anonymous classes
         if (isInterface()) {
-          if (!JavaClassNames.JAVA_LANG_OBJECT.equals(mySuperClassName)) {
+          if (!CommonClassNames.JAVA_LANG_OBJECT.equals(mySuperClassName)) {
             throw new ClsFormatException();
           }
         }

@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -95,17 +94,15 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
               (PsiWildcardType) parameterType;
           final PsiType bound = wildcardType.getBound();
           if (bound != null) {
-            if (!bound.equalsToText(
-                JavaClassNames.JAVA_LANG_OBJECT)) {
+            if (!bound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
               useTypeParameter = true;
             }
             canonicalTexts[i] = bound.getCanonicalText();
           } else {
-            canonicalTexts[i] = JavaClassNames.JAVA_LANG_OBJECT;
+            canonicalTexts[i] = CommonClassNames.JAVA_LANG_OBJECT;
           }
         } else {
-          if (!parameterType.equalsToText(
-              JavaClassNames.JAVA_LANG_OBJECT)) {
+          if (!parameterType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
             useTypeParameter = true;
           }
           canonicalTexts[i] = parameterType.getCanonicalText();
@@ -192,7 +189,7 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
         return;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName)) {
+      if (!CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName)) {
         return;
       }
       registerError(expression, expression, replacement);

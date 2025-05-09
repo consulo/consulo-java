@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import jakarta.annotation.Nonnull;
@@ -97,10 +96,8 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
       if (qualifierClass == null) {
         return;
       }
-      if (!InheritanceUtil.isInheritor(qualifierClass,
-                                       JavaClassNames.JAVA_UTIL_COLLECTION) &&
-          !InheritanceUtil.isInheritor(qualifierClass,
-                                       JavaClassNames.JAVA_UTIL_MAP)) {
+      if (!InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_UTIL_COLLECTION)
+          && !InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_UTIL_MAP)) {
         return;
       }
       registerError(qualifier);

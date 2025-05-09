@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -345,8 +344,8 @@ public class ConstantMathCallInspection extends BaseInspection {
         return;
       }
       final String className = referencedClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_MATH.equals(className)
-          && !JavaClassNames.JAVA_LANG_STRICT_MATH.equals(className)) {
+      if (!CommonClassNames.JAVA_LANG_MATH.equals(className)
+          && !CommonClassNames.JAVA_LANG_STRICT_MATH.equals(className)) {
         return;
       }
       registerMethodCallError(expression);

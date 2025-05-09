@@ -19,15 +19,13 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 /**
  * @author Pavel.Dolgov
@@ -40,7 +38,7 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
     myCollectionExpression = collectionExpression;
 
     PsiType componentType = arrayType.getComponentType();
-    myNewArrayText = componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
+    myNewArrayText = componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
   }
 
   @Nls

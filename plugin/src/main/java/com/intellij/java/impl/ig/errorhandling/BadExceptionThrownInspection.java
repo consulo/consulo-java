@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.java.language.psi.PsiType;
@@ -44,13 +45,13 @@ public class BadExceptionThrownInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public final ExternalizableStringSet exceptions =
     new ExternalizableStringSet(
-      JavaClassNames.JAVA_LANG_THROWABLE,
-      JavaClassNames.JAVA_LANG_EXCEPTION,
-      JavaClassNames.JAVA_LANG_ERROR,
-      JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
-      JavaClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
-      JavaClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
-      JavaClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
+      CommonClassNames.JAVA_LANG_THROWABLE,
+      CommonClassNames.JAVA_LANG_EXCEPTION,
+      CommonClassNames.JAVA_LANG_ERROR,
+      CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+      CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
+      CommonClassNames.JAVA_LANG_CLASS_CAST_EXCEPTION,
+      CommonClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
     );
 
   public BadExceptionThrownInspection() {
@@ -83,7 +84,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
     return UiUtils.createAddRemoveTreeClassChooserPanel(
       table,
       InspectionGadgetsLocalize.chooseExceptionClass().get(),
-        JavaClassNames.JAVA_LANG_THROWABLE
+      CommonClassNames.JAVA_LANG_THROWABLE
     );
   }
 

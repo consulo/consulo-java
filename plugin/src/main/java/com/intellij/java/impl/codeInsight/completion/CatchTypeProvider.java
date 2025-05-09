@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.completion.CompletionResultSet;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import consulo.language.editor.completion.CompletionProvider;
-import consulo.java.language.module.util.JavaClassNames;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Collections;
 
@@ -65,8 +64,9 @@ class CatchTypeProvider implements CompletionProvider
 			}
 		}
 
-		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(JavaClassNames
-				.JAVA_LANG_THROWABLE));
+		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(
+			JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE)
+		);
 		JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), type ->
 		{
 			final PsiClass psiClass = type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;

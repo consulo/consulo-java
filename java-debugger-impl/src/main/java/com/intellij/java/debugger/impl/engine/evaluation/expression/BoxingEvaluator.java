@@ -15,18 +15,17 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.internal.com.sun.jdi.*;
-
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eugene Zhuravlev
@@ -47,28 +46,28 @@ public class BoxingEvaluator implements Evaluator {
         }
 
         if (result instanceof BooleanValue booleanValue) {
-            return convertToWrapper(context, booleanValue, JavaClassNames.JAVA_LANG_BOOLEAN);
+            return convertToWrapper(context, booleanValue, CommonClassNames.JAVA_LANG_BOOLEAN);
         }
         if (result instanceof ByteValue byteValue) {
-            return convertToWrapper(context, byteValue, JavaClassNames.JAVA_LANG_BYTE);
+            return convertToWrapper(context, byteValue, CommonClassNames.JAVA_LANG_BYTE);
         }
         if (result instanceof CharValue charValue) {
-            return convertToWrapper(context, charValue, JavaClassNames.JAVA_LANG_CHARACTER);
+            return convertToWrapper(context, charValue, CommonClassNames.JAVA_LANG_CHARACTER);
         }
         if (result instanceof ShortValue shortValue) {
-            return convertToWrapper(context, shortValue, JavaClassNames.JAVA_LANG_SHORT);
+            return convertToWrapper(context, shortValue, CommonClassNames.JAVA_LANG_SHORT);
         }
         if (result instanceof IntegerValue integerValue) {
-            return convertToWrapper(context, integerValue, JavaClassNames.JAVA_LANG_INTEGER);
+            return convertToWrapper(context, integerValue, CommonClassNames.JAVA_LANG_INTEGER);
         }
         if (result instanceof LongValue longValue) {
-            return convertToWrapper(context, longValue, JavaClassNames.JAVA_LANG_LONG);
+            return convertToWrapper(context, longValue, CommonClassNames.JAVA_LANG_LONG);
         }
         if (result instanceof FloatValue floatValue) {
-            return convertToWrapper(context, floatValue, JavaClassNames.JAVA_LANG_FLOAT);
+            return convertToWrapper(context, floatValue, CommonClassNames.JAVA_LANG_FLOAT);
         }
         if (result instanceof DoubleValue doubleValue) {
-            return convertToWrapper(context, doubleValue, JavaClassNames.JAVA_LANG_DOUBLE);
+            return convertToWrapper(context, doubleValue, CommonClassNames.JAVA_LANG_DOUBLE);
         }
         throw new EvaluateException("Cannot perform boxing conversion for a value of type " + ((Value)result).type().name());
     }

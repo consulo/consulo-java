@@ -10,7 +10,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -153,7 +152,7 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                         break;
                     case TRUE_VALUE:
                     case FALSE_VALUE:
-                        if (!PsiType.BOOLEAN.equals(type) && !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+                        if (!PsiType.BOOLEAN.equals(type) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
                             LocalizeValue message = LocalizeValue.localizeTODO(
                                 "Contract clause '" + contract + "': parameter #" + (i + 1) + " has '" +
                                 type.getPresentableText() + "' type (expected boolean)"

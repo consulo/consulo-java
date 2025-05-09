@@ -26,7 +26,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
@@ -36,7 +35,6 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.lazy.LazyValue;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -128,7 +126,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
         PsiClass containingClass = getContainingClass();
         if (containingClass != null) {
             String qName = containingClass.getQualifiedName();
-            if (JavaClassNames.JAVA_LANG_FLOAT.equals(qName)) {
+            if (CommonClassNames.JAVA_LANG_FLOAT.equals(qName)) {
                 String name = getName();
                 if ("POSITIVE_INFINITY".equals(name)) {
                     return Float.POSITIVE_INFINITY;
@@ -140,7 +138,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
                     return Float.NaN;
                 }
             }
-            else if (JavaClassNames.JAVA_LANG_DOUBLE.equals(qName)) {
+            else if (CommonClassNames.JAVA_LANG_DOUBLE.equals(qName)) {
                 String name = getName();
                 if ("POSITIVE_INFINITY".equals(name)) {
                     return Double.POSITIVE_INFINITY;

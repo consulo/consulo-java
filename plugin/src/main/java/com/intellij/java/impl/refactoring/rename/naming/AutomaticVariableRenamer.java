@@ -19,17 +19,15 @@ import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.util.lang.StringUtil;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
+import consulo.language.impl.ast.TreeUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
-import consulo.language.impl.ast.TreeUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.usage.UsageInfo;
+import consulo.util.lang.StringUtil;
 
 import java.util.*;
 
@@ -96,7 +94,7 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
       }
     } else {
       PsiType collectionType = JavaPsiFacade.getInstance(variable.getProject()).getElementFactory()
-          .createTypeByFQClassName(JavaClassNames.JAVA_UTIL_COLLECTION, variable.getResolveScope());
+          .createTypeByFQClassName(CommonClassNames.JAVA_UTIL_COLLECTION, variable.getResolveScope());
       if (!collectionType.isAssignableFrom(variable.getType())) return;
       final PsiTypeElement[] typeParameterElements = ref.getParameterList().getTypeParameterElements();
       for (PsiTypeElement typeParameterElement : typeParameterElements) {

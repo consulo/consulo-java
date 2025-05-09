@@ -27,10 +27,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
@@ -41,7 +39,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPriorityAction {
@@ -71,7 +68,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
             myPsiClass.getTypeParameters(),
             typeParameter -> {
                 PsiType substituted = substitutor.substitute(typeParameter);
-                return substituted != null ? substituted.getPresentableText() : JavaClassNames.JAVA_LANG_OBJECT;
+                return substituted != null ? substituted.getPresentableText() : CommonClassNames.JAVA_LANG_OBJECT;
             },
             ", "
         ) + ">";

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -25,7 +26,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -65,9 +65,7 @@ public class ComparableImplementedButEqualsNotOverriddenInspection
       final Project project = aClass.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final GlobalSearchScope scope = aClass.getResolveScope();
-      final PsiClass comparableClass =
-        psiFacade.findClass(JavaClassNames.JAVA_LANG_COMPARABLE,
-                            scope);
+      final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
       if (comparableClass == null) {
         return;
       }

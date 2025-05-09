@@ -16,15 +16,11 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -66,7 +62,7 @@ public class CallToNativeMethodWhileLockedInspection
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(className)) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
         return;
       }
       if (!SynchronizationUtil.isInSynchronizedContext(expression)) {
