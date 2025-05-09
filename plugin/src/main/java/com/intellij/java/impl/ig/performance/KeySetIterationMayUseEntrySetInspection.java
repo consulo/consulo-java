@@ -25,7 +25,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
@@ -368,7 +367,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
         return false;
       }
       final String className = aClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_UTIL_MAP.equals(className)) {
+      if (!CommonClassNames.JAVA_UTIL_MAP.equals(className)) {
         return false;
       }
       final GetValueFromMapChecker checker = new GetValueFromMapChecker(targetVariable, key);

@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.compiler.CacheCorruptedException;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
@@ -104,7 +103,7 @@ class JavaDependencyProcessor {
         newClassesCache.getGenericSignature(qName));
 
     boolean superclassesDiffer = cache.getSuperQualifiedName(qName) != newClassesCache.getSuperQualifiedName(qName);
-    boolean wasDerivedFromObject = JavaClassNames.JAVA_LANG_OBJECT.equals(javaDependencyCache.resolve(cache.getSuperQualifiedName(qName)));
+    boolean wasDerivedFromObject = CommonClassNames.JAVA_LANG_OBJECT.equals(javaDependencyCache.resolve(cache.getSuperQualifiedName(qName)));
     mySuperClassChanged = !wasDerivedFromObject && superclassesDiffer;
     mySuperClassAdded = wasDerivedFromObject && superclassesDiffer;
   }
@@ -482,8 +481,8 @@ class JavaDependencyProcessor {
     final IntObjectMap<AnnotationConstantValue> oldAnnotations = fetchAllAnnotations(oldCache);
     final IntObjectMap<AnnotationConstantValue> newAnnotations = fetchAllAnnotations(newCache);
     // filter certain known annotation which are processed separately
-    final int retentionAnnotation = myJavaDependencyCache.getSymbolTable().getId(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION);
-    final int targetAnnotation = myJavaDependencyCache.getSymbolTable().getId(JavaClassNames.JAVA_LANG_ANNOTATION_TARGET);
+    final int retentionAnnotation = myJavaDependencyCache.getSymbolTable().getId(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+    final int targetAnnotation = myJavaDependencyCache.getSymbolTable().getId(CommonClassNames.JAVA_LANG_ANNOTATION_TARGET);
     oldAnnotations.remove(retentionAnnotation);
     oldAnnotations.remove(targetAnnotation);
     newAnnotations.remove(retentionAnnotation);
@@ -968,7 +967,7 @@ class JavaDependencyProcessor {
           hasBaseAbstractMethodsInHierarchy(superQName, methodsToCheck);
     } else {
       final String qName = myJavaDependencyCache.resolve(superQName);
-      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) {
+      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) {
         if (hasBaseAbstractMethods2(qName, methodsToCheck)) {
           return true;
         }

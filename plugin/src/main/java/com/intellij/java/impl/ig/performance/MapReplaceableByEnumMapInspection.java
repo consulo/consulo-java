@@ -16,15 +16,13 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -73,7 +71,7 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
       if (!(argumentType instanceof PsiClassType)) {
         return;
       }
-      if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_MAP)) {
+      if (!TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_UTIL_MAP)) {
         return;
       }
       if (null != TypeUtils.expressionHasTypeOrSubtype(expression, "java.util.EnumMap", "java.util.concurrent.ConcurrentMap")) {
@@ -94,7 +92,7 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
       final PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList != null) {
         final PsiExpression[] arguments = argumentList.getExpressions();
-        if (arguments.length > 0 && TypeUtils.expressionHasTypeOrSubtype(arguments[0], JavaClassNames.JAVA_UTIL_COMPARATOR)) {
+        if (arguments.length > 0 && TypeUtils.expressionHasTypeOrSubtype(arguments[0], CommonClassNames.JAVA_UTIL_COMPARATOR)) {
           return;
         }
       }

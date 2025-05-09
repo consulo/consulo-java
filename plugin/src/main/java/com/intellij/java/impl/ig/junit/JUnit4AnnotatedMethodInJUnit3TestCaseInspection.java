@@ -25,7 +25,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -194,7 +193,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
       if (!modifierList.hasModifierProperty(PsiModifier.PUBLIC)) {
         modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
       }
-      final PsiAnnotation overrideAnnotation = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE);
+      final PsiAnnotation overrideAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
       if (overrideAnnotation != null) {
         overrideAnnotation.delete();
       }

@@ -31,7 +31,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
@@ -147,10 +146,10 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor {
     final String[] suggestedNames = suggestedNameInfo.names;
     addLookupItems(set, suggestedNameInfo, matcher, project, suggestedNames);
     if (!hasStartMatches(set, matcher)) {
-      if (type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && matcher.prefixMatches("object")) {
+      if (type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && matcher.prefixMatches("object")) {
         set.add(withInsertHandler(suggestedNameInfo, LookupElementBuilder.create("object")));
       }
-      if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING) && matcher.prefixMatches("string")) {
+      if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING) && matcher.prefixMatches("string")) {
         set.add(withInsertHandler(suggestedNameInfo, LookupElementBuilder.create("string")));
       }
     }

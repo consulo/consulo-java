@@ -30,7 +30,6 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.*;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Computable;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -40,9 +39,9 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ThreeState;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -258,7 +257,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
           superMethods.add(superMethod);
         } else {
           final PsiClass aClass = superMethod.getContainingClass();
-          if (aClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
+          if (aClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
             superMethods.add(superMethod);
           }
         }
@@ -288,10 +287,10 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
       PsiMethod existingMethod = (PsiMethod) existing.getElement();
       PsiClass existingClass = existingMethod.getContainingClass();
       if (class1 != null && existingClass != null) { //prefer interface methods to methods from Object
-        if (class1.isInterface() && JavaClassNames.JAVA_LANG_OBJECT.equals(existingClass.getQualifiedName())) {
+        if (class1.isInterface() && CommonClassNames.JAVA_LANG_OBJECT.equals(existingClass.getQualifiedName())) {
           signatures.put(signature, info);
           continue;
-        } else if (existingClass.isInterface() && JavaClassNames.JAVA_LANG_OBJECT.equals(class1.getQualifiedName())) {
+        } else if (existingClass.isInterface() && CommonClassNames.JAVA_LANG_OBJECT.equals(class1.getQualifiedName())) {
           conflicts.remove(info);
           i--;
           continue;
@@ -597,8 +596,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
       if (varargsPosition) {
         if (type1 instanceof PsiEllipsisType && type2 instanceof PsiEllipsisType &&
             params1.length == params2.length &&
-            (class1 != null && !JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(JavaClassNames
-                .JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))) {
+            (class1 != null && !JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))) {
           type1 = ((PsiEllipsisType) type1).toArrayType();
           type2 = ((PsiEllipsisType) type2).toArrayType();
         } else {

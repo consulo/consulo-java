@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -243,9 +242,7 @@ public class ListIndexOfReplaceableByContainsInspection
       final GlobalSearchScope projectScope =
         GlobalSearchScope.allScope(project);
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass javaUtilListClass =
-        psiFacade.findClass(JavaClassNames.JAVA_UTIL_LIST,
-                            projectScope);
+      final PsiClass javaUtilListClass = psiFacade.findClass(CommonClassNames.JAVA_UTIL_LIST, projectScope);
       if (javaUtilListClass == null) {
         return false;
       }

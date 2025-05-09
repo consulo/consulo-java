@@ -26,7 +26,6 @@ import com.siyeh.ig.psiutils.*;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
@@ -118,8 +117,12 @@ public class MagicNumberInspection extends BaseInspection {
           final PsiElement parent = expressionList.getParent();
           if (parent instanceof PsiNewExpression) {
             final PsiNewExpression newExpression = (PsiNewExpression)parent;
-            if (TypeUtils.expressionHasTypeOrSubtype(newExpression, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
-                                                 JavaClassNames.JAVA_UTIL_MAP, JavaClassNames.JAVA_UTIL_COLLECTION) != null) {
+            if (TypeUtils.expressionHasTypeOrSubtype(
+                newExpression,
+                CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
+                CommonClassNames.JAVA_UTIL_MAP,
+                CommonClassNames.JAVA_UTIL_COLLECTION
+            ) != null) {
               return;
             }
           }

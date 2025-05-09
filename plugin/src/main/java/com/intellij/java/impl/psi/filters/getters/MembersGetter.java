@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.matcher.PrefixMatcher;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -90,7 +89,7 @@ public abstract class MembersGetter {
       return;
     }
 
-    final boolean searchFactoryMethods = searchInheritors && !JavaClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
+    final boolean searchFactoryMethods = searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
 
     final Project project = myPlace.getProject();
     final GlobalSearchScope scope = myPlace.getResolveScope();
@@ -116,7 +115,7 @@ public abstract class MembersGetter {
       }
     };
     consumer.accept(baseType);
-    if (searchInheritors && !JavaClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName())) {
+    if (searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName())) {
       CodeInsightUtil.processSubTypes(baseType, myPlace, true, PrefixMatcher.ALWAYS_TRUE, consumer);
     }
   }
@@ -126,7 +125,7 @@ public abstract class MembersGetter {
     if (qname == null || !qname.startsWith("java.lang.")) {
       return false;
     }
-    return JavaClassNames.JAVA_LANG_STRING.equals(qname) || InheritanceUtil.isInheritor(where, JavaClassNames.JAVA_LANG_NUMBER);
+    return CommonClassNames.JAVA_LANG_STRING.equals(qname) || InheritanceUtil.isInheritor(where, CommonClassNames.JAVA_LANG_NUMBER);
   }
 
   private void doProcessMembers(boolean acceptMethods, Consumer<LookupElement> results, boolean isExpectedTypeMember, Collection<? extends PsiElement> declarations) {

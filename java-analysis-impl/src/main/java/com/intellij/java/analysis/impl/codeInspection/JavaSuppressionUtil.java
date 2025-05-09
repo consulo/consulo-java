@@ -27,7 +27,6 @@ import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.DaemonCodeAnalyzerSettings;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
@@ -40,9 +39,9 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -128,7 +127,7 @@ public class JavaSuppressionUtil {
   }
 
   public static PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID) {
-    final PsiAnnotation generatedAnnotation = AnnotationUtil.findAnnotation(owner, JavaClassNames.JAVAX_ANNOTATION_GENERATED);
+    final PsiAnnotation generatedAnnotation = AnnotationUtil.findAnnotation(owner, CommonClassNames.JAVAX_ANNOTATION_GENERATED);
     if (generatedAnnotation != null) return generatedAnnotation;
     PsiModifierList modifierList = owner.getModifierList();
     Collection<String> suppressedIds = getInspectionIdsSuppressedInAnnotation(modifierList);

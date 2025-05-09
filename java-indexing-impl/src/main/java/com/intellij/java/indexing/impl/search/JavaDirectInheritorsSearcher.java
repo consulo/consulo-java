@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.progress.ProgressManager;
 import consulo.content.scope.SearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.EverythingGlobalScope;
@@ -59,7 +58,7 @@ public class JavaDirectInheritorsSearcher implements DirectClassInheritorsSearch
         String qualifiedName = app.runReadAction((Supplier<String>)aClass::getQualifiedName);
 
         Project project = PsiUtilCore.getProjectInReadAction(aClass);
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
             //[pasynkov]: WTF?
             //SearchScope scope = useScope.intersectWith(GlobalSearchScope.notScope(GlobalSearchScope.getScopeRestrictedByFileTypes(
             //    GlobalSearchScope.allScope(psiManager.getProject()), StdFileTypes.JSP, StdFileTypes.JSPX)));
@@ -71,7 +70,7 @@ public class JavaDirectInheritorsSearcher implements DirectClassInheritorsSearch
                 }
                 PsiClass superClass = psiClass.getSuperClass();
                 return !(superClass != null
-                    && JavaClassNames.JAVA_LANG_OBJECT.equals(app.runReadAction((Supplier<String>)superClass::getQualifiedName)))
+                    && CommonClassNames.JAVA_LANG_OBJECT.equals(app.runReadAction((Supplier<String>)superClass::getQualifiedName)))
                     || consumer.test(psiClass);
             });
         }

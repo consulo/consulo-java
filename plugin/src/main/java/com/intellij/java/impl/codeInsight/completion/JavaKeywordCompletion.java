@@ -31,7 +31,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.document.Document;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
@@ -863,7 +862,7 @@ public class JavaKeywordCompletion {
       Set<PsiType> expected = ContainerUtil.map2Set(JavaSmartCompletionContributor.getExpectedTypes(position, false),
                                                     ExpectedTypeInfo::getDefaultType);
       boolean addAll = expected.isEmpty() || ContainerUtil.exists(expected, t ->
-        t.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || t.equalsToText(JavaClassNames.JAVA_IO_SERIALIZABLE));
+        t.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || t.equalsToText(CommonClassNames.JAVA_IO_SERIALIZABLE));
       PsiElementFactory factory = JavaPsiFacade.getElementFactory(position.getProject());
       for (String primitiveType : PRIMITIVE_TYPES) {
         PsiType array = factory.createTypeFromText(primitiveType + "[]", null);
@@ -908,7 +907,7 @@ public class JavaKeywordCompletion {
 
   private static boolean expectsClassLiteral(PsiElement position) {
     return ContainerUtil.find(JavaSmartCompletionContributor.getExpectedTypes(position, false),
-                              info -> InheritanceUtil.isInheritor(info.getType(), JavaClassNames.JAVA_LANG_CLASS)) != null;
+                              info -> InheritanceUtil.isInheritor(info.getType(), CommonClassNames.JAVA_LANG_CLASS)) != null;
   }
 
   private static boolean isAtResourceVariableStart(PsiElement position) {

@@ -32,7 +32,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.util.function.Processor;
 import consulo.application.util.matcher.PrefixMatcher;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionProvider;
@@ -100,7 +99,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
     addArrayTypes(parameters.getPosition(), infos, consumer);
 
     List<PsiClassType> classTypes = extractClassTypes(infos);
-    boolean arraysWelcome = ContainerUtil.exists(ExpectedTypesGetter.extractTypes(infos, true), t -> t.getDeepComponentType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
+    boolean arraysWelcome = ContainerUtil.exists(ExpectedTypesGetter.extractTypes(infos, true), t -> t.getDeepComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
     processInheritors(parameters, classTypes, prefixMatcher, type ->
     {
       final LookupElement element = addExpectedType(type, parameters);

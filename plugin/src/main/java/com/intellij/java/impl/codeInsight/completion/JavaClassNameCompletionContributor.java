@@ -28,7 +28,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.custom.CustomSyntaxTableFileType;
 import consulo.language.editor.completion.*;
@@ -229,7 +228,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         MultiMap<String, PsiClass> map = new MultiMap<>();
         GlobalSearchScope scope = context.getResolveScope();
         PsiClass annotation =
-            JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope);
+            JavaPsiFacade.getInstance(context.getProject()).findClass(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope);
         if (annotation != null) {
             DirectClassInheritorsSearch.search(annotation, scope, false).forEach(psiClass -> {
                 if (!psiClass.isAnnotationType() || psiClass.getQualifiedName() == null) {

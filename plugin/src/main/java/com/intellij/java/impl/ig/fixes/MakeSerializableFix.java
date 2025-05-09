@@ -19,13 +19,11 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class MakeSerializableFix extends InspectionGadgetsFix {
@@ -47,8 +45,7 @@ public class MakeSerializableFix extends InspectionGadgetsFix {
       JavaPsiFacade.getElementFactory(project);
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiJavaCodeReferenceElement referenceElement =
-      elementFactory.createReferenceElementByFQClassName(
-        JavaClassNames.JAVA_IO_SERIALIZABLE, scope);
+      elementFactory.createReferenceElementByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, scope);
     final PsiReferenceList implementsList =
       containingClass.getImplementsList();
     assert implementsList != null;

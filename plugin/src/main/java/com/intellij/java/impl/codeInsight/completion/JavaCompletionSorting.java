@@ -28,7 +28,6 @@ import consulo.application.util.matcher.NameUtil;
 import consulo.ide.impl.idea.codeInsight.completion.impl.CompletionSorterImpl;
 import consulo.ide.impl.idea.codeInsight.completion.impl.LiftShorterItemsClassifier;
 import consulo.ide.impl.idea.codeInsight.lookup.ClassifierFactory;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.Classifier;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -42,9 +41,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
@@ -393,10 +392,10 @@ public class JavaCompletionSorting {
     private static PsiType removeClassWildcard(PsiType type) {
       if (type instanceof PsiClassType) {
         final PsiClass psiClass = ((PsiClassType) type).resolve();
-        if (psiClass != null && JavaClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
+        if (psiClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
           PsiClassType erased = (PsiClassType) GenericsUtil.eliminateWildcards(type);
           PsiType[] parameters = erased.getParameters();
-          if (parameters.length == 1 && !parameters[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+          if (parameters.length == 1 && !parameters[0].equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
             return erased;
           }
         }
@@ -506,7 +505,7 @@ public class JavaCompletionSorting {
       myConstructorPossible = constructorPossible;
       myExpectedTypes = expectedTypes;
       for (ExpectedTypeInfo info : expectedTypes) {
-        ContainerUtil.addIfNotNull(myExpectedClasses, PsiUtil.substituteTypeParameter(info.getDefaultType(), JavaClassNames.JAVA_LANG_CLASS, 0, false));
+        ContainerUtil.addIfNotNull(myExpectedClasses, PsiUtil.substituteTypeParameter(info.getDefaultType(), CommonClassNames.JAVA_LANG_CLASS, 0, false));
       }
 
       myExpectedMemberName = calcExpectedMemberNameByParentCall(position);

@@ -31,7 +31,6 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.ast.FileElement;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.DummyHolder;
@@ -273,7 +272,7 @@ public class JavaResolveUtil {
       }
     }
 
-    PsiPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(JavaClassNames.DEFAULT_PACKAGE);
+    PsiPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(CommonClassNames.DEFAULT_PACKAGE);
     if (langPackage != null) {
       if (!langPackage.processDeclarations(processor, state, null, place)) {
         return false;

@@ -19,6 +19,7 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
@@ -30,7 +31,6 @@ import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.image.Image;
@@ -111,7 +111,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     @Override
     public XBreakpoint<JavaExceptionBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
         final PsiClass throwableClass =
-            JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_THROWABLE, GlobalSearchScope.allScope(project));
+            JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_THROWABLE, GlobalSearchScope.allScope(project));
         TreeClassChooser chooser =
             TreeClassChooserFactory.getInstance(project).createInheritanceClassChooser(
                 DebuggerBundle.message("add.exception.breakpoint.classchooser.title"),

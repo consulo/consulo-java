@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.editor.completion.CompletionContributor;
 import consulo.language.editor.completion.CompletionParameters;
@@ -38,8 +37,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -62,8 +61,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
   private static final String ANNOTATED_ELEMENT = "java.lang.reflect.AnnotatedElement";
 
   private static final Set<String> DECLARED_NAMES = Set.of(DECLARED_CONSTRUCTOR, DECLARED_ANNOTATION, DECLARED_ANNOTATIONS_BY_TYPE);
-  private static final ElementPattern<? extends PsiElement> CONSTRUCTOR_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(CONSTRUCTOR,
-      DECLARED_CONSTRUCTOR).definedInClass(JavaClassNames.JAVA_LANG_CLASS)));
+  private static final ElementPattern<? extends PsiElement> CONSTRUCTOR_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(CONSTRUCTOR, DECLARED_CONSTRUCTOR).definedInClass(CommonClassNames.JAVA_LANG_CLASS)));
 
   private static final ElementPattern<? extends PsiElement> ANNOTATION_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(ANNOTATION,
       DECLARED_ANNOTATION, ANNOTATIONS_BY_TYPE, DECLARED_ANNOTATIONS_BY_TYPE).with(new MethodDefinedInInterfacePatternCondition(ANNOTATED_ELEMENT))));

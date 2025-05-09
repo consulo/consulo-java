@@ -27,7 +27,6 @@ import consulo.application.AllIcons;
 import consulo.component.util.Iconable;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
 import consulo.language.icon.IconDescriptorUpdaters;
@@ -75,7 +74,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
 
         if (!DumbService.getInstance(element.getProject()).isDumb()) {
           final PsiManager manager = psiClass.getManager();
-          final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
+          final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
           final boolean isException = javaLangTrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangTrowable, true);
           if (isException) {
             iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractException : AllIcons.Nodes.ExceptionClass);

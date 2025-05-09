@@ -31,7 +31,6 @@ import consulo.codeEditor.action.TabOutScopesTracker;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.RangeMarker;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.AutoPopupController;
@@ -570,7 +569,7 @@ public class JavaCompletionUtil {
                 -1
             );
         }
-        if (containsMember(qualifierType, object, false) && !qualifierType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+        if (containsMember(qualifierType, object, false) && !qualifierType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
             LookupElementDecorator<LookupElement> bold = LookupElementDecorator.withRenderer(
                 item,
                 new LookupElementRenderer<>() {

@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.action.SelectWordUtil;
-import consulo.language.lexer.StringLiteralLexer;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import com.intellij.java.language.psi.JavaTokenType;
+import consulo.language.editor.action.SelectWordUtil;
+import consulo.language.lexer.StringLiteralLexer;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiLiteralExpression;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class LiteralSelectioner extends BasicSelectioner {
 
   private static boolean isStringLiteral(PsiElement element) {
     return element instanceof PsiLiteralExpression &&
-           ((PsiLiteralExpression)element).getType().equalsToText(JavaClassNames.JAVA_LANG_STRING) && element.getText().startsWith("\"") && element.getText().endsWith("\"");
+           ((PsiLiteralExpression)element).getType().equalsToText(CommonClassNames.JAVA_LANG_STRING) && element.getText().startsWith("\"") && element.getText().endsWith("\"");
   }
 
   @Override

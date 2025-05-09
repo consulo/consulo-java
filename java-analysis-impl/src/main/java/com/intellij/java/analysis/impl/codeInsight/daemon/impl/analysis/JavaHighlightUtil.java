@@ -20,13 +20,12 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +34,7 @@ public class JavaHighlightUtil {
   public static boolean isSerializable(@Nonnull PsiClass aClass) {
     PsiManager manager = aClass.getManager();
     PsiClass serializableClass = JavaPsiFacade.getInstance(manager.getProject())
-        .findClass(JavaClassNames.JAVA_IO_SERIALIZABLE, aClass.getResolveScope());
+        .findClass(CommonClassNames.JAVA_IO_SERIALIZABLE, aClass.getResolveScope());
     return serializableClass != null && aClass.isInheritor(serializableClass, true);
   }
 
@@ -61,20 +60,20 @@ public class JavaHighlightUtil {
     if ("readResolve".equals(name)) {
       return parameters.length == 0
           && returnType != null
-          && returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
-          && (containingClass.hasModifierProperty(PsiModifier.ABSTRACT) || isSerializable(containingClass));
+          && returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
+          && (containingClass.isAbstract() || isSerializable(containingClass));
     }
     if ("writeReplace".equals(name)) {
       return parameters.length == 0
           && returnType != null
-          && returnType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
-          && (containingClass.hasModifierProperty(PsiModifier.ABSTRACT) || isSerializable(containingClass));
+          && returnType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
+          && (containingClass.isAbstract() || isSerializable(containingClass));
     }
     if ("writeObject".equals(name)) {
       return parameters.length == 1
           && TypeConversionUtil.isVoidType(returnType)
           && parameters[0].getType().equalsToText("java.io.ObjectOutputStream")
-          && method.hasModifierProperty(PsiModifier.PRIVATE)
+          && method.isPrivate()
           && isSerializable(containingClass);
     }
     return false;

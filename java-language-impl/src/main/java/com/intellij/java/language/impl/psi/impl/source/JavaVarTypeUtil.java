@@ -20,10 +20,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.RecursionManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.util.collection.ArrayUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -113,7 +111,7 @@ public class JavaVarTypeUtil {
               PsiType U = RecursionManager.doPreventingRecursion(ai, true, () -> ai.accept(this));
               if (U == null) {
                 targetSubstitutor = targetSubstitutor.put(parameter, PsiWildcardType.createUnbounded(manager));
-              } else if (!U.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && tryUpperBound(aClass, parameter, U)) {
+              } else if (!U.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && tryUpperBound(aClass, parameter, U)) {
                 targetSubstitutor = targetSubstitutor.put(parameter, PsiWildcardType.createExtends(manager, U));
               } else {
                 targetSubstitutor = targetSubstitutor.put(parameter, createDownwardProjection(manager, ai));

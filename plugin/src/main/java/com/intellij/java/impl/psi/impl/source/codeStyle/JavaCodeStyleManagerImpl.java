@@ -32,7 +32,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.matcher.NameUtil;
 import consulo.application.util.matcher.NameUtilCore;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyle;
 import consulo.language.codeStyle.CodeStyleSettings;
@@ -368,7 +367,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager {
     private String suggestNameFromTypeMap(@Nonnull PsiType type, @Nonnull VariableKind variableKind, @Nullable String longTypeName) {
         if (longTypeName != null) {
             if (type.equals(PsiTypes.nullType())) {
-                longTypeName = JavaClassNames.JAVA_LANG_OBJECT;
+                longTypeName = CommonClassNames.JAVA_LANG_OBJECT;
             }
             String name = nameByType(longTypeName, variableKind);
             if (name != null && isIdentifier(name)) {
@@ -385,23 +384,23 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager {
                 case "int", "boolean", "byte", "char", "long" -> longTypeName.substring(0, 1);
                 case "double", "float" -> "v";
                 case "short" -> "i";
-                case JavaClassNames.JAVA_LANG_OBJECT -> "o";
-                case JavaClassNames.JAVA_LANG_STRING -> "s";
-                case JavaClassNames.JAVA_LANG_VOID -> "unused";
+                case CommonClassNames.JAVA_LANG_OBJECT -> "o";
+                case CommonClassNames.JAVA_LANG_STRING -> "s";
+                case CommonClassNames.JAVA_LANG_VOID -> "unused";
                 default -> null;
             };
         }
         if (kind == VariableKind.LOCAL_VARIABLE) {
             return switch (longTypeName) {
                 case "int", "boolean", "byte", "char", "long" -> longTypeName.substring(0, 1);
-                case "double", "float", JavaClassNames.JAVA_LANG_DOUBLE, JavaClassNames.JAVA_LANG_FLOAT -> "v";
-                case "short", JavaClassNames.JAVA_LANG_SHORT, JavaClassNames.JAVA_LANG_INTEGER -> "i";
-                case JavaClassNames.JAVA_LANG_LONG -> "l";
-                case JavaClassNames.JAVA_LANG_BOOLEAN, JavaClassNames.JAVA_LANG_BYTE -> "b";
-                case JavaClassNames.JAVA_LANG_CHARACTER -> "c";
-                case JavaClassNames.JAVA_LANG_OBJECT -> "o";
-                case JavaClassNames.JAVA_LANG_STRING -> "s";
-                case JavaClassNames.JAVA_LANG_VOID -> "unused";
+                case "double", "float", CommonClassNames.JAVA_LANG_DOUBLE, CommonClassNames.JAVA_LANG_FLOAT -> "v";
+                case "short", CommonClassNames.JAVA_LANG_SHORT, CommonClassNames.JAVA_LANG_INTEGER -> "i";
+                case CommonClassNames.JAVA_LANG_LONG -> "l";
+                case CommonClassNames.JAVA_LANG_BOOLEAN, CommonClassNames.JAVA_LANG_BYTE -> "b";
+                case CommonClassNames.JAVA_LANG_CHARACTER -> "c";
+                case CommonClassNames.JAVA_LANG_OBJECT -> "o";
+                case CommonClassNames.JAVA_LANG_STRING -> "s";
+                case CommonClassNames.JAVA_LANG_VOID -> "unused";
                 default -> null;
             };
         }
@@ -623,11 +622,11 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager {
         }
         else if (type instanceof PsiWildcardType wildcardType) {
             PsiType bound = wildcardType.getBound();
-            return bound != null ? getLongTypeName(bound) : JavaClassNames.JAVA_LANG_OBJECT;
+            return bound != null ? getLongTypeName(bound) : CommonClassNames.JAVA_LANG_OBJECT;
         }
         else if (type instanceof PsiCapturedWildcardType capturedWildcardType) {
             PsiType bound = capturedWildcardType.getWildcard().getBound();
-            return bound != null ? getLongTypeName(bound) : JavaClassNames.JAVA_LANG_OBJECT;
+            return bound != null ? getLongTypeName(bound) : CommonClassNames.JAVA_LANG_OBJECT;
         }
         else if (type instanceof PsiIntersectionType intersectionType) {
             return getLongTypeName(intersectionType.getRepresentative());
@@ -770,7 +769,7 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager {
     @Nullable
     private static PsiType extractOptionalContent(@Nonnull PsiClassType classType) {
         PsiClass resolved = classType.resolve();
-        if (resolved != null && JavaClassNames.JAVA_UTIL_OPTIONAL.equals(resolved.getQualifiedName())) {
+        if (resolved != null && CommonClassNames.JAVA_UTIL_OPTIONAL.equals(resolved.getQualifiedName())) {
             if (classType.getParameterCount() == 1) {
                 return classType.getParameters()[0];
             }

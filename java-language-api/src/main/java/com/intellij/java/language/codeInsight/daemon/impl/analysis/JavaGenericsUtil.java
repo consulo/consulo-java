@@ -1,23 +1,22 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.codeInsight.daemon.impl.analysis;
 
-import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_EXTERNAL;
-
-import java.util.Iterator;
-
-import jakarta.annotation.Nullable;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import java.util.Iterator;
+
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_EXTERNAL;
 
 public class JavaGenericsUtil
 {
@@ -120,7 +119,7 @@ public class JavaGenericsUtil
 			return false;
 		}
 
-		if(AnnotationUtil.isAnnotated(psiMethod, JavaClassNames.JAVA_LANG_SAFE_VARARGS, CHECK_EXTERNAL))
+		if(AnnotationUtil.isAnnotated(psiMethod, CommonClassNames.JAVA_LANG_SAFE_VARARGS, CHECK_EXTERNAL))
 		{
 			return false;
 		}

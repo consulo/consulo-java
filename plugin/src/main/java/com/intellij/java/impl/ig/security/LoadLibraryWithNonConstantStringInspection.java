@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -84,11 +83,10 @@ public class LoadLibraryWithNonConstantStringInspection
         return;
       }
       final String typeText = type.getCanonicalText();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(typeText)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(typeText)) {
         return;
       }
-      final String stringValue =
-        (String)ConstantExpressionUtil.computeCastTo(arg, type);
+      final String stringValue = (String)ConstantExpressionUtil.computeCastTo(arg, type);
       if (stringValue != null) {
         return;
       }

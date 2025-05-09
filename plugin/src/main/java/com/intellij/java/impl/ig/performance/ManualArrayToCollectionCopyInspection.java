@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -28,16 +27,14 @@ import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ManualArrayToCollectionCopyInspection extends BaseInspection {
@@ -605,8 +602,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
         return false;
       }
       final PsiClass containingClass = method.getContainingClass();
-      return InheritanceUtil.isInheritor(containingClass,
-                                         JavaClassNames.JAVA_UTIL_COLLECTION);
+      return InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_COLLECTION);
     }
   }
 }

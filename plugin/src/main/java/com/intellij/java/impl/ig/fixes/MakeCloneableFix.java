@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -59,8 +58,7 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
         JavaPsiFacade.getElementFactory(project);
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiJavaCodeReferenceElement ref =
-        elementFactory.createReferenceElementByFQClassName(
-            JavaClassNames.JAVA_LANG_CLONEABLE, scope);
+        elementFactory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, scope);
     final PsiReferenceList extendsImplementsList;
     if (containingClass.isInterface()) {
       extendsImplementsList = containingClass.getExtendsList();
