@@ -21,7 +21,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -88,7 +87,7 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
       if (modifierList == null) {
         return;
       }
-      final PsiAnnotation retentionAnnotation = modifierList.findAnnotation(JavaClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+      final PsiAnnotation retentionAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
       if (retentionAnnotation == null) {
         registerError(arg);
         return;

@@ -98,8 +98,8 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
       return false;
     }
     final String qualifiedName = containingClass.getQualifiedName();
-    if (!JavaClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName) &&
-        !JavaClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
+    if (!CommonClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName)
+        && !CommonClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
       return false;
     }
     final StringBuilder newExpression = new StringBuilder();

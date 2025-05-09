@@ -21,7 +21,6 @@ import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiComment;
@@ -29,9 +28,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +103,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     @NonNls final StringBuilder switchStatementText = new StringBuilder();
     switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
     final PsiType type = switchExpression.getType();
-    final boolean castToInt = type != null && type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER);
+    final boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
     for (IfStatementBranch branch : branches) {
       boolean hasConflicts = false;
       for (IfStatementBranch testBranch : branches) {

@@ -18,7 +18,6 @@ package com.intellij.java.language.psi.util;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -46,23 +45,23 @@ public class PsiTypesUtil {
   private static final Map<String, String> ourBoxedTypes = new HashMap<>();
 
   static {
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_BOOLEAN, "boolean");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_BYTE, "byte");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_SHORT, "short");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_INTEGER, "int");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_LONG, "long");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_FLOAT, "float");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_DOUBLE, "double");
-    ourUnboxedTypes.put(JavaClassNames.JAVA_LANG_CHARACTER, "char");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_BOOLEAN, "boolean");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_BYTE, "byte");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_SHORT, "short");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_INTEGER, "int");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_LONG, "long");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_FLOAT, "float");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_DOUBLE, "double");
+    ourUnboxedTypes.put(CommonClassNames.JAVA_LANG_CHARACTER, "char");
 
-    ourBoxedTypes.put("boolean", JavaClassNames.JAVA_LANG_BOOLEAN);
-    ourBoxedTypes.put("byte", JavaClassNames.JAVA_LANG_BYTE);
-    ourBoxedTypes.put("short", JavaClassNames.JAVA_LANG_SHORT);
-    ourBoxedTypes.put("int", JavaClassNames.JAVA_LANG_INTEGER);
-    ourBoxedTypes.put("long", JavaClassNames.JAVA_LANG_LONG);
-    ourBoxedTypes.put("float", JavaClassNames.JAVA_LANG_FLOAT);
-    ourBoxedTypes.put("double", JavaClassNames.JAVA_LANG_DOUBLE);
-    ourBoxedTypes.put("char", JavaClassNames.JAVA_LANG_CHARACTER);
+    ourBoxedTypes.put("boolean", CommonClassNames.JAVA_LANG_BOOLEAN);
+    ourBoxedTypes.put("byte", CommonClassNames.JAVA_LANG_BYTE);
+    ourBoxedTypes.put("short", CommonClassNames.JAVA_LANG_SHORT);
+    ourBoxedTypes.put("int", CommonClassNames.JAVA_LANG_INTEGER);
+    ourBoxedTypes.put("long", CommonClassNames.JAVA_LANG_LONG);
+    ourBoxedTypes.put("float", CommonClassNames.JAVA_LANG_FLOAT);
+    ourBoxedTypes.put("double", CommonClassNames.JAVA_LANG_DOUBLE);
+    ourBoxedTypes.put("char", CommonClassNames.JAVA_LANG_CHARACTER);
   }
 
   @NonNls
@@ -131,8 +130,8 @@ public class PsiTypesUtil {
     }
     if (customDefaultValues) {
       PsiType rawType = type instanceof PsiClassType ? ((PsiClassType) type).rawType() : null;
-      if (rawType != null && rawType.equalsToText(JavaClassNames.JAVA_UTIL_OPTIONAL)) {
-        return JavaClassNames.JAVA_UTIL_OPTIONAL + ".empty()";
+      if (rawType != null && rawType.equalsToText(CommonClassNames.JAVA_UTIL_OPTIONAL)) {
+        return CommonClassNames.JAVA_UTIL_OPTIONAL + ".empty()";
       }
     }
     return PsiKeyword.NULL;
@@ -234,7 +233,7 @@ public class PsiTypesUtil {
   public static boolean isGetClass(PsiMethod method) {
     if (GET_CLASS_METHOD.equals(method.getName())) {
       PsiClass aClass = method.getContainingClass();
-      return aClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
+      return aClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
     }
     return false;
   }
@@ -244,7 +243,7 @@ public class PsiTypesUtil {
     if (qualifierType != null) {
       PsiUtil.ensureValidType(qualifierType);
       JavaPsiFacade facade = JavaPsiFacade.getInstance(context.getProject());
-      PsiClass javaLangClass = facade.findClass(JavaClassNames.JAVA_LANG_CLASS, context.getResolveScope());
+      PsiClass javaLangClass = facade.findClass(CommonClassNames.JAVA_LANG_CLASS, context.getResolveScope());
       if (javaLangClass != null && javaLangClass.getTypeParameters().length == 1) {
         PsiSubstitutor substitutor = PsiSubstitutor.EMPTY.
             put(javaLangClass.getTypeParameters()[0], PsiWildcardType.createExtends(context.getManager(), qualifierType));

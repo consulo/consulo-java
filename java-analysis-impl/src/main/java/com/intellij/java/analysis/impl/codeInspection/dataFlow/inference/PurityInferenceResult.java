@@ -20,7 +20,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContrac
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -87,7 +86,7 @@ class PurityInferenceResult {
             if (classOrAnonymousClassReference != null
                 && classOrAnonymousClassReference.resolve() instanceof PsiClass psiClass) {
                 PsiClass superClass = psiClass.getSuperClass();
-                return superClass == null || JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName());
+                return superClass == null || CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName());
             }
         }
 

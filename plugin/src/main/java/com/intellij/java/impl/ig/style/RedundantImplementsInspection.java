@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
@@ -24,7 +25,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -154,14 +154,10 @@ public class RedundantImplementsInspection extends BaseInspection {
       PsiJavaCodeReferenceElement[] extendsElements,
       PsiJavaCodeReferenceElement[] implementsElements) {
       final String qualifiedName = implementedClass.getQualifiedName();
-      if (ignoreSerializable &&
-          JavaClassNames.JAVA_IO_SERIALIZABLE.equals(
-            qualifiedName)) {
+      if (ignoreSerializable && CommonClassNames.JAVA_IO_SERIALIZABLE.equals(qualifiedName)) {
         return;
       }
-      else if (ignoreCloneable &&
-               JavaClassNames.JAVA_LANG_CLONEABLE.equals(
-                 qualifiedName)) {
+      else if (ignoreCloneable && CommonClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
         return;
       }
       for (final PsiJavaCodeReferenceElement extendsElement :

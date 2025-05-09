@@ -19,14 +19,13 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.util.IncorrectOperationException;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 public class RemoveUnusedVariableUtil {
@@ -76,7 +75,7 @@ public class RemoveUnusedVariableUtil {
 
     // all Throwable descendants from java.lang are side effects free
     if ("java.lang".equals(packageName) || "java.io".equals(packageName)) {
-      PsiClass throwableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, aClass.getResolveScope());
+      PsiClass throwableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, aClass.getResolveScope());
       if (throwableClass != null && InheritanceUtil.isInheritorOrSelf(aClass, throwableClass, true)) {
         return true;
       }

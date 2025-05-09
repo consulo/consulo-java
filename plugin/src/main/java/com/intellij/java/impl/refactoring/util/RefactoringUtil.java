@@ -43,7 +43,6 @@ import consulo.content.scope.SearchScope;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.highlight.HighlightManager;
@@ -62,8 +61,8 @@ import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 public class RefactoringUtil {
@@ -463,7 +462,7 @@ public class RefactoringUtil {
     ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getInstance(expr.getProject()).getExpectedTypes(expr, false);
     if (expectedTypes.length == 1) {
       type = expectedTypes[0].getType();
-      if (!type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+      if (!type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
         return type;
       }
     }
@@ -503,7 +502,7 @@ public class RefactoringUtil {
       if (infos.length == 1) {
         type = infos[0].getType();
       } else {
-        type = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_OBJECT, expr.getResolveScope());
+        type = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT, expr.getResolveScope());
       }
     }
 

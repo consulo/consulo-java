@@ -21,7 +21,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.EditorFactory;
 import consulo.document.Document;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.module.content.ProjectFileIndex;
@@ -29,7 +28,6 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -93,9 +91,9 @@ public class PsiUtilEx {
     if (type instanceof PsiClassType) {
       // optimization. doesn't require resolve
       final String shortName = ((PsiClassType)type).getClassName();
-      if (!Comparing.equal(shortName, JavaClassNames.JAVA_LANG_STRING_SHORT)) return false;
+      if (!Comparing.equal(shortName, CommonClassNames.JAVA_LANG_STRING_SHORT)) return false;
     }
-    return JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
+    return CommonClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
   }
 
   public static boolean isStringOrStringArray(@Nonnull PsiType type) {

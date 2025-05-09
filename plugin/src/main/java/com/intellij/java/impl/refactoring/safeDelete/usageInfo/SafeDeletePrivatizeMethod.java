@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -23,7 +24,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
 import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author dsl
@@ -40,7 +40,7 @@ public class SafeDeletePrivatizeMethod extends SafeDeleteUsageInfo implements Sa
   @Override
   public void performRefactoring() throws IncorrectOperationException {
     PsiUtil.setModifierProperty(getMethod(), PsiModifier.PRIVATE, true);
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, JavaClassNames.JAVA_LANG_OVERRIDE);
+    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

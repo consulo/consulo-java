@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.psi.util.proximity;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PlatformPatterns;
 import consulo.language.psi.PsiElement;
@@ -113,7 +113,7 @@ public class ReferenceListWeigher extends ProximityWeigher {
       return applicableByKind;
     }
     if (condition == Preference.Exceptions) {
-      return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_THROWABLE) ? applicableByKind : inapplicable;
+      return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_THROWABLE) ? applicableByKind : inapplicable;
     }
     return unknown;
   }

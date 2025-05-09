@@ -23,13 +23,11 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceConcatenationWithStringBufferIntention", fileExtensions = "java", categories = {"Java", "Strings"})
@@ -103,7 +101,7 @@ public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedI
       return false;
     }
     final String className = type.getCanonicalText();
-    if (!JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) && !JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+    if (!CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) && !CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
       return false;
     }
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -114,13 +112,13 @@ public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedI
     if (expression instanceof PsiPolyadicExpression) {
       final PsiPolyadicExpression concatenation = (PsiPolyadicExpression)expression;
       final PsiType type = concatenation.getType();
-      if (type != null && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (type != null && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         result.append(".append(").append(concatenation.getText()).append(')');
         return;
       }
       final PsiExpression[] operands = concatenation.getOperands();
       final PsiType startType = operands[0].getType();
-      if (startType == null || startType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (startType == null || startType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         for (PsiExpression operand : operands) {
           turnExpressionIntoChainedAppends(operand, result);
         }
@@ -132,7 +130,7 @@ public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedI
         final PsiExpression operand = operands[i];
         if (!string) {
           final PsiType operandType = operand.getType();
-          if (operandType == null || operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+          if (operandType == null || operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
             final PsiElementFactory factory = JavaPsiFacade.getElementFactory(expression.getProject());
             final PsiExpression newExpression = factory.createExpressionFromText(newExpressionText.toString(), expression);
             turnExpressionIntoChainedAppends(newExpression, result);

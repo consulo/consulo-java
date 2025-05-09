@@ -15,16 +15,12 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiNewExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -62,8 +58,8 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
             if (!(argumentType instanceof PsiClassType argumentClassType)) {
                 return;
             }
-            if (!TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_SET)
-                || TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_UTIL_ENUM_SET)) {
+            if (!TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_UTIL_SET)
+                || TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_UTIL_ENUM_SET)) {
                 return;
             }
             PsiClass argumentClass = argumentClassType.resolve();

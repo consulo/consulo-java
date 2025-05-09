@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -74,12 +73,10 @@ public class ReplaceAllDotInspection extends BaseInspection {
         return;
       }
       final String canonicalText = argumentType.getCanonicalText();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
         return;
       }
-      final String argValue =
-        (String)ConstantExpressionUtil.computeCastTo(argument,
-                                                     argumentType);
+      final String argValue = (String)ConstantExpressionUtil.computeCastTo(argument, argumentType);
       if (!".".equals(argValue)) {
         return;
       }
@@ -92,7 +89,7 @@ public class ReplaceAllDotInspection extends BaseInspection {
         return;
       }
       final String qualifiedName = containingClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
         return;
       }
       registerMethodCallError(expression);

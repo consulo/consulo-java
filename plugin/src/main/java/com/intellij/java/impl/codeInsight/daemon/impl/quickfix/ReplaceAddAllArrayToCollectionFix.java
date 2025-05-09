@@ -28,7 +28,6 @@ import consulo.codeEditor.Editor;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
@@ -69,7 +68,7 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
     if (element instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod)element;
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass collectionsClass = psiFacade.findClass(JavaClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
+      final PsiClass collectionsClass = psiFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
       if (collectionsClass != null && InheritanceUtil.isInheritorOrSelf(method.getContainingClass(), collectionsClass, true)) {
         if (Comparing.strEqual(method.getName(), "addAll") && PsiType.BOOLEAN.equals(method.getReturnType())) {
           final PsiParameter[] psiParameters = method.getParameterList().getParameters();

@@ -42,7 +42,6 @@ import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.AutoImportHelper;
 import consulo.language.editor.CodeInsightSettings;
@@ -948,7 +947,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         final PsiElement parent = expression.getParent();
         if (parent instanceof PsiForeachStatement) {
             final PsiType type = expression.getType();
-            if (InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_ITERATOR)) {
+            if (InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_ITERATOR)) {
                 return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement)parent);
             }
         }

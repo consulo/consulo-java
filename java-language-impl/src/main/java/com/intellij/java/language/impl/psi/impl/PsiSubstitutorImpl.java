@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.RecursionManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
@@ -184,7 +183,7 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor {
             LOG.assertTrue(newBound.isValid());
 
             if (type.isExtends()) {
-                if (newBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+                if (newBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
                     return PsiWildcardType.createUnbounded(type.getManager());
                 }
                 return PsiWildcardType.createExtends(type.getManager(), newBound);

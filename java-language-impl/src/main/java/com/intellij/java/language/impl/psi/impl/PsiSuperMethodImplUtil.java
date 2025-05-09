@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.*;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.PsiModificationTracker;
@@ -135,7 +134,7 @@ public class PsiSuperMethodImplUtil {
             return false;
         }
         PsiClass parentClass = method.getContainingClass();
-        return parentClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(parentClass.getQualifiedName());
+        return parentClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(parentClass.getQualifiedName());
     }
 
     @Nullable
@@ -398,7 +397,7 @@ public class PsiSuperMethodImplUtil {
         PsiClass containingClass = method.getContainingClass();
         if (!superMethod.isConstructor() && !aClass.equals(superClass)
             && MethodSignatureUtil.isSubsignature(superSignatureHierarchical, hierarchicalMethodSignature) && superClass != null) {
-            if (superClass.isInterface() || JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
+            if (superClass.isInterface() || CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
                 //noinspection SimplifiableIfStatement
                 if (superMethod.isStatic()
                     || superMethod.hasModifierProperty(PsiModifier.DEFAULT) && method.isStatic()

@@ -29,7 +29,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.psi.*;
@@ -58,8 +57,6 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Predicate;
-
-import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 public final class PsiUtil extends PsiUtilCore {
     private static final Logger LOG = Logger.getInstance(PsiUtil.class);
@@ -841,9 +838,10 @@ public final class PsiUtil extends PsiUtilCore {
      * JLS 15.28
      */
     public static boolean isCompileTimeConstant(@Nonnull PsiVariable field) {
-        return field.hasModifierProperty(PsiModifier.FINAL) && (TypeConversionUtil.isPrimitiveAndNotNull(field.getType()) || field.getType()
-            .equalsToText(
-                JAVA_LANG_STRING)) && field.hasInitializer()
+        return field.hasModifierProperty(PsiModifier.FINAL)
+            && (TypeConversionUtil.isPrimitiveAndNotNull(field.getType())
+            || field.getType().equalsToText(CommonClassNames.JAVA_LANG_STRING))
+            && field.hasInitializer()
             && isConstantExpression(field.getInitializer());
     }
 
@@ -1012,7 +1010,7 @@ public final class PsiUtil extends PsiUtilCore {
             for (PsiType boundType : boundTypes) {
                 PsiType substitutedBoundType = captureSubstitutor.substitute(boundType);
                 if (substitutedBoundType != null && !(substitutedBoundType instanceof PsiWildcardType)
-                    && !substitutedBoundType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+                    && !substitutedBoundType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
                     if (originalBound instanceof PsiArrayType && substitutedBoundType instanceof PsiArrayType
                         && !originalBound.isAssignableFrom(substitutedBoundType)
                         && !substitutedBoundType.isAssignableFrom(originalBound)) {
@@ -1343,8 +1341,8 @@ public final class PsiUtil extends PsiUtilCore {
 
     @Nullable
     public static PsiType extractIterableTypeParameter(@Nullable PsiType psiType, boolean eraseTypeParameter) {
-        PsiType type = substituteTypeParameter(psiType, JavaClassNames.JAVA_LANG_ITERABLE, 0, eraseTypeParameter);
-        return type != null ? type : substituteTypeParameter(psiType, JavaClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
+        PsiType type = substituteTypeParameter(psiType, CommonClassNames.JAVA_LANG_ITERABLE, 0, eraseTypeParameter);
+        return type != null ? type : substituteTypeParameter(psiType, CommonClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
     }
 
     @Nullable
@@ -1444,7 +1442,7 @@ public final class PsiUtil extends PsiUtilCore {
         Project project = resourceClass.getProject();
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
         PsiClass autoCloseable =
-            facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope)ProjectScopes.getLibrariesScope(project));
+            facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope)ProjectScopes.getLibrariesScope(project));
         if (autoCloseable == null) {
             return null;
         }
@@ -1489,7 +1487,7 @@ public final class PsiUtil extends PsiUtilCore {
         Project project = resourceClass.getProject();
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
         PsiClass autoCloseable =
-            facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope)ProjectScopes.getLibrariesScope(project));
+            facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope)ProjectScopes.getLibrariesScope(project));
         if (autoCloseable == null) {
             return null;
         }

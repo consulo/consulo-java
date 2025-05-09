@@ -15,25 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import jakarta.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-
-import jakarta.annotation.Nullable;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.LanguageLevel;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 /**
  * @author peter
@@ -101,7 +94,8 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 		}
 
 		PsiMethod method = call.resolveMethod();
-		if(method != null && method.getParameterList().getParametersCount() == 1 && method.getParameterList().getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT))
+		if(method != null && method.getParameterList().getParametersCount() == 1
+			&& method.getParameterList().getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
 		{
 			return new ReplaceWithObjectsEqualsFix(qualifier.getText(), noParens.getText());
 		}

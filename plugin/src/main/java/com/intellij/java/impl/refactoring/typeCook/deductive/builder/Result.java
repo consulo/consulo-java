@@ -15,20 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive.builder;
 
-import com.intellij.java.language.impl.psi.Bottom;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
-import com.intellij.java.language.psi.*;
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.logging.Logger;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.Util;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
+import com.intellij.java.language.impl.psi.Bottom;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.logging.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,7 +72,7 @@ public class Result {
     if (myBinding != null) {
       final PsiType type = myBinding.substitute(myTypes.get(element));
 
-      @NonNls final String objectFQName = JavaClassNames.JAVA_LANG_OBJECT;
+      final String objectFQName = CommonClassNames.JAVA_LANG_OBJECT;
       if (originalType.getCanonicalText().equals(objectFQName)) {
         if (type == null) {
           return originalType;
