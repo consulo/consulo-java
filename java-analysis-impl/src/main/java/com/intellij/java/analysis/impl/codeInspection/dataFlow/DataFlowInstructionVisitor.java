@@ -101,12 +101,14 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
     }
 
+    @RequiredReadAction
     private static boolean isAssignmentToDefaultValueInConstructor(AssignInstruction instruction, DataFlowRunner runner, DfaValue target) {
-        if (!(target instanceof DfaVariableValue var)) {
+        if (!(target instanceof DfaVariableValue varValue)) {
             return false;
         }
-        if (!(var.getPsiVariable() instanceof PsiField) || var.getQualifier() == null ||
-            !(var.getQualifier().getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor)) {
+        if (!(varValue.getPsiVariable() instanceof PsiField)
+            || varValue.getQualifier() == null
+            || !(varValue.getQualifier().getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor)) {
             return false;
         }
 
@@ -122,7 +124,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
         DfType dfType = dest.getDfType();
 
-        PsiType type = var.getType();
+        PsiType type = varValue.getType();
         boolean isDefaultValue = DfConstantType.isConst(dfType, PsiTypesUtil.getDefaultValue(type)) ||
             DfConstantType.isConst(dfType, 0) && TypeConversionUtil.isIntegralNumberType(type);
         if (!isDefaultValue) {
