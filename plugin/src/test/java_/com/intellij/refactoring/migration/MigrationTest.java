@@ -1,13 +1,13 @@
 package com.intellij.refactoring.migration;
 
+import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.migration.MigrationMap;
 import com.intellij.java.impl.refactoring.migration.MigrationMapEntry;
 import com.intellij.java.impl.refactoring.migration.MigrationProcessor;
-import consulo.document.FileDocumentManager;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.virtualFileSystem.VirtualFile;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.refactoring.MultiFileTestCase;
-import com.intellij.JavaTestUtil;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * @author dsl
@@ -15,7 +15,7 @@ import com.intellij.JavaTestUtil;
 public abstract class MigrationTest extends MultiFileTestCase {
   public void testUnexistingClassInUnexistingPackage() throws Exception {
     doTest(createAction(new MigrationMap(new MigrationMapEntry[]{
-      new MigrationMapEntry("qqq.aaa.Yahoo", JavaClassNames.JAVA_LANG_STRING, MigrationMapEntry.CLASS, false)
+      new MigrationMapEntry("qqq.aaa.Yahoo", CommonClassNames.JAVA_LANG_STRING, MigrationMapEntry.CLASS, false)
     })));
   }
 

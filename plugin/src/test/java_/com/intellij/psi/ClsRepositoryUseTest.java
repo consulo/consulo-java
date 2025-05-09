@@ -15,38 +15,30 @@
  */
 package com.intellij.psi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.module.content.layer.ModifiableRootModel;
-import consulo.module.content.ModuleRootManager;
-import consulo.content.OrderRootType;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileFilter;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
-import consulo.language.psi.scope.GlobalSearchScope;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.application.ApplicationManager;
+import consulo.content.OrderRootType;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.impl.module.extension.JavaModuleExtensionImpl;
 import consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.logging.Logger;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileFilter;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
 
 @PlatformTestCase.WrapInCommand
 public abstract class ClsRepositoryUseTest extends PsiTestCase {
@@ -418,7 +410,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     LOG.assertTrue(type instanceof PsiArrayType);
     PsiType componentType = ((PsiArrayType)type).getComponentType();
 
-    assertTrue(componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
+    assertTrue(componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
     assertEquals("Object", componentType.getPresentableText());
     assertFalse(componentType instanceof PsiPrimitiveType);
     assertFalse(componentType instanceof PsiArrayType);
@@ -437,7 +429,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiType type2 = ((PsiArrayType)field2.getType()).getComponentType();
     assertTrue(type2 instanceof PsiClassType);
 
-    assertTrue(type2.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
+    assertTrue(type2.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
     assertEquals("Object", type2.getPresentableText());
   }
 
@@ -449,7 +441,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiType type1 = aClass.getFields()[1].getType();
     PsiElement target1 = PsiUtil.resolveClassInType(type1);
     assertNotNull(target1);
-    PsiClass objectClass = myJavaFacade.findClasses(JavaClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
+    PsiClass objectClass = myJavaFacade.findClasses(CommonClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
     assertEquals(objectClass, target1);
   }
 
@@ -481,7 +473,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiClassType[] refs = list.getReferencedTypes();
     assertEquals(1, refs.length);
     assertEquals("ArrayList", refs[0].getPresentableText());
-    assertEquals(JavaClassNames.JAVA_UTIL_ARRAY_LIST, refs[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_UTIL_ARRAY_LIST, refs[0].getCanonicalText());
   }
 
   public void testImplementsList() throws Exception {
@@ -494,7 +486,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     PsiClassType[] refs = list.getReferencedTypes();
     assertEquals(1, refs.length);
     assertEquals("Cloneable", refs[0].getPresentableText());
-    assertEquals(JavaClassNames.JAVA_LANG_CLONEABLE, refs[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_CLONEABLE, refs[0].getCanonicalText());
   }
 
   public void testThrowsList() throws Exception {
@@ -508,8 +500,8 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     assertEquals(2, refs.length);
     assertEquals("Exception", refs[0].getPresentableText());
     assertEquals("IOException", refs[1].getPresentableText());
-    assertEquals(JavaClassNames.JAVA_LANG_EXCEPTION, refs[0].getCanonicalText());
-    assertEquals(JavaClassNames.JAVA_IO_IO_EXCEPTION, refs[1].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_EXCEPTION, refs[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_IO_IO_EXCEPTION, refs[1].getCanonicalText());
   }
 
 
@@ -531,12 +523,12 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
 
     PsiType type2 = parameters[1].getType();
     assertEquals("Object", type2.getPresentableText());
-    assertTrue(type2.equalsToText(JavaClassNames.JAVA_LANG_OBJECT));
+    assertTrue(type2.equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
     assertFalse(type2 instanceof PsiArrayType);
     assertFalse(type2 instanceof PsiPrimitiveType);
     PsiClass target2 = PsiUtil.resolveClassInType(type2);
     assertNotNull(target2);
-    PsiClass objectClass = myJavaFacade.findClasses(JavaClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
+    PsiClass objectClass = myJavaFacade.findClasses(CommonClassNames.JAVA_LANG_OBJECT, RESOLVE_SCOPE)[1];
     assertEquals(objectClass, target2);
 
     parameters[0].getModifierList();
@@ -545,7 +537,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
   public void testGenericClass() throws Exception {
     disableJdk();
 
-    PsiClass map = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_HASH_MAP, RESOLVE_SCOPE);
+    PsiClass map = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_HASH_MAP, RESOLVE_SCOPE);
     assert map != null;
     PsiMethod entrySet = map.findMethodsByName("entrySet", false)[0];
     PsiClassType ret = (PsiClassType)entrySet.getReturnType();
@@ -553,7 +545,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     final PsiClassType.ClassResolveResult setResolveResult = ret.resolveGenerics();
     final PsiClass setResolveResultElement = setResolveResult.getElement();
     assert setResolveResultElement != null : setResolveResult;
-    assertEquals(JavaClassNames.JAVA_UTIL_SET, setResolveResultElement.getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_SET, setResolveResultElement.getQualifiedName());
     final PsiTypeParameter typeParameter = setResolveResultElement.getTypeParameters()[0];
 
     final PsiType substitutedResult = setResolveResult.getSubstitutor().substitute(typeParameter);
@@ -564,7 +556,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
     final PsiClassType.ClassResolveResult setTypeResolveResult = setType.resolveGenerics();
     final PsiClass setTypeResolveResultElement = setTypeResolveResult.getElement();
     assert setTypeResolveResultElement != null : setTypeResolveResult;
-    assertEquals(JavaClassNames.JAVA_UTIL_MAP_ENTRY, setTypeResolveResultElement.getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_MAP_ENTRY, setTypeResolveResultElement.getQualifiedName());
     final PsiTypeParameter[] typeParameters = setTypeResolveResultElement.getTypeParameters();
     assertEquals(2, typeParameters.length);
     PsiType[] mapParams = new PsiType[]{
@@ -591,7 +583,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
   public void testGenericReturnType() throws Exception {
     disableJdk();
 
-    final PsiClass map = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
+    final PsiClass map = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
     assert map != null;
     final PsiElementFactory factory = myJavaFacade.getElementFactory();
     final PsiClassType typeMapStringToInteger =
@@ -632,8 +624,8 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
 
   public void testSimplerGenericInheritance() throws Exception {
     PsiElementFactory factory = myJavaFacade.getElementFactory();
-    PsiClass map = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
-    PsiClass hashMap = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_HASH_MAP, RESOLVE_SCOPE);
+    PsiClass map = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_MAP, RESOLVE_SCOPE);
+    PsiClass hashMap = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_HASH_MAP, RESOLVE_SCOPE);
     assert map != null && hashMap != null;
     assertTrue(factory.createType(map).isAssignableFrom(factory.createType(hashMap)));
   }
@@ -762,7 +754,7 @@ public abstract class ClsRepositoryUseTest extends PsiTestCase {
 
   public void testInvariantParsing2() throws Exception {
     disableJdk();
-    final PsiClass collection = myJavaFacade.findClass(JavaClassNames.JAVA_UTIL_COLLECTION, RESOLVE_SCOPE);
+    final PsiClass collection = myJavaFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, RESOLVE_SCOPE);
     assertNotNull(collection);
     final PsiMethod[] methods = collection.findMethodsByName("removeAll", false);
     assertEquals(1, methods.length);

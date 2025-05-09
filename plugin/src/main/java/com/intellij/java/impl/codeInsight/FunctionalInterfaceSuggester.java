@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -36,9 +35,9 @@ import java.util.function.Predicate;
 public class FunctionalInterfaceSuggester {
     public static final String[] FUNCTIONAL_INTERFACES = {
         //old jdk without annotations
-        JavaClassNames.JAVA_LANG_RUNNABLE,
-        JavaClassNames.JAVA_UTIL_CONCURRENT_CALLABLE,
-        JavaClassNames.JAVA_UTIL_COMPARATOR,
+        CommonClassNames.JAVA_LANG_RUNNABLE,
+        CommonClassNames.JAVA_UTIL_CONCURRENT_CALLABLE,
+        CommonClassNames.JAVA_UTIL_COMPARATOR,
 
         //IDEA
         "com.intellij.util.Function",
@@ -172,7 +171,7 @@ public class FunctionalInterfaceSuggester {
         };
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
         GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
-        PsiClass functionalInterfaceClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, allScope);
+        PsiClass functionalInterfaceClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, allScope);
         if (functionalInterfaceClass != null) {
             AnnotatedMembersSearch.search(functionalInterfaceClass, element.getResolveScope()).forEach(consumer);
         }

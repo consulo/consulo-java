@@ -16,18 +16,17 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.module.ModifiableModuleModel;
-import consulo.module.Module;
-import consulo.module.ModuleManager;
-import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.ResolveTestCase;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.module.ModifiableModuleModel;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 
 import java.util.Collections;
 
@@ -123,7 +122,7 @@ public abstract class ResolveClassTest extends ResolveTestCase {
     PsiReference ref = configure();
     PsiElement target = ((PsiJavaReference)ref).advancedResolve(true).getElement();
     assertTrue(target instanceof PsiClass);
-    assertEquals(JavaClassNames.JAVA_UTIL_DATE, ((PsiClass)target).getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_DATE, ((PsiClass)target).getQualifiedName());
   }
 
   public void testLocals1() throws Exception {

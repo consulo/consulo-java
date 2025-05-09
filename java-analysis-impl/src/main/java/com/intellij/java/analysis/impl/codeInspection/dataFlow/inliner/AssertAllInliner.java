@@ -5,14 +5,10 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
@@ -26,7 +22,7 @@ public class AssertAllInliner implements CallInliner {
         staticCall("org.junit.jupiter.api.Assertions", "assertAll")
             .parameterTypes("org.junit.jupiter.api.function.Executable..."),
         staticCall("org.junit.jupiter.api.Assertions", "assertAll")
-            .parameterTypes(JavaClassNames.JAVA_LANG_STRING, "org.junit.jupiter.api.function.Executable...")
+            .parameterTypes(CommonClassNames.JAVA_LANG_STRING, "org.junit.jupiter.api.function.Executable...")
     );
 
 

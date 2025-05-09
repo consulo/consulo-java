@@ -1,7 +1,6 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -14,7 +13,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInAssign1 () throws Exception {
@@ -23,7 +22,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals( JavaClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
+    assertEquals( CommonClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInAssign2() throws Exception {
@@ -32,7 +31,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, paramTypes[0].getCanonicalText());
   }
 
   public void testInferInCast () throws Exception {
@@ -41,7 +40,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     assertTrue(type instanceof PsiClassType);
     PsiType[] paramTypes = ((PsiClassType)type).getParameters();
     assertEquals(1, paramTypes.length);
-    assertEquals(JavaClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_STRING, paramTypes[0].getCanonicalText());
   }
 
   public void testInferWithBounds () throws Exception {
@@ -54,7 +53,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     PsiSubstitutor substitutor = resolveResult.getSubstitutor();
     PsiMethod method = (PsiMethod)resolveResult.getElement();
     PsiType type = substitutor.substitute(method.getTypeParameters()[0]);
-    assertEquals(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
+    assertEquals(CommonClassNames.JAVA_LANG_STRING, type.getCanonicalText());
   }
 
   private PsiReferenceExpression configure() throws Exception {
@@ -66,7 +65,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferRawType () throws Exception {
-    checkResolvesTo(JavaClassNames.JAVA_LANG_OBJECT);
+    checkResolvesTo(CommonClassNames.JAVA_LANG_OBJECT);
   }
 
   private void checkResolvesTo(@NonNls String typeName) throws Exception {
@@ -85,7 +84,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferWithWildcards1 () throws Exception {
-    checkResolvesTo(JavaClassNames.JAVA_LANG_STRING);
+    checkResolvesTo(CommonClassNames.JAVA_LANG_STRING);
   }
 
   public void testInferWithWildcards2 () throws Exception {
@@ -109,7 +108,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferAutoboxed () throws Exception {
-    checkResolvesTo(JavaClassNames.JAVA_LANG_INTEGER);
+    checkResolvesTo(CommonClassNames.JAVA_LANG_INTEGER);
   }
 
   public void testInferWithVarargs1 () throws Exception {
@@ -145,7 +144,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
   }
 
   public void testInferUnchecked () throws Exception {
-    checkResolvesTo(JavaClassNames.JAVA_LANG_OBJECT);
+    checkResolvesTo(CommonClassNames.JAVA_LANG_OBJECT);
   }
 
   public void testInferNotNull () throws Exception {

@@ -1,23 +1,15 @@
-/*
- * Created by IntelliJ IDEA.
- * User: mike
- * Date: Jun 14, 2002
- * Time: 8:05:58 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.psi.util;
 
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
+/**
+ * @author mike
+ * @since 2002-06-14
+ */
 public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
   public void testSuggestGetterName() throws Exception {
     assertEquals("isValid", PropertyUtil.suggestGetterName("valid", getType("boolean")));
@@ -30,7 +22,7 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
     assertEquals("isaURL", PropertyUtil.suggestGetterName(createField("aURL", "boolean")));
     assertEquals("getaURL", PropertyUtil.suggestGetterName(createField("aURL", "Object")));
-    assertEquals("getBool", PropertyUtil.suggestGetterName(createField("bool", JavaClassNames.JAVA_LANG_BOOLEAN)));
+    assertEquals("getBool", PropertyUtil.suggestGetterName(createField("bool", CommonClassNames.JAVA_LANG_BOOLEAN)));
   }
 
   public void testSuggestSetterName() throws Exception {
@@ -42,7 +34,7 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
     assertEquals("setaURL", PropertyUtil.suggestSetterName("aURL"));
     assertEquals("setaURL", PropertyUtil.suggestSetterName(createField("aURL", "Object")));
-    assertEquals("setBool", PropertyUtil.suggestSetterName(createField("bool", JavaClassNames.JAVA_LANG_BOOLEAN)));
+    assertEquals("setBool", PropertyUtil.suggestSetterName(createField("bool", CommonClassNames.JAVA_LANG_BOOLEAN)));
   }
 
   public void testSuggestPropertyName() throws Exception {
@@ -61,8 +53,8 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
 
   public void testBooleanPropertyGetters() {
     assertTrue(PropertyUtil.hasGetterName(createMethod("isOk", "boolean")));
-    assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", JavaClassNames.JAVA_LANG_BOOLEAN)));
-    assertTrue(PropertyUtil.hasGetterName(createMethod("getOk", JavaClassNames.JAVA_LANG_BOOLEAN)));
+    assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", CommonClassNames.JAVA_LANG_BOOLEAN)));
+    assertTrue(PropertyUtil.hasGetterName(createMethod("getOk", CommonClassNames.JAVA_LANG_BOOLEAN)));
     assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", "int")));
   }
 

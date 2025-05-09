@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -65,7 +65,7 @@ public class AbstractClassExtendsConcreteClassInspection
         return;
       }
       final String superclassName = superClass.getQualifiedName();
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
         return;
       }
       registerClassError(aClass);

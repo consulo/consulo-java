@@ -15,18 +15,13 @@
  */
 package com.intellij.psi.resolve;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import com.intellij.java.language.psi.*;
-import consulo.content.bundle.Sdk;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.content.bundle.Sdk;
+
+import static org.junit.Assert.*;
 
 public abstract class ResolveMethodTest extends ResolveTestCase {
   @Override
@@ -201,7 +196,7 @@ public abstract class ResolveMethodTest extends ResolveTestCase {
     assertTrue(target instanceof PsiMethod);
     final PsiMethod method = (PsiMethod)target;
     assertEquals("clone", method.getName());
-    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
 
 

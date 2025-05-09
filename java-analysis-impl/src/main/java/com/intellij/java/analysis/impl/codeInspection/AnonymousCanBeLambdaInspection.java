@@ -25,11 +25,13 @@ import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.util.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.RedundantCastUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.component.util.text.UniqueNameGenerator;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.HighPriorityAction;
@@ -43,9 +45,9 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.*;
@@ -117,7 +119,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
           if (isOnTheFly && !state.reportNotAnnotatedInterfaces) {
             final PsiClass baseClass = aClass.getBaseClassType().resolve();
             LOG.assertTrue(baseClass != null);
-            if (!AnnotationUtil.isAnnotated(baseClass, JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false)) {
+            if (!AnnotationUtil.isAnnotated(baseClass, CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false)) {
               problemHighlightType = ProblemHighlightType.INFORMATION;
             }
           }
@@ -228,7 +230,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
       final PsiClassType baseClassType = aClass.getBaseClassType();
       final PsiClassType.ClassResolveResult resolveResult = baseClassType.resolveGenerics();
       final PsiClass baseClass = resolveResult.getElement();
-      if (baseClass == null || !reportNotAnnotatedInterfaces && !AnnotationUtil.isAnnotated(baseClass, JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false)) {
+      if (baseClass == null || !reportNotAnnotatedInterfaces && !AnnotationUtil.isAnnotated(baseClass, CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false)) {
         return false;
       }
       final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(resolveResult);
@@ -470,7 +472,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
   public static boolean functionalInterfaceMethodReferenced(PsiMethod psiMethod, PsiAnonymousClass anonymClass, PsiCallExpression callExpression) {
     if (psiMethod != null && !psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
       final PsiClass containingClass = psiMethod.getContainingClass();
-      if (containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+      if (containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
         return false;
       }
 

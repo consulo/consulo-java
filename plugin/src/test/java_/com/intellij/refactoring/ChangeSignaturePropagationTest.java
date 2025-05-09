@@ -1,36 +1,30 @@
 package com.intellij.refactoring;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.Set;
-
 import com.intellij.JavaTestUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiParameter;
-import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.JavaThrownExceptionInfo;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.changeSignature.ThrownExceptionInfo;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
-import consulo.util.collection.ContainerUtil;
-import java.util.HashSet;
-import consulo.language.editor.TargetElementUtil;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtilEx;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author ven
@@ -133,7 +127,7 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
 
   private void exceptionPropagationTest(final PsiMethod method, final Set<PsiMethod> methodsToPropagateExceptions) throws Exception {
     PsiClassType newExceptionType = JavaPsiFacade.getElementFactory(getProject())
-      .createTypeByFQClassName(JavaClassNames.JAVA_LANG_EXCEPTION, GlobalSearchScope.allScope(getProject()));
+      .createTypeByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, GlobalSearchScope.allScope(getProject()));
     final ThrownExceptionInfo[] newExceptions = new ThrownExceptionInfo[]{new JavaThrownExceptionInfo(-1, newExceptionType)};
     doTest(new ParameterInfoImpl[0], newExceptions, null, methodsToPropagateExceptions, method);
   }

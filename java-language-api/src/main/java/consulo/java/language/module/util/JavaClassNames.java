@@ -15,9 +15,13 @@
  */
 package consulo.java.language.module.util;
 
+import consulo.annotation.DeprecationInfo;
+
 /**
  * @author peter
  */
+@Deprecated
+@DeprecationInfo(value = "Use com.intellij.java.language.psi.CommonClassNames")
 public interface JavaClassNames {
     String DEFAULT_PACKAGE = "java.lang";
     String JAVA_IO_EXTERNALIZABLE = "java.io.Externalizable";

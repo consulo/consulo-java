@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -22,7 +23,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -74,7 +74,7 @@ public class AbstractMethodOverridesConcreteMethodInspection
         }
         final String superClassName = superClass.getQualifiedName();
         if (!superClass.isInterface() &&
-            !JavaClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
+            !CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
             !superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
           registerMethodError(method);
           return;

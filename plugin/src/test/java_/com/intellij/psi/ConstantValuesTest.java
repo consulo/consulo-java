@@ -244,7 +244,7 @@ public abstract class ConstantValuesTest extends PsiTestCase
 		assertNotNull(field);
 		PsiLiteralExpression initializer = (PsiLiteralExpression) field.getInitializer();
 		assertNotNull(initializer);
-		assertTrue(initializer.getType().equalsToText(JavaClassNames.JAVA_LANG_STRING));
+		assertTrue(initializer.getType().equalsToText(CommonClassNames.JAVA_LANG_STRING));
 		assertEquals("a\r\n\"bcd", initializer.getValue());
 		assertEquals("\"a\\r\\n\\\"bcd\"", initializer.getText());
 

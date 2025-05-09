@@ -64,7 +64,6 @@ import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -154,7 +153,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     }
 
     public static boolean isAssignableFrom(@Nonnull final String baseQualifiedName, @Nonnull ReferenceType checkedType) {
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(baseQualifiedName)) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(baseQualifiedName)) {
             return true;
         }
         return getSuperClass(baseQualifiedName, checkedType) != null;

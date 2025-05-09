@@ -15,20 +15,18 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -174,17 +172,15 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
   }
 
   static boolean isIntegerGetInteger(PsiMethodCallExpression expression) {
-    return isCallTo(expression, JavaClassNames.JAVA_LANG_INTEGER,
-                    "getInteger");
+    return isCallTo(expression, CommonClassNames.JAVA_LANG_INTEGER, "getInteger");
   }
 
   static boolean isLongGetLong(PsiMethodCallExpression expression) {
-    return isCallTo(expression, JavaClassNames.JAVA_LANG_LONG, "getLong");
+    return isCallTo(expression, CommonClassNames.JAVA_LANG_LONG, "getLong");
   }
 
   static boolean isBooleanGetBoolean(PsiMethodCallExpression expression) {
-    return isCallTo(expression, JavaClassNames.JAVA_LANG_BOOLEAN,
-                    "getBoolean");
+    return isCallTo(expression, CommonClassNames.JAVA_LANG_BOOLEAN, "getBoolean");
   }
 
   private static boolean isCallTo(PsiMethodCallExpression expression,

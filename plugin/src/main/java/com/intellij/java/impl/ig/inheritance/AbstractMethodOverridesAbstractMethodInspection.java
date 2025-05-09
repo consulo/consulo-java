@@ -165,7 +165,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
       final Set<PsiAnnotation> annotationsSet = new HashSet<PsiAnnotation>(Arrays.asList(superAnnotations));
       for (PsiAnnotation annotation : annotations) {
         final String qualifiedName = annotation.getQualifiedName();
-        if (JavaClassNames.JAVA_LANG_OVERRIDE.equals(qualifiedName)) {
+        if (CommonClassNames.JAVA_LANG_OVERRIDE.equals(qualifiedName)) {
           continue;
         }
         if (!annotationsSet.contains(annotation)) {

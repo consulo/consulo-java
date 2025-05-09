@@ -1,13 +1,13 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.NavigationItem;
-import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
-import static org.junit.Assert.assertThat;
+
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author dsl
@@ -20,7 +20,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
-    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportHidden() throws Exception {
@@ -31,7 +31,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
-    assertEquals(JavaClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportDirect() throws Exception {
@@ -41,7 +41,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
-    assertEquals(JavaClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
     final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
@@ -62,7 +62,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertThat(element, instanceOf(PsiMethod.class));
     final PsiMethod method = (PsiMethod)element;
     assertEquals("sort", method.getName());
-    assertEquals(JavaClassNames.JAVA_UTIL_COLLECTIONS, method.getContainingClass().getQualifiedName());
+    assertEquals(CommonClassNames.JAVA_UTIL_COLLECTIONS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
     final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
@@ -451,12 +451,12 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
 
   public void testExplicitParams1() throws Exception {
     PsiReference ref = configureByFile();
-    assertGenericResolve(ref, "f", new String[] {JavaClassNames.JAVA_LANG_STRING}, JavaClassNames.JAVA_LANG_STRING);
+    assertGenericResolve(ref, "f", new String[] {CommonClassNames.JAVA_LANG_STRING}, CommonClassNames.JAVA_LANG_STRING);
   }
 
   public void testExplicitParams2() throws Exception {
     PsiReference ref = configureByFile();
-    assertGenericResolve(ref, "f", new String[] {JavaClassNames.JAVA_LANG_INTEGER}, "Foo");
+    assertGenericResolve(ref, "f", new String[] {CommonClassNames.JAVA_LANG_INTEGER}, "Foo");
   }
 
   public void testConstructorExplicitParams() throws Exception {

@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.HelpManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -96,7 +95,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
           if (psiType instanceof PsiClassType) {
             type = TypeConversionUtil.erasure(psiType);
           }
-          if (type == null || type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) return "";
+          if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) return "";
           if (type instanceof PsiArrayType) {
             type = type.getDeepComponentType();
           }

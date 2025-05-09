@@ -752,7 +752,7 @@ public class AnnotationUtil {
     for (PsiAnnotation annotation : annotations) {
       map.put(annotation.getQualifiedName(), annotation);
     }
-    map.remove(JavaClassNames.JAVA_LANG_OVERRIDE);
+    map.remove(CommonClassNames.JAVA_LANG_OVERRIDE);
     map.remove("java.lang.SuppressWarnings");
     return map;
   }

@@ -13,28 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 20-Aug-2008
- */
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.VisibilityUtil;
 import consulo.document.FileDocumentManager;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import consulo.ide.impl.idea.util.Function;
-import com.intellij.java.language.util.VisibilityUtil;
-import consulo.java.language.module.util.JavaClassNames;
 
+/**
+ * @author anna
+ * @since 2008-08-20
+ */
 public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
   @Override
   protected String getTestRoot() {
@@ -158,7 +153,7 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
       @Override
       public VariableData[] fun(PsiMethod psiMethod) {
         final PsiParameter parameter = psiMethod.getParameterList().getParameters()[0];
-        final PsiClass collectionClass = getJavaFacade().findClass(JavaClassNames.JAVA_UTIL_COLLECTION);
+        final PsiClass collectionClass = getJavaFacade().findClass(CommonClassNames.JAVA_UTIL_COLLECTION);
         final VariableData variableData =
           new VariableData(parameter, JavaPsiFacade.getElementFactory(getProject()).createType(collectionClass));
         variableData.name = parameter.getName();
