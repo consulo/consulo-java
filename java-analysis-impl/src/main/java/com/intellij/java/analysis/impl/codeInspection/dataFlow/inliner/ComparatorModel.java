@@ -20,6 +20,8 @@ import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.ObjectUtil;
 
 import jakarta.annotation.Nonnull;
@@ -136,19 +138,17 @@ abstract class ComparatorModel {
     }
 
     @Nonnull
+    @RequiredReadAction
     static ComparatorModel from(@Nullable PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);
         if (expression == null || NULL_HOSTILE.matches(expression)) {
             return new NullHostile();
         }
-        if (expression instanceof PsiReferenceExpression) {
-            PsiReferenceExpression ref = (PsiReferenceExpression)expression;
-            if ("CASE_INSENSITIVE_ORDER".equals(ref.getReferenceName())) {
-                PsiField field = ObjectUtil.tryCast(ref.resolve(), PsiField.class);
-                if (field != null && field.getContainingClass() != null &&
-                    CommonClassNames.JAVA_LANG_STRING.equals(field.getContainingClass().getQualifiedName())) {
-                    return new NullHostile();
-                }
+        if (expression instanceof PsiReferenceExpression ref && "CASE_INSENSITIVE_ORDER".equals(ref.getReferenceName())) {
+            PsiField field = ObjectUtil.tryCast(ref.resolve(), PsiField.class);
+            if (field != null && field.getContainingClass() != null
+                && JavaClassNames.JAVA_LANG_STRING.equals(field.getContainingClass().getQualifiedName())) {
+                return new NullHostile();
             }
         }
         PsiMethodCallExpression call = ObjectUtil.tryCast(expression, PsiMethodCallExpression.class);

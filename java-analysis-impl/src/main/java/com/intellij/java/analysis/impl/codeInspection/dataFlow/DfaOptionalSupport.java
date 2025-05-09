@@ -7,29 +7,29 @@ import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.intention.CommonQuickFixBundle;
+import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
  * @author anet, peter
  */
 public final class DfaOptionalSupport {
-
     @Nullable
     public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@Nonnull PsiExpression qualifier) {
-        final PsiMethodCallExpression call = findCallExpression(qualifier);
-        final PsiMethod method = call == null ? null : call.resolveMethod();
-        final PsiClass containingClass = method == null ? null : method.getContainingClass();
+        PsiMethodCallExpression call = findCallExpression(qualifier);
+        PsiMethod method = call == null ? null : call.resolveMethod();
+        PsiClass containingClass = method == null ? null : method.getContainingClass();
         if (containingClass != null && "of".equals(method.getName())) {
-            final String qualifiedName = containingClass.getQualifiedName();
-            if (CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
+            String qualifiedName = containingClass.getQualifiedName();
+            if (JavaClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
                 return new ReplaceOptionalCallFix("ofNullable", false);
             }
             if (OptionalUtil.GUAVA_OPTIONAL.equals(qualifiedName)) {
@@ -40,11 +40,10 @@ public final class DfaOptionalSupport {
     }
 
     private static PsiMethodCallExpression findCallExpression(@Nonnull PsiElement anchor) {
-        final PsiElement argList = PsiUtil.skipParenthesizedExprUp(anchor).getParent();
-        if (argList instanceof PsiExpressionList) {
-            final PsiElement parent = argList.getParent();
-            if (parent instanceof PsiMethodCallExpression) {
-                return (PsiMethodCallExpression)parent;
+        if (PsiUtil.skipParenthesizedExprUp(anchor).getParent() instanceof PsiExpressionList argList) {
+            PsiElement parent = argList.getParent();
+            if (parent instanceof PsiMethodCallExpression methodCall) {
+                return methodCall;
             }
         }
         return null;
@@ -52,7 +51,7 @@ public final class DfaOptionalSupport {
 
     @Nullable
     public static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(@Nonnull PsiElement anchor) {
-        final PsiMethodCallExpression parent = findCallExpression(anchor);
+        PsiMethodCallExpression parent = findCallExpression(anchor);
         if (parent == null) {
             return null;
         }
@@ -62,7 +61,7 @@ public final class DfaOptionalSupport {
 
     @Nullable
     public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@Nonnull PsiElement anchor) {
-        final PsiMethodCallExpression parent = findCallExpression(anchor);
+        PsiMethodCallExpression parent = findCallExpression(anchor);
         if (parent == null) {
             return null;
         }
@@ -85,7 +84,7 @@ public final class DfaOptionalSupport {
         private final String myTargetMethodName;
         private final boolean myClearArguments;
 
-        ReplaceOptionalCallFix(final String targetMethodName, boolean clearArguments) {
+        ReplaceOptionalCallFix(String targetMethodName, boolean clearArguments) {
             myTargetMethodName = targetMethodName;
             myClearArguments = clearArguments;
         }
@@ -93,12 +92,13 @@ public final class DfaOptionalSupport {
         @Nonnull
         @Override
         public String getFamilyName() {
-            return CommonQuickFixBundle.message("fix.replace.with.x", "." + myTargetMethodName + "()");
+            return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()").get();
         }
 
         @Override
+        @RequiredReadAction
         public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-            final PsiMethodCallExpression
+            PsiMethodCallExpression
                 methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
             if (methodCallExpression != null) {
                 ExpressionUtils.bindCallTo(methodCallExpression, myTargetMethodName);
