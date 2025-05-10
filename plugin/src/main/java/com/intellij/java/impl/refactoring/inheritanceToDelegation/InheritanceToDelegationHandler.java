@@ -32,7 +32,6 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -106,7 +105,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
 
     final PsiClass[] bases = aClass.getSupers();
-    @NonNls final String javaLangObject = JavaClassNames.JAVA_LANG_OBJECT;
+    @NonNls final String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
       LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
         RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName())

@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -76,7 +75,7 @@ public class IterableComponentTypeMacro extends Macro {
       PsiClass aClass = resolveResult.getElement();
 
       if (aClass != null) {
-        PsiClass iterableClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_ITERABLE, aClass.getResolveScope());
+        PsiClass iterableClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_ITERABLE, aClass.getResolveScope());
         if (iterableClass != null) {
           PsiSubstitutor substitutor = TypeConversionUtil.getClassSubstitutor(iterableClass, aClass, resolveResult.getSubstitutor());
           if (substitutor != null) {

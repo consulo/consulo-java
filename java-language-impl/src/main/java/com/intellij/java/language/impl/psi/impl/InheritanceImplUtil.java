@@ -19,16 +19,15 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.JavaClassSupers;
 import consulo.application.progress.ProgressIndicatorProvider;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,11 +47,11 @@ public class InheritanceImplUtil {
   }
 
   static boolean hasObjectQualifiedName(@Nonnull PsiClass candidateClass) {
-    if (!JavaClassNames.JAVA_LANG_OBJECT_SHORT.equals(candidateClass.getName())) {
+    if (!CommonClassNames.JAVA_LANG_OBJECT_SHORT.equals(candidateClass.getName())) {
       return false;
     }
     PsiElement parent = candidateClass.getParent();
-    return parent instanceof PsiJavaFile && JavaClassNames.DEFAULT_PACKAGE.equals(((PsiJavaFile) parent).getPackageName());
+    return parent instanceof PsiJavaFile && CommonClassNames.DEFAULT_PACKAGE.equals(((PsiJavaFile) parent).getPackageName());
   }
 
   private static boolean isInheritor(@Nonnull PsiManager manager, @Nonnull PsiClass candidateClass, @Nonnull PsiClass baseClass, boolean checkDeep, @Nullable Set<PsiClass> checkedClasses) {
@@ -72,7 +71,7 @@ public class InheritanceImplUtil {
 
     JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
     if (hasObjectQualifiedName(baseClass)) {
-      PsiClass objectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, candidateClass.getResolveScope());
+      PsiClass objectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, candidateClass.getResolveScope());
       if (manager.areElementsEquivalent(baseClass, objectClass)) {
         if (manager.areElementsEquivalent(candidateClass, objectClass)) {
           return false;
@@ -91,10 +90,10 @@ public class InheritanceImplUtil {
           return false;
         }
 
-        if (JavaClassNames.JAVA_LANG_ENUM.equals(baseQName) && candidateClass.isEnum()) {
+        if (CommonClassNames.JAVA_LANG_ENUM.equals(baseQName) && candidateClass.isEnum()) {
           return facade.findClass(baseQName, candidateClass.getResolveScope()) != null;
         }
-        if (JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseQName) && candidateClass.isAnnotationType()) {
+        if (CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseQName) && candidateClass.isAnnotationType()) {
           return facade.findClass(baseQName, candidateClass.getResolveScope()) != null;
         }
 

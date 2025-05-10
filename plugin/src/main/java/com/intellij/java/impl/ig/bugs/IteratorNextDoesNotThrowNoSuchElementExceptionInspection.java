@@ -15,19 +15,16 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import com.intellij.java.language.psi.*;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
 import com.intellij.java.impl.ig.psiutils.IteratorUtils;
+import com.intellij.java.language.psi.*;
+import com.siyeh.HardcodedMethodConstants;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
-import consulo.java.language.module.util.JavaClassNames;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 import java.util.Set;
@@ -65,8 +62,7 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
-      if (!MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_ITERATOR, null,
-                                     HardcodedMethodConstants.NEXT)) {
+      if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
         return;
       }
       final Set<PsiClassType> exceptions =

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.impl.ig.psiutils.IteratorUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.BaseInspection;
@@ -23,7 +24,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -52,8 +52,7 @@ public class IteratorHasNextCallsIteratorNextInspection
     public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       @NonNls final String name = method.getName();
-      if (!MethodUtils.methodMatches(method, JavaClassNames.JAVA_UTIL_ITERATOR, null,
-                                     HardcodedMethodConstants.HAS_NEXT)) {
+      if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.HAS_NEXT)) {
         return;
       }
       if (!IteratorUtils.containsCallToIteratorNext(method, null, true)) {

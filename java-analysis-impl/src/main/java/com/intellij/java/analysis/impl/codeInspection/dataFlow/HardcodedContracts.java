@@ -10,14 +10,13 @@ import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SyntaxTraverser;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.*;
@@ -528,7 +527,7 @@ public final class HardcodedContracts {
     }
     String name = method.getName();
 
-    if (JavaClassNames.JAVA_UTIL_OBJECTS.equals(className) && "requireNonNull".equals(name)) {
+    if (CommonClassNames.JAVA_UTIL_OBJECTS.equals(className) && "requireNonNull".equals(name)) {
       PsiParameter[] parameters = method.getParameterList().getParameters();
       if (parameters.length == 2 && parameters[1].getType().getCanonicalText().contains("Supplier")) {
         return MutationSignature.unknown();

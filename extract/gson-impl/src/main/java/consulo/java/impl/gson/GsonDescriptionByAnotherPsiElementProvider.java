@@ -27,7 +27,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.RecursionManager;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.json.validation.NativeArray;
 import consulo.json.validation.descriptionByAnotherPsiElement.DescriptionByAnotherPsiElementProvider;
 import consulo.json.validation.descriptor.JsonObjectDescriptor;
@@ -37,7 +36,6 @@ import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -137,21 +135,21 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
       PsiClass psiClass = classResolveResult.getElement();
       if (psiClass != null) {
         String qualifiedName = psiClass.getQualifiedName();
-        if (JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+        if (CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
           return new PropertyType(String.class);
-        } else if (JavaClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicBoolean".equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicBoolean".equals(qualifiedName)) {
           return new PropertyType(Boolean.class);
-        } else if (JavaClassNames.JAVA_LANG_BYTE.equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_BYTE.equals(qualifiedName)) {
           return new PropertyType(Number.class);
-        } else if (JavaClassNames.JAVA_LANG_SHORT.equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_SHORT.equals(qualifiedName)) {
           return new PropertyType(Number.class);
-        } else if (JavaClassNames.JAVA_LANG_INTEGER.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicInteger".equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_INTEGER.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicInteger".equals(qualifiedName)) {
           return new PropertyType(Number.class);
-        } else if (JavaClassNames.JAVA_LANG_LONG.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicLong".equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_LONG.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicLong".equals(qualifiedName)) {
           return new PropertyType(Number.class);
-        } else if (JavaClassNames.JAVA_LANG_FLOAT.equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName)) {
           return new PropertyType(Number.class);
-        } else if (JavaClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicDouble".equals(qualifiedName)) {
+        } else if (CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicDouble".equals(qualifiedName)) {
           return new PropertyType(Number.class);
         } else if ("java.util.concurrent.atomic.AtomicIntegerArray".equals(qualifiedName)) {
           return new PropertyType(new NativeArray(Number.class));
@@ -161,7 +159,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
           return new PropertyType(new NativeArray(Number.class));
         }
 
-        PsiClass collectionClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
+        PsiClass collectionClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
         if (collectionClass != null) {
           if (InheritanceUtil.isInheritorOrSelf(psiClass, collectionClass, true)) {
             PsiSubstitutor superClassSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(collectionClass, psiClass, classResolveResult.getSubstitutor());
@@ -177,7 +175,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
           }
         }
 
-        PsiClass mapClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_MAP, GlobalSearchScope.allScope(project));
+        PsiClass mapClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_MAP, GlobalSearchScope.allScope(project));
         if (mapClass != null) {
           if (InheritanceUtil.isInheritorOrSelf(psiClass, mapClass, true)) {
             PsiSubstitutor superClassSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(mapClass, psiClass, classResolveResult.getSubstitutor());

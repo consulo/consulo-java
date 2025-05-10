@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ipp.forloop;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.ast.IElementType;
-import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 
 class IndexedForEachLoopPredicate implements PsiElementPredicate {
 
@@ -59,11 +58,9 @@ class IndexedForEachLoopPredicate implements PsiElementPredicate {
       final Project project = element.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final PsiClass listInterface =
-        psiFacade.findClass(JavaClassNames.JAVA_UTIL_LIST,
-                            GlobalSearchScope.allScope(project));
+        psiFacade.findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
       if (listInterface == null ||
-          !InheritanceUtil.isInheritorOrSelf(aClass,
-                                             listInterface, true)) {
+          !InheritanceUtil.isInheritorOrSelf(aClass, listInterface, true)) {
         return false;
       }
     }

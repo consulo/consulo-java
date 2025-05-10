@@ -19,7 +19,6 @@ import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -73,8 +72,8 @@ public class IterableVariableMacro extends VariableTypeMacroBase {
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     final GlobalSearchScope scope = file.getResolveScope();
 
-    PsiType iterableType = elementFactory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_ITERABLE, scope);
-    PsiType mapType = elementFactory.createTypeByFQClassName(JavaClassNames.JAVA_UTIL_MAP, scope);
+    PsiType iterableType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ITERABLE, scope);
+    PsiType mapType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_UTIL_MAP, scope);
 
     PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
     for (PsiVariable var : variables) {

@@ -19,20 +19,19 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.psi.util.TypesDistinctProver;
-import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+
 import java.util.*;
 
 /**
@@ -88,11 +87,11 @@ public class GenericsUtil {
       final PsiType componentType1 = ((PsiArrayType) type1).getComponentType();
       final PsiType componentType2 = ((PsiArrayType) type2).getComponentType();
       final PsiType componentType = getLeastUpperBound(componentType1, componentType2, compared, manager);
-      if (componentType1 instanceof PsiPrimitiveType && componentType2 instanceof PsiPrimitiveType && componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+      if (componentType1 instanceof PsiPrimitiveType && componentType2 instanceof PsiPrimitiveType && componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
         final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
         final GlobalSearchScope resolveScope = GlobalSearchScope.allScope(manager.getProject());
-        final PsiClassType cloneable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_CLONEABLE, resolveScope);
-        final PsiClassType serializable = factory.createTypeByFQClassName(JavaClassNames.JAVA_IO_SERIALIZABLE, resolveScope);
+        final PsiClassType cloneable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, resolveScope);
+        final PsiClassType serializable = factory.createTypeByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, resolveScope);
         return PsiIntersectionType.createIntersection(componentType, cloneable, serializable);
       }
       return componentType.createArrayType();
@@ -163,8 +162,8 @@ public class GenericsUtil {
     if (type1 instanceof PsiArrayType) {
       PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
       GlobalSearchScope all = GlobalSearchScope.allScope(manager.getProject());
-      PsiClassType serializable = factory.createTypeByFQClassName(JavaClassNames.JAVA_IO_SERIALIZABLE, all);
-      PsiClassType cloneable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_CLONEABLE, all);
+      PsiClassType serializable = factory.createTypeByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, all);
+      PsiClassType cloneable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, all);
       PsiType arraySupers = PsiIntersectionType.createIntersection(serializable, cloneable);
       return getLeastUpperBound(arraySupers, type2, compared, manager);
     }
@@ -342,7 +341,7 @@ public class GenericsUtil {
             }
             return acceptedBound;
           }
-          if (wildcardType.isExtends() && acceptedBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+          if (wildcardType.isExtends() && acceptedBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
             return PsiWildcardType.createUnbounded(manager);
           }
           if (acceptedBound.equals(bound)) {

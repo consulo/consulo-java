@@ -33,7 +33,6 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -109,7 +108,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     myBaseClass = targetBaseClass;
     LOG.assertTrue(
       myBaseClass != null // && !myBaseClass.isInterface()
-        && (myBaseClass.getQualifiedName() == null || !myBaseClass.getQualifiedName().equals(JavaClassNames.JAVA_LANG_OBJECT))
+        && (myBaseClass.getQualifiedName() == null || !myBaseClass.getQualifiedName().equals(CommonClassNames.JAVA_LANG_OBJECT))
     );
     myBaseClassMembers = getAllBaseClassMembers();
     myBaseClassBases = getAllBases();
@@ -197,7 +196,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
       if (objectUpcastedUsageInfos.length > 0) {
         final LocalizeValue message = RefactoringLocalize.instancesOf0UpcastedTo1WereFound(
           RefactoringUIUtil.getDescription(myClass, true),
-          CommonRefactoringUtil.htmlEmphasize(JavaClassNames.JAVA_LANG_OBJECT)
+          CommonRefactoringUtil.htmlEmphasize(CommonClassNames.JAVA_LANG_OBJECT)
         );
 
         conflicts.putValue(myClass, message.get());
@@ -231,7 +230,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     HashMap<PsiClass, HashSet<PsiElement>> reportedUpcasts = new HashMap<PsiClass, HashSet<PsiElement>>();
     //    HashSet reportedObjectUpcasts = new HashSet();
 
-    //    final String nameJavaLangObject = ConflictsUtil.htmlEmphasize(JavaClassNames.JAVA_LANG_OBJECT);
+    //    final String nameJavaLangObject = ConflictsUtil.htmlEmphasize(CommonClassNames.JAVA_LANG_OBJECT);
     final String classDescription = RefactoringUIUtil.getDescription(myClass, false);
 
     for (UsageInfo aUsage : usage) {
@@ -908,7 +907,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
       PsiClass containingClass = superMethod.getContainingClass();
       if (InheritanceUtil.isInheritorOrSelf(myBaseClass, containingClass, true)) {
         String qName = containingClass.getQualifiedName();
-        if (qName == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) {
+        if (qName == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) {
           return superMethod;
         }
       }
@@ -930,7 +929,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     //remove java.lang.Object members
     for (Iterator<PsiMember> iterator = result.iterator(); iterator.hasNext(); ) {
       PsiMember member = iterator.next();
-      if (JavaClassNames.JAVA_LANG_OBJECT.equals(member.getContainingClass().getQualifiedName())) {
+      if (CommonClassNames.JAVA_LANG_OBJECT.equals(member.getContainingClass().getQualifiedName())) {
         iterator.remove();
       }
     }
@@ -1224,7 +1223,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         return;
       }
       String qName = aClass.getQualifiedName();
-      if (qName != null && JavaClassNames.JAVA_LANG_OBJECT.equals(qName)) {
+      if (qName != null && CommonClassNames.JAVA_LANG_OBJECT.equals(qName)) {
         myUsageInfoStorage.add(new ObjectUpcastedUsageInfo(instanceRef, aClass, getFieldAccessibility(instanceRef)));
       } else {
         if (myBaseClassBases.contains(aClass)

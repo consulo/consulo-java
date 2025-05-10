@@ -27,7 +27,6 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -361,7 +360,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
         return false;
       }
       final String className = aClass.getQualifiedName();
-      return JavaClassNames.JAVA_LANG_STRING.equals(className);
+      return CommonClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 

@@ -45,7 +45,6 @@ import com.intellij.java.language.psi.util.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
@@ -832,7 +831,7 @@ public class HighlightUtil extends HighlightUtilBase {
             PsiType arrayComponentType = arrayType.getComponentType();
             if (!(arrayComponentType instanceof PsiPrimitiveType)
                 && !(PsiUtil.resolveClassInType(arrayComponentType) instanceof PsiTypeParameter)
-                && InheritanceUtil.isInheritor(fromType, JavaClassNames.JAVA_UTIL_COLLECTION)) {
+                && InheritanceUtil.isInheritor(fromType, CommonClassNames.JAVA_UTIL_COLLECTION)) {
                 PsiType collectionItemType = JavaGenericsUtil.getCollectionItemType(fromType, expression.getResolveScope());
                 if (collectionItemType != null && arrayComponentType.isAssignableFrom(collectionItemType)) {
                     hlBuilder.registerFix(QuickFixFactory.getInstance().createCollectionToArrayFix(expression, arrayType));
@@ -1878,7 +1877,7 @@ public class HighlightUtil extends HighlightUtilBase {
             if (psiClass.isEnum()) {
                 return SelectorKind.ENUM;
             }
-            if (Comparing.strEqual(psiClass.getQualifiedName(), JavaClassNames.JAVA_LANG_STRING)) {
+            if (Comparing.strEqual(psiClass.getQualifiedName(), CommonClassNames.JAVA_LANG_STRING)) {
                 return SelectorKind.STRING;
             }
         }
@@ -2256,7 +2255,7 @@ public class HighlightUtil extends HighlightUtilBase {
         }
 
         PsiElementFactory factory = JavaPsiFacade.getInstance(resource.getProject()).getElementFactory();
-        PsiClassType autoCloseable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, resource.getResolveScope());
+        PsiClassType autoCloseable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, resource.getResolveScope());
         if (TypeConversionUtil.isAssignable(autoCloseable, type)) {
             return null;
         }
@@ -3394,7 +3393,7 @@ public class HighlightUtil extends HighlightUtilBase {
             return null;
         }
         PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
-        PsiClassType throwable = factory.createTypeByFQClassName(JavaClassNames.JAVA_LANG_THROWABLE, context.getResolveScope());
+        PsiClassType throwable = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE, context.getResolveScope());
         if (!TypeConversionUtil.isAssignable(throwable, type)) {
             HighlightInfo.Builder hlBuilder = createIncompatibleTypeHighlightInfo(throwable, type, context.getTextRange(), 0);
             if (addCastIntention && TypeConversionUtil.areTypesConvertible(type, throwable)

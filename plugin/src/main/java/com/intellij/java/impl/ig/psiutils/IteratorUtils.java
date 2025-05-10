@@ -16,12 +16,11 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.PsiElement;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
+
 import java.util.regex.Pattern;
 
 public class IteratorUtils {
@@ -55,8 +54,7 @@ public class IteratorUtils {
 
   public static boolean isCallToHasNext(
       PsiMethodCallExpression methodCallExpression) {
-    return MethodCallUtils.isCallToMethod(methodCallExpression,
-        JavaClassNames.JAVA_UTIL_ITERATOR, PsiType.BOOLEAN, "hasNext");
+    return MethodCallUtils.isCallToMethod(methodCallExpression, CommonClassNames.JAVA_UTIL_ITERATOR, PsiType.BOOLEAN, "hasNext");
   }
 
   private static class CallsIteratorNextVisitor
@@ -92,17 +90,11 @@ public class IteratorUtils {
       }
       super.visitMethodCallExpression(expression);
       if (checkScanner) {
-        if (!MethodCallUtils.isCallToMethod(expression,
-            JavaClassNames.JAVA_UTIL_ITERATOR, null,
-            SCANNER_PATTERN)) {
+        if (!MethodCallUtils.isCallToMethod(expression, CommonClassNames.JAVA_UTIL_ITERATOR, null, SCANNER_PATTERN)) {
           return;
         }
-      } else {
-        if (!MethodCallUtils.isCallToMethod(expression,
-            JavaClassNames.JAVA_UTIL_ITERATOR, null,
-            HardcodedMethodConstants.NEXT)) {
-          return;
-        }
+      } else if (!MethodCallUtils.isCallToMethod(expression, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
+        return;
       }
       if (checkTarget) {
         final PsiReferenceExpression methodExpression =

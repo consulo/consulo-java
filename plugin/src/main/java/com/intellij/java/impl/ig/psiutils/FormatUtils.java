@@ -16,11 +16,10 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,10 +40,10 @@ public class FormatUtils {
     formatMethodNames.add("format");
     formatMethodNames.add("printf");
 
-    formatClassNames.add(JavaClassNames.JAVA_IO_PRINT_WRITER);
-    formatClassNames.add(JavaClassNames.JAVA_IO_PRINT_STREAM);
+    formatClassNames.add(CommonClassNames.JAVA_IO_PRINT_WRITER);
+    formatClassNames.add(CommonClassNames.JAVA_IO_PRINT_STREAM);
     formatClassNames.add("java.util.Formatter");
-    formatClassNames.add(JavaClassNames.JAVA_LANG_STRING);
+    formatClassNames.add(CommonClassNames.JAVA_LANG_STRING);
   }
 
   private FormatUtils() {}

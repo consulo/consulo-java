@@ -14,7 +14,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -421,7 +420,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
             PsiAnnotation annotation = !method.isConstructor()
-                ? AnnotationUtil.findAnnotation(method, JavaClassNames.JAVA_LANG_OVERRIDE) : null;
+                ? AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE) : null;
             if (annotation != null) {
                 Module module = annotation.getModule();
                 LanguageLevel sinceLanguageLevel = null;

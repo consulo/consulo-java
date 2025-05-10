@@ -15,33 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import consulo.util.lang.Pair;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.GenericsUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.java.language.psi.PsiWildcardType;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.ConstraintFormula;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.StrictSubtypingConstraint;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.TypeCompatibilityConstraint;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.util.function.Processor;
-import consulo.util.lang.SystemProperties;
-import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.SystemProperties;
+
+import java.util.*;
 
 /**
  * User: anna
@@ -237,11 +224,11 @@ public class InferenceIncorporationPhase
 						{
 							if(mySession.getInferenceVariable(upperBound) == null)
 							{
-								if(paramBounds.length == 1 && paramBounds[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT) || paramBounds.length == 0)
+								if(paramBounds.length == 1 && paramBounds[0].equalsToText(CommonClassNames.JAVA_LANG_OBJECT) || paramBounds.length == 0)
 								{
 									addConstraint(new StrictSubtypingConstraint(upperBound, extendsBound));
 								}
-								else if(extendsBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && glb != null)
+								else if(extendsBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) && glb != null)
 								{
 									addConstraint(new StrictSubtypingConstraint(upperBound, mySession.substituteWithInferenceVariables(glb)));
 								}

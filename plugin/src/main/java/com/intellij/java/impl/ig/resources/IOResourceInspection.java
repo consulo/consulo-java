@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -182,7 +181,7 @@ public class IOResourceInspection extends ResourceInspection {
     if (qualifier == null) {
       return false;
     }
-    return TypeUtils.expressionHasTypeOrSubtype(qualifier, JavaClassNames.JAVA_LANG_CLASS, "java.lang.ClassLoader") != null;
+    return TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_LANG_CLASS, "java.lang.ClassLoader") != null;
   }
 
   public boolean isIOResource(PsiExpression expression) {
