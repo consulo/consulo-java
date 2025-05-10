@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
@@ -36,6 +35,7 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
@@ -46,8 +46,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
-import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 /*
  * Class SetValueAction
@@ -91,13 +89,15 @@ public abstract class JavaValueModifier extends XValueModifier {
     }
 
     protected static void update(final DebuggerContextImpl context) {
-        DebuggerInvocationUtil.swingInvokeLater(context.getProject(), () ->
-        {
-            final DebuggerSession session = context.getDebuggerSession();
-            if (session != null) {
-                session.refresh(false);
+        DebuggerInvocationUtil.swingInvokeLater(
+            context.getProject(),
+            () -> {
+                DebuggerSession session = context.getDebuggerSession();
+                if (session != null) {
+                    session.refresh(false);
+                }
             }
-        });
+        );
     }
 
     protected abstract void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback);
@@ -110,7 +110,7 @@ public abstract class JavaValueModifier extends XValueModifier {
         }
 
         if (myJavaValue.getEvaluationContext().getSuspendContext().isResumed()) {
-            callback.errorOccurred(DebuggerBundle.message("error.context.has.changed"));
+            callback.errorOccurred(JavaDebuggerLocalize.errorContextHasChanged().get());
             return;
         }
 
@@ -118,14 +118,14 @@ public abstract class JavaValueModifier extends XValueModifier {
     }
 
     protected static Value preprocessValue(EvaluationContextImpl context, Value value, Type varType) throws EvaluateException {
-        if (value != null && JAVA_LANG_STRING.equals(varType.name()) && !(value instanceof StringReference)) {
+        if (value != null && CommonClassNames.JAVA_LANG_STRING.equals(varType.name()) && !(value instanceof StringReference)) {
             String v = DebuggerUtils.getValueAsString(context, value);
             if (v != null) {
                 value = context.getSuspendContext().getDebugProcess().getVirtualMachineProxy().mirrorOf(v);
             }
         }
-        if (value instanceof DoubleValue) {
-            double dValue = ((DoubleValue) value).doubleValue();
+        if (value instanceof DoubleValue doubleValue) {
+            double dValue = doubleValue.doubleValue();
             if (varType instanceof FloatType && Float.MIN_VALUE <= dValue && dValue <= Float.MAX_VALUE) {
                 value = context.getSuspendContext().getDebugProcess().getVirtualMachineProxy().mirrorOf((float) dValue);
             }
@@ -163,7 +163,7 @@ public abstract class JavaValueModifier extends XValueModifier {
             throw EvaluateExceptionUtil.createEvaluateException(ex.getMessage());
         }
         catch (InvalidTypeException ex) {
-            throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.type.mismatch"));
+            throw EvaluateExceptionUtil.createEvaluateException(JavaDebuggerLocalize.evaluationErrorTypeMismatch().get());
         }
         catch (IncompatibleThreadStateException e) {
             throw EvaluateExceptionUtil.createEvaluateException(e);
@@ -172,7 +172,7 @@ public abstract class JavaValueModifier extends XValueModifier {
             if (!evaluationContext.isAutoLoadClasses()) {
                 throw EvaluateExceptionUtil.createEvaluateException(ex);
             }
-            final ReferenceType refType;
+            ReferenceType refType;
             try {
                 refType = setValueRunnable.loadClass(evaluationContext, ex.className());
                 if (refType != null) {

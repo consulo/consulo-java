@@ -24,7 +24,6 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -33,8 +32,8 @@ import consulo.util.lang.StringUtil;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.actions.generate.DomTemplateRunner;
 import consulo.xml.util.xml.ui.actions.generate.CreateDomElementAction;
-
 import jakarta.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -22,19 +22,18 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 
+import consulo.platform.base.icon.PlatformIconGroup;
 import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static consulo.java.language.module.util.JavaClassNames.*;
 
 /**
  * @author peter
@@ -44,18 +43,18 @@ class CollectConversion {
   static void addCollectConversion(PsiReferenceExpression ref,
                                    Collection<ExpectedTypeInfo> expectedTypes,
                                    Consumer<LookupElement> consumer) {
-    final PsiExpression qualifier = ref.getQualifierExpression();
+    PsiExpression qualifier = ref.getQualifierExpression();
     PsiType component = qualifier == null ? null : PsiUtil.substituteTypeParameter(qualifier.getType(),
-        JAVA_UTIL_STREAM_STREAM, 0, true);
+        CommonClassNames.JAVA_UTIL_STREAM_STREAM, 0, true);
     if (component == null) {
       return;
     }
 
     JavaPsiFacade facade = JavaPsiFacade.getInstance(ref.getProject());
     GlobalSearchScope scope = ref.getResolveScope();
-    PsiClass list = facade.findClass(JAVA_UTIL_LIST, scope);
-    PsiClass set = facade.findClass(JAVA_UTIL_SET, scope);
-    if (facade.findClass(JAVA_UTIL_STREAM_COLLECTORS, scope) == null || list == null || set == null) {
+    PsiClass list = facade.findClass(CommonClassNames.JAVA_UTIL_LIST, scope);
+    PsiClass set = facade.findClass(CommonClassNames.JAVA_UTIL_SET, scope);
+    if (facade.findClass(CommonClassNames.JAVA_UTIL_STREAM_COLLECTORS, scope) == null || list == null || set == null) {
       return;
     }
 
@@ -110,10 +109,11 @@ class CollectConversion {
     public void renderElement(LookupElementPresentation presentation) {
       super.renderElement(presentation);
       presentation.setTypeText(myTypeText);
-      presentation.setIcon(AllIcons.Nodes.Method);
+      presentation.setIcon(PlatformIconGroup.nodesMethod());
     }
 
     @Override
+    @RequiredReadAction
     public void handleInsert(InsertionContext context) {
       context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), getInsertString());
       context.commitDocument();
@@ -134,7 +134,7 @@ class CollectConversion {
 
     @Nonnull
     private String getInsertString() {
-      return "collect(" + JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";
+      return "collect(" + CommonClassNames.JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";
     }
 
     @Override

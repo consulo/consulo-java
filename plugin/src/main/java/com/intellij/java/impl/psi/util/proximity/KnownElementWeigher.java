@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.psi.util.proximity;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
@@ -36,18 +37,26 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-import static consulo.java.language.module.util.JavaClassNames.*;
-
 /**
  * @author peter
  */
 @ExtensionImpl(id = "knownElement", order = "after sameModule, before sdkOrLibrary")
 public class KnownElementWeigher extends ProximityWeigher {
-    private static final Set<String> POPULAR_JDK_CLASSES = Set.of(JAVA_LANG_STRING, JAVA_LANG_CLASS, System.class.getName(), JAVA_LANG_RUNNABLE, JAVA_LANG_EXCEPTION,
-        JAVA_LANG_THROWABLE, JAVA_LANG_RUNTIME_EXCEPTION, JAVA_UTIL_ARRAY_LIST, JAVA_UTIL_HASH_MAP, JAVA_UTIL_HASH_SET);
+    private static final Set<String> POPULAR_JDK_CLASSES = Set.of(
+        CommonClassNames.JAVA_LANG_STRING,
+        CommonClassNames.JAVA_LANG_CLASS,
+        System.class.getName(),
+        CommonClassNames.JAVA_LANG_RUNNABLE,
+        CommonClassNames.JAVA_LANG_EXCEPTION,
+        CommonClassNames.JAVA_LANG_THROWABLE,
+        CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+        CommonClassNames.JAVA_UTIL_ARRAY_LIST,
+        CommonClassNames.JAVA_UTIL_HASH_MAP,
+        CommonClassNames.JAVA_UTIL_HASH_SET
+    );
 
     @Override
-    public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+    public Comparable weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
         Project project = location.getProject();
         if (project == null) {
             return 0;
@@ -66,15 +75,15 @@ public class KnownElementWeigher extends ProximityWeigher {
             return getJdkClassProximity((PsiClass) element);
         }
         if (element instanceof PsiMethod) {
-            final PsiMethod method = (PsiMethod) element;
-            final PsiClass containingClass = method.getContainingClass();
+            PsiMethod method = (PsiMethod) element;
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass != null) {
                 String methodName = method.getName();
                 if ("finalize".equals(methodName)
                     || "registerNatives".equals(methodName)
                     || methodName.startsWith("wait")
                     || methodName.startsWith("notify")) {
-                    if (JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+                    if (CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
                         return -1;
                     }
                 }
@@ -82,11 +91,11 @@ public class KnownElementWeigher extends ProximityWeigher {
                     return -1;
                 }
                 if ("subSequence".equals(methodName)) {
-                    if (JAVA_LANG_STRING.equals(containingClass.getQualifiedName())) {
+                    if (CommonClassNames.JAVA_LANG_STRING.equals(containingClass.getQualifiedName())) {
                         return -1;
                     }
                 }
-                if (JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+                if (CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
                     return 0;
                 }
                 return getJdkClassProximity(method.getContainingClass());
@@ -98,8 +107,8 @@ public class KnownElementWeigher extends ProximityWeigher {
         return 0;
     }
 
-    public static boolean isSdkElement(PsiElement element, @Nonnull final Project project) {
-        final VirtualFile file = PsiUtilCore.getVirtualFile(element);
+    public static boolean isSdkElement(PsiElement element, @Nonnull Project project) {
+        VirtualFile file = PsiUtilCore.getVirtualFile(element);
         if (file != null) {
             List<OrderEntry> orderEntries = ProjectRootManager.getInstance(project).getFileIndex().getOrderEntriesForFile(file);
             if (!orderEntries.isEmpty() && orderEntries.get(0) instanceof ModuleExtensionWithSdkOrderEntry) {
@@ -112,7 +121,7 @@ public class KnownElementWeigher extends ProximityWeigher {
     @Nullable
     private static Integer getTestFrameworkWeight(@Nonnull PsiElement element, @Nonnull ProximityLocation location, @Nonnull Project project) {
         if (element instanceof PsiClass) {
-            final String qualifiedName = ((PsiClass) element).getQualifiedName();
+            String qualifiedName = ((PsiClass) element).getQualifiedName();
             if (qualifiedName != null) {
                 if (qualifiedName.startsWith("org.testng.internal")) {
                     return -1;
@@ -135,10 +144,10 @@ public class KnownElementWeigher extends ProximityWeigher {
             return 0;
         }
 
-        final String qname = element.getQualifiedName();
+        String qname = element.getQualifiedName();
         if (qname != null) {
             String pkg = StringUtil.getPackageName(qname);
-            if (qname.equals(JAVA_LANG_OBJECT)) {
+            if (qname.equals(CommonClassNames.JAVA_LANG_OBJECT)) {
                 return 5;
             }
             if (POPULAR_JDK_CLASSES.contains(qname)) {

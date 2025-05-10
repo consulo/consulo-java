@@ -15,24 +15,22 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInspection.LambdaCanBeMethodReferenceInspection;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
 import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
-import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

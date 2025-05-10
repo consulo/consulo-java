@@ -38,7 +38,6 @@ import consulo.colorScheme.EditorColorsManager;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.Language;
 import consulo.language.editor.DaemonCodeAnalyzerSettings;

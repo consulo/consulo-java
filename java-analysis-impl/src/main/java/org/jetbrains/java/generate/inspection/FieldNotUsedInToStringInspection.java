@@ -18,16 +18,15 @@ package org.jetbrains.java.generate.inspection;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

@@ -27,7 +27,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 

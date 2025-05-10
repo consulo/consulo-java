@@ -29,7 +29,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;

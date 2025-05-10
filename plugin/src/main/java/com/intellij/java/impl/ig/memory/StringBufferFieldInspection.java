@@ -16,15 +16,12 @@
 package com.intellij.java.impl.ig.memory;
 
 import com.intellij.java.language.psi.CommonClassNames;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl

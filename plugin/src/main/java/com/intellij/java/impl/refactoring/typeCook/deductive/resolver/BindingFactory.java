@@ -27,7 +27,6 @@ import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;

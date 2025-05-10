@@ -11,7 +11,6 @@ import consulo.application.util.CachedValueProvider;
 import consulo.application.util.ConcurrentFactoryMap;
 import consulo.application.util.function.Processor;
 import consulo.application.util.function.Processors;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.PsiReference;
