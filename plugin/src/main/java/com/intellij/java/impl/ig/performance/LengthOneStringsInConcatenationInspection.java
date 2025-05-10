@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -140,8 +139,8 @@ public class LengthOneStringsInConcatenationInspection
         return false;
       }
       final String className = methodClass.getQualifiedName();
-      return JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-             JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
+      return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
+          || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
     }
   }
 }

@@ -19,6 +19,7 @@ import com.intellij.java.indexing.search.searches.AllClassesSearch;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearchExecutor;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.access.RequiredReadAction;
@@ -29,7 +30,6 @@ import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.ReadActionProcessor;
 import consulo.content.scope.SearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.psi.PsiAnchor;
 import consulo.language.psi.PsiBundle;
 import consulo.language.psi.PsiUtilCore;
@@ -164,7 +164,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
 
     private static boolean isJavaLangObject(Application application, @Nonnull PsiClass baseClass) {
         return application.runReadAction(
-            (Supplier<Boolean>)() -> baseClass.isValid() && JavaClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())
+            (Supplier<Boolean>)() -> baseClass.isValid() && CommonClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())
         );
     }
 

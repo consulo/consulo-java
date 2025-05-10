@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.postfixTemplate.PostfixTemplatePsiInfo;
@@ -101,12 +100,12 @@ public abstract class JavaPostfixTemplatesUtils {
 
   @Contract("null -> false")
   public static boolean isIterable(@Nullable PsiType type) {
-    return type != null && InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE);
+    return type != null && InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE);
   }
 
   @Contract("null -> false")
   public static boolean isThrowable(@Nullable PsiType type) {
-    return type != null && InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_THROWABLE);
+    return type != null && InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_THROWABLE);
   }
 
   @Contract("null -> false")

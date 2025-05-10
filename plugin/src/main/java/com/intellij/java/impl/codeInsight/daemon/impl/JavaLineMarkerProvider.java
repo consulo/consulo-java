@@ -330,7 +330,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         if (aClass.isFinal()) {
             return Collections.emptyList();
         }
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
             return Collections.emptyList(); // It's useless to have overridden markers for object.
         }
 

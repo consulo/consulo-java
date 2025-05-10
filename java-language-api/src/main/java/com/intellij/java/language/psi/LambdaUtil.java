@@ -26,7 +26,6 @@ import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.util.LanguageCachedValueUtil;
@@ -35,10 +34,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.SystemProperties;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -258,7 +257,7 @@ public class LambdaUtil {
     if (signatures.isEmpty()) {
       final PsiMethod method = psiMethod.getMethod();
       final PsiClass containingClass = method.getContainingClass();
-      if (containingClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+      if (containingClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
         if (method.hasModifierProperty(PsiModifier.PUBLIC)) {
           return true;
         }

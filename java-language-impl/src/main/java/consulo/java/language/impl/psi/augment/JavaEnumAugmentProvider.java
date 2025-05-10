@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package consulo.java.language.impl.psi.augment;
 
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
-import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
 
@@ -58,8 +56,8 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider {
       valueOfMethod.setContainingClass((PsiClass) element);
       valueOfMethod.setMethodReturnType(new PsiImmediateClassType((PsiClass) element, PsiSubstitutor.EMPTY));
       valueOfMethod.addModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC);
-      valueOfMethod.addParameter("name", JavaClassNames.JAVA_LANG_STRING);
-      valueOfMethod.addException(JavaClassNames.JAVA_LANG_ILLEGAL_ARGUMENT_EXCEPTION);
+      valueOfMethod.addParameter("name", CommonClassNames.JAVA_LANG_STRING);
+      valueOfMethod.addException(CommonClassNames.JAVA_LANG_ILLEGAL_ARGUMENT_EXCEPTION);
       list.add((Psi) valueOfMethod);
       return list;
     }

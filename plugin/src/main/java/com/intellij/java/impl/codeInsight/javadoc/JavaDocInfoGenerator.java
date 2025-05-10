@@ -38,7 +38,6 @@ import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.LangBundle;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.documentation.DocumentationManagerProtocol;
@@ -547,10 +546,10 @@ public class JavaDocInfoGenerator {
 
     String qName = aClass.getQualifiedName();
 
-    if (refs.length > 0 || !aClass.isInterface() && (qName == null || !qName.equals(JavaClassNames.JAVA_LANG_OBJECT))) {
+    if (refs.length > 0 || !aClass.isInterface() && (qName == null || !qName.equals(CommonClassNames.JAVA_LANG_OBJECT))) {
       buffer.append("extends ");
       if (refs.length == 0) {
-        generateLink(buffer, JavaClassNames.JAVA_LANG_OBJECT, null, aClass, false);
+        generateLink(buffer, CommonClassNames.JAVA_LANG_OBJECT, null, aClass, false);
       } else {
         for (int i = 0; i < refs.length; i++) {
           generateType(buffer, refs[i], aClass, generateLink);
@@ -888,7 +887,7 @@ public class JavaDocInfoGenerator {
         if (o != null) {
           String text = o.toString();
           PsiType type = variable.getType();
-          if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+          if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
             text = "\"" + StringUtil.escapeStringCharacters(StringUtil.shortenPathWithEllipsis(text, 120)) + "\"";
           } else if (type.equalsToText("char")) {
             text = "'" + text + "'";
@@ -1113,7 +1112,7 @@ public class JavaDocInfoGenerator {
 
   public static boolean isRepeatableAnnotationType(@Nullable PsiElement annotationType) {
     return annotationType instanceof PsiClass psiClass
-      && AnnotationUtil.isAnnotated(psiClass, JavaClassNames.JAVA_LANG_ANNOTATION_REPEATABLE, false, true);
+      && AnnotationUtil.isAnnotated(psiClass, CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE, false, true);
   }
 
   @RequiredReadAction
@@ -1289,7 +1288,7 @@ public class JavaDocInfoGenerator {
       if (method.getName().equals("values") && parameterList.getParametersCount() == 0) {
         return loadSyntheticDocComment(method, "/javadoc/EnumValues.java.template");
       }
-      if (method.getName().equals("valueOf") && parameterList.getParametersCount() == 1 && parameterList.getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (method.getName().equals("valueOf") && parameterList.getParametersCount() == 1 && parameterList.getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return loadSyntheticDocComment(method, "/javadoc/EnumValueOf.java.template");
       }
     }

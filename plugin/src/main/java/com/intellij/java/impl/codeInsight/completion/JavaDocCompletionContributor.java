@@ -36,7 +36,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -62,9 +61,9 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 import consulo.util.lang.function.Conditions;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
@@ -379,7 +378,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
           InheritanceUtil.processSupers((PsiClass) member, false, psiClass ->
           {
             String name = psiClass.getQualifiedName();
-            if (StringUtil.isNotEmpty(name) && !JavaClassNames.JAVA_LANG_OBJECT.equals(name)) {
+            if (StringUtil.isNotEmpty(name) && !CommonClassNames.JAVA_LANG_OBJECT.equals(name)) {
               result.add("see " + name);
             }
             return true;

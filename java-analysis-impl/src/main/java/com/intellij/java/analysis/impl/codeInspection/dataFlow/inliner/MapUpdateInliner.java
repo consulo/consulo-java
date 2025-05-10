@@ -7,22 +7,22 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
 public class MapUpdateInliner implements CallInliner {
     private static final CallMatcher MAP_COMPUTE =
-        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "computeIfAbsent", "computeIfPresent", "compute")
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "computeIfAbsent", "computeIfPresent", "compute")
             .parameterCount(2);
     private static final CallMatcher MAP_MERGE =
-        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "merge").parameterCount(3);
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "merge").parameterCount(3);
 
     @Override
     public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {

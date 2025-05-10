@@ -20,7 +20,7 @@ public final class JavaDeprecationUtils {
     @Nonnull
     @RequiredReadAction
     private static ThreeState isDeprecatedByAnnotation(@Nonnull PsiModifierListOwner owner, @Nullable PsiElement context) {
-        PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, JavaClassNames.JAVA_LANG_DEPRECATED);
+        PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, CommonClassNames.JAVA_LANG_DEPRECATED);
         if (annotation == null) {
             return ThreeState.UNSURE;
         }

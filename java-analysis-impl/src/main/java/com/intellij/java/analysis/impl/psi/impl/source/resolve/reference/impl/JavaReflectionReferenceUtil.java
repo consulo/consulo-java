@@ -14,7 +14,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
 import consulo.component.util.Iconable;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.lookup.*;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
@@ -29,10 +28,9 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Function;
@@ -202,14 +200,14 @@ public final class JavaReflectionReferenceUtil {
                 PsiMethod method = methodCall.resolveMethod();
                 if (method != null) {
                     PsiExpression[] arguments = methodCall.getArgumentList().getExpressions();
-                    if (arguments.length == 0 && isClassWithName(method.getContainingClass(), JavaClassNames.JAVA_LANG_CLASS)) {
+                    if (arguments.length == 0 && isClassWithName(method.getContainingClass(), CommonClassNames.JAVA_LANG_CLASS)) {
                         PsiExpression qualifier = methodCall.getMethodExpression().getQualifierExpression();
                         if (qualifier != null) {
                             return ourGuard.doPreventingRecursion(qualifier, false, () -> getReflectiveType(qualifier));
                         }
                     }
                     else if (arguments.length > 1
-                        && isClassWithName(method.getContainingClass(), JavaClassNames.JAVA_LANG_REFLECT_ARRAY)) {
+                        && isClassWithName(method.getContainingClass(), CommonClassNames.JAVA_LANG_REFLECT_ARRAY)) {
                         PsiExpression typeExpression = arguments[0];
                         if (typeExpression != null) {
                             ReflectiveType itemType =
@@ -324,12 +322,12 @@ public final class JavaReflectionReferenceUtil {
 
     @Contract("null -> false")
     public static boolean isJavaLangClass(@Nullable PsiClass aClass) {
-        return isClassWithName(aClass, JavaClassNames.JAVA_LANG_CLASS);
+        return isClassWithName(aClass, CommonClassNames.JAVA_LANG_CLASS);
     }
 
     @Contract("null -> false")
     public static boolean isJavaLangObject(@Nullable PsiClass aClass) {
-        return isClassWithName(aClass, JavaClassNames.JAVA_LANG_OBJECT);
+        return isClassWithName(aClass, CommonClassNames.JAVA_LANG_OBJECT);
     }
 
     @Contract("null, _ -> false")
@@ -575,13 +573,13 @@ public final class JavaReflectionReferenceUtil {
         boolean finalArray = signature.getSecond();
 
         List<String> typeNames = new ArrayList<>();
-        typeNames.add(JavaClassNames.JAVA_LANG_OBJECT); // return type
+        typeNames.add(CommonClassNames.JAVA_LANG_OBJECT); // return type
 
         for (int i = 0; i < objectArgCount; i++) {
-            typeNames.add(JavaClassNames.JAVA_LANG_OBJECT);
+            typeNames.add(CommonClassNames.JAVA_LANG_OBJECT);
         }
         if (finalArray) {
-            typeNames.add(JavaClassNames.JAVA_LANG_OBJECT + "[]");
+            typeNames.add(CommonClassNames.JAVA_LANG_OBJECT + "[]");
         }
         return ReflectiveSignature.create(typeNames);
     }

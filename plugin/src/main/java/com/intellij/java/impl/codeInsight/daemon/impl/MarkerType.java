@@ -19,7 +19,6 @@ import consulo.application.ReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.CommonProcessors;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.DaemonBundle;
@@ -255,7 +254,7 @@ public class MarkerType {
 
     private static String getOverriddenMethodTooltip(@Nonnull PsiMethod method) {
         PsiClass aClass = method.getContainingClass();
-        if (aClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
+        if (aClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
             return getImplementationTooltip("Is implemented in several subclasses");
         }
 

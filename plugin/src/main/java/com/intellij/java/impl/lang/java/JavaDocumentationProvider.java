@@ -35,7 +35,6 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.codeEditor.Editor;
 import consulo.component.ProcessCanceledException;
 import consulo.content.base.DocumentationOrderRootType;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.CodeDocumentationAwareCommenter;
 import consulo.language.Commenter;
 import consulo.language.LangBundle;
@@ -209,7 +208,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
   }
 
   public static void writeExtends(PsiClass aClass, StringBuilder buffer, PsiClassType[] refs) {
-    if (refs.length > 0 || !aClass.isInterface() && !JavaClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
+    if (refs.length > 0 || !aClass.isInterface() && !CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName())) {
       buffer.append(" extends ");
       if (refs.length == 0) {
         buffer.append("Object");

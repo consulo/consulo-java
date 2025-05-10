@@ -35,6 +35,7 @@ import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
@@ -50,7 +51,6 @@ import consulo.execution.debug.ui.XValueTextProvider;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.project.Project;
@@ -302,9 +302,9 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                         final ArrayType type = (ArrayType) container.getDescriptor().getType();
                         if (type != null) {
                             final String typeName = type.componentTypeName();
-                            if (TypeConversionUtil.isPrimitive(typeName) || JavaClassNames.JAVA_LANG_STRING.equals(typeName)) {
+                            if (TypeConversionUtil.isPrimitive(typeName) || CommonClassNames.JAVA_LANG_STRING.equals(typeName)) {
                                 int size = value.length();
-                                int max = Math.min(size, JavaClassNames.JAVA_LANG_STRING.equals(typeName) ? 5 : 10);
+                                int max = Math.min(size, CommonClassNames.JAVA_LANG_STRING.equals(typeName) ? 5 : 10);
                                 //TODO [eu]: this is a quick fix for IDEA-136606, need to move this away from EDT!!!
                                 final List<Value> values = value.getValues(0, max);
                                 int i = 0;
