@@ -23,7 +23,6 @@ import com.intellij.java.impl.refactoring.changeSignature.ThrownExceptionInfo;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtilEx;
-import consulo.java.language.module.util.CommonClassNames.*;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;

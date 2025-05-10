@@ -45,7 +45,6 @@ open module consulo.java.language.api {
   exports com.intellij.java.language.vfs.jrt;
   exports consulo.java.language.fileTypes;
   exports consulo.java.language.module.extension;
-  exports consulo.java.language.module.util;
   exports consulo.java.language.bundle;
   exports consulo.java.language.psi;
   exports consulo.java.language.localize;
