@@ -47,7 +47,6 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.fileTemplate.FileTemplateUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.WeighingComparable;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
@@ -456,7 +455,7 @@ public class CreateFromUsageUtils {
               targetClass = (PsiClass) sourceFile.add(aClass);
             }
 
-            if (superClassName != null && (classKind != CreateClassKind.ENUM || !superClassName.equals(JavaClassNames.JAVA_LANG_ENUM))) {
+            if (superClassName != null && (classKind != CreateClassKind.ENUM || !superClassName.equals(CommonClassNames.JAVA_LANG_ENUM))) {
               final PsiClass superClass =
                 facade.findClass(superClassName, targetClass.getResolveScope());
               final PsiJavaCodeReferenceElement superClassReference = factory.createReferenceElementByFQClassName(superClassName, targetClass.getResolveScope());
@@ -921,7 +920,7 @@ public class CreateFromUsageUtils {
     ApplicationManager.getApplication().runReadAction(new Runnable() {
       @Override
       public void run() {
-        final PsiClass objectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, searchScope);
+        final PsiClass objectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, searchScope);
         if (objectClass != null) {
           if (method && objectClass.findMethodsByName(memberName, false).length > 0) {
             allClasses[0] = true;
@@ -936,7 +935,7 @@ public class CreateFromUsageUtils {
       }
     });
     if (allClasses[0]) {
-      possibleClassNames.add(JavaClassNames.JAVA_LANG_OBJECT);
+      possibleClassNames.add(CommonClassNames.JAVA_LANG_OBJECT);
 
       if (!addInheritors) {
         return true;

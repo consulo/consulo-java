@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.localize.CommonQuickFixLocalize;
@@ -29,7 +28,7 @@ public final class DfaOptionalSupport {
         PsiClass containingClass = method == null ? null : method.getContainingClass();
         if (containingClass != null && "of".equals(method.getName())) {
             String qualifiedName = containingClass.getQualifiedName();
-            if (JavaClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
+            if (CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
                 return new ReplaceOptionalCallFix("ofNullable", false);
             }
             if (OptionalUtil.GUAVA_OPTIONAL.equals(qualifiedName)) {

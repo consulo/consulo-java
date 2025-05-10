@@ -46,7 +46,6 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiCodeFragment;
@@ -58,9 +57,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder
@@ -681,8 +680,8 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 			// concat with a String
 			if(opCode == JavaTokenType.PLUS)
 			{
-				if((lType instanceof PsiClassType && lType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) || (rType instanceof PsiClassType && rType.equalsToText(JavaClassNames
-						.JAVA_LANG_STRING)))
+				if((lType instanceof PsiClassType && lType.equalsToText(CommonClassNames.JAVA_LANG_STRING))
+					|| (rType instanceof PsiClassType && rType.equalsToText(CommonClassNames.JAVA_LANG_STRING)))
 				{
 					return false;
 				}

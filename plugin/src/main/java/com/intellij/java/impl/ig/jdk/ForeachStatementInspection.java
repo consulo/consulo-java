@@ -25,7 +25,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -143,7 +142,7 @@ public class ForeachStatementInspection extends BaseInspection {
     public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       final PsiExpression iteratedValue = statement.getIteratedValue();
-      if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), JavaClassNames.JAVA_LANG_ITERABLE)) {
+      if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), CommonClassNames.JAVA_LANG_ITERABLE)) {
         return;
       }
       registerStatementError(statement);

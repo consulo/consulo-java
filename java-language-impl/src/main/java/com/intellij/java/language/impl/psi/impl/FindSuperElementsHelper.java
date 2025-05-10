@@ -23,13 +23,12 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.impl.psi.PsiAnchor;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.MultiMap;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 public class FindSuperElementsHelper {
@@ -40,7 +39,7 @@ public class FindSuperElementsHelper {
       List<PsiClass> allSupers = new ArrayList<>(Arrays.asList(aClass.getSupers()));
       for (Iterator<PsiClass> iterator = allSupers.iterator(); iterator.hasNext(); ) {
         PsiClass superClass = iterator.next();
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
           iterator.remove();
         }
       }
@@ -106,7 +105,7 @@ public class FindSuperElementsHelper {
         !method.hasModifierProperty(PsiModifier.NATIVE) &&
         method.hasModifierProperty(PsiModifier.PUBLIC) &&
         !containingClass.isInterface() &&
-        !JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName());
+        !CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName());
   }
 
   public static class SiblingInfo {

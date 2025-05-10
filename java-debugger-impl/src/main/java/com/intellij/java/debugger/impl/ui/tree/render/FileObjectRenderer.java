@@ -16,8 +16,8 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.inject.Inject;
 
 /**
@@ -28,7 +28,7 @@ public class FileObjectRenderer extends ToStringBasedRenderer {
   @Inject
   public FileObjectRenderer(final NodeRendererSettings rendererSettings) {
     super(rendererSettings, "File", null, NodeRendererSettings.createExpressionChildrenRenderer("listFiles()", null));
-    setClassName(JavaClassNames.JAVA_IO_FILE);
+    setClassName(CommonClassNames.JAVA_IO_FILE);
     setEnabled(true);
   }
 }

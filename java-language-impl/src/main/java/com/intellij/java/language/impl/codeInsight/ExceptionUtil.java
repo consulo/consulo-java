@@ -30,7 +30,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.impl.codeInsight.ExtraExceptionHandler;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
@@ -759,7 +758,7 @@ public class ExceptionUtil {
             return false;
         }
         PsiClass containingClass = method.getContainingClass();
-        if (containingClass == null || !JavaClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
+        if (containingClass == null || !CommonClassNames.JAVA_LANG_OBJECT.equals(containingClass.getQualifiedName())) {
             return false;
         }
         if (element instanceof PsiMethodReferenceExpression methodRef) {
@@ -775,13 +774,13 @@ public class ExceptionUtil {
     }
 
     public static boolean isUncheckedException(@Nonnull PsiClassType type) {
-        return InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)
-            || InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ERROR);
+        return InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)
+            || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ERROR);
     }
 
     public static boolean isUncheckedException(@Nonnull PsiClass psiClass) {
-        return InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION)
-            || InheritanceUtil.isInheritor(psiClass, JavaClassNames.JAVA_LANG_ERROR);
+        return InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)
+            || InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_LANG_ERROR);
     }
 
     public static boolean isUncheckedExceptionOrSuperclass(@Nonnull PsiClassType type) {
@@ -790,7 +789,7 @@ public class ExceptionUtil {
 
     public static boolean isGeneralExceptionType(@Nonnull PsiType type) {
         String canonicalText = type.getCanonicalText();
-        return JavaClassNames.JAVA_LANG_THROWABLE.equals(canonicalText) || JavaClassNames.JAVA_LANG_EXCEPTION.equals(canonicalText);
+        return CommonClassNames.JAVA_LANG_THROWABLE.equals(canonicalText) || CommonClassNames.JAVA_LANG_EXCEPTION.equals(canonicalText);
     }
 
     public static boolean isHandled(@Nonnull PsiClassType exceptionType, @Nonnull PsiElement throwPlace) {

@@ -32,7 +32,6 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -242,7 +241,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   private static boolean isImmutableState(PsiType type) {
     return type instanceof PsiPrimitiveType ||
         PsiPrimitiveType.getUnboxedType(type) != null ||
-        Comparing.strEqual(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
+        Comparing.strEqual(CommonClassNames.JAVA_LANG_STRING, type.getCanonicalText());
   }
 
   private static Collection<PsiVariable> getWrittenVariables(ControlFlow controlFlow, Ref<Collection<PsiVariable>> writtenVariables) {

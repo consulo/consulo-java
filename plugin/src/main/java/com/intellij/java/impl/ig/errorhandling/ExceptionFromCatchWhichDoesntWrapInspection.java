@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
@@ -106,7 +105,7 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
           final PsiClass exceptionClass = classType.resolve();
           if (exceptionClass != null) {
             final PsiMethod[] constructors = exceptionClass.getConstructors();
-            final PsiClassType throwableType = TypeUtils.getType(JavaClassNames.JAVA_LANG_THROWABLE, statement);
+            final PsiClassType throwableType = TypeUtils.getType(CommonClassNames.JAVA_LANG_THROWABLE, statement);
             boolean canWrap = false;
             outer:
             for (PsiMethod constructor : constructors) {

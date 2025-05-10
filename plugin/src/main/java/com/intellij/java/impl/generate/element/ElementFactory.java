@@ -15,18 +15,10 @@
  */
 package com.intellij.java.impl.generate.element;
 
-import org.jetbrains.java.generate.psi.PsiAdapter;
-import consulo.logging.Logger;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.logging.Logger;
+import org.jetbrains.java.generate.psi.PsiAdapter;
 
 /**
  * Factory for creating {@link FieldElement} or {@link ClassElement} objects.
@@ -56,7 +48,7 @@ public class ElementFactory
 
 		// super
 		PsiClass superClass = clazz.getSuperClass();
-		if(superClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
+		if(superClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 		{
 			ce.setSuperName(superClass.getName());
 		}

@@ -24,7 +24,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -135,7 +134,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     }
 
     private static boolean isExternalizable(PsiClass aClass) {
-      final PsiClass externalizableClass = ClassUtils.findClass(JavaClassNames.JAVA_IO_EXTERNALIZABLE, aClass);
+      final PsiClass externalizableClass = ClassUtils.findClass(CommonClassNames.JAVA_IO_EXTERNALIZABLE, aClass);
       return externalizableClass != null && aClass.isInheritor(externalizableClass, true);
     }
   }

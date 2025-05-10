@@ -26,7 +26,6 @@ import com.siyeh.HardcodedMethodConstants;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValueProvider;
 import consulo.document.util.TextRange;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiModificationTracker;
@@ -50,14 +49,14 @@ import java.util.stream.Stream;
 import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class ExpressionUtils {
-    static final Set<String> STRING_BUILDER_CLASS_NAMES = Set.of(JavaClassNames.JAVA_LANG_STRING_BUILDER, JavaClassNames.JAVA_LANG_STRING_BUFFER);
-    static final Set<String> PRINT_CLASS_NAMES = Set.of(JavaClassNames.JAVA_IO_PRINT_STREAM, JavaClassNames.JAVA_IO_PRINT_WRITER);
+    static final Set<String> STRING_BUILDER_CLASS_NAMES = Set.of(CommonClassNames.JAVA_LANG_STRING_BUILDER, CommonClassNames.JAVA_LANG_STRING_BUFFER);
+    static final Set<String> PRINT_CLASS_NAMES = Set.of(CommonClassNames.JAVA_IO_PRINT_STREAM, CommonClassNames.JAVA_IO_PRINT_WRITER);
     static final Set<String> PRINT_METHOD_NAMES = Set.of("print", "println");
     static final Set<String> SLF4J_LOGGING_CLASS_NAMES = Set.of("org.slf4j.Logger");
     static final Set<String> SLF4J_LOGGING_METHOD_NAMES = Set.of("trace", "debug", "info", "warn", "error");
 
     static final Set<String> CONVERTABLE_BOXED_CLASS_NAMES =
-        Set.of(JavaClassNames.JAVA_LANG_BYTE, JavaClassNames.JAVA_LANG_CHARACTER, JavaClassNames.JAVA_LANG_SHORT);
+        Set.of(CommonClassNames.JAVA_LANG_BYTE, CommonClassNames.JAVA_LANG_CHARACTER, CommonClassNames.JAVA_LANG_SHORT);
 
     static final List<String> POLYMORPHIC_SIGNATURE_ANNOTATION = Collections.singletonList("java.lang.invoke.MethodHandle.PolymorphicSignature");
 
@@ -167,7 +166,7 @@ public class ExpressionUtils {
                 return false;
             }
             final PsiType type = castType.getType();
-            return TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, type);
+            return TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type);
         }
         return false;
     }
@@ -487,13 +486,13 @@ public class ExpressionUtils {
     }
 
     public static boolean hasStringType(@Nullable PsiExpression expression) {
-        return hasType(expression, JavaClassNames.JAVA_LANG_STRING);
+        return hasType(expression, CommonClassNames.JAVA_LANG_STRING);
     }
 
     public static boolean isConversionToStringNecessary(PsiExpression expression, boolean throwable) {
         final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
         if (parent instanceof PsiPolyadicExpression polyadic) {
-            if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING, polyadic.getType())) {
+            if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, polyadic.getType())) {
                 return true;
             }
             final PsiExpression[] operands = polyadic.getOperands();
@@ -654,7 +653,7 @@ public class ExpressionUtils {
     public static boolean isConcatenation(PsiElement element) {
         if (element instanceof PsiPolyadicExpression polyadic) {
             final PsiType type = polyadic.getType();
-            return type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+            return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
         }
         return false;
     }
@@ -1361,12 +1360,12 @@ public class ExpressionUtils {
                     }
                     if (reference.getParent() instanceof PsiMethodCallExpression methodCall
                         && MethodCallUtils.isCallToMethod(
-                        methodCall,
-                        JavaClassNames.JAVA_LANG_OBJECT,
-                        null,
-                        "clone",
-                        PsiType.EMPTY_ARRAY
-                    )) {
+                            methodCall,
+                            CommonClassNames.JAVA_LANG_OBJECT,
+                            null,
+                            "clone",
+                            PsiType.EMPTY_ARRAY
+                        )) {
                         return true;
                     }
                 }

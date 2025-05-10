@@ -159,10 +159,10 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       }
       @NonNls final String qualifiedName = containingClass.getQualifiedName();
       if ("getDeclaredFields".equals(name)) {
-        return JavaClassNames.JAVA_LANG_CLASS.equals(qualifiedName);
+        return CommonClassNames.JAVA_LANG_CLASS.equals(qualifiedName);
       } else if ("toString".equals(name)) {
-        return "org.apache.commons.lang.builder.ReflectionToStringBuilder".equals(qualifiedName) ||
-            JavaClassNames.JAVA_UTIL_OBJECTS.equals(qualifiedName);
+        return "org.apache.commons.lang.builder.ReflectionToStringBuilder".equals(qualifiedName)
+            || CommonClassNames.JAVA_UTIL_OBJECTS.equals(qualifiedName);
       }
       return false;
     }

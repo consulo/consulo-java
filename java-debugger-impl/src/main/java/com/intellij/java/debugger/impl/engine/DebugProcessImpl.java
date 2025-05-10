@@ -53,6 +53,7 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.language.projectRoots.JavaSdkType;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.Semaphore;
 import consulo.content.bundle.Sdk;
@@ -71,7 +72,6 @@ import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.StepRequest;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -1092,7 +1092,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                                         && arrayType.componentType() instanceof InterfaceType) {
                                         List<String> argTypes = myMethod.argumentTypeNames();
                                         if (argTypes.size() > lastIndex
-                                            && argTypes.get(lastIndex).startsWith(JavaClassNames.JAVA_LANG_OBJECT)) {
+                                            && argTypes.get(lastIndex).startsWith(CommonClassNames.JAVA_LANG_OBJECT)) {
                                             // unwrap array of interfaces for vararg param
                                             myArgs.remove(lastIndex);
                                             myArgs.addAll(arrayRef.getValues());
@@ -1415,7 +1415,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         qName = reformatArrayName(qName);
         ReferenceType refType = null;
         VirtualMachineProxyImpl virtualMachine = getVirtualMachineProxy();
-        ClassType classClassType = (ClassType)ContainerUtil.getFirstItem(virtualMachine.classesByName(JavaClassNames.JAVA_LANG_CLASS));
+        ClassType classClassType = (ClassType)ContainerUtil.getFirstItem(virtualMachine.classesByName(CommonClassNames.JAVA_LANG_CLASS));
         if (classClassType != null) {
             Method forNameMethod;
             List<Value> args = new ArrayList<>(); // do not use unmodifiable lists because the list is modified by JPDA

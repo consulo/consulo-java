@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.security;
 
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameter;
@@ -26,7 +27,6 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -85,7 +85,7 @@ public class DeserializableClassInSecureContextInspection extends BaseInspection
           break;
         }
       }
-      if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_LANG_THROWABLE)) {
+      if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
       registerClassError(aClass);

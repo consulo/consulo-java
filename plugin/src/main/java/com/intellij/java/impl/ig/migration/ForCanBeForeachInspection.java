@@ -30,7 +30,6 @@ import com.siyeh.ig.psiutils.*;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -1140,9 +1139,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return false;
     }
     final PsiVariable variable = (PsiVariable)declaredElement;
-    if (!TypeUtils.variableHasTypeOrSubtype(variable,
-                                            JavaClassNames.JAVA_UTIL_ITERATOR,
-                                            "java.util.ListIterator")) {
+    if (!TypeUtils.variableHasTypeOrSubtype(variable, CommonClassNames.JAVA_UTIL_ITERATOR, "java.util.ListIterator")) {
       return false;
     }
     final PsiExpression initialValue = variable.getInitializer();
@@ -1200,10 +1197,8 @@ public class ForCanBeForeachInspection extends BaseInspection {
     if (qualifierClass == null) {
       return false;
     }
-    if (!InheritanceUtil.isInheritor(qualifierClass,
-                                     JavaClassNames.JAVA_LANG_ITERABLE) &&
-        !InheritanceUtil.isInheritor(qualifierClass,
-                                     JavaClassNames.JAVA_UTIL_COLLECTION)) {
+    if (!InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_LANG_ITERABLE)
+        && !InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
       return false;
     }
     final PsiExpression condition = forStatement.getCondition();
@@ -1397,8 +1392,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return false;
     }
     final PsiClass aClass = method.getContainingClass();
-    return InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_UTIL_LIST);
+    return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_LIST);
   }
 
   @Nullable
@@ -1442,8 +1436,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return null;
     }
     final PsiClass containingClass = method.getContainingClass();
-    if (!InheritanceUtil.isInheritor(containingClass,
-                                     JavaClassNames.JAVA_UTIL_LIST)) {
+    if (!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_LIST)) {
       return null;
     }
     final PsiExpression qualifierExpression =
