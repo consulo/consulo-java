@@ -15,16 +15,12 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiNewExpression;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -63,9 +59,8 @@ public class StringBufferMustHaveInitialCapacityInspection
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
 
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUFFER,
-                                type) &&
-          !TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUILDER, type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type) &&
+          !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

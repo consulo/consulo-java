@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -144,7 +143,7 @@ public class StringCompareToInspection extends BaseInspection {
         return false;
       }
       final String className = aClass.getQualifiedName();
-      return JavaClassNames.JAVA_LANG_STRING.equals(className);
+      return CommonClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 }

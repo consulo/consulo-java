@@ -17,13 +17,13 @@ package com.intellij.java.impl.ide.hierarchy.type;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.content.scope.SearchScope;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import consulo.ide.localize.IdeLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
@@ -51,7 +51,7 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure {
         if (!(element instanceof PsiClass psiClass)) {
             return ArrayUtil.EMPTY_OBJECT_ARRAY;
         }
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
             return new Object[]{IdeLocalize.nodeHierarchyJavaLangObject().get()};
         }
         if (psiClass instanceof PsiAnonymousClass) {

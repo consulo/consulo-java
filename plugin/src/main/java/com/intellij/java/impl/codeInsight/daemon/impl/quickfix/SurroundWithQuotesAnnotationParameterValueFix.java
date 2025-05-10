@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -45,7 +44,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
       return false;
     }
     final PsiClass resolvedType = ((PsiClassType)myExpectedType).resolve();
-    return resolvedType != null && JavaClassNames.JAVA_LANG_STRING.equals(resolvedType.getQualifiedName()) &&
+    return resolvedType != null && CommonClassNames.JAVA_LANG_STRING.equals(resolvedType.getQualifiedName()) &&
       myValue instanceof PsiLiteralExpression;
   }
 

@@ -25,7 +25,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -128,8 +127,8 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
         return;
       }
       final String className = containingClass.getQualifiedName();
-      if (JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-          JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+      if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
+          || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
         registerMethodCallError(expression, containingClass);
         return;
       }
@@ -160,7 +159,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
       if (type == null) {
         return false;
       }
-      return type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+      return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
     }
   }
 }

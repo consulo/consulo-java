@@ -15,12 +15,11 @@
  */
 package com.intellij.java.impl.ipp.chartostring;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.util.collection.ArrayUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
 class StringToCharPredicate implements PsiElementPredicate {
@@ -36,7 +35,7 @@ class StringToCharPredicate implements PsiElementPredicate {
       return false;
     }
     final String typeText = type.getCanonicalText();
-    if (!JavaClassNames.JAVA_LANG_STRING.equals(typeText)) {
+    if (!CommonClassNames.JAVA_LANG_STRING.equals(typeText)) {
       return false;
     }
     final String value = (String)expression.getValue();
@@ -56,7 +55,7 @@ class StringToCharPredicate implements PsiElementPredicate {
         return false;
       }
       final String parentTypeText = parentType.getCanonicalText();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(parentTypeText)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText)) {
         return false;
       }
       if (parentExpression.getOperationTokenType() != JavaTokenType.PLUS) {
@@ -67,14 +66,14 @@ class StringToCharPredicate implements PsiElementPredicate {
       if (index > 0) {
         for (int i = 0; i < index && i < operands.length; i++) {
           final PsiType type = operands[i].getType();
-          if (type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+          if (type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
             return true;
           }
         }
       }
       else if (index == 0) {
         final PsiType type = operands[index + 1].getType();
-        return type != null && type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+        return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
       }
       return false;
     }
@@ -90,7 +89,7 @@ class StringToCharPredicate implements PsiElementPredicate {
         return false;
       }
       final String parentTypeText = parentType.getCanonicalText();
-      return JavaClassNames.JAVA_LANG_STRING.equals(parentTypeText);
+      return CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText);
     }
     if (parent instanceof PsiExpressionList) {
       final PsiElement grandParent = parent.getParent();
@@ -116,8 +115,8 @@ class StringToCharPredicate implements PsiElementPredicate {
         return false;
       }
       final String className = type.getCanonicalText();
-      if (JavaClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
-          JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
+      if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
+          CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
         @NonNls final String methodName =
           methodExpression.getReferenceName();
         if (!"append".equals(methodName) &&
@@ -127,9 +126,8 @@ class StringToCharPredicate implements PsiElementPredicate {
         final PsiElement method = methodExpression.resolve();
         return method != null;
       }
-      else if (JavaClassNames.JAVA_LANG_STRING.equals(className)) {
-        @NonNls final String methodName =
-          methodExpression.getReferenceName();
+      else if (CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+        @NonNls final String methodName = methodExpression.getReferenceName();
         if (!"indexOf".equals(methodName) &&
             !"lastIndexOf".equals(methodName) &&
             !"replace".equals(methodName)) {

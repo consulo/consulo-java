@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -102,7 +101,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
       final PsiElement element = descriptor.getPsiElement();
       final PsiElement parent = element.getParent();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass stringBuilderClass = psiFacade.findClass(JavaClassNames.JAVA_LANG_STRING_BUILDER, element.getResolveScope());
+      final PsiClass stringBuilderClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING_BUILDER, element.getResolveScope());
       if (stringBuilderClass == null) {
         return;
       }
@@ -148,8 +147,8 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
 
   private static class StringBufferReplaceableByStringBuilderVisitor extends BaseInspectionVisitor {
 
-    private static final Set<String> excludes = new HashSet(Arrays.asList(JavaClassNames.JAVA_LANG_STRING_BUILDER,
-                                                                          JavaClassNames.JAVA_LANG_STRING_BUFFER));
+    private static final Set<String> excludes =
+        new HashSet(Arrays.asList(CommonClassNames.JAVA_LANG_STRING_BUILDER, CommonClassNames.JAVA_LANG_STRING_BUFFER));
 
     @Override
     public void visitDeclarationStatement(PsiDeclarationStatement statement) {
@@ -180,7 +179,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
         return false;
       }
       final PsiType type = variable.getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUFFER, type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type)) {
         return false;
       }
       final PsiExpression initializer = variable.getInitializer();

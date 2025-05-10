@@ -5,16 +5,15 @@ import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatis
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -100,9 +99,9 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
       final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
       if (referenceElements.length == 1) {
         PsiClass returnClass = (PsiClass)referenceElements[0].resolve();
-        if (returnClass != null &&
-            !JavaClassNames.JAVA_LANG_OBJECT.equals(returnClass.getQualifiedName()) &&
-            !returnClass.isInterface()) {
+        if (returnClass != null
+            && !CommonClassNames.JAVA_LANG_OBJECT.equals(returnClass.getQualifiedName())
+            && !returnClass.isInterface()) {
           return returnClass;
         }
       }

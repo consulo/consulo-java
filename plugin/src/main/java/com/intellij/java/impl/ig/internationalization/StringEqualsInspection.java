@@ -26,9 +26,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,13 +112,11 @@ public class StringEqualsInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
-          expression.getMethodExpression();
-      final PsiExpression qualifier =
-          methodExpression.getQualifierExpression();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      final PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
         return;
       }

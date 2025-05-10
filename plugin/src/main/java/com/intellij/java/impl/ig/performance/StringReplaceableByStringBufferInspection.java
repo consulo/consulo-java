@@ -15,17 +15,13 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
@@ -81,8 +77,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
         return;
       }
       final PsiType type = variable.getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING,
-                                type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
         return;
       }
       if (!variableIsAppendedTo(variable, codeBlock)) {

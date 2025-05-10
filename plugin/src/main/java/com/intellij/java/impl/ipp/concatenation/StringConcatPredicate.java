@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 
 class StringConcatPredicate implements PsiElementPredicate {
 
@@ -41,7 +41,7 @@ class StringConcatPredicate implements PsiElementPredicate {
     }
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
     final PsiType type = polyadicExpression.getType();
-    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return false;
     }
     final PsiExpression[] operands = polyadicExpression.getOperands();
@@ -55,11 +55,11 @@ class StringConcatPredicate implements PsiElementPredicate {
         if (!(previous instanceof PsiLiteralExpression) || !(operand instanceof PsiLiteralExpression)) {
           return false;
         }
-        return stringTypeSeen || (i == 1 && operandType != null && operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING));
+        return stringTypeSeen || (i == 1 && operandType != null && operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING));
       }
       previous = operand;
       if (!stringTypeSeen) {
-        stringTypeSeen = operandType != null && operandType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+        stringTypeSeen = operandType != null && operandType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
       }
     }
     return false;

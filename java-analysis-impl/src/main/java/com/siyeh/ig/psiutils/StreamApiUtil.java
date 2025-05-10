@@ -18,7 +18,6 @@ package com.siyeh.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -36,19 +35,19 @@ public class StreamApiUtil {
       return null;
     }
     PsiClass aClass = ((PsiClassType) type).resolve();
-    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_INT_STREAM)) {
+    if (InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_UTIL_STREAM_INT_STREAM)) {
       return PsiType.INT;
     }
-    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_LONG_STREAM)) {
+    if (InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_UTIL_STREAM_LONG_STREAM)) {
       return PsiType.LONG;
     }
-    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM)) {
+    if (InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM)) {
       return PsiType.DOUBLE;
     }
-    if (!InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_STREAM)) {
+    if (!InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_UTIL_STREAM_STREAM)) {
       return null;
     }
-    PsiType streamType = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_STREAM_STREAM, 0, false);
+    PsiType streamType = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_UTIL_STREAM_STREAM, 0, false);
     if (variableType) {
       if (streamType instanceof PsiIntersectionType) {
         return null;

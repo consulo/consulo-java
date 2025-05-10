@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.memory;
 
+import com.intellij.java.language.psi.CommonClassNames;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
@@ -55,8 +56,8 @@ public class StringBufferFieldInspection extends BaseInspection {
     public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       final PsiType type = field.getType();
-      if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) &&
-          !type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUILDER)) {
+      if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&
+          !type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER)) {
         return;
       }
       registerFieldError(field, type);

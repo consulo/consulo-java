@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -58,7 +57,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final String typeText = ((PsiType)infos[1]).getCanonicalText();
-    return new StringBufferReplaceableByStringFix(JavaClassNames.JAVA_LANG_STRING_BUILDER.equals(typeText));
+    return new StringBufferReplaceableByStringFix(CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(typeText));
   }
 
   private static class StringBufferReplaceableByStringFix extends InspectionGadgetsFix {
@@ -125,7 +124,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
           final PsiType type = argument.getType();
           if (!PsiType.INT.equals(type)) {
             result.append(argument.getText());
-            if (type != null && type.equalsToText(JavaClassNames.JAVA_LANG_CHAR_SEQUENCE)) {
+            if (type != null && type.equalsToText(CommonClassNames.JAVA_LANG_CHAR_SEQUENCE)) {
               result.append(".toString()");
             }
           }
@@ -186,7 +185,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
                 result.append('(').append(argumentText).append(')');
               }
               else {
-                if (type != null && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+                if (type != null && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
                   result.append("String.valueOf(").append(argumentText).append(")");
                 }
                 else {
@@ -217,8 +216,8 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
         return;
       }
       final PsiType type = variable.getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUFFER, type) &&
-          !TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUILDER, type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type) &&
+          !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
         return;
       }
       final PsiExpression initializer = variable.getInitializer();
@@ -250,8 +249,8 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
     public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
-      if (!TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUFFER, type) &&
-          !TypeUtils.typeEquals(JavaClassNames.JAVA_LANG_STRING_BUILDER, type)) {
+      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type) &&
+          !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
         return;
       }
       final PsiExpression completeExpression = getCompleteExpression(expression);
