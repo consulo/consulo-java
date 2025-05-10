@@ -23,7 +23,6 @@ import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.jvm.types.JvmSubstitutor;
 import com.intellij.java.language.jvm.types.JvmType;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.logging.attachment.AttachmentFactory;
@@ -91,7 +90,7 @@ class PsiJvmConversionHelper {
       return null;
     }
     if (psiClass.isEnum()) {
-      return getTypeByName(JavaClassNames.JAVA_LANG_ENUM, psiClass.getProject(), psiClass.getResolveScope());
+      return getTypeByName(CommonClassNames.JAVA_LANG_ENUM, psiClass.getProject(), psiClass.getResolveScope());
     }
     if (psiClass instanceof PsiAnonymousClass) {
       PsiClassType baseClassType = ((PsiAnonymousClass) psiClass).getBaseClassType();
@@ -102,7 +101,7 @@ class PsiJvmConversionHelper {
         return getJavaLangObject(psiClass.getManager(), psiClass.getResolveScope());
       }
     }
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+    if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
       return null;
     }
 

@@ -6,22 +6,21 @@ import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Contract;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, HighPriorityAction {
-    private static final CallMatcher MAP_COMPUTE = CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "compute").
-        parameterTypes("K", JavaClassNames.JAVA_UTIL_FUNCTION_BI_FUNCTION);
+    private static final CallMatcher MAP_COMPUTE =
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "compute")
+            .parameterTypes("K", CommonClassNames.JAVA_UTIL_FUNCTION_BI_FUNCTION);
 
     @Override
     @Nonnull

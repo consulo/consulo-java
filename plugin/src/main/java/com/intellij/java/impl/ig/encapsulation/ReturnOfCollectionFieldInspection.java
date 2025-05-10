@@ -27,7 +27,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -82,23 +81,23 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[1];
     final String text = referenceExpression.getText();
-    if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_MAP)) {
-      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SORTED_MAP)) {
-        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedMap(" + text + ')', JavaClassNames.JAVA_UTIL_SORTED_MAP);
+    if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_MAP)) {
+      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_MAP)) {
+        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedMap(" + text + ')', CommonClassNames.JAVA_UTIL_SORTED_MAP);
       }
-      return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableMap(" + text + ')', JavaClassNames.JAVA_UTIL_MAP);
+      return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableMap(" + text + ')', CommonClassNames.JAVA_UTIL_MAP);
     }
-    else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_COLLECTION)) {
-      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SET)) {
-        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_SORTED_SET)) {
-          return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedSet(" + text + ')', JavaClassNames.JAVA_UTIL_SORTED_SET);
+    else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_COLLECTION)) {
+      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SET)) {
+        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_SET)) {
+          return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedSet(" + text + ')', CommonClassNames.JAVA_UTIL_SORTED_SET);
         }
-        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSet(" + text + ')', JavaClassNames.JAVA_UTIL_SET);
+        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSet(" + text + ')', CommonClassNames.JAVA_UTIL_SET);
       }
-      else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_LIST)) {
-        return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableList(" + text + ')', JavaClassNames.JAVA_UTIL_LIST);
+      else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_LIST)) {
+        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableList(" + text + ')', CommonClassNames.JAVA_UTIL_LIST);
       }
-      return new ReturnOfCollectionFieldFix(JavaClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableCollection(" + text + ')', JavaClassNames.JAVA_UTIL_COLLECTION);
+      return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableCollection(" + text + ')', CommonClassNames.JAVA_UTIL_COLLECTION);
     }
     return null;
   }

@@ -16,18 +16,16 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.project.Project;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.InspectionGadgetsBundle;
-import consulo.java.language.module.util.JavaClassNames;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -107,7 +105,7 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
         return;
       }
       final String className = aClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
+      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
       final PsiExpression firstArgument = arguments[0];
@@ -115,7 +113,7 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
       if (firstType == null || containsPercentN(firstArgument)) {
         return;
       }
-      if (firstType.equalsToText(JavaClassNames.JAVA_LANG_STRING) && arguments.length == 1) {
+      if (firstType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && arguments.length == 1) {
         registerMethodCallError(expression);
       }
       else if (firstType.equalsToText("java.util.Locale")) {
@@ -127,7 +125,7 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
         if (secondType == null) {
           return;
         }
-        if (secondType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+        if (secondType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
           registerMethodCallError(expression);
         }
       }

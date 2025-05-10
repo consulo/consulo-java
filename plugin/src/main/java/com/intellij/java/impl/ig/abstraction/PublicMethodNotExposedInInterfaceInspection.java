@@ -19,10 +19,7 @@ import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -166,7 +163,7 @@ public class PublicMethodNotExposedInInterfaceInspection
           return true;
         }
         final String superclassName = superClass.getQualifiedName();
-        if (JavaClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
+        if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
           return true;
         }
         if (exposedInInterface(superMethod)) {

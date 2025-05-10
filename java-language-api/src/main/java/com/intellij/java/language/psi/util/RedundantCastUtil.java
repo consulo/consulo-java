@@ -17,7 +17,6 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
@@ -28,9 +27,9 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -554,7 +553,7 @@ public class RedundantCastUtil {
     }
 
     if (operand instanceof PsiLambdaExpression || operand instanceof PsiMethodReferenceExpression) {
-      if (castType instanceof PsiClassType && InheritanceUtil.isInheritor(PsiUtil.resolveClassInType(castType), JavaClassNames.JAVA_IO_SERIALIZABLE))
+      if (castType instanceof PsiClassType && InheritanceUtil.isInheritor(PsiUtil.resolveClassInType(castType), CommonClassNames.JAVA_IO_SERIALIZABLE))
         return true;
       if (castType instanceof PsiIntersectionType) {
         boolean redundant = false;
@@ -631,6 +630,6 @@ public class RedundantCastUtil {
   private static boolean isPolymorphicMethod(PsiMethodCallExpression expression) {
     final PsiElement method = expression.getMethodExpression().resolve();
     return method instanceof PsiMethod &&
-        AnnotationUtil.isAnnotated((PsiMethod) method, JavaClassNames.JAVA_LANG_INVOKE_MH_POLYMORPHIC, false, true);
+        AnnotationUtil.isAnnotated((PsiMethod) method, CommonClassNames.JAVA_LANG_INVOKE_MH_POLYMORPHIC, false, true);
   }
 }

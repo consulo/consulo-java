@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicatorProvider;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.PsiManager;
@@ -39,7 +38,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -535,7 +533,7 @@ public class PsiScopesUtil {
             }
             else if (superExpr.getQualifier() != null
                 && PsiUtil.isLanguageLevel8OrHigher(qualifier)
-                && JavaClassNames.JAVA_LANG_CLONEABLE.equals(psiClass.getQualifiedName())
+                && CommonClassNames.JAVA_LANG_CLONEABLE.equals(psiClass.getQualifiedName())
                 && psiClass.isInterface()) {
                 processor.setAccessClass(psiClass);
             }

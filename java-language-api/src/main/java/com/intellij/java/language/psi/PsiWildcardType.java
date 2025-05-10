@@ -15,13 +15,11 @@
  */
 package com.intellij.java.language.psi;
 
-import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
-
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -163,9 +161,9 @@ public class PsiWildcardType extends PsiType.Stub {
 
     PsiWildcardType that = (PsiWildcardType) o;
     if (myBound == null && that.myBound != null) {
-      return that.isExtends() && that.myBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
+      return that.isExtends() && that.myBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
     } else if (myBound != null && that.myBound == null) {
-      return isExtends() && myBound.equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
+      return isExtends() && myBound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
     }
     return myIsExtending == that.myIsExtending && Comparing.equal(myBound, that.myBound);
   }

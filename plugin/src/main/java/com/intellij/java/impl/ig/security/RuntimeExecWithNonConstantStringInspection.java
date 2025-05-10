@@ -21,7 +21,6 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -80,7 +79,7 @@ public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
       }
       final PsiExpression argument = arguments[0];
       final PsiType type = argument.getType();
-      if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return;
       }
       if (PsiUtil.isConstantExpression(argument)) {

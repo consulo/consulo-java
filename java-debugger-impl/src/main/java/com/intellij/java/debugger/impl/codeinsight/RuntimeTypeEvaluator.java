@@ -37,7 +37,6 @@ import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -109,7 +108,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		if(type instanceof ClassType)
 		{
 			ClassType superclass = ((ClassType) type).superclass();
-			if(superclass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(superclass.name()))
+			if(superclass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(superclass.name()))
 			{
 				psiType = findPsiType(project, superclass);
 				if(psiType != null)

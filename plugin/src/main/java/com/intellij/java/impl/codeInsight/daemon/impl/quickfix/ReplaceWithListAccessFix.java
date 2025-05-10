@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -27,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -74,7 +72,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
   @Nullable
   private PsiType createUtilListType(@Nonnull Project project) {
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
+    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
 
     if (listClass == null) return null;
 

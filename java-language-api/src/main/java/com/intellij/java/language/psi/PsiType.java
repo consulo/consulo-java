@@ -17,12 +17,10 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.types.JvmType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.project.Project;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.project.Project;
 import consulo.util.collection.ArrayFactory;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -31,23 +29,23 @@ import jakarta.annotation.Nullable;
  */
 public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType {
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", JavaClassNames.JAVA_LANG_BYTE);
+  public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", CommonClassNames.JAVA_LANG_BYTE);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType CHAR = new PsiPrimitiveType("char", JavaClassNames.JAVA_LANG_CHARACTER);
+  public static final PsiPrimitiveType CHAR = new PsiPrimitiveType("char", CommonClassNames.JAVA_LANG_CHARACTER);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType DOUBLE = new PsiPrimitiveType("double", JavaClassNames.JAVA_LANG_DOUBLE);
+  public static final PsiPrimitiveType DOUBLE = new PsiPrimitiveType("double", CommonClassNames.JAVA_LANG_DOUBLE);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType FLOAT = new PsiPrimitiveType("float", JavaClassNames.JAVA_LANG_FLOAT);
+  public static final PsiPrimitiveType FLOAT = new PsiPrimitiveType("float", CommonClassNames.JAVA_LANG_FLOAT);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType INT = new PsiPrimitiveType("int", JavaClassNames.JAVA_LANG_INTEGER);
+  public static final PsiPrimitiveType INT = new PsiPrimitiveType("int", CommonClassNames.JAVA_LANG_INTEGER);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType LONG = new PsiPrimitiveType("long", JavaClassNames.JAVA_LANG_LONG);
+  public static final PsiPrimitiveType LONG = new PsiPrimitiveType("long", CommonClassNames.JAVA_LANG_LONG);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType SHORT = new PsiPrimitiveType("short", JavaClassNames.JAVA_LANG_SHORT);
+  public static final PsiPrimitiveType SHORT = new PsiPrimitiveType("short", CommonClassNames.JAVA_LANG_SHORT);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType BOOLEAN = new PsiPrimitiveType("boolean", JavaClassNames.JAVA_LANG_BOOLEAN);
+  public static final PsiPrimitiveType BOOLEAN = new PsiPrimitiveType("boolean", CommonClassNames.JAVA_LANG_BOOLEAN);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
-  public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", JavaClassNames.JAVA_LANG_VOID);
+  public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", CommonClassNames.JAVA_LANG_VOID);
   @SuppressWarnings("StaticInitializerReferencesSubClass")
   public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String) null);
 
@@ -194,7 +192,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangObject(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_OBJECT, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_OBJECT, manager.getProject(), resolveScope);
   }
 
   /**
@@ -206,7 +204,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangClass(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_CLASS, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_CLASS, manager.getProject(), resolveScope);
   }
 
   /**
@@ -218,7 +216,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangThrowable(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
   }
 
   /**
@@ -230,7 +228,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangString(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_STRING, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_STRING, manager.getProject(), resolveScope);
   }
 
   /**
@@ -242,7 +240,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangError(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_ERROR, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_ERROR, manager.getProject(), resolveScope);
   }
 
   /**
@@ -254,7 +252,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
    */
   @Nonnull
   public static PsiClassType getJavaLangRuntimeException(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
-    return getTypeByName(JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
+    return getTypeByName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
   }
 
   /**

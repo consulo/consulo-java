@@ -27,7 +27,6 @@ import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.WriteCommandAction;
@@ -93,7 +92,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
     if (extendsList != null && extendsList.getReferencedTypes().length > 0) {
       final List<PsiMethod> methods = new ArrayList<PsiMethod>(Arrays.asList(targetClass.getAllMethods()));
       final PsiClass objectClass =
-        JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
+        JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
       if (objectClass == null) return false;
       methods.removeAll(Arrays.asList(objectClass.getMethods()));
       if (methods.size() > 0) return false;

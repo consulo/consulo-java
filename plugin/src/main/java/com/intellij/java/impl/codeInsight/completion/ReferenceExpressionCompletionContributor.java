@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.AllIcons;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.InsertionContext;
@@ -65,9 +64,12 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
  */
 public class ReferenceExpressionCompletionContributor {
   private static final Logger LOG = Logger.getInstance(ReferenceExpressionCompletionContributor.class);
-  private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod().withName(StandardPatterns.string().oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass",
-      "clone", "toString")).
-      definedInClass(JavaClassNames.JAVA_LANG_OBJECT);
+  private static final PsiMethodPattern OBJECT_METHOD_PATTERN = psiMethod()
+      .withName(
+          StandardPatterns.string()
+              .oneOf("hashCode", "equals", "finalize", "wait", "notify", "notifyAll", "getClass", "clone", "toString")
+      )
+      .definedInClass(CommonClassNames.JAVA_LANG_OBJECT);
   private static final PrefixMatcher TRUE_MATCHER = new PrefixMatcher("") {
     @Override
     public boolean prefixMatches(@Nonnull String name) {
@@ -278,7 +280,7 @@ public class ReferenceExpressionCompletionContributor {
       final PsiElement qualifier = element1 instanceof PsiJavaCodeReferenceElement ? ((PsiJavaCodeReferenceElement) element1).getQualifier() : null;
       final PsiType expectedType = parameters.getExpectedType();
       if (!OBJECT_METHOD_PATTERN.accepts(object) || allowGetClass(object, parameters)) {
-        if (parameters.getParameters().getInvocationCount() >= 3 || !itemType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+        if (parameters.getParameters().getInvocationCount() >= 3 || !itemType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
           if (!(object instanceof PsiMethod && ((PsiMethod) object).getParameterList().getParametersCount() > 0)) {
             addChainedCallVariants(element, baseItem, result, itemType, expectedType, parameters);
           }
@@ -370,7 +372,7 @@ public class ReferenceExpressionCompletionContributor {
         context.getDocument().replaceString(startOffset, context.getTailOffset(), newText);
 
         context.commitDocument();
-        JavaCodeStyleManager.getInstance(project).shortenClassReferences(context.getFile(), startOffset, startOffset + JavaClassNames.JAVA_UTIL_ARRAYS.length());
+        JavaCodeStyleManager.getInstance(project).shortenClassReferences(context.getFile(), startOffset, startOffset + CommonClassNames.JAVA_UTIL_ARRAYS.length());
       }
     });
   }
@@ -398,7 +400,7 @@ public class ReferenceExpressionCompletionContributor {
   }
 
   private static PsiType getStreamComponentType(PsiType expectedType) {
-    return PsiUtil.substituteTypeParameter(expectedType, JavaClassNames.JAVA_UTIL_STREAM_BASE_STREAM, 0, true);
+    return PsiUtil.substituteTypeParameter(expectedType, CommonClassNames.JAVA_UTIL_STREAM_BASE_STREAM, 0, true);
   }
 
   private static void addToArrayConversions(final PsiElement element,
@@ -515,7 +517,7 @@ public class ReferenceExpressionCompletionContributor {
 
     if (object instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod) object;
-      if (psiMethod().withName("toArray").withParameterCount(1).definedInClass(JavaClassNames.JAVA_UTIL_COLLECTION).accepts(method)) {
+      if (psiMethod().withName("toArray").withParameterCount(1).definedInClass(CommonClassNames.JAVA_UTIL_COLLECTION).accepts(method)) {
         return false;
       }
       final PsiMethod parentMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
@@ -551,7 +553,8 @@ public class ReferenceExpressionCompletionContributor {
     }
 
     if ("toString".equals(method.getName())) {
-      if (qualifierType.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) || InheritanceUtil.isInheritor(qualifierType, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
+      if (qualifierType.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER)
+          || InheritanceUtil.isInheritor(qualifierType, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
         return false;
       }
     }

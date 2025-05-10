@@ -17,7 +17,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.completion.*;
@@ -32,7 +31,6 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
@@ -152,7 +150,7 @@ class SmartCastProvider implements CompletionProvider {
         }
 
         PsiType type = operand.getType();
-        return type == null || type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)
+        return type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)
             ? Collections.emptyList()
             : Collections.singletonList(new ExpectedTypeInfoImpl(
                 type,
@@ -178,7 +176,7 @@ class SmartCastProvider implements CompletionProvider {
                 infoClass,
                 true,
                 superClass -> {
-                    if (!JavaClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
+                    if (!CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
                         result.accept(JavaPsiFacade.getElementFactory(superClass.getProject())
                             .createType(CompletionUtilCore.getOriginalOrSelf(superClass)));
                     }

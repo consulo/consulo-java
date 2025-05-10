@@ -17,7 +17,6 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -84,7 +83,7 @@ public class PsiMethodUtil {
             return false;
         }
         PsiType componentType = arrayType.getComponentType();
-        return componentType.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+        return componentType.equalsToText(CommonClassNames.JAVA_LANG_STRING);
     }
 
     public static boolean hasMainMethod(PsiClass psiClass) {

@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -88,7 +87,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
       }
       final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
       final String type =
-        TypeUtils.expressionHasTypeOrSubtype(referenceExpression, JavaClassNames.JAVA_UTIL_DATE, JavaClassNames.JAVA_UTIL_CALENDAR);
+        TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }
@@ -119,8 +118,8 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
       if (!(element instanceof PsiField)) {
         return;
       }
-      final String type = TypeUtils.expressionHasTypeOrSubtype(
-        returnValue, JavaClassNames.JAVA_UTIL_DATE, JavaClassNames.JAVA_UTIL_CALENDAR);
+      final String type =
+          TypeUtils.expressionHasTypeOrSubtype(returnValue, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }

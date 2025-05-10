@@ -16,17 +16,17 @@
 package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
 import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 
 /**
- * User: anna
- * Date: 7/22/13
+ * @author anna
+ * @since 2013-07-22
  */
 public class SafeDeleteOverrideAnnotation extends SafeDeleteUsageInfo implements SafeDeleteCustomUsageInfo {
   public SafeDeleteOverrideAnnotation(PsiElement element, PsiElement referencedElement) {
@@ -38,7 +38,7 @@ public class SafeDeleteOverrideAnnotation extends SafeDeleteUsageInfo implements
   }
 
   public void performRefactoring() throws IncorrectOperationException {
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, JavaClassNames.JAVA_LANG_OVERRIDE);
+    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

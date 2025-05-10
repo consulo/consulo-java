@@ -2,7 +2,6 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -69,7 +68,7 @@ public class PsiPrecedenceUtil {
             return false;
         }
         PsiType type = expression.getType();
-        return type != null && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+        return type != null && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
     }
 
     public static boolean isAssociativeOperation(PsiPolyadicExpression expression) {
@@ -208,7 +207,7 @@ public class PsiPrecedenceUtil {
             if (!parentType.equals(childType)) {
                 return true;
             }
-            if (childType.equalsToText(JavaClassNames.JAVA_LANG_STRING)
+            if (childType.equalsToText(CommonClassNames.JAVA_LANG_STRING)
                 && !PsiTreeUtil.isAncestor(parentPolyadic.getOperands()[0], childPolyadic, true)) {
                 PsiExpression[] operands = childPolyadic.getOperands();
                 for (PsiExpression operand : operands) {
