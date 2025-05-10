@@ -18,15 +18,14 @@ package com.intellij.java.impl.ipp.concatenation;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
-import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 

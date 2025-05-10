@@ -18,10 +18,7 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiLiteral;
-import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.pattern.ElementPattern;
@@ -30,14 +27,12 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceContributor;
 import consulo.language.psi.PsiReferenceRegistrar;
 import consulo.language.util.ProcessingContext;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
-import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_CLASS;
 import static consulo.language.pattern.StandardPatterns.or;
 
 /**
@@ -46,9 +41,10 @@ import static consulo.language.pattern.StandardPatterns.or;
 @ExtensionImpl
 public class JavaReflectionReferenceContributor extends PsiReferenceContributor {
   public static final PsiJavaElementPattern.Capture<PsiLiteral> PATTERN = psiLiteral().methodCallParameter(psiMethod().withName(GET_FIELD, GET_DECLARED_FIELD, GET_METHOD, GET_DECLARED_METHOD)
-      .definedInClass(JAVA_LANG_CLASS));
+      .definedInClass(CommonClassNames.JAVA_LANG_CLASS));
 
-  public static final PsiJavaElementPattern.Capture<PsiLiteral> CLASS_PATTERN = psiLiteral().methodCallParameter(or(psiMethod().withName(FOR_NAME).definedInClass(JAVA_LANG_CLASS), psiMethod()
+  public static final PsiJavaElementPattern.Capture<PsiLiteral> CLASS_PATTERN = psiLiteral().methodCallParameter(or(psiMethod().withName(FOR_NAME).definedInClass(
+      CommonClassNames.JAVA_LANG_CLASS), psiMethod()
       .withName(LOAD_CLASS).definedInClass(JAVA_LANG_CLASS_LOADER)));
 
   private static final ElementPattern<? extends PsiElement> METHOD_HANDLE_PATTERN = psiLiteral().methodCallParameter(1, psiMethod().withName(HANDLE_FACTORY_METHOD_NAMES).definedInClass

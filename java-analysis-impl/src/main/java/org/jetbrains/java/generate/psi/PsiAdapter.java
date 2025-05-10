@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -33,11 +33,9 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
-import java.util.*;
 
-import static consulo.java.language.module.util.JavaClassNames.*;
+import java.util.*;
 
 /**
  * Basic PSI Adapter with common function that works in all supported versions of IDEA.
@@ -120,11 +118,7 @@ public class PsiAdapter {
    * @return true if it's a String array type.
    */
   public static boolean isStringArrayType(PsiType type) {
-    if (isPrimitiveType(type)) {
-      return false;
-    }
-
-    return type.getCanonicalText().indexOf("String[]") > 0;
+    return !isPrimitiveType(type) && type.getCanonicalText().indexOf("String[]") > 0;
   }
 
   /**
@@ -135,7 +129,7 @@ public class PsiAdapter {
    * @return true if it's a Collection type.
    */
   public static boolean isCollectionType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_COLLECTION);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_COLLECTION);
   }
 
   /**
@@ -146,7 +140,7 @@ public class PsiAdapter {
    * @return true if it's a Map type.
    */
   public static boolean isMapType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_MAP);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_MAP);
   }
 
   /**
@@ -157,7 +151,7 @@ public class PsiAdapter {
    * @return true if it's a Map type.
    */
   public static boolean isSetType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_SET);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_SET);
   }
 
   /**
@@ -168,7 +162,7 @@ public class PsiAdapter {
    * @return true if it's a Map type.
    */
   public static boolean isListType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_LIST);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_LIST);
   }
 
   /**
@@ -179,7 +173,7 @@ public class PsiAdapter {
    * @return true if it's a String type.
    */
   public static boolean isStringType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_LANG_STRING);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_LANG_STRING);
   }
 
   /**
@@ -190,7 +184,7 @@ public class PsiAdapter {
    * @return true if it's an Object type.
    */
   public static boolean isObjectType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_LANG_OBJECT);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_LANG_OBJECT);
   }
 
   /**
@@ -201,7 +195,7 @@ public class PsiAdapter {
    * @return true if it's a Date type.
    */
   public static boolean isDateType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_DATE);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_DATE);
   }
 
   /**
@@ -212,7 +206,7 @@ public class PsiAdapter {
    * @return true if it's a Calendar type.
    */
   public static boolean isCalendarType(PsiElementFactory factory, PsiType type) {
-    return isTypeOf(factory, type, JAVA_UTIL_CALENDAR);
+    return isTypeOf(factory, type, CommonClassNames.JAVA_UTIL_CALENDAR);
   }
 
   /**
@@ -229,7 +223,7 @@ public class PsiAdapter {
       return "boolean".equals(s);
     } else {
       // test for Object type of Boolean
-      return isTypeOf(factory, type, JAVA_LANG_BOOLEAN);
+      return isTypeOf(factory, type, CommonClassNames.JAVA_LANG_BOOLEAN);
     }
   }
 
@@ -247,7 +241,7 @@ public class PsiAdapter {
       return "byte".equals(s) || "double".equals(s) || "float".equals(s) || "int".equals(s) || "long".equals(s) || "short".equals(s);
     } else {
       // test for Object type of numeric
-      return isTypeOf(factory, type, JAVA_LANG_NUMBER);
+      return isTypeOf(factory, type, CommonClassNames.JAVA_LANG_NUMBER);
     }
   }
 
@@ -258,6 +252,7 @@ public class PsiAdapter {
    * @param importStatement import statement to test existing for.
    * @return true if the javafile has the import statement.
    */
+  @RequiredReadAction
   public static boolean hasImportStatement(PsiJavaFile javaFile, String importStatement) {
     PsiImportList importList = javaFile.getImportList();
     if (importList == null) {
@@ -278,6 +273,7 @@ public class PsiAdapter {
    * @param importStatementOnDemand name of import statement, must be with a wildcard (etc. java.util.*).
    * @throws IncorrectOperationException is thrown if there is an error creating the import statement.
    */
+  @RequiredReadAction
   public static void addImportStatement(PsiJavaFile javaFile, String importStatementOnDemand) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(javaFile.getProject()).getElementFactory();
     PsiImportStatement is = factory.createImportStatementOnDemand(fixImportStatement(importStatementOnDemand));
@@ -373,12 +369,12 @@ public class PsiAdapter {
     // is it public static void main(String[] args)
     for (PsiMethod method : methods) {
       // must be public
-      if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+      if (!method.isPublic()) {
         continue;
       }
 
       // must be static
-      if (!method.hasModifierProperty(PsiModifier.STATIC)) {
+      if (!method.isStatic()) {
         continue;
       }
 
@@ -417,8 +413,9 @@ public class PsiAdapter {
    * @throws IncorrectOperationException is thrown if error adding/replacing the javadoc comment.
    */
   @Nullable
+  @RequiredReadAction
   public static PsiComment addOrReplaceJavadoc(PsiMethod method, String javadoc, boolean replace) {
-    final Project project = method.getProject();
+    Project project = method.getProject();
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     PsiComment comment = factory.createCommentFromText(javadoc, null);
 
@@ -428,7 +425,7 @@ public class PsiAdapter {
       if (replace) {
         // javadoc already exists, so replace
         doc.replace(comment);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(method); // to reformat javadoc
         return comment;
       } else {
@@ -438,7 +435,7 @@ public class PsiAdapter {
     } else {
       // add new javadoc
       method.addBefore(comment, method.getFirstChild());
-      final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+      CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
       codeStyleManager.reformat(method); // to reformat javadoc
       return comment;
     }
@@ -468,11 +465,8 @@ public class PsiAdapter {
     if (isTypeOfVoid(method.getReturnType())) {
       return false;
     }
-    final PsiParameterList parameterList = method.getParameterList();
-    if (parameterList.getParametersCount() != 0) {
-      return false;
-    }
-    return true;
+    PsiParameterList parameterList = method.getParameterList();
+    return parameterList.getParametersCount() == 0;
   }
 
   /**
@@ -510,8 +504,8 @@ public class PsiAdapter {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
-    final PsiClassType classType = (PsiClassType) type;
-    final PsiClass aClass = classType.resolve();
+    PsiClassType classType = (PsiClassType) type;
+    PsiClass aClass = classType.resolve();
     return (aClass != null) && aClass.isEnum();
   }
 
@@ -522,7 +516,7 @@ public class PsiAdapter {
    * @return true if class is an exception.
    */
   public static boolean isExceptionClass(PsiClass clazz) {
-    return InheritanceUtil.isInheritor(clazz, JAVA_LANG_THROWABLE);
+    return InheritanceUtil.isInheritor(clazz, CommonClassNames.JAVA_LANG_THROWABLE);
   }
 
   /**
@@ -538,12 +532,12 @@ public class PsiAdapter {
     // is it public boolean equals(Object o)
     for (PsiMethod method : methods) {
       // must be public
-      if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+      if (!method.isPublic()) {
         continue;
       }
 
       // must not be static
-      if (method.hasModifierProperty(PsiModifier.STATIC)) {
+      if (method.isStatic()) {
         continue;
       }
 
@@ -560,7 +554,7 @@ public class PsiAdapter {
       }
 
       // parameter must be Object
-      if (!(parameters[0].getType().getCanonicalText().equals(JAVA_LANG_OBJECT))) {
+      if (!(parameters[0].getType().getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT))) {
         continue;
       }
 
@@ -585,12 +579,12 @@ public class PsiAdapter {
     // is it public int hashCode()
     for (PsiMethod method : methods) {
       // must be public
-      if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+      if (!method.isPublic()) {
         continue;
       }
 
       // must not be static
-      if (method.hasModifierProperty(PsiModifier.STATIC)) {
+      if (method.isStatic()) {
         continue;
       }
 
@@ -646,6 +640,7 @@ public class PsiAdapter {
    * @param clazz the class
    * @return the names.
    */
+  @RequiredReadAction
   public static String[] getImplementsClassnames(PsiClass clazz) {
     PsiClass[] interfaces = clazz.getInterfaces();
 
@@ -672,6 +667,7 @@ public class PsiAdapter {
     return type instanceof PsiPrimitiveType;
   }
 
+  @RequiredReadAction
   public static int getJavaVersion(@Nonnull PsiElement element) {
     JavaSdkVersion sdkVersion = JavaVersionService.getInstance().getJavaSdkVersion(element);
     if (sdkVersion == null) {
@@ -716,7 +712,7 @@ public class PsiAdapter {
     if (!(aType instanceof PsiArrayType)) {
       return false;
     }
-    final PsiType componentType = ((PsiArrayType) aType).getComponentType();
+    PsiType componentType = ((PsiArrayType) aType).getComponentType();
     return componentType instanceof PsiArrayType;
   }
 }

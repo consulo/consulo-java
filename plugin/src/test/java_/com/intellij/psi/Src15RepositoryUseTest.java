@@ -15,10 +15,19 @@
  */
 package com.intellij.psi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.testFramework.IdeaTestUtil;
+import com.intellij.testFramework.PlatformTestCase;
+import com.intellij.testFramework.PsiTestCase;
+import com.intellij.testFramework.PsiTestUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileFilter;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,20 +35,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.intellij.java.language.psi.*;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileFilter;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.testFramework.IdeaTestUtil;
-import com.intellij.testFramework.PlatformTestCase;
-import com.intellij.testFramework.PsiTestCase;
-import com.intellij.testFramework.PsiTestUtil;
-import jakarta.annotation.Nonnull;
+import static org.junit.Assert.*;
 
 /**
  * @author dsl

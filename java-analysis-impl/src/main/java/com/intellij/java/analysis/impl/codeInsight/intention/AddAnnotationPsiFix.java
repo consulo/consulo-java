@@ -13,7 +13,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.editor.intention.BaseIntentionAction;

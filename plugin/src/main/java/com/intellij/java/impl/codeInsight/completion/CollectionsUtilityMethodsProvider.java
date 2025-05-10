@@ -21,11 +21,8 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.function.Consumer;
-
-import static consulo.java.language.module.util.JavaClassNames.*;
 
 /**
 * @author peter
@@ -40,7 +37,7 @@ class CollectionsUtilityMethodsProvider {
 
   CollectionsUtilityMethodsProvider(PsiElement position,
                                     PsiType expectedType,
-                                    PsiType defaultType, @Nonnull final Consumer<LookupElement> result) {
+                                    PsiType defaultType, @Nonnull Consumer<LookupElement> result) {
     myResult = result;
     myElement = position;
     myExpectedType = expectedType;
@@ -48,63 +45,63 @@ class CollectionsUtilityMethodsProvider {
   }
 
   public void addCompletions(boolean showAll) {
-    final PsiElement parent = myElement.getParent();
+    PsiElement parent = myElement.getParent();
     if (parent instanceof PsiReferenceExpression && ((PsiReferenceExpression)parent).getQualifierExpression() != null) return;
 
-    final PsiClass collectionsClass =
-        JavaPsiFacade.getInstance(myElement.getProject()).findClass(JAVA_UTIL_COLLECTIONS, myElement.getResolveScope());
+    PsiClass collectionsClass =
+        JavaPsiFacade.getInstance(myElement.getProject()).findClass(CommonClassNames.JAVA_UTIL_COLLECTIONS, myElement.getResolveScope());
     if (collectionsClass == null) return;
 
-    final PsiElement pparent = parent.getParent();
+    PsiElement pparent = parent.getParent();
     if (showAll ||
         pparent instanceof PsiReturnStatement ||
         pparent instanceof PsiConditionalExpression && pparent.getParent() instanceof PsiReturnStatement) {
-      addCollectionMethod(JAVA_UTIL_LIST, "emptyList", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_SET, "emptySet", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_MAP, "emptyMap", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_LIST, "emptyList", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_SET, "emptySet", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_MAP, "emptyMap", collectionsClass);
     }
 
     if (showAll) {
-      addCollectionMethod(JAVA_UTIL_LIST, "singletonList", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_SET, "singleton", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_MAP, "singletonMap", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_LIST, "singletonList", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_SET, "singleton", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_MAP, "singletonMap", collectionsClass);
 
-      addCollectionMethod(JAVA_UTIL_COLLECTION, "unmodifiableCollection", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_LIST, "unmodifiableList", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_SET, "unmodifiableSet", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_MAP, "unmodifiableMap", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_SORTED_SET, "unmodifiableSortedSet", collectionsClass);
-      addCollectionMethod(JAVA_UTIL_SORTED_MAP, "unmodifiableSortedMap", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_COLLECTION, "unmodifiableCollection", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_LIST, "unmodifiableList", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_SET, "unmodifiableSet", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_MAP, "unmodifiableMap", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_SORTED_SET, "unmodifiableSortedSet", collectionsClass);
+      addCollectionMethod(CommonClassNames.JAVA_UTIL_SORTED_MAP, "unmodifiableSortedMap", collectionsClass);
     }
 
   }
 
-  private void addCollectionMethod(final String baseClassName,
-                                   @NonNls final String method, @Nonnull final PsiClass collectionsClass) {
-    if (isClassType(myExpectedType, baseClassName) || isClassType(myExpectedType, JAVA_UTIL_COLLECTION)) {
+  private void addCollectionMethod(String baseClassName,
+                                   String method, @Nonnull PsiClass collectionsClass) {
+    if (isClassType(myExpectedType, baseClassName) || isClassType(myExpectedType, CommonClassNames.JAVA_UTIL_COLLECTION)) {
       addMethodItem(myExpectedType, method, collectionsClass);
-    } else if (isClassType(myDefaultType, baseClassName) || isClassType(myDefaultType, JAVA_UTIL_COLLECTION)) {
+    } else if (isClassType(myDefaultType, baseClassName) || isClassType(myDefaultType, CommonClassNames.JAVA_UTIL_COLLECTION)) {
       addMethodItem(myDefaultType, method, collectionsClass);
     }
   }
 
   private void addMethodItem(PsiType expectedType, String methodName, PsiClass containingClass) {
-    final PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
+    PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
     if (methods.length == 0) {
       return;
     }
     
-    final PsiMethod method = methods[0];
-    final JavaMethodCallElement item = new JavaMethodCallElement(method, false, false);
+    PsiMethod method = methods[0];
+    JavaMethodCallElement item = new JavaMethodCallElement(method, false, false);
     item.setAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
     item.setInferenceSubstitutor(SmartCompletionDecorator.calculateMethodReturnTypeSubstitutor(method, expectedType), myElement);
     item.putUserData(COLLECTION_FACTORY, true);
     myResult.accept(item);
   }
 
-  private static boolean isClassType(final PsiType type, final String className) {
+  private static boolean isClassType(PsiType type, String className) {
     if (type instanceof PsiClassType) {
-      final PsiClass psiClass = ((PsiClassType)type).resolve();
+      PsiClass psiClass = ((PsiClassType)type).resolve();
       return psiClass != null && className.equals(psiClass.getQualifiedName());
     }
     return false;

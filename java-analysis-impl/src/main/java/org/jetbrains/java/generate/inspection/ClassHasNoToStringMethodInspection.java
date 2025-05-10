@@ -19,7 +19,6 @@ import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;

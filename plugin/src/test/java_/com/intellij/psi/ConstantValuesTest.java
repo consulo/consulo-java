@@ -1,23 +1,20 @@
 package com.intellij.psi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.intellij.JavaTestUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.java.language.psi.*;
+import com.intellij.testFramework.PsiTestCase;
+import com.intellij.testFramework.PsiTestUtil;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.logging.Logger;
+import consulo.virtualFileSystem.VirtualFile;
 
 import java.io.IOException;
 
-import com.intellij.JavaTestUtil;
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
-import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.testFramework.PsiTestCase;
-import com.intellij.testFramework.PsiTestUtil;
+import static org.junit.Assert.*;
 
 public abstract class ConstantValuesTest extends PsiTestCase
 {

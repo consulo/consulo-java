@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
 import consulo.util.lang.ObjectUtil;

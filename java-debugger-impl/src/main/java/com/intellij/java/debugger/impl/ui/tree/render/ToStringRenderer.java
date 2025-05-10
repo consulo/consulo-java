@@ -36,8 +36,6 @@ import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
-
 public class ToStringRenderer extends NodeRendererImpl implements OnDemandRenderer
 {
 	public static final
@@ -149,7 +147,7 @@ public class ToStringRenderer extends NodeRendererImpl implements OnDemandRender
 			return false;
 		}
 
-		if(JAVA_LANG_STRING.equals(type.name()))
+		if(CommonClassNames.JAVA_LANG_STRING.equals(type.name()))
 		{
 			return false; // do not render 'String' objects for performance reasons
 		}

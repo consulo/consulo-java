@@ -25,7 +25,6 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;

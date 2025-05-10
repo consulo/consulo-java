@@ -23,14 +23,13 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 

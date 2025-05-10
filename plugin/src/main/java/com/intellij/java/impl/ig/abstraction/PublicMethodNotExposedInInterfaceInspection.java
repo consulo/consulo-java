@@ -20,7 +20,6 @@ import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,9 +28,8 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
-import consulo.java.language.module.util.JavaClassNames;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
