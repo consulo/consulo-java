@@ -28,7 +28,6 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -55,14 +54,14 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 
 	static
 	{
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_INTEGER, "intValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_SHORT, "shortValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_BOOLEAN, "booleanValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_LONG, "longValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_BYTE, "byteValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_FLOAT, "floatValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_DOUBLE, "doubleValue");
-		s_unboxingMethods.put(JavaClassNames.JAVA_LANG_CHARACTER, "charValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_INTEGER, "intValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_SHORT, "shortValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_BOOLEAN, "booleanValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_LONG, "longValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_BYTE, "byteValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_FLOAT, "floatValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_DOUBLE, "doubleValue");
+		s_unboxingMethods.put(CommonClassNames.JAVA_LANG_CHARACTER, "charValue");
 	}
 
 	@Override
@@ -133,7 +132,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 						return;
 					}
 					final String classname = containingClass.getQualifiedName();
-					if(JavaClassNames.JAVA_LANG_BOOLEAN.equals(classname))
+					if(CommonClassNames.JAVA_LANG_BOOLEAN.equals(classname))
 					{
 						@NonNls final String name = field.getName();
 						if("TRUE".equals(name))

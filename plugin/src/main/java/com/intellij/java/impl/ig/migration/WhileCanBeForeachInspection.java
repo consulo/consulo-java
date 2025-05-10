@@ -32,7 +32,6 @@ import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -383,7 +382,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         return false;
       }
       final PsiVariable variable = (PsiVariable)declaredElement;
-      if (!TypeUtils.variableHasTypeOrSubtype(variable, JavaClassNames.JAVA_UTIL_ITERATOR, "java.util.ListIterator")) {
+      if (!TypeUtils.variableHasTypeOrSubtype(variable, CommonClassNames.JAVA_UTIL_ITERATOR, "java.util.ListIterator")) {
         return false;
       }
       final PsiExpression initialValue = variable.getInitializer();
@@ -416,8 +415,8 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       if (qualifierClass == null) {
         return false;
       }
-      if (!InheritanceUtil.isInheritor(qualifierClass, JavaClassNames.JAVA_LANG_ITERABLE) &&
-          !InheritanceUtil.isInheritor(qualifierClass, JavaClassNames.JAVA_UTIL_COLLECTION)) {
+      if (!InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_LANG_ITERABLE) &&
+          !InheritanceUtil.isInheritor(qualifierClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
         return false;
       }
       final PsiExpression condition = whileStatement.getCondition();

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive.util;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.Util;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 
 import java.util.HashSet;
 
@@ -38,7 +38,7 @@ public class VictimCollector extends Visitor {
 
   private void testNAdd(final PsiElement element, final PsiType t) {
     if (Util.isRaw(t, mySettings)) {
-      if (element instanceof PsiNewExpression && t.getCanonicalText().equals(JavaClassNames.JAVA_LANG_OBJECT)){
+      if (element instanceof PsiNewExpression && t.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT)){
         return;  
       }
 

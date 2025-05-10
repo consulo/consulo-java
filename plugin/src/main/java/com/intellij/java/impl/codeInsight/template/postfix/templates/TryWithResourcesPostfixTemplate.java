@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
@@ -58,7 +57,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
     final PsiClass aClass = ((PsiClassType)type).resolve();
     Project project = element.getProject();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
     if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
 
     return true;

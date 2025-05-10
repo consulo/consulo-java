@@ -15,32 +15,28 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
-
-import consulo.execution.debug.ui.XDebuggerUIConstants;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import consulo.util.lang.StringUtil;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.Type;
-import consulo.internal.com.sun.jdi.Value;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import com.intellij.java.language.psi.CommonClassNames;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.internal.com.sun.jdi.*;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import jakarta.annotation.Nonnull;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 public class ToStringRenderer extends NodeRendererImpl implements OnDemandRenderer
 {
@@ -167,7 +163,7 @@ public class ToStringRenderer extends NodeRendererImpl implements OnDemandRender
 		if(type instanceof ClassType)
 		{
 			Method toStringMethod = ((ClassType) type).concreteMethodByName("toString", "()Ljava/lang/String;");
-			return toStringMethod != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(toStringMethod.declaringType().name());
+			return toStringMethod != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(toStringMethod.declaringType().name());
 		}
 		return false;
 	}

@@ -3,8 +3,8 @@ package com.intellij.java.language.impl.psi.impl.cache;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiClassStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.*;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
@@ -48,10 +48,10 @@ public /*sealed*/ abstract class TypeInfo {
             "null",
             "short",
             "void",
-            JavaClassNames.JAVA_LANG_OBJECT_SHORT,
-            JavaClassNames.JAVA_LANG_OBJECT,
-            JavaClassNames.JAVA_LANG_STRING_SHORT,
-            JavaClassNames.JAVA_LANG_STRING
+            CommonClassNames.JAVA_LANG_OBJECT_SHORT,
+            CommonClassNames.JAVA_LANG_OBJECT,
+            CommonClassNames.JAVA_LANG_STRING_SHORT,
+            CommonClassNames.JAVA_LANG_STRING
         };
 
         ourFrequentTypeIndex = ObjectMaps.newObjectIntHashMap();
@@ -92,16 +92,16 @@ public /*sealed*/ abstract class TypeInfo {
         GENERIC,
 
         // References to widely used classes (skip encoding the class name)
-        JAVA_LANG_OBJECT(JavaClassNames.JAVA_LANG_OBJECT),
-        JAVA_LANG_STRING(JavaClassNames.JAVA_LANG_STRING),
-        JAVA_LANG_THROWABLE(JavaClassNames.JAVA_LANG_THROWABLE),
-        JAVA_LANG_EXCEPTION(JavaClassNames.JAVA_LANG_EXCEPTION),
-        JAVA_UTIL_COLLECTION(JavaClassNames.JAVA_UTIL_COLLECTION),
-        JAVA_UTIL_LIST(JavaClassNames.JAVA_UTIL_LIST),
-        JAVA_LANG_ITERABLE(JavaClassNames.JAVA_LANG_ITERABLE),
-        JAVA_UTIL_ITERATOR(JavaClassNames.JAVA_UTIL_ITERATOR),
-        JAVA_UTIL_MAP(JavaClassNames.JAVA_UTIL_MAP),
-        JAVA_LANG_ANNOTATION_ANNOTATION(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION),
+        JAVA_LANG_OBJECT(CommonClassNames.JAVA_LANG_OBJECT),
+        JAVA_LANG_STRING(CommonClassNames.JAVA_LANG_STRING),
+        JAVA_LANG_THROWABLE(CommonClassNames.JAVA_LANG_THROWABLE),
+        JAVA_LANG_EXCEPTION(CommonClassNames.JAVA_LANG_EXCEPTION),
+        JAVA_UTIL_COLLECTION(CommonClassNames.JAVA_UTIL_COLLECTION),
+        JAVA_UTIL_LIST(CommonClassNames.JAVA_UTIL_LIST),
+        JAVA_LANG_ITERABLE(CommonClassNames.JAVA_LANG_ITERABLE),
+        JAVA_UTIL_ITERATOR(CommonClassNames.JAVA_UTIL_ITERATOR),
+        JAVA_UTIL_MAP(CommonClassNames.JAVA_UTIL_MAP),
+        JAVA_LANG_ANNOTATION_ANNOTATION(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION),
 
         /**
          * Reference with outer class (which may probably be inner as well, or have generic parameters),

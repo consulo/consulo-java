@@ -24,7 +24,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -62,8 +61,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
     final PsiExpression[] arguments = argumentList.getExpressions();
     for (PsiExpression argument : arguments) {
       final PsiType type = argument.getType();
-      if (type == null ||
-          !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return null;
       }
     }
@@ -168,8 +166,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
       if (qualifier == null) {
         return;
       }
-      if (!TypeUtils.expressionHasTypeOrSubtype(qualifier,
-                                                JavaClassNames.JAVA_UTIL_PROPERTIES)) {
+      if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_UTIL_PROPERTIES)) {
         return;
       }
       registerMethodCallError(expression, expression);

@@ -15,13 +15,11 @@
  */
 package com.intellij.java.language.psi.util;
 
-import java.util.Set;
-
 import com.intellij.java.language.psi.*;
+import consulo.util.lang.Comparing;
 
 import java.util.HashSet;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.util.lang.Comparing;
+import java.util.Set;
 
 /**
  * User: anna
@@ -33,9 +31,9 @@ public class TypesDistinctProver
 
 	static
 	{
-		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_IO_SERIALIZABLE);
-		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_LANG_CLONEABLE);
-		ARRAY_SUPER_CLASSES.add(JavaClassNames.JAVA_LANG_OBJECT);
+		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_IO_SERIALIZABLE);
+		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_LANG_CLONEABLE);
+		ARRAY_SUPER_CLASSES.add(CommonClassNames.JAVA_LANG_OBJECT);
 	}
 
 	private TypesDistinctProver()
@@ -86,9 +84,9 @@ public class TypesDistinctProver
 						return false;
 					}
 
-					if(JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass2.getQualifiedName()) && !(boundClass1 instanceof PsiTypeParameter))
+					if(CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass2.getQualifiedName()) && !(boundClass1 instanceof PsiTypeParameter))
 					{
-						return !JavaClassNames.JAVA_LANG_OBJECT.equals(boundClass1.getQualifiedName());
+						return !CommonClassNames.JAVA_LANG_OBJECT.equals(boundClass1.getQualifiedName());
 					}
 
 					return proveExtendsBoundsDistinct(type1, type2, boundClass1, psiClass2);

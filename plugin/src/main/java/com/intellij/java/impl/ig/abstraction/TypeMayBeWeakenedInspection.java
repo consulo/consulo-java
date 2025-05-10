@@ -26,7 +26,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -260,7 +259,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       if (doNotWeakenToJavaLangObject) {
         final Project project = variable.getProject();
         final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final PsiClass javaLangObjectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, variable.getResolveScope());
+        final PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, variable.getResolveScope());
         weakestClasses.remove(javaLangObjectClass);
       }
       if (onlyWeakentoInterface) {
@@ -301,7 +300,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       if (doNotWeakenToJavaLangObject) {
         final Project project = method.getProject();
         final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final PsiClass javaLangObjectClass = facade.findClass(JavaClassNames.JAVA_LANG_OBJECT, method.getResolveScope());
+        final PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, method.getResolveScope());
         weakestClasses.remove(javaLangObjectClass);
       }
       if (onlyWeakentoInterface) {

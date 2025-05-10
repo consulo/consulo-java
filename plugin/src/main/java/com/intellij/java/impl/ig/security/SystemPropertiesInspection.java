@@ -15,15 +15,11 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -132,7 +128,7 @@ public class SystemPropertiesInspection extends BaseInspection {
       if (className == null) {
         return false;
       }
-      return JavaClassNames.JAVA_LANG_INTEGER.equals(className);
+      return CommonClassNames.JAVA_LANG_INTEGER.equals(className);
     }
 
     private static boolean isBooleanGetBoolean(
@@ -156,7 +152,7 @@ public class SystemPropertiesInspection extends BaseInspection {
       if (className == null) {
         return false;
       }
-      return JavaClassNames.JAVA_LANG_BOOLEAN.equals(className);
+      return CommonClassNames.JAVA_LANG_BOOLEAN.equals(className);
     }
   }
 }

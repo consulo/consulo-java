@@ -33,7 +33,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamingDialog;
@@ -404,7 +403,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
     PsiElement tmp;
 
     final PsiClass javaUtilCollectionClass =
-      JavaPsiFacade.getInstance(myManager.getProject()).findClass(JavaClassNames.JAVA_UTIL_COLLECTION, ref.getResolveScope());
+      JavaPsiFacade.getInstance(myManager.getProject()).findClass(CommonClassNames.JAVA_UTIL_COLLECTION, ref.getResolveScope());
     if (javaUtilCollectionClass == null) return;
     tmp = newExpression.getParent();
     if (!(tmp instanceof PsiExpressionList)) return;
@@ -508,7 +507,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
     }
     else if (variable instanceof PsiResourceVariable) {
       final PsiJavaParserFacade facade = JavaPsiFacade.getInstance(myProject).getParserFacade();
-      checkConstrainingType(type, facade.createTypeFromText(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, variable));
+      checkConstrainingType(type, facade.createTypeFromText(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, variable));
     }
   }
 

@@ -16,14 +16,13 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -88,7 +87,7 @@ public class WaitNotInSynchronizedContextInspection
         return;
       }
       final String qualifiedName = aClass.getQualifiedName();
-      if (!JavaClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
+      if (!CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
         return;
       }
       final PsiExpression qualifier =

@@ -24,7 +24,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -104,7 +103,7 @@ public class VarargParameterInspection extends BaseInspection {
       if (typeElement == null) {
         return;
       }
-      final PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, JavaClassNames.JAVA_LANG_SAFE_VARARGS);
+      final PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS);
       if (annotation != null) {
         annotation.delete();
       }

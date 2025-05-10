@@ -12,7 +12,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.impl.JavaBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionSelector;
@@ -57,7 +56,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                 }
             }
 
-            if (type.equalsToText(JavaClassNames.JAVA_LANG_STRING) && expression.getContainingFile() instanceof PsiJavaFile javaFile) {
+            if (type.equalsToText(CommonClassNames.JAVA_LANG_STRING) && expression.getContainingFile() instanceof PsiJavaFile javaFile) {
                 if (PsiUtil.isAvailable(JavaFeature.STRING_SWITCH, javaFile)) {
                     return true;
                 }

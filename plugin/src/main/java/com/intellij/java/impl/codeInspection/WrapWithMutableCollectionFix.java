@@ -9,18 +9,16 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nls;
 
 public class WrapWithMutableCollectionFix implements LocalQuickFix {
     private final String myVariableName;
@@ -62,15 +60,15 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
             return;
         }
         String typeParameters = "";
-        if (myCollectionName.equals(JavaClassNames.JAVA_UTIL_HASH_MAP)) {
-            PsiType keyParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_MAP, 0, false);
-            PsiType valueParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_MAP, 1, false);
+        if (myCollectionName.equals(CommonClassNames.JAVA_UTIL_HASH_MAP)) {
+            PsiType keyParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_UTIL_MAP, 0, false);
+            PsiType valueParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_UTIL_MAP, 1, false);
             if (keyParameter != null && valueParameter != null) {
                 typeParameters = "<" + keyParameter.getCanonicalText() + "," + valueParameter.getCanonicalText() + ">";
             }
         }
         else {
-            PsiType elementParameter = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_LANG_ITERABLE, 0, false);
+            PsiType elementParameter = PsiUtil.substituteTypeParameter(type, CommonClassNames.JAVA_LANG_ITERABLE, 0, false);
             if (elementParameter != null) {
                 typeParameters = "<" + elementParameter.getCanonicalText() + ">";
             }
@@ -133,10 +131,10 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
             return null;
         }
         return switch (name) {
-            case JavaClassNames.JAVA_LANG_ITERABLE, JavaClassNames.JAVA_UTIL_COLLECTION, JavaClassNames.JAVA_UTIL_LIST ->
-                JavaClassNames.JAVA_UTIL_ARRAY_LIST;
-            case JavaClassNames.JAVA_UTIL_SET -> JavaClassNames.JAVA_UTIL_HASH_SET;
-            case JavaClassNames.JAVA_UTIL_MAP -> JavaClassNames.JAVA_UTIL_HASH_MAP;
+            case CommonClassNames.JAVA_LANG_ITERABLE, CommonClassNames.JAVA_UTIL_COLLECTION, CommonClassNames.JAVA_UTIL_LIST ->
+                CommonClassNames.JAVA_UTIL_ARRAY_LIST;
+            case CommonClassNames.JAVA_UTIL_SET -> CommonClassNames.JAVA_UTIL_HASH_SET;
+            case CommonClassNames.JAVA_UTIL_MAP -> CommonClassNames.JAVA_UTIL_HASH_MAP;
             default -> null;
         };
     }

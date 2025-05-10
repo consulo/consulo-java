@@ -19,15 +19,14 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,11 +64,11 @@ public class TypeUtils {
   }
 
   public static PsiClassType getObjectType(@Nonnull PsiElement context) {
-    return getType(JavaClassNames.JAVA_LANG_OBJECT, context);
+    return getType(CommonClassNames.JAVA_LANG_OBJECT, context);
   }
 
   public static PsiClassType getStringType(@Nonnull PsiElement context) {
-    return getType(JavaClassNames.JAVA_LANG_STRING, context);
+    return getType(CommonClassNames.JAVA_LANG_STRING, context);
   }
 
   /**
@@ -83,12 +82,12 @@ public class TypeUtils {
 
   @Contract("null -> false")
   public static boolean isJavaLangObject(@Nullable PsiType targetType) {
-    return typeEquals(JavaClassNames.JAVA_LANG_OBJECT, targetType);
+    return typeEquals(CommonClassNames.JAVA_LANG_OBJECT, targetType);
   }
 
   @Contract("null -> false")
   public static boolean isJavaLangString(@Nullable PsiType targetType) {
-    return typeEquals(JavaClassNames.JAVA_LANG_STRING, targetType);
+    return typeEquals(CommonClassNames.JAVA_LANG_STRING, targetType);
   }
 
   public static boolean isOptional(@Nullable PsiType type) {
@@ -101,7 +100,7 @@ public class TypeUtils {
       return false;
     }
     final String qualifiedName = aClass.getQualifiedName();
-    return JavaClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName) || "java.util.OptionalDouble".equals(qualifiedName) || "java.util.OptionalInt".equals(qualifiedName) || ("java.util" +
+    return CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName) || "java.util.OptionalDouble".equals(qualifiedName) || "java.util.OptionalInt".equals(qualifiedName) || ("java.util" +
         ".OptionalLong").equals(qualifiedName) || "com.google.common.base.Optional".equals(qualifiedName);
   }
 
@@ -245,19 +244,19 @@ public class TypeUtils {
     if (type == null) {
       return null;
     }
-    if (type.equalsToText(JavaClassNames.JAVA_LANG_BYTE)
-        || type.equalsToText(JavaClassNames.JAVA_LANG_SHORT)
-        || type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER)
-        || type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER)
+    if (type.equalsToText(CommonClassNames.JAVA_LANG_BYTE)
+        || type.equalsToText(CommonClassNames.JAVA_LANG_SHORT)
+        || type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER)
+        || type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER)
         || type.equals(PsiType.BYTE)
         || type.equals(PsiType.SHORT)
         || type.equals(PsiType.CHAR)) {
       return PsiType.INT;
-    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_LONG)) {
+    } else if (type.equalsToText(CommonClassNames.JAVA_LANG_LONG)) {
       return PsiType.LONG;
-    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_FLOAT)) {
+    } else if (type.equalsToText(CommonClassNames.JAVA_LANG_FLOAT)) {
       return PsiType.FLOAT;
-    } else if (type.equalsToText(JavaClassNames.JAVA_LANG_DOUBLE)) {
+    } else if (type.equalsToText(CommonClassNames.JAVA_LANG_DOUBLE)) {
       return PsiType.DOUBLE;
     }
     return type;

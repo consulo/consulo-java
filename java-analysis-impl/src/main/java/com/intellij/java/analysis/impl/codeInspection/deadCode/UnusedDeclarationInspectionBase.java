@@ -43,11 +43,13 @@ import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.application.Application;
 import consulo.application.progress.ProgressManager;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.GlobalInspectionTool;
+import consulo.language.editor.inspection.InspectionToolState;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
@@ -219,7 +221,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     if (parameters.length != 0) {
       return false;
     }
-    if (!method.getReturnType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+    if (!method.getReturnType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
       return false;
     }
     if (method.hasModifierProperty(PsiModifier.STATIC)) {
@@ -238,7 +240,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     if (parameters.length != 0) {
       return false;
     }
-    if (!method.getReturnType().equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+    if (!method.getReturnType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
       return false;
     }
     if (method.hasModifierProperty(PsiModifier.STATIC)) {

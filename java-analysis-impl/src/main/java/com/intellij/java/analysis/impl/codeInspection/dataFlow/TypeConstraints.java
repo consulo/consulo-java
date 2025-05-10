@@ -6,14 +6,12 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
-import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -119,12 +117,12 @@ public final class TypeConstraints {
 
         @Override
         public String toString() {
-            return JavaClassNames.JAVA_LANG_OBJECT;
+            return CommonClassNames.JAVA_LANG_OBJECT;
         }
 
         @Override
         public PsiType getPsiType(Project project) {
-            return JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(JavaClassNames.JAVA_LANG_OBJECT);
+            return JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT);
         }
     };
 
@@ -255,11 +253,11 @@ public final class TypeConstraints {
         String name = psiClass.getQualifiedName();
         if (name != null) {
             switch (name) {
-                case JavaClassNames.JAVA_LANG_OBJECT:
+                case CommonClassNames.JAVA_LANG_OBJECT:
                     return EXACTLY_OBJECT;
-                case JavaClassNames.JAVA_LANG_CLONEABLE:
+                case CommonClassNames.JAVA_LANG_CLONEABLE:
                     return ArraySuperInterface.CLONEABLE;
-                case JavaClassNames.JAVA_IO_SERIALIZABLE:
+                case CommonClassNames.JAVA_IO_SERIALIZABLE:
                     return ArraySuperInterface.SERIALIZABLE;
             }
         }
@@ -319,8 +317,8 @@ public final class TypeConstraints {
     }
 
     private enum ArraySuperInterface implements TypeConstraint.Exact {
-        CLONEABLE(JavaClassNames.JAVA_LANG_CLONEABLE),
-        SERIALIZABLE(JavaClassNames.JAVA_IO_SERIALIZABLE);
+        CLONEABLE(CommonClassNames.JAVA_LANG_CLONEABLE),
+        SERIALIZABLE(CommonClassNames.JAVA_IO_SERIALIZABLE);
         @Nonnull
         private final String myReference;
 
@@ -403,13 +401,13 @@ public final class TypeConstraints {
             // Abstract final type is incorrect. We, however, assume that final wins: it can be instantiated
             // otherwise TypeConstraints.instanceOf(type) would return impossible type
             return (myClass.isFinal() || !myClass.isAbstract())
-                && !JavaClassNames.JAVA_LANG_VOID.equals(myClass.getQualifiedName());
+                && !CommonClassNames.JAVA_LANG_VOID.equals(myClass.getQualifiedName());
         }
 
         @Override
         public boolean isComparedByEquals() {
             String name = myClass.getQualifiedName();
-            return name != null && (JavaClassNames.JAVA_LANG_STRING.equals(name) || TypeConversionUtil.isPrimitiveWrapper(name));
+            return name != null && (CommonClassNames.JAVA_LANG_STRING.equals(name) || TypeConversionUtil.isPrimitiveWrapper(name));
         }
 
         @Nonnull
@@ -548,7 +546,7 @@ public final class TypeConstraints {
             }
             //noinspection SimplifiableIfStatement
             if (other instanceof ExactClass exactClass) {
-                return JavaClassNames.JAVA_LANG_OBJECT.equals(exactClass.myClass.getQualifiedName());
+                return CommonClassNames.JAVA_LANG_OBJECT.equals(exactClass.myClass.getQualifiedName());
             }
             return false;
         }

@@ -15,14 +15,14 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import org.jdom.Element;
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.engine.DebuggerUtils;
+import com.intellij.java.language.psi.CommonClassNames;
+import consulo.internal.com.sun.jdi.Type;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.internal.com.sun.jdi.Type;
+import jakarta.annotation.Nonnull;
+import org.jdom.Element;
 
 public abstract class TypeRenderer implements Renderer
 {
@@ -31,7 +31,7 @@ public abstract class TypeRenderer implements Renderer
 
 	protected TypeRenderer()
 	{
-		this(JavaClassNames.JAVA_LANG_OBJECT);
+		this(CommonClassNames.JAVA_LANG_OBJECT);
 	}
 
 	protected TypeRenderer(@Nonnull String className)

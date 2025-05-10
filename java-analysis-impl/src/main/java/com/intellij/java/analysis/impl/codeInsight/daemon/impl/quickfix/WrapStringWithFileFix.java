@@ -19,17 +19,15 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   public final static MyMethodArgumentFixerFactory REGISTAR = new MyMethodArgumentFixerFactory();
@@ -59,7 +57,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 
   @Override
   public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
-    return myType != null && myType.isValid() && myType.equalsToText(JavaClassNames.JAVA_IO_FILE) && startElement.isValid() && startElement.getManager().isInProject(startElement) &&
+    return myType != null && myType.isValid() && myType.equalsToText(CommonClassNames.JAVA_IO_FILE) && startElement.isValid() && startElement.getManager().isInProject(startElement) &&
         isStringType(startElement);
   }
 
@@ -76,11 +74,11 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
     if (type == null) {
       return false;
     }
-    return type.equalsToText(JavaClassNames.JAVA_LANG_STRING);
+    return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
   }
 
   private static PsiElement getModifiedExpression(@Nonnull PsiElement expression) {
-    return JavaPsiFacade.getElementFactory(expression.getProject()).createExpressionFromText(PsiKeyword.NEW + " " + JavaClassNames.JAVA_IO_FILE + "(" + expression.getText() + ")", expression);
+    return JavaPsiFacade.getElementFactory(expression.getProject()).createExpressionFromText(PsiKeyword.NEW + " " + CommonClassNames.JAVA_IO_FILE + "(" + expression.getText() + ")", expression);
   }
 
   private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction {
@@ -108,12 +106,12 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
     @Nullable
     @Override
     protected PsiExpression getModifiedArgument(final PsiExpression expression, final PsiType toType) throws IncorrectOperationException {
-      return isStringType(expression) && toType.equalsToText(JavaClassNames.JAVA_IO_FILE) ? (PsiExpression) getModifiedExpression(expression) : null;
+      return isStringType(expression) && toType.equalsToText(CommonClassNames.JAVA_IO_FILE) ? (PsiExpression) getModifiedExpression(expression) : null;
     }
 
     @Override
     public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context) {
-      return parameterType.isConvertibleFrom(exprType) || (parameterType.equalsToText(JavaClassNames.JAVA_IO_FILE) && exprType.equalsToText(JavaClassNames.JAVA_LANG_STRING));
+      return parameterType.isConvertibleFrom(exprType) || (parameterType.equalsToText(CommonClassNames.JAVA_IO_FILE) && exprType.equalsToText(CommonClassNames.JAVA_LANG_STRING));
     }
 
     @Override

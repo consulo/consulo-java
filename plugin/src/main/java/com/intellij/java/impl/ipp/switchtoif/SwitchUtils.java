@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ipp.switchtoif;
 
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.language.LanguageLevel;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
-import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 class SwitchUtils {
 
@@ -93,8 +93,8 @@ class SwitchUtils {
       return true;
     }
     else if (type instanceof PsiClassType) {
-      if (type.equalsToText(JavaClassNames.JAVA_LANG_CHARACTER) || type.equalsToText(JavaClassNames.JAVA_LANG_BYTE) ||
-          type.equalsToText(JavaClassNames.JAVA_LANG_SHORT) || type.equalsToText(JavaClassNames.JAVA_LANG_INTEGER)) {
+      if (type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER) || type.equalsToText(CommonClassNames.JAVA_LANG_BYTE) ||
+          type.equalsToText(CommonClassNames.JAVA_LANG_SHORT) || type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER)) {
         return true;
       }
       if (languageLevel.isAtLeast(LanguageLevel.JDK_1_5)) {
@@ -104,7 +104,7 @@ class SwitchUtils {
           return true;
         }
       }
-      if (languageLevel.isAtLeast(LanguageLevel.JDK_1_7) && type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+      if (languageLevel.isAtLeast(LanguageLevel.JDK_1_7) && type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return true;
       }
     }
@@ -159,7 +159,7 @@ class SwitchUtils {
       return null;
     }
     final PsiType type = qualifierExpression.getType();
-    if (type == null || !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return null;
     }
     final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
@@ -169,7 +169,7 @@ class SwitchUtils {
     }
     final PsiExpression argument = arguments[0];
     final PsiType argumentType = argument.getType();
-    if (argumentType == null || !argumentType.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (argumentType == null || !argumentType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return null;
     }
     if (PsiUtil.isConstantExpression(qualifierExpression)) {
