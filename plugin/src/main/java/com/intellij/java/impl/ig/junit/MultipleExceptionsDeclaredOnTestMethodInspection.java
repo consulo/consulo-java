@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -79,8 +78,7 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
         project);
       final GlobalSearchScope scope = referenceList.getResolveScope();
       final PsiJavaCodeReferenceElement referenceElement =
-        factory.createReferenceElementByFQClassName(
-          JavaClassNames.JAVA_LANG_EXCEPTION, scope);
+        factory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, scope);
       referenceList.add(referenceElement);
     }
   }

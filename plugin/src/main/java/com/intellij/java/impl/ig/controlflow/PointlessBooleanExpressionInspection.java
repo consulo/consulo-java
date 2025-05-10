@@ -15,26 +15,24 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.localize.LocalizeValue;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import consulo.java.language.module.util.JavaClassNames;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -342,7 +340,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
             return false;
           }
           final PsiType type = operand.getType();
-          if (type == null || !type.equals(PsiType.BOOLEAN) && !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+          if (type == null || !type.equals(PsiType.BOOLEAN) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
             return false;
           }
           containsConstant |= (evaluate(operand) != null);

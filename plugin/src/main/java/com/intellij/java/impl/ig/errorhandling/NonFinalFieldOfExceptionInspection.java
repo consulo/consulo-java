@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -69,8 +68,7 @@ public class NonFinalFieldOfExceptionInspection extends BaseInspection {
       if (containingClass == null) {
         return;
       }
-      if (!InheritanceUtil.isInheritor(containingClass,
-                                       JavaClassNames.JAVA_LANG_EXCEPTION)) {
+      if (!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
         return;
       }
       registerFieldError(field, field);

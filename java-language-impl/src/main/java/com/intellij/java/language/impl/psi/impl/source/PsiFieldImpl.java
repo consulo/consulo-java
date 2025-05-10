@@ -30,7 +30,6 @@ import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.application.util.Queryable;
 import consulo.content.scope.SearchScope;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.file.light.LightVirtualFile;
 import consulo.language.impl.ast.CompositeElement;
@@ -296,7 +295,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   private Object _computeConstantValue(Set<PsiVariable> visitedVars) {
     PsiType type = getType();
     // javac rejects all non primitive and non String constants, although JLS states constants "variables whose initializers are constant expressions"
-    if (!(type instanceof PsiPrimitiveType) && !type.equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+    if (!(type instanceof PsiPrimitiveType) && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return null;
     }
 

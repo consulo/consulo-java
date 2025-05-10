@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ServiceImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.language.psi.JavaLanguageVersion;
 import consulo.language.Language;
 import consulo.language.ast.ASTNode;
@@ -50,12 +49,12 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -181,10 +180,10 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   public PsiTypeParameter createTypeParameter(String name, PsiClassType[] superTypes) {
     StringBuilder builder = new StringBuilder();
     builder.append("public <").append(name);
-    if (superTypes.length > 1 || superTypes.length == 1 && !superTypes[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+    if (superTypes.length > 1 || superTypes.length == 1 && !superTypes[0].equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
       builder.append(" extends ");
       for (PsiClassType type : superTypes) {
-        if (!type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+        if (!type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
           builder.append(type.getCanonicalText(true)).append('&');
         }
       }

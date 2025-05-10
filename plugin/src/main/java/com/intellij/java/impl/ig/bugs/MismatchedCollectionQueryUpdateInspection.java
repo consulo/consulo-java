@@ -34,7 +34,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -60,7 +59,7 @@ public class MismatchedCollectionQueryUpdateInspection
     extends BaseInspection {
 
     private static final CallMatcher TRANSFORMED = CallMatcher.staticCall(
-        JavaClassNames.JAVA_UTIL_COLLECTIONS,
+        CommonClassNames.JAVA_UTIL_COLLECTIONS,
         "asLifoQueue",
         "checkedCollection",
         "checkedList",
@@ -83,14 +82,14 @@ public class MismatchedCollectionQueryUpdateInspection
     );
     private static final CallMatcher DERIVED = CallMatcher.anyOf(
         CollectionUtils.DERIVED_COLLECTION,
-        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_LIST, "subList"),
-        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_SORTED_MAP, "headMap", "tailMap", "subMap"),
-        CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_SORTED_SET, "headSet", "tailSet", "subSet")
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_LIST, "subList"),
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_SORTED_MAP, "headMap", "tailMap", "subMap"),
+        CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_SORTED_SET, "headSet", "tailSet", "subSet")
     );
     private static final CallMatcher COLLECTION_SAFE_ARGUMENT_METHODS =
         CallMatcher.anyOf(
-            CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_COLLECTION, "addAll", "removeAll", "containsAll", "remove"),
-            CallMatcher.instanceCall(JavaClassNames.JAVA_UTIL_MAP, "putAll", "remove")
+            CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_COLLECTION, "addAll", "removeAll", "containsAll", "remove"),
+            CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "putAll", "remove")
         );
     private static final Set<String> COLLECTIONS_QUERIES =
         Set.of("binarySearch", "disjoint", "indexOfSubList", "lastIndexOfSubList", "max", "min");
@@ -153,8 +152,8 @@ public class MismatchedCollectionQueryUpdateInspection
         JPanel ignoredClassesPanel = UiUtils.createAddRemoveTreeClassChooserPanel(
             ignoredClassesTable,
             ignoreClassesMessage.get(),
-            JavaClassNames.JAVA_UTIL_COLLECTION,
-            JavaClassNames.JAVA_UTIL_MAP
+            CommonClassNames.JAVA_UTIL_COLLECTION,
+            CommonClassNames.JAVA_UTIL_MAP
         );
 
         JPanel namesPanel = new JPanel(new GridLayout(1, 2, UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
@@ -471,7 +470,7 @@ public class MismatchedCollectionQueryUpdateInspection
             return false;
         }
         String qualifiedName = aClass.getQualifiedName();
-        return JavaClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName);
+        return CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName);
     }
 
     private static boolean isQueryMethod(@Nonnull PsiCallExpression call) {

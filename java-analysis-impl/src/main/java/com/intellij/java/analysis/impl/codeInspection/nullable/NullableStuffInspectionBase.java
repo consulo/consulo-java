@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.util.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.registry.Registry;
 import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
@@ -38,10 +37,9 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -175,7 +173,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                 for (PsiMethod method : aClass.getConstructors()) {
                     PsiParameterList list = method.getParameterList();
                     if (list.getParametersCount() == 1 &&
-                        list.getParameters()[0].getType().equalsToText(JavaClassNames.JAVA_LANG_STRING)) {
+                        list.getParameters()[0].getType().equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
                         return true;
                     }
                 }
@@ -329,8 +327,8 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                 }
 
                 for (int i = 0; i <= 1; i++) {
-                    PsiType expectedArg = PsiUtil.substituteTypeParameter(expectedType, JavaClassNames.JAVA_UTIL_MAP, i, false);
-                    PsiType assignedArg = PsiUtil.substituteTypeParameter(assignedType, JavaClassNames.JAVA_UTIL_MAP, i, false);
+                    PsiType expectedArg = PsiUtil.substituteTypeParameter(expectedType, CommonClassNames.JAVA_UTIL_MAP, i, false);
+                    PsiType assignedArg = PsiUtil.substituteTypeParameter(assignedType, CommonClassNames.JAVA_UTIL_MAP, i, false);
                     if (isNullityConflict(expectedArg, assignedArg)
                         || expectedArg != null && assignedArg != null
                         && isNullableNotNullCollectionConflict(expectedArg, assignedArg, visited)) {

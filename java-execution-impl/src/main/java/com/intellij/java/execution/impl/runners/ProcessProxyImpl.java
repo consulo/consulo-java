@@ -2,8 +2,8 @@
 package com.intellij.java.execution.impl.runners;
 
 import com.intellij.java.execution.runners.ProcessProxy;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.container.plugin.PluginManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.process.ProcessHandler;
@@ -90,7 +90,7 @@ class ProcessProxyImpl implements ProcessProxy {
           return false;
         }
       }
-      return new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen/breakgen.dll").exists();
+      return new File(PluginManager.getPluginPath(CommonClassNames.class), "breakgen/breakgen.dll").exists();
     }
 
     synchronized (myLock) {

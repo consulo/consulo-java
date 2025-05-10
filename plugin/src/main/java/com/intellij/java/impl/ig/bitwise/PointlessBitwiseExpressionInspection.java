@@ -25,7 +25,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
@@ -200,8 +199,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
           return;
         }
         final PsiType type = operand.getType();
-        if (type == null || type.equals(PsiType.BOOLEAN) ||
-            type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+        if (type == null || type.equals(PsiType.BOOLEAN) || type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
           return;
         }
       }

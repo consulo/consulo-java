@@ -16,10 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.impl.ig.fixes.EqualityToEqualsFix;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,7 +24,6 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -90,8 +86,7 @@ public class NumberEqualityInspection extends BaseInspection {
     }
 
     private static boolean hasNumberType(PsiExpression expression) {
-      return TypeUtils.expressionHasTypeOrSubtype(expression,
-                                                  JavaClassNames.JAVA_LANG_NUMBER);
+      return TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_NUMBER);
     }
   }
 }

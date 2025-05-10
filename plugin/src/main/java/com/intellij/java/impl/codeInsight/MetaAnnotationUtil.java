@@ -24,7 +24,6 @@ import consulo.application.util.CachedValue;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
 import consulo.application.util.ConcurrentFactoryMap;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.PsiUtilCore;
@@ -39,9 +38,9 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
@@ -138,7 +137,7 @@ public class MetaAnnotationUtil {
     {
       GlobalSearchScope scope = GlobalSearchScope.allScope(project);
       Set<VirtualFile> allAnnotationFiles = new HashSet<>();
-      for (PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(JavaClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope)) {
+      for (PsiClass javaLangAnnotation : JavaPsiFacade.getInstance(project).findClasses(CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION, scope)) {
         DirectClassInheritorsSearch.search(javaLangAnnotation, scope, false).forEach(annotationClass ->
         {
           ContainerUtil.addIfNotNull(allAnnotationFiles, PsiUtilCore.getVirtualFile(annotationClass));

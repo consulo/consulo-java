@@ -18,7 +18,6 @@ package consulo.java.impl.intelliLang.config;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.java.impl.intelliLang.JavaLanguageInjectionSupport;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.inject.advanced.BaseInjection;
 import consulo.language.inject.advanced.InjectionPlace;
 import consulo.language.inject.advanced.pattern.PatternCompiler;
@@ -220,10 +219,10 @@ public class MethodParameterInjection extends BaseInjection {
     if (project.isDefault()) {
       @NonNls final String text = type.getPresentableText();
       if (text == null) return false;
-      return text.equals(JavaClassNames.JAVA_LANG_STRING) || text.equals("java.lang.String...") || text.equals("java.lang.String[]");
+      return text.equals(CommonClassNames.JAVA_LANG_STRING) || text.equals("java.lang.String...") || text.equals("java.lang.String[]");
     }
     else {
-      return type.equalsToText(JavaClassNames.JAVA_LANG_STRING) || type.equalsToText("java.lang.String...") || type.equalsToText("java.lang.String[]");
+      return type.equalsToText(CommonClassNames.JAVA_LANG_STRING) || type.equalsToText("java.lang.String...") || type.equalsToText("java.lang.String[]");
     }
   }
 

@@ -28,7 +28,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -194,11 +193,11 @@ public class ObjectEqualityInspection extends BaseInspection {
       }
       final PsiClassType classType = (PsiClassType)type;
       final PsiClassType rawType = classType.rawType();
-      return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
+      return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
     }
 
     private boolean isEnumType(@Nullable PsiExpression expression) {
-      return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_ENUM);
+      return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_ENUM);
     }
 
     private boolean isObjectType(PsiExpression expression) {
@@ -210,7 +209,7 @@ public class ObjectEqualityInspection extends BaseInspection {
              !(type instanceof PsiArrayType) &&
              !(type instanceof PsiPrimitiveType) &&
              !TypeUtils.isJavaLangString(type) &&
-             !TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_NUMBER);
+             !TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_NUMBER);
     }
   }
 }

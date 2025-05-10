@@ -16,19 +16,18 @@
 package com.intellij.java.impl.psi.impl.migration;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.Pair;
-import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.InheritanceImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
-import consulo.language.impl.psi.LightElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.content.scope.SearchScope;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.meta.PsiMetaData;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.content.scope.SearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -126,7 +125,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   @Override
   public PsiClass getSuperClass() {
     return JavaPsiFacade.getInstance(myManager.getProject())
-      .findClass(JavaClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myManager.getProject()));
+      .findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(myManager.getProject()));
   }
 
   @Override

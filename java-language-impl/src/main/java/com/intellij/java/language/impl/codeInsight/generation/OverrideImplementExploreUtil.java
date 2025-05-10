@@ -9,12 +9,11 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.Application;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 public class OverrideImplementExploreUtil {
@@ -94,7 +93,7 @@ public class OverrideImplementExploreUtil {
         if (finals.get(signature) == null) {
           PsiMethod abstractOne = abstracts.get(signature);
           if (abstractOne == null || !abstractOne.getContainingClass().isInheritor(concrete.getContainingClass(), true) ||
-              JavaClassNames.JAVA_LANG_OBJECT.equals(concrete.getContainingClass().getQualifiedName())) {
+              CommonClassNames.JAVA_LANG_OBJECT.equals(concrete.getContainingClass().getQualifiedName())) {
             PsiSubstitutor subst = correctSubstitutor(concrete, signature.getSubstitutor());
             CandidateInfo info = new CandidateInfo(concrete, subst);
             result.put(signature, info);

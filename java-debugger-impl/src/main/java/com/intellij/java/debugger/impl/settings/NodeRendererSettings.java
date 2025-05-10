@@ -33,6 +33,7 @@ import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.psi.CommonClassNames;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
@@ -42,7 +43,6 @@ import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
@@ -86,7 +86,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
     private final NodeRenderer[] myAlternateCollectionRenderers = new NodeRenderer[]{
         createCompoundReferenceRenderer(
             "Map",
-            JavaClassNames.JAVA_UTIL_MAP,
+            CommonClassNames.JAVA_UTIL_MAP,
             createLabelRenderer(" size = ", "size()", null),
             createExpressionChildrenRenderer(
                 "entrySet().toArray()",
@@ -111,7 +111,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         new ListObjectRenderer(this),
         createCompoundReferenceRenderer(
             "Collection",
-            JavaClassNames.JAVA_UTIL_COLLECTION,
+            CommonClassNames.JAVA_UTIL_COLLECTION,
             createLabelRenderer(" size = ", "size()", null),
             createExpressionChildrenRenderer("toArray()", "!isEmpty()")
         )
@@ -347,10 +347,10 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
             return myToStringRenderer;
         }
         else if (rendererId.equals(CompoundNodeRenderer.UNIQUE_ID) || rendererId.equals(REFERENCE_RENDERER)) {
-            return createCompoundReferenceRenderer("unnamed", JavaClassNames.JAVA_LANG_OBJECT, null, null);
+            return createCompoundReferenceRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
         }
         else if (rendererId.equals(CompoundTypeRenderer.UNIQUE_ID)) {
-            return createCompoundTypeRenderer("unnamed", JavaClassNames.JAVA_LANG_OBJECT, null, null);
+            return createCompoundTypeRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
         }
         return null;
     }
@@ -559,7 +559,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
                 createLabelRenderer(" size = ", "size()", null),
                 createExpressionChildrenRenderer("toArray()", "!isEmpty()")
             );
-            setClassName(JavaClassNames.JAVA_UTIL_LIST);
+            setClassName(CommonClassNames.JAVA_UTIL_LIST);
         }
 
         @Override
