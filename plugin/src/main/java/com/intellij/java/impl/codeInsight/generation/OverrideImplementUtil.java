@@ -20,7 +20,6 @@ import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix
 import com.intellij.java.impl.codeInsight.MethodImplementor;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.psi.*;
@@ -30,7 +29,6 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.application.Application;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -81,10 +79,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     private static final Logger LOG = Logger.getInstance(OverrideImplementUtil.class);
 
     private OverrideImplementUtil() {
-    }
-
-    protected static List<MethodImplementor> getImplementors() {
-        return Application.get().getExtensionList(MethodImplementor.class);
     }
 
     /**
@@ -149,13 +143,13 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         }
 
         List<PsiMethod> results = new ArrayList<>();
-        for (MethodImplementor implementor : getImplementors()) {
+        aClass.getApplication().getExtensionPoint(MethodImplementor.class).forEach(implementor -> {
             PsiMethod[] prototypes = implementor.createImplementationPrototypes(aClass, method);
             for (PsiMethod prototype : prototypes) {
                 implementor.createDecorator(aClass, method, toCopyJavaDoc, insertOverrideIfPossible).accept(prototype);
                 results.add(prototype);
             }
-        }
+        });
 
         if (results.isEmpty()) {
             PsiMethod method1 = GenerateMembersUtil.substituteGenericMethod(method, substitutor, aClass);
@@ -287,7 +281,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         GlobalSearchScope moduleScope = module != null ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) : null;
         Project project = targetClass.getProject();
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        for (OverrideImplementsAnnotationsHandler each : OverrideImplementsAnnotationsHandler.EP_NAME.getExtensions()) {
+        project.getApplication().getExtensionPoint(OverrideImplementsAnnotationsHandler.class).forEach(each -> {
             for (String annotation : each.getAnnotations(project)) {
                 if (moduleScope != null && facade.findClass(annotation, moduleScope) == null) {
                     continue;
@@ -296,14 +290,14 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
                     && !AnnotationUtil.isAnnotated(method, annotation, false, false)) {
                     PsiAnnotation psiAnnotation = AnnotationUtil.findAnnotation(overridden, annotation);
                     if (psiAnnotation != null && AnnotationUtil.isInferredAnnotation(psiAnnotation)) {
-                        continue;
+                        return;
                     }
 
                     AddAnnotationPsiFix.removePhysicalAnnotations(method, each.annotationsToRemove(project, annotation));
                     AddAnnotationPsiFix.addPhysicalAnnotationTo(annotation, PsiNameValuePair.EMPTY_ARRAY, method.getModifierList());
                 }
             }
-        }
+        });
     }
 
     public static void annotate(@Nonnull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException {
@@ -357,14 +351,10 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
 
     public static PsiGenerationInfo<PsiMethod> createGenerationInfo(PsiMethod s, boolean mergeIfExists) {
-        for (MethodImplementor implementor : getImplementors()) {
-            GenerationInfo info = implementor.createGenerationInfo(s, mergeIfExists);
-            if (info instanceof PsiGenerationInfo generationInfo) {
-                //noinspection unchecked
-                return generationInfo;
-            }
-        }
-        return new PsiGenerationInfo<>(s);
+        PsiGenerationInfo generationInfo = s.getApplication().getExtensionPoint(MethodImplementor.class).computeSafeIfAny(
+            implementor -> implementor.createGenerationInfo(s, mergeIfExists) instanceof PsiGenerationInfo genInfo ? genInfo : null
+        );
+        return generationInfo != null ? generationInfo : new PsiGenerationInfo<>(s);
     }
 
     @Nonnull
