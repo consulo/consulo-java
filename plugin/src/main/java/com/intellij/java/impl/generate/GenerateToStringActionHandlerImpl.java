@@ -200,12 +200,8 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
         }
 
         //exclude interfaces, non-java classes etc
-        for (GenerateToStringClassFilter filter : GenerateToStringClassFilter.EP_NAME.getExtensionList()) {
-            if (!filter.canGenerateToString(clazz)) {
-                return null;
-            }
-        }
-        return clazz;
+        return file.getApplication().getExtensionPoint(GenerateToStringClassFilter.class)
+            .allMatchSafe(filter -> filter.canGenerateToString(clazz)) ? clazz : null;
     }
 
     public static class MemberChooserHeaderPanel extends JPanel {

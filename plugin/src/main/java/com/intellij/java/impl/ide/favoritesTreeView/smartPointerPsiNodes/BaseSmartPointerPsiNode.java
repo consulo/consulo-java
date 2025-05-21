@@ -28,14 +28,13 @@ import consulo.project.ui.view.tree.*;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
-    PsiElementNavigationItem {
+public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointer> extends ProjectViewNode<Type>
+    implements PsiElementNavigationItem {
     private static final Logger LOG = Logger.getInstance(BaseSmartPointerPsiNode.class);
 
     protected BaseSmartPointerPsiNode(Project project, Type value, ViewSettings viewSettings) {
@@ -112,9 +111,8 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
             data.setAttributesKey(CodeInsightColors.DEPRECATED_ATTRIBUTES);
         }
         updateImpl(data);
-        for (ProjectViewNodeDecorator decorator : ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
-            decorator.decorate(this, data);
-        }
+        value.getProject().getExtensionPoint(ProjectViewNodeDecorator.class)
+            .forEach(decorator -> decorator.decorate(this, data));
     }
 
     private boolean isDeprecated() {

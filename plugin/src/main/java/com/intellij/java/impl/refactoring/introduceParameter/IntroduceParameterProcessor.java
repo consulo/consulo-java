@@ -280,9 +280,8 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
             }
         }
 
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            processor.findConflicts(this, refUsages.get(), conflicts);
-        }
+        myProject.getApplication().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .forEach(processor -> processor.findConflicts(this, refUsages.get(), conflicts));
 
         myHasConflicts = !conflicts.isEmpty();
         return showConflicts(conflicts, usagesIn);

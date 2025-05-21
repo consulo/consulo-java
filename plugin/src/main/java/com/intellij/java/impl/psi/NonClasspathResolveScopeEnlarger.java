@@ -31,7 +31,7 @@ public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
 
         FileType fileType = file.getFileType();
         if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
-            for (PsiElementFinder finder : PsiElementFinder.EP_NAME.getExtensionList(project)) {
+            return project.getExtensionPoint(PsiElementFinder.class).computeSafeIfAny(finder -> {
                 if (finder instanceof NonClasspathClassFinder nonClasspathClassFinder) {
                     List<VirtualFile> roots = nonClasspathClassFinder.getClassRoots();
                     for (VirtualFile root : roots) {
@@ -40,7 +40,8 @@ public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
                         }
                     }
                 }
-            }
+                return null;
+            });
         }
         return null;
     }

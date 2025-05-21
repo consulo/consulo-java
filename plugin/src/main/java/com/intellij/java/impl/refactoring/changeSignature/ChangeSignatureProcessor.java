@@ -25,6 +25,7 @@ import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.component.extension.ExtensionPoint;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureProcessorBase;
@@ -185,14 +186,19 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        for (ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
-            if (processor instanceof ChangeSignatureUsageProcessorEx changeSignatureUsageProcessorEx
-                && changeSignatureUsageProcessorEx.setupDefaultValues(myChangeInfo, refUsages, myProject)) {
-                return false;
-            }
+        ExtensionPoint<ChangeSignatureUsageProcessor> extensionPoint =
+            myProject.getApplication().getExtensionPoint(ChangeSignatureUsageProcessor.class);
+
+        boolean defaultValuesSet = extensionPoint.noneMatchSafe(
+            processor -> processor instanceof ChangeSignatureUsageProcessorEx changeSignatureUsageProcessorEx
+                && changeSignatureUsageProcessorEx.setupDefaultValues(myChangeInfo, refUsages, myProject)
+        );
+        if (defaultValuesSet) {
+            return false;
         }
+
         MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<>();
-        for (ChangeSignatureUsageProcessor usageProcessor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
+        extensionPoint.forEach(usageProcessor -> {
             MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
             for (PsiElement key : conflicts.keySet()) {
                 Collection<String> collection = conflictDescriptions.get(key);
@@ -202,7 +208,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
                 collection.addAll(conflicts.get(key));
                 conflictDescriptions.put(key, collection);
             }
-        }
+        });
 
         UsageInfo[] usagesIn = refUsages.get();
         RenameUtil.addConflictDescriptions(usagesIn, conflictDescriptions);
