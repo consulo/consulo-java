@@ -13,15 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: cdr
- * Date: Jul 20, 2007
- * Time: 2:57:59 PM
- */
 package com.intellij.java.analysis.impl.codeInsight.intention.impl;
 
+import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -35,7 +29,12 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 
+/**
+ * @author cdr
+ * @since 2007-07-20
+ */
 public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
+    @RequiredReadAction
     public AddNullableNotNullAnnotationFix(
         @Nonnull String fqn,
         @Nonnull PsiModifierListOwner owner,
@@ -45,6 +44,7 @@ public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailable(
         @Nonnull Project project,
         @Nonnull PsiFile file,
@@ -58,8 +58,8 @@ public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
         if (owner == null || AnnotationUtil.isAnnotated(owner, getAnnotationsToRemove()[0], false, false)) {
             return false;
         }
-        if (owner instanceof PsiMethod) {
-            PsiType returnType = ((PsiMethod)owner).getReturnType();
+        if (owner instanceof PsiMethod method) {
+            PsiType returnType = method.getReturnType();
 
             return returnType != null && !(returnType instanceof PsiPrimitiveType);
         }
