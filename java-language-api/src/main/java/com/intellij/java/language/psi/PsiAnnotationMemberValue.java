@@ -25,16 +25,16 @@ import jakarta.annotation.Nonnull;
  * @author ven
  */
 public interface PsiAnnotationMemberValue extends PsiElement {
-  /**
-   * The empty array of PSI annotation member values which can be reused to avoid unnecessary allocations.
-   */
-  PsiAnnotationMemberValue[] EMPTY_ARRAY = new PsiAnnotationMemberValue[0];
+    /**
+     * The empty array of PSI annotation member values which can be reused to avoid unnecessary allocations.
+     */
+    PsiAnnotationMemberValue[] EMPTY_ARRAY = new PsiAnnotationMemberValue[0];
 
-  ArrayFactory<PsiAnnotationMemberValue> ARRAY_FACTORY = new ArrayFactory<PsiAnnotationMemberValue>() {
-    @Nonnull
-    @Override
-    public PsiAnnotationMemberValue[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new PsiAnnotationMemberValue[count];
-    }
-  };
+    ArrayFactory<PsiAnnotationMemberValue> ARRAY_FACTORY = new ArrayFactory<PsiAnnotationMemberValue>() {
+        @Nonnull
+        @Override
+        public PsiAnnotationMemberValue[] create(final int count) {
+            return count == 0 ? EMPTY_ARRAY : new PsiAnnotationMemberValue[count];
+        }
+    };
 }
