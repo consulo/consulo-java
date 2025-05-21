@@ -24,16 +24,16 @@ import jakarta.annotation.Nullable;
  * @author ven
  */
 public interface PsiAnnotationMethod extends PsiMethod {
-  /**
-   * The empty array of PSI annotation methods which can be reused to avoid unnecessary allocations.
-   */
-  PsiAnnotationMethod[] EMPTY_ARRAY = new PsiAnnotationMethod[0];
+    /**
+     * The empty array of PSI annotation methods which can be reused to avoid unnecessary allocations.
+     */
+    PsiAnnotationMethod[] EMPTY_ARRAY = new PsiAnnotationMethod[0];
 
-  /**
-   * Returns the default value of the annotation element defined by the method.
-   *
-   * @return the default value of the element, or null if no default value is specified.
-   */
-  @Nullable
-  PsiAnnotationMemberValue getDefaultValue();
+    /**
+     * Returns the default value of the annotation element defined by the method.
+     *
+     * @return the default value of the element, or null if no default value is specified.
+     */
+    @Nullable
+    PsiAnnotationMemberValue getDefaultValue();
 }

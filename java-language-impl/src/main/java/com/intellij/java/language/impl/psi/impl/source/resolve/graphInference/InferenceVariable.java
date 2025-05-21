@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
@@ -28,7 +29,7 @@ import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
- * User: anna
+ * @author anna
  */
 public class InferenceVariable extends LightTypeParameter {
     private final PsiElement myContext;
@@ -213,6 +214,7 @@ public class InferenceVariable extends LightTypeParameter {
     }
 
     @Override
+    @RequiredReadAction
     public String toString() {
         return getDelegate().toString();
     }
@@ -224,6 +226,7 @@ public class InferenceVariable extends LightTypeParameter {
 
     @Nullable
     @Override
+    @RequiredReadAction
     public String getName() {
         return myName;
     }

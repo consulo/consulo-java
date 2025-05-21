@@ -17,110 +17,115 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.Language;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class LightModifierList extends LightElement implements PsiModifierList {
-  private final Set<String> myModifiers;
+    private final Set<String> myModifiers;
 
-  public LightModifierList(PsiModifierListOwner modifierListOwner) {
-    this(modifierListOwner.getManager());
-    copyModifiers(modifierListOwner.getModifierList());
-  }
-
-  public LightModifierList(PsiManager manager) {
-    this(manager, JavaLanguage.INSTANCE);
-  }
-
-  public LightModifierList(PsiManager manager, final Language language, String... modifiers) {
-    super(manager, language);
-    myModifiers = new HashSet<>(Set.of(modifiers));
-  }
-
-  public void addModifier(String modifier) {
-    myModifiers.add(modifier);
-  }
-
-  public void copyModifiers(PsiModifierList modifierList) {
-    if (modifierList == null) return;
-    for (String modifier : PsiModifier.MODIFIERS) {
-      if (modifierList.hasExplicitModifier(modifier)) {
-        addModifier(modifier);
-      }
+    public LightModifierList(PsiModifierListOwner modifierListOwner) {
+        this(modifierListOwner.getManager());
+        copyModifiers(modifierListOwner.getModifierList());
     }
-  }
 
-  public void clearModifiers() {
-    myModifiers.clear();
-  }
-
-  @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
-    return myModifiers.contains(name);
-  }
-
-  @Override
-  public boolean hasExplicitModifier(@Nonnull String name) {
-    return myModifiers.contains(name);
-  }
-
-  @Override
-  public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
-
-  @Override
-  public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getAnnotations() {
-    //todo
-    return PsiAnnotation.EMPTY_ARRAY;
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getApplicableAnnotations() {
-    return getAnnotations();
-  }
-
-  @Override
-  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
-    return null;
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
-    throw new IncorrectOperationException();
-  }
-
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitModifierList(this);
-    } else {
-      visitor.visitElement(this);
+    public LightModifierList(PsiManager manager) {
+        this(manager, JavaLanguage.INSTANCE);
     }
-  }
 
-  public String toString() {
-    return "PsiModifierList";
-  }
+    public LightModifierList(PsiManager manager, Language language, String... modifiers) {
+        super(manager, language);
+        myModifiers = new HashSet<>(Set.of(modifiers));
+    }
 
-  public String[] getModifiers() {
-    return ArrayUtil.toStringArray(myModifiers);
-  }
+    public void addModifier(String modifier) {
+        myModifiers.add(modifier);
+    }
+
+    public void copyModifiers(PsiModifierList modifierList) {
+        if (modifierList == null) {
+            return;
+        }
+        for (String modifier : PsiModifier.MODIFIERS) {
+            if (modifierList.hasExplicitModifier(modifier)) {
+                addModifier(modifier);
+            }
+        }
+    }
+
+    public void clearModifiers() {
+        myModifiers.clear();
+    }
+
+    @Override
+    @RequiredReadAction
+    public boolean hasModifierProperty(@Nonnull String name) {
+        return myModifiers.contains(name);
+    }
+
+    @Override
+    public boolean hasExplicitModifier(@Nonnull String name) {
+        return myModifiers.contains(name);
+    }
+
+    @Override
+    public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+        throw new IncorrectOperationException();
+    }
+
+    @Override
+    public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+        throw new IncorrectOperationException();
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getAnnotations() {
+        //todo
+        return PsiAnnotation.EMPTY_ARRAY;
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getApplicableAnnotations() {
+        return getAnnotations();
+    }
+
+    @Override
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+        return null;
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+        throw new IncorrectOperationException();
+    }
+
+    @Override
+    public void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitModifierList(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PsiModifierList";
+    }
+
+    public String[] getModifiers() {
+        return ArrayUtil.toStringArray(myModifiers);
+    }
 }

@@ -26,11 +26,11 @@ import jakarta.annotation.Nonnull;
  * @see PsiAnnotation
  */
 public interface PsiAnnotationParameterList extends PsiElement {
-  /**
-   * Returns the array of name/value elements specified on the annotation.
-   *
-   * @return the array of name/value pairs.
-   */
-  @Nonnull
-  PsiNameValuePair[] getAttributes();
+    /**
+     * Returns the array of name/value elements specified on the annotation.
+     *
+     * @return the array of name/value pairs.
+     */
+    @Nonnull
+    PsiNameValuePair[] getAttributes();
 }
