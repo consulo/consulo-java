@@ -34,7 +34,6 @@ import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.ide.util.DirectoryChooser;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.rename.RenameUtil;
@@ -60,7 +59,6 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nullable;
 
@@ -119,10 +117,9 @@ public class MoveClassesOrPackagesImpl {
                 PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
                 LOG.assertTrue(aPackage != null);
                 if (aPackage.getQualifiedName().isEmpty()) { //is default package
-                    String message = RefactoringLocalize.movePackageRefactoringCannotBeAppliedToDefaultPackage().get();
                     CommonRefactoringUtil.showErrorMessage(
                         RefactoringLocalize.moveTitle().get(),
-                        message,
+                        RefactoringLocalize.movePackageRefactoringCannotBeAppliedToDefaultPackage().get(),
                         HelpID.getMoveHelpID(element),
                         project
                     );
@@ -144,10 +141,9 @@ public class MoveClassesOrPackagesImpl {
             }
             else if (element instanceof PsiClass aClass) {
                 if (aClass instanceof PsiAnonymousClass) {
-                    String message = RefactoringLocalize.moveClassRefactoringCannotBeAppliedToAnonymousClasses().get();
                     CommonRefactoringUtil.showErrorMessage(
                         RefactoringLocalize.moveTitle().get(),
-                        message,
+                        RefactoringLocalize.moveClassRefactoringCannotBeAppliedToAnonymousClasses().get(),
                         HelpID.getMoveHelpID(element),
                         project
                     );
@@ -165,13 +161,8 @@ public class MoveClassesOrPackagesImpl {
                     return null;
                 }
 
-                String name = null;
-                for (MoveClassHandler nameProvider : MoveClassHandler.EP_NAME.getExtensionList()) {
-                    name = nameProvider.getName(aClass);
-                    if (name != null) {
-                        break;
-                    }
-                }
+                String name = project.getApplication().getExtensionPoint(MoveClassHandler.class)
+                    .computeSafeIfAny(nameProvider -> nameProvider.getName(aClass));
                 if (name == null) {
                     name = aClass.getContainingFile().getName();
                 }
@@ -216,17 +207,13 @@ public class MoveClassesOrPackagesImpl {
         VirtualFile[] virtualFiles = aPackage.occursInPackagePrefixes();
         if (directories.length > 1 || virtualFiles.length > 0) {
             StringBuffer message = new StringBuffer();
-            RenameUtil.buildPackagePrefixChangedMessage(virtualFiles, message, aPackage.getQualifiedName());
+            String packageName = aPackage.getQualifiedName();
+            assert packageName != null;
+            RenameUtil.buildPackagePrefixChangedMessage(virtualFiles, message, packageName);
             if (directories.length > 1) {
-                DirectoryAsPackageRenameHandlerBase.buildMultipleDirectoriesInPackageMessage(
-                    message,
-                    aPackage.getQualifiedName(),
-                    directories
-                );
+                DirectoryAsPackageRenameHandlerBase.buildMultipleDirectoriesInPackageMessage(message, packageName, directories);
                 message.append("\n\n");
-                LocalizeValue report =
-                    RefactoringLocalize.allTheseDirectoriesWillBeMovedAndAllReferencesTo0WillBeChanged(aPackage.getQualifiedName());
-                message.append(report.get());
+                message.append(RefactoringLocalize.allTheseDirectoriesWillBeMovedAndAllReferencesTo0WillBeChanged(packageName));
             }
             message.append("\n");
             message.append(RefactoringLocalize.doYouWishToContinue());
@@ -252,7 +239,8 @@ public class MoveClassesOrPackagesImpl {
                     CommonRefactoringUtil.showErrorMessage(
                         RefactoringLocalize.moveTitle().get(),
                         RefactoringLocalize.cannotMovePackageIntoItself().get(),
-                        HelpID.getMoveHelpID(srcPackage), project
+                        HelpID.getMoveHelpID(srcPackage),
+                        project
                     );
                 }
                 return false;
@@ -419,24 +407,25 @@ public class MoveClassesOrPackagesImpl {
                 }
             }
         }
-        SimpleReference<IncorrectOperationException> ex = SimpleReference.create();
-        String commandDescription = RefactoringLocalize.movingDirectoriesCommand().get();
-        @RequiredUIAccess
-        Runnable runnable = () -> project.getApplication().runWriteAction(() -> {
-            LocalHistoryAction a = LocalHistory.getInstance().startAction(commandDescription);
-            try {
-                rearrangeDirectoriesToTarget(directories, selectedTarget);
-            }
-            catch (IncorrectOperationException e) {
-                ex.set(e);
-            }
-            finally {
-                a.finish();
-            }
-        });
-        CommandProcessor.getInstance().executeCommand(project, runnable, commandDescription, null);
-        if (!ex.isNull()) {
-            RefactoringUIUtil.processIncorrectOperation(project, ex.get());
+        try {
+            LocalizeValue commandDescription = RefactoringLocalize.movingDirectoriesCommand();
+            CommandProcessor.getInstance().newCommand()
+                .project(project)
+                .name(commandDescription)
+                .inWriteAction()
+                .canThrow(IncorrectOperationException.class)
+                .run(() -> {
+                    LocalHistoryAction a = LocalHistory.getInstance().startAction(commandDescription.get());
+                    try {
+                        rearrangeDirectoriesToTarget(directories, selectedTarget);
+                    }
+                    finally {
+                        a.finish();
+                    }
+                });
+        }
+        catch (IncorrectOperationException e) {
+            RefactoringUIUtil.processIncorrectOperation(project, e);
         }
     }
 

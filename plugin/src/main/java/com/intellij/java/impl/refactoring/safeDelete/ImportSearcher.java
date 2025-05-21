@@ -37,13 +37,7 @@ public abstract class ImportSearcher {
 
     @Nullable
     public static PsiElement getImport(PsiElement element, boolean onlyNonStatic) {
-        for (ImportSearcher searcher : EP_NAME.getExtensions()) {
-            PsiElement anImport = searcher.findImport(element, onlyNonStatic);
-            if (anImport != null) {
-                return anImport;
-            }
-        }
-
-        return null;
+        return element.getApplication().getExtensionPoint(ImportSearcher.class)
+            .computeSafeIfAny(searcher -> searcher.findImport(element, onlyNonStatic));
     }
 }

@@ -119,6 +119,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     }
 
     @Nonnull
+    @Override
     protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
         PsiElement[] elements = new PsiElement[myElementsToMove.length];
         System.arraycopy(myElementsToMove, 0, elements, 0, myElementsToMove.length);
@@ -169,6 +170,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     }
 
     @Nonnull
+    @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
         List<UsageInfo> allUsages = new ArrayList<>();
@@ -216,6 +218,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     protected static class ConflictsUsageInfo extends UsageInfo {
         private final Collection<String> myConflicts;
 
+        @RequiredReadAction
         public ConflictsUsageInfo(PsiElement pseudoElement, Collection<String> conflicts) {
             super(pseudoElement);
             myConflicts = conflicts;
@@ -485,11 +488,10 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
                     if (allClasses.containsKey(psiClass)) {
                         continue;
                     }
-                    for (MoveAllClassesInFileHandler fileHandler : MoveAllClassesInFileHandler.EP_NAME.getExtensionList()) {
-                        fileHandler.processMoveAllClassesInFile(allClasses, psiClass, myElementsToMove);
+                    myProject.getApplication().getExtensionPoint(MoveAllClassesInFileHandler.class)
+                        .forEach(fileHandler -> fileHandler.processMoveAllClassesInFile(allClasses, psiClass, myElementsToMove));
                     }
                 }
-            }
             Map<PsiElement, PsiElement> oldToNewElementsMapping = new HashMap<>();
             for (int idx = 0; idx < myElementsToMove.length; idx++) {
                 PsiElement element = myElementsToMove[idx];

@@ -82,14 +82,8 @@ public class MoveClassesOrPackagesUtil {
         }
 
         findNonCodeUsages(searchInStringsAndComments, searchInNonJavaFiles, element, newQName, results);
-        preprocessUsages(results);
+        element.getApplication().getExtensionPoint(MoveClassHandler.class).forEach(handler -> handler.preprocessUsages(results));
         return results.toArray(new UsageInfo[results.size()]);
-    }
-
-    private static void preprocessUsages(ArrayList<UsageInfo> results) {
-        for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
-            handler.preprocessUsages(results);
-        }
     }
 
     public static void findNonCodeUsages(
@@ -220,15 +214,13 @@ public class MoveClassesOrPackagesUtil {
     }
 
     public static void prepareMoveClass(PsiClass aClass) {
-        for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
-            handler.prepareMove(aClass);
-        }
+        aClass.getApplication().getExtensionPoint(MoveClassHandler.class)
+            .forEach(handler -> handler.prepareMove(aClass));
     }
 
     public static void finishMoveClass(PsiClass aClass) {
-        for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
-            handler.finishMoveClass(aClass);
-        }
+        aClass.getApplication().getExtensionPoint(MoveClassHandler.class)
+            .forEach(handler -> handler.finishMoveClass(aClass));
     }
 
     // Does not process non-code usages!
@@ -243,11 +235,10 @@ public class MoveClassesOrPackagesUtil {
         throws IncorrectOperationException {
         PsiClass newClass;
         if (!moveAllClassesInFile) {
-            for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
-                newClass = handler.doMoveClass(aClass, moveDestination);
-                if (newClass != null) {
-                    return newClass;
-                }
+            newClass = aClass.getApplication().getExtensionPoint(MoveClassHandler.class)
+                .computeSafeIfAny(handler -> handler.doMoveClass(aClass, moveDestination));
+            if (newClass != null) {
+                return newClass;
             }
         }
 
