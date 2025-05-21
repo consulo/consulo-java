@@ -5,6 +5,7 @@ import com.intellij.java.language.jvm.JvmAnnotation;
 import com.intellij.java.language.jvm.JvmClass;
 import com.intellij.java.language.jvm.JvmEnumField;
 import com.intellij.java.language.jvm.annotation.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,19 +47,20 @@ class PsiAnnotationClassValue extends PsiAnnotationAttributeValue<PsiClassObject
     @Nullable
     @Override
     public String getQualifiedName() {
-        final PsiJavaCodeReferenceElement referenceElement = getReferenceElement();
+        PsiJavaCodeReferenceElement referenceElement = getReferenceElement();
         return referenceElement == null ? null : referenceElement.getQualifiedName();
     }
 
     @Nullable
     @Override
+    @RequiredReadAction
     public JvmClass getClazz() {
         PsiJavaCodeReferenceElement referenceElement = getReferenceElement();
         if (referenceElement == null) {
             return null;
         }
         PsiElement resolved = referenceElement.resolve();
-        return resolved instanceof JvmClass ? (JvmClass)resolved : null;
+        return resolved instanceof JvmClass jvmClass ? jvmClass : null;
     }
 }
 

@@ -15,9 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -49,7 +47,7 @@ public interface PsiAnnotationOwner {
      * @param qualifiedName the fully qualified name of the annotation to find
      * @return {@code true} is such annotation is found, otherwise {@code false}
      */
-    default boolean hasAnnotation(@Nonnull @NonNls String qualifiedName) {
+    default boolean hasAnnotation(@Nonnull String qualifiedName) {
         //noinspection SSBasedInspection
         return findAnnotation(qualifiedName) != null;
     }
@@ -62,7 +60,7 @@ public interface PsiAnnotationOwner {
      * @return the annotation instance, or null if no such annotation is found.
      */
     @Nullable
-    PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName);
+    PsiAnnotation findAnnotation(@Nonnull String qualifiedName);
 
     /**
      * Adds a new annotation to this owner. The annotation class name will be shortened. No attributes will be defined.
@@ -71,5 +69,5 @@ public interface PsiAnnotationOwner {
      * @return newly added annotation
      */
     @Nonnull
-    PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName);
+    PsiAnnotation addAnnotation(@Nonnull String qualifiedName);
 }
