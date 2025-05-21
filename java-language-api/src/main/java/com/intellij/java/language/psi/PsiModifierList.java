@@ -27,43 +27,43 @@ import org.jetbrains.annotations.NonNls;
  * @see PsiModifierListOwner#getModifierList()
  */
 public interface PsiModifierList extends PsiElement, PsiAnnotationOwner {
-  /**
-   * Checks if the modifier list has the specified modifier set either by an explicit keyword
-   * or implicitly (for example, interface methods are implicitly public).
-   *
-   * @param name the name of the modifier to check.
-   * @return true if the list has the modifier, false otherwise
-   * @see #hasExplicitModifier(String)
-   */
-  boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
+    /**
+     * Checks if the modifier list has the specified modifier set either by an explicit keyword
+     * or implicitly (for example, interface methods are implicitly public).
+     *
+     * @param name the name of the modifier to check.
+     * @return true if the list has the modifier, false otherwise
+     * @see #hasExplicitModifier(String)
+     */
+    boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
 
-  /**
-   * Checks if the modifier list has the specified modifier set by an explicit keyword.
-   *
-   * @param name the name of the modifier to check.
-   * @return true if the list has the modifier, false otherwise
-   * @see #hasModifierProperty(String)
-   */
-  boolean hasExplicitModifier(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
+    /**
+     * Checks if the modifier list has the specified modifier set by an explicit keyword.
+     *
+     * @param name the name of the modifier to check.
+     * @return true if the list has the modifier, false otherwise
+     * @see #hasModifierProperty(String)
+     */
+    boolean hasExplicitModifier(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
 
-  /**
-   * Adds or removes the specified modifier to the modifier list.
-   *
-   * @param name  the name of the modifier to add or remove.
-   * @param value true if the modifier should be added, false if it should be removed.
-   * @throws IncorrectOperationException if the modification fails for some reason.
-   */
-  void setModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value) throws IncorrectOperationException;
+    /**
+     * Adds or removes the specified modifier to the modifier list.
+     *
+     * @param name  the name of the modifier to add or remove.
+     * @param value true if the modifier should be added, false if it should be removed.
+     * @throws IncorrectOperationException if the modification fails for some reason.
+     */
+    void setModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value) throws IncorrectOperationException;
 
-  /**
-   * Checks if it is possible to add or remove the specified modifier to the modifier list,
-   * and throws an exception if the operation is not possible. Does not actually modify
-   * anything.
-   *
-   * @param name  the name of the modifier to check the add or remove possibility for.
-   * @param value true if the modifier should be added, false if it should be removed.
-   * @throws IncorrectOperationException if the modification fails for some reason.
-   */
-  void checkSetModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value) throws IncorrectOperationException;
-
+    /**
+     * Checks if it is possible to add or remove the specified modifier to the modifier list,
+     * and throws an exception if the operation is not possible. Does not actually modify
+     * anything.
+     *
+     * @param name  the name of the modifier to check the add or remove possibility for.
+     * @param value true if the modifier should be added, false if it should be removed.
+     * @throws IncorrectOperationException if the modification fails for some reason.
+     */
+    void checkSetModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value)
+        throws IncorrectOperationException;
 }

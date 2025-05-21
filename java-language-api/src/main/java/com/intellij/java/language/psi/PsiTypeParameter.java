@@ -27,57 +27,53 @@ import jakarta.annotation.Nonnull;
  *
  * @author dsl
  */
-public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeParameter
-{
-	/**
-	 * The empty array of PSI type parameters which can be reused to avoid unnecessary allocations.
-	 */
-	PsiTypeParameter[] EMPTY_ARRAY = new PsiTypeParameter[0];
+public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeParameter {
+    /**
+     * The empty array of PSI type parameters which can be reused to avoid unnecessary allocations.
+     */
+    PsiTypeParameter[] EMPTY_ARRAY = new PsiTypeParameter[0];
 
-	ArrayFactory<PsiTypeParameter> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiTypeParameter[count];
+    ArrayFactory<PsiTypeParameter> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiTypeParameter[count];
 
-	/**
-	 * Returns the extends list of the type parameter.
-	 *
-	 * @return the extends list. For this particular kind of classes it never returns null.
-	 */
-	@Override
-	@Nonnull
-	PsiReferenceList getExtendsList();
+    /**
+     * Returns the extends list of the type parameter.
+     *
+     * @return the extends list. For this particular kind of classes it never returns null.
+     */
+    @Override
+    @Nonnull
+    PsiReferenceList getExtendsList();
 
-	/**
-	 * Returns the element which is parameterized by the type parameter.
-	 *
-	 * @return the type parameter owner instance.
-	 */
-	@Nullable
-	@Override
-	PsiTypeParameterListOwner getOwner();
+    /**
+     * Returns the element which is parameterized by the type parameter.
+     *
+     * @return the type parameter owner instance.
+     */
+    @Nullable
+    @Override
+    PsiTypeParameterListOwner getOwner();
 
-	/**
-	 * Returns the position of this type parameter in the type parameter list of the owner element.
-	 *
-	 * @return the type parameter position.
-	 */
-	int getIndex();
+    /**
+     * Returns the position of this type parameter in the type parameter list of the owner element.
+     *
+     * @return the type parameter position.
+     */
+    int getIndex();
 
-	@Nonnull
-	@Override
-	default PsiAnnotation[] getAnnotations()
-	{
-		return PsiClass.super.getAnnotations();
-	}
+    @Nonnull
+    @Override
+    default PsiAnnotation[] getAnnotations() {
+        return PsiClass.super.getAnnotations();
+    }
 
-	@Override
-	default boolean hasAnnotation(@Nonnull @NonNls String fqn)
-	{
-		return PsiClass.super.hasAnnotation(fqn);
-	}
+    @Override
+    default boolean hasAnnotation(@Nonnull @NonNls String fqn) {
+        return PsiClass.super.hasAnnotation(fqn);
+    }
 
-	@Nonnull
-	@Override
-	default JvmReferenceType[] getBounds()
-	{
-		return getExtendsList().getReferencedTypes();
-	}
+    @Nonnull
+    @Override
+    default JvmReferenceType[] getBounds() {
+        return getExtendsList().getReferencedTypes();
+    }
 }

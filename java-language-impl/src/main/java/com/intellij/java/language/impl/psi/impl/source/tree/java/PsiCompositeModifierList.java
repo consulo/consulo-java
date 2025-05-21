@@ -30,46 +30,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PsiCompositeModifierList extends LightModifierList {
-  private final List<PsiModifierList> mySublists;
+    private final List<PsiModifierList> mySublists;
 
-  public PsiCompositeModifierList(final PsiManager manager, List<PsiModifierList> sublists) {
-    super(manager);
-    mySublists = sublists;
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getAnnotations() {
-    List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
-    for (PsiModifierList list : mySublists) {
-      ContainerUtil.addAll(annotations, list.getAnnotations());
-    }
-    return annotations.toArray(new PsiAnnotation[annotations.size()]);
-  }
-
-  @Override
-  public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
-    for (PsiModifierList sublist : mySublists) {
-      final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
-      if (annotation != null) return annotation;
+    public PsiCompositeModifierList(final PsiManager manager, List<PsiModifierList> sublists) {
+        super(manager);
+        mySublists = sublists;
     }
 
-    return null;
-  }
-
-  @Override
-  public boolean hasModifierProperty(@Nonnull final String name) {
-    for (PsiModifierList sublist : mySublists) {
-      if (sublist.hasModifierProperty(name)) return true;
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getAnnotations() {
+        List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
+        for (PsiModifierList list : mySublists) {
+            ContainerUtil.addAll(annotations, list.getAnnotations());
+        }
+        return annotations.toArray(new PsiAnnotation[annotations.size()]);
     }
-    return false;
-  }
 
-  @Override
-  public boolean hasExplicitModifier(@Nonnull final String name) {
-    for (PsiModifierList sublist : mySublists) {
-      if (sublist.hasExplicitModifier(name)) return true;
+    @Override
+    public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
+        for (PsiModifierList sublist : mySublists) {
+            final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+
+        return null;
     }
-    return false;
-  }
+
+    @Override
+    public boolean hasModifierProperty(@Nonnull final String name) {
+        for (PsiModifierList sublist : mySublists) {
+            if (sublist.hasModifierProperty(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasExplicitModifier(@Nonnull final String name) {
+        for (PsiModifierList sublist : mySublists) {
+            if (sublist.hasExplicitModifier(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
