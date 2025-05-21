@@ -8,11 +8,10 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ServiceImpl;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,37 +20,37 @@ import java.util.List;
 @ServiceImpl
 public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
     private static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
+    @Nonnull
     private final Project myProject;
 
     @Inject
-    public InferredAnnotationsManagerImpl(Project project) {
+    public InferredAnnotationsManagerImpl(@Nonnull Project project) {
         myProject = project;
     }
 
     @Nullable
     @Override
     public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
-        for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
+        return myProject.getExtensionPoint(InferredAnnotationProvider.class).computeSafeIfAny(provider -> {
             PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
             if (annotation != null) {
                 markInferred(annotation);
-                return annotation;
             }
-        }
-        return null;
+            return annotation;
+        });
     }
 
     @Nonnull
     @Override
     public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
         List<PsiAnnotation> result = new ArrayList<>();
-        for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
+        myProject.getExtensionPoint(InferredAnnotationProvider.class).forEach(provider -> {
             List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
             for (PsiAnnotation annotation : annotations) {
                 markInferred(annotation);
                 result.add(annotation);
             }
-        }
+        });
         return result.toArray(PsiAnnotation.EMPTY_ARRAY);
     }
 
@@ -63,5 +62,4 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
     private static void markInferred(@Nonnull PsiAnnotation annotation) {
         annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
     }
-
 }

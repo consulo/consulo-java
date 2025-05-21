@@ -12,6 +12,7 @@ import com.intellij.java.language.psi.util.JavaElementKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
@@ -260,6 +261,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
      */
     @Deprecated
     //@ApiStatus.ScheduledForRemoval(inVersion = "2020.3")
+    @RequiredWriteAction
     public static PsiAnnotation addPhysicalAnnotation(String fqn, PsiNameValuePair[] pairs, PsiModifierList modifierList) {
         return addPhysicalAnnotationTo(fqn, pairs, modifierList);
     }
@@ -278,7 +280,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
      * @return added physical annotation; null if annotation already exists (in this case, no changes are performed)
      */
     @Nullable
-    @RequiredReadAction
+    @RequiredWriteAction
     public static PsiAnnotation addPhysicalAnnotationIfAbsent(
         @Nonnull String fqn,
         @Nonnull PsiNameValuePair[] pairs,
@@ -306,7 +308,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         return addPhysicalAnnotationTo(fqn, pairs, owner);
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     public static PsiAnnotation addPhysicalAnnotationTo(String fqn, PsiNameValuePair[] pairs, PsiAnnotationOwner owner) {
         owner = expandParameterIfNecessary(owner);
         PsiAnnotation inserted;
@@ -332,7 +334,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         return inserted;
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     private static PsiAnnotationOwner expandParameterIfNecessary(PsiAnnotationOwner owner) {
         if (owner instanceof PsiModifierList modifierList) {
             PsiParameter parameter = ObjectUtil.tryCast(modifierList.getParent(), PsiParameter.class);
@@ -366,6 +368,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         return owner;
     }
 
+    @RequiredWriteAction
     public static void removePhysicalAnnotations(@Nonnull PsiModifierListOwner owner, @Nonnull String... fqns) {
         for (String fqn : fqns) {
             PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, true, fqn);

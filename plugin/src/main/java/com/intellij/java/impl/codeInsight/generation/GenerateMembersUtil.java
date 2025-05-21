@@ -61,10 +61,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.Contract;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -735,19 +734,19 @@ public class GenerateMembersUtil {
         }
     }
 
-    private static void filterAnnotations(Project project, PsiModifierList modifierList, GlobalSearchScope moduleScope) {
+    private static void filterAnnotations(@Nonnull Project project, PsiModifierList modifierList, GlobalSearchScope moduleScope) {
         Set<String> toRemove = new HashSet<>();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
         for (PsiAnnotation annotation : modifierList.getAnnotations()) {
             String qualifiedName = annotation.getQualifiedName();
             if (qualifiedName != null) {
-                for (OverrideImplementsAnnotationsHandler handler : OverrideImplementsAnnotationsHandler.EP_NAME.getExtensionList()) {
+                project.getApplication().getExtensionPoint(OverrideImplementsAnnotationsHandler.class).forEach(handler -> {
                     String[] annotations2Remove = handler.annotationsToRemove(project, qualifiedName);
                     Collections.addAll(toRemove, annotations2Remove);
                     if (moduleScope != null && psiFacade.findClass(qualifiedName, moduleScope) == null) {
                         toRemove.add(qualifiedName);
                     }
-                }
+                });
             }
         }
         for (String fqn : toRemove) {
@@ -819,6 +818,7 @@ public class GenerateMembersUtil {
         return generatePrototype(field, field.getContainingClass(), ignoreInvalidTemplate, GetterTemplatesManager.getInstance());
     }
 
+    @RequiredWriteAction
     static PsiMethod generateSetterPrototype(@Nonnull PsiField field, boolean ignoreInvalidTemplate) {
         return generatePrototype(field, field.getContainingClass(), ignoreInvalidTemplate, SetterTemplatesManager.getInstance());
     }

@@ -223,31 +223,29 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         List<LocalQuickFix> result
     ) {
         String fullReferenceText = reference.getCanonicalText();
-        for (ExternalLibraryResolver resolver : ExternalLibraryResolver.EP_NAME.getExtensionList()) {
-            ExternalClassResolveResult resolveResult =
-                resolver.resolveClass(shortReferenceName, isReferenceToAnnotation(psiElement), currentModule);
-            OrderEntryFix fix = null;
-            if (resolveResult != null && facade.findClass(
-                resolveResult.getQualifiedClassName(),
-                GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(currentModule, true)
-            ) == null) {
-                fix = new AddExternalLibraryToDependenciesQuickFix(
-                    currentModule,
-                    resolveResult.getLibrary(),
-                    reference,
-                    resolveResult.getQualifiedClassName()
-                );
-            }
-            else if (!fullReferenceText.equals(shortReferenceName)) {
-                ExternalLibraryDescriptor descriptor = resolver.resolvePackage(fullReferenceText);
-                if (descriptor != null) {
-                    fix = new AddExternalLibraryToDependenciesQuickFix(currentModule, descriptor, reference, null);
+        GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(currentModule, true);
+        currentModule.getApplication().getExtensionPoint(ExternalLibraryResolver.class).collectMapped(
+            result,
+            resolver -> {
+                ExternalClassResolveResult resolveResult =
+                    resolver.resolveClass(shortReferenceName, isReferenceToAnnotation(psiElement) , currentModule);
+                if (resolveResult != null && facade.findClass(resolveResult.getQualifiedClassName(), scope) == null) {
+                    return new AddExternalLibraryToDependenciesQuickFix(
+                        currentModule,
+                        resolveResult.getLibrary(),
+                        reference,
+                        resolveResult.getQualifiedClassName()
+                    );
                 }
+                else if (!fullReferenceText.equals(shortReferenceName)) {
+                    ExternalLibraryDescriptor descriptor = resolver.resolvePackage(fullReferenceText);
+                    if (descriptor != null) {
+                        return new AddExternalLibraryToDependenciesQuickFix(currentModule, descriptor, reference, null);
+                    }
+                }
+                return null;
             }
-            if (fix != null) {
-                result.add(fix);
-            }
-        }
+        );
     }
 
     private static List<PsiClass> filterAllowedDependencies(PsiElement element, PsiClass[] classes) {

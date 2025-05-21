@@ -13,15 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: cdr
- * Date: Jul 20, 2007
- * Time: 2:57:59 PM
- */
 package com.intellij.java.analysis.impl.codeInsight.intention.impl;
 
+import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -35,31 +29,40 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 
-public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix
-{
-	public AddNullableNotNullAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner owner, @Nonnull String... annotationToRemove)
-	{
-		super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
-	}
+/**
+ * @author cdr
+ * @since 2007-07-20
+ */
+public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
+    @RequiredReadAction
+    public AddNullableNotNullAnnotationFix(
+        @Nonnull String fqn,
+        @Nonnull PsiModifierListOwner owner,
+        @Nonnull String... annotationToRemove
+    ) {
+        super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
+    }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		if(!super.isAvailable(project, file, startElement, endElement))
-		{
-			return false;
-		}
-		PsiModifierListOwner owner = getContainer(file, startElement.getTextRange().getStartOffset());
-		if(owner == null || AnnotationUtil.isAnnotated(owner, getAnnotationsToRemove()[0], false, false))
-		{
-			return false;
-		}
-		if(owner instanceof PsiMethod)
-		{
-			PsiType returnType = ((PsiMethod) owner).getReturnType();
+    @Override
+    @RequiredReadAction
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        if (!super.isAvailable(project, file, startElement, endElement)) {
+            return false;
+        }
+        PsiModifierListOwner owner = getContainer(file, startElement.getTextRange().getStartOffset());
+        if (owner == null || AnnotationUtil.isAnnotated(owner, getAnnotationsToRemove()[0], false, false)) {
+            return false;
+        }
+        if (owner instanceof PsiMethod method) {
+            PsiType returnType = method.getReturnType();
 
-			return returnType != null && !(returnType instanceof PsiPrimitiveType);
-		}
-		return true;
-	}
+            return returnType != null && !(returnType instanceof PsiPrimitiveType);
+        }
+        return true;
+    }
 }
