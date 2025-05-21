@@ -31,74 +31,74 @@ import jakarta.annotation.Nonnull;
  * @author max
  */
 public class LightTypeElement extends LightElement implements PsiTypeElement {
-  private final PsiType myType;
+    private final PsiType myType;
 
-  public LightTypeElement(PsiManager manager, PsiType type) {
-    super(manager, JavaLanguage.INSTANCE);
-    type = PsiUtil.convertAnonymousToBaseType(type);
-    myType = type;
-  }
-
-  public String toString() {
-    return "PsiTypeElement:" + getText();
-  }
-
-  @Override
-  public String getText() {
-    return myType.getPresentableText();
-  }
-
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitTypeElement(this);
-    } else {
-      visitor.visitElement(this);
+    public LightTypeElement(PsiManager manager, PsiType type) {
+        super(manager, JavaLanguage.INSTANCE);
+        type = PsiUtil.convertAnonymousToBaseType(type);
+        myType = type;
     }
-  }
 
-  @Override
-  public PsiElement copy() {
-    return new LightTypeElement(myManager, myType);
-  }
+    public String toString() {
+        return "PsiTypeElement:" + getText();
+    }
 
-  @Override
-  @Nonnull
-  public PsiType getType() {
-    return myType;
-  }
+    @Override
+    public String getText() {
+        return myType.getPresentableText();
+    }
 
-  @Override
-  public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
-    return null;
-  }
+    @Override
+    public void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor)visitor).visitTypeElement(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
 
-  @Override
-  public boolean isValid() {
-    return myType.isValid();
-  }
+    @Override
+    public PsiElement copy() {
+        return new LightTypeElement(myManager, myType);
+    }
 
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getAnnotations() {
-    return myType.getAnnotations();
-  }
+    @Override
+    @Nonnull
+    public PsiType getType() {
+        return myType;
+    }
 
-  @Override
-  public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
-    return myType.findAnnotation(qualifiedName);
-  }
+    @Override
+    public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
+        return null;
+    }
 
-  @Override
-  @Nonnull
-  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
-    throw new IncorrectOperationException();
-  }
+    @Override
+    public boolean isValid() {
+        return myType.isValid();
+    }
 
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getApplicableAnnotations() {
-    return getAnnotations();
-  }
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getAnnotations() {
+        return myType.getAnnotations();
+    }
 
+    @Override
+    public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
+        return myType.findAnnotation(qualifiedName);
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+        throw new IncorrectOperationException();
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getApplicableAnnotations() {
+        return getAnnotations();
+    }
 }

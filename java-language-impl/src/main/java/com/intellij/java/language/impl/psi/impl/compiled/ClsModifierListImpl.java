@@ -30,140 +30,144 @@ import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nonnull;
 
 public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierListStub> implements PsiModifierList {
-  public ClsModifierListImpl(PsiModifierListStub stub) {
-    super(stub);
-  }
-
-  @Override
-  @Nonnull
-  public PsiElement[] getChildren() {
-    return getAnnotations();
-  }
-
-  @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
-    return ModifierFlags.hasModifierProperty(name, getStub().getModifiersMask());
-  }
-
-  @Override
-  public boolean hasExplicitModifier(@Nonnull String name) {
-    return hasModifierProperty(name);
-  }
-
-  @Override
-  public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
-    throw cannotModifyException(this);
-  }
-
-  @Override
-  public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
-    throw cannotModifyException(this);
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getAnnotations() {
-    return getStub().getChildrenByType(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation[] getApplicableAnnotations() {
-    return getAnnotations();
-  }
-
-  @Override
-  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
-    return PsiImplUtil.findAnnotation(this, qualifiedName);
-  }
-
-  @Override
-  @Nonnull
-  public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
-    throw cannotModifyException(this);
-  }
-
-  @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
-    PsiElement parent = getParent();
-    PsiAnnotation[] annotations = getAnnotations();
-    boolean separateAnnotations = parent instanceof PsiClass || parent instanceof PsiMethod || parent instanceof PsiField || parent instanceof PsiJavaModule;
-
-    for (PsiAnnotation annotation : annotations) {
-      appendText(annotation, indentLevel, buffer, separateAnnotations ? NEXT_LINE : " ");
+    public ClsModifierListImpl(PsiModifierListStub stub) {
+        super(stub);
     }
 
-    boolean isClass = parent instanceof PsiClass;
-    boolean isInterface = isClass && ((PsiClass) parent).isInterface();
-    boolean isEnum = isClass && ((PsiClass) parent).isEnum();
-    boolean isInterfaceClass = isClass && parent.getParent() instanceof PsiClass && ((PsiClass) parent.getParent()).isInterface();
-    boolean isMethod = parent instanceof PsiMethod;
-    boolean isInterfaceMethod = isMethod && parent.getParent() instanceof PsiClass && ((PsiClass) parent.getParent()).isInterface();
-    boolean isField = parent instanceof PsiField;
-    boolean isInterfaceField = isField && parent.getParent() instanceof PsiClass && ((PsiClass) parent.getParent()).isInterface();
-    boolean isEnumConstant = parent instanceof PsiEnumConstant;
+    @Override
+    @Nonnull
+    public PsiElement[] getChildren() {
+        return getAnnotations();
+    }
 
-    if (hasModifierProperty(PsiModifier.PUBLIC) && !isInterfaceMethod && !isInterfaceField && !isInterfaceClass && !isEnumConstant) {
-      buffer.append(PsiModifier.PUBLIC).append(' ');
+    @Override
+    public boolean hasModifierProperty(@Nonnull String name) {
+        return ModifierFlags.hasModifierProperty(name, getStub().getModifiersMask());
     }
-    if (hasModifierProperty(PsiModifier.PROTECTED)) {
-      buffer.append(PsiModifier.PROTECTED).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.PRIVATE)) {
-      buffer.append(PsiModifier.PRIVATE).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.STATIC) && !isInterfaceField && !isEnumConstant) {
-      buffer.append(PsiModifier.STATIC).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.ABSTRACT) && !isInterface && !isInterfaceMethod) {
-      buffer.append(PsiModifier.ABSTRACT).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.FINAL) && !isEnum && !isInterfaceField && !isEnumConstant) {
-      buffer.append(PsiModifier.FINAL).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.NATIVE)) {
-      buffer.append(PsiModifier.NATIVE).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
-      buffer.append(PsiModifier.SYNCHRONIZED).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.TRANSIENT)) {
-      buffer.append(PsiModifier.TRANSIENT).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.VOLATILE)) {
-      buffer.append(PsiModifier.VOLATILE).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.STRICTFP)) {
-      buffer.append(PsiModifier.STRICTFP).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.DEFAULT)) {
-      buffer.append(PsiModifier.DEFAULT).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.OPEN)) {
-      buffer.append(PsiModifier.OPEN).append(' ');
-    }
-    if (hasModifierProperty(PsiModifier.TRANSITIVE)) {
-      buffer.append(PsiModifier.TRANSITIVE).append(' ');
-    }
-  }
 
-  @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.MODIFIER_LIST);
-    setMirrors(getAnnotations(), SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations());
-  }
-
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitModifierList(this);
-    } else {
-      visitor.visitElement(this);
+    @Override
+    public boolean hasExplicitModifier(@Nonnull String name) {
+        return hasModifierProperty(name);
     }
-  }
 
-  @Override
-  public String toString() {
-    return "PsiModifierList";
-  }
+    @Override
+    public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+        throw cannotModifyException(this);
+    }
+
+    @Override
+    public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+        throw cannotModifyException(this);
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getAnnotations() {
+        return getStub().getChildrenByType(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation[] getApplicableAnnotations() {
+        return getAnnotations();
+    }
+
+    @Override
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+        return PsiImplUtil.findAnnotation(this, qualifiedName);
+    }
+
+    @Override
+    @Nonnull
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+        throw cannotModifyException(this);
+    }
+
+    @Override
+    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+        PsiElement parent = getParent();
+        PsiAnnotation[] annotations = getAnnotations();
+        boolean separateAnnotations = parent instanceof PsiClass
+            || parent instanceof PsiMethod
+            || parent instanceof PsiField
+            || parent instanceof PsiJavaModule;
+
+        for (PsiAnnotation annotation : annotations) {
+            appendText(annotation, indentLevel, buffer, separateAnnotations ? NEXT_LINE : " ");
+        }
+
+        boolean isClass = parent instanceof PsiClass;
+        boolean isInterface = isClass && ((PsiClass)parent).isInterface();
+        boolean isEnum = isClass && ((PsiClass)parent).isEnum();
+        boolean isInterfaceClass = isClass && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isMethod = parent instanceof PsiMethod;
+        boolean isInterfaceMethod = isMethod && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isField = parent instanceof PsiField;
+        boolean isInterfaceField = isField && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isEnumConstant = parent instanceof PsiEnumConstant;
+
+        if (hasModifierProperty(PsiModifier.PUBLIC) && !isInterfaceMethod && !isInterfaceField && !isInterfaceClass && !isEnumConstant) {
+            buffer.append(PsiModifier.PUBLIC).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.PROTECTED)) {
+            buffer.append(PsiModifier.PROTECTED).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.PRIVATE)) {
+            buffer.append(PsiModifier.PRIVATE).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.STATIC) && !isInterfaceField && !isEnumConstant) {
+            buffer.append(PsiModifier.STATIC).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.ABSTRACT) && !isInterface && !isInterfaceMethod) {
+            buffer.append(PsiModifier.ABSTRACT).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.FINAL) && !isEnum && !isInterfaceField && !isEnumConstant) {
+            buffer.append(PsiModifier.FINAL).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.NATIVE)) {
+            buffer.append(PsiModifier.NATIVE).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
+            buffer.append(PsiModifier.SYNCHRONIZED).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.TRANSIENT)) {
+            buffer.append(PsiModifier.TRANSIENT).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.VOLATILE)) {
+            buffer.append(PsiModifier.VOLATILE).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.STRICTFP)) {
+            buffer.append(PsiModifier.STRICTFP).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.DEFAULT)) {
+            buffer.append(PsiModifier.DEFAULT).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.OPEN)) {
+            buffer.append(PsiModifier.OPEN).append(' ');
+        }
+        if (hasModifierProperty(PsiModifier.TRANSITIVE)) {
+            buffer.append(PsiModifier.TRANSITIVE).append(' ');
+        }
+    }
+
+    @Override
+    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+        setMirrorCheckingType(element, JavaElementType.MODIFIER_LIST);
+        setMirrors(getAnnotations(), SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations());
+    }
+
+    @Override
+    public void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor)visitor).visitModifierList(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PsiModifierList";
+    }
 }
