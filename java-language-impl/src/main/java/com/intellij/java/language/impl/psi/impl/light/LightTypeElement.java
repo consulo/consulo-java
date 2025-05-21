@@ -18,13 +18,12 @@ package com.intellij.java.language.impl.psi.impl.light;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
-import consulo.language.impl.psi.LightElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -39,19 +38,22 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
         myType = type;
     }
 
+    @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiTypeElement:" + getText();
     }
 
     @Override
+    @RequiredReadAction
     public String getText() {
         return myType.getPresentableText();
     }
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeElement(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitTypeElement(this);
         }
         else {
             visitor.visitElement(this);
@@ -86,13 +88,13 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
         return myType.findAnnotation(qualifiedName);
     }
 
     @Override
     @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
         throw new IncorrectOperationException();
     }
 

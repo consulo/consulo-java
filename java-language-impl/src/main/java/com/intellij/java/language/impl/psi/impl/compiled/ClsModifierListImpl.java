@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiModifierListStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
@@ -34,18 +35,21 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
         super(stub);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
         return getAnnotations();
     }
 
     @Override
+    @RequiredReadAction
     public boolean hasModifierProperty(@Nonnull String name) {
         return ModifierFlags.hasModifierProperty(name, getStub().getModifiersMask());
     }
 
     @Override
+    @RequiredReadAction
     public boolean hasExplicitModifier(@Nonnull String name) {
         return hasModifierProperty(name);
     }
@@ -84,6 +88,7 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
     }
 
     @Override
+    @RequiredReadAction
     public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
         PsiElement parent = getParent();
         PsiAnnotation[] annotations = getAnnotations();
@@ -99,11 +104,11 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
         boolean isClass = parent instanceof PsiClass;
         boolean isInterface = isClass && ((PsiClass)parent).isInterface();
         boolean isEnum = isClass && ((PsiClass)parent).isEnum();
-        boolean isInterfaceClass = isClass && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isInterfaceClass = isClass && parent.getParent() instanceof PsiClass outerClass && outerClass.isInterface();
         boolean isMethod = parent instanceof PsiMethod;
-        boolean isInterfaceMethod = isMethod && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isInterfaceMethod = isMethod && parent.getParent() instanceof PsiClass psiClass && psiClass.isInterface();
         boolean isField = parent instanceof PsiField;
-        boolean isInterfaceField = isField && parent.getParent() instanceof PsiClass && ((PsiClass)parent.getParent()).isInterface();
+        boolean isInterfaceField = isField && parent.getParent() instanceof PsiClass psiClass && psiClass.isInterface();
         boolean isEnumConstant = parent instanceof PsiEnumConstant;
 
         if (hasModifierProperty(PsiModifier.PUBLIC) && !isInterfaceMethod && !isInterfaceField && !isInterfaceClass && !isEnumConstant) {
@@ -158,8 +163,8 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitModifierList(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitModifierList(this);
         }
         else {
             visitor.visitElement(this);

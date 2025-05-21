@@ -8,6 +8,7 @@ import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.AtomicNotNullLazyValue;
 import consulo.application.util.AtomicNullableLazyValue;
 import consulo.application.util.NotNullLazyValue;
@@ -58,7 +59,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
         myTypeText = TypeInfo.internFrequentType(typeText);
         myVariance = variance;
         myAnnotations = annotations;
-        myChild = new AtomicNullableLazyValue<ClsElementImpl>() {
+        myChild = new AtomicNullableLazyValue<>() {
             @Override
             protected ClsElementImpl compute() {
                 return calculateChild();
@@ -67,8 +68,9 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
         myCachedType = AtomicNotNullLazyValue.createValue(this::calculateType);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
         ClsElementImpl child = myChild.getValue();
         return child != null ? new PsiElement[]{child} : PsiElement.EMPTY_ARRAY;
@@ -80,12 +82,13 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     }
 
     @Override
+    @RequiredReadAction
     public String getText() {
-        final String shortClassName = PsiNameHelper.getShortClassName(myTypeText);
+        String shortClassName = PsiNameHelper.getShortClassName(myTypeText);
         return decorateTypeText(shortClassName);
     }
 
-    private String decorateTypeText(final String shortClassName) {
+    private String decorateTypeText(String shortClassName) {
         switch (myVariance) {
             case VARIANCE_NONE:
                 return shortClassName;
@@ -201,11 +204,13 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     }
 
     @Nonnull
+    @RequiredReadAction
     private PsiType calculateType() {
         return calculateBaseType().annotate(myAnnotations.getProvider(this));
     }
 
     @Nonnull
+    @RequiredReadAction
     private PsiType calculateBaseType() {
         PsiType result = PsiJavaParserFacadeImpl.getPrimitiveType(myTypeText);
         if (result != null) {
@@ -213,46 +218,39 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
         }
 
         ClsElementImpl childElement = myChild.getValue();
-        if (childElement instanceof ClsTypeElementImpl) {
+        if (childElement instanceof ClsTypeElementImpl typeElement) {
             if (isArray()) {
-                switch (myVariance) {
-                    case VARIANCE_NONE:
-                        return createArrayType((PsiTypeElement)childElement);
-                    case VARIANCE_EXTENDS:
-                        return PsiWildcardType.createExtends(getManager(), ((PsiTypeElement)childElement).getType());
-                    case VARIANCE_SUPER:
-                        return PsiWildcardType.createSuper(getManager(), ((PsiTypeElement)childElement).getType());
-                    default:
+                return switch (myVariance) {
+                    case VARIANCE_NONE -> createArrayType(typeElement);
+                    case VARIANCE_EXTENDS -> PsiWildcardType.createExtends(getManager(), typeElement.getType());
+                    case VARIANCE_SUPER -> PsiWildcardType.createSuper(getManager(), typeElement.getType());
+                    default -> {
                         assert false : myVariance;
-                        return null;
-                }
+                        yield null;
+                    }
+                };
             }
-            else {
-                assert isVarArgs() : this;
-                return createArrayType((PsiTypeElement)childElement);
-            }
+            assert isVarArgs() : this;
+            return createArrayType(typeElement);
         }
-        if (childElement instanceof ClsJavaCodeReferenceElementImpl) {
-            PsiClassReferenceType psiClassReferenceType = new PsiClassReferenceType((PsiJavaCodeReferenceElement)childElement, null);
-            switch (myVariance) {
-                case VARIANCE_NONE:
-                    return psiClassReferenceType;
-                case VARIANCE_EXTENDS:
-                    return PsiWildcardType.createExtends(
-                        getManager(),
-                        psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(childElement))
-                    );
-                case VARIANCE_SUPER:
-                    return PsiWildcardType.createSuper(
-                        getManager(),
-                        psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(childElement))
-                    );
-                case VARIANCE_INVARIANT:
-                    return PsiWildcardType.createUnbounded(getManager());
-                default:
+        if (childElement instanceof ClsJavaCodeReferenceElementImpl codeRefElem) {
+            PsiClassReferenceType psiClassReferenceType = new PsiClassReferenceType(codeRefElem, null);
+            return switch (myVariance) {
+                case VARIANCE_NONE -> psiClassReferenceType;
+                case VARIANCE_EXTENDS -> PsiWildcardType.createExtends(
+                    getManager(),
+                    psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(codeRefElem))
+                );
+                case VARIANCE_SUPER -> PsiWildcardType.createSuper(
+                    getManager(),
+                    psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(codeRefElem))
+                );
+                case VARIANCE_INVARIANT -> PsiWildcardType.createUnbounded(getManager());
+                default -> {
                     assert false : myVariance;
-                    return null;
-            }
+                    yield null;
+                }
+            };
         }
         assert childElement == null : this;
         return PsiWildcardType.createUnbounded(getManager());
@@ -260,8 +258,8 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeElement(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitTypeElement(this);
         }
         else {
             visitor.visitElement(this);
@@ -292,6 +290,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     }
 
     @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiTypeElement:" + getText();
     }

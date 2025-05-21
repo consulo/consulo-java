@@ -25,6 +25,8 @@ import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.Language;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElement;
@@ -56,11 +58,12 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     public abstract PsiClass getDelegate();
 
     @Nonnull
+    @Override
     public abstract PsiElement copy();
 
-    @Override
-    @NonNls
     @Nullable
+    @Override
+    @RequiredReadAction
     public String getName() {
         return getDelegate().getName();
     }
@@ -72,7 +75,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    public boolean hasModifierProperty(@NonNls @Nonnull String name) {
+    public boolean hasModifierProperty(@Nonnull String name) {
         return getDelegate().hasModifierProperty(name);
     }
 
@@ -104,9 +107,8 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
         return getDelegate().getTypeParameters();
     }
 
-    @Override
-    @NonNls
     @Nullable
+    @Override
     public String getQualifiedName() {
         return getDelegate().getQualifiedName();
     }
@@ -126,8 +128,8 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
         return getDelegate().isEnum();
     }
 
-    @Override
     @Nullable
+    @Override
     public PsiReferenceList getExtendsList() {
         return getDelegate().getExtendsList();
     }
@@ -156,6 +158,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
         return getDelegate().getSuperClass();
     }
 
+    @Nonnull
     @Override
     public PsiClass[] getInterfaces() {
         return getDelegate().getInterfaces();
@@ -210,6 +213,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
+    @RequiredReadAction
     public boolean processDeclarations(
         @Nonnull PsiScopeProcessor processor,
         @Nonnull ResolveState state,
@@ -248,7 +252,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
 
     @Override
     @Nullable
-    public PsiField findFieldByName(@NonNls String name, boolean checkBases) {
+    public PsiField findFieldByName(String name, boolean checkBases) {
         return PsiClassImplUtil.findFieldByName(this, name, checkBases);
     }
 
@@ -266,13 +270,13 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
 
     @Override
     @Nonnull
-    public PsiMethod[] findMethodsByName(@NonNls String name, boolean checkBases) {
+    public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
         return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
     }
 
     @Override
     @Nonnull
-    public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(@NonNls String name, boolean checkBases) {
+    public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
         return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
     }
 
@@ -284,7 +288,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
 
     @Override
     @Nullable
-    public PsiClass findInnerClassByName(@NonNls String name, boolean checkBases) {
+    public PsiClass findInnerClassByName(String name, boolean checkBases) {
         return getDelegate().findInnerClassByName(name, checkBases);
     }
 
@@ -334,16 +338,19 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
+    @RequiredWriteAction
+    public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
         return getDelegate().setName(name);
     }
 
     @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiClass:" + getName();
     }
 
     @Override
+    @RequiredReadAction
     public String getText() {
         return getDelegate().getText();
     }

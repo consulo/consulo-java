@@ -62,7 +62,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
     /**
      * Constructs a PsiType with given annotations
      */
-    protected PsiType(@Nonnull final PsiAnnotation[] annotations) {
+    protected PsiType(@Nonnull PsiAnnotation[] annotations) {
         this(TypeAnnotationProvider.Static.create(annotations));
     }
 
@@ -145,7 +145,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
      * Checks if the type is currently valid.
      *
      * @return true if the type is valid, false otherwise.
-     * @see PsiElement#isValid()
+     * @see consulo.language.psi.PsiElement#isValid()
      */
     public abstract boolean isValid();
 
@@ -175,7 +175,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
      * Returns the class type for qualified class name.
      *
      * @param qName        qualified class name.
-     * @param project
+     * @param project      current project.
      * @param resolveScope the scope in which the class is searched.
      * @return the class instance.
      */
@@ -272,9 +272,9 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
     public final int getArrayDimensions() {
         PsiType type = this;
         int dims = 0;
-        while (type instanceof PsiArrayType) {
+        while (type instanceof PsiArrayType arrayType) {
             dims++;
-            type = ((PsiArrayType)type).getComponentType();
+            type = arrayType.getComponentType();
         }
         return dims;
     }
@@ -288,8 +288,8 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
     @Nonnull
     public final PsiType getDeepComponentType() {
         PsiType type = this;
-        while (type instanceof PsiArrayType) {
-            type = ((PsiArrayType)type).getComponentType();
+        while (type instanceof PsiArrayType arrayType) {
+            type = arrayType.getComponentType();
         }
         return type;
     }

@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author max
- */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.psi.PsiAnnotation;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.impl.psi.impl.light.LightModifierList;
@@ -29,10 +26,13 @@ import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author max
+ */
 public class PsiCompositeModifierList extends LightModifierList {
     private final List<PsiModifierList> mySublists;
 
-    public PsiCompositeModifierList(final PsiManager manager, List<PsiModifierList> sublists) {
+    public PsiCompositeModifierList(PsiManager manager, List<PsiModifierList> sublists) {
         super(manager);
         mySublists = sublists;
     }
@@ -40,7 +40,7 @@ public class PsiCompositeModifierList extends LightModifierList {
     @Override
     @Nonnull
     public PsiAnnotation[] getAnnotations() {
-        List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
+        List<PsiAnnotation> annotations = new ArrayList<>();
         for (PsiModifierList list : mySublists) {
             ContainerUtil.addAll(annotations, list.getAnnotations());
         }
@@ -48,9 +48,9 @@ public class PsiCompositeModifierList extends LightModifierList {
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
         for (PsiModifierList sublist : mySublists) {
-            final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
+            PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
             if (annotation != null) {
                 return annotation;
             }
@@ -60,7 +60,8 @@ public class PsiCompositeModifierList extends LightModifierList {
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull final String name) {
+    @RequiredReadAction
+    public boolean hasModifierProperty(@Nonnull String name) {
         for (PsiModifierList sublist : mySublists) {
             if (sublist.hasModifierProperty(name)) {
                 return true;
@@ -70,7 +71,7 @@ public class PsiCompositeModifierList extends LightModifierList {
     }
 
     @Override
-    public boolean hasExplicitModifier(@Nonnull final String name) {
+    public boolean hasExplicitModifier(@Nonnull String name) {
         for (PsiModifierList sublist : mySublists) {
             if (sublist.hasExplicitModifier(name)) {
                 return true;

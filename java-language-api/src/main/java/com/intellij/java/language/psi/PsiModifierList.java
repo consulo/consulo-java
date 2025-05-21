@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * Represents the list of modifiers and annotations on a Java element (class, method,
@@ -35,7 +35,8 @@ public interface PsiModifierList extends PsiElement, PsiAnnotationOwner {
      * @return true if the list has the modifier, false otherwise
      * @see #hasExplicitModifier(String)
      */
-    boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
+    @RequiredReadAction
+    boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name);
 
     /**
      * Checks if the modifier list has the specified modifier set by an explicit keyword.
@@ -44,7 +45,7 @@ public interface PsiModifierList extends PsiElement, PsiAnnotationOwner {
      * @return true if the list has the modifier, false otherwise
      * @see #hasModifierProperty(String)
      */
-    boolean hasExplicitModifier(@PsiModifier.ModifierConstant @Nonnull @NonNls String name);
+    boolean hasExplicitModifier(@PsiModifier.ModifierConstant @Nonnull String name);
 
     /**
      * Adds or removes the specified modifier to the modifier list.
@@ -53,7 +54,7 @@ public interface PsiModifierList extends PsiElement, PsiAnnotationOwner {
      * @param value true if the modifier should be added, false if it should be removed.
      * @throws IncorrectOperationException if the modification fails for some reason.
      */
-    void setModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value) throws IncorrectOperationException;
+    void setModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name, boolean value) throws IncorrectOperationException;
 
     /**
      * Checks if it is possible to add or remove the specified modifier to the modifier list,
@@ -64,6 +65,6 @@ public interface PsiModifierList extends PsiElement, PsiAnnotationOwner {
      * @param value true if the modifier should be added, false if it should be removed.
      * @throws IncorrectOperationException if the modification fails for some reason.
      */
-    void checkSetModifierProperty(@PsiModifier.ModifierConstant @Nonnull @NonNls String name, boolean value)
+    void checkSetModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name, boolean value)
         throws IncorrectOperationException;
 }

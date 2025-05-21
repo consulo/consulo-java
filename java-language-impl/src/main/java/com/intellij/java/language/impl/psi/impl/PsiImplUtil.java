@@ -214,6 +214,7 @@ public class PsiImplUtil {
     }
 
     @Nonnull
+    @RequiredReadAction
     public static Object[] getReferenceVariantsByFilter(@Nonnull PsiJavaCodeReferenceElement reference, @Nonnull ElementFilter filter) {
         FilterScopeProcessor processor = new FilterScopeProcessor(filter);
         PsiScopesUtil.resolveAndWalk(processor, reference, null, true);
@@ -383,6 +384,7 @@ public class PsiImplUtil {
      * @deprecated use {@link AnnotationTargetUtil#findAnnotationTarget(PsiAnnotation, TargetType...)} (to be removed ion IDEA 17)
      */
     @SuppressWarnings("unused")
+    @RequiredReadAction
     public static TargetType findApplicableTarget(@Nonnull PsiAnnotation annotation, @Nonnull TargetType... types) {
         return AnnotationTargetUtil.findAnnotationTarget(annotation, types);
     }
@@ -391,6 +393,7 @@ public class PsiImplUtil {
      * @deprecated use {@link AnnotationTargetUtil#findAnnotationTarget(PsiClass, TargetType...)} (to be removed ion IDEA 17)
      */
     @SuppressWarnings("unused")
+    @RequiredReadAction
     public static TargetType findApplicableTarget(@Nonnull PsiClass annotationType, @Nonnull TargetType... types) {
         return AnnotationTargetUtil.findAnnotationTarget(annotationType, types);
     }
@@ -399,6 +402,7 @@ public class PsiImplUtil {
      * @deprecated use {@link AnnotationTargetUtil#getAnnotationTargets(PsiClass)} (to be removed ion IDEA 17)
      */
     @SuppressWarnings("unused")
+    @RequiredReadAction
     public static Set<TargetType> getAnnotationTargets(@Nonnull PsiClass annotationType) {
         return AnnotationTargetUtil.getAnnotationTargets(annotationType);
     }
@@ -744,10 +748,12 @@ public class PsiImplUtil {
         return null;
     }
 
+    @RequiredReadAction
     public static boolean isTypeAnnotation(@Nullable PsiElement element) {
         return element instanceof PsiAnnotation annotation && AnnotationTargetUtil.isTypeAnnotation(annotation);
     }
 
+    @RequiredReadAction
     public static void collectTypeUseAnnotations(@Nonnull PsiModifierList modifierList, @Nonnull List<PsiAnnotation> annotations) {
         for (PsiAnnotation annotation : modifierList.getAnnotations()) {
             if (AnnotationTargetUtil.isTypeAnnotation(annotation)) {
@@ -760,6 +766,7 @@ public class PsiImplUtil {
      * @deprecated use {@link #collectTypeUseAnnotations(PsiModifierList, List)} (to be removed in IDEA 16)
      */
     @SuppressWarnings("unused")
+    @RequiredReadAction
     public static List<PsiAnnotation> getTypeUseAnnotations(@Nonnull PsiModifierList modifierList) {
         SmartList<PsiAnnotation> result = null;
 
@@ -789,7 +796,7 @@ public class PsiImplUtil {
         }
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     public static void deleteTypeAnnotations(@Nonnull PsiTypeElement typeElement) {
         PsiElement left = PsiTreeUtil.skipSiblingsBackward(typeElement, PsiComment.class, PsiWhiteSpace.class, PsiTypeParameterList.class);
         if (left instanceof PsiModifierList modifierList) {
@@ -809,6 +816,7 @@ public class PsiImplUtil {
         return element instanceof LeafElement leafElement && tokenSet.contains(leafElement.getElementType());
     }
 
+    @RequiredReadAction
     public static PsiType buildTypeFromTypeString(@Nonnull String typeName, @Nonnull PsiElement context, @Nonnull PsiFile psiFile) {
         PsiType resultType;
         PsiManager psiManager = psiFile.getManager();

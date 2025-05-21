@@ -19,13 +19,13 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class LightTypeParameter extends LightClass implements PsiTypeParameter {
-    public LightTypeParameter(final PsiTypeParameter delegate) {
+    public LightTypeParameter(PsiTypeParameter delegate) {
         super(delegate);
     }
 
@@ -42,9 +42,9 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter {
     }
 
     @Override
-    public void accept(@Nonnull final PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeParameter(this);
+    public void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor elementVisitor) {
+            elementVisitor.visitTypeParameter(this);
         }
         else {
             super.accept(visitor);
@@ -74,13 +74,13 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter {
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull @NonNls final String qualifiedName) {
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
         return getDelegate().findAnnotation(qualifiedName);
     }
 
     @Nonnull
     @Override
-    public PsiAnnotation addAnnotation(@Nonnull @NonNls final String qualifiedName) {
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
         return getDelegate().addAnnotation(qualifiedName);
     }
 
@@ -89,6 +89,7 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter {
     }
 
     @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiTypeParameter:" + getName();
     }

@@ -18,9 +18,8 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.jvm.JvmTypeParameter;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents the type parameter of a generic class, interface, method or constructor.
@@ -40,8 +39,8 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
      *
      * @return the extends list. For this particular kind of classes it never returns null.
      */
-    @Override
     @Nonnull
+    @Override
     PsiReferenceList getExtendsList();
 
     /**
@@ -67,7 +66,7 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
     }
 
     @Override
-    default boolean hasAnnotation(@Nonnull @NonNls String fqn) {
+    default boolean hasAnnotation(@Nonnull String fqn) {
         return PsiClass.super.hasAnnotation(fqn);
     }
 

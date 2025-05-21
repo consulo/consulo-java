@@ -17,14 +17,13 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.Language;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -42,7 +41,7 @@ public class LightModifierList extends LightElement implements PsiModifierList {
         this(manager, JavaLanguage.INSTANCE);
     }
 
-    public LightModifierList(PsiManager manager, final Language language, String... modifiers) {
+    public LightModifierList(PsiManager manager, Language language, String... modifiers) {
         super(manager, language);
         myModifiers = new HashSet<>(Set.of(modifiers));
     }
@@ -67,6 +66,7 @@ public class LightModifierList extends LightElement implements PsiModifierList {
     }
 
     @Override
+    @RequiredReadAction
     public boolean hasModifierProperty(@Nonnull String name) {
         return myModifiers.contains(name);
     }
@@ -106,20 +106,21 @@ public class LightModifierList extends LightElement implements PsiModifierList {
 
     @Override
     @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
         throw new IncorrectOperationException();
     }
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitModifierList(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitModifierList(this);
         }
         else {
             visitor.visitElement(this);
         }
     }
 
+    @Override
     public String toString() {
         return "PsiModifierList";
     }

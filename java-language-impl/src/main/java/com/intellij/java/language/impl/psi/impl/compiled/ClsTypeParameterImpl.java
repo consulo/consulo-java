@@ -24,6 +24,7 @@ import com.intellij.java.language.impl.psi.impl.light.LightEmptyImplementsList;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.content.scope.SearchScope;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
@@ -36,8 +37,6 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -157,6 +156,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
     }
 
     @Override
+    @RequiredReadAction
     public boolean processDeclarations(
         @Nonnull PsiScopeProcessor processor,
         @Nonnull ResolveState state,
@@ -176,6 +176,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
     }
 
     @Override
+    @RequiredReadAction
     public String getName() {
         return getStub().getName();
     }
@@ -265,6 +266,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
         return PsiClassImplUtil.getSuperClass(this);
     }
 
+    @Nonnull
     @Override
     public PsiClass[] getInterfaces() {
         return PsiClassImplUtil.getInterfaces(this);
@@ -315,20 +317,21 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeParameter(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitTypeParameter(this);
         }
         else {
             visitor.visitElement(this);
         }
     }
 
-    @NonNls
+    @Override
     public String toString() {
         return "PsiTypeParameter";
     }
 
     @Override
+    @RequiredReadAction
     public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
         buffer.append(getName());
 
@@ -350,8 +353,9 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
         setMirror(getExtendsList(), SourceTreeToPsiMap.<PsiTypeParameter>treeToPsiNotNull(element).getExtendsList());
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiElement[] getChildren() {
         return PsiElement.EMPTY_ARRAY;
     }
@@ -363,16 +367,17 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
 
     @Override
     public int getIndex() {
-        final PsiTypeParameterStub stub = getStub();
+        PsiTypeParameterStub stub = getStub();
         return stub.getParentStub().getChildrenStubs().indexOf(stub);
     }
 
+    @Override
     public PsiMetaData getMetaData() {
         return MetaDataService.getInstance().getMeta(this);
     }
 
     @Override
-    public boolean isEquivalentTo(final PsiElement another) {
+    public boolean isEquivalentTo(PsiElement another) {
         return PsiClassImplUtil.isClassEquivalentTo(this, another);
     }
 
@@ -390,13 +395,13 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
         return null;
     }
 
     @Override
     @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
         throw new IncorrectOperationException();
     }
 

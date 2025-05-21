@@ -10,7 +10,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class LightTypeParameterBuilder extends LightPsiClassBuilder implements PsiTypeParameter {
-
     private final PsiTypeParameterListOwner myOwner;
     private final int myIndex;
 
@@ -22,8 +21,8 @@ public class LightTypeParameterBuilder extends LightPsiClassBuilder implements P
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeParameter(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitTypeParameter(this);
         }
         else {
             visitor.visitElement(this);

@@ -27,6 +27,8 @@ import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.content.scope.SearchScope;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
@@ -41,8 +43,6 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -59,11 +59,11 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
         }
     };
 
-    public PsiTypeParameterImpl(final PsiTypeParameterStub stub) {
+    public PsiTypeParameterImpl(PsiTypeParameterStub stub) {
         super(stub, JavaStubElementTypes.TYPE_PARAMETER);
     }
 
-    public PsiTypeParameterImpl(final ASTNode node) {
+    public PsiTypeParameterImpl(ASTNode node) {
         super(node);
     }
 
@@ -166,25 +166,22 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
 
     @Override
     public PsiTypeParameterListOwner getOwner() {
-        final PsiElement parent = getParent();
+        PsiElement parent = getParent();
         if (parent == null) {
             throw new PsiInvalidElementAccessException(this);
         }
-        final PsiElement parentParent = parent.getParent();
-        if (!(parentParent instanceof PsiTypeParameterListOwner)) {
-            // Might be an error element;
-            return PsiTreeUtil.getParentOfType(this, PsiTypeParameterListOwner.class);
-        }
 
-        return (PsiTypeParameterListOwner)parentParent;
+        return parent.getParent() instanceof PsiTypeParameterListOwner owner ? owner
+            : PsiTreeUtil.getParentOfType(this, PsiTypeParameterListOwner.class); // Might be an error element
     }
 
 
     @Override
+    @RequiredReadAction
     public int getIndex() {
-        final PsiTypeParameterStub stub = getStub();
+        PsiTypeParameterStub stub = getStub();
         if (stub != null) {
-            final PsiTypeParameterListStub parentStub = (PsiTypeParameterListStub)stub.getParentStub();
+            PsiTypeParameterListStub parentStub = (PsiTypeParameterListStub)stub.getParentStub();
             return parentStub.getChildrenStubs().indexOf(stub);
         }
 
@@ -199,13 +196,15 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
         return ret;
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     public PsiIdentifier getNameIdentifier() {
         return PsiTreeUtil.getRequiredChildOfType(this, PsiIdentifier.class);
     }
 
     @Override
+    @RequiredReadAction
     public boolean processDeclarations(
         @Nonnull PsiScopeProcessor processor,
         @Nonnull ResolveState state,
@@ -225,8 +224,9 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
     }
 
     @Override
+    @RequiredReadAction
     public String getName() {
-        final PsiTypeParameterStub stub = getStub();
+        PsiTypeParameterStub stub = getStub();
         if (stub != null) {
             return stub.getName();
         }
@@ -235,6 +235,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
     }
 
     @Override
+    @RequiredWriteAction
     public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
         PsiImplUtil.setName(getNameIdentifier(), name);
         return this;
@@ -320,6 +321,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
         return PsiClassImplUtil.getSuperClass(this);
     }
 
+    @Nonnull
     @Override
     public PsiClass[] getInterfaces() {
         return PsiClassImplUtil.getInterfaces(this);
@@ -370,25 +372,27 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
 
     @Override
     public void accept(@Nonnull PsiElementVisitor visitor) {
-        if (visitor instanceof JavaElementVisitor) {
-            ((JavaElementVisitor)visitor).visitTypeParameter(this);
+        if (visitor instanceof JavaElementVisitor elemVisitor) {
+            elemVisitor.visitTypeParameter(this);
         }
         else {
             visitor.visitElement(this);
         }
     }
 
-    @NonNls
+    @Override
+    @RequiredReadAction
     public String toString() {
         return "PsiTypeParameter:" + getName();
     }
 
+    @Override
     public PsiMetaData getMetaData() {
         return MetaDataService.getInstance().getMeta(this);
     }
 
     @Override
-    public boolean isEquivalentTo(final PsiElement another) {
+    public boolean isEquivalentTo(PsiElement another) {
         return PsiClassImplUtil.isClassEquivalentTo(this, another);
     }
 
@@ -405,13 +409,13 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
         return PsiImplUtil.findAnnotation(this, qualifiedName);
     }
 
     @Override
     @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
         throw new IncorrectOperationException();
     }
 
