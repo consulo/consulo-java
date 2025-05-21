@@ -35,31 +35,34 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 
-public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix
-{
-	public AddNullableNotNullAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner owner, @Nonnull String... annotationToRemove)
-	{
-		super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
-	}
+public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
+    public AddNullableNotNullAnnotationFix(
+        @Nonnull String fqn,
+        @Nonnull PsiModifierListOwner owner,
+        @Nonnull String... annotationToRemove
+    ) {
+        super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
+    }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		if(!super.isAvailable(project, file, startElement, endElement))
-		{
-			return false;
-		}
-		PsiModifierListOwner owner = getContainer(file, startElement.getTextRange().getStartOffset());
-		if(owner == null || AnnotationUtil.isAnnotated(owner, getAnnotationsToRemove()[0], false, false))
-		{
-			return false;
-		}
-		if(owner instanceof PsiMethod)
-		{
-			PsiType returnType = ((PsiMethod) owner).getReturnType();
+    @Override
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        if (!super.isAvailable(project, file, startElement, endElement)) {
+            return false;
+        }
+        PsiModifierListOwner owner = getContainer(file, startElement.getTextRange().getStartOffset());
+        if (owner == null || AnnotationUtil.isAnnotated(owner, getAnnotationsToRemove()[0], false, false)) {
+            return false;
+        }
+        if (owner instanceof PsiMethod) {
+            PsiType returnType = ((PsiMethod)owner).getReturnType();
 
-			return returnType != null && !(returnType instanceof PsiPrimitiveType);
-		}
-		return true;
-	}
+            return returnType != null && !(returnType instanceof PsiPrimitiveType);
+        }
+        return true;
+    }
 }
