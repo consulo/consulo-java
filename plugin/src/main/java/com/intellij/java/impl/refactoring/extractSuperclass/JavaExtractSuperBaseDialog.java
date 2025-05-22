@@ -30,6 +30,7 @@ import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -52,7 +53,7 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
   protected final DestinationFolderComboBox myDestinationFolderComboBox;
 
 
-  public JavaExtractSuperBaseDialog(Project project, PsiClass sourceClass, List<MemberInfo> members, String refactoringName) {
+  public JavaExtractSuperBaseDialog(Project project, PsiClass sourceClass, List<MemberInfo> members, LocalizeValue refactoringName) {
     super(project, sourceClass, members, refactoringName);
     myDestinationFolderComboBox = new DestinationFolderComboBox() {
       @Override

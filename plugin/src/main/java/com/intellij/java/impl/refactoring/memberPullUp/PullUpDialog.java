@@ -30,17 +30,18 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.HelpManager;
-import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.memberPullUp.PullUpDialogBase;
 import consulo.language.editor.refactoring.ui.AbstractMemberSelectionTable;
+import consulo.language.editor.ui.util.DocCommentPanel;
+import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.psi.PsiElement;
 import consulo.language.statistician.StatisticsInfo;
 import consulo.language.statistician.StatisticsManager;
 import consulo.project.Project;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.Component;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 
@@ -154,7 +155,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
 
   @Override
   protected void addCustomElementsToCentralPanel(JPanel panel) {
-    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.javadocForAbstracts().get());
+    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.javadocForAbstracts());
     myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
     boolean hasJavadoc = false;
     for (MemberInfo info : myMemberInfos) {
@@ -168,8 +169,10 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
         }
       }
     }
-    UIUtil.setEnabled(myJavaDocPanel, hasJavadoc, true);
-    panel.add(myJavaDocPanel, BorderLayout.EAST);
+
+    Component component = myJavaDocPanel.getComponent();
+    component.setEnabledRecursive(hasJavadoc);
+    panel.add(TargetAWT.to(component), BorderLayout.EAST);
   }
 
   @Override

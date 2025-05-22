@@ -24,12 +24,11 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.ElementsHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
@@ -48,8 +47,7 @@ import javax.swing.*;
 public class ExtractInterfaceHandler implements RefactoringActionHandler, ElementsHandler {
   private static final Logger LOG = Logger.getInstance(ExtractInterfaceHandler.class);
 
-  public static final String REFACTORING_NAME = RefactoringBundle.message("extract.interface.title");
-
+  public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractInterfaceTitle();
 
   private Project myProject;
   private PsiClass myClass;
@@ -66,7 +64,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
     while (true) {
       if (element == null || element instanceof PsiFile) {
         LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
-        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_INTERFACE);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_INTERFACE);
         return;
       }
       if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
@@ -108,10 +106,8 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
           }
         });
       }
-    }, REFACTORING_NAME, null);
-
+    }, REFACTORING_NAME.get(), null);
   }
-
 
   private void doRefactoring() throws IncorrectOperationException {
     LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());

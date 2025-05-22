@@ -22,14 +22,15 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.application.HelpManager;
-import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.classMember.MemberInfoChange;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.language.editor.refactoring.classMember.UsedByDependencyMemberInfoModel;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.ui.util.DocCommentPanel;
+import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.project.Project;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,9 +107,9 @@ public class PushDownDialog extends RefactoringDialog {
     memberSelectionPanel.getTable().addMemberInfoChangeListener(myMemberInfoModel);
 
 
-    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.pushDownJavadocPanelTitle().get());
+    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.pushDownJavadocPanelTitle());
     myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
-    panel.add(myJavaDocPanel, BorderLayout.EAST);
+    panel.add(TargetAWT.to(myJavaDocPanel.getComponent()), BorderLayout.EAST);
     return panel;
   }
 

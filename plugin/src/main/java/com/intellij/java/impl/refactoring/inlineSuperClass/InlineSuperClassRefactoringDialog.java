@@ -22,13 +22,14 @@ package com.intellij.java.impl.refactoring.inlineSuperClass;
 
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.language.editor.refactoring.inline.InlineOptionsDialog;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.ui.util.DocCommentPanel;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
@@ -47,7 +48,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     myCurrentInheritor = currentInheritor;
     myInvokedOnReference = currentInheritor != null;
     myTargetClasses = targetClasses;
-    myDocPanel = new DocCommentPanel("JavaDoc for inlined members");
+    myDocPanel = new DocCommentPanel(LocalizeValue.localizeTODO("JavaDoc for inlined members"));
     myDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
     init();
     setTitle(InlineSuperClassRefactoringHandler.REFACTORING_NAME);
@@ -80,7 +81,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     final GridBagConstraints gc =
         new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
             JBUI.emptyInsets(), 0, 0);
-    panel.add(myDocPanel, gc);
+    panel.add(TargetAWT.to(myDocPanel.getComponent()), gc);
     panel.add(label, gc);
     gc.weighty = 1;
     gc.fill = GridBagConstraints.BOTH;

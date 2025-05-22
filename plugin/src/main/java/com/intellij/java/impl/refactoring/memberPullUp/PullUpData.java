@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.memberPullUp;
 
-import java.util.Set;
-
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.ui.util.DocCommentPolicy;
+import consulo.project.Project;
+
+import java.util.Set;
 
 /**
  * Created by Max Medvedev on 10/3/13
  */
-public interface PullUpData
-{
-	PsiClass getSourceClass();
+public interface PullUpData {
+    PsiClass getSourceClass();
 
-	PsiClass getTargetClass();
+    PsiClass getTargetClass();
 
-	DocCommentPolicy getDocCommentPolicy();
+    DocCommentPolicy getDocCommentPolicy();
 
-	Set<PsiMember> getMembersToMove();
+    Set<PsiMember> getMembersToMove();
 
-	Set<PsiMember> getMovedMembers();
+    Set<PsiMember> getMovedMembers();
 
-	Project getProject();
+    Project getProject();
 }

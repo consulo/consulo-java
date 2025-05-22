@@ -24,13 +24,14 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.application.AllIcons;
 import consulo.application.HelpManager;
 import consulo.component.util.Iconable;
-import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.ui.util.DocCommentPanel;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.JBColor;
@@ -314,8 +315,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
 
     JPanel encapsulateBox = new JPanel(new BorderLayout());
     encapsulateBox.add(leftPanel, BorderLayout.CENTER);
-    myJavadocPolicy = new DocCommentPanel("JavaDoc");
-    encapsulateBox.add(myJavadocPolicy, BorderLayout.EAST);
+    myJavadocPolicy = new DocCommentPanel(LocalizeValue.localizeTODO("JavaDoc"));
+    consulo.ui.Component javadocPolicyComponent = myJavadocPolicy.getComponent();
+    encapsulateBox.add(TargetAWT.to(javadocPolicyComponent), BorderLayout.EAST);
     boolean hasJavadoc = false;
     for (PsiField field : myFields) {
       if (field.getDocComment() != null) {
@@ -323,7 +325,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
         break;
       }
     }
-    myJavadocPolicy.setVisible(hasJavadoc);
+      javadocPolicyComponent.setVisible(hasJavadoc);
 
     Box fieldsBox = Box.createVerticalBox();
     fieldsBox.add(myRbFieldPrivate);

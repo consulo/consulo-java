@@ -15,29 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
-import java.awt.BorderLayout;
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.classMember.MemberInfoChange;
-import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceContainmentVerifier;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.UsesAndInterfacesDependencyMemberInfoModel;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.classMember.MemberInfoModel;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.ui.util.DocCommentPolicy;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.ArrayUtil;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
   private final InterfaceContainmentVerifier myContainmentVerifier = new InterfaceContainmentVerifier() {
@@ -102,14 +101,14 @@ class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
     memberSelectionPanel.getTable().setMemberInfoModel(memberInfoModel);
     memberSelectionPanel.getTable().addMemberInfoChangeListener(memberInfoModel);
 
-    panel.add(myDocCommentPanel, BorderLayout.EAST);
+    panel.add(TargetAWT.to(myDocCommentPanel.getComponent()), BorderLayout.EAST);
 
     return panel;
   }
 
   @Override
-  protected String getDocCommentPanelName() {
-    return RefactoringLocalize.javadocForAbstracts().get();
+  protected LocalizeValue getDocCommentPanelName() {
+    return RefactoringLocalize.javadocForAbstracts();
   }
 
   @Override

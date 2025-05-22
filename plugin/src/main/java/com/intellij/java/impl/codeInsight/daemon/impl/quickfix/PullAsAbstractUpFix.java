@@ -25,11 +25,11 @@ import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -37,9 +37,9 @@ import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.JBPopup;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.LinkedHashSet;
 
 public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiElement {

@@ -34,12 +34,11 @@ import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.ElementsHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
@@ -60,7 +59,7 @@ import java.util.List;
 public class ExtractSuperclassHandler implements RefactoringActionHandler, ExtractSuperclassDialog.Callback, ElementsHandler {
   private static final Logger LOG = Logger.getInstance(ExtractSuperclassHandler.class);
 
-  public static final String REFACTORING_NAME = RefactoringBundle.message("extract.superclass.title");
+  public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractSuperclassTitle();
 
   private PsiClass mySubclass;
   private Project myProject;
@@ -73,7 +72,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     while (true) {
       if (element == null || element instanceof PsiFile) {
         LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
-        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
         return;
       }
       if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
@@ -96,14 +95,14 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     if (mySubclass.isInterface()) {
       LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface());
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
       return;
     }
 
     if (mySubclass.isEnum()) {
       LocalizeValue message =
         RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum());
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
       return;
     }
 
@@ -117,7 +116,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     CommandProcessor.getInstance().executeCommand(
       myProject,
       () -> myProject.getApplication().runWriteAction(() -> doRefactoring(project, mySubclass, dialog)),
-      REFACTORING_NAME,
+      REFACTORING_NAME.get(),
       null
     );
   }

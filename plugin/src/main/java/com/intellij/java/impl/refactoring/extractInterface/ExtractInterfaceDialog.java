@@ -22,11 +22,13 @@ import com.intellij.java.impl.refactoring.extractSuperclass.JavaExtractSuperBase
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.*;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.ui.util.DocCommentPolicy;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.ArrayUtil;
 
 import javax.swing.*;
@@ -95,14 +97,14 @@ class ExtractInterfaceDialog extends JavaExtractSuperBaseDialog {
       });
     panel.add(memberSelectionPanel, BorderLayout.CENTER);
 
-    panel.add(myDocCommentPanel, BorderLayout.EAST);
+    panel.add(TargetAWT.to(myDocCommentPanel.getComponent()), BorderLayout.EAST);
 
     return panel;
   }
 
   @Override
-  protected String getDocCommentPanelName() {
-    return RefactoringLocalize.extractsuperinterfaceJavadoc().get();
+  protected LocalizeValue getDocCommentPanelName() {
+    return RefactoringLocalize.extractsuperinterfaceJavadoc();
   }
 
   @Override

@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.extractInterface;
 
+import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperBaseProcessor;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperBaseProcessor;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import consulo.language.editor.ui.util.DocCommentPolicy;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 /**
  * @author dsl
