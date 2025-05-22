@@ -673,12 +673,12 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
                         isStatic
                             ? new ReplaceStaticVariableAssignment(exp, qualifiedName)
                             : new ReplaceInstanceVariableAssignment(
-                                PsiTreeUtil.getParentOfType(exp, PsiAssignmentExpression.class),
-                                delegateFieldName,
-                                setter,
-                                getter,
-                                field.getName()
-                            )
+                            PsiTreeUtil.getParentOfType(exp, PsiAssignmentExpression.class),
+                            delegateFieldName,
+                            setter,
+                            getter,
+                            field.getName()
+                        )
                     );
                 }
                 else {

@@ -53,8 +53,7 @@ import java.util.*;
  * @author ven
  */
 public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
-    private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inline" +
-        ".InlineConstantFieldProcessor");
+    private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inline.InlineConstantFieldProcessor");
     private PsiField myField;
     private final PsiReferenceExpression myRefExpr;
     private final boolean myInlineThisOnly;
@@ -86,8 +85,8 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
         mySearchForTextOccurrences = searchForTextOccurrences;
     }
 
-    @Override
     @Nonnull
+    @Override
     protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
         return new InlineViewDescriptor(myField);
     }
