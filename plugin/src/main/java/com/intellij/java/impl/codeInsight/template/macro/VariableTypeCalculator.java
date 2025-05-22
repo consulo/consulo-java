@@ -39,13 +39,8 @@ public abstract class VariableTypeCalculator {
      */
     @Nonnull
     public static PsiType getVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place) {
-        for (VariableTypeCalculator calculator : EP_NAME.getExtensionList()) {
-            PsiType type = calculator.inferVarTypeAt(var, place);
-            if (type != null) {
-                return type;
-            }
-        }
-
-        return var.getType();
+        PsiType varType = var.getApplication().getExtensionPoint(VariableTypeCalculator.class)
+            .computeSafeIfAny(calculator -> calculator.inferVarTypeAt(var, place));
+        return varType != null ? varType : var.getType();
     }
 }

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiMember;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -60,12 +59,7 @@ public abstract class DocumentationDelegateProvider {
 
     @Nullable
     public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
-        for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
-            PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
-            if (type != null) {
-                return type;
-            }
-        }
-        return null;
+        return method.getApplication().getExtensionPoint(DocumentationDelegateProvider.class)
+            .computeSafeIfAny(delegator -> delegator.computeDocumentationDelegate(method));
     }
 }

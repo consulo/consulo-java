@@ -34,6 +34,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.IdentifierUtil;
@@ -54,6 +55,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,12 +63,6 @@ import java.util.List;
 
 @ExtensionImpl
 public class VisibilityInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
-    private static final Logger LOG = Logger.getInstance(VisibilityInspection.class);
-    public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
-    public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;
-    public boolean SUGGEST_PRIVATE_FOR_INNERS = false;
-    private static final String SHORT_NAME = "WeakerAccess";
-
     private class OptionsPanel extends JPanel {
         private final JCheckBox myPackageLocalForMembersCheckbox;
         private final JCheckBox myPrivateForInnersCheckbox;
@@ -107,6 +103,19 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             gc.weighty = 1;
             add(myPrivateForInnersCheckbox, gc);
         }
+    }
+
+    private static final Logger LOG = Logger.getInstance(VisibilityInspection.class);
+    private static final String SHORT_NAME = "WeakerAccess";
+
+    private final Application myApplication;
+    public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
+    public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;
+    public boolean SUGGEST_PRIVATE_FOR_INNERS = false;
+
+    @Inject
+    public VisibilityInspection(Application application) {
+        myApplication = application;
     }
 
     @Override
@@ -459,9 +468,8 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             ignoreElement(processor, entryPoint);
         }
 
-        for (VisibilityExtension addin : VisibilityExtension.EP_NAME.getExtensions()) {
-            addin.fillIgnoreList(manager, processor);
-        }
+        myApplication.getExtensionPoint(VisibilityExtension.class)
+            .forEach(addin -> addin.fillIgnoreList(manager, processor));
         manager.iterate(new RefJavaVisitor() {
             @Override
             public void visitElement(@Nonnull RefEntity refEntity) {

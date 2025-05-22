@@ -79,13 +79,13 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         LOG.assertTrue(parameter.isValid());
         List<LocalQuickFix> result = new ArrayList<>();
         if (itemType != null) {
-            for (ChangeVariableTypeQuickFixProvider fixProvider : ChangeVariableTypeQuickFixProvider.EP_NAME.getExtensionList()) {
+            parameter.getApplication().getExtensionPoint(ChangeVariableTypeQuickFixProvider.class).forEach(fixProvider -> {
                 for (IntentionAction action : fixProvider.getFixes(parameter, itemType)) {
                     if (action instanceof LocalQuickFix fix) {
                         result.add(fix);
                     }
                 }
-            }
+            });
         }
 
         if (generifyFixes.length > 0) {
