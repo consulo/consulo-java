@@ -21,7 +21,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -187,7 +186,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
             editor,
             expression.getTextRange().getStartOffset(),
             expression.getTextRange().getEndOffset(),
-            EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES),
+            EditorColors.SEARCH_RESULT_ATTRIBUTES,
             false,
             null
           );

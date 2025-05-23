@@ -22,9 +22,6 @@ import com.siyeh.IntentionPowerPackBundle;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.EditorColorsScheme;
-import consulo.colorScheme.TextAttributes;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -36,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -94,17 +90,9 @@ public class MoveDeclarationIntention extends Intention {
       FileEditorManager.getInstance(project);
     final HighlightManager highlightManager =
       HighlightManager.getInstance(project);
-    final EditorColorsManager editorColorsManager =
-      EditorColorsManager.getInstance();
     final Editor editor = editorManager.getSelectedTextEditor();
-    final EditorColorsScheme globalScheme =
-      editorColorsManager.getGlobalScheme();
-    final TextAttributes textattributes =
-      globalScheme.getAttributes(
-        EditorColors.SEARCH_RESULT_ATTRIBUTES);
     final PsiElement[] elements = new PsiElement[]{element};
-    highlightManager.addOccurrenceHighlights(editor, elements,
-                                             textattributes, true, null);
+    highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
 
     StatusBar.Info.set(IntentionPowerPackBundle.message(
       "status.bar.escape.highlighting.message"), project);

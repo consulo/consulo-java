@@ -33,8 +33,6 @@ import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.markup.RangeHighlighter;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.component.messagebus.MessageBus;
 import consulo.component.messagebus.MessageBusConnection;
 import consulo.content.bundle.Sdk;
@@ -91,7 +89,10 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
-import consulo.virtualFileSystem.event.*;
+import consulo.virtualFileSystem.event.VirtualFileCopyEvent;
+import consulo.virtualFileSystem.event.VirtualFileEvent;
+import consulo.virtualFileSystem.event.VirtualFileListener;
+import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.ide.highlighter.XmlFileType;
 import consulo.xml.psi.XmlElementFactory;
@@ -513,14 +514,11 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
           editor != null && editor.getDocument() == PsiDocumentManager.getInstance(project).getDocument(containingFile);
       try {
         if (highlight) {
-          final EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-          final TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-
           //do not highlight for batch inspections
           final TextRange textRange = highlightElement.getTextRange();
           HighlightManager.getInstance(project).addRangeHighlight(editor,
               textRange.getStartOffset(), textRange.getEndOffset(),
-              attributes, true, highlighters);
+              EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
           final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
           editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.CENTER);
         }

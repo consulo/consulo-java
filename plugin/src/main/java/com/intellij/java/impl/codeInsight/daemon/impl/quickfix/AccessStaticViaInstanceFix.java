@@ -131,8 +131,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
     if (editor == null) {
       return false;
     }
-    TextAttributes attributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, PsiUtilCore.toPsiElementArray(sideEffects), attributes, true, null);
+    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, PsiUtilCore.toPsiElementArray(sideEffects), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
     try {
       hasSideEffects = PsiUtil.isStatement(factory.createStatementFromText(qualifierExpression.getText(), qualifierExpression));
     }

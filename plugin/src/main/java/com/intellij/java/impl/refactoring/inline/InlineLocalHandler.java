@@ -29,8 +29,6 @@ import consulo.application.Application;
 import consulo.application.util.query.Query;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.highlight.HighlightManager;
@@ -157,13 +155,10 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     }
     final PsiElement[] refsToInline = PsiUtilBase.toPsiElementArray(refsToInlineList);
 
-    EditorColorsManager manager = EditorColorsManager.getInstance();
-    final TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    final TextAttributes writeAttributes = manager.getGlobalScheme().getAttributes(EditorColors.WRITE_SEARCH_RESULT_ATTRIBUTES);
     if (refExpr != null && PsiUtil.isAccessedForReading(refExpr) && ArrayUtil.find(refsToInline, refExpr) < 0) {
       final PsiElement[] defs = DefUseUtil.getDefs(containerBlock, local, refExpr);
       LOG.assertTrue(defs.length > 0);
-      highlightManager.addOccurrenceHighlights(editor, defs, attributes, true, null);
+      highlightManager.addOccurrenceHighlights(editor, defs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
       CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
@@ -204,8 +199,8 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         isSameDefinition &= isSameDefinition(def, defToInline);
       }
       if (!isSameDefinition) {
-        highlightManager.addOccurrenceHighlights(editor, defs, writeAttributes, true, null);
-        highlightManager.addOccurrenceHighlights(editor, new PsiElement[]{ref}, attributes, true, null);
+        highlightManager.addOccurrenceHighlights(editor, defs, EditorColors.WRITE_SEARCH_RESULT_ATTRIBUTES, true, null);
+        highlightManager.addOccurrenceHighlights(editor, new PsiElement[]{ref}, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
         LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
             RefactoringLocalize.variableIsAccessedForWritingAndUsedWithInlined(localName));
         CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
@@ -216,7 +211,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
 
     final PsiElement writeAccess = checkRefsInAugmentedAssignmentOrUnaryModified(refsToInline);
     if (writeAccess != null) {
-      HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{writeAccess}, writeAttributes, true, null);
+      HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{writeAccess}, EditorColors.WRITE_SEARCH_RESULT_ATTRIBUTES, true, null);
       LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
       CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
@@ -230,7 +225,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       highlightManager.addOccurrenceHighlights(
           editor,
           refsToInline,
-          attributes, true, null
+          EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null
       );
       int occurrencesCount = refsToInline.length;
       LocalizeValue message = isInliningVariableInitializer(defToInline)
@@ -270,7 +265,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         }
 
         if (editor != null && !project.getApplication().isUnitTestMode()) {
-          highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
+          highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
           WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         }
 

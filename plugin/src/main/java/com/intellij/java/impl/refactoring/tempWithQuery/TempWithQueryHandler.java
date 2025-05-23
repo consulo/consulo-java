@@ -28,8 +28,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.ScrollType;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.dataContext.DataContext;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.TargetElementUtil;
@@ -106,8 +104,6 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
 
     final HighlightManager highlightManager = HighlightManager.getInstance(project);
     ArrayList<PsiReference> array = new ArrayList<>();
-    EditorColorsManager manager = EditorColorsManager.getInstance();
-    final TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
     for (PsiReference ref : refs) {
       PsiElement refElement = ref.getElement();
       if (PsiUtil.isAccessedForWriting((PsiExpression) refElement)) {
@@ -115,7 +111,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       }
       if (!array.isEmpty()) {
         PsiReference[] refsForWriting = array.toArray(new PsiReference[array.size()]);
-        highlightManager.addOccurrenceHighlights(editor, refsForWriting, attributes, true, null);
+        highlightManager.addOccurrenceHighlights(editor, refsForWriting, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
         LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
         CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
@@ -161,7 +157,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
             PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
             declaration.delete();
 
-            highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
+            highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
           } catch (IncorrectOperationException e) {
             LOG.error(e);
           }

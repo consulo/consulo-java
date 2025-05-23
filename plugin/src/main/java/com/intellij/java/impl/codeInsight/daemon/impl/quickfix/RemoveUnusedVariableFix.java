@@ -123,9 +123,7 @@ public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
     Project project = editor.getProject();
     HighlightManager highlightManager = HighlightManager.getInstance(project);
     PsiElement[] elements = PsiUtilCore.toPsiElementArray(sideEffects);
-    EditorColorsManager manager = EditorColorsManager.getInstance();
-    TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    highlightManager.addOccurrenceHighlights(editor, elements, attributes, true, null);
+    highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
 
     SideEffectWarningDialog dialog = new SideEffectWarningDialog(project, false, variable, beforeText, afterText, canCopeWithSideEffects);
     dialog.show();

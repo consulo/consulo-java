@@ -29,8 +29,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.dataContext.DataContext;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
@@ -208,9 +206,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     if (e.getFile() == file) {
       final TextRange textRange = e.getTextRange();
       final HighlightManager highlightManager = HighlightManager.getInstance(project);
-      EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-      TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-      highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, true, null);
+      highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
       editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.MAKE_VISIBLE);
       WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
@@ -240,7 +236,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
   private static Editor openEditor(final Project project, final PsiFile file) {
     final VirtualFile virtualFile = file.getVirtualFile();
     LOG.assertTrue(virtualFile != null);
-    final OpenFileDescriptor fileDescriptor = OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).build();
+    final OpenFileDescriptor fileDescriptor = OpenFileDescriptorFactory.getInstance(project).newBuilder(virtualFile).build();
     return FileEditorManager.getInstance(project).openTextEditor(fileDescriptor, false);
   }
 }

@@ -67,15 +67,12 @@ public class HighlightUtils {
       }
       final Project project = firstElement.getProject();
       final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-      final EditorColorsManager editorColorsManager = EditorColorsManager.getInstance();
       final Editor editor = editorManager.getSelectedTextEditor();
       if (editor == null) {
         return;
       }
-      final EditorColorsScheme globalScheme = editorColorsManager.getGlobalScheme();
-      final TextAttributes textattributes = globalScheme.getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       final HighlightManager highlightManager = HighlightManager.getInstance(project);
-      highlightManager.addOccurrenceHighlights(editor, elements, textattributes, true, null);
+      highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       final WindowManager windowManager = WindowManager.getInstance();
       final StatusBar statusBar = windowManager.getStatusBar(project);
       statusBar.setInfo(InspectionGadgetsLocalize.pressEscapeToRemoveHighlightingMessage().get());

@@ -199,8 +199,6 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
       }
     }
 
-    EditorColorsManager manager = EditorColorsManager.getInstance();
-    TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{field.getInitializer()}, attributes, false, null);
+    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{field.getInitializer()}, EditorColors.SEARCH_RESULT_ATTRIBUTES, false, null);
   }
 }

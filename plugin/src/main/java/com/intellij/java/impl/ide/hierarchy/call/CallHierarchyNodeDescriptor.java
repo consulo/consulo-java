@@ -231,8 +231,6 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         if (editor != null) {
 
             HighlightManager highlightManager = HighlightManager.getInstance(getProject());
-            EditorColorsManager colorManager = EditorColorsManager.getInstance();
-            TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
             ArrayList<RangeHighlighter> highlighters = new ArrayList<>();
             for (PsiReference psiReference : myReferences) {
                 PsiElement eachElement = psiReference.getElement();
@@ -244,7 +242,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
                             editor,
                             textRange.getStartOffset(),
                             textRange.getEndOffset(),
-                            attributes,
+                            EditorColors.SEARCH_RESULT_ATTRIBUTES,
                             false,
                             highlighters
                         );

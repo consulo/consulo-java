@@ -206,9 +206,8 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
 
   private static void highlightError(Project project, Editor editor, PsiElement errorElement) {
     if (editor != null) {
-      final TextAttributes attributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       final TextRange textRange = errorElement.getTextRange();
-      HighlightManager.getInstance(project).addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, true, new ArrayList<RangeHighlighter>());
+      HighlightManager.getInstance(project).addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, new ArrayList<RangeHighlighter>());
     }
   }
 

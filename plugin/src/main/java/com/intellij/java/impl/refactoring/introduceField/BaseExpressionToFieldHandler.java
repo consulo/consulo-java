@@ -24,6 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.impl.refactoring.IntroduceHandlerBase;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.rename.RenameJavaVariableProcessor;
@@ -33,7 +34,6 @@ import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.PsiElementFactory;
@@ -47,14 +47,11 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.codeEditor.markup.RangeHighlighter;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.ide.util.DirectoryChooserUtil;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -74,10 +71,10 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -254,12 +251,6 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     PsiElement element = selectedExpr.getUserData(ElementToWorkOn.PARENT);
     if (element == null) element = selectedExpr;
     return element;
-  }
-
-  private static TextAttributes highlightAttributes() {
-    return EditorColorsManager.getInstance().getGlobalScheme().getAttributes(
-                EditorColors.SEARCH_RESULT_ATTRIBUTES
-              );
   }
 
   protected abstract OccurrenceManager createOccurrenceManager(PsiExpression selectedExpr, PsiClass parentClass);
@@ -830,7 +821,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
             if (!ApplicationManager.getApplication().isUnitTestMode()) {
               PsiElement[] exprsToHighlight = PsiUtilBase.toPsiElementArray(array);
               HighlightManager highlightManager = HighlightManager.getInstance(myProject);
-              highlightManager.addOccurrenceHighlights(myEditor, exprsToHighlight, highlightAttributes(), true, null);
+                highlightManager.addOccurrenceHighlights(myEditor, exprsToHighlight, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
               WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
             }
           }

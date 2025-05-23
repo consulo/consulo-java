@@ -17,12 +17,10 @@ package com.intellij.java.impl.refactoring.util.duplicates;
 
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.codeEditor.*;
 import consulo.codeEditor.markup.RangeHighlighter;
 import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.find.FindManager;
@@ -30,7 +28,6 @@ import consulo.ide.impl.idea.ui.ReplacePromptDialog;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.folding.CodeFoldingManager;
 import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
@@ -44,7 +41,6 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -210,9 +206,7 @@ public class DuplicatesImpl {
   }
 
   public static void highlightMatch(final Project project, Editor editor, final Match match, final ArrayList<RangeHighlighter> highlighters) {
-    EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-    TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    HighlightManager.getInstance(project).addRangeHighlight(editor, match.getTextRange().getStartOffset(), match.getTextRange().getEndOffset(), attributes, true, highlighters);
+    HighlightManager.getInstance(project).addRangeHighlight(editor, match.getTextRange().getStartOffset(), match.getTextRange().getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
   }
 
   public static void processDuplicates(@Nonnull MatchProvider provider, @Nonnull Project project, @Nonnull Editor editor) {

@@ -21,9 +21,6 @@ import consulo.application.Application;
 import consulo.application.util.query.Query;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.EditorColorsScheme;
-import consulo.colorScheme.TextAttributes;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.find.FindManager;
@@ -37,8 +34,8 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
 import consulo.project.ui.wm.WindowManager;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -63,15 +60,12 @@ public class HighlightUtil {
       }
       final Project project = firstElement.getProject();
       final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-      final EditorColorsManager editorColorsManager = EditorColorsManager.getInstance();
       final Editor editor = editorManager.getSelectedTextEditor();
       if (editor == null) {
         return;
       }
-      final EditorColorsScheme globalScheme = editorColorsManager.getGlobalScheme();
-      final TextAttributes textattributes = globalScheme.getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       final HighlightManager highlightManager = HighlightManager.getInstance(project);
-      highlightManager.addOccurrenceHighlights(editor, elements, textattributes, true, null);
+      highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       final FindManager findmanager = FindManager.getInstance(project);
       FindModel findmodel = findmanager.getFindNextModel();
       if (findmodel == null) {

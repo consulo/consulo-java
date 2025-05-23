@@ -1059,9 +1059,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
       return;
     }
     HighlightManager highlightManager = HighlightManager.getInstance(project);
-    EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-    TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    highlightManager.addOccurrenceHighlights(editor, replacedOccurences, attributes, true, null);
+    highlightManager.addOccurrenceHighlights(editor, replacedOccurences, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
     WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
   }
 

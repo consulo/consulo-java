@@ -21,8 +21,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
@@ -93,11 +91,8 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
   }
 
   private static void highlightRExpression(@Nonnull PsiAssignmentExpression assignment, @Nonnull Project project, Editor editor) {
-    final EditorColorsManager manager = EditorColorsManager.getInstance();
-    final TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
     final PsiExpression expression = assignment.getRExpression();
-
-    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{expression}, attributes, false, null);
+    HighlightManager.getInstance(project).addOccurrenceHighlights(editor, new PsiElement[]{expression}, EditorColors.SEARCH_RESULT_ATTRIBUTES, false, null);
   }
 
   @Nonnull
