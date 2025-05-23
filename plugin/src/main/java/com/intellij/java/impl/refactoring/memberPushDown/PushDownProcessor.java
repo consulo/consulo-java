@@ -31,6 +31,7 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.progress.ProgressManager;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -50,7 +51,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.dataholder.Key;
-import consulo.util.lang.ref.Ref;
 import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
@@ -77,18 +77,22 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     }
 
     @Nonnull
+    @Override
     protected String getCommandName() {
         return JavaPushDownHandler.REFACTORING_NAME;
     }
 
     @Nonnull
+    @Override
     protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
         return new PushDownUsageViewDescriptor(myClass);
     }
 
     @Nonnull
+    @Override
+    @RequiredReadAction
     protected UsageInfo[] findUsages() {
-        final PsiClass[] inheritors = ClassInheritorsSearch.search(myClass, false).toArray(PsiClass.EMPTY_ARRAY);
+        PsiClass[] inheritors = ClassInheritorsSearch.search(myClass, false).toArray(PsiClass.EMPTY_ARRAY);
         UsageInfo[] usages = new UsageInfo[inheritors.length];
         for (int i = 0; i < inheritors.length; i++) {
             usages[i] = new UsageInfo(inheritors[i]);
@@ -99,12 +103,12 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        final UsageInfo[] usagesIn = refUsages.get();
-        final PushDownConflicts pushDownConflicts = new PushDownConflicts(myClass, myMemberInfos);
+        UsageInfo[] usagesIn = refUsages.get();
+        PushDownConflicts pushDownConflicts = new PushDownConflicts(myClass, myMemberInfos);
         pushDownConflicts.checkSourceClassConflicts();
 
         if (usagesIn.length == 0) {
-            if (myClass.isEnum() || myClass.hasModifierProperty(PsiModifier.FINAL)) {
+            if (myClass.isEnum() || myClass.isFinal()) {
                 if (Messages.showOkCancelDialog(
                     (
                         myClass.isEnum()
@@ -121,8 +125,8 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                 LocalizeValue noInheritors = myClass.isInterface()
                     ? RefactoringLocalize.interface0DoesNotHaveInheritors(myClass.getQualifiedName())
                     : RefactoringLocalize.class0DoesNotHaveInheritors(myClass.getQualifiedName());
-                final String message = noInheritors + "\n" + RefactoringLocalize.pushDownWillDeleteMembers();
-                final int answer = Messages.showYesNoCancelDialog(message, JavaPushDownHandler.REFACTORING_NAME, UIUtil.getWarningIcon());
+                String message = noInheritors + "\n" + RefactoringLocalize.pushDownWillDeleteMembers();
+                int answer = Messages.showYesNoCancelDialog(message, JavaPushDownHandler.REFACTORING_NAME, UIUtil.getWarningIcon());
                 if (answer == DialogWrapper.OK_EXIT_CODE) {
                     myCreateClassDlg = CreateSubclassAction.chooseSubclassToCreate(myClass);
                     if (myCreateClassDlg != null) {
@@ -138,9 +142,10 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                 }
             }
         }
+        @RequiredReadAction
         Runnable runnable = () -> {
             for (UsageInfo usage : usagesIn) {
-                final PsiElement element = usage.getElement();
+                PsiElement element = usage.getElement();
                 if (element instanceof PsiClass psiClass) {
                     pushDownConflicts.checkTargetClassConflicts(psiClass, usagesIn.length > 1, element);
                 }
@@ -156,29 +161,30 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         return processFinished && showConflicts(pushDownConflicts.getConflicts(), usagesIn);
     }
 
+    @Override
     protected void refreshElements(PsiElement[] elements) {
-        if (elements.length == 1 && elements[0] instanceof PsiClass) {
-            myClass = (PsiClass)elements[0];
+        if (elements.length == 1 && elements[0] instanceof PsiClass psiClass) {
+            myClass = psiClass;
         }
         else {
             LOG.assertTrue(false);
         }
     }
 
+    @Override
     @RequiredUIAccess
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         try {
             encodeRefs();
             if (myCreateClassDlg != null) { //usages.length == 0
-                final PsiClass psiClass =
+                PsiClass psiClass =
                     CreateSubclassAction.createSubclass(myClass, myCreateClassDlg.getTargetDirectory(), myCreateClassDlg.getClassName());
                 if (psiClass != null) {
                     pushDownToClass(psiClass);
                 }
             }
             for (UsageInfo usage : usages) {
-                if (usage.getElement() instanceof PsiClass) {
-                    final PsiClass targetClass = (PsiClass)usage.getElement();
+                if (usage.getElement() instanceof PsiClass targetClass) {
                     pushDownToClass(targetClass);
                 }
             }
@@ -199,17 +205,19 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         }
 
         for (MemberInfo memberInfo : myMemberInfos) {
-            final PsiMember member = memberInfo.getMember();
+            PsiMember member = memberInfo.getMember();
             member.accept(new JavaRecursiveElementVisitor() {
                 @Override
+                @RequiredReadAction
                 public void visitReferenceExpression(PsiReferenceExpression expression) {
                     encodeRef(expression, movedMembers, expression);
                     super.visitReferenceExpression(expression);
                 }
 
                 @Override
+                @RequiredReadAction
                 public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-                    final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
+                    PsiJavaCodeReferenceElement classReference = expression.getClassReference();
                     if (classReference != null) {
                         encodeRef(classReference, movedMembers, expression);
                     }
@@ -217,8 +225,9 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                 }
 
                 @Override
-                public void visitTypeElement(@Nonnull final PsiTypeElement type) {
-                    final PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
+                @RequiredReadAction
+                public void visitTypeElement(@Nonnull PsiTypeElement type) {
+                    PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
                     if (referenceElement != null) {
                         encodeRef(referenceElement, movedMembers, type);
                     }
@@ -230,12 +239,12 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     }
 
     @RequiredReadAction
-    private void encodeRef(final PsiJavaCodeReferenceElement expression, final Set<PsiMember> movedMembers, final PsiElement toPut) {
-        final PsiElement resolved = expression.resolve();
+    private void encodeRef(PsiJavaCodeReferenceElement expression, Set<PsiMember> movedMembers, PsiElement toPut) {
+        PsiElement resolved = expression.resolve();
         if (resolved == null) {
             return;
         }
-        final PsiElement qualifier = expression.getQualifier();
+        PsiElement qualifier = expression.getQualifier();
         for (PsiMember movedMember : movedMembers) {
             if (movedMember.equals(resolved)) {
                 if (qualifier == null) {
@@ -255,7 +264,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
             }
             else {
                 if (qualifier instanceof PsiThisExpression thisExpression) {
-                    final PsiJavaCodeReferenceElement qElement = thisExpression.getQualifier();
+                    PsiJavaCodeReferenceElement qElement = thisExpression.getQualifier();
                     if (qElement != null && qElement.isReferenceTo(myClass)) {
                         toPut.putCopyableUserData(REPLACE_QUALIFIER_KEY, myClass);
                     }
@@ -264,7 +273,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    private void decodeRefs(final PsiMember member, final PsiClass targetClass) {
+    private void decodeRefs(PsiMember member, final PsiClass targetClass) {
         try {
             ChangeContextUtil.decodeContextInfo(member, null, null);
         }
@@ -275,14 +284,16 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         final PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
         member.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
+            @RequiredReadAction
             public void visitReferenceExpression(PsiReferenceExpression expression) {
                 decodeRef(expression, factory, targetClass, expression);
                 super.visitReferenceExpression(expression);
             }
 
             @Override
+            @RequiredReadAction
             public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-                final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
+                PsiJavaCodeReferenceElement classReference = expression.getClassReference();
                 if (classReference != null) {
                     decodeRef(classReference, factory, targetClass, expression);
                 }
@@ -290,8 +301,9 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
             }
 
             @Override
-            public void visitTypeElement(@Nonnull final PsiTypeElement type) {
-                final PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
+            @RequiredReadAction
+            public void visitTypeElement(@Nonnull PsiTypeElement type) {
+                PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
                 if (referenceElement != null) {
                     decodeRef(referenceElement, factory, targetClass, type);
                 }
@@ -301,16 +313,11 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     }
 
     @RequiredReadAction
-    private void decodeRef(
-        final PsiJavaCodeReferenceElement ref,
-        final PsiElementFactory factory,
-        final PsiClass targetClass,
-        final PsiElement toGet
-    ) {
+    private void decodeRef(PsiJavaCodeReferenceElement ref, PsiElementFactory factory, PsiClass targetClass, PsiElement toGet) {
         try {
             if (toGet.getCopyableUserData(REMOVE_QUALIFIER_KEY) != null) {
                 toGet.putCopyableUserData(REMOVE_QUALIFIER_KEY, null);
-                final PsiElement qualifier = ref.getQualifier();
+                PsiElement qualifier = ref.getQualifier();
                 if (qualifier != null) {
                     qualifier.delete();
                 }
@@ -330,12 +337,12 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                             LOG.assertTrue(psiClass != null);
                         }
 
-                        if (!(qualifier instanceof PsiThisExpression) && ref instanceof PsiReferenceExpression referenceExpression) {
-                            referenceExpression.setQualifierExpression(factory.createReferenceExpression(psiClass));
+                        if (!(qualifier instanceof PsiThisExpression) && ref instanceof PsiReferenceExpression refExpr) {
+                            refExpr.setQualifierExpression(factory.createReferenceExpression(psiClass));
                         }
                         else {
-                            if (qualifier instanceof PsiThisExpression thisExpression) {
-                                qualifier = thisExpression.getQualifier();
+                            if (qualifier instanceof PsiThisExpression thisExpr) {
+                                qualifier = thisExpr.getQualifier();
                             }
                             qualifier.replace(factory.createReferenceElementByType(factory.createType(psiClass)));
                         }
@@ -348,17 +355,17 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredWriteAction
     private void removeFromTargetClass() throws IncorrectOperationException {
         for (MemberInfo memberInfo : myMemberInfos) {
-            final PsiElement member = memberInfo.getMember();
+            PsiElement member = memberInfo.getMember();
 
             if (member instanceof PsiField) {
                 member.delete();
             }
-            else if (member instanceof PsiMethod) {
+            else if (member instanceof PsiMethod method) {
                 if (memberInfo.isToAbstract()) {
-                    final PsiMethod method = (PsiMethod)member;
-                    if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                    if (method.isPrivate()) {
                         PsiUtil.setModifierProperty(method, PsiModifier.PROTECTED, true);
                     }
                     RefactoringUtil.makeMethodAbstract(myClass, method);
@@ -381,18 +388,18 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
     @RequiredUIAccess
     protected void pushDownToClass(PsiClass targetClass) throws IncorrectOperationException {
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
-        final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(myClass, targetClass, PsiSubstitutor.EMPTY);
+        PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
+        PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(myClass, targetClass, PsiSubstitutor.EMPTY);
         for (MemberInfo memberInfo : myMemberInfos) {
             PsiMember member = memberInfo.getMember();
-            final List<PsiReference> refsToRebind = new ArrayList<>();
-            final PsiModifierList list = member.getModifierList();
+            List<PsiReference> refsToRebind = new ArrayList<>();
+            PsiModifierList list = member.getModifierList();
             LOG.assertTrue(list != null);
             if (list.hasModifierProperty(PsiModifier.STATIC)) {
-                for (final PsiReference reference : ReferencesSearch.search(member)) {
-                    final PsiElement element = reference.getElement();
+                for (PsiReference reference : ReferencesSearch.search(member)) {
+                    PsiElement element = reference.getElement();
                     if (element instanceof PsiReferenceExpression referenceExpression) {
-                        final PsiExpression qualifierExpression = referenceExpression.getQualifierExpression();
+                        PsiExpression qualifierExpression = referenceExpression.getQualifierExpression();
                         if (qualifierExpression instanceof PsiReferenceExpression refExpr && !(refExpr.resolve() instanceof PsiClass)) {
                             continue;
                         }
@@ -424,21 +431,21 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                         }
                     }
                     else if (memberInfo.isToAbstract()) {
-                        if (newMember.hasModifierProperty(PsiModifier.PRIVATE)) {
+                        if (newMember.isPrivate()) {
                             PsiUtil.setModifierProperty(newMember, PsiModifier.PROTECTED, true);
                         }
                         myJavaDocPolicy.processNewJavaDoc(((PsiMethod)newMember).getDocComment());
                     }
                 }
                 else { //abstract method: remove @Override
-                    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(methodBySignature, CommonClassNames.JAVA_LANG_OVERRIDE);
+                    PsiAnnotation annotation = AnnotationUtil.findAnnotation(methodBySignature, CommonClassNames.JAVA_LANG_OVERRIDE);
                     if (annotation != null && !leaveOverrideAnnotation(substitutor, method)) {
                         annotation.delete();
                     }
-                    final PsiDocComment oldDocComment = method.getDocComment();
+                    PsiDocComment oldDocComment = method.getDocComment();
                     if (oldDocComment != null) {
-                        final PsiDocComment docComment = methodBySignature.getDocComment();
-                        final int policy = myJavaDocPolicy.getJavaDocPolicy();
+                        PsiDocComment docComment = methodBySignature.getDocComment();
+                        int policy = myJavaDocPolicy.getJavaDocPolicy();
                         if (policy == DocCommentPolicy.COPY || policy == DocCommentPolicy.MOVE) {
                             if (docComment != null) {
                                 docComment.replace(oldDocComment);
@@ -452,17 +459,18 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
             }
             else if (member instanceof PsiClass) {
                 if (Boolean.FALSE.equals(memberInfo.getOverrides())) {
-                    final PsiClass aClass = (PsiClass)memberInfo.getMember();
+                    PsiClass aClass = (PsiClass)memberInfo.getMember();
                     PsiClassType classType = null;
                     if (!targetClass.isInheritor(aClass, false)) {
-                        final PsiClassType[] types = memberInfo.getSourceReferenceList().getReferencedTypes();
+                        PsiClassType[] types = memberInfo.getSourceReferenceList().getReferencedTypes();
                         for (PsiClassType type : types) {
                             if (type.resolve() == aClass) {
                                 classType = (PsiClassType)substitutor.substitute(type);
                             }
                         }
                         PsiJavaCodeReferenceElement classRef = classType != null
-                            ? factory.createReferenceElementByType(classType) : factory.createClassReferenceElement(aClass);
+                            ? factory.createReferenceElementByType(classType)
+                            : factory.createClassReferenceElement(aClass);
                         if (aClass.isInterface()) {
                             targetClass.getImplementsList().add(classRef);
                         }
@@ -483,25 +491,26 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
                 for (PsiReference psiReference : refsToRebind) {
                     JavaCodeStyleManager.getInstance(myProject).shortenClassReferences(psiReference.bindToElement(newMember));
                 }
-                final JavaRefactoringListenerManager listenerManager = JavaRefactoringListenerManager.getInstance(newMember.getProject());
+                JavaRefactoringListenerManager listenerManager = JavaRefactoringListenerManager.getInstance(newMember.getProject());
                 ((JavaRefactoringListenerManagerImpl)listenerManager).fireMemberMoved(myClass, newMember);
             }
         }
     }
 
+    @RequiredReadAction
     private boolean leaveOverrideAnnotation(PsiSubstitutor substitutor, PsiMethod method) {
-        final PsiMethod methodBySignature = MethodSignatureUtil.findMethodBySignature(myClass, method.getSignature(substitutor), false);
+        PsiMethod methodBySignature = MethodSignatureUtil.findMethodBySignature(myClass, method.getSignature(substitutor), false);
         if (methodBySignature == null) {
             return false;
         }
-        final PsiMethod[] superMethods = methodBySignature.findDeepestSuperMethods();
+        PsiMethod[] superMethods = methodBySignature.findDeepestSuperMethods();
         if (superMethods.length == 0) {
             return false;
         }
-        final boolean is15 = !PsiUtil.isLanguageLevel6OrHigher(methodBySignature);
+        boolean is15 = !PsiUtil.isLanguageLevel6OrHigher(methodBySignature);
         if (is15) {
             for (PsiMethod psiMethod : superMethods) {
-                final PsiClass aClass = psiMethod.getContainingClass();
+                PsiClass aClass = psiMethod.getContainingClass();
                 if (aClass != null && aClass.isInterface()) {
                     return false;
                 }
