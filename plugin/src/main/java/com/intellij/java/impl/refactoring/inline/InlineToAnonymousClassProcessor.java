@@ -31,10 +31,11 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -140,7 +141,9 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         return false;
     }
 
-    protected boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, String> conflicts = getConflicts(refUsages.get());
         if (!conflicts.isEmpty()) {
             return showConflicts(conflicts, refUsages.get());

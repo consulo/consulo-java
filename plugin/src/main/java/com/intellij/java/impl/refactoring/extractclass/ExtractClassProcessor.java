@@ -173,7 +173,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull final SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         myExtractEnumProcessor.findEnumConstantConflicts(refUsages);
         if (!DestinationFolderComboBox.isAccessible(

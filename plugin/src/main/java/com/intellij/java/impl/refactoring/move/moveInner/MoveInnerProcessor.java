@@ -44,12 +44,13 @@ import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -58,9 +59,8 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * created at Sep 24, 2001
- *
  * @author Jeka
+ * @since 2001-09-24
  */
 public class MoveInnerProcessor extends BaseRefactoringProcessor {
     private static final Logger LOG = Logger.getInstance(MoveInnerProcessor.class);
@@ -336,7 +336,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
         final HashMap<PsiElement, HashSet<PsiElement>> reported = new HashMap<PsiElement, HashSet<PsiElement>>();
         class Visitor extends JavaRecursiveElementWalkingVisitor {

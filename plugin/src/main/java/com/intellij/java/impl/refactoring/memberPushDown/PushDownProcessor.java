@@ -51,6 +51,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
@@ -95,8 +96,9 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         return usages;
     }
 
+    @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final UsageInfo[] usagesIn = refUsages.get();
         final PushDownConflicts pushDownConflicts = new PushDownConflicts(myClass, myMemberInfos);
         pushDownConflicts.checkSourceClassConflicts();

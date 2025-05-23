@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2000-2013 JetBrains s.r.o.
  *
@@ -44,7 +43,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
@@ -90,7 +89,8 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
 
         checkExistingMethods(conflicts, true);

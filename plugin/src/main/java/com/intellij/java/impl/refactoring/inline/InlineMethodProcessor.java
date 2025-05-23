@@ -59,13 +59,14 @@ import consulo.localHistory.LocalHistoryAction;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -191,7 +192,9 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         myMethod = (PsiMethod)elements[0];
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         if (!myInlineThisOnly && checkReadOnly()) {
             if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myMethod)) {
                 return false;

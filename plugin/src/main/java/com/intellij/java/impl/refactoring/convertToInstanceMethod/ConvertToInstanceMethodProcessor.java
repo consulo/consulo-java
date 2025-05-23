@@ -42,11 +42,12 @@ import consulo.localHistory.LocalHistoryAction;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -137,7 +138,9 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         return result.toArray(new UsageInfo[result.size()]);
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
         final Set<PsiMember> methods = Collections.singleton((PsiMember)myMethod);

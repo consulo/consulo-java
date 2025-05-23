@@ -20,7 +20,6 @@ import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
@@ -43,17 +42,15 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
-
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
 
 /**
- * created at Sep 11, 2001
- *
  * @author Jeka
+ * @since 2001-09-11
  */
 public class MoveMembersProcessor extends BaseRefactoringProcessor {
     private static final Logger LOG = Logger.getInstance(MoveMembersProcessor.class);
@@ -298,7 +295,9 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         VisibilityUtil.fixVisibility(UsageViewUtil.toElements(infos), newMember, myNewVisibility);
     }
 
-    protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
         final UsageInfo[] usages = refUsages.get();
 

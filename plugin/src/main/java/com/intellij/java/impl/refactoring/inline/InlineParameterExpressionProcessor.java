@@ -178,7 +178,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         UsageInfo[] usages = refUsages.get();
         InaccessibleExpressionsDetector detector = new InaccessibleExpressionsDetector(conflicts);

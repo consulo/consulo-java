@@ -41,12 +41,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -96,7 +97,9 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         return new MoveInstanceMethodViewDescriptor(myMethod, myTargetVariable, myTargetClass);
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final UsageInfo[] usages = refUsages.get();
         MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
         final Set<PsiMember> members = new HashSet<PsiMember>();

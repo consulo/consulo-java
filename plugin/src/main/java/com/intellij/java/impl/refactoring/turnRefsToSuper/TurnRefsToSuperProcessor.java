@@ -30,11 +30,12 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -90,7 +91,9 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
         setClasses((PsiClass)elements[0], (PsiClass)elements[1]);
     }
 
-    protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         if (!ApplicationManager.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
             String message = RefactoringLocalize.noUsagesCanBeReplaced(myClass.getQualifiedName(), mySuper.getQualifiedName()).get();
             Messages.showInfoMessage(myProject, message, TurnRefsToSuperHandler.REFACTORING_NAME);

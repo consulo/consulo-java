@@ -44,10 +44,12 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.Queue;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
@@ -69,7 +71,9 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
     private final String mySuperClassName;
     private final List<UsageInfo> myVariablesUsages = new ArrayList<UsageInfo>();
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         List<UsageInfo> filtered = new ArrayList<UsageInfo>();
         for (UsageInfo usage : usages) {

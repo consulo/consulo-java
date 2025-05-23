@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: dsl
- * Date: 16.04.2002
- * Time: 15:37:30
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.impl.refactoring.makeStatic;
 
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
@@ -44,6 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
@@ -51,12 +43,17 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/*
+ * @author dsl
+ * @since 2002-04-16
+ */
 public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParameterListOwner> extends BaseRefactoringProcessor {
     private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.makeMethodStatic.MakeMethodStaticProcessor");
 
@@ -74,7 +71,9 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         return new MakeMethodOrClassStaticViewDescriptor(myMember);
     }
 
-    protected final boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected final boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         if (myPrepareSuccessfulSwingThreadCallback != null) {
             MultiMap<PsiElement, String> conflicts = getConflictDescriptions(usagesIn);

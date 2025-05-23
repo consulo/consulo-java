@@ -49,9 +49,10 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.*;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -186,7 +187,9 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         return FieldAccessibility.INVISIBLE;
     }
 
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    @Override
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         final UsageInfo[] usagesIn = refUsages.get();
         ArrayList<UsageInfo> oldUsages = new ArrayList<UsageInfo>();
         addAll(oldUsages, usagesIn);
