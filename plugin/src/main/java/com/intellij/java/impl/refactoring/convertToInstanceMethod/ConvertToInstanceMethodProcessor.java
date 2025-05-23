@@ -142,17 +142,17 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
-        MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-        final Set<PsiMember> methods = Collections.singleton((PsiMember)myMethod);
+        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        Set<PsiMember> methods = Collections.singleton((PsiMember)myMethod);
         if (!myTargetClass.isInterface()) {
             RefactoringConflictsUtil.analyzeAccessibilityConflicts(methods, myTargetClass, conflicts, myNewVisibility);
         }
         else {
-            for (final UsageInfo usage : usagesIn) {
-                if (usage instanceof ImplementingClassUsageInfo) {
+            for (UsageInfo usage : usagesIn) {
+                if (usage instanceof ImplementingClassUsageInfo implementingClassUsageInfo) {
                     RefactoringConflictsUtil.analyzeAccessibilityConflicts(
                         methods,
-                        ((ImplementingClassUsageInfo)usage).getPsiClass(),
+                        implementingClassUsageInfo.getPsiClass(),
                         conflicts,
                         PsiModifier.PUBLIC
                     );
@@ -160,11 +160,11 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
             }
         }
 
-        for (final UsageInfo usageInfo : usagesIn) {
-            if (usageInfo instanceof MethodCallUsageInfo) {
-                final PsiMethodCallExpression methodCall = ((MethodCallUsageInfo)usageInfo).getMethodCall();
-                final PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
-                final int index = myMethod.getParameterList().getParameterIndex(myTargetParameter);
+        for (UsageInfo usageInfo : usagesIn) {
+            if (usageInfo instanceof MethodCallUsageInfo methodCallUsageInfo) {
+                PsiMethodCallExpression methodCall = methodCallUsageInfo.getMethodCall();
+                PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
+                int index = myMethod.getParameterList().getParameterIndex(myTargetParameter);
                 if (index < expressions.length) {
                     PsiExpression instanceValue = expressions[index];
                     instanceValue = RefactoringUtil.unparenthesizeExpression(instanceValue);
@@ -182,7 +182,9 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         return showConflicts(conflicts, usagesIn);
     }
 
-    protected void performRefactoring(UsageInfo[] usages) {
+    @Override
+    @RequiredUIAccess
+    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myTargetClass)) {
             return;
         }
@@ -200,12 +202,12 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     private void doRefactoring(UsageInfo[] usages) throws IncorrectOperationException {
         myTypeParameterReplacements = buildTypeParameterReplacements();
-        List<PsiClass> inheritors = new ArrayList<PsiClass>();
+        List<PsiClass> inheritors = new ArrayList<>();
 
         CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usages);
 
         // Process usages
-        for (final UsageInfo usage : usages) {
+        for (UsageInfo usage : usages) {
             if (usage instanceof MethodCallUsageInfo) {
                 processMethodCall((MethodCallUsageInfo)usage);
             }
@@ -225,15 +227,15 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
             fixVisibility(method, usages);
         }
         else {
-            final PsiMethod interfaceMethod = addMethodToClass(myTargetClass);
-            final PsiModifierList modifierList = interfaceMethod.getModifierList();
+            PsiMethod interfaceMethod = addMethodToClass(myTargetClass);
+            PsiModifierList modifierList = interfaceMethod.getModifierList();
             modifierList.setModifierProperty(PsiModifier.PRIVATE, false);
             modifierList.setModifierProperty(PsiModifier.PUBLIC, false);
             modifierList.setModifierProperty(PsiModifier.PROTECTED, false);
             RefactoringUtil.makeMethodAbstract(myTargetClass, interfaceMethod);
 
-            for (final PsiClass psiClass : inheritors) {
-                final PsiMethod newMethod = addMethodToClass(psiClass);
+            for (PsiClass psiClass : inheritors) {
+                PsiMethod newMethod = addMethodToClass(psiClass);
                 PsiUtil.setModifierProperty(
                     newMethod,
                     myNewVisibility != null && !myNewVisibility.equals(VisibilityUtil.ESCALATE_VISIBILITY) ? myNewVisibility
@@ -245,12 +247,12 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         myMethod.delete();
     }
 
-    private void fixVisibility(final PsiMethod method, final UsageInfo[] usages) throws IncorrectOperationException {
-        final PsiModifierList modifierList = method.getModifierList();
+    private void fixVisibility(PsiMethod method, UsageInfo[] usages) throws IncorrectOperationException {
+        PsiModifierList modifierList = method.getModifierList();
         if (VisibilityUtil.ESCALATE_VISIBILITY.equals(myNewVisibility)) {
             for (UsageInfo usage : usages) {
                 if (usage instanceof MethodCallUsageInfo) {
-                    final PsiElement place = usage.getElement();
+                    PsiElement place = usage.getElement();
                     if (place != null) {
                         VisibilityUtil.escalateVisibility(method, place);
                     }

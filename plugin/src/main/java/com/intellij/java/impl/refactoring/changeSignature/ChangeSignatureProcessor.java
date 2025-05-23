@@ -244,8 +244,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         if (PsiUtil.isLanguageLevel5OrHigher(myChangeInfo.getMethod())) {
             List<UsageInfo> covariantOverriderInfos = new ArrayList<>();
             for (UsageInfo usageInfo : usages) {
-                if (usageInfo instanceof OverriderUsageInfo) {
-                    OverriderUsageInfo info = (OverriderUsageInfo)usageInfo;
+                if (usageInfo instanceof OverriderUsageInfo info) {
                     PsiMethod overrider = info.getElement();
                     PsiMethod baseMethod = info.getBaseMethod();
                     PsiSubstitutor substitutor = calculateSubstitutor(overrider, baseMethod);
