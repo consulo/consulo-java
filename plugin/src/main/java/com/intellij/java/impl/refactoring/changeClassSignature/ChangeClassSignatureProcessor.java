@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
@@ -121,6 +122,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
         try {
@@ -134,6 +136,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredWriteAction
     private void doRefactoring(UsageInfo[] usages) throws IncorrectOperationException {
         PsiTypeParameter[] typeParameters = myClass.getTypeParameters();
         boolean[] toRemoveParms = detectRemovedParameters(typeParameters);
@@ -162,6 +165,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         changeClassSignature(typeParameters, toRemoveParms);
     }
 
+    @RequiredWriteAction
     private void changeClassSignature(PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParms)
         throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
@@ -190,6 +194,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         return toRemoveParms;
     }
 
+    @RequiredWriteAction
     private void processUsage(UsageInfo usage, PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParms)
         throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();

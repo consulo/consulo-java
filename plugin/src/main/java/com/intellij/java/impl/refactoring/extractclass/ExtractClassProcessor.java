@@ -38,7 +38,6 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.application.Result;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -145,8 +144,8 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             ContainerUtil.addAll(typeParams, sourceClass.getTypeParameters());
         }
         else {
-            final Set<PsiTypeParameter> typeParamSet = new HashSet<>();
-            final TypeParametersVisitor visitor = new TypeParametersVisitor(typeParamSet);
+            Set<PsiTypeParameter> typeParamSet = new HashSet<>();
+            TypeParametersVisitor visitor = new TypeParametersVisitor(typeParamSet);
             for (PsiField field : fields) {
                 field.accept(visitor);
             }
@@ -174,7 +173,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         myExtractEnumProcessor.findEnumConstantConflicts(refUsages);
         if (!DestinationFolderComboBox.isAccessible(
             myProject,
@@ -187,9 +186,9 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             );
         }
         Application.get().runWriteAction(myClass::delete);
-        final Project project = sourceClass.getProject();
-        final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-        final PsiClass existingClass =
+        Project project = sourceClass.getProject();
+        GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+        PsiClass existingClass =
             JavaPsiFacade.getInstance(project).findClass(StringUtil.getQualifiedName(newPackageName, newClassName), scope);
         if (existingClass != null) {
             conflicts.putValue(
@@ -202,15 +201,15 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
         if (!myGenerateAccessors) {
             calculateInitializersConflicts(conflicts);
-            final NecessaryAccessorsVisitor visitor = checkNecessaryGettersSetters4ExtractedClass();
-            final NecessaryAccessorsVisitor srcVisitor = checkNecessaryGettersSetters4SourceClass();
-            final Set<PsiField> fieldsNeedingGetter = new LinkedHashSet<>();
+            NecessaryAccessorsVisitor visitor = checkNecessaryGettersSetters4ExtractedClass();
+            NecessaryAccessorsVisitor srcVisitor = checkNecessaryGettersSetters4SourceClass();
+            Set<PsiField> fieldsNeedingGetter = new LinkedHashSet<>();
             fieldsNeedingGetter.addAll(visitor.getFieldsNeedingGetter());
             fieldsNeedingGetter.addAll(srcVisitor.getFieldsNeedingGetter());
             for (PsiField field : fieldsNeedingGetter) {
                 conflicts.putValue(field, LocalizeValue.localizeTODO("Field \'" + field.getName() + "\' needs getter").get());
             }
-            final Set<PsiField> fieldsNeedingSetter = new LinkedHashSet<>();
+            Set<PsiField> fieldsNeedingSetter = new LinkedHashSet<>();
             fieldsNeedingSetter.addAll(visitor.getFieldsNeedingSetter());
             fieldsNeedingSetter.addAll(srcVisitor.getFieldsNeedingSetter());
             for (PsiField field : fieldsNeedingSetter) {
@@ -223,7 +222,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
 
     private void calculateInitializersConflicts(MultiMap<PsiElement, String> conflicts) {
-        final PsiClassInitializer[] initializers = sourceClass.getInitializers();
+        PsiClassInitializer[] initializers = sourceClass.getInitializers();
         for (PsiClassInitializer initializer : initializers) {
             if (initializerDependsOnMoved(initializer)) {
                 conflicts.putValue(initializer, LocalizeValue.localizeTODO("Class initializer requires moved members").get());
@@ -241,7 +240,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         initializer.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitReferenceExpression(final PsiReferenceExpression expression) {
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
                 super.visitReferenceExpression(expression);
                 if (expression.resolve() instanceof PsiMember member) {
                     dependsOnMoved[0] |= !member.isStatic() && isInMovedElement(member);
@@ -252,10 +251,10 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     }
 
     private String calculateDelegateFieldName() {
-        final Project project = sourceClass.getProject();
-        final JavaCodeStyleSettings settings = JavaCodeStyleSettings.getInstance(sourceClass.getContainingFile());
+        Project project = sourceClass.getProject();
+        JavaCodeStyleSettings settings = JavaCodeStyleSettings.getInstance(sourceClass.getContainingFile());
 
-        final String baseName = settings.FIELD_NAME_PREFIX.length() == 0 ? StringUtil.decapitalize(newClassName) : newClassName;
+        String baseName = settings.FIELD_NAME_PREFIX.length() == 0 ? StringUtil.decapitalize(newClassName) : newClassName;
         String name = settings.FIELD_NAME_PREFIX + baseName + settings.FIELD_NAME_SUFFIX;
         if (!existsFieldWithName(name) && !PsiNameHelper.getInstance(project).isKeyword(name)) {
             return name;
@@ -271,7 +270,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     }
 
     private boolean existsFieldWithName(String name) {
-        final PsiField[] allFields = sourceClass.getAllFields();
+        PsiField[] allFields = sourceClass.getAllFields();
         for (PsiField field : allFields) {
             if (name.equals(field.getName()) && !fields.contains(field)) {
                 return true;
@@ -295,7 +294,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     @Override
     @RequiredReadAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
-        final PsiClass psiClass = buildClass();
+        PsiClass psiClass = buildClass();
         if (psiClass == null) {
             return;
         }
@@ -305,16 +304,16 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         myExtractEnumProcessor.performEnumConstantTypeMigration(usageInfos);
         final Set<PsiMember> members = new HashSet<>();
         for (PsiMethod method : methods) {
-            final PsiMethod member = psiClass.findMethodBySignature(method, false);
+            PsiMethod member = psiClass.findMethodBySignature(method, false);
             if (member != null) {
                 members.add(member);
             }
         }
         for (PsiField field : fields) {
-            final PsiField member = psiClass.findFieldByName(field.getName(), false);
+            PsiField member = psiClass.findFieldByName(field.getName(), false);
             if (member != null) {
                 members.add(member);
-                final PsiExpression initializer = member.getInitializer();
+                PsiExpression initializer = member.getInitializer();
                 if (initializer != null) {
                     final boolean[] moveInitializerToConstructor = new boolean[1];
                     initializer.accept(new JavaRecursiveElementWalkingVisitor() {
@@ -329,7 +328,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
                     });
 
                     if (moveInitializerToConstructor[0]) {
-                        final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(myProject);
+                        PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(myProject);
                         PsiMethod[] constructors = psiClass.getConstructors();
                         if (constructors.length == 0) {
                             PsiMethod constructor = (PsiMethod)elementFactory.createConstructor().setName(psiClass.getName());
@@ -740,7 +739,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
                 directory = myMoveDestination.getTargetDirectory(containingDirectory);
             }
             else {
-                Module module = ModuleUtil.findModuleForPsiElement(containingFile);
+                Module module = containingFile.getModule();
                 assert module != null;
                 directory = PackageUtil.findOrCreateDirectoryForPackage(module, newPackageName, containingDirectory, false, true);
             }

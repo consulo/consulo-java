@@ -105,6 +105,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
     }
 
     private static class UsageFromJavaDoc extends UsageInfo {
+        @RequiredReadAction
         private UsageFromJavaDoc(@Nonnull PsiElement element) {
             super(element, true);
         }

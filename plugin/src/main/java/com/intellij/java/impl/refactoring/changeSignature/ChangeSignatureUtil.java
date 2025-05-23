@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.changeSignature;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler;
 import consulo.language.editor.util.PsiUtilBase;
@@ -39,11 +40,12 @@ public class ChangeSignatureUtil {
     private ChangeSignatureUtil() {
     }
 
+    @RequiredWriteAction
     public static <Parent extends PsiElement, Child extends PsiElement> void synchronizeList(
         Parent list,
-        final List<Child> newElements,
+        List<Child> newElements,
         ChildrenGenerator<Parent, Child> generator,
-        final boolean[] shouldRemoveChild
+        boolean[] shouldRemoveChild
     ) throws IncorrectOperationException {
         ArrayList<Child> elementsToRemove = null;
         List<Child> elements;
@@ -89,7 +91,7 @@ public class ChangeSignatureUtil {
                 else {
                     anchor = index - 1 < elements.size() ? elements.get(index - 1) : null;
                 }
-                final PsiElement psi = Factory.createSingleLeafElement(
+                PsiElement psi = Factory.createSingleLeafElement(
                     JavaTokenType.COMMA,
                     ",",
                     0,
@@ -114,7 +116,7 @@ public class ChangeSignatureUtil {
 
     @RequiredUIAccess
     public static void invokeChangeSignatureOn(PsiMethod method, Project project) {
-        final ChangeSignatureHandler handler = RefactoringSupportProvider.forLanguage(method.getLanguage()).getChangeSignatureHandler();
+        ChangeSignatureHandler handler = RefactoringSupportProvider.forLanguage(method.getLanguage()).getChangeSignatureHandler();
         handler.invoke(project, new PsiElement[]{method}, null);
     }
 
@@ -122,6 +124,7 @@ public class ChangeSignatureUtil {
         if (type1 == type2) {
             return true;
         }
+        //noinspection SimplifiableIfStatement
         if (type1 == null || !type1.equals(type2)) {
             return false;
         }
