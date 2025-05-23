@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2000-2013 JetBrains s.r.o.
  *
@@ -44,291 +43,310 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
 public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
-  private static final Logger LOG = Logger.getInstance(EncapsulateFieldsProcessor.class);
+    private static final Logger LOG = Logger.getInstance(EncapsulateFieldsProcessor.class);
 
-  private PsiClass myClass;
-  @Nonnull
-  private final EncapsulateFieldsDescriptor myDescriptor;
-  private final FieldDescriptor[] myFieldDescriptors;
+    private PsiClass myClass;
+    @Nonnull
+    private final EncapsulateFieldsDescriptor myDescriptor;
+    private final FieldDescriptor[] myFieldDescriptors;
 
-  private HashMap<String,PsiMethod> myNameToGetter;
-  private HashMap<String,PsiMethod> myNameToSetter;
+    private HashMap<String, PsiMethod> myNameToGetter;
+    private HashMap<String, PsiMethod> myNameToSetter;
 
-  public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
-    super(project);
-    myDescriptor = descriptor;
-    myFieldDescriptors = descriptor.getSelectedFields();
-    myClass = descriptor.getTargetClass();
-  }
-
-  public static void setNewFieldVisibility(PsiField field, EncapsulateFieldsDescriptor descriptor) {
-    try {
-      if (descriptor.getFieldsVisibility() != null) {
-        field.normalizeDeclaration();
-        PsiUtil.setModifierProperty(field, descriptor.getFieldsVisibility(), true);
-      }
+    public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
+        super(project);
+        myDescriptor = descriptor;
+        myFieldDescriptors = descriptor.getSelectedFields();
+        myClass = descriptor.getTargetClass();
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
 
-  @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
-    FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
-    System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);
-    return new EncapsulateFieldsViewDescriptor(fields);
-  }
-
-  protected String getCommandName() {
-    return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
-  }
-
-  protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-
-    checkExistingMethods(conflicts, true);
-    checkExistingMethods(conflicts, false);
-    final Collection<PsiClass> classes = ClassInheritorsSearch.search(myClass).findAll();
-    for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
-      final Set<PsiMethod> setters = new HashSet<PsiMethod>();
-      final Set<PsiMethod> getters = new HashSet<PsiMethod>();
-
-      for (PsiClass aClass : classes) {
-        final PsiMethod getterOverrider =
-          myDescriptor.isToEncapsulateGet() ? aClass.findMethodBySignature(fieldDescriptor.getGetterPrototype(), false) : null;
-        if (getterOverrider != null) {
-          getters.add(getterOverrider);
-        }
-        final PsiMethod setterOverrider =
-          myDescriptor.isToEncapsulateSet() ? aClass.findMethodBySignature(fieldDescriptor.getSetterPrototype(), false) : null;
-        if (setterOverrider != null) {
-          setters.add(setterOverrider);
-        }
-      }
-      if (!getters.isEmpty() || !setters.isEmpty()) {
-        final PsiField field = fieldDescriptor.getField();
-        for (PsiReference reference : ReferencesSearch.search(field)) {
-          final PsiElement place = reference.getElement();
-          LOG.assertTrue(place instanceof PsiReferenceExpression);
-          final PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
-          final PsiClass ancestor;
-          if (qualifierExpression == null) {
-            ancestor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
-          }
-          else {
-            ancestor = PsiUtil.resolveClassInType(qualifierExpression.getType());
-          }
-
-          final boolean isGetter = !PsiUtil.isAccessedForWriting((PsiExpression)place);
-          for (PsiMethod overridden : isGetter ? getters : setters) {
-            if (InheritanceUtil.isInheritorOrSelf(myClass, ancestor, true)) {
-              conflicts.putValue(overridden, "There is already a " +
-                                             RefactoringUIUtil.getDescription(overridden, true) +
-                                             " which would hide generated " +
-                                             (isGetter ? "getter" : "setter") + " for " + place.getText());
-              break;
+    public static void setNewFieldVisibility(PsiField field, EncapsulateFieldsDescriptor descriptor) {
+        try {
+            if (descriptor.getFieldsVisibility() != null) {
+                field.normalizeDeclaration();
+                PsiUtil.setModifierProperty(field, descriptor.getFieldsVisibility(), true);
             }
-          }
         }
-      }
-    }
-    return showConflicts(conflicts, refUsages.get());
-  }
-
-  private void checkExistingMethods(MultiMap<PsiElement, String> conflicts, boolean isGetter) {
-    if (isGetter) {
-      if (!myDescriptor.isToEncapsulateGet()) return;
-    }
-    else {
-      if (!myDescriptor.isToEncapsulateSet()) return;
-    }
-
-    for (FieldDescriptor descriptor : myFieldDescriptors) {
-      PsiMethod prototype = isGetter
-                            ? descriptor.getGetterPrototype()
-                            : descriptor.getSetterPrototype();
-
-      final PsiType prototypeReturnType = prototype.getReturnType();
-      PsiMethod existing = myClass.findMethodBySignature(prototype, true);
-      if (existing != null) {
-        final PsiType returnType = existing.getReturnType();
-        if (!RefactoringUtil.equivalentTypes(prototypeReturnType, returnType, myClass.getManager())) {
-          final String descr = PsiFormatUtil.formatMethod(existing,
-                                                          PsiSubstitutor.EMPTY,
-                                                          PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_TYPE,
-                                                          PsiFormatUtilBase.SHOW_TYPE
-          );
-          LocalizeValue message = isGetter
-            ? RefactoringLocalize.encapsulateFieldsGetterExists(
-              CommonRefactoringUtil.htmlEmphasize(descr),
-              CommonRefactoringUtil.htmlEmphasize(prototype.getName())
-            )
-            : RefactoringLocalize.encapsulateFieldsSetterExists(
-              CommonRefactoringUtil.htmlEmphasize(descr),
-              CommonRefactoringUtil.htmlEmphasize(prototype.getName())
-            );
-          conflicts.putValue(existing, message.get());
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
         }
-      } else {
-        PsiClass containingClass = myClass.getContainingClass();
-        while (containingClass != null && existing == null) {
-          existing = containingClass.findMethodBySignature(prototype, true);
-          if (existing != null) {
-            for (PsiReference reference : ReferencesSearch.search(existing)) {
-              final PsiElement place = reference.getElement();
-              LOG.assertTrue(place instanceof PsiReferenceExpression);
-              final PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
-              final PsiClass inheritor;
-              if (qualifierExpression == null) {
-                inheritor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
-              } else {
-                inheritor = PsiUtil.resolveClassInType(qualifierExpression.getType());
-              }
+    }
 
-              if (InheritanceUtil.isInheritorOrSelf(inheritor, myClass, true)) {
-                conflicts.putValue(existing, "There is already a " + RefactoringUIUtil.getDescription(existing, true) + " which would be hidden by generated " + (isGetter ? "getter" : "setter"));
-                break;
-              }
+    @Nonnull
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
+        FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
+        System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);
+        return new EncapsulateFieldsViewDescriptor(fields);
+    }
+
+    protected String getCommandName() {
+        return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
+    }
+
+    @Override
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+        final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
+
+        checkExistingMethods(conflicts, true);
+        checkExistingMethods(conflicts, false);
+        final Collection<PsiClass> classes = ClassInheritorsSearch.search(myClass).findAll();
+        for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
+            final Set<PsiMethod> setters = new HashSet<PsiMethod>();
+            final Set<PsiMethod> getters = new HashSet<PsiMethod>();
+
+            for (PsiClass aClass : classes) {
+                final PsiMethod getterOverrider =
+                    myDescriptor.isToEncapsulateGet() ? aClass.findMethodBySignature(fieldDescriptor.getGetterPrototype(), false) : null;
+                if (getterOverrider != null) {
+                    getters.add(getterOverrider);
+                }
+                final PsiMethod setterOverrider =
+                    myDescriptor.isToEncapsulateSet() ? aClass.findMethodBySignature(fieldDescriptor.getSetterPrototype(), false) : null;
+                if (setterOverrider != null) {
+                    setters.add(setterOverrider);
+                }
             }
-          }
-          containingClass = containingClass.getContainingClass();
+            if (!getters.isEmpty() || !setters.isEmpty()) {
+                final PsiField field = fieldDescriptor.getField();
+                for (PsiReference reference : ReferencesSearch.search(field)) {
+                    final PsiElement place = reference.getElement();
+                    LOG.assertTrue(place instanceof PsiReferenceExpression);
+                    final PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
+                    final PsiClass ancestor;
+                    if (qualifierExpression == null) {
+                        ancestor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
+                    }
+                    else {
+                        ancestor = PsiUtil.resolveClassInType(qualifierExpression.getType());
+                    }
+
+                    final boolean isGetter = !PsiUtil.isAccessedForWriting((PsiExpression)place);
+                    for (PsiMethod overridden : isGetter ? getters : setters) {
+                        if (InheritanceUtil.isInheritorOrSelf(myClass, ancestor, true)) {
+                            conflicts.putValue(overridden, "There is already a " +
+                                RefactoringUIUtil.getDescription(overridden, true) +
+                                " which would hide generated " +
+                                (isGetter ? "getter" : "setter") + " for " + place.getText());
+                            break;
+                        }
+                    }
+                }
+            }
         }
-      }
+        return showConflicts(conflicts, refUsages.get());
     }
-  }
 
-  @Nonnull
-  protected UsageInfo[] findUsages() {
-    ArrayList<EncapsulateFieldUsageInfo> array = ContainerUtil.newArrayList();
-    for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
-      for (final PsiReference reference : ReferencesSearch.search(fieldDescriptor.getField())) {
-        final PsiElement element = reference.getElement();
-        if (element == null) continue;
-
-        final EncapsulateFieldHelper helper = EncapsulateFieldHelper.getHelper(element.getLanguage());
-        EncapsulateFieldUsageInfo usageInfo = helper.createUsage(myDescriptor, fieldDescriptor, reference);
-        if (usageInfo != null) {
-          array.add(usageInfo);
+    private void checkExistingMethods(MultiMap<PsiElement, String> conflicts, boolean isGetter) {
+        if (isGetter) {
+            if (!myDescriptor.isToEncapsulateGet()) {
+                return;
+            }
         }
-      }
-    }
-    EncapsulateFieldUsageInfo[] usageInfos = array.toArray(new EncapsulateFieldUsageInfo[array.size()]);
-    return UsageViewUtil.removeDuplicatedUsages(usageInfos);
-  }
-
-  protected void refreshElements(PsiElement[] elements) {
-    LOG.assertTrue(elements.length == myFieldDescriptors.length);
-
-    for (int idx = 0; idx < elements.length; idx++) {
-      PsiElement element = elements[idx];
-
-      LOG.assertTrue(element instanceof PsiField);
-
-      myFieldDescriptors[idx].refreshField((PsiField)element);
-    }
-
-    myClass = myFieldDescriptors[0].getField().getContainingClass();
-  }
-
-  protected void performRefactoring(UsageInfo[] usages) {
-    updateFieldVisibility();
-    generateAccessors();
-    processUsagesPerFile(usages);
-  }
-
-  private void updateFieldVisibility() {
-    if (myDescriptor.getFieldsVisibility() == null) return;
-
-    for (FieldDescriptor descriptor : myFieldDescriptors) {
-      setNewFieldVisibility(descriptor.getField(), myDescriptor);
-    }
-  }
-
-  private void generateAccessors() {
-    // generate accessors
-    myNameToGetter = new HashMap<String, PsiMethod>();
-    myNameToSetter = new HashMap<String, PsiMethod>();
-
-    for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
-      final DocCommentPolicy<PsiDocComment> commentPolicy = new DocCommentPolicy<PsiDocComment>(myDescriptor.getJavadocPolicy());
-
-      PsiField field = fieldDescriptor.getField();
-      final PsiDocComment docComment = field.getDocComment();
-      if (myDescriptor.isToEncapsulateGet()) {
-        final PsiMethod prototype = fieldDescriptor.getGetterPrototype();
-        assert prototype != null;
-        final PsiMethod getter = addOrChangeAccessor(prototype, myNameToGetter);
-        if (docComment != null) {
-          final PsiDocComment getterJavadoc = (PsiDocComment)getter.addBefore(docComment, getter.getFirstChild());
-          commentPolicy.processNewJavaDoc(getterJavadoc);
+        else if (!myDescriptor.isToEncapsulateSet()) {
+            return;
         }
-      }
-      if (myDescriptor.isToEncapsulateSet() && !field.hasModifierProperty(PsiModifier.FINAL)) {
-        PsiMethod prototype = fieldDescriptor.getSetterPrototype();
-        assert prototype != null;
-        addOrChangeAccessor(prototype, myNameToSetter);
-      }
 
-      if (docComment != null) {
-        commentPolicy.processOldJavaDoc(docComment);
-      }
-    }
-  }
+        for (FieldDescriptor descriptor : myFieldDescriptors) {
+            PsiMethod prototype = isGetter
+                ? descriptor.getGetterPrototype()
+                : descriptor.getSetterPrototype();
 
-  private void processUsagesPerFile(UsageInfo[] usages) {
-    Map<PsiFile, List<EncapsulateFieldUsageInfo>> usagesInFiles = new HashMap<PsiFile, List<EncapsulateFieldUsageInfo>>();
-    for (UsageInfo usage : usages) {
-      PsiElement element = usage.getElement();
-      if (element == null) continue;
-      final PsiFile file = element.getContainingFile();
-      List<EncapsulateFieldUsageInfo> usagesInFile = usagesInFiles.get(file);
-      if (usagesInFile == null) {
-        usagesInFile = new ArrayList<EncapsulateFieldUsageInfo>();
-        usagesInFiles.put(file, usagesInFile);
-      }
-      usagesInFile.add(((EncapsulateFieldUsageInfo)usage));
+            final PsiType prototypeReturnType = prototype.getReturnType();
+            PsiMethod existing = myClass.findMethodBySignature(prototype, true);
+            if (existing != null) {
+                final PsiType returnType = existing.getReturnType();
+                if (!RefactoringUtil.equivalentTypes(prototypeReturnType, returnType, myClass.getManager())) {
+                    final String descr = PsiFormatUtil.formatMethod(
+                        existing,
+                        PsiSubstitutor.EMPTY,
+                        PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_TYPE,
+                        PsiFormatUtilBase.SHOW_TYPE
+                    );
+                    LocalizeValue message = isGetter
+                        ? RefactoringLocalize.encapsulateFieldsGetterExists(
+                        CommonRefactoringUtil.htmlEmphasize(descr),
+                        CommonRefactoringUtil.htmlEmphasize(prototype.getName())
+                    )
+                        : RefactoringLocalize.encapsulateFieldsSetterExists(
+                        CommonRefactoringUtil.htmlEmphasize(descr),
+                        CommonRefactoringUtil.htmlEmphasize(prototype.getName())
+                    );
+                    conflicts.putValue(existing, message.get());
+                }
+            }
+            else {
+                PsiClass containingClass = myClass.getContainingClass();
+                while (containingClass != null && existing == null) {
+                    existing = containingClass.findMethodBySignature(prototype, true);
+                    if (existing != null) {
+                        for (PsiReference reference : ReferencesSearch.search(existing)) {
+                            final PsiElement place = reference.getElement();
+                            LOG.assertTrue(place instanceof PsiReferenceExpression);
+                            final PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
+                            final PsiClass inheritor;
+                            if (qualifierExpression == null) {
+                                inheritor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
+                            }
+                            else {
+                                inheritor = PsiUtil.resolveClassInType(qualifierExpression.getType());
+                            }
+
+                            if (InheritanceUtil.isInheritorOrSelf(inheritor, myClass, true)) {
+                                conflicts.putValue(
+                                    existing,
+                                    "There is already a " + RefactoringUIUtil.getDescription(
+                                        existing,
+                                        true
+                                    ) + " which would be hidden by generated " + (isGetter ? "getter" : "setter")
+                                );
+                                break;
+                            }
+                        }
+                    }
+                    containingClass = containingClass.getContainingClass();
+                }
+            }
+        }
     }
 
-    for (List<EncapsulateFieldUsageInfo> usageInfos : usagesInFiles.values()) {
-      //this is to avoid elements to become invalid as a result of processUsage
-      final EncapsulateFieldUsageInfo[] infos = usageInfos.toArray(new EncapsulateFieldUsageInfo[usageInfos.size()]);
-      CommonRefactoringUtil.sortDepthFirstRightLeftOrder(infos);
+    @Nonnull
+    protected UsageInfo[] findUsages() {
+        ArrayList<EncapsulateFieldUsageInfo> array = ContainerUtil.newArrayList();
+        for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
+            for (final PsiReference reference : ReferencesSearch.search(fieldDescriptor.getField())) {
+                final PsiElement element = reference.getElement();
+                if (element == null) {
+                    continue;
+                }
 
-      for (EncapsulateFieldUsageInfo info : infos) {
-        EncapsulateFieldHelper helper = EncapsulateFieldHelper.getHelper(info.getElement().getLanguage());
-        helper.processUsage(info,
-                            myDescriptor,
-                            myNameToSetter.get(info.getFieldDescriptor().getSetterName()),
-                            myNameToGetter.get(info.getFieldDescriptor().getGetterName())
-        );
-      }
+                final EncapsulateFieldHelper helper = EncapsulateFieldHelper.getHelper(element.getLanguage());
+                EncapsulateFieldUsageInfo usageInfo = helper.createUsage(myDescriptor, fieldDescriptor, reference);
+                if (usageInfo != null) {
+                    array.add(usageInfo);
+                }
+            }
+        }
+        EncapsulateFieldUsageInfo[] usageInfos = array.toArray(new EncapsulateFieldUsageInfo[array.size()]);
+        return UsageViewUtil.removeDuplicatedUsages(usageInfos);
     }
-  }
 
-  private PsiMethod addOrChangeAccessor(PsiMethod prototype, HashMap<String,PsiMethod> nameToAncestor) {
-    PsiMethod existing = myClass.findMethodBySignature(prototype, false);
-    PsiMethod result = existing;
-    try{
-      if (existing == null){
-        PsiUtil.setModifierProperty(prototype, myDescriptor.getAccessorsVisibility(), true);
-        result = (PsiMethod) myClass.add(prototype);
-      }
-      else{
-        //TODO : change visibility
-      }
-      nameToAncestor.put(prototype.getName(), result);
-      return result;
+    protected void refreshElements(PsiElement[] elements) {
+        LOG.assertTrue(elements.length == myFieldDescriptors.length);
+
+        for (int idx = 0; idx < elements.length; idx++) {
+            PsiElement element = elements[idx];
+
+            LOG.assertTrue(element instanceof PsiField);
+
+            myFieldDescriptors[idx].refreshField((PsiField)element);
+        }
+
+        myClass = myFieldDescriptors[0].getField().getContainingClass();
     }
-    catch(IncorrectOperationException e){
-      LOG.error(e);
+
+    protected void performRefactoring(UsageInfo[] usages) {
+        updateFieldVisibility();
+        generateAccessors();
+        processUsagesPerFile(usages);
     }
-    return null;
-  }
+
+    private void updateFieldVisibility() {
+        if (myDescriptor.getFieldsVisibility() == null) {
+            return;
+        }
+
+        for (FieldDescriptor descriptor : myFieldDescriptors) {
+            setNewFieldVisibility(descriptor.getField(), myDescriptor);
+        }
+    }
+
+    private void generateAccessors() {
+        // generate accessors
+        myNameToGetter = new HashMap<String, PsiMethod>();
+        myNameToSetter = new HashMap<String, PsiMethod>();
+
+        for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
+            final DocCommentPolicy<PsiDocComment> commentPolicy = new DocCommentPolicy<PsiDocComment>(myDescriptor.getJavadocPolicy());
+
+            PsiField field = fieldDescriptor.getField();
+            final PsiDocComment docComment = field.getDocComment();
+            if (myDescriptor.isToEncapsulateGet()) {
+                final PsiMethod prototype = fieldDescriptor.getGetterPrototype();
+                assert prototype != null;
+                final PsiMethod getter = addOrChangeAccessor(prototype, myNameToGetter);
+                if (docComment != null) {
+                    final PsiDocComment getterJavadoc = (PsiDocComment)getter.addBefore(docComment, getter.getFirstChild());
+                    commentPolicy.processNewJavaDoc(getterJavadoc);
+                }
+            }
+            if (myDescriptor.isToEncapsulateSet() && !field.hasModifierProperty(PsiModifier.FINAL)) {
+                PsiMethod prototype = fieldDescriptor.getSetterPrototype();
+                assert prototype != null;
+                addOrChangeAccessor(prototype, myNameToSetter);
+            }
+
+            if (docComment != null) {
+                commentPolicy.processOldJavaDoc(docComment);
+            }
+        }
+    }
+
+    private void processUsagesPerFile(UsageInfo[] usages) {
+        Map<PsiFile, List<EncapsulateFieldUsageInfo>> usagesInFiles = new HashMap<PsiFile, List<EncapsulateFieldUsageInfo>>();
+        for (UsageInfo usage : usages) {
+            PsiElement element = usage.getElement();
+            if (element == null) {
+                continue;
+            }
+            final PsiFile file = element.getContainingFile();
+            List<EncapsulateFieldUsageInfo> usagesInFile = usagesInFiles.get(file);
+            if (usagesInFile == null) {
+                usagesInFile = new ArrayList<EncapsulateFieldUsageInfo>();
+                usagesInFiles.put(file, usagesInFile);
+            }
+            usagesInFile.add(((EncapsulateFieldUsageInfo)usage));
+        }
+
+        for (List<EncapsulateFieldUsageInfo> usageInfos : usagesInFiles.values()) {
+            //this is to avoid elements to become invalid as a result of processUsage
+            final EncapsulateFieldUsageInfo[] infos = usageInfos.toArray(new EncapsulateFieldUsageInfo[usageInfos.size()]);
+            CommonRefactoringUtil.sortDepthFirstRightLeftOrder(infos);
+
+            for (EncapsulateFieldUsageInfo info : infos) {
+                EncapsulateFieldHelper helper = EncapsulateFieldHelper.getHelper(info.getElement().getLanguage());
+                helper.processUsage(
+                    info,
+                    myDescriptor,
+                    myNameToSetter.get(info.getFieldDescriptor().getSetterName()),
+                    myNameToGetter.get(info.getFieldDescriptor().getGetterName())
+                );
+            }
+        }
+    }
+
+    private PsiMethod addOrChangeAccessor(PsiMethod prototype, HashMap<String, PsiMethod> nameToAncestor) {
+        PsiMethod existing = myClass.findMethodBySignature(prototype, false);
+        PsiMethod result = existing;
+        try {
+            if (existing == null) {
+                PsiUtil.setModifierProperty(prototype, myDescriptor.getAccessorsVisibility(), true);
+                result = (PsiMethod)myClass.add(prototype);
+            }
+            else {
+                //TODO : change visibility
+            }
+            nameToAncestor.put(prototype.getName(), result);
+            return result;
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+        return null;
+    }
 }

@@ -121,7 +121,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         return showConflicts(getConflicts(usages), usages);
     }

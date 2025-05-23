@@ -52,7 +52,7 @@ import consulo.usage.*;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -226,8 +226,9 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         ArrayList<UsageInfo> filteredUsages = new ArrayList<>();
