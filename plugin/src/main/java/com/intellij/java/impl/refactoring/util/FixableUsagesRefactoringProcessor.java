@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.xml.util.XmlUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -42,9 +43,9 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usageInfos);
         for (UsageInfo usageInfo : usageInfos) {
-            if (usageInfo instanceof FixableUsageInfo) {
+            if (usageInfo instanceof FixableUsageInfo fixableUsageInfo) {
                 try {
-                    ((FixableUsageInfo)usageInfo).fixUsage();
+                    fixableUsageInfo.fixUsage();
                 }
                 catch (IncorrectOperationException e) {
                     LOG.info(e);
@@ -58,13 +59,14 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
     protected final UsageInfo[] findUsages() {
         List<FixableUsageInfo> usages = Collections.synchronizedList(new ArrayList<FixableUsageInfo>());
         findUsages(usages);
-        final int numUsages = usages.size();
-        final FixableUsageInfo[] usageArray = usages.toArray(new FixableUsageInfo[numUsages]);
+        int numUsages = usages.size();
+        FixableUsageInfo[] usageArray = usages.toArray(new FixableUsageInfo[numUsages]);
         return usageArray;
     }
 
     protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
 
+    @RequiredReadAction
     protected static void checkConflicts(SimpleReference<UsageInfo[]> refUsages, MultiMap<PsiElement, String> conflicts) {
         for (UsageInfo info : refUsages.get()) {
             String conflict = ((FixableUsageInfo)info).getConflictMessage();
