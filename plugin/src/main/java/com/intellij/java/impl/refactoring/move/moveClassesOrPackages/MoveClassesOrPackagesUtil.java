@@ -97,7 +97,7 @@ public class MoveClassesOrPackagesUtil {
         boolean searchInNonJavaFiles,
         PsiElement element,
         String newQName,
-        ArrayList<UsageInfo> results
+        List<UsageInfo> results
     ) {
         String stringToSearch = getStringToSearch(element);
         if (stringToSearch == null) {
