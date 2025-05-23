@@ -39,7 +39,6 @@ import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
 
 public class VisibilityUtil {
-    @NonNls
     public static final String ESCALATE_VISIBILITY = "EscalateVisible";
     private static final String[] visibilityModifiers = {
         PsiModifier.PRIVATE,
@@ -61,7 +60,7 @@ public class VisibilityUtil {
     }
 
     public static void escalateVisibility(PsiMember modifierListOwner, PsiElement place) throws IncorrectOperationException {
-        final String visibilityModifier = getVisibilityModifier(modifierListOwner.getModifierList());
+        String visibilityModifier = getVisibilityModifier(modifierListOwner.getModifierList());
         int index;
         for (index = 0; index < visibilityModifiers.length; index++) {
             String modifier = visibilityModifiers[index];
@@ -76,14 +75,14 @@ public class VisibilityUtil {
     }
 
     public static void escalateVisibility(PsiModifierList modifierList, PsiElement place) throws IncorrectOperationException {
-        final PsiElement parent = modifierList.getParent();
+        PsiElement parent = modifierList.getParent();
         if (parent instanceof PsiMember) {
             escalateVisibility((PsiMember)parent, place);
         }
     }
 
     @PsiModifier.ModifierConstant
-    public static String getPossibleVisibility(final PsiMember psiMethod, final PsiElement place) {
+    public static String getPossibleVisibility(PsiMember psiMethod, PsiElement place) {
         Project project = psiMethod.getProject();
         if (PsiUtil.isAccessible(project, psiMethod, place, null)) {
             return getVisibilityModifier(psiMethod.getModifierList());
@@ -111,7 +110,6 @@ public class VisibilityUtil {
     }
 
     @Nonnull
-    @NonNls
     public static String getVisibilityString(@PsiModifier.ModifierConstant String visibilityModifier) {
         if (PsiModifier.PACKAGE_LOCAL.equals(visibilityModifier)) {
             return "";
@@ -122,13 +120,13 @@ public class VisibilityUtil {
     @Nls
     @Nonnull
     public static String getVisibilityStringToDisplay(@Nonnull PsiMember member) {
-        if (member.hasModifierProperty(PsiModifier.PUBLIC)) {
+        if (member.isPublic()) {
             return toPresentableText(PsiModifier.PUBLIC);
         }
-        if (member.hasModifierProperty(PsiModifier.PROTECTED)) {
+        if (member.isProtected()) {
             return toPresentableText(PsiModifier.PROTECTED);
         }
-        if (member.hasModifierProperty(PsiModifier.PRIVATE)) {
+        if (member.isPrivate()) {
             return toPresentableText(PsiModifier.PRIVATE);
         }
         return toPresentableText(PsiModifier.PACKAGE_LOCAL);

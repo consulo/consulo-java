@@ -176,10 +176,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
 
         initializer = normalize((PsiExpression)initializer.copy());
         for (UsageInfo info : usages) {
-            if (info instanceof UsageFromJavaDoc) {
-                continue;
-            }
-            if (info instanceof NonCodeUsageInfo) {
+            if (info instanceof UsageFromJavaDoc || info instanceof NonCodeUsageInfo) {
                 continue;
             }
             PsiElement element = info.getElement();

@@ -397,10 +397,9 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                 continue;
             }
             PsiElement container = ConflictsUtil.getContainer(usageElement);
-            if (!(container instanceof PsiMember)) {
+            if (!(container instanceof PsiMember memberContainer)) {
                 continue;    // usage in import statement
             }
-            PsiMember memberContainer = (PsiMember)container;
             Set<PsiMember> inaccessibleReferenced = result.get(memberContainer);
             if (inaccessibleReferenced == null) {
                 inaccessibleReferenced = new HashSet<>();
