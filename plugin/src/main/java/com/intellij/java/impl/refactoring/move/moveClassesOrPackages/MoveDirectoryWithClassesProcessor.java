@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 28-Dec-2009
- */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
@@ -52,6 +48,10 @@ import jakarta.annotation.Nullable;
 
 import java.util.*;
 
+/**
+ * @author anna
+ * @since 2009-12-28
+ */
 public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor {
     private final PsiDirectory[] myDirectories;
     private final PsiDirectory myTargetDirectory;
@@ -108,6 +108,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
     @Nonnull
     @Override
+    @RequiredReadAction
     public UsageInfo[] findUsages() {
         List<UsageInfo> usages = new ArrayList<>();
         for (MoveDirectoryWithClassesHelper helper : MoveDirectoryWithClassesHelper.findAll()) {
@@ -208,6 +209,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
 
     @Override
+    @RequiredWriteAction
     protected void performPsiSpoilingRefactoring() {
         if (myNonCodeUsages == null) {
             return; //refactoring was aborted

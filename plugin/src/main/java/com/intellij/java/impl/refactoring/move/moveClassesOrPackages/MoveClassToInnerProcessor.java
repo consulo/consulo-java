@@ -333,6 +333,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
             && !Comparing.equal(elementPackage, myTargetPackage));
     }
 
+    @RequiredReadAction
     private void detectInaccessibleMemberUsages(ConflictsCollector collector) {
         PsiElement[] members = collectPackageLocalMembers(collector.getClassToMove());
         for (PsiElement member : members) {
