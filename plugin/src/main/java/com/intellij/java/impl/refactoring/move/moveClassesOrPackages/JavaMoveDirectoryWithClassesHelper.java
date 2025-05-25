@@ -3,6 +3,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiDirectory;
@@ -22,6 +23,7 @@ import java.util.function.Function;
 public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClassesHelper {
 
     @Override
+    @RequiredReadAction
     public void findUsages(
         Collection<PsiFile> filesToMove,
         PsiDirectory[] directoriesToMove,
@@ -30,24 +32,22 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
         boolean searchInNonJavaFiles,
         Project project
     ) {
-        final Set<String> packageNames = new HashSet<String>();
+        Set<String> packageNames = new HashSet<>();
         for (PsiFile psiFile : filesToMove) {
-            if (psiFile instanceof PsiClassOwner) {
-                final PsiClass[] classes = ((PsiClassOwner)psiFile).getClasses();
-                for (PsiClass aClass : classes) {
-                    Collections
-                        .addAll(
-                            usages,
-                            MoveClassesOrPackagesUtil.findUsages(aClass, searchInComments, searchInNonJavaFiles, aClass.getName())
-                        );
+            if (psiFile instanceof PsiClassOwner classOwner) {
+                for (PsiClass aClass : classOwner.getClasses()) {
+                    Collections.addAll(
+                        usages,
+                        MoveClassesOrPackagesUtil.findUsages(aClass, searchInComments, searchInNonJavaFiles, aClass.getName())
+                    );
                 }
                 packageNames.add(((PsiClassOwner)psiFile).getPackageName());
             }
         }
 
-        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
         for (String packageName : packageNames) {
-            final PsiJavaPackage aPackage = psiFacade.findPackage(packageName);
+            PsiJavaPackage aPackage = psiFacade.findPackage(packageName);
             if (aPackage != null) {
                 boolean remainsNothing = true;
                 for (PsiDirectory packageDirectory : aPackage.getDirectories()) {
@@ -58,8 +58,8 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
                 }
                 if (remainsNothing) {
                     for (PsiReference reference : ReferencesSearch.search(aPackage)) {
-                        final PsiElement element = reference.getElement();
-                        final PsiImportStatementBase statementBase = PsiTreeUtil.getParentOfType(element, PsiImportStatementBase.class);
+                        PsiElement element = reference.getElement();
+                        PsiImportStatementBase statementBase = PsiTreeUtil.getParentOfType(element, PsiImportStatementBase.class);
                         if (statementBase != null && statementBase.isOnDemand()) {
                             usages.add(new RemoveOnDemandImportStatementsUsageInfo(statementBase));
                         }
@@ -103,10 +103,11 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
     }
 
     @Override
+    @RequiredReadAction
     public void postProcessUsages(UsageInfo[] usages, Function<PsiDirectory, PsiDirectory> newDirMapper) {
         for (UsageInfo usage : usages) {
             if (usage instanceof RemoveOnDemandImportStatementsUsageInfo) {
-                final PsiElement element = usage.getElement();
+                PsiElement element = usage.getElement();
                 if (element != null) {
                     element.delete();
                 }
@@ -136,6 +137,7 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
     }
 
     private static class RemoveOnDemandImportStatementsUsageInfo extends UsageInfo {
+        @RequiredReadAction
         public RemoveOnDemandImportStatementsUsageInfo(PsiImportStatementBase statementBase) {
             super(statementBase);
         }

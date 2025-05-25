@@ -19,6 +19,8 @@ import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -56,7 +58,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     private static final Logger LOG = Logger.getInstance(MoveMembersProcessor.class);
 
     private PsiClass myTargetClass;
-    private final Set<PsiMember> myMembersToMove = new LinkedHashSet<PsiMember>();
+    private final Set<PsiMember> myMembersToMove = new LinkedHashSet<>();
     private final MoveCallback myMoveCallback;
     private final boolean myOpenInEditor;
     private String myNewVisibility; // "null" means "as is"
@@ -78,6 +80,8 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         setOptions(options);
     }
 
+    @Nonnull
+    @Override
     protected String getCommandName() {
         return myCommandName;
     }
@@ -91,13 +95,13 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
 
         setCommandName(members);
 
-        final String targetClassName = dialog.getTargetClassName();
+        String targetClassName = dialog.getTargetClassName();
         myTargetClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
         LOG.assertTrue(myTargetClass != null, "target class: " + targetClassName);
         myNewVisibility = dialog.getMemberVisibility();
     }
 
-    private void setCommandName(final PsiMember[] members) {
+    private void setCommandName(PsiMember[] members) {
         StringBuilder commandName = new StringBuilder();
         commandName.append(MoveHandler.REFACTORING_NAME);
         commandName.append(" ");
@@ -116,17 +120,20 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     }
 
     @Nonnull
+    @Override
     protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
         return new MoveMemberViewDescriptor(PsiUtilCore.toPsiElementArray(myMembersToMove));
     }
 
     @Nonnull
+    @Override
+    @RequiredReadAction
     protected UsageInfo[] findUsages() {
-        final List<UsageInfo> usagesList = new ArrayList<UsageInfo>();
+        List<UsageInfo> usagesList = new ArrayList<>();
         for (PsiMember member : myMembersToMove) {
             for (PsiReference psiReference : ReferencesSearch.search(member)) {
                 PsiElement ref = psiReference.getElement();
-                final MoveMemberHandler handler = MoveMemberHandler.forLanguage(ref.getLanguage());
+                MoveMemberHandler handler = MoveMemberHandler.forLanguage(ref.getLanguage());
                 MoveMembersUsageInfo usage = null;
                 if (handler != null && myTargetClass != null) {
                     usage = handler.getUsage(member, psiReference, myMembersToMove, myTargetClass);
@@ -144,6 +151,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         return usageInfos;
     }
 
+    @Override
     protected void refreshElements(@Nonnull PsiElement[] elements) {
         LOG.assertTrue(myMembersToMove.size() == elements.length);
         myMembersToMove.clear();
@@ -161,7 +169,9 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         return false;
     }
 
-    protected void performRefactoring(@Nonnull final UsageInfo[] usages) {
+    @Override
+    @RequiredWriteAction
+    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         try {
             PsiClass targetClass =
                 JavaPsiFacade.getInstance(myProject).findClass(myOptions.getTargetClassName(), GlobalSearchScope.projectScope(myProject));
@@ -170,14 +180,14 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             }
 
             // collect anchors to place moved members at
-            final Map<PsiMember, SmartPsiElementPointer<PsiElement>> anchors = new HashMap<PsiMember, SmartPsiElementPointer<PsiElement>>();
-            final Map<PsiMember, PsiMember> anchorsInSourceClass = new HashMap<PsiMember, PsiMember>();
+            Map<PsiMember, SmartPsiElementPointer<PsiElement>> anchors = new HashMap<>();
+            Map<PsiMember, PsiMember> anchorsInSourceClass = new HashMap<>();
             for (PsiMember member : myMembersToMove) {
-                final MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
+                MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
                 if (handler != null) {
-                    final PsiElement anchor = handler.getAnchor(member, targetClass, myMembersToMove);
-                    if (anchor instanceof PsiMember && myMembersToMove.contains((PsiMember)anchor)) {
-                        anchorsInSourceClass.put(member, (PsiMember)anchor);
+                    PsiElement anchor = handler.getAnchor(member, targetClass, myMembersToMove);
+                    if (anchor instanceof PsiMember anchorMember && myMembersToMove.contains(anchorMember)) {
+                        anchorsInSourceClass.put(member, anchorMember);
                     }
                     else {
                         anchors.put(
@@ -189,13 +199,13 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             }
 
             // correct references to moved members from the outside
-            ArrayList<MoveMembersUsageInfo> otherUsages = new ArrayList<MoveMembersUsageInfo>();
+            List<MoveMembersUsageInfo> otherUsages = new ArrayList<>();
             for (UsageInfo usageInfo : usages) {
                 MoveMembersUsageInfo usage = (MoveMembersUsageInfo)usageInfo;
                 if (!usage.reference.isValid()) {
                     continue;
                 }
-                final MoveMemberHandler handler = MoveMemberHandler.forLanguage(usageInfo.getElement().getLanguage());
+                MoveMemberHandler handler = MoveMemberHandler.forLanguage(usageInfo.getElement().getLanguage());
                 if (handler != null) {
                     if (handler.changeExternalUsage(myOptions, usage)) {
                         continue;
@@ -205,9 +215,9 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             }
 
             // correct references inside moved members and outer references to Inner Classes
-            final Map<PsiMember, PsiMember> movedMembers = new HashMap<PsiMember, PsiMember>();
+            Map<PsiMember, PsiMember> movedMembers = new HashMap<>();
             for (PsiMember member : myMembersToMove) {
-                ArrayList<PsiReference> refsToBeRebind = new ArrayList<PsiReference>();
+                List<PsiReference> refsToBeRebind = new ArrayList<>();
                 for (Iterator<MoveMembersUsageInfo> iterator = otherUsages.iterator(); iterator.hasNext(); ) {
                     MoveMembersUsageInfo info = iterator.next();
                     if (member.equals(info.member)) {
@@ -218,18 +228,17 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
                         iterator.remove();
                     }
                 }
-                final RefactoringElementListener elementListener = getTransaction().getElementListener(member);
-                final MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
+                RefactoringElementListener elementListener = getTransaction().getElementListener(member);
+                MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
                 if (handler != null) {
-
-                    final PsiElement anchor;
+                    PsiElement anchor;
                     if (anchorsInSourceClass.containsKey(member)) {
-                        final PsiMember memberInSourceClass = anchorsInSourceClass.get(member);
+                        PsiMember memberInSourceClass = anchorsInSourceClass.get(member);
                         //anchor should be already moved as myMembersToMove contains members in order they appear in source class
                         anchor = memberInSourceClass != null ? movedMembers.get(memberInSourceClass) : null;
                     }
                     else {
-                        final SmartPsiElementPointer<PsiElement> pointer = anchors.get(member);
+                        SmartPsiElementPointer<PsiElement> pointer = anchors.get(member);
                         anchor = pointer != null ? pointer.getElement() : null;
                     }
 
@@ -246,7 +255,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             }
 
             // qualifier info must be decoded after members are moved
-            final MoveMemberHandler handler = MoveMemberHandler.forLanguage(myTargetClass.getLanguage());
+            MoveMemberHandler handler = MoveMemberHandler.forLanguage(myTargetClass.getLanguage());
             if (handler != null) {
                 handler.decodeContextInfo(myTargetClass);
             }
@@ -257,7 +266,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             }
 
             if (myOpenInEditor && !movedMembers.isEmpty()) {
-                final PsiMember item = ContainerUtil.getFirstItem(movedMembers.values());
+                PsiMember item = ContainerUtil.getFirstItem(movedMembers.values());
                 if (item != null) {
                     EditorHelper.openInEditor(item);
                 }
@@ -268,7 +277,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    private void fixModifierList(PsiMember member, PsiMember newMember, final UsageInfo[] usages) throws IncorrectOperationException {
+    private void fixModifierList(PsiMember member, PsiMember newMember, UsageInfo[] usages) throws IncorrectOperationException {
         PsiModifierList modifierList = newMember.getModifierList();
 
         if (modifierList != null && myTargetClass.isInterface()) {
@@ -285,9 +294,9 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             return;
         }
 
-        final List<UsageInfo> filtered = new ArrayList<UsageInfo>();
+        List<UsageInfo> filtered = new ArrayList<>();
         for (UsageInfo usage : usages) {
-            if (usage instanceof MoveMembersUsageInfo && member == ((MoveMembersUsageInfo)usage).member) {
+            if (usage instanceof MoveMembersUsageInfo moveMembersUsageInfo && member == moveMembersUsageInfo.member) {
                 filtered.add(usage);
             }
         }
@@ -298,15 +307,15 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-        final UsageInfo[] usages = refUsages.get();
+        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        UsageInfo[] usages = refUsages.get();
 
         String newVisibility = myNewVisibility;
         if (VisibilityUtil.ESCALATE_VISIBILITY.equals(newVisibility)) { // still need to check for access object
             newVisibility = PsiModifier.PUBLIC;
         }
 
-        final Map<PsiMember, PsiModifierList> modifierListCopies = new HashMap<PsiMember, PsiModifierList>();
+        Map<PsiMember, PsiModifierList> modifierListCopies = new HashMap<>();
         for (PsiMember member : myMembersToMove) {
             PsiModifierList modifierListCopy = member.getModifierList();
             if (modifierListCopy != null) {
@@ -331,6 +340,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         return showConflicts(conflicts, usages);
     }
 
+    @RequiredReadAction
     private static void analyzeConflictsOnUsages(
         UsageInfo[] usages,
         Set<PsiMember> membersToMove,
@@ -340,12 +350,11 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         MultiMap<PsiElement, String> conflicts
     ) {
         for (UsageInfo usage : usages) {
-            if (!(usage instanceof MoveMembersUsageInfo)) {
+            if (!(usage instanceof MoveMembersUsageInfo usageInfo)) {
                 continue;
             }
-            final MoveMembersUsageInfo usageInfo = (MoveMembersUsageInfo)usage;
-            final PsiMember member = usageInfo.member;
-            final MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
+            PsiMember member = usageInfo.member;
+            MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
             if (handler != null) {
                 handler.checkConflictsOnUsage(
                     usageInfo,
@@ -359,6 +368,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredReadAction
     private static void analyzeConflictsOnMembers(
         Set<PsiMember> membersToMove,
         String newVisibility,
@@ -366,8 +376,8 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         Map<PsiMember, PsiModifierList> modifierListCopies,
         MultiMap<PsiElement, String> conflicts
     ) {
-        for (final PsiMember member : membersToMove) {
-            final MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
+        for (PsiMember member : membersToMove) {
+            MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
             if (handler != null) {
                 handler.checkConflictsOnMember(
                     member,
@@ -381,6 +391,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @Override
     @RequiredUIAccess
     public void doRun() {
         if (myMembersToMove.isEmpty()) {
@@ -392,25 +403,25 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     }
 
     public List<PsiElement> getMembers() {
-        return new ArrayList<PsiElement>(myMembersToMove);
+        return new ArrayList<>(myMembersToMove);
     }
 
     public PsiClass getTargetClass() {
         return myTargetClass;
     }
 
-
     public static class MoveMembersUsageInfo extends MoveRenameUsageInfo {
         public final PsiClass qualifierClass;
         public final PsiElement reference;
         public final PsiMember member;
 
+        @RequiredReadAction
         public MoveMembersUsageInfo(
             PsiMember member,
             PsiElement element,
             PsiClass qualifierClass,
             PsiElement highlightElement,
-            final PsiReference ref
+            PsiReference ref
         ) {
             super(highlightElement, ref, member);
             this.member = member;
