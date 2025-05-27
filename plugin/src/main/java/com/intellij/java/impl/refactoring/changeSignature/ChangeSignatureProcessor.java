@@ -189,7 +189,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         ExtensionPoint<ChangeSignatureUsageProcessor> extensionPoint =
             myProject.getApplication().getExtensionPoint(ChangeSignatureUsageProcessor.class);
 
-        boolean defaultValuesSet = extensionPoint.noneMatchSafe(
+        boolean defaultValuesSet = extensionPoint.anyMatchSafe(
             processor -> processor instanceof ChangeSignatureUsageProcessorEx changeSignatureUsageProcessorEx
                 && changeSignatureUsageProcessorEx.setupDefaultValues(myChangeInfo, refUsages, myProject)
         );
