@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.util.usageInfo.DefaultConstructorImplicitUsageInfo;
 import com.intellij.java.impl.refactoring.util.usageInfo.NoConstructorClassUsageInfo;
-import consulo.usage.UsageInfo;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,39 +47,26 @@ public class IntroduceParameterUtil {
     }
 
     public static boolean isMethodUsage(UsageInfo usageInfo) {
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            if (processor.isMethodUsage(usageInfo)) {
-                return true;
-            }
-        }
-        return false;
+        return Application.get().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .anyMatchSafe(processor -> processor.isMethodUsage(usageInfo));
     }
 
     public static void addSuperCall(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            if (!processor.processAddSuperCall(data, usage, usages)) {
-                break;
-            }
-        }
+        Application.get().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .allMatchSafe(processor -> processor.processAddSuperCall(data, usage, usages));
     }
 
     public static void addDefaultConstructor(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            if (!processor.processAddDefaultConstructor(data, usage, usages)) {
-                break;
-            }
-        }
+        Application.get().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .allMatchSafe(processor -> processor.processAddDefaultConstructor(data, usage, usages));
     }
 
     public static void changeExternalUsage(UsageInfo usage, UsageInfo[] usages, IntroduceParameterData data)
         throws IncorrectOperationException {
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            if (!processor.processChangeMethodUsage(data, usage, usages)) {
-                break;
-            }
-        }
+        Application.get().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .allMatchSafe(processor -> processor.processChangeMethodUsage(data, usage, usages));
     }
 
     public static void changeMethodSignatureAndResolveFieldConflicts(
@@ -86,11 +74,8 @@ public class IntroduceParameterUtil {
         UsageInfo[] usages,
         IntroduceParameterData data
     ) throws IncorrectOperationException {
-        for (IntroduceParameterMethodUsagesProcessor processor : IntroduceParameterMethodUsagesProcessor.EP_NAME.getExtensions()) {
-            if (!processor.processChangeMethodSignature(data, usage, usages)) {
-                break;
-            }
-        }
+        Application.get().getExtensionPoint(IntroduceParameterMethodUsagesProcessor.class)
+            .allMatchSafe(processor -> processor.processChangeMethodSignature(data, usage, usages));
     }
 
     @RequiredReadAction

@@ -19,15 +19,15 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.usage.UsageInfo;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -55,27 +55,28 @@ public class MoveJavaClassHandler implements MoveClassHandler {
         }
     }
 
-    public PsiClass doMoveClass(@Nonnull final PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException {
+    @Override
+    @RequiredWriteAction
+    public PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException {
         PsiFile file = aClass.getContainingFile();
-        final PsiJavaPackage newPackage = JavaDirectoryService.getInstance().getPackage(moveDestination);
+        PsiJavaPackage newPackage = JavaDirectoryService.getInstance().getPackage(moveDestination);
 
         PsiClass newClass = null;
-        if (file instanceof PsiJavaFile) {
-            if (!moveDestination.equals(file.getContainingDirectory()) &&
-                moveDestination.findFile(file.getName()) != null) {
+        if (file instanceof PsiJavaFile javaFile) {
+            if (!moveDestination.equals(javaFile.getContainingDirectory()) && moveDestination.findFile(file.getName()) != null) {
                 // moving second of two classes which were in the same file to a different directory (IDEADEV-3089)
                 correctSelfReferences(aClass, newPackage);
-                final PsiFile newFile = moveDestination.findFile(file.getName());
+                PsiFile newFile = moveDestination.findFile(file.getName());
                 LOG.assertTrue(newFile != null);
                 newClass = (PsiClass)newFile.add(aClass);
                 correctOldClassReferences(newClass, aClass);
                 aClass.delete();
             }
-            else if (((PsiJavaFile)file).getClasses().length > 1) {
+            else if (javaFile.getClasses().length > 1) {
                 correctSelfReferences(aClass, newPackage);
-                final PsiClass created = JavaDirectoryService.getInstance().createClass(moveDestination, aClass.getName());
+                PsiClass created = JavaDirectoryService.getInstance().createClass(moveDestination, aClass.getName());
                 if (aClass.getDocComment() == null) {
-                    final PsiDocComment createdDocComment = created.getDocComment();
+                    PsiDocComment createdDocComment = created.getDocComment();
                     if (createdDocComment != null) {
                         aClass.addAfter(createdDocComment, null);
                     }
@@ -89,12 +90,13 @@ public class MoveJavaClassHandler implements MoveClassHandler {
     }
 
     private static void correctOldClassReferences(final PsiClass newClass, final PsiClass oldClass) {
-        final Set<PsiImportStatementBase> importsToDelete = new HashSet<PsiImportStatementBase>();
+        final Set<PsiImportStatementBase> importsToDelete = new HashSet<>();
         newClass.getContainingFile().accept(new JavaRecursiveElementVisitor() {
             @Override
-            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+            @RequiredWriteAction
+            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
                 if (reference.isValid() && reference.isReferenceTo(oldClass)) {
-                    final PsiImportStatementBase importStatement = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class);
+                    PsiImportStatementBase importStatement = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class);
                     if (importStatement != null) {
                         importsToDelete.add(importStatement);
                         return;
@@ -119,13 +121,13 @@ public class MoveJavaClassHandler implements MoveClassHandler {
         if (aPackage != null) {
             aClass.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
-                public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+                @RequiredWriteAction
+                public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
                     if (reference.isQualified() && reference.isReferenceTo(aClass)) {
-                        final PsiElement qualifier = reference.getQualifier();
-                        if (qualifier instanceof PsiJavaCodeReferenceElement && ((PsiJavaCodeReferenceElement)qualifier).isReferenceTo(
-                            aPackage)) {
+                        if (reference.getQualifier() instanceof PsiJavaCodeReferenceElement codeRefElem
+                            && codeRefElem.isReferenceTo(aPackage)) {
                             try {
-                                ((PsiJavaCodeReferenceElement)qualifier).bindToElement(newContainingPackage);
+                                codeRefElem.bindToElement(newContainingPackage);
                             }
                             catch (IncorrectOperationException e) {
                                 LOG.error(e);
@@ -138,12 +140,15 @@ public class MoveJavaClassHandler implements MoveClassHandler {
         }
     }
 
+    @Override
+    @RequiredReadAction
     public String getName(PsiClass clazz) {
-        final PsiFile file = clazz.getContainingFile();
-        if (!(file instanceof PsiJavaFile)) {
+        if (!(clazz.getContainingFile() instanceof PsiJavaFile javaFile)) {
             return null;
         }
-        return ((PsiJavaFile)file).getClasses().length > 1 ? clazz.getName() + "." + JavaFileType.INSTANCE.getDefaultExtension() : file.getName();
+        return javaFile.getClasses().length > 1
+            ? clazz.getName() + "." + JavaFileType.INSTANCE.getDefaultExtension()
+            : javaFile.getName();
     }
 
     @Override

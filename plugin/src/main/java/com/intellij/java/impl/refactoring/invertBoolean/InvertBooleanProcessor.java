@@ -50,6 +50,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     private final Map<UsageInfo, SmartPsiElementPointer> myToInvert = new HashMap<>();
     private final SmartPointerManager mySmartPointerManager;
 
+    @RequiredReadAction
     public InvertBooleanProcessor(PsiNamedElement namedElement, String newName) {
         super(namedElement.getProject());
         myElement = namedElement;
@@ -83,14 +84,14 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
 
         addRefsToInvert(toInvert, myElement);
 
-        if (myElement instanceof PsiMethod) {
-            Collection<PsiMethod> overriders = OverridingMethodsSearch.search((PsiMethod)myElement).findAll();
+        if (myElement instanceof PsiMethod currentMethod) {
+            Collection<PsiMethod> overriders = OverridingMethodsSearch.search(currentMethod).findAll();
             for (PsiMethod overrider : overriders) {
                 myRenameProcessor.addElement(overrider, myNewName);
             }
 
             Collection<PsiMethod> allMethods = new HashSet<>(overriders);
-            allMethods.add((PsiMethod)myElement);
+            allMethods.add(currentMethod);
 
             for (PsiMethod method : allMethods) {
                 method.accept(new JavaRecursiveElementWalkingVisitor() {
@@ -108,8 +109,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
                 });
             }
         }
-        else if (myElement instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod) {
-            PsiMethod method = (PsiMethod)parameter.getDeclarationScope();
+        else if (myElement instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
             int index = method.getParameterList().getParameterIndex(parameter);
             LOG.assertTrue(index >= 0);
             Query<PsiReference> methodQuery = MethodReferencesSearch.search(method);
@@ -214,18 +214,15 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     private static UsageInfo[] extractUsagesForElement(PsiElement element, UsageInfo[] usages) {
         ArrayList<UsageInfo> extractedUsages = new ArrayList<>(usages.length);
         for (UsageInfo usage : usages) {
-            if (usage instanceof MoveRenameUsageInfo) {
-                MoveRenameUsageInfo usageInfo = (MoveRenameUsageInfo)usage;
-                if (element.equals(usageInfo.getReferencedElement())) {
-                    extractedUsages.add(usageInfo);
-                }
+            if (usage instanceof MoveRenameUsageInfo usageInfo && element.equals(usageInfo.getReferencedElement())) {
+                extractedUsages.add(usageInfo);
             }
         }
         return extractedUsages.toArray(new UsageInfo[extractedUsages.size()]);
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredUIAccess
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         for (PsiElement element : myRenameProcessor.getElements()) {
             try {
