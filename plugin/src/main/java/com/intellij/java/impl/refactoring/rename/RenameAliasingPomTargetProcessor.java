@@ -36,29 +36,30 @@ public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor 
 
     @Override
     public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
-        PomTarget target = null;
+        PomTarget target;
         if (element instanceof PomTargetPsiElement targetPsiElement) {
             target = targetPsiElement.getTarget();
         }
         else if (element instanceof PomTarget pomTarget) {
             target = pomTarget;
         }
+        else {
+            return;
+        }
 
-        if (target != null) {
-            for (AliasingPsiTargetMapper mapper : AliasingPsiTargetMapper.EP_NAME.getExtensions()) {
-                for (AliasingPsiTarget psiTarget : mapper.getTargets(target)) {
-                    PsiElement psiElement = PomService.convertToPsi(psiTarget);
-                    String name = psiTarget.getNameAlias(newName);
+        element.getApplication().getExtensionPoint(AliasingPsiTargetMapper.class).forEach(mapper -> {
+            for (AliasingPsiTarget psiTarget : mapper.getTargets(target)) {
+                PsiElement psiElement = PomService.convertToPsi(psiTarget);
+                String name = psiTarget.getNameAlias(newName);
 
-                    String definedName = allRenames.put(psiElement, name);
-                    if (definedName != null) {
-                        assert definedName.equals(name);
-                    }
-                    else {
-                        prepareRenaming(psiElement, name, allRenames);
-                    }
+                String definedName = allRenames.put(psiElement, name);
+                if (definedName != null) {
+                    assert definedName.equals(name);
+                }
+                else {
+                    prepareRenaming(psiElement, name, allRenames);
                 }
             }
-        }
+        });
     }
 }

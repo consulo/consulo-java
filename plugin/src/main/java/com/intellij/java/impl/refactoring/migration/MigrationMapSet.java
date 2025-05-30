@@ -158,8 +158,7 @@ public class MigrationMapSet {
             }
         }
 
-        PredefinedMigrationProvider.EP_NAME.forEachExtensionSafe(provider ->
-        {
+        Application.get().getExtensionPoint(PredefinedMigrationProvider.class).forEach(provider -> {
             URL migrationMap = provider.getMigrationMap();
             String fileName = new File(migrationMap.getFile()).getName();
             if (myDeletedMaps.contains(FileUtil.getNameWithoutExtension(fileName))) {
