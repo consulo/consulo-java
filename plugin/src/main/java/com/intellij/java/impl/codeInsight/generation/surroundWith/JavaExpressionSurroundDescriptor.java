@@ -21,23 +21,26 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundDescriptor;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-
 import jakarta.annotation.Nonnull;
+import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author ven
  */
 @ExtensionImpl
 public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
+    private final Application myApplication;
     private Surrounder[] mySurrounders = null;
 
     private static final Surrounder[] SURROUNDERS = {
@@ -49,6 +52,11 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
         new JavaWithIfElseExpressionSurrounder(),
         new JavaWithNullCheckSurrounder()
     };
+
+    @Inject
+    public JavaExpressionSurroundDescriptor(Application application) {
+        myApplication = application;
+    }
 
     @Nonnull
     @Override
@@ -69,9 +77,9 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
     @Nonnull
     public Surrounder[] getSurrounders() {
         if (mySurrounders == null) {
-            ArrayList<Surrounder> list = new ArrayList<>();
+            List<Surrounder> list = new ArrayList<>();
             Collections.addAll(list, SURROUNDERS);
-            Collections.addAll(list, JavaExpressionSurrounder.EP_NAME.getExtensions());
+            list.addAll(myApplication.getExtensionList(JavaExpressionSurrounder.class));
             mySurrounders = list.toArray(new Surrounder[list.size()]);
         }
         return mySurrounders;

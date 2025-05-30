@@ -36,7 +36,7 @@ public class TypeMigrationRules {
         myConversionRules = new ArrayList<>(extensions.length + 2);
         myConversionRules.add(new RootTypeConversionRule());
         myConversionRules.add(new DisjunctionTypeConversionRule());
-        ContainerUtil.addAll(myConversionRules, extensions);
+        myConversionRules.addAll(project.getApplication().getExtensionList(TypeConversionRule.class));
         addConversionRuleSettings(new MigrateGetterNameSetting());
     }
 

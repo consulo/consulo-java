@@ -24,6 +24,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
+import consulo.component.extension.ExtensionPoint;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
@@ -144,13 +145,12 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
             return;
         }
 
-        MoveClassToInnerHandler[] handlers = MoveClassToInnerHandler.EP_NAME.getExtensions();
+        ExtensionPoint<MoveClassToInnerHandler> extensionPoint =
+            myProject.getApplication().getExtensionPoint(MoveClassToInnerHandler.class);
 
         List<UsageInfo> usageList = new ArrayList<>(Arrays.asList(usages));
         List<PsiElement> importStatements = new ArrayList<>();
-        for (MoveClassToInnerHandler handler : handlers) {
-            importStatements.addAll(handler.filterImports(usageList, myProject));
-        }
+        extensionPoint.forEach(handler -> importStatements.addAll(handler.filterImports(usageList, myProject)));
 
         usages = usageList.toArray(new UsageInfo[usageList.size()]);
 
@@ -158,13 +158,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         Map<PsiElement, PsiElement> oldToNewElementsMapping = new HashMap<>();
         try {
             for (PsiClass classToMove : myClassesToMove) {
-                PsiClass newClass = null;
-                for (MoveClassToInnerHandler handler : handlers) {
-                    newClass = handler.moveClass(classToMove, myTargetClass);
-                    if (newClass != null) {
-                        break;
-                    }
-                }
+                PsiClass newClass = extensionPoint.computeSafeIfAny(handler -> handler.moveClass(classToMove, myTargetClass));
                 LOG.assertTrue(
                     newClass != null,
                     "There is no appropriate MoveClassToInnerHandler for " + myTargetClass + "; " + classToMove
@@ -173,17 +167,9 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
             }
 
             myNonCodeUsages = CommonMoveUtil.retargetUsages(usages, oldToNewElementsMapping);
-            for (MoveClassToInnerHandler handler : handlers) {
-                handler.retargetNonCodeUsages(oldToNewElementsMapping, myNonCodeUsages);
-            }
-
-            for (MoveClassToInnerHandler handler : handlers) {
-                handler.retargetClassRefsInMoved(oldToNewElementsMapping);
-            }
-
-            for (MoveClassToInnerHandler handler : handlers) {
-                handler.removeRedundantImports(myTargetClass.getContainingFile());
-            }
+            extensionPoint.forEach(handler -> handler.retargetNonCodeUsages(oldToNewElementsMapping, myNonCodeUsages));
+            extensionPoint.forEach(handler -> handler.retargetClassRefsInMoved(oldToNewElementsMapping));
+            extensionPoint.forEach(handler -> handler.removeRedundantImports(myTargetClass.getContainingFile()));
 
             for (PsiClass classToMove : myClassesToMove) {
                 classToMove.delete();
