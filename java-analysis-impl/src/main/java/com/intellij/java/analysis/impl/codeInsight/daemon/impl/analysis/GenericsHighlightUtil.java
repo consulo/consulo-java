@@ -155,18 +155,56 @@ public class GenericsHighlightUtil {
             }
         }
 
-        if (registerIntentions) {
-            HighlightInfo.Builder wrongParamNumberHighlightInfo =
-                checkForWrongNumberOfTypeParameters(typeParameterListOwner, referenceParameterList, javaSdkVersion);
-            if (wrongParamNumberHighlightInfo != null) {
-                return wrongParamNumberHighlightInfo;
+        PsiTypeParameter[] typeParameters = typeParameterListOwner.getTypeParameters();
+        int targetParametersNum = typeParameters.length;
+        int refParametersNum = referenceParameterList == null ? 0 : referenceParameterList.getTypeArguments().length;
+        if (targetParametersNum != refParametersNum && refParametersNum != 0) {
+            LocalizeValue description;
+            if (targetParametersNum == 0) {
+                if (PsiTreeUtil.getParentOfType(referenceParameterList, PsiCall.class) != null
+                    && typeParameterListOwner instanceof PsiMethod method
+                    && (javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_7) || hasSuperMethodsWithTypeParams(method))) {
+                    description = LocalizeValue.empty();
+                }
+                else {
+                    description = JavaErrorLocalize.genericsTypeOrMethodDoesNotHaveTypeParameters(
+                        typeParameterListOwnerCategoryDescription(typeParameterListOwner),
+                        typeParameterListOwnerDescription(typeParameterListOwner)
+                    );
+                }
+            }
+            else {
+                description = JavaErrorLocalize.genericsWrongNumberOfTypeArguments(refParametersNum, targetParametersNum);
+            }
+
+            if (description != LocalizeValue.empty()) {
+                HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(referenceParameterList)
+                    .descriptionAndTooltip(description);
+                if (registerIntentions) {
+                    QuickFixFactory factory = QuickFixFactory.getInstance();
+                    if (typeParameterListOwner instanceof PsiClass psiClass) {
+                        hlBuilder.registerFix(factory.createChangeClassSignatureFromUsageFix(psiClass, referenceParameterList));
+                    }
+
+                    if (referenceParameterList.getParent().getParent() instanceof PsiTypeElement typeElement
+                        && typeElement.getParent() instanceof PsiVariable variable) {
+                        if (targetParametersNum == 0) {
+                            hlBuilder.registerFix(factory.createRemoveTypeArgumentsFix(variable));
+                        }
+                        registerVariableParameterizedTypeFixes(
+                            hlBuilder,
+                            variable,
+                            referenceParameterList,
+                            javaSdkVersion
+                        );
+                    }
+                }
+                return hlBuilder;
             }
         }
 
         // bounds check
-        PsiTypeParameter[] typeParameters = typeParameterListOwner.getTypeParameters();
-        int targetParametersNum = typeParameters.length;
-        int refParametersNum = referenceParameterList == null ? 0 : referenceParameterList.getTypeArguments().length;
         if (targetParametersNum > 0 && refParametersNum != 0) {
             if (inferenceResult != null) {
                 PsiType[] types = inferenceResult.getTypes();
@@ -202,55 +240,6 @@ public class GenericsHighlightUtil {
         }
 
         return null;
-    }
-
-    @Nullable
-    @RequiredReadAction
-    private static HighlightInfo.Builder checkForWrongNumberOfTypeParameters(
-        PsiTypeParameterListOwner typeParameterListOwner,
-        PsiReferenceParameterList referenceParameterList,
-        @Nonnull JavaSdkVersion javaSdkVersion
-    ) {
-        PsiTypeParameter[] typeParameters = typeParameterListOwner.getTypeParameters();
-        int targetParametersNum = typeParameters.length;
-        int refParametersNum = referenceParameterList == null ? 0 : referenceParameterList.getTypeArguments().length;
-        if (targetParametersNum == refParametersNum || refParametersNum == 0) {
-            return null;
-        }
-
-        LocalizeValue description;
-        if (targetParametersNum == 0) {
-            if (PsiTreeUtil.getParentOfType(referenceParameterList, PsiCall.class) != null
-                && typeParameterListOwner instanceof PsiMethod method
-                && (javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_7) || hasSuperMethodsWithTypeParams(method))) {
-                return null;
-            }
-            else {
-                description = JavaErrorLocalize.genericsTypeOrMethodDoesNotHaveTypeParameters(
-                    typeParameterListOwnerCategoryDescription(typeParameterListOwner),
-                    typeParameterListOwnerDescription(typeParameterListOwner)
-                );
-            }
-        }
-        else {
-            description = JavaErrorLocalize.genericsWrongNumberOfTypeArguments(refParametersNum, targetParametersNum);
-        }
-
-        HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
-            .range(referenceParameterList)
-            .descriptionAndTooltip(description);
-        if (typeParameterListOwner instanceof PsiClass psiClass) {
-            hlBuilder.registerFix(QuickFixFactory.getInstance().createChangeClassSignatureFromUsageFix(psiClass, referenceParameterList));
-        }
-
-        if (referenceParameterList.getParent().getParent() instanceof PsiTypeElement typeElem
-            && typeElem.getParent() instanceof PsiVariable variable) {
-            if (targetParametersNum == 0) {
-                hlBuilder.registerFix(QuickFixFactory.getInstance().createRemoveTypeArgumentsFix(variable));
-            }
-            registerVariableParameterizedTypeFixes(hlBuilder, variable, referenceParameterList, javaSdkVersion);
-        }
-        return hlBuilder;
     }
 
     private static boolean hasSuperMethodsWithTypeParams(PsiMethod method) {
