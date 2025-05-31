@@ -27,6 +27,17 @@
 
     <repositories>
         <repository>
+            <id>central</id>
+            <url>https://repo.maven.org/maven2</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
             <id>consulo</id>
             <url>https://maven.consulo.io/repository/snapshots/</url>
             <snapshots>

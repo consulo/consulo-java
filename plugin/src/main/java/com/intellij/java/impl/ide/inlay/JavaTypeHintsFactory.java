@@ -36,13 +36,13 @@ public final class JavaTypeHintsFactory {
             wildcardHint(builder, level, (PsiWildcardType) type);
         }
         else if (type instanceof PsiDisjunctionType) {
-            join(builder,
+            join(
                 ((PsiDisjunctionType) type).getDisjunctions(),
                 t -> typeHint(builder, level, t),
                 () -> builder.text(" | "));
         }
         else if (type instanceof PsiIntersectionType) {
-            join(builder,
+            join(
                 Arrays.asList(((PsiIntersectionType) type).getConjuncts()),
                 t -> typeHint(builder, level, t),
                 () -> builder.text(" & "));
@@ -79,19 +79,19 @@ public final class JavaTypeHintsFactory {
         }
         builder.collapsibleList(
             (b) -> {
-                b.toggleButton((next) -> builder.text("<"));
-                join(builder,
-                    Arrays.asList(classType.getParameters()),
-                    t -> typeHint(builder, level + 1, t),
-                    () -> builder.text(", "));
-                b.toggleButton((next) -> builder.text(">"));
+                b.toggleButton((next) -> next.text("<"));
+                join(
+                    List.of(classType.getParameters()),
+                    t -> typeHint(b, level + 1, t),
+                    () -> b.text(", "));
+
+                b.toggleButton((next) -> next.text(">"));
             },
-            (b) -> b.toggleButton((next) -> builder.text("<...>"))
+            (b) -> b.toggleButton((next) -> next.text("<...>"))
         );
     }
 
-    private static <T> void join(DeclarativePresentationTreeBuilder builder,
-                                 List<T> elements,
+    private static <T> void join(List<T> elements,
                                  Consumer<T> op,
                                  Runnable separator) {
         boolean first = true;
