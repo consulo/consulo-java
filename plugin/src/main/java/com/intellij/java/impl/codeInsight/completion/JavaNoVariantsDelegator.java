@@ -20,6 +20,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.dumb.DumbAware;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
 import consulo.ide.impl.idea.util.CollectConsumer;
@@ -45,7 +46,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
  * @author peter
  */
 @ExtensionImpl(id = "javaBasic2ClassName", order = "before javaMemberName, before javaLegacy, after liveTemplates")
-public class JavaNoVariantsDelegator extends CompletionContributor {
+public class JavaNoVariantsDelegator extends CompletionContributor implements DumbAware {
   @Override
   public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
     if (JavaModuleCompletion.isModuleFile(parameters.getOriginalFile())) {

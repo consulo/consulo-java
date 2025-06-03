@@ -27,20 +27,19 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
-import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressIndicatorProvider;
+import consulo.application.progress.ProgressManager;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
-import consulo.language.psi.stub.IdFilter;
+import consulo.project.DumbService;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 @ExtensionImpl
 public class AllClassesSearchExecutor implements com.intellij.java.indexing.search.searches.AllClassesSearchExecutor {
@@ -55,7 +54,7 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
             return processAllClassesInGlobalScope(globalSearchScope, queryParameters, consumer);
         }
 
-        PsiElement[] scopeRoots = ((LocalSearchScope)scope).getScope();
+        PsiElement[] scopeRoots = ((LocalSearchScope) scope).getScope();
         for (PsiElement scopeRoot : scopeRoots) {
             if (!processScopeRootForAllClasses(scopeRoot, consumer)) {
                 return false;
@@ -94,48 +93,39 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
         Predicate<? super PsiClass> processor
     ) {
         PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
-        for (String name : names) {
+
+        for (final String name : names) {
             ProgressIndicatorProvider.checkCanceled();
-            PsiClass[] classes = MethodUsagesSearcher.resolveInReadAction(project, () -> cache.getClassesByName(name, scope));
-            for (PsiClass psiClass : classes) {
-                ProgressIndicatorProvider.checkCanceled();
-                if (!processor.test(psiClass)) {
-                    return false;
-                }
+            if (!processByName(project, scope, processor, cache, name)) {
+                return false;
             }
         }
         return true;
     }
 
-    public static Project processClassNames(Project project, GlobalSearchScope scope, Predicate<String> consumer) {
-        ProgressIndicator indicator = ProgressIndicatorProvider.getGlobalProgressIndicator();
-
-        MethodUsagesSearcher.resolveInReadAction(
-            project,
-            (Supplier<Void>)() -> {
-                PsiShortNamesCache.getInstance(project).processAllClassNames(
-                    new Predicate<>() {
-                        int i = 0;
-
-                        @Override
-                        public boolean test(String s) {
-                            if (indicator != null && i++ % 512 == 0) {
-                                indicator.checkCanceled();
-                            }
-                            return consumer.test(s);
-                        }
-                    },
-                    scope,
-                    IdFilter.getProjectIdFilter(project, true)
-                );
-                return null;
+    private static boolean processByName(Project project,
+                                         GlobalSearchScope scope,
+                                         Predicate<? super PsiClass> processor,
+                                         PsiShortNamesCache cache,
+                                         String name) {
+        for (PsiClass psiClass : DumbService.getInstance(project).runReadActionInSmartMode(() -> cache.getClassesByName(name, scope))) {
+            ProgressIndicatorProvider.checkCanceled();
+            if (!processor.test(psiClass)) {
+                return false;
             }
-        );
-
-        if (indicator != null) {
-            indicator.checkCanceled();
         }
-        return project;
+        return true;
+    }
+
+    public static boolean processClassNames(Project project, GlobalSearchScope scope, Predicate<String> predicate) {
+        boolean success = DumbService.getInstance(project).runReadActionInSmartMode(() ->
+            PsiShortNamesCache.getInstance(project).processAllClassNames(s -> {
+                ProgressManager.checkCanceled();
+                return predicate.test(s);
+            }, scope, null));
+
+        ProgressManager.checkCanceled();
+        return success;
     }
 
     private static boolean processScopeRootForAllClasses(
