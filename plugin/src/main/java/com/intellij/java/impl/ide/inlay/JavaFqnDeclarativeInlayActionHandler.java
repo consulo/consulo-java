@@ -32,7 +32,7 @@ public class JavaFqnDeclarativeInlayActionHandler implements InlayActionHandler 
         String fqn = actionPayload.getText();
 
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        AppExecutorUtil.getAppExecutorService().submit(() ->
+        AppExecutorUtil.getAppExecutorService().execute(() ->
             ApplicationManager.getApplication().runReadAction(() -> {
                 PsiClass aClass = facade.findClass(fqn, GlobalSearchScope.allScope(project));
                 if (aClass != null) {

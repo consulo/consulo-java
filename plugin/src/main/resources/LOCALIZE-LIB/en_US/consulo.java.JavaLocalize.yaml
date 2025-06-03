@@ -207,14 +207,67 @@ quickfix.family.remove.redundant.parameter:
 inspection.default.annotation.param:
   text: Default annotation parameter value
 nullable.notnull.annotations.panel.title:
-  text: '{0} annotations:'
+    text: '{0} annotations:'
 nullable.notnull.annotations.runtime.instrumentation.tooltip:
-  text: Add runtime assertions for notnull-annotated methods and parameters
+    text: Add runtime assertions for notnull-annotated methods and parameters
 nullable.notnull.configuration.dialog.title:
-  text: Nullable/NotNull Configuration
+    text: Nullable/NotNull Configuration
 nullable.notnull.annotation.used.label:
-  text: 'Annotation used for code generation:'
+    text: 'Annotation used for code generation:'
 notification.navigation.to.overriding.classes:
-  text: Navigation to overriding classes is not possible during index update
+    text: Navigation to overriding classes is not possible during index update
 notification.navigation.to.overriding.methods:
-  text: Navigation to overriding methods is not possible during index update
+    text: Navigation to overriding methods is not possible during index update
+settings.inlay.java.annotations:
+    text: Annotations
+settings.inlay.java.builder.like.methods:
+    text: Builder-like methods
+settings.inlay.java.complex.expressions.binary.functional.array.access.and.other:
+    text: Complex expressions as arguments
+settings.inlay.java.enum.constants:
+    text: Enum constants
+settings.inlay.java.external.annotations:
+    text: External annotations
+settings.inlay.java.inferred.annotations:
+    text: Inferred annotations
+settings.inlay.java.inheritors:
+    text: Inheritors
+settings.inlay.java.implicit.types.local:
+    text: Implicit types
+settings.inlay.java.implicit.types.local.description:
+    text: Local variables declared with the var keyword when the inferred type may not be clear from the right part of the assignment, for example, when using a factory method.
+settings.inlay.java.implicit.types.lambda:
+    text: Lambda types
+settings.inlay.java.implicit.types.lambda.description:
+    text: Show inlay hints for lambda parameter types.
+settings.inlay.java.methods.with.same.named.numbered.parameters:
+    text: Methods with same-named numbered parameters
+settings.inlay.java.new.expressions:
+    text: '''New'' expressions'
+settings.inlay.java.non.literals.in.case.of.multiple.parameters.with.the.same.type:
+    text: Non-literals in case of multiple parameters with the same type
+settings.inlay.java.parameters.with.names.that.are.contained.in.the.method.name:
+    text: Parameters with names that are contained in the method name
+settings.inlay.java.show.hints.for:
+    text: 'Show hints for:'
+settings.inlay.java.show.parameter.hints.for:
+    text: 'Show parameter hints for:'
+settings.inlay.java.show.parameter.hints.when.expression.type.is.clear.description:
+    text: Array initializer, switch, conditional, reference, instance of, assignment, call, qualified, type cast, class object access expressions.
+settings.inlay.java.turn.off.showExternal.annotations:
+    text: Turn off External Annotations
+settings.inlay.java.turn.off.showInferred.annotations:
+    text: Turn off Inferred Annotations
+settings.inlay.java.turn.on.showExternal.annotations:
+    text: Turn on External Annotations
+settings.inlay.java.turn.on.showInferred.annotations:
+    text: Turn on Inferred Annotations
+settings.inlay.java.usages:
+    text: Usages
+java.method.chains.inlay.provider.name:
+    text: Method chains
+inlay.MethodChainsInlayProvider.description:
+    text: Method return types in call chains.
+
+
+

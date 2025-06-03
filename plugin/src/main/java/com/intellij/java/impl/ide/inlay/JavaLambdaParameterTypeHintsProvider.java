@@ -5,6 +5,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.Language;
 import consulo.language.editor.inlay.*;
 import consulo.language.psi.PsiElement;
@@ -29,14 +30,32 @@ public class JavaLambdaParameterTypeHintsProvider implements DeclarativeInlayHin
 
     @Nonnull
     @Override
-    public String getProviderId() {
+    public String getId() {
         return PROVIDER_ID;
     }
 
     @Nonnull
     @Override
-    public LocalizeValue getProviderName() {
-        return LocalizeValue.localizeTODO("Lambda parameter types");
+    public LocalizeValue getName() {
+        return JavaLocalize.settingsInlayJavaImplicitTypesLambda();
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDescription() {
+        return JavaLocalize.settingsInlayJavaImplicitTypesLambdaDescription();
+    }
+
+    @Nonnull
+    @Override
+    public InlayGroup getGroup() {
+        return InlayGroup.TYPES_GROUP;
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getPreviewFileText() {
+        return null;
     }
 
     private static class Collector implements DeclarativeInlayHintsCollector.SharedBypassCollector {

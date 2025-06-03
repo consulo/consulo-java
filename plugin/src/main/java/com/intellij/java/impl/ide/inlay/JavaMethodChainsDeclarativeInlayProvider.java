@@ -8,6 +8,7 @@ import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.Language;
 import consulo.language.editor.inlay.*;
 import consulo.language.editor.inlay.chain.AbstractDeclarativeCallChainProvider;
@@ -30,14 +31,32 @@ public class JavaMethodChainsDeclarativeInlayProvider extends AbstractDeclarativ
 
     @Nonnull
     @Override
-    public  String getProviderId() {
+    public  String getId() {
         return PROVIDER_ID;
     }
 
     @Nonnull
     @Override
-    public LocalizeValue getProviderName() {
-        return LocalizeValue.localizeTODO("Method chains");
+    public LocalizeValue getName() {
+        return JavaLocalize.javaMethodChainsInlayProviderName();
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDescription() {
+        return JavaLocalize.inlayMethodchainsinlayproviderDescription();
+    }
+
+    @Nonnull
+    @Override
+    public InlayGroup getGroup() {
+        return InlayGroup.METHOD_CHAINS_GROUP;
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getPreviewFileText() {
+        return JavaLocalize.inlayprovidersJavaMethodChains();
     }
 
     @Override
@@ -87,10 +106,5 @@ public class JavaMethodChainsDeclarativeInlayProvider extends AbstractDeclarativ
     @Override
     protected boolean isChainUnacceptable(List<ExpressionWithType<PsiType>> list) {
         return false;
-    }
-
-    @Override
-    protected HintFormat getHintFormat() {
-        return new HintFormat(HintColorKind.Default, HintFontSize.ABitSmallerThanInEditor, HintMarginPadding.MarginAndSmallerPadding);
     }
 }
