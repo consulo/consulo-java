@@ -1,7 +1,7 @@
 remote.debug.configuration.description:
-  text: Java Remote debug configuration
+  text: Remote JVM Debug configuration
 remote.debug.configuration.display.name:
-  text: Java Remote
+  text: Remote JVM Debug
 jre.path.is.not.valid.jre.home.error.message:
   text: '''''{0}'''' is not a valid JRE home'
 show.swing.inspector:
