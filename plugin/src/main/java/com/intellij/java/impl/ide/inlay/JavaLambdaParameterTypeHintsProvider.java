@@ -55,7 +55,7 @@ public class JavaLambdaParameterTypeHintsProvider implements DeclarativeInlayHin
     @Nonnull
     @Override
     public LocalizeValue getPreviewFileText() {
-        return null;
+        return JavaLocalize.inlayprovidersJavaImplicitTypesLambda();
     }
 
     private static class Collector implements DeclarativeInlayHintsCollector.SharedBypassCollector {
