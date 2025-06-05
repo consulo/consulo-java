@@ -20,7 +20,6 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -28,25 +27,19 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl(id = "default")
 public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider {
-  @Override
-  public boolean isSynthetic(@Nonnull TypeComponent typeComponent) {
-    return checkIsSynthetic(typeComponent);
-  }
+    @Override
+    public boolean isSynthetic(@Nonnull TypeComponent typeComponent) {
+        if (DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name())) {
+            return true;
+        }
 
-  public static boolean checkIsSynthetic(@Nonnull TypeComponent typeComponent) {
-    String name = typeComponent.name();
-    if (DebuggerUtilsEx.isLambdaName(name)) {
-      return false;
-    } else {
-      if (DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name())) {
-        return true;
-      }
+        VirtualMachine vm = typeComponent.virtualMachine();
+        return vm != null && vm.canGetSyntheticAttribute() ? typeComponent.isSynthetic() : typeComponent.name().contains("$");
     }
-    VirtualMachine machine = typeComponent.virtualMachine();
-    if (machine != null && machine.canGetSyntheticAttribute()) {
-      return typeComponent.isSynthetic();
-    } else {
-      return name.contains("$");
+
+    @Override
+    public boolean isNotSynthetic(TypeComponent typeComponent) {
+        String name = typeComponent.name();
+        return DebuggerUtilsEx.isLambdaName(name);
     }
-  }
 }

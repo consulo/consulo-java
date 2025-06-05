@@ -31,6 +31,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 import consulo.application.dumb.IndexNotReadyException;
+import consulo.component.extension.ExtensionPoint;
 import consulo.dataContext.DataContext;
 import consulo.ide.ServiceManager;
 import consulo.internal.com.sun.jdi.*;
@@ -514,14 +515,18 @@ public abstract class DebuggerUtils {
     @Nonnull
     public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
+    @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isSynthetic(TypeComponent typeComponent) {
-        //noinspection SimplifiableIfStatement
         if (typeComponent == null) {
             return false;
         }
 
-        return Application.get().getExtensionPoint(SyntheticTypeComponentProvider.class)
-            .anyMatchSafe(provider -> provider.isSynthetic(typeComponent));
+        ExtensionPoint<SyntheticTypeComponentProvider> point = Application.get().getExtensionPoint(SyntheticTypeComponentProvider.class);
+        if (point.anyMatchSafe(p -> p.isNotSynthetic(typeComponent))) {
+            return false;
+        }
+
+        return point.anyMatchSafe(provider -> provider.isSynthetic(typeComponent));
     }
 
     public static boolean isInsideSimpleGetter(@Nonnull PsiElement contextElement) {

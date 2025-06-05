@@ -24,5 +24,10 @@ import consulo.internal.com.sun.jdi.TypeComponent;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface SyntheticTypeComponentProvider {
-  boolean isSynthetic(TypeComponent typeComponent);
+    boolean isSynthetic(TypeComponent typeComponent);
+
+    //override this method to prevent other providers treating type component as synthetic
+    default boolean isNotSynthetic(TypeComponent typeComponent) {
+        return false;
+    }
 }

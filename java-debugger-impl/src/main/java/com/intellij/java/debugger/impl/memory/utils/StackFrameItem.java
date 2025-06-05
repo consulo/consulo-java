@@ -96,7 +96,7 @@ public class StackFrameItem {
           if (withVars) {
             if (!DebuggerSettings.getInstance().CAPTURE_VARIABLES) {
               vars = VARS_CAPTURE_DISABLED;
-            } else if (method.isNative() || method.isBridge() || DefaultSyntheticProvider.checkIsSynthetic(method)) {
+            } else if (method.isNative() || method.isBridge() || DebuggerUtils.isSynthetic(method)) {
               vars = VARS_NOT_CAPTURED;
             } else {
               vars = new ArrayList<>();
