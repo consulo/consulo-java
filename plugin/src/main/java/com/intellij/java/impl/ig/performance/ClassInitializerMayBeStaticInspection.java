@@ -26,8 +26,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPoint;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
-import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -76,11 +77,12 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
             if (containingClass == null) {
                 return;
             }
-            for (CantBeStaticCondition addin : JavaExtensionPoints.CANT_BE_STATIC_EP_NAME.getExtensions()) {
-                if (addin.cantBeStatic(initializer)) {
-                    return;
-                }
+            ExtensionPoint<CantBeStaticCondition> cantBeStaticEP =
+                initializer.getApplication().getExtensionPoint(CantBeStaticCondition.class);
+            if (cantBeStaticEP.anyMatchSafe(addin -> addin.cantBeStatic(initializer))) {
+                return;
             }
+
             PsiElement scope = containingClass.getScope();
             if (!(scope instanceof PsiJavaFile) && !containingClass.isStatic()) {
                 return;

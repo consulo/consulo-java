@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -40,6 +41,7 @@ import consulo.language.psi.PsiPackage;
 import consulo.language.psi.resolve.RefResolveService;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import jakarta.annotation.Nonnull;
@@ -87,6 +89,29 @@ public class UnusedSymbolUtil {
         }) || isInjected(project, element);
     }
 
+    @Nonnull
+    @RequiredReadAction
+    public static HighlightInfo.Builder createUnusedSymbolInfo(
+        @Nonnull PsiElement element,
+        @Nonnull LocalizeValue message,
+        @Nonnull HighlightInfoType highlightInfoType
+    ) {
+        HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(highlightInfoType)
+            .range(element)
+            .descriptionAndTooltip(message);
+
+        element.getApplication().getExtensionPoint(UnusedDeclarationFixProvider.class).forEach(provider -> {
+            IntentionAction[] fixes = provider.getQuickFixes(element);
+            for (IntentionAction fix : fixes) {
+                hlBuilder.registerFix(fix);
+            }
+        });
+
+        return hlBuilder;
+    }
+
+    @Deprecated
+    @DeprecationInfo("Use variant with LocalizeValue")
     @Nullable
     @RequiredReadAction
     public static HighlightInfo createUnusedSymbolInfo(
@@ -94,21 +119,7 @@ public class UnusedSymbolUtil {
         @Nonnull String message,
         @Nonnull HighlightInfoType highlightInfoType
     ) {
-        HighlightInfo info = HighlightInfo.newHighlightInfo(highlightInfoType)
-            .range(element)
-            .descriptionAndTooltip(message).create();
-
-        if (info == null) {
-            return null; //filtered out
-        }
-
-        for (UnusedDeclarationFixProvider provider : UnusedDeclarationFixProvider.EP_NAME.getExtensionList()) {
-            IntentionAction[] fixes = provider.getQuickFixes(element);
-            for (IntentionAction fix : fixes) {
-                info.registerFix(fix, null, null, null, null);
-            }
-        }
-        return info;
+        return createUnusedSymbolInfo(element, LocalizeValue.of(message), highlightInfoType).create();
     }
 
     @RequiredReadAction

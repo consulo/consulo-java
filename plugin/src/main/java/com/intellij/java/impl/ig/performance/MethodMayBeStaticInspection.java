@@ -27,9 +27,9 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
+import consulo.component.extension.ExtensionPoint;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
-import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
@@ -98,10 +98,9 @@ public class MethodMayBeStaticInspection extends BaseInspection {
             if (containingClass == null) {
                 return;
             }
-            for (CantBeStaticCondition addin : JavaExtensionPoints.CANT_BE_STATIC_EP_NAME.getExtensions()) {
-                if (addin.cantBeStatic(method)) {
-                    return;
-                }
+            ExtensionPoint<CantBeStaticCondition> cantBeStaticEP = method.getApplication().getExtensionPoint(CantBeStaticCondition.class);
+            if (cantBeStaticEP.anyMatchSafe(addin -> addin.cantBeStatic(method))) {
+                return;
             }
             PsiElement scope = containingClass.getScope();
             if (!(scope instanceof PsiJavaFile) && !containingClass.isStatic()) {
