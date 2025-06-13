@@ -24,11 +24,11 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
-import consulo.application.Application;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
 import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
@@ -49,6 +49,14 @@ import java.util.Map;
  * @author Sascha Weinreuter
  */
 public class ThreadDumpAction extends AnAction {
+    public ThreadDumpAction() {
+        super(
+            JavaDebuggerLocalize.actionThreadDumpText(),
+            JavaDebuggerLocalize.actionThreadDumpDescription(),
+            PlatformIconGroup.actionsDump()
+        );
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
@@ -75,7 +83,7 @@ public class ThreadDumpAction extends AnAction {
                                     DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
                                 }
                             },
-                            Application.get().getNoneModalityState()
+                            project.getApplication().getNoneModalityState()
                         );
                     }
                     finally {
@@ -257,45 +265,29 @@ public class ThreadDumpAction extends AnAction {
     }
 
     private static String threadStatusToJavaThreadState(int status) {
-        switch (status) {
-            case ThreadReference.THREAD_STATUS_MONITOR:
-                return Thread.State.BLOCKED.name();
-            case ThreadReference.THREAD_STATUS_NOT_STARTED:
-                return Thread.State.NEW.name();
-            case ThreadReference.THREAD_STATUS_RUNNING:
-                return Thread.State.RUNNABLE.name();
-            case ThreadReference.THREAD_STATUS_SLEEPING:
-                return Thread.State.TIMED_WAITING.name();
-            case ThreadReference.THREAD_STATUS_WAIT:
-                return Thread.State.WAITING.name();
-            case ThreadReference.THREAD_STATUS_ZOMBIE:
-                return Thread.State.TERMINATED.name();
-            case ThreadReference.THREAD_STATUS_UNKNOWN:
-                return "unknown";
-            default:
-                return "undefined";
-        }
+        return switch (status) {
+            case ThreadReference.THREAD_STATUS_MONITOR -> Thread.State.BLOCKED.name();
+            case ThreadReference.THREAD_STATUS_NOT_STARTED -> Thread.State.NEW.name();
+            case ThreadReference.THREAD_STATUS_RUNNING -> Thread.State.RUNNABLE.name();
+            case ThreadReference.THREAD_STATUS_SLEEPING -> Thread.State.TIMED_WAITING.name();
+            case ThreadReference.THREAD_STATUS_WAIT -> Thread.State.WAITING.name();
+            case ThreadReference.THREAD_STATUS_ZOMBIE -> Thread.State.TERMINATED.name();
+            case ThreadReference.THREAD_STATUS_UNKNOWN -> "unknown";
+            default -> "undefined";
+        };
     }
 
     private static String threadStatusToState(int status) {
-        switch (status) {
-            case ThreadReference.THREAD_STATUS_MONITOR:
-                return "waiting for monitor entry";
-            case ThreadReference.THREAD_STATUS_NOT_STARTED:
-                return "not started";
-            case ThreadReference.THREAD_STATUS_RUNNING:
-                return "runnable";
-            case ThreadReference.THREAD_STATUS_SLEEPING:
-                return "sleeping";
-            case ThreadReference.THREAD_STATUS_WAIT:
-                return "waiting";
-            case ThreadReference.THREAD_STATUS_ZOMBIE:
-                return "zombie";
-            case ThreadReference.THREAD_STATUS_UNKNOWN:
-                return "unknown";
-            default:
-                return "undefined";
-        }
+        return switch (status) {
+            case ThreadReference.THREAD_STATUS_MONITOR -> "waiting for monitor entry";
+            case ThreadReference.THREAD_STATUS_NOT_STARTED -> "not started";
+            case ThreadReference.THREAD_STATUS_RUNNING -> "runnable";
+            case ThreadReference.THREAD_STATUS_SLEEPING -> "sleeping";
+            case ThreadReference.THREAD_STATUS_WAIT -> "waiting";
+            case ThreadReference.THREAD_STATUS_ZOMBIE -> "zombie";
+            case ThreadReference.THREAD_STATUS_UNKNOWN -> "unknown";
+            default -> "undefined";
+        };
     }
 
     public static String renderLocation(Location location) {

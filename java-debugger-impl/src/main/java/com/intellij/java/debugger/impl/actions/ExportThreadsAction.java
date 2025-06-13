@@ -20,6 +20,7 @@ import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.ExportDialog;
 import consulo.platform.Platform;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -41,6 +42,10 @@ import java.io.IOException;
  * @author Jeka
  */
 public class ExportThreadsAction extends AnAction {
+    public ExportThreadsAction() {
+        super(ActionLocalize.actionExportthreadsText(), ActionLocalize.actionExportthreadsDescription(), PlatformIconGroup.actionsExport());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {

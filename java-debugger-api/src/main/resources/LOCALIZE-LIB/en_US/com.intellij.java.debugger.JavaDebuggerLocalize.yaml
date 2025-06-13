@@ -34,6 +34,10 @@ action.show.watches.text.hide:
     text: Hide Watches
 action.show.watches.text.show:
     text: Show Watches
+action.thread.dump.text:
+    text: Get Thread Dump
+action.thread.dump.description:
+    text: Get stacktraces of all the threads within JVM at current moment
 action.watch.method.return.value.description:
     text: Enables watching last executed method return value
 action.watches.method.return.value.disable:
