@@ -1,1016 +1,1020 @@
-evaluation.error.empty.code.fragment:
-  text: Code fragment expected
-evaluation.error.cannot.evaluate.tostring:
-  text: Cannot evaluate {0}.toString()
-evaluation.error.unsupported.expression.type:
-  text: Unsupported expression type
-internal.error.locations.of.line:
-  text: Internal error loading debug information from ''{0}''.  Breakpoints will be unavailable in this class.
-evaluation.error.inconsistent.debug.info:
-  text: Debug information is inconsistent
-evaluation.error.boolean.value.expected.in.condition:
-  text: '''boolean'' value expected in condition'
-evaluation.error.boolean.condition.expected:
-  text: '''''boolean'''' value expected in condition'
-evaluation.error.process.exited:
-  text: 'Cannot evaluate: process exited'
-evaluation.error.stack.frame.unavailable:
-  text: Stack frame unavailable
-evaluation.error.nested.evaluation:
-  text: Evaluation is not supported during another method''s evaluation
-evaluation.error.sources.out.of.sync:
-  text: Sources do not correspond to code being executed
-evaluation.error.cannot.find.stackframe.source:
-  text: Cannot find source class for current stack frame
-evaluation.error.object.collected:
-  text: Object has been collected
-evaluation.error.thread.collected:
-  text: Thread has been collected
-evaluation.error.array.collected:
-  text: Array has been collected
-evaluation.error.thread.resumed:
-  text: Thread has been resumed
-evaluation.error.debug.info.unavailable:
-  text: Debug info unavailable
-evaluation.error.invalid.expression:
-  text: 'Invalid expression : {0}'
-evaluation.error.unknown.expression.type:
-  text: 'Expression type unknown: {0}'
-evaluation.error.unknown.expression.operand:
-  text: 'Expression operand unknown: {0}'
-evaluation.error.type.mismatch:
-  text: Type mismatch
-evaluation.error.class.not.loaded:
-  text: Class ''{0}'' is not loaded
-evaluation.error.thread.not.at.breakpoint:
-  text: 'Cannot evaluate: thread is not paused at breakpoint'
-evaluation.error.method.exception:
-  text: Method threw ''{0}'' exception.
-evaluation.error.surrounded.expression.null:
-  text: Surrounded expression is null
-title.customize.data.views:
-  text: Customize Data Views
-title.evaluating:
-  text: Evaluating...
-error.modification.watchpoints.not.supported:
-  text: Target VM does not support modification watchpoints
-error.native.method.exception:
-  text: None of the frames through and including frame may be native
-error.executing.finally:
-  text: 'Error while executing finally blocks: {0}'
-error.early.return:
-  text: 'Error while doing early return: {0}'
-warning.finally.block.detected:
-  text: 'Non-empty finally blocks detected:'
-button.drop.anyway:
-  text: Do Not Execute
-button.execute.finally:
-  text: Execute Finally Blocks
-drop.frame.error.no.information:
-  text: Information about the frame is not available
-action.remove.watch.text:
-  text: '{0,choice, 1#Remove Watch|2#Remove Watches}'
-progress.evaluating:
-  text: Evaluating {0}
-action.resume.thread.text.resume:
-  text: Resume
-action.resume.thread.text.unfreeze:
-  text: Unfreeze
-action.interrupt.thread.text:
-  text: Interrupt
-title.set.value:
-  text: Set Value
-warning.recalculate:
-  text: The value will be recalculated
-warning.source.code.not.match:
-  text: Source code does not match the bytecode
-progress.set.value:
-  text: Setting value...
 action.add.field.watchpoint.text:
-  text: Add Field Watchpoint
-status.process.started:
-  text: Process started
-status.process.terminated:
-  text: Process terminated
-status.disconnected:
-  text: 'Disconnected from the target VM, address: ''''{0}'''', transport: ''''{1}'''''
-status.stopped.at.cursor:
-  text: Stopped at cursor
-status.line.breakpoint.reached:
-  text: Breakpoint reached at {0}({1}:{2,number,#})
-status.line.breakpoint.reached.full.trace:
-  text: Breakpoint reached at {0}
-export.threads.stackframe.format:
-  text: at {0}({1}:{2,number,#})
-status.generic.breakpoint.reached:
-  text: Breakpoint reached
-status.thread.blocked.by:
-  text: Stepping in thread {0} is blocked by thread {1}
-status.thread.blocked.by.resume:
-  text: <a href="#">Resume {0}</a>
-status.breakpoint.reached.in.thread:
-  text: Breakpoint reached in thread {0}
-status.breakpoint.reached.in.thread.switch:
-  text: <a href="#">Switch thread</a>
-status.method.entry.breakpoint.reached:
-  text: Method ''{0}'' entered at {1}({2}:{3,number,#})
-status.method.exit.breakpoint.reached:
-  text: Method breakpoint reached. Method ''{0}'' is about to exit at {1}({2}:{3,number,#})
-status.exception.breakpoint.reached:
-  text: Exception breakpoint reached
-status.exception.breakpoint.reached.details:
-  text: Exception  ''{0}'' in thread ''{1}''
-status.field.watchpoint.reached:
-  text: Field watchpoint reached
-status.connected:
-  text: 'Connected to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
-status.connect.failed:
-  text: 'Failed to establish connection to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
-error.debugger.already.listening:
-  text: Debugger is already listening
-transport.name.shared.memory:
-  text: shared memory (if avaliable)
-transport.name.socket:
-  text: socket
-error.debug.connector.not.found:
-  text: 'Cannot connect using transport ''''{0}'''': required connector not found. Check your JDK installation.'
-error.no.debug.listen.port:
-  text: The port to listen at unspecified
-error.no.debug.attach.port:
-  text: The port to attach to unspecified
-error.no.shmem.address:
-  text: Shared memory address unspecified
-debugger.jdi.bootstrap.error:
-  text: '{0}. Check your JDK installation.'
-warning.jdk140.unstable:
-  text: |-
-    The debuggee VM version is "1.4.0".
-    J2SDK 1.4.0 documented bugs may cause unstable debugger behavior.
-    We recommend using J2SDK 1.4.0_01 or higher.
-title.jdk140.unstable:
-  text: VM Version Warning
-message.remote.jre.version.mismatch:
-  text: "Target JRE version ({0})\ndoes not match module JDK version ({1}), \nwill use sources from JDK: {2}"
-message.breakpoint.skipped:
-  text: Skipped breakpoint at {0} because it happened inside debugger evaluation
-error.invalid.argument:
-  text: '{0,choice, 1#Invalid argument|2#Invalid arguments}'
-error.vm.disconnected:
-  text: VM disconnected. Target virtual machine closed connection
-error.unknown.host:
-  text: Cannot connect to remote process, host is unknown
-error.cannot.open.debugger.port:
-  text: Unable to open debugger port
-error.exception.while.connecting:
-  text: |-
-    Error connecting to remote process.
-    Exception occurred: {0}
-    Exception message: {1}
-status.waiting.attach:
-  text: 'Debugger is waiting for application to start; debug address: ''''{0}''''; transport: ''''{1}'''''
-status.listening:
-  text: 'Listening to the connection, address: ''''{0}'''', transport: ''''{1}'''''
-status.connecting:
-  text: 'Connecting to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
-status.app.running:
-  text: The application is running
-status.debug.stopped:
-  text: Debug stopped
-status.waiting.evaluation.result:
-  text: Waiting until last debugger command completes
-status.step.out:
-  text: Stepping out
-status.step.into:
-  text: Stepping into
-status.step.over:
-  text: Stepping over
-status.run.to.cursor:
-  text: Run to cursor
-status.process.resumed:
-  text: Process resumed
-status.paused.in.another.thread:
-  text: Paused in another thread
-error.pop.bottom.stackframe:
-  text: Cannot pop bottom frame
-error.pop.stackframe:
-  text: 'An error occurred while popping stack frame: {0}'
-error.class.not.loaded:
-  text: 'Class not loaded : {0}'
-string.file.line.position:
-  text: Class at {0}:{1}
-string.null.context:
-  text: null context
-evaluation.error.array.reference.expected:
-  text: Array reference expected
-evaluation.error.invalid.index.expression:
-  text: Invalid index expression
-evaluation.error.not.rvalue:
-  text: Right part of the assignment is not a value
-evaluation.error.not.lvalue:
-  text: Left part of the assignment is not lvalue
-evaluation.error.incompatible.types:
-  text: Incompatible types for ''{0}'' operation
-evaluation.error.lebeled.loops.not.found:
-  text: No loop statements labeled with label ''{0}''
-evaluation.error.reference.type.expected:
-  text: Reference type expected
-evaluation.error.variable.not.declared:
-  text: Variable ''{0}'' is not declared
-evaluation.error.variable.already.declared:
-  text: Variable ''{0}'' is already declared
-evaluation.error.operation.not.supported:
-  text: Operation ''{0}'' not supported
-evaluation.error.statement.not.supported:
-  text: Statement ''{0}'' not supported
-evaluation.error.incompatible.variable.initializer.type:
-  text: Initializer for ''{0}'' has incompatible type
-evaluation.error.local.variable.missing.from.class.closure:
-  text: Local variable ''{0}'' not found in class closure
-evaluation.error.local.variable.missing:
-  text: Cannot find local variable ''{0}''
-evaluation.error.cannot.resolve.field.class:
-  text: Cannot resolve class containing field ''{0}''
-evaluation.error.cannot.sources.for.field.class:
-  text: Cannot find sources for class containing field ''{0}''
-evaluation.error.identifier.expected:
-  text: Identifier expected instead of ''{0}''
-evaluation.error.qualifier.type.unknown:
-  text: Type is unknown for ''{0}''
-evaluation.error.cannot.evaluate.qualifier:
-  text: Cannot evaluate qualifier ''{0}''
-evaluation.error.method.not.found:
-  text: Method ''{0}'' not found
-evaluation.error.cannot.resolve.class:
-  text: Cannot resolve class ''{0}''
-evaluation.error.invalid.array.dimension.expression:
-  text: 'Invalid expression for array dimension: {0}'
-evaluation.error.multi.dimensional.arrays.creation.not.supported:
-  text: Creation of multi-dimensional arrays not supported
-evaluation.error.anonymous.class.evaluation.not.supported:
-  text: Anonymous class evaluation is not supported
-evaluation.error.lambda.evaluation.not.supported:
-  text: Lambdas evaluation is not supported
-evaluation.error.method.reference.evaluation.not.supported:
-  text: Method reference evaluation is not supported
-evaluation.error.no.static.field:
-  text: 'No such static field: ''''{0}'''''
-evaluation.error.no.instance.field:
-  text: 'No such instance field: ''''{0}'''''
-evaluation.error.class.or.array.expected:
-  text: Class or array type expected while evaluating field ''{0}''
-evaluation.error.evaluating.field:
-  text: 'Error evaluating field : ''''{0}'''''
-evaluation.error.evaluating.method:
-  text: 'Error evaluating method : ''''{0}'''''
-evaluation.error.object.reference.expected:
-  text: Object reference expected
-evaluation.error.no.stackframe:
-  text: 'Cannot evaluate: stack frame unavailable'
-evaluation.error.no.static.method:
-  text: 'No such static method: ''''{0}'''''
-evaluation.error.no.instance.method:
-  text: 'No such instance method: ''''{0}'''''
-evaluation.error.array.type.expected:
-  text: Array type expected
-evaluation.error.array.dimention.numeric.value.expected:
-  text: Numeric value expected as array dimension
-evaluation.error.cannot.evaluate.array.initializer:
-  text: Cannot evaluate array initializer
-evaluation.error.incompatible.array.initializer.type:
-  text: Initializer type is not assignment-compatible with array's component type
-evaluation.error.invalid.array.size:
-  text: Invalid array size
-evaluation.error.cannot.initialize.array:
-  text: Cannot initialize array
-evaluation.error.cannot.evaluate.class.type:
-  text: Cannot evaluate class type
-evaluation.error.cannot.resolve.constructor:
-  text: Cannot resolve constructor ''{0}''
-evaluation.error.this.not.avalilable:
-  text: '''this'' is not available'
-evaluation.error.cannot.cast.null:
-  text: Cannot cast null to ''{0}''
-evaluation.error.cannot.cast.numeric:
-  text: Cannot cast numeric value to ''{0}''
-evaluation.error.cannot.cast.boolean:
-  text: Cannot cast boolean value to ''{0}''
-evaluation.error.cannot.cast.char:
-  text: Cannot cast char value to ''{0}''
-evaluation.error.cannot.cast.object:
-  text: Cannot cast ''{0}'' to ''{1}''
-evaluation.error.numeric.expected:
-  text: Numeric value expected
-evaluation.error.integer.expected:
-  text: Integer value expected
-evaluation.error.boolean.expected:
-  text: Boolean value expected
-status.invalid.breakpoint.out.of.class:
-  text: Breakpoint does not belong to any class
-error.invalid.breakpoint.source.changed:
-  text: Source file changed or found source file does not correspond to the breakpoint''s file
-error.invalid.breakpoint.source.not.found:
-  text: The class {0}, found in the project classpath, has no associated source files
-status.paused:
-  text: Paused
-status.thread.monitor:
-  text: MONITOR
-status.thread.not.started:
-  text: NOT_STARTED
-status.thread.running:
-  text: RUNNING
-status.thread.sleeping:
-  text: SLEEPING
-status.thread.unknown:
-  text: UNKNOWN
-status.thread.wait:
-  text: WAIT
-status.thread.zombie:
-  text: ZOMBIE
-status.thread.undefined:
-  text: UNDEFINED
-string.debugger.runner.description:
-  text: Debug selected configuration
-debugger.runner.start.action.text:
-  text: '&Debug'
-progress.hotswap.scanning.path:
-  text: 'Scanning: {0}'
-progress.hotswap.scanning.classes:
-  text: Scanning for classes to reload...
-progress.hotswap.reloading:
-  text: Reloading classes...
-warning.hotswap.ignored.breakpoints:
-  text: Breakpoints will be ignored for the obsolete version of the method
-error.operation.canceled:
-  text: Operation canceled
-error.operation.not.supported.by.vm:
-  text: Operation not supported by VM
-error.class.def.not.found:
-  text: 'Class definition not found : {0}'
-error.verification.error:
-  text: 'Verification error : {0}'
-error.unsupported.class.version:
-  text: 'Unsupported class version : {0}'
-error.class.format.error:
-  text: 'Class format error : {0}'
-error.class.circularity.error:
-  text: 'Class circularity error : {0}'
-error.exception.while.reloading:
-  text: 'Exception while reloading classes : {0} : {1}'
-status.hotswap.loaded.classes.up.to.date:
-  text: Loaded classes are up to date. Nothing to reload
-error.io.error:
-  text: I/O error
-status.classes.reloaded:
-  text: '{0,number} {0,choice, 0#classes|1#class|2#classes} reloaded'
-status.classes.not.all.versions.reloaded:
-  text: For {0} of {1} {1,choice, 1#class|2#classes} not all versions were reloaded
-error.cannot.create.void.value:
-  text: Cannot create void value
-warning.range.too.big:
-  text: Range specified is too big. {0} needs too much resources to perform requested operation. Are you sure you want to continue?
-title.range.too.big:
-  text: Range Is Too Big
-error.array.renderer.configurable.start.index.less.than.zero:
-  text: Start index is less than 0
-error.array.renderer.configurable.end.index.less.than.start:
-  text: End index is less than start index
-label.array.renderer.configurable.start.index:
-  text: 'Array sta&rt index:'
-label.array.renderer.configurable.end.index:
-  text: 'en&d index:'
-label.array.renderer.configurable.max.count1:
-  text: Show &maximum
-label.array.renderer.configurable.max.count2:
-  text: array elements
-label.base.renderer.configurable.autoscroll:
-  text: Autoscroll to new &local variables
-label.base.renderer.configurable.show.synthetic.fields:
-  text: S&ynthetic fields
-label.base.renderer.configurable.show.val.fields.as.locals:
-  text: $val fields as local &variables
-label.base.renderer.configurable.sort.alphabetically:
-  text: Sort a&lphabetically
-label.base.renderer.configurable.hide.null.array.elements:
-  text: Hide &null elements in arrays and collections
-label.base.renderer.configurable.show.static.fields:
-  text: '&Static fields'
-label.base.renderer.configurable.show.static.final.fields:
-  text: Static &final fields
-label.base.renderer.configurable.show.declared.type:
-  text: Declared &type
-label.base.renderer.configurable.show.fq.names:
-  text: Fully &qualified names
-label.base.renderer.configurable.show.object.id:
-  text: Object &id
-label.base.renderer.configurable.show.hex.value:
-  text: Show hex value for primitives
-label.base.renderer.configurable.show.strings.type:
-  text: Show type for strings
-label.base.renderer.configurable.alternate.view:
-  text: Enable alternative view for Coll&ections classes
-label.base.renderer.configurable.enable.toString:
-  text: 'Enable ''t&oString()'' object view:'
-label.base.renderer.configurable.all.overriding:
-  text: For all classes that override 'toString()' method
-label.base.renderer.configurable.classes.from.list:
-  text: 'For classes from the list:'
-label.compound.renderer.configurable.show.type:
-  text: Show type and object id
-label.compound.renderer.configurable.ondemand:
-  text: On-demand
-label.compound.renderer.configurable.use.default.renderer:
-  text: Use default renderer
-label.compound.renderer.configurable.use.expression:
-  text: 'Use following expression:'
-label.compound.renderer.configurable.use.expression.list:
-  text: 'Use list of expressions:'
-label.compound.renderer.configurable.apply.to:
-  text: 'Apply renderer to objects of type (fully-qualified name):'
-label.compound.renderer.configurable.when.rendering:
-  text: When rendering a node
-label.compound.renderer.configurable.when.expanding:
-  text: When expanding a node
-label.compound.renderer.configurable.test.can.expand:
-  text: 'Test if a node can be expanded (optional):'
-title.compound.renderer.configurable.choose.renderer.reference.type:
-  text: Renderer Reference Type
-text.base.renderer.configurable.no.class.patterns:
-  text: No class patterns configured
-label.compound.renderer.configurable.append.default.children:
-  text: Append default children
-button.add:
-  text: Add
-button.remove:
-  text: '&Remove'
-button.move.up:
-  text: Move &Up
-button.move.down:
-  text: Move &Down
-label.compound.renderer.configurable.table.header.name:
-  text: Name
-label.compound.renderer.configurable.table.header.expression:
-  text: Expression
-label.compound.renderer.configurable.table.header.ondemand:
-  text: On-demand
-label.debugger.hotswap.configurable.hotswap.background:
-  text: Reload classes in &background
-label.debugger.hotswap.configurable.compile.before.hotswap:
-  text: Build project before reloading classes
-label.debugger.hotswap.configurable.enable.vm.hang.warning:
-  text: Enable 'JVM will hang' warning
-label.debugger.hotswap.configurable.reload.classes:
-  text: 'Reload classes after compilation:'
-label.debugger.hotswap.configurable.always:
-  text: '&Always'
-label.debugger.hotswap.configurable.never:
-  text: '&Never'
-label.debugger.hotswap.configurable.ask:
-  text: As&k
-label.debugger.launching.configurable.force.classic.vm:
-  text: Force Class&ic VM for JDK 1.3.x and earlier
-label.debugger.launching.configurable.disable.jit:
-  text: Disable JIT
-label.debugger.launching.configurable.debugger.transport:
-  text: 'Transport:'
-label.debugger.launching.configurable.socket:
-  text: '&Socket'
-label.debugger.launching.configurable.shmem:
-  text: Shared &memory
-label.debugger.general.configurable.show.alternative.source:
-  text: Show alternative source switcher
-label.debugger.general.configurable.kill.immediately:
-  text: Kill the debug process immediately
-label.debugger.general.configurable.skip.synthetic.methods:
-  text: Ski&p synthetic methods
-label.debugger.general.configurable.skip.constructors:
-  text: Skip &constructors
-label.debugger.general.configurable.skip.classLoaders:
-  text: Skip class l&oaders
-label.debugger.general.configurable.skip.simple.getters:
-  text: Skip simple &getters
-label.debugger.general.configurable.step.filters.list.header:
-  text: Do not step &into the classes
-label.debugger.general.configurable.evaluate.finally.on.pop:
-  text: 'Evaluate finally blocks on pop frame and early return:'
-label.debugger.general.configurable.evaluate.finally.always:
-  text: '&Always'
-label.debugger.general.configurable.evaluate.finally.never:
-  text: N&ever
-label.debugger.general.configurable.evaluate.finally.ask:
-  text: As&k
-label.debugger.general.configurable.resume.only.current.thread:
-  text: Resume only the current thread
-label.threads.view.configurable.show.source.file.name:
-  text: Show source file name
-label.threads.view.configurable.show.class.name:
-  text: Show class name
-label.threads.view.configurable.show.package:
-  text: Show package name
-label.threads.view.configurable.show.line.number:
-  text: Show &line number
-label.threads.view.configurable.current.thread.on.top:
-  text: Move current thread to the top
-label.threads.view.configurable.show.stack.frames.for.synthetic.methods:
-  text: Show stack &frames for synthetic methods
-label.threads.view.configurable.show.thread.groups:
-  text: Show thread &groups
-label.capture.configurable.capture.variables:
-  text: Capture local variables (may greatly slow down the execution)
-threads.view.configurable.display.name:
-  text: Customize Threads View
-user.renderers.configurable.display.name:
-  text: Java Type Renderers
-async.stacktraces.configurable.display.name:
-  text: Async Stacktraces
-label.user.renderers.configurable.renderer.name:
-  text: 'Renderer name:'
-text.user.renderers.configurable.no.renderers:
-  text: No renderers
-button.copy:
-  text: Copy
-user.renderers.configurable.button.description.add:
-  text: Add new renderer
-user.renderers.configurable.button.description.remove:
-  text: Remove selected renderer
-user.renderers.configurable.button.description.copy:
-  text: Copy selected renderer
-user.renderers.configurable.button.description.move.up:
-  text: Move renderer Up
-user.renderers.configurable.button.description.move.down:
-  text: Move renderer Down
-label.complete.input.dialog.expression:
-  text: Enter the expression
-debugger.session.tab.threads.title:
-  text: Threads
-debugger.session.tab.log.content.name:
-  text: 'Log: {0}'
-debugger.session.tab.watches.title.with.size:
-  text: Watches ({0})
-button.close.no.mnemonic:
-  text: Close
-button.evaluate:
-  text: E&valuate
-threads.export.dialog.title:
-  text: Export Threads
-button.save:
-  text: Save
-label.threads.export.dialog.file:
-  text: 'Export to file:'
-error.threads.export.dialog.file.is.directory:
-  text: |-
-    The specified file is a directory.
-    Please specify a correct file name.
-error.threads.export.dialog.file.already.exists:
-  text: |-
-    The file
-    ''{0}''
-    already exists. Would you like to overwrite it?
-threads.export.attribute.label.daemon:
-  text: daemon
-threads.export.attribute.label.group:
-  text: in group ''{0}''
-threads.export.attribute.label.status:
-  text: 'status: ''''{0}'''''
-threads.export.attribute.label.priority:
-  text: prio={0}
-threads.export.attribute.label.tid:
-  text: tid=0x{0}
-threads.export.attribute.label.nid:
-  text: nid={0}
-threads.export.attribute.label.blocks.thread:
-  text: blocks {0}
-threads.export.attribute.label.waiting.for.thread:
-  text: waiting for {0} to release lock on {1}
-threads.export.attribute.label.locked:
-  text: locked {0}
-threads.export.attribute.label.object.id:
-  text: <0x{0}> (a {1})
-threads.export.attribute.error.incompatible.state:
-  text: 'Incompatible thread state: thread not suspended'
-export.dialog.copy.action.description:
-  text: '&Copy text to clipboard'
-evaluate.expression.dialog.title:
-  text: Expression Evaluation
-label.evaluate.dialog.language:
-  text: 'Language:'
-label.evaluate.dialog.expression:
-  text: '&Expression:'
-label.evaluate.dialog.result:
-  text: '&Result:'
-action.evaluate.expression.dialog.switch.mode.description:
-  text: Code Fragment &Mode
-label.generic.debugger.parameters.patcher.configurable.shmem:
-  text: Shared &memory
-label.generic.debugger.parameters.patcher.configurable.socket:
-  text: '&Socket'
-button.debugger.settings:
-  text: Debugger Settings...
-label.generic.debugger.parameters.patcher.configurable.transport:
-  text: 'Transport:'
-label.generic.debugger.parameters.patcher.configurable.shmem.address:
-  text: 'Shared memory address:'
-get.jpda.dialog.title:
-  text: JPDA Libraries Missing
-label.get.jpda.dialog.prompt:
-  text: To get JPDA libraries please visit
-label.get.jpda.dialog.error.description:
-  text: 'Cannot start debugger: debug libraries are missig from JDK home'
-progress.hot.swap.title:
-  text: Hot Swap
-status.hot.swap.completed.with.errors:
-  text: Hot Swap failed.
-status.hot.swap.completed.restart:
-  text: <a href="restart">Restart debug session</a>
-status.hot.swap.completed.stop:
-  text: <a href="stop">Stop debug session</a>
-status.hot.swap.completed.with.warnings:
-  text: Hot Swap completed with warnings
-label.generic.debugger.parameters.patcher.configurable.port:
-  text: 'Port:'
-status.hotswap.uptodate:
-  text: Loaded classes are up to date. Nothing to reload.
-add.instance.filter.dialog.title:
-  text: Add Instance Filter
-add.instance.filter.dialog.prompt:
-  text: 'Enter instance ID:'
-add.instance.filter.dialog.error.numeric.value.expected:
-  text: Instance ID should be a numeric value of type 'long'
-position.highlighter.stripe.tooltip:
-  text: Execution line
-hotswap.dialog.title.with.session:
-  text: Reload Changed Classes for {0}
-hotswap.dialog.title:
-  text: Reload Changed Classes
-hotswap.dialog.run.prompt:
-  text: Some classes have been changed. Reload changed classes now?
-hotswap.dialog.hang.warning:
-  text: |-
-    JVM is currently suspended.
-    Reloading classes with active third-party JVM agents may cause the JVM to hang.
-hotswap.dialog.hang.question:
-  text: Would you like to reload changed classes anyway?
-evaluate.statement.dialog.title:
-  text: Code Fragment Evaluation
-label.evaluation.dialog.statements:
-  text: 'Statements to &evaluate:'
-action.evaluate.statement.dialog.switch.mode.description:
-  text: Expression &Mode
-label.add.field.breakpoint.dialog.fq.name:
-  text: 'Fully qualified name of a class:'
-label.add.field.breakpoint.dialog.field.name:
-  text: 'Field name:'
-add.field.breakpoint.dialog.title:
-  text: Add Field Watchpoint
-add.field.breakpoint.dialog.classchooser.title:
-  text: Choose Field's class
-add.field.breakpoint.dialog.field.chooser.title:
-  text: '{0,choice, 0#Class has no fields|1#Select Field}'
-breakpoint.any.exception.display.name:
-  text: Any exception
-breakpoint.log.message:
-  text: '"reached {0}"'
-action.enable.text:
-  text: Enable
-action.disable.text:
-  text: Disable
-breakpoint.manager.action.view.breakpoints.text:
-  text: View Breakpoints
-action.remove.text:
-  text: Remove
-value.none:
-  text: <None>
-breakpoint.table.header.column.enabled:
-  text: Enabled
-breakpoint.table.header.column.name:
-  text: Name
-default.package.name:
-  text: <Default>
-class.filters.dialog.title:
-  text: Class Filters
-class.filters.dialog.inclusion.filters.group:
-  text: Class Filters
-class.filters.dialog.exclusion.filters.group:
-  text: Class Exclusion Filters
-instance.filters.dialog.title:
-  text: Instance Filters
-instance.filters.dialog.instance.filters.group:
-  text: Instance Filters
-breakpoint.exception.breakpoint.display.name:
-  text: '''''{0}'''''
-exception.breakpoints.tab.title:
-  text: Java Exception Breakpoints
-field.watchpoints.tab.title:
-  text: Java Field Watchpoints
-line.breakpoints.tab.title:
-  text: Java Line Breakpoints
-method.breakpoints.tab.title:
-  text: Java Method Breakpoints
-method.breakpoints.slowness.warning:
-  text: Method breakpoints may dramatically slow down debugging
-title.error.evaluating.breakpoint.condition:
-  text: Breakpoint Condition Error
-title.error.evaluating.breakpoint.action:
-  text: Breakpoint Action Error
-error.evaluating.breakpoint.condition.or.action:
-  text: |-
-    Problem processing VM event:
-    Breakpoint: ''{0}''
-    Error: {1}
-    Would you like to stop at the breakpoint?
-error.unable.to.evaluate.expression:
-  text: Unable to evaluate the expression
-error.unable.to.evaluate.capture.expression:
-  text: 'Unable to evaluate capture key expression: {0}'
-error.unable.to.evaluate.insert.expression:
-  text: 'Unable to evaluate insert key expression: {0}'
-breakpoint.properties.panel.option.pass.count:
-  text: '&Pass count:'
-breakpoint.properties.panel.option.class.filters:
-  text: 'C&lass filters:'
-breakpoint.properties.panel.option.instance.filters:
-  text: '&Instance filters:'
-breakpoint.properties.panel.option.condition:
-  text: 'Co&ndition:'
-breakpoint.properties.panel.option.suspend.all:
-  text: All
-breakpoint.properties.panel.option.suspend.none:
-  text: None
-breakpoint.properties.panel.option.suspend.thread:
-  text: Thread
-breakpoint.properties.panel.option.log.expression:
-  text: Log evaluated &expression
-breakpoint.properties.panel.option.depends.on:
-  text: 'Depends on:'
-breakpoint.properties.panel.option.log.message:
-  text: Log &message to console
-breakpoint.warning:
-  text: 'Warning : {0}'
-breakpoint.property.name.suspend.policy:
-  text: Suspend
-breakpoint.property.name.log.message:
-  text: Log message
-breakpoint.property.name.log.expression:
-  text: Log expression
-breakpoint.property.name.condition:
-  text: Condition
-breakpoint.property.name.pass.count:
-  text: Pass count
-breakpoint.property.name.class.filters:
-  text: Class filters
-breakpoint.property.name.instance.filters:
-  text: 'Instance filters:'
-breakpoint.tooltip.text:
-  text: Breakpoint at line {0}
-error.absent.exception.breakpoint.class.name:
-  text: No class name for exception breakpoint
-exception.breakpoint.console.message.location.info:
-  text: '{0}:{1,number,#}'
-exception.breakpoint.console.message.location.info.absent:
-  text: No Debug Info
-exception.breakpoint.console.message.with.thread.info:
-  text: Exception ''{0}'' occurred in thread ''{1}'' at {2}({3})
-exception.breakpoint.console.message:
-  text: Exception ''{0}'' occurred at {1}({2})
-add.exception.breakpoint.classchooser.title:
-  text: Enter Exception Class
-label.exception.breakpoint.properties.panel.caught.exception:
-  text: Caught exceptio&n
-label.exception.breakpoint.properties.panel.uncaught.exception:
-  text: Uncaught excepti&on
-label.exception.breakpoint.properties.panel.group.notifications:
-  text: Notifications
-error.invalid.breakpoint.missing.field.in.class:
-  text: Cannot find field ''{0}'' in  class ''{1}''
-status.breakpoint.invalid:
-  text: INVALID
-error.field.breakpoint.class.name.not.specified:
-  text: 'Cannot add watchpoint: a class name is not specified'
-error.field.breakpoint.field.name.not.specified:
-  text: 'Cannot add watchpoint: a field name is not specified'
-error.field.breakpoint.field.not.found:
-  text: |-
-    Cannot create a field watchpoint for ''{0}.{1}''.
-    Field ''{2}'' not found
-error.field.breakpoint.class.sources.not.found:
-  text: |-
-    Cannot create a field watchpoint for ''{0}.{1}''.
-    No sources for class ''{2}''
-label.filed.breakpoint.properties.panel.field.access:
-  text: Field acce&ss
-label.filed.breakpoint.properties.panel.field.modification:
-  text: Field &modification
-label.group.watch.events:
-  text: Watch
-error.failed.evaluating.breakpoint.condition:
-  text: |-
-    Failed to evaluate breakpoint condition
-    ''{0}''
-    Reason: {1}
-error.invalid.breakpoint.no.executable.code:
-  text: No executable code found at line {0} in class {1}
-error.invalid.breakpoint.no.line.info:
-  text: Line numbers info is not available in class {0}
-error.invalid.breakpoint.bad.line.number:
-  text: Line number is invalid
-line.breakpoint.display.name:
-  text: Line {0}
-line.breakpoint.display.name.with.class.or.method:
-  text: Line {0,number,#} in {1}
-error.invalid.breakpoint.method.not.found:
-  text: Method not found in class {0}
-label.method.breakpoints.processing.classes:
-  text: Processing classes for emulated method breakpoints
-label.method.breakpoints.setting.breakpoints:
-  text: Setting emulated method breakpoints
-label.method.breakpoint.properties.panel.method.entry:
-  text: Method entr&y
-label.method.breakpoint.properties.panel.method.exit:
-  text: Method e&xit
-label.method.breakpoint.properties.panel.emulated:
-  text: Em&ulated
-button.switch.view:
-  text: S&witch View
-button.list.view:
-  text: List View
-button.tree.view:
-  text: Tree View
-button.flatten.packages:
-  text: '&Flatten packages'
-button.group.by.classes:
-  text: Group by cl&asses
-button.group.by.methods:
-  text: Group by me&thods
-error.cannot.build.node.children.object.collected:
-  text: Cannot evaluate descendants, object was collected. {0}
-error.invalid.field.name:
-  text: Invalid field name ''{0}''
-label.unknown.value:
-  text: <unknown>
-message.node.debug.info.not.available:
-  text: Debug info not available
-message.node.local.variables.debug.info.not.available:
-  text: Variables debug info not available
-message.node.local.variables.not.captured:
-  text: Local variables are not captured for synthetic, bridge etc. methods
-message.node.local.variables.capture.disabled:
-  text: Local variables were not captured, you can change it in
-message.node.elements.null.hidden:
-  text: Not showing null elements
-message.node.all.array.elements.null:
-  text: All elements in range ({0}, {1}) are null
-message.node.all.elements.null:
-  text: All elements are null
-message.node.filtered:
-  text: 'Filtered by:'
-message.node.empty.array:
-  text: Empty
-message.node.class.has.no.fields:
-  text: Class has no fields
-message.node.class.no.fields.to.display:
-  text: No fields to display
-message.node.object.collected:
-  text: Object has been garbage collected during method invocation
-message.node.thread.running:
-  text: Thread is running
-message.node.thread.has.no.frames:
-  text: Thread has no frames
-message.node.evaluation.not.possible:
-  text: Target VM is not paused by breakpoint request. Evaluation of methods is not possible in this mode
-message.node.show.image:
-  text: … Show image
-message.node.show.icon:
-  text: … Show icon
-message.node.navigate:
-  text: … Navigate
-message.node.toString:
-  text: … toString()
-message.node.evaluate:
-  text: … Evaluate
-label.thread.node.thread.collected:
-  text: Thread ''{0}'' has been garbage-collected
-label.thread.node:
-  text: '"{0}"@{1}: {2}'
-label.thread.node.in.group:
-  text: '"{0}"@{1} in group "{3}": {2}'
-label.thread.group.node.group.collected:
-  text: Thread Group "{0}" has been garbage-collected
-label.thread.group.node:
-  text: Thread Group "{0}"@{1}
-evaluation.error.objref.expected:
-  text: Object reference expected instead of{0}
-evaluation.error.invalid.type.name:
-  text: 'Invalid type name: ''''{0}'''''
-label.undefined:
-  text: undefined
-label.node.descendands.expression:
-  text: 'Node &descendands expression:'
-node.has.descendands.expression.optional:
-  text: '''Node &has descendands'' expression (optional):'
-label.class.label.expression.configurable.node.label:
-  text: Node label expression
-label.named.children.configurable.node.descendants:
-  text: 'Node de&scendants:'
-label.named.children.configurable.table.header.column.name:
-  text: Name
-label.named.children.configurable.table.header.column.expression:
-  text: Expression
-error.running.to.cursor.no.executable.code:
-  text: There is no executable code at {0}:{1}
-evaluation.error.local.variable.declarations.not.supported:
-  text: Local variable declarations are not supported here.
-evaluation.error.unsupported.declaration:
-  text: 'Invalid declaration : {0} Only local variable declarations are supported.'
-error.jdk.not.specified:
-  text: JDK is not specified
-error.unsupported.jdk.version:
-  text: Debugging is not supported for JDK {0}
-error.invalid.jdk.home:
-  text: Invalid JDK home directory specified.{0}
-error.debug.libraries.missing:
-  text: Debug libraries are missig from JDK home.nIn order for debugger to start, the libraries should be installed.nPlease visit http://java.sun.com/products/jpda
-error.field.not.found.in.class:
-  text: No such field {0} in {1}
-error.breakpoint.file.not.found:
-  text: File ''{0}'' not found; breakpoints for this file will be ignored
-error.cannot.load.breakpoint.file:
-  text: Cannot load file ''{0}''; breakpoints for this file will be ignored
-evaluation.error.invalid.this.expression:
-  text: Cannot substitute ''{0}'' into ''{1}'' as ''this''
-error.invalid.type.name:
-  text: Invalid type name ''{0}''
-error.cannot.create.expression.from.code.fragment:
-  text: Cannot create expression from code fragment.
-error.invalid.local.variable.name:
-  text: Invalid local variable name ''{0}''
-error.inconsistent.debug.info:
-  text: Inconsistent debug information
-error.invalid.stackframe:
-  text: Internal exception - invalid stackframe
-label.breakpoint.properties.panel.group.conditions:
-  text: Filters
-label.breakpoint.properties.panel.group.actions:
-  text: Actions
-label.breakpoint.properties.panel.group.suspend.policy:
-  text: Suspend policy
-active.tooltip.title:
-  text: Evaluation of {0}
-active.tooltip.suggestion:
-  text: Click here to view object tree
-error.text.invalid.port:
-  text: Port is not specified
-error.cannot.invoke.method.in.collected.thread:
-  text: 'Cannot invoke method: the invocation thread has been collected'
-title.smart.step.popup:
-  text: Method to Step Into
-action.show.watches.description:
-  text: Shows or hides 'watches' pane
-action.show.watches.text.hide:
-  text: Hide Watches
-action.show.watches.text.show:
-  text: Show Watches
-action.watch.method.return.value.description:
-  text: Enables watching last executed method return value
-action.watches.method.return.value.enable:
-  text: Show Method Return Values
-action.watches.method.return.value.disable:
-  text: Stop watching method return values
-action.watches.method.return.value.unavailable.reason:
-  text: Feature is not supported by the target VM
+    text: Add Field Watchpoint
 action.auto.variables.mode:
-  text: Auto-Variables Mode
+    text: Auto-Variables Mode
 action.auto.variables.mode.description:
-  text: Show only variables used near the execution point
-action.maximizeContent.text:
-  text: ''
-breakpoint.properties.panel.option.depends.disable.again:
-  text: Disable again
-breakpoint.properties.panel.option.depends.leave.enabled:
-  text: Leave enabled
-breakpoint.properties.panel.option.dependency.type.lable:
-  text: 'After breakpoint was hit:'
-watchs.add.text:
-  text: Add to watches
-breakpoint.properties.panel.option.suspend.default:
-  text: Make De&fault
-frame.panel.frames.not.available:
-  text: Frames not available for unsuspended thread
-error.corrupt.debug.info:
-  text: 'Debug info might be corrupt: {0}'
-action.kill.process.text:
-  text: Kill Process
+    text: Show only variables used near the execution point
+action.disable.text:
+    text: Disable
+action.enable.text:
+    text: Enable
+action.evaluate.expression.dialog.switch.mode.description:
+    text: Code Fragment &Mode
+action.evaluate.statement.dialog.switch.mode.description:
+    text: Expression &Mode
+action.interrupt.thread.text:
+    text: Interrupt
 action.kill.process.description:
-  text: Forcibly terminate debugged application
-evaluation.error.unknown.method.return.type:
-  text: 'Cannot resolve method return type: {0}'
-rule.name.group.by.class:
-  text: Group by class
-rule.name.group.by.package:
-  text: Group by package
-error.context.has.changed:
-  text: Context has changed, operation is not possible
-editor.notification.alternative.source:
-  text: Alternative source available for the class {0}
-label.threads.view.configurable.show.prams.types:
-  text: Show method arguments types
+    text: Forcibly terminate debugged application
+action.kill.process.text:
+    text: Kill Process
+action.maximizeContent.text:
+    text: ''
+action.remove.text:
+    text: Remove
+action.remove.watch.text:
+    text: '{0,choice, 1#Remove Watch|2#Remove Watches}'
+action.resume.thread.text.resume:
+    text: Resume
+action.resume.thread.text.unfreeze:
+    text: Unfreeze
+action.show.watches.description:
+    text: Shows or hides 'watches' pane
+action.show.watches.text.hide:
+    text: Hide Watches
+action.show.watches.text.show:
+    text: Show Watches
+action.thread.dump.text:
+    text: Get Thread Dump
+action.thread.dump.description:
+    text: Get stacktraces of all the threads within JVM at current moment
+action.watch.method.return.value.description:
+    text: Enables watching last executed method return value
+action.watches.method.return.value.disable:
+    text: Stop watching method return values
+action.watches.method.return.value.enable:
+    text: Show Method Return Values
+action.watches.method.return.value.unavailable.reason:
+    text: Feature is not supported by the target VM
+active.tooltip.suggestion:
+    text: Click here to view object tree
+active.tooltip.title:
+    text: Evaluation of {0}
+add.exception.breakpoint.classchooser.title:
+    text: Enter Exception Class
+add.field.breakpoint.dialog.classchooser.title:
+    text: Choose Field's class
+add.field.breakpoint.dialog.field.chooser.title:
+    text: '{0,choice, 0#Class has no fields|1#Select Field}'
+add.field.breakpoint.dialog.title:
+    text: Add Field Watchpoint
+add.instance.filter.dialog.error.numeric.value.expected:
+    text: Instance ID should be a numeric value of type 'long'
+add.instance.filter.dialog.prompt:
+    text: 'Enter instance ID:'
+add.instance.filter.dialog.title:
+    text: Add Instance Filter
+async.stacktraces.configurable.display.name:
+    text: Async Stacktraces
+breakpoint.any.exception.display.name:
+    text: Any exception
+breakpoint.exception.breakpoint.display.name:
+    text: '''''{0}'''''
+breakpoint.log.message:
+    text: '"reached {0}"'
+breakpoint.manager.action.view.breakpoints.text:
+    text: View Breakpoints
 breakpoint.properties.panel.option.catch.class.filters:
-  text: 'Catch class filters:'
+    text: 'Catch class filters:'
+breakpoint.properties.panel.option.class.filters:
+    text: 'C&lass filters:'
+breakpoint.properties.panel.option.condition:
+    text: 'Co&ndition:'
+breakpoint.properties.panel.option.dependency.type.lable:
+    text: 'After breakpoint was hit:'
+breakpoint.properties.panel.option.depends.disable.again:
+    text: Disable again
+breakpoint.properties.panel.option.depends.leave.enabled:
+    text: Leave enabled
+breakpoint.properties.panel.option.depends.on:
+    text: 'Depends on:'
+breakpoint.properties.panel.option.instance.filters:
+    text: '&Instance filters:'
+breakpoint.properties.panel.option.log.expression:
+    text: Log evaluated &expression
+breakpoint.properties.panel.option.log.message:
+    text: Log &message to console
+breakpoint.properties.panel.option.pass.count:
+    text: '&Pass count:'
+breakpoint.properties.panel.option.suspend.all:
+    text: All
+breakpoint.properties.panel.option.suspend.default:
+    text: Make De&fault
+breakpoint.properties.panel.option.suspend.none:
+    text: None
+breakpoint.properties.panel.option.suspend.thread:
+    text: Thread
+breakpoint.property.name.class.filters:
+    text: Class filters
+breakpoint.property.name.condition:
+    text: Condition
+breakpoint.property.name.instance.filters:
+    text: 'Instance filters:'
+breakpoint.property.name.log.expression:
+    text: Log expression
+breakpoint.property.name.log.message:
+    text: Log message
+breakpoint.property.name.pass.count:
+    text: Pass count
+breakpoint.property.name.suspend.policy:
+    text: Suspend
+breakpoint.table.header.column.enabled:
+    text: Enabled
+breakpoint.table.header.column.name:
+    text: Name
+breakpoint.tooltip.text:
+    text: Breakpoint at line {0}
+breakpoint.warning:
+    text: 'Warning : {0}'
+button.add:
+    text: Add
+button.close.no.mnemonic:
+    text: Close
+button.copy:
+    text: Copy
+button.debugger.settings:
+    text: Debugger Settings...
+button.drop.anyway:
+    text: Do Not Execute
+button.evaluate:
+    text: E&valuate
+button.execute.finally:
+    text: Execute Finally Blocks
+button.flatten.packages:
+    text: '&Flatten packages'
+button.group.by.classes:
+    text: Group by cl&asses
+button.group.by.methods:
+    text: Group by me&thods
+button.list.view:
+    text: List View
+button.move.down:
+    text: Move &Down
+button.move.up:
+    text: Move &Up
+button.remove:
+    text: '&Remove'
+button.save:
+    text: Save
+button.switch.view:
+    text: S&witch View
+button.tree.view:
+    text: Tree View
+class.filters.dialog.exclusion.filters.group:
+    text: Class Exclusion Filters
+class.filters.dialog.inclusion.filters.group:
+    text: Class Filters
+class.filters.dialog.title:
+    text: Class Filters
+debugger.jdi.bootstrap.error:
+    text: '{0}. Check your JDK installation.'
+debugger.runner.start.action.text:
+    text: '&Debug'
+debugger.session.tab.log.content.name:
+    text: 'Log: {0}'
+debugger.session.tab.threads.title:
+    text: Threads
+debugger.session.tab.watches.title.with.size:
+    text: Watches ({0})
+default.package.name:
+    text: <Default>
+drop.frame.error.no.information:
+    text: Information about the frame is not available
+editor.notification.alternative.source:
+    text: Alternative source available for the class {0}
+error.absent.exception.breakpoint.class.name:
+    text: No class name for exception breakpoint
+error.array.renderer.configurable.end.index.less.than.start:
+    text: End index is less than start index
+error.array.renderer.configurable.start.index.less.than.zero:
+    text: Start index is less than 0
+error.breakpoint.file.not.found:
+    text: File ''{0}'' not found; breakpoints for this file will be ignored
+error.cannot.build.node.children.object.collected:
+    text: Cannot evaluate descendants, object was collected. {0}
+error.cannot.create.expression.from.code.fragment:
+    text: Cannot create expression from code fragment.
+error.cannot.create.void.value:
+    text: Cannot create void value
+error.cannot.invoke.method.in.collected.thread:
+    text: 'Cannot invoke method: the invocation thread has been collected'
+error.cannot.load.breakpoint.file:
+    text: Cannot load file ''{0}''; breakpoints for this file will be ignored
+error.cannot.open.debugger.port:
+    text: Unable to open debugger port
+error.class.circularity.error:
+    text: 'Class circularity error : {0}'
+error.class.def.not.found:
+    text: 'Class definition not found : {0}'
+error.class.format.error:
+    text: 'Class format error : {0}'
+error.class.not.loaded:
+    text: 'Class not loaded : {0}'
+error.context.has.changed:
+    text: Context has changed, operation is not possible
+error.corrupt.debug.info:
+    text: 'Debug info might be corrupt: {0}'
+error.debug.connector.not.found:
+    text: 'Cannot connect using transport ''''{0}'''': required connector not found. Check your JDK installation.'
+error.debug.libraries.missing:
+    text: Debug libraries are missig from JDK home.nIn order for debugger to start, the libraries should be installed.nPlease visit http://java.sun.com/products/jpda
+error.debugger.already.listening:
+    text: Debugger is already listening
+error.early.return:
+    text: 'Error while doing early return: {0}'
+error.evaluating.breakpoint.condition.or.action:
+    text: |-
+        Problem processing VM event:
+        Breakpoint: ''{0}''
+        Error: {1}
+        Would you like to stop at the breakpoint?
+error.exception.while.connecting:
+    text: |-
+        Error connecting to remote process.
+        Exception occurred: {0}
+        Exception message: {1}
+error.exception.while.reloading:
+    text: 'Exception while reloading classes : {0} : {1}'
+error.executing.finally:
+    text: 'Error while executing finally blocks: {0}'
+error.failed.evaluating.breakpoint.condition:
+    text: |-
+        Failed to evaluate breakpoint condition
+        ''{0}''
+        Reason: {1}
+error.field.breakpoint.class.name.not.specified:
+    text: 'Cannot add watchpoint: a class name is not specified'
+error.field.breakpoint.class.sources.not.found:
+    text: |-
+        Cannot create a field watchpoint for ''{0}.{1}''.
+        No sources for class ''{2}''
+error.field.breakpoint.field.name.not.specified:
+    text: 'Cannot add watchpoint: a field name is not specified'
+error.field.breakpoint.field.not.found:
+    text: |-
+        Cannot create a field watchpoint for ''{0}.{1}''.
+        Field ''{2}'' not found
+error.field.not.found.in.class:
+    text: No such field {0} in {1}
+error.inconsistent.debug.info:
+    text: Inconsistent debug information
+error.invalid.argument:
+    text: '{0,choice, 1#Invalid argument|2#Invalid arguments}'
+error.invalid.breakpoint.bad.line.number:
+    text: Line number is invalid
+error.invalid.breakpoint.method.not.found:
+    text: Method not found in class {0}
+error.invalid.breakpoint.missing.field.in.class:
+    text: Cannot find field ''{0}'' in  class ''{1}''
+error.invalid.breakpoint.no.executable.code:
+    text: No executable code found at line {0} in class {1}
+error.invalid.breakpoint.no.line.info:
+    text: Line numbers info is not available in class {0}
+error.invalid.breakpoint.source.changed:
+    text: Source file changed or found source file does not correspond to the breakpoint''s file
+error.invalid.breakpoint.source.not.found:
+    text: The class {0}, found in the project classpath, has no associated source files
+error.invalid.field.name:
+    text: Invalid field name ''{0}''
+error.invalid.jdk.home:
+    text: Invalid JDK home directory specified.{0}
+error.invalid.local.variable.name:
+    text: Invalid local variable name ''{0}''
+error.invalid.stackframe:
+    text: Internal exception - invalid stackframe
+error.invalid.type.name:
+    text: Invalid type name ''{0}''
+error.io.error:
+    text: I/O error
+error.jdk.not.specified:
+    text: JDK is not specified
+error.modification.watchpoints.not.supported:
+    text: Target VM does not support modification watchpoints
+error.native.method.exception:
+    text: None of the frames through and including frame may be native
+error.no.debug.attach.port:
+    text: The port to attach to unspecified
+error.no.debug.listen.port:
+    text: The port to listen at unspecified
+error.no.shmem.address:
+    text: Shared memory address unspecified
+error.operation.canceled:
+    text: Operation canceled
+error.operation.not.supported.by.vm:
+    text: Operation not supported by VM
+error.pop.bottom.stackframe:
+    text: Cannot pop bottom frame
+error.pop.stackframe:
+    text: 'An error occurred while popping stack frame: {0}'
+error.running.to.cursor.no.executable.code:
+    text: There is no executable code at {0}:{1}
+error.text.invalid.port:
+    text: Port is not specified
+error.threads.export.dialog.file.already.exists:
+    text: |-
+        The file
+        ''{0}''
+        already exists. Would you like to overwrite it?
+error.threads.export.dialog.file.is.directory:
+    text: |-
+        The specified file is a directory.
+        Please specify a correct file name.
+error.unable.to.evaluate.capture.expression:
+    text: 'Unable to evaluate capture key expression: {0}'
+error.unable.to.evaluate.expression:
+    text: Unable to evaluate the expression
+error.unable.to.evaluate.insert.expression:
+    text: 'Unable to evaluate insert key expression: {0}'
+error.unknown.host:
+    text: Cannot connect to remote process, host is unknown
+error.unsupported.class.version:
+    text: 'Unsupported class version : {0}'
+error.unsupported.jdk.version:
+    text: Debugging is not supported for JDK {0}
+error.verification.error:
+    text: 'Verification error : {0}'
+error.vm.disconnected:
+    text: VM disconnected. Target virtual machine closed connection
+evaluate.expression.dialog.title:
+    text: Expression Evaluation
+evaluate.statement.dialog.title:
+    text: Code Fragment Evaluation
+evaluation.error.anonymous.class.evaluation.not.supported:
+    text: Anonymous class evaluation is not supported
+evaluation.error.array.collected:
+    text: Array has been collected
+evaluation.error.array.dimention.numeric.value.expected:
+    text: Numeric value expected as array dimension
+evaluation.error.array.reference.expected:
+    text: Array reference expected
+evaluation.error.array.type.expected:
+    text: Array type expected
+evaluation.error.boolean.condition.expected:
+    text: '''''boolean'''' value expected in condition'
+evaluation.error.boolean.expected:
+    text: Boolean value expected
+evaluation.error.boolean.value.expected.in.condition:
+    text: '''boolean'' value expected in condition'
+evaluation.error.cannot.cast.boolean:
+    text: Cannot cast boolean value to ''{0}''
+evaluation.error.cannot.cast.char:
+    text: Cannot cast char value to ''{0}''
+evaluation.error.cannot.cast.null:
+    text: Cannot cast null to ''{0}''
+evaluation.error.cannot.cast.numeric:
+    text: Cannot cast numeric value to ''{0}''
+evaluation.error.cannot.cast.object:
+    text: Cannot cast ''{0}'' to ''{1}''
+evaluation.error.cannot.evaluate.array.initializer:
+    text: Cannot evaluate array initializer
+evaluation.error.cannot.evaluate.class.type:
+    text: Cannot evaluate class type
+evaluation.error.cannot.evaluate.qualifier:
+    text: Cannot evaluate qualifier ''{0}''
+evaluation.error.cannot.evaluate.tostring:
+    text: Cannot evaluate {0}.toString()
+evaluation.error.cannot.find.stackframe.source:
+    text: Cannot find source class for current stack frame
+evaluation.error.cannot.initialize.array:
+    text: Cannot initialize array
+evaluation.error.cannot.resolve.class:
+    text: Cannot resolve class ''{0}''
+evaluation.error.cannot.resolve.constructor:
+    text: Cannot resolve constructor ''{0}''
+evaluation.error.cannot.resolve.field.class:
+    text: Cannot resolve class containing field ''{0}''
+evaluation.error.cannot.sources.for.field.class:
+    text: Cannot find sources for class containing field ''{0}''
+evaluation.error.class.not.loaded:
+    text: Class ''{0}'' is not loaded
+evaluation.error.class.or.array.expected:
+    text: Class or array type expected while evaluating field ''{0}''
+evaluation.error.debug.info.unavailable:
+    text: Debug info unavailable
+evaluation.error.empty.code.fragment:
+    text: Code fragment expected
+evaluation.error.evaluating.field:
+    text: 'Error evaluating field : ''''{0}'''''
+evaluation.error.evaluating.method:
+    text: 'Error evaluating method : ''''{0}'''''
+evaluation.error.identifier.expected:
+    text: Identifier expected instead of ''{0}''
+evaluation.error.incompatible.array.initializer.type:
+    text: Initializer type is not assignment-compatible with array's component type
+evaluation.error.incompatible.types:
+    text: Incompatible types for ''{0}'' operation
+evaluation.error.incompatible.variable.initializer.type:
+    text: Initializer for ''{0}'' has incompatible type
+evaluation.error.inconsistent.debug.info:
+    text: Debug information is inconsistent
+evaluation.error.integer.expected:
+    text: Integer value expected
+evaluation.error.invalid.array.dimension.expression:
+    text: 'Invalid expression for array dimension: {0}'
+evaluation.error.invalid.array.size:
+    text: Invalid array size
+evaluation.error.invalid.expression:
+    text: 'Invalid expression : {0}'
+evaluation.error.invalid.index.expression:
+    text: Invalid index expression
+evaluation.error.invalid.this.expression:
+    text: Cannot substitute ''{0}'' into ''{1}'' as ''this''
+evaluation.error.invalid.type.name:
+    text: 'Invalid type name: ''''{0}'''''
+evaluation.error.lambda.evaluation.not.supported:
+    text: Lambdas evaluation is not supported
+evaluation.error.lebeled.loops.not.found:
+    text: No loop statements labeled with label ''{0}''
+evaluation.error.local.variable.declarations.not.supported:
+    text: Local variable declarations are not supported here.
+evaluation.error.local.variable.missing:
+    text: Cannot find local variable ''{0}''
+evaluation.error.local.variable.missing.from.class.closure:
+    text: Local variable ''{0}'' not found in class closure
+evaluation.error.method.exception:
+    text: Method threw ''{0}'' exception.
+evaluation.error.method.not.found:
+    text: Method ''{0}'' not found
+evaluation.error.method.reference.evaluation.not.supported:
+    text: Method reference evaluation is not supported
+evaluation.error.multi.dimensional.arrays.creation.not.supported:
+    text: Creation of multi-dimensional arrays not supported
+evaluation.error.nested.evaluation:
+    text: Evaluation is not supported during another method''s evaluation
+evaluation.error.no.instance.field:
+    text: 'No such instance field: ''''{0}'''''
+evaluation.error.no.instance.method:
+    text: 'No such instance method: ''''{0}'''''
+evaluation.error.no.stackframe:
+    text: 'Cannot evaluate: stack frame unavailable'
+evaluation.error.no.static.field:
+    text: 'No such static field: ''''{0}'''''
+evaluation.error.no.static.method:
+    text: 'No such static method: ''''{0}'''''
+evaluation.error.not.lvalue:
+    text: Left part of the assignment is not lvalue
+evaluation.error.not.rvalue:
+    text: Right part of the assignment is not a value
+evaluation.error.numeric.expected:
+    text: Numeric value expected
+evaluation.error.object.collected:
+    text: Object has been collected
+evaluation.error.object.reference.expected:
+    text: Object reference expected
+evaluation.error.objref.expected:
+    text: Object reference expected instead of{0}
+evaluation.error.operation.not.supported:
+    text: Operation ''{0}'' not supported
+evaluation.error.process.exited:
+    text: 'Cannot evaluate: process exited'
+evaluation.error.qualifier.type.unknown:
+    text: Type is unknown for ''{0}''
+evaluation.error.reference.type.expected:
+    text: Reference type expected
+evaluation.error.sources.out.of.sync:
+    text: Sources do not correspond to code being executed
+evaluation.error.stack.frame.unavailable:
+    text: Stack frame unavailable
+evaluation.error.statement.not.supported:
+    text: Statement ''{0}'' not supported
+evaluation.error.surrounded.expression.null:
+    text: Surrounded expression is null
+evaluation.error.this.not.avalilable:
+    text: '''this'' is not available'
+evaluation.error.thread.collected:
+    text: Thread has been collected
+evaluation.error.thread.not.at.breakpoint:
+    text: 'Cannot evaluate: thread is not paused at breakpoint'
+evaluation.error.thread.resumed:
+    text: Thread has been resumed
+evaluation.error.type.mismatch:
+    text: Type mismatch
+evaluation.error.unknown.expression.operand:
+    text: 'Expression operand unknown: {0}'
+evaluation.error.unknown.expression.type:
+    text: 'Expression type unknown: {0}'
+evaluation.error.unknown.method.return.type:
+    text: 'Cannot resolve method return type: {0}'
+evaluation.error.unsupported.declaration:
+    text: 'Invalid declaration : {0} Only local variable declarations are supported.'
+evaluation.error.unsupported.expression.type:
+    text: Unsupported expression type
+evaluation.error.variable.already.declared:
+    text: Variable ''{0}'' is already declared
+evaluation.error.variable.not.declared:
+    text: Variable ''{0}'' is not declared
+exception.breakpoint.console.message:
+    text: Exception ''{0}'' occurred at {1}({2})
+exception.breakpoint.console.message.location.info:
+    text: '{0}:{1,number,#}'
+exception.breakpoint.console.message.location.info.absent:
+    text: No Debug Info
+exception.breakpoint.console.message.with.thread.info:
+    text: Exception ''{0}'' occurred in thread ''{1}'' at {2}({3})
+exception.breakpoints.tab.title:
+    text: Java Exception Breakpoints
+export.dialog.copy.action.description:
+    text: '&Copy text to clipboard'
+export.threads.stackframe.format:
+    text: at {0}({1}:{2,number,#})
+field.watchpoints.tab.title:
+    text: Java Field Watchpoints
+frame.panel.frames.not.available:
+    text: Frames not available for unsuspended thread
+get.jpda.dialog.title:
+    text: JPDA Libraries Missing
+hotswap.dialog.hang.question:
+    text: Would you like to reload changed classes anyway?
+hotswap.dialog.hang.warning:
+    text: |-
+        JVM is currently suspended.
+        Reloading classes with active third-party JVM agents may cause the JVM to hang.
+hotswap.dialog.run.prompt:
+    text: Some classes have been changed. Reload changed classes now?
+hotswap.dialog.title:
+    text: Reload Changed Classes
+hotswap.dialog.title.with.session:
+    text: Reload Changed Classes for {0}
+instance.filters.dialog.instance.filters.group:
+    text: Instance Filters
+instance.filters.dialog.title:
+    text: Instance Filters
+internal.error.locations.of.line:
+    text: Internal error loading debug information from ''{0}''.  Breakpoints will be unavailable in this class.
+label.add.field.breakpoint.dialog.field.name:
+    text: 'Field name:'
+label.add.field.breakpoint.dialog.fq.name:
+    text: 'Fully qualified name of a class:'
+label.array.renderer.configurable.end.index:
+    text: 'en&d index:'
+label.array.renderer.configurable.max.count1:
+    text: Show &maximum
+label.array.renderer.configurable.max.count2:
+    text: array elements
+label.array.renderer.configurable.start.index:
+    text: 'Array sta&rt index:'
+label.base.renderer.configurable.all.overriding:
+    text: For all classes that override 'toString()' method
+label.base.renderer.configurable.alternate.view:
+    text: Enable alternative view for Coll&ections classes
+label.base.renderer.configurable.autoscroll:
+    text: Autoscroll to new &local variables
+label.base.renderer.configurable.classes.from.list:
+    text: 'For classes from the list:'
+label.base.renderer.configurable.enable.toString:
+    text: 'Enable ''t&oString()'' object view:'
+label.base.renderer.configurable.hide.null.array.elements:
+    text: Hide &null elements in arrays and collections
+label.base.renderer.configurable.show.declared.type:
+    text: Declared &type
+label.base.renderer.configurable.show.fq.names:
+    text: Fully &qualified names
+label.base.renderer.configurable.show.hex.value:
+    text: Show hex value for primitives
+label.base.renderer.configurable.show.object.id:
+    text: Object &id
+label.base.renderer.configurable.show.static.fields:
+    text: '&Static fields'
+label.base.renderer.configurable.show.static.final.fields:
+    text: Static &final fields
+label.base.renderer.configurable.show.strings.type:
+    text: Show type for strings
+label.base.renderer.configurable.show.synthetic.fields:
+    text: S&ynthetic fields
+label.base.renderer.configurable.show.val.fields.as.locals:
+    text: $val fields as local &variables
+label.base.renderer.configurable.sort.alphabetically:
+    text: Sort a&lphabetically
+label.breakpoint.properties.panel.group.actions:
+    text: Actions
+label.breakpoint.properties.panel.group.conditions:
+    text: Filters
+label.breakpoint.properties.panel.group.suspend.policy:
+    text: Suspend policy
+label.capture.configurable.capture.variables:
+    text: Capture local variables (may greatly slow down the execution)
+label.class.label.expression.configurable.node.label:
+    text: Node label expression
+label.complete.input.dialog.expression:
+    text: Enter the expression
+label.compound.renderer.configurable.append.default.children:
+    text: Append default children
+label.compound.renderer.configurable.apply.to:
+    text: 'Apply renderer to objects of type (fully-qualified name):'
+label.compound.renderer.configurable.ondemand:
+    text: On-demand
+label.compound.renderer.configurable.show.type:
+    text: Show type and object id
+label.compound.renderer.configurable.table.header.expression:
+    text: Expression
+label.compound.renderer.configurable.table.header.name:
+    text: Name
+label.compound.renderer.configurable.table.header.ondemand:
+    text: On-demand
+label.compound.renderer.configurable.test.can.expand:
+    text: 'Test if a node can be expanded (optional):'
+label.compound.renderer.configurable.use.default.renderer:
+    text: Use default renderer
+label.compound.renderer.configurable.use.expression:
+    text: 'Use following expression:'
+label.compound.renderer.configurable.use.expression.list:
+    text: 'Use list of expressions:'
+label.compound.renderer.configurable.when.expanding:
+    text: When expanding a node
+label.compound.renderer.configurable.when.rendering:
+    text: When rendering a node
+label.debugger.general.configurable.evaluate.finally.always:
+    text: '&Always'
+label.debugger.general.configurable.evaluate.finally.ask:
+    text: As&k
+label.debugger.general.configurable.evaluate.finally.never:
+    text: N&ever
+label.debugger.general.configurable.evaluate.finally.on.pop:
+    text: 'Evaluate finally blocks on pop frame and early return:'
+label.debugger.general.configurable.kill.immediately:
+    text: Kill the debug process immediately
+label.debugger.general.configurable.resume.only.current.thread:
+    text: Resume only the current thread
+label.debugger.general.configurable.show.alternative.source:
+    text: Show alternative source switcher
+label.debugger.general.configurable.skip.classLoaders:
+    text: Skip class l&oaders
+label.debugger.general.configurable.skip.constructors:
+    text: Skip &constructors
+label.debugger.general.configurable.skip.simple.getters:
+    text: Skip simple &getters
+label.debugger.general.configurable.skip.synthetic.methods:
+    text: Ski&p synthetic methods
+label.debugger.general.configurable.step.filters.list.header:
+    text: Do not step &into the classes
+label.debugger.hotswap.configurable.always:
+    text: '&Always'
+label.debugger.hotswap.configurable.ask:
+    text: As&k
+label.debugger.hotswap.configurable.compile.before.hotswap:
+    text: Build project before reloading classes
+label.debugger.hotswap.configurable.enable.vm.hang.warning:
+    text: Enable 'JVM will hang' warning
+label.debugger.hotswap.configurable.hotswap.background:
+    text: Reload classes in &background
+label.debugger.hotswap.configurable.never:
+    text: '&Never'
+label.debugger.hotswap.configurable.reload.classes:
+    text: 'Reload classes after compilation:'
+label.debugger.launching.configurable.debugger.transport:
+    text: 'Transport:'
+label.debugger.launching.configurable.disable.jit:
+    text: Disable JIT
+label.debugger.launching.configurable.force.classic.vm:
+    text: Force Class&ic VM for JDK 1.3.x and earlier
+label.debugger.launching.configurable.shmem:
+    text: Shared &memory
+label.debugger.launching.configurable.socket:
+    text: '&Socket'
+label.evaluate.dialog.expression:
+    text: '&Expression:'
+label.evaluate.dialog.language:
+    text: 'Language:'
+label.evaluate.dialog.result:
+    text: '&Result:'
+label.evaluation.dialog.statements:
+    text: 'Statements to &evaluate:'
+label.exception.breakpoint.properties.panel.caught.exception:
+    text: Caught exceptio&n
+label.exception.breakpoint.properties.panel.group.notifications:
+    text: Notifications
+label.exception.breakpoint.properties.panel.uncaught.exception:
+    text: Uncaught excepti&on
+label.filed.breakpoint.properties.panel.field.access:
+    text: Field acce&ss
+label.filed.breakpoint.properties.panel.field.modification:
+    text: Field &modification
+label.generic.debugger.parameters.patcher.configurable.port:
+    text: 'Port:'
+label.generic.debugger.parameters.patcher.configurable.shmem:
+    text: Shared &memory
+label.generic.debugger.parameters.patcher.configurable.shmem.address:
+    text: 'Shared memory address:'
+label.generic.debugger.parameters.patcher.configurable.socket:
+    text: '&Socket'
+label.generic.debugger.parameters.patcher.configurable.transport:
+    text: 'Transport:'
+label.get.jpda.dialog.error.description:
+    text: 'Cannot start debugger: debug libraries are missig from JDK home'
+label.get.jpda.dialog.prompt:
+    text: To get JPDA libraries please visit
+label.group.watch.events:
+    text: Watch
+label.method.breakpoint.properties.panel.emulated:
+    text: Em&ulated
+label.method.breakpoint.properties.panel.method.entry:
+    text: Method entr&y
+label.method.breakpoint.properties.panel.method.exit:
+    text: Method e&xit
+label.method.breakpoints.processing.classes:
+    text: Processing classes for emulated method breakpoints
+label.method.breakpoints.setting.breakpoints:
+    text: Setting emulated method breakpoints
+label.named.children.configurable.node.descendants:
+    text: 'Node de&scendants:'
+label.named.children.configurable.table.header.column.expression:
+    text: Expression
+label.named.children.configurable.table.header.column.name:
+    text: Name
+label.node.descendands.expression:
+    text: 'Node &descendands expression:'
+label.thread.group.node:
+    text: Thread Group "{0}"@{1}
+label.thread.group.node.group.collected:
+    text: Thread Group "{0}" has been garbage-collected
+label.thread.node:
+    text: '"{0}"@{1}: {2}'
+label.thread.node.in.group:
+    text: '"{0}"@{1} in group "{3}": {2}'
+label.thread.node.thread.collected:
+    text: Thread ''{0}'' has been garbage-collected
+label.threads.export.dialog.file:
+    text: 'Export to file:'
+label.threads.view.configurable.current.thread.on.top:
+    text: Move current thread to the top
+label.threads.view.configurable.show.class.name:
+    text: Show class name
+label.threads.view.configurable.show.line.number:
+    text: Show &line number
+label.threads.view.configurable.show.package:
+    text: Show package name
+label.threads.view.configurable.show.prams.types:
+    text: Show method arguments types
+label.threads.view.configurable.show.source.file.name:
+    text: Show source file name
+label.threads.view.configurable.show.stack.frames.for.synthetic.methods:
+    text: Show stack &frames for synthetic methods
+label.threads.view.configurable.show.thread.groups:
+    text: Show thread &groups
+label.undefined:
+    text: undefined
+label.unknown.value:
+    text: <unknown>
+label.user.renderers.configurable.renderer.name:
+    text: 'Renderer name:'
+line.breakpoint.display.name:
+    text: Line {0}
+line.breakpoint.display.name.with.class.or.method:
+    text: Line {0,number,#} in {1}
+line.breakpoints.tab.title:
+    text: Java Line Breakpoints
+message.breakpoint.skipped:
+    text: Skipped breakpoint at {0} because it happened inside debugger evaluation
+message.node.all.array.elements.null:
+    text: All elements in range ({0}, {1}) are null
+message.node.all.elements.null:
+    text: All elements are null
+message.node.class.has.no.fields:
+    text: Class has no fields
+message.node.class.no.fields.to.display:
+    text: No fields to display
+message.node.debug.info.not.available:
+    text: Debug info not available
+message.node.elements.null.hidden:
+    text: Not showing null elements
+message.node.empty.array:
+    text: Empty
+message.node.evaluate:
+    text: … Evaluate
+message.node.evaluation.not.possible:
+    text: Target VM is not paused by breakpoint request. Evaluation of methods is not possible in this mode
+message.node.filtered:
+    text: 'Filtered by:'
+message.node.local.variables.capture.disabled:
+    text: Local variables were not captured, you can change it in
+message.node.local.variables.debug.info.not.available:
+    text: Variables debug info not available
+message.node.local.variables.not.captured:
+    text: Local variables are not captured for synthetic, bridge etc. methods
+message.node.navigate:
+    text: … Navigate
+message.node.object.collected:
+    text: Object has been garbage collected during method invocation
+message.node.show.icon:
+    text: … Show icon
+message.node.show.image:
+    text: … Show image
+message.node.thread.has.no.frames:
+    text: Thread has no frames
+message.node.thread.running:
+    text: Thread is running
+message.node.toString:
+    text: … toString()
+message.remote.jre.version.mismatch:
+    text: "Target JRE version ({0})\ndoes not match module JDK version ({1}), \nwill use sources from JDK: {2}"
+method.breakpoints.slowness.warning:
+    text: Method breakpoints may dramatically slow down debugging
+method.breakpoints.tab.title:
+    text: Java Method Breakpoints
+node.has.descendands.expression.optional:
+    text: '''Node &has descendands'' expression (optional):'
+position.highlighter.stripe.tooltip:
+    text: Execution line
+progress.evaluating:
+    text: Evaluating {0}
+progress.hot.swap.title:
+    text: Hot Swap
+progress.hotswap.reloading:
+    text: Reloading classes...
+progress.hotswap.scanning.classes:
+    text: Scanning for classes to reload...
+progress.hotswap.scanning.path:
+    text: 'Scanning: {0}'
+progress.set.value:
+    text: Setting value...
+rule.name.group.by.class:
+    text: Group by class
+rule.name.group.by.package:
+    text: Group by package
+status.app.running:
+    text: The application is running
+status.breakpoint.invalid:
+    text: INVALID
+status.breakpoint.reached.in.thread:
+    text: Breakpoint reached in thread {0}
+status.breakpoint.reached.in.thread.switch:
+    text: <a href="#">Switch thread</a>
+status.classes.not.all.versions.reloaded:
+    text: For {0} of {1} {1,choice, 1#class|2#classes} not all versions were reloaded
+status.classes.reloaded:
+    text: '{0,number} {0,choice, 0#classes|1#class|2#classes} reloaded'
+status.connect.failed:
+    text: 'Failed to establish connection to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
+status.connected:
+    text: 'Connected to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
+status.connecting:
+    text: 'Connecting to the target VM, address: ''''{0}'''', transport: ''''{1}'''''
+status.debug.stopped:
+    text: Debug stopped
+status.disconnected:
+    text: 'Disconnected from the target VM, address: ''''{0}'''', transport: ''''{1}'''''
+status.exception.breakpoint.reached:
+    text: Exception breakpoint reached
+status.exception.breakpoint.reached.details:
+    text: Exception  ''{0}'' in thread ''{1}''
+status.field.watchpoint.reached:
+    text: Field watchpoint reached
+status.generic.breakpoint.reached:
+    text: Breakpoint reached
+status.hot.swap.completed.restart:
+    text: <a href="restart">Restart debug session</a>
+status.hot.swap.completed.stop:
+    text: <a href="stop">Stop debug session</a>
+status.hot.swap.completed.with.errors:
+    text: Hot Swap failed.
+status.hot.swap.completed.with.warnings:
+    text: Hot Swap completed with warnings
+status.hotswap.loaded.classes.up.to.date:
+    text: Loaded classes are up to date. Nothing to reload
+status.hotswap.uptodate:
+    text: Loaded classes are up to date. Nothing to reload.
+status.invalid.breakpoint.out.of.class:
+    text: Breakpoint does not belong to any class
+status.line.breakpoint.reached:
+    text: Breakpoint reached at {0}({1}:{2,number,#})
+status.line.breakpoint.reached.full.trace:
+    text: Breakpoint reached at {0}
+status.listening:
+    text: 'Listening to the connection, address: ''''{0}'''', transport: ''''{1}'''''
+status.method.entry.breakpoint.reached:
+    text: Method ''{0}'' entered at {1}({2}:{3,number,#})
+status.method.exit.breakpoint.reached:
+    text: Method breakpoint reached. Method ''{0}'' is about to exit at {1}({2}:{3,number,#})
+status.paused:
+    text: Paused
+status.paused.in.another.thread:
+    text: Paused in another thread
+status.process.resumed:
+    text: Process resumed
+status.process.started:
+    text: Process started
+status.process.terminated:
+    text: Process terminated
+status.run.to.cursor:
+    text: Run to cursor
+status.step.into:
+    text: Stepping into
+status.step.out:
+    text: Stepping out
+status.step.over:
+    text: Stepping over
+status.stopped.at.cursor:
+    text: Stopped at cursor
+status.thread.blocked.by:
+    text: Stepping in thread {0} is blocked by thread {1}
+status.thread.blocked.by.resume:
+    text: <a href="#">Resume {0}</a>
+status.thread.monitor:
+    text: MONITOR
+status.thread.not.started:
+    text: NOT_STARTED
+status.thread.running:
+    text: RUNNING
+status.thread.sleeping:
+    text: SLEEPING
+status.thread.undefined:
+    text: UNDEFINED
+status.thread.unknown:
+    text: UNKNOWN
+status.thread.wait:
+    text: WAIT
+status.thread.zombie:
+    text: ZOMBIE
+status.waiting.attach:
+    text: 'Debugger is waiting for application to start; debug address: ''''{0}''''; transport: ''''{1}'''''
+status.waiting.evaluation.result:
+    text: Waiting until last debugger command completes
+string.debugger.runner.description:
+    text: Debug selected configuration
+string.file.line.position:
+    text: Class at {0}:{1}
+string.null.context:
+    text: null context
+text.base.renderer.configurable.no.class.patterns:
+    text: No class patterns configured
+text.user.renderers.configurable.no.renderers:
+    text: No renderers
+threads.export.attribute.error.incompatible.state:
+    text: 'Incompatible thread state: thread not suspended'
+threads.export.attribute.label.blocks.thread:
+    text: blocks {0}
+threads.export.attribute.label.daemon:
+    text: daemon
+threads.export.attribute.label.group:
+    text: in group ''{0}''
+threads.export.attribute.label.locked:
+    text: locked {0}
+threads.export.attribute.label.nid:
+    text: nid={0}
+threads.export.attribute.label.object.id:
+    text: <0x{0}> (a {1})
+threads.export.attribute.label.priority:
+    text: prio={0}
+threads.export.attribute.label.status:
+    text: 'status: ''''{0}'''''
+threads.export.attribute.label.tid:
+    text: tid=0x{0}
+threads.export.attribute.label.waiting.for.thread:
+    text: waiting for {0} to release lock on {1}
+threads.export.dialog.title:
+    text: Export Threads
+threads.view.configurable.display.name:
+    text: Customize Threads View
+title.compound.renderer.configurable.choose.renderer.reference.type:
+    text: Renderer Reference Type
+title.customize.data.views:
+    text: Customize Data Views
+title.error.evaluating.breakpoint.action:
+    text: Breakpoint Action Error
+title.error.evaluating.breakpoint.condition:
+    text: Breakpoint Condition Error
+title.evaluating:
+    text: Evaluating...
+title.jdk140.unstable:
+    text: VM Version Warning
+title.range.too.big:
+    text: Range Is Too Big
+title.set.value:
+    text: Set Value
+title.smart.step.popup:
+    text: Method to Step Into
+transport.name.shared.memory:
+    text: shared memory (if avaliable)
+transport.name.socket:
+    text: socket
+user.renderers.configurable.button.description.add:
+    text: Add new renderer
+user.renderers.configurable.button.description.copy:
+    text: Copy selected renderer
+user.renderers.configurable.button.description.move.down:
+    text: Move renderer Down
+user.renderers.configurable.button.description.move.up:
+    text: Move renderer Up
+user.renderers.configurable.button.description.remove:
+    text: Remove selected renderer
+user.renderers.configurable.display.name:
+    text: Java Type Renderers
+value.none:
+    text: <None>
+warning.finally.block.detected:
+    text: 'Non-empty finally blocks detected:'
+warning.hotswap.ignored.breakpoints:
+    text: Breakpoints will be ignored for the obsolete version of the method
+warning.jdk140.unstable:
+    text: |-
+        The debuggee VM version is "1.4.0".
+        J2SDK 1.4.0 documented bugs may cause unstable debugger behavior.
+        We recommend using J2SDK 1.4.0_01 or higher.
+warning.range.too.big:
+    text: Range specified is too big. {0} needs too much resources to perform requested operation. Are you sure you want to continue?
+warning.recalculate:
+    text: The value will be recalculated
+warning.source.code.not.match:
+    text: Source code does not match the bytecode
+watchs.add.text:
+    text: Add to watches

@@ -136,10 +136,10 @@
 			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
 		</group>
 
-		<action id="ExportThreads" class="com.intellij.java.debugger.impl.actions.ExportThreadsAction" icon="consulo.platform.base.PlatformIconGroup@actions.export">
+		<action id="ExportThreads" class="com.intellij.java.debugger.impl.actions.ExportThreadsAction">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
-		<action id="DumpThreads" class="com.intellij.java.debugger.impl.actions.ThreadDumpAction" text="Take a thread dump" icon="consulo.platform.base.PlatformIconGroup@actions.dump">
+		<action id="DumpThreads" class="com.intellij.java.debugger.impl.actions.ThreadDumpAction">
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
 
