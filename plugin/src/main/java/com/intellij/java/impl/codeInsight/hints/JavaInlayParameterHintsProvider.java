@@ -163,11 +163,6 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
         return Collections.emptyList();
     }
 
-    @Override
-    public boolean canShowHintsWhenDisabled() {
-        return true;
-    }
-
     @Nonnull
     @Override
     public Set<String> getDefaultBlackList() {
