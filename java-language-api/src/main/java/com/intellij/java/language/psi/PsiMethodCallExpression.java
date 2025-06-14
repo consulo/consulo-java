@@ -21,15 +21,21 @@ import jakarta.annotation.Nonnull;
  * Represents a call of a Java method.
  */
 public interface PsiMethodCallExpression extends PsiCallExpression {
-  @Override
-  @Nonnull
-  PsiExpressionList getArgumentList();
+    @Override
+    @Nonnull
+    PsiExpressionList getArgumentList();
 
-  /**
-   * Returns the reference expression specifying the called method.
-   *
-   * @return the reference expression for the method.
-   */
-  @Nonnull
-  PsiReferenceExpression getMethodExpression();
+    /**
+     * Returns the reference expression specifying the called method.
+     *
+     * @return the reference expression for the method.
+     */
+    @Nonnull
+    PsiReferenceExpression getMethodExpression();
+
+    @Override
+    @Nonnull
+    default JavaResolveResult[] multiResolve(boolean incompleteCode) {
+        return getMethodExpression().multiResolve(incompleteCode);
+    }
 }

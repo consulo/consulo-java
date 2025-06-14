@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -26,26 +25,43 @@ import jakarta.annotation.Nullable;
  * @author ven
  */
 public interface PsiCall extends PsiElement {
-  /**
-   * Returns the list of arguments passed to the called method.
-   *
-   * @return the argument list, or null if the call is incomplete.
-   */
-  @Nullable PsiExpressionList getArgumentList();
+    /**
+     * Returns the list of arguments passed to the called method.
+     *
+     * @return the argument list, or null if the call is incomplete.
+     */
+    @Nullable
+    PsiExpressionList getArgumentList();
 
-  /**
-   * Resolves the reference to the called method and returns the method.
-   *
-   * @return the called method, or null if the resolve failed.
-   */
-  @Nullable PsiMethod resolveMethod();
+    /**
+     * Resolves the reference to the called method and returns the method.
+     *
+     * @return the called method, or null if the resolve failed.
+     */
+    @Nullable
+    PsiMethod resolveMethod();
 
-  /**
-   * Resolves the reference to the called method and returns the resolve result
-   * containing the method and the substitutor for generic type parameters.
-   *
-   * @return the resolve result, or {@link JavaResolveResult#EMPTY} if unresolved
-   */
-  @Nonnull
-  JavaResolveResult resolveMethodGenerics();
+    /**
+     * Resolves the reference to the called method and returns the resolve result
+     * containing the method and the substitutor for generic type parameters.
+     *
+     * @return the resolve result, or {@link JavaResolveResult#EMPTY} if unresolved
+     */
+    @Nonnull
+    JavaResolveResult resolveMethodGenerics();
+
+
+    /**
+     * Returns the results of resolving the called method.
+     *
+     * @param incompleteCode if true, the code in the context of which the call is
+     *                       being resolved is considered incomplete, and the method may return additional
+     *                       invalid results.
+     * @return the array of results for resolving the called method.
+     */
+    @Nonnull
+    default JavaResolveResult[] multiResolve(boolean incompleteCode) {
+        JavaResolveResult result = resolveMethodGenerics();
+        return result == JavaResolveResult.EMPTY ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{result};
+    }
 }
