@@ -10,7 +10,6 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.ClassElement;
 import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.formatting.blocks.CStyleCommentBlock;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;

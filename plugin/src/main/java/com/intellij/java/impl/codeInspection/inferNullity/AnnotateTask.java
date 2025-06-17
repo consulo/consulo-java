@@ -17,10 +17,10 @@ package com.intellij.java.impl.codeInspection.inferNullity;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.SequentialModalProgressTask;
+import consulo.application.progress.SequentialTask;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-import consulo.ide.impl.idea.util.SequentialModalProgressTask;
-import consulo.ide.impl.idea.util.SequentialTask;
 
 class AnnotateTask implements SequentialTask
 {
