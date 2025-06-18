@@ -154,7 +154,7 @@ public class JavaCoverageEngine extends CoverageEngine {
             return false;
         }
         // let's show coverage only for module files
-        Module module = psiFile.getApplication().runReadAction((Supplier<Module>)psiFile::getModule);
+        Module module = psiFile.getApplication().runReadAction((Supplier<Module>) psiFile::getModule);
         return module != null;
     }
 
@@ -171,10 +171,10 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
 
         for (CoverageSuite coverageSuite : suite.getSuites()) {
-            JavaCoverageSuite javaSuite = (JavaCoverageSuite)coverageSuite;
+            JavaCoverageSuite javaSuite = (JavaCoverageSuite) coverageSuite;
 
             List<PsiJavaPackage> packages = javaSuite.getCurrentSuitePackages(project);
-            if (isUnderFilteredPackages((PsiClassOwner)psiFile, packages)) {
+            if (isUnderFilteredPackages((PsiClassOwner) psiFile, packages)) {
                 return true;
             }
             else {
@@ -247,7 +247,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
 
     public static boolean isUnderFilteredPackages(PsiClassOwner javaFile, List<PsiJavaPackage> packages) {
-        String hisPackageName = javaFile.getApplication().runReadAction((Supplier<String>)javaFile::getPackageName);
+        String hisPackageName = javaFile.getApplication().runReadAction((Supplier<String>) javaFile::getPackageName);
         PsiPackage hisPackage = JavaPsiFacade.getInstance(javaFile.getProject()).findPackage(hisPackageName);
         if (hisPackage == null) {
             return false;
@@ -290,7 +290,7 @@ public class JavaCoverageEngine extends CoverageEngine {
         @Nonnull CoverageSuitesBundle suite
     ) {
         for (CoverageSuite coverageSuite : suite.getSuites()) {
-            JavaCoverageSuite javaSuite = (JavaCoverageSuite)coverageSuite;
+            JavaCoverageSuite javaSuite = (JavaCoverageSuite) coverageSuite;
             if (javaSuite.isClassFiltered(qualifiedName) || javaSuite.isPackageFiltered(getPackageName(sourceFile))) {
                 return true;
             }
@@ -309,15 +309,15 @@ public class JavaCoverageEngine extends CoverageEngine {
     @Override
     public Set<String> getQualifiedNames(@Nonnull PsiFile sourceFile) {
         Application application = sourceFile.getApplication();
-        PsiClass[] classes = application.runReadAction((Supplier<PsiClass[]>)((PsiClassOwner)sourceFile)::getClasses);
+        PsiClass[] classes = application.runReadAction((Supplier<PsiClass[]>) ((PsiClassOwner) sourceFile)::getClasses);
         Set<String> qNames = new HashSet<>();
         for (JavaCoverageEngineExtension nameExtension : JavaCoverageEngineExtension.EP_NAME.getExtensions()) {
-            if (application.runReadAction((Supplier<Boolean>)() -> nameExtension.suggestQualifiedName(sourceFile, classes, qNames))) {
+            if (application.runReadAction((Supplier<Boolean>) () -> nameExtension.suggestQualifiedName(sourceFile, classes, qNames))) {
                 return qNames;
             }
         }
         for (PsiClass aClass : classes) {
-            String qName = application.runReadAction((Supplier<String>)aClass::getQualifiedName);
+            String qName = application.runReadAction((Supplier<String>) aClass::getQualifiedName);
             if (qName == null) {
                 continue;
             }
@@ -372,9 +372,9 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
 
         Application application = srcFile.getApplication();
-        PsiClass[] classes = application.runReadAction((Supplier<PsiClass[]>)((PsiClassOwner)srcFile)::getClasses);
+        PsiClass[] classes = application.runReadAction((Supplier<PsiClass[]>) ((PsiClassOwner) srcFile)::getClasses);
         for (PsiClass psiClass : classes) {
-            String className = application.runReadAction((Supplier<String>)psiClass::getName);
+            String className = application.runReadAction((Supplier<String>) psiClass::getName);
             for (File child : children) {
                 if (FileUtil.extensionEquals(child.getName(), JavaClassFileType.INSTANCE.getDefaultExtension())) {
                     String childName = FileUtil.getNameWithoutExtension(child);
@@ -458,7 +458,7 @@ public class JavaCoverageEngine extends CoverageEngine {
             int hits = 0;
             if (lineData.getJumps() != null) {
                 for (Object o : lineData.getJumps()) {
-                    JumpData jumpData = (JumpData)o;
+                    JumpData jumpData = (JumpData) o;
                     if (jumpData.getTrueHits() + jumpData.getFalseHits() > 0) {
                         PsiExpression expression = expressions.get(idx++);
                         PsiElement parentExpression = expression.getParent();
@@ -484,7 +484,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
             if (lineData.getSwitches() != null) {
                 for (Object o : lineData.getSwitches()) {
-                    SwitchData switchData = (SwitchData)o;
+                    SwitchData switchData = (SwitchData) o;
                     PsiExpression conditionExpression = expressions.get(idx++);
                     buf.append(indent).append(conditionExpression.getText()).append("\n");
                     int i = 0;
@@ -567,7 +567,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     private static boolean hasDefaultLabel(PsiElement conditionExpression) {
         boolean hasDefault = false;
         PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(conditionExpression, PsiSwitchStatement.class);
-        PsiCodeBlock body = ((PsiSwitchStatementImpl)conditionExpression.getParent()).getBody();
+        PsiCodeBlock body = ((PsiSwitchStatementImpl) conditionExpression.getParent()).getBody();
         if (body != null) {
             PsiElement bodyElement = body.getFirstBodyElement();
             if (bodyElement != null) {
@@ -610,7 +610,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Nonnull
     protected static String getPackageName(PsiFile sourceFile) {
-        return sourceFile.getApplication().runReadAction((Supplier<String>)((PsiClassOwner)sourceFile)::getPackageName);
+        return sourceFile.getApplication().runReadAction((Supplier<String>) ((PsiClassOwner) sourceFile)::getPackageName);
     }
 
     @Override
@@ -624,6 +624,6 @@ public class JavaCoverageEngine extends CoverageEngine {
         CoverageSuitesBundle suiteBundle,
         CoverageViewManager.StateBean stateBean
     ) {
-        return new JavaCoverageViewExtension((JavaCoverageAnnotator)getCoverageAnnotator(project), project, suiteBundle, stateBean);
+        return new JavaCoverageViewExtension((JavaCoverageAnnotator) getCoverageAnnotator(project), project, suiteBundle, stateBean);
     }
 }

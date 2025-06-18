@@ -43,7 +43,7 @@ public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
                 && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction)
                 && profile instanceof RunConfigurationBase
                 && myApplication.getExtensionPoint(CoverageEngine.class)
-                .findExtensionOrFail(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase)profile);
+                .findExtensionOrFail(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase) profile);
         }
         catch (Exception e) {
             return false;
