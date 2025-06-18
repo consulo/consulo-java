@@ -21,22 +21,22 @@ public class CoberturaLoaderUtil {
     private CoberturaLoaderUtil() {
     }
 
-    public static ProjectData load(final File sessionDataFile) {
+    public static ProjectData load(File sessionDataFile) {
         ProjectData projectInfo = new ProjectData();
         DataInputStream dataFile = null;
         try {
             dataFile = new DataInputStream(new FileInputStream(sessionDataFile));
             int classesCount = dataFile.read();
             for (int i = 0; i < classesCount; i++) {
-                final String classFQName = dataFile.readUTF();
+                String classFQName = dataFile.readUTF();
                 dataFile.readUTF(); //sourcefilename
-                final ClassData classData = projectInfo.getOrCreateClassData(classFQName);
-                final int numberOfLines = dataFile.read();
+                ClassData classData = projectInfo.getOrCreateClassData(classFQName);
+                int numberOfLines = dataFile.read();
                 for (int l = 0; l < numberOfLines; l++) {
-                    final int lineNumber = dataFile.read();
-                    final LineData lineData = null; //todo classData.getOrCreateLine(lineNumber, dataFile.readUTF() + dataFile.readUTF());
+                    int lineNumber = dataFile.read();
+                    LineData lineData = null; //todo classData.getOrCreateLine(lineNumber, dataFile.readUTF() + dataFile.readUTF());
                     long hits = dataFile.readLong();
-                    final int jumpsNumber = dataFile.read();
+                    int jumpsNumber = dataFile.read();
                     int trueHits = 0;
                     int falseHits = 0;
                     int totalHits = 0;
@@ -53,7 +53,7 @@ public class CoberturaLoaderUtil {
                     }
                     int defaultHitsNumber = 0;
                     int branchHitNumber = 0;
-                    final int switchNumber = dataFile.read();
+                    int switchNumber = dataFile.read();
                     for (int s = 0; s < switchNumber; s++) {
                         dataFile.read(); //switch number
                         dataFile.read(); //number of keys
@@ -62,9 +62,9 @@ public class CoberturaLoaderUtil {
                             defaultHitsNumber++;
                         }
                         int coveredSwitchBranches = 0;
-                        final int switchBranchesNumber = dataFile.read();
+                        int switchBranchesNumber = dataFile.read();
                         for (int b = 0; b < switchBranchesNumber; b++) {
-                            final long branchHit = dataFile.readLong();
+                            long branchHit = dataFile.readLong();
                             if (branchHit > 0) {
                                 coveredSwitchBranches++;
                             }

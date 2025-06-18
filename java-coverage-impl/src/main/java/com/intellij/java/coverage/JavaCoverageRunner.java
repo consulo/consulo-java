@@ -33,17 +33,17 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
     }
 
     public abstract void appendCoverageArgument(
-        final String sessionDataFilePath,
-        @Nullable final String[] patterns,
-        final OwnJavaParameters parameters,
-        final boolean collectLineInfo,
-        final boolean isSampling
+        String sessionDataFilePath,
+        @Nullable String[] patterns,
+        OwnJavaParameters parameters,
+        boolean collectLineInfo,
+        boolean isSampling
     );
 
     @Nonnull
     protected static String handleSpacesInPath(@Nonnull File parent) {
         String agentPath;
-        final String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
+        String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
         if (userDefined != null && new File(userDefined).exists()) {
             agentPath = userDefined;
         }
@@ -57,9 +57,11 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
                     TempFileService tempFileService = Application.get().getInstance(TempFileService.class);
                     dir = tempFileService.createTempDirectory("coverage", "jars").toFile();
                     if (dir.getAbsolutePath().contains(" ")) {
-                        LOG.info("Coverage agent not used since the agent path contains spaces: " + agentPath + "\n" +
-                            "One can move the agent libraries to a directory with no spaces in path and specify its path in idea.properties as "
-                            + COVERAGE_AGENT_PATH + "=<path>");
+                        LOG.info(
+                            "Coverage agent not used since the agent path contains spaces: " + agentPath + "\n" +
+                                "One can move the agent libraries to a directory with no spaces in path " +
+                                "and specify its path in idea.properties as " + COVERAGE_AGENT_PATH + "=<path>"
+                        );
                         return agentPath;
                     }
                 }
@@ -95,7 +97,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
                 true
             );
             if (tempFile.getAbsolutePath().contains(" ")) {
-                final String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
+                String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
                 if (userDefined != null && new File(userDefined).isDirectory()) {
                     tempFile = FileUtil.createTempFile(new File(userDefined), "coverage", "args", true);
                 }

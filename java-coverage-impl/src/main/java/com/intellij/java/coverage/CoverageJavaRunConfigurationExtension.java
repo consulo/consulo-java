@@ -48,19 +48,22 @@ import java.util.List;
  */
 @ExtensionImpl
 public class CoverageJavaRunConfigurationExtension extends RunConfigurationExtension {
+    @Override
     public void attachToProcess(
-        @Nonnull final RunConfigurationBase configuration,
+        @Nonnull RunConfigurationBase configuration,
         @Nonnull ProcessHandler handler,
         RunnerSettings runnerSettings
     ) {
         CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);
     }
 
+    @Override
     @Nullable
     public SettingsEditor createEditor(@Nonnull RunConfigurationBase configuration) {
         return new CoverageConfigurable(configuration);
     }
 
+    @Override
     public String getEditorTitle() {
         return CoverageEngine.getEditorTitle();
     }
@@ -71,25 +74,24 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
         return "coverage";
     }
 
+    @Override
     public void updateJavaParameters(RunConfigurationBase configuration, OwnJavaParameters params, RunnerSettings runnerSettings) {
         if (!isApplicableFor(configuration)) {
             return;
         }
 
-        final JavaCoverageEnabledConfiguration coverageConfig = JavaCoverageEnabledConfiguration.getFrom(configuration);
+        JavaCoverageEnabledConfiguration coverageConfig = JavaCoverageEnabledConfiguration.getFrom(configuration);
         //noinspection ConstantConditions
         coverageConfig.setCurrentCoverageSuite(null);
-        final CoverageRunner coverageRunner = coverageConfig.getCoverageRunner();
+        CoverageRunner coverageRunner = coverageConfig.getCoverageRunner();
         if (runnerSettings instanceof CoverageRunnerData && coverageRunner != null) {
-            final CoverageDataManager coverageDataManager = CoverageDataManager.getInstance(configuration.getProject());
+            CoverageDataManager coverageDataManager = CoverageDataManager.getInstance(configuration.getProject());
             coverageConfig.setCurrentCoverageSuite(coverageDataManager.addCoverageSuite(coverageConfig));
             coverageConfig.appendCoverageArgument(params);
 
-            final Sdk jdk = params.getJdk();
-            if (jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(
-                jdk,
-                JavaSdkVersion.JDK_1_7
-            ) && coverageRunner instanceof JavaCoverageRunner && !((JavaCoverageRunner) coverageRunner).isJdk7Compatible()) {
+            Sdk jdk = params.getJdk();
+            if (jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_7)
+                && coverageRunner instanceof JavaCoverageRunner javaCoverageRunner && !javaCoverageRunner.isJdk7Compatible()) {
                 Notifications.Bus.notify(new Notification(
                     NotificationGroup.balloonGroup("Coverage"),
                     "Coverage instrumentation is not fully compatible with JDK 7",
@@ -103,7 +105,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
+    public void readExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
         if (!isApplicableFor(runConfiguration)) {
             return;
         }
@@ -123,13 +125,13 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
     @Override
     public void extendCreatedConfiguration(@Nonnull RunConfigurationBase runJavaConfiguration, @Nonnull Location location) {
-        final JavaCoverageEnabledConfiguration coverageEnabledConfiguration =
+        JavaCoverageEnabledConfiguration coverageEnabledConfiguration =
             JavaCoverageEnabledConfiguration.getFrom(runJavaConfiguration);
         assert coverageEnabledConfiguration != null;
-        if (runJavaConfiguration instanceof CommonJavaRunConfigurationParameters) {
+        if (runJavaConfiguration instanceof CommonJavaRunConfigurationParameters commonJavaRunConfigurationParameters) {
             coverageEnabledConfiguration.setUpCoverageFilters(
-                ((CommonJavaRunConfigurationParameters) runJavaConfiguration).getRunClass(),
-                ((CommonJavaRunConfigurationParameters) runJavaConfiguration).getPackage()
+                commonJavaRunConfigurationParameters.getRunClass(),
+                commonJavaRunConfigurationParameters.getPackage()
             );
         }
     }
@@ -153,28 +155,28 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
         if (!isApplicableFor(configuration)) {
             return listener;
         }
-        final JavaCoverageEnabledConfiguration coverageEnabledConfiguration = JavaCoverageEnabledConfiguration.getFrom(configuration);
+        JavaCoverageEnabledConfiguration coverageEnabledConfiguration = JavaCoverageEnabledConfiguration.getFrom(configuration);
         if (coverageEnabledConfiguration != null) {
-            final Project project = configuration.getProject();
-            final ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
-            final String[] filters = getFilters(coverageEnabledConfiguration);
+            Project project = configuration.getProject();
+            ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
+            String[] filters = getFilters(coverageEnabledConfiguration);
             if (patterns != null) {
                 assert filters != null;
-                if (element instanceof PsiClass) {
-                    final int idx = ArrayUtil.find(filters, ((PsiClass) element).getQualifiedName());
+                if (element instanceof PsiClass psiClass) {
+                    int idx = ArrayUtil.find(filters, psiClass.getQualifiedName());
                     if (idx > -1) {
-                        final RefactoringListeners.Accessor<PsiClass> accessor = new MyClassAccessor(project, patterns, idx, filters);
-                        final RefactoringElementListener classListener = RefactoringListeners.getClassOrPackageListener(element, accessor);
+                        RefactoringListeners.Accessor<PsiClass> accessor = new MyClassAccessor(project, patterns, idx, filters);
+                        RefactoringElementListener classListener = RefactoringListeners.getClassOrPackageListener(element, accessor);
                         if (classListener != null) {
                             listener = appendListener(listener, classListener);
                         }
                     }
                 }
-                else if (element instanceof PsiJavaPackage) {
-                    final String qualifiedName = ((PsiJavaPackage) element).getQualifiedName();
+                else if (element instanceof PsiJavaPackage javaPackage) {
+                    String qualifiedName = javaPackage.getQualifiedName();
                     for (int i = 0, filtersLength = filters.length; i < filtersLength; i++) {
                         if (filters[i].startsWith(qualifiedName + ".")) {
-                            final RefactoringElementListener packageListener;
+                            RefactoringElementListener packageListener;
                             if (filters[i].endsWith("*")) {
                                 packageListener = RefactoringListeners.getListener(
                                     (PsiJavaPackage) element,
@@ -200,9 +202,9 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
     @Nullable
     private static String[] getFilters(JavaCoverageEnabledConfiguration coverageEnabledConfiguration) {
-        final ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
+        ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
         if (patterns != null) {
-            final List<String> filters = new ArrayList<String>();
+            List<String> filters = new ArrayList<>();
             for (ClassFilter classFilter : patterns) {
                 filters.add(classFilter.getPattern());
             }
@@ -213,13 +215,13 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
     private static RefactoringElementListener appendListener(
         RefactoringElementListener listener,
-        final RefactoringElementListener classOrPackageListener
+        RefactoringElementListener classOrPackageListener
     ) {
         if (listener == null) {
             listener = new RefactoringElementListenerComposite();
         }
         else if (!(listener instanceof RefactoringElementListenerComposite)) {
-            final RefactoringElementListenerComposite composite = new RefactoringElementListenerComposite();
+            RefactoringElementListenerComposite composite = new RefactoringElementListenerComposite();
             composite.addListener(listener);
             listener = composite;
         }
@@ -233,14 +235,15 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
             if (!(runnerSettings instanceof CoverageRunnerData)) {
                 return true;
             }
-            final CoverageEnabledConfiguration coverageEnabledConfiguration = CoverageEnabledConfiguration.getOrCreate(configuration);
-            return !(coverageEnabledConfiguration.getCoverageRunner() instanceof IDEACoverageRunner) ||
-                !(coverageEnabledConfiguration.isTrackPerTestCoverage() && !coverageEnabledConfiguration.isSampling());
+            CoverageEnabledConfiguration coverageEnabledConfiguration = CoverageEnabledConfiguration.getOrCreate(configuration);
+            return !(coverageEnabledConfiguration.getCoverageRunner() instanceof IDEACoverageRunner)
+                || !(coverageEnabledConfiguration.isTrackPerTestCoverage() && !coverageEnabledConfiguration.isSampling());
         }
         return false;
     }
 
-    protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration) {
+    @Override
+    protected boolean isApplicableFor(@Nonnull RunConfigurationBase configuration) {
         return CoverageEnabledConfiguration.isApplicableTo(configuration);
     }
 
@@ -251,15 +254,18 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
             super(project, patterns, idx, filters);
         }
 
+        @Override
         public void setName(String qualifiedName) {
             super.setName(qualifiedName + ".*");
         }
 
+        @Override
         public PsiJavaPackage getPsiElement() {
-            final String name = getName();
+            String name = getName();
             return JavaPsiFacade.getInstance(getProject()).findPackage(name.substring(0, name.length() - ".*".length()));
         }
 
+        @Override
         public void setPsiElement(PsiJavaPackage psiElement) {
             setName(psiElement.getQualifiedName());
         }
@@ -271,10 +277,12 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
             super(project, patterns, idx, filters);
         }
 
+        @Override
         public PsiClass getPsiElement() {
             return JavaPsiFacade.getInstance(getProject()).findClass(getName(), GlobalSearchScope.allScope(getProject()));
         }
 
+        @Override
         public void setPsiElement(PsiClass psiElement) {
             setName(psiElement.getQualifiedName());
         }

@@ -14,34 +14,34 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * User: anna
- * Date: 20-May-2008
+ * @author anna
+ * @since 2008-05-20
  */
 @ExtensionImpl
 public class IDEACoverageRunner extends JavaCoverageRunner {
     private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 
     @Override
-    public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @Nullable final CoverageSuite coverageSuite) {
+    public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite coverageSuite) {
         return ProjectDataLoader.load(sessionDataFile);
     }
 
     @Override
     public void appendCoverageArgument(
-        final String sessionDataFilePath,
-        final String[] patterns,
-        final OwnJavaParameters javaParameters,
-        final boolean collectLineInfo,
-        final boolean isSampling
+        String sessionDataFilePath,
+        String[] patterns,
+        OwnJavaParameters javaParameters,
+        boolean collectLineInfo,
+        boolean isSampling
     ) {
         StringBuilder argument = new StringBuilder("-javaagent:");
         File agentFile = new File(PluginManager.getPluginPath(IDEACoverageRunner.class), "coverage/consulo/agent.jar");
 
-        final String parentPath = handleSpacesInPath(agentFile);
+        String parentPath = handleSpacesInPath(agentFile);
         argument.append(parentPath).append(File.separator).append(agentFile.getName());
         argument.append("=");
         try {
-            final File tempFile = createTempFile();
+            File tempFile = createTempFile();
             tempFile.deleteOnExit();
             write2file(tempFile, sessionDataFilePath);
             write2file(tempFile, String.valueOf(collectLineInfo));

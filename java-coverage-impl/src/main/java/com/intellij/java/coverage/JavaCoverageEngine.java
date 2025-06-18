@@ -144,9 +144,6 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     /**
      * Determines if coverage information should be displayed for given file
-     *
-     * @param psiFile
-     * @return
      */
     @Override
     public boolean coverageEditorHighlightingApplicableTo(@Nonnull PsiFile psiFile) {
@@ -223,7 +220,7 @@ public class JavaCoverageEngine extends CoverageEngine {
                             if (aborted || errors != 0) {
                                 return;
                             }
-                            Application.get().invokeLater(() -> {
+                            project.getApplication().invokeLater(() -> {
                                 if (project.isDisposed()) {
                                     return;
                                 }

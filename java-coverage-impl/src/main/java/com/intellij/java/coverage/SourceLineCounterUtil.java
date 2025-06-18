@@ -6,15 +6,15 @@ import consulo.util.collection.primitive.ints.IntObjectMap;
 import java.util.List;
 
 /**
- * User: anna
- * Date: 12/30/11
+ * @author anna
+ * @since 2011-12-30
  */
 public class SourceLineCounterUtil {
     public static boolean collectNonCoveredClassInfo(
-        final PackageAnnotator.ClassCoverageInfo classCoverageInfo,
-        final PackageAnnotator.PackageCoverageInfo packageCoverageInfo,
+        PackageAnnotator.ClassCoverageInfo classCoverageInfo,
+        PackageAnnotator.PackageCoverageInfo packageCoverageInfo,
         byte[] content,
-        final boolean excludeLines
+        boolean excludeLines
     ) {
         if (content == null) {
             return false;
@@ -33,14 +33,11 @@ public class SourceLineCounterUtil {
         return false;
     }
 
-    public static void collectSrcLinesForUntouchedFiles(
-        final List<Integer> uncoveredLines,
-        byte[] content, final boolean excludeLines
-    ) {
-        final ClassReader reader = new ClassReader(content);
-        final SourceLineCounter collector = new SourceLineCounter(null, excludeLines, null);
+    public static void collectSrcLinesForUntouchedFiles(List<Integer> uncoveredLines, byte[] content, boolean excludeLines) {
+        ClassReader reader = new ClassReader(content);
+        SourceLineCounter collector = new SourceLineCounter(null, excludeLines, null);
         reader.accept(collector, 0);
-        final IntObjectMap lines = collector.getSourceLines();
+        IntObjectMap lines = collector.getSourceLines();
         lines.keySet().forEach(line -> {
             line--;
             uncoveredLines.add(line);

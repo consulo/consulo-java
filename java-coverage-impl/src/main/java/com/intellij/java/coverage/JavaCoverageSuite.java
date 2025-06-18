@@ -1,30 +1,26 @@
 package com.intellij.java.coverage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.execution.coverage.*;
-import consulo.logging.Logger;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nullable;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.application.util.function.Computable;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.rt.coverage.data.ProjectData;
+import consulo.execution.coverage.*;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.rt.coverage.data.ProjectData;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jdom.Element;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author ven
@@ -35,31 +31,28 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     private String[] myFilters;
     private String mySuiteToMerge;
 
-    @NonNls
     private static final String FILTER = "FILTER";
-    @NonNls
     private static final String MERGE_SUITE = "MERGE_SUITE";
-    @NonNls
     private static final String COVERAGE_RUNNER = "RUNNER";
     private final CoverageEngine myCoverageEngine;
 
     //read external only
-    public JavaCoverageSuite(@Nonnull final JavaCoverageEngine coverageSupportProvider) {
+    public JavaCoverageSuite(@Nonnull JavaCoverageEngine coverageSupportProvider) {
         super();
         myCoverageEngine = coverageSupportProvider;
     }
 
     public JavaCoverageSuite(
-        final String name,
-        final CoverageFileProvider coverageDataFileProvider,
-        final String[] filters,
-        final long lastCoverageTimeStamp,
-        final boolean coverageByTestEnabled,
-        final boolean tracingEnabled,
-        final boolean trackTestFolders,
-        final CoverageRunner coverageRunner,
-        @Nonnull final JavaCoverageEngine coverageSupportProvider,
-        final Project project
+        String name,
+        CoverageFileProvider coverageDataFileProvider,
+        String[] filters,
+        long lastCoverageTimeStamp,
+        boolean coverageByTestEnabled,
+        boolean tracingEnabled,
+        boolean trackTestFolders,
+        CoverageRunner coverageRunner,
+        @Nonnull JavaCoverageEngine coverageSupportProvider,
+        Project project
     ) {
         super(name, coverageDataFileProvider, lastCoverageTimeStamp, coverageByTestEnabled,
             tracingEnabled, trackTestFolders,
@@ -75,7 +68,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         if (myFilters == null || myFilters.length == 0) {
             return ArrayUtil.EMPTY_STRING_ARRAY;
         }
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (String filter : myFilters) {
             if (filter.equals("*")) {
                 result.add(""); //default package
@@ -92,7 +85,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         if (myFilters == null) {
             return ArrayUtil.EMPTY_STRING_ARRAY;
         }
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (String filter : myFilters) {
             if (!filter.equals("*") && !filter.endsWith(".*")) {
                 result.add(filter);
@@ -101,12 +94,13 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return ArrayUtil.toStringArray(result);
     }
 
+    @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
 
         // filters
-        final List children = element.getChildren(FILTER);
-        List<String> filters = new ArrayList<String>();
+        List children = element.getChildren(FILTER);
+        List<String> filters = new ArrayList<>();
         //noinspection unchecked
         for (Element child : ((Iterable<Element>) children)) {
             filters.add(child.getValue());
@@ -121,32 +115,34 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         }
     }
 
-    public void writeExternal(final Element element) throws WriteExternalException {
+    @Override
+    public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
         if (mySuiteToMerge != null) {
             element.setAttribute(MERGE_SUITE, mySuiteToMerge);
         }
         if (myFilters != null) {
             for (String filter : myFilters) {
-                final Element filterElement = new Element(FILTER);
+                Element filterElement = new Element(FILTER);
                 filterElement.setText(filter);
                 element.addContent(filterElement);
             }
         }
-        final CoverageRunner coverageRunner = getRunner();
+        CoverageRunner coverageRunner = getRunner();
         element.setAttribute(COVERAGE_RUNNER, coverageRunner != null ? coverageRunner.getId() : "emma");
     }
 
     @Nullable
-    public ProjectData getCoverageData(final CoverageDataManager coverageDataManager) {
-        final ProjectData data = getCoverageData();
+    @Override
+    public ProjectData getCoverageData(CoverageDataManager coverageDataManager) {
+        ProjectData data = getCoverageData();
         if (data != null) {
             return data;
         }
         ProjectData map = loadProjectInfo();
         if (mySuiteToMerge != null) {
             JavaCoverageSuite toMerge = null;
-            final CoverageSuite[] suites = coverageDataManager.getSuites();
+            CoverageSuite[] suites = coverageDataManager.getSuites();
             for (CoverageSuite suite : suites) {
                 if (Comparing.strEqual(suite.getPresentableName(), mySuiteToMerge)) {
                     if (!Comparing.strEqual(((JavaCoverageSuite) suite).getSuiteToMerge(), getPresentableName())) {
@@ -156,7 +152,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
                 }
             }
             if (toMerge != null) {
-                final ProjectData projectInfo = toMerge.getCoverageData(coverageDataManager);
+                ProjectData projectInfo = toMerge.getCoverageData(coverageDataManager);
                 if (map != null) {
                     map.merge(projectInfo);
                 }
@@ -170,6 +166,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     }
 
     @Nonnull
+    @Override
     public CoverageEngine getCoverageEngine() {
         return myCoverageEngine;
     }
@@ -179,8 +176,8 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return mySuiteToMerge;
     }
 
-    public boolean isClassFiltered(final String classFQName) {
-        for (final String className : getFilteredClassNames()) {
+    public boolean isClassFiltered(String classFQName) {
+        for (String className : getFilteredClassNames()) {
             if (className.equals(classFQName) || classFQName.startsWith(className) && classFQName.charAt(className.length()) == '$') {
                 return true;
             }
@@ -188,9 +185,9 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return false;
     }
 
-    public boolean isPackageFiltered(final String packageFQName) {
-        final String[] filteredPackageNames = getFilteredPackageNames();
-        for (final String packName : filteredPackageNames) {
+    public boolean isPackageFiltered(String packageFQName) {
+        String[] filteredPackageNames = getFilteredPackageNames();
+        for (String packName : filteredPackageNames) {
             if (packName.equals(packageFQName) || packageFQName.startsWith(packName) && packageFQName.charAt(packName.length()) == '.') {
                 return true;
             }
@@ -200,29 +197,29 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
 
     public @Nonnull
     List<PsiJavaPackage> getCurrentSuitePackages(Project project) {
-        List<PsiJavaPackage> packages = new ArrayList<PsiJavaPackage>();
-        final PsiManager psiManager = PsiManager.getInstance(project);
-        final String[] filters = getFilteredPackageNames();
+        List<PsiJavaPackage> packages = new ArrayList<>();
+        PsiManager psiManager = PsiManager.getInstance(project);
+        String[] filters = getFilteredPackageNames();
         if (filters.length == 0) {
             if (getFilteredClassNames().length > 0) {
                 return Collections.emptyList();
             }
 
-            final PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(psiManager.getProject()).findPackage("");
+            PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(psiManager.getProject()).findPackage("");
             if (defaultPackage != null) {
                 packages.add(defaultPackage);
             }
         }
         else {
-            final List<String> nonInherited = new ArrayList<String>();
-            for (final String filter : filters) {
+            List<String> nonInherited = new ArrayList<>();
+            for (String filter : filters) {
                 if (!isSubPackage(filters, filter)) {
                     nonInherited.add(filter);
                 }
             }
 
             for (String filter : nonInherited) {
-                final PsiJavaPackage psiPackage = JavaPsiFacade.getInstance(psiManager.getProject()).findPackage(filter);
+                PsiJavaPackage psiPackage = JavaPsiFacade.getInstance(psiManager.getProject()).findPackage(filter);
                 if (psiPackage != null) {
                     packages.add(psiPackage);
                 }
@@ -241,21 +238,16 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return false;
     }
 
-    public @Nonnull
-    List<PsiClass> getCurrentSuiteClasses(final Project project) {
-        final List<PsiClass> classes = new ArrayList<PsiClass>();
-        final PsiManager psiManager = PsiManager.getInstance(project);
-        final String[] classNames = getFilteredClassNames();
+    @Nonnull
+    public List<PsiClass> getCurrentSuiteClasses(Project project) {
+        List<PsiClass> classes = new ArrayList<>();
+        PsiManager psiManager = PsiManager.getInstance(project);
+        String[] classNames = getFilteredClassNames();
         if (classNames.length > 0) {
-            for (final String className : classNames) {
-                final PsiClass aClass =
-                    ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-                        @Nullable
-                        public PsiClass compute() {
-                            return JavaPsiFacade.getInstance(psiManager.getProject())
-                                .findClass(className.replace("$", "."), GlobalSearchScope.allScope(project));
-                        }
-                    });
+            for (String className : classNames) {
+                PsiClass aClass =
+                    project.getApplication().runReadAction((Supplier<PsiClass>) () -> JavaPsiFacade.getInstance(psiManager.getProject())
+                        .findClass(className.replace("$", "."), GlobalSearchScope.allScope(project)));
                 if (aClass != null) {
                     classes.add(aClass);
                 }

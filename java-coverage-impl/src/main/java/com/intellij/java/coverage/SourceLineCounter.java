@@ -29,20 +29,20 @@ import java.util.Set;
 
 /**
  * @author anna
- * @since 27-Jun-2008
+ * @since 2008-06-27
  */
 public class SourceLineCounter extends ClassVisitor {
     private final boolean myExcludeLines;
     private final ClassData myClassData;
     private final ProjectData myProjectData;
 
-    private final IntObjectMap myNSourceLines = IntMaps.newIntObjectHashMap();
-    private final Set myMethodsWithSourceCode = new HashSet();
+    private final IntObjectMap<String> myNSourceLines = IntMaps.newIntObjectHashMap();
+    private final Set<String> myMethodsWithSourceCode = new HashSet<>();
     private int myCurrentLine;
     private boolean myInterface;
     private boolean myEnum;
 
-    public SourceLineCounter(final ClassData classData, final boolean excludeLines, final ProjectData projectData) {
+    public SourceLineCounter(ClassData classData, boolean excludeLines, ProjectData projectData) {
         super(Opcodes.API_VERSION, new ClassVisitor(Opcodes.API_VERSION) {
         });
         myProjectData = projectData;
@@ -74,13 +74,7 @@ public class SourceLineCounter extends ClassVisitor {
     }
 
     @Override
-    public MethodVisitor visitMethod(
-        final int access,
-        final String name,
-        final String desc,
-        final String signature,
-        final String[] exceptions
-    ) {
+    public MethodVisitor visitMethod(int access, final String name, final String desc, String signature, String[] exceptions) {
         final MethodVisitor v = cv.visitMethod(access, name, desc, signature, exceptions);
         if (myInterface) {
             return v;
@@ -102,9 +96,8 @@ public class SourceLineCounter extends ClassVisitor {
         return new MethodVisitor(Opcodes.ASM5, v) {
             private boolean myHasInstructions;
 
-
             @Override
-            public void visitLineNumber(final int line, final Label start) {
+            public void visitLineNumber(int line, Label start) {
                 myHasInstructions = false;
                 myCurrentLine = line;
                 if (!myExcludeLines ||
@@ -117,7 +110,7 @@ public class SourceLineCounter extends ClassVisitor {
             }
 
             @Override
-            public void visitInsn(final int opcode) {
+            public void visitInsn(int opcode) {
                 if (myExcludeLines) {
                     if (opcode == Opcodes.RETURN && !myHasInstructions) {
                         myNSourceLines.remove(myCurrentLine);
@@ -129,25 +122,25 @@ public class SourceLineCounter extends ClassVisitor {
             }
 
             @Override
-            public void visitIntInsn(final int opcode, final int operand) {
+            public void visitIntInsn(int opcode, int operand) {
                 super.visitIntInsn(opcode, operand);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitVarInsn(final int opcode, final int var) {
+            public void visitVarInsn(int opcode, int var) {
                 super.visitVarInsn(opcode, var);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitTypeInsn(final int opcode, final String type) {
+            public void visitTypeInsn(int opcode, String type) {
                 super.visitTypeInsn(opcode, type);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitFieldInsn(final int opcode, final String owner, final String name, final String desc) {
+            public void visitFieldInsn(int opcode, String owner, String name, String desc) {
                 super.visitFieldInsn(opcode, owner, name, desc);
                 myHasInstructions = true;
             }
@@ -159,47 +152,46 @@ public class SourceLineCounter extends ClassVisitor {
             }
 
             @Override
-            public void visitJumpInsn(final int opcode, final Label label) {
+            public void visitJumpInsn(int opcode, Label label) {
                 super.visitJumpInsn(opcode, label);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitLdcInsn(final Object cst) {
+            public void visitLdcInsn(Object cst) {
                 super.visitLdcInsn(cst);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitIincInsn(final int var, final int increment) {
+            public void visitIincInsn(int var, int increment) {
                 super.visitIincInsn(var, increment);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitTableSwitchInsn(final int min, final int max, final Label dflt, final Label[] labels) {
+            public void visitTableSwitchInsn(int min, int max, Label dflt, Label[] labels) {
                 super.visitTableSwitchInsn(min, max, dflt, labels);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitLookupSwitchInsn(final Label dflt, final int[] keys, final Label[] labels) {
+            public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
                 super.visitLookupSwitchInsn(dflt, keys, labels);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitMultiANewArrayInsn(final String desc, final int dims) {
+            public void visitMultiANewArrayInsn(String desc, int dims) {
                 super.visitMultiANewArrayInsn(desc, dims);
                 myHasInstructions = true;
             }
 
             @Override
-            public void visitTryCatchBlock(final Label start, final Label end, final Label handler, final String type) {
+            public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
                 super.visitTryCatchBlock(start, end, handler, type);
                 myHasInstructions = true;
             }
-
         };
     }
 
