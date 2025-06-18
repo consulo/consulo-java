@@ -1,0 +1,78 @@
+coverage.button.add.package:
+    text: Add Package…
+coverage.classes:
+    text: classes
+coverage.classes.capitalised:
+    text: Classes
+coverage.error.jacoco.report.corrupted:
+    text: Jacoco report file {0} may be corrupted, try to rerun
+coverage.error.jacoco.report.format:
+    text: 'File is not in Jacoco report format: {0}'
+coverage.pattern.filter.editor.choose.package.title:
+    text: Choose Package
+coverage.recompile:
+    text: Recompile
+coverage.settings:
+    text: Show code coverage options
+coverage.settings.exclude:
+    text: Exclude classes and packages
+coverage.settings.group:
+    text: Code Coverage
+coverage.settings.include:
+    text: Specify classes and packages
+coverage.settings.menu:
+    text: Coverage settings
+coverage.view.column.branch:
+    text: Branch, %
+coverage.view.column.class:
+    text: Class, %
+coverage.view.column.line:
+    text: Line, %
+coverage.view.column.method:
+    text: Method, %
+coverage.view.text.classes.covered:
+    text: '{0}% classes'
+coverage.view.text.methods.covered:
+    text: '{0}% methods'
+coverage.xml.report.title:
+    text: XML Report
+do.not.show.coverage.data.in.specified.classes.and.packages:
+    text: Do not show coverage data in specified classes and packages
+download.coverage.report.from.target.failed:
+    text: Couldn't download coverage report from target
+download.coverage.report.from.target.progress.title:
+    text: Downloading coverage report from target…
+exclude.coverage.filters.title:
+    text: Packages and classes to exclude from coverage data
+generating.coverage.report:
+    text: Generating coverage report…
+java.coverage.engine.presentable.text:
+    text: Java Coverage
+notification.group.coverage:
+    text: Error loading or collecting coverage data
+project.class.files.are.out.of.date:
+    text: Project class files are out of date, this may lead to incomplete coverage information
+project.is.out.of.date:
+    text: Project Is out of Date
+record.coverage.filters.title:
+    text: Packages and classes to include in coverage data
+report.unknown.outcome:
+    text: 'Unknown outcome: {0}'
+run.configuration.choose.coverage.runner:
+    text: 'Choose coverage runner:'
+run.configuration.coverage.branches:
+    text: Branch coverage
+run.configuration.coverage.branches.comment:
+    text: Collect coverage for all branches of if/switch statements
+run.configuration.enable.coverage.in.test.folders:
+    text: Collect coverage in test folders
+run.configuration.track.per.test.coverage:
+    text: Track per test coverage
+run.configuration.track.per.test.coverage.comment:
+    text: Collect data about which code lines were covered by specific tests
+settings.coverage.java.ignore.implicitly.declared.default.constructors:
+    text: Ignore implicitly declared default constructors
+settings.coverage.java.java.coverage:
+    text: Java Coverage
+show.coverage.data.only.in.specified.classes.and.packages:
+    text: Show coverage data only in specified classes and packages

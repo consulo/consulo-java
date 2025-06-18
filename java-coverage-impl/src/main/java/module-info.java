@@ -1,6 +1,6 @@
 /**
  * @author VISTALL
- * @since 07/12/2022
+ * @since 2022-12-07
  */
 module consulo.java.coverage.impl {
     requires consulo.java.execution.api;
@@ -19,4 +19,5 @@ module consulo.java.coverage.impl {
     exports com.intellij.java.coverage;
     exports com.intellij.java.coverage.info;
     exports com.intellij.java.coverage.view;
+    exports consulo.java.coverage.localize;
 }
