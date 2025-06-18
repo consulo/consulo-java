@@ -30,6 +30,7 @@ import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.coverage.CoverageEnabledConfiguration;
 import consulo.execution.coverage.CoverageRunner;
 import consulo.execution.localize.ExecutionLocalize;
+import consulo.java.coverage.localize.JavaCoverageLocalize;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
@@ -216,7 +217,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
         myRunnerPanel = new JPanel(new GridBagLayout());
         myRunnerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         myRunnerPanel.add(
-            new JLabel(LocalizeValue.localizeTODO("Choose coverage runner:").get()),
+            new JLabel(JavaCoverageLocalize.runConfigurationChooseCoverageRunner().get()),
             new GridBagConstraints(
                 0, 0, 1, 1, 0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE,
                 JBUI.insetsRight(10), 0, 0
@@ -250,7 +251,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
         mySamplingRb.addActionListener(samplingListener);
         myTracingRb.addActionListener(samplingListener);
 
-        myTrackPerTestCoverageCb = new JCheckBox(LocalizeValue.localizeTODO("Track per test coverage").get());
+        myTrackPerTestCoverageCb = new JCheckBox(JavaCoverageLocalize.runConfigurationTrackPerTestCoverage().get());
         JPanel tracingPanel = new JPanel(new BorderLayout());
         tracingPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
         tracingPanel.add(myTrackPerTestCoverageCb, BorderLayout.CENTER);
@@ -279,7 +280,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
         panel.add(myClassFilterEditor, bagConstraints);
 
         bagConstraints.weighty = 0;
-        myTrackTestSourcesCb = new JCheckBox(LocalizeValue.localizeTODO("Enable coverage in test folders").get());
+        myTrackTestSourcesCb = new JCheckBox(JavaCoverageLocalize.runConfigurationEnableCoverageInTestFolders().get());
         panel.add(myTrackTestSourcesCb, bagConstraints);
 
         result.add(panel, gc);

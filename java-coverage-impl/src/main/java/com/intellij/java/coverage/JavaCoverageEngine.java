@@ -22,6 +22,7 @@ import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.*;
 import consulo.execution.coverage.view.CoverageViewExtension;
 import consulo.execution.test.AbstractTestProxy;
+import consulo.java.coverage.localize.JavaCoverageLocalize;
 import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.psi.PsiElement;
@@ -208,9 +209,8 @@ public class JavaCoverageEngine extends CoverageEngine {
             suite.checkModule(module);
             Runnable runnable = () -> {
                 if (Messages.showOkCancelDialog(
-                    "Project class files are out of date. Would you like to recompile?" +
-                        " The refusal to do it will result in incomplete coverage information",
-                    "Project is out of date",
+                    JavaCoverageLocalize.projectClassFilesAreOutOfDate().get(),
+                    JavaCoverageLocalize.projectIsOutOfDate().get(),
                     UIUtil.getWarningIcon()
                 ) == Messages.OK) {
                     CompilerManager compilerManager = CompilerManager.getInstance(project);
@@ -612,7 +612,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Override
     public String getPresentableText() {
-        return "Java Coverage";
+        return JavaCoverageLocalize.javaCoverageEnginePresentableText().get();
     }
 
     @Override
