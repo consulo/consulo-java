@@ -10,6 +10,7 @@ import consulo.execution.coverage.CoverageSuite;
 import consulo.execution.coverage.CoverageSuitesBundle;
 import consulo.execution.coverage.CoverageViewManager;
 import consulo.execution.coverage.view.*;
+import consulo.java.coverage.localize.JavaCoverageLocalize;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -311,9 +312,9 @@ public class JavaCoverageViewExtension extends CoverageViewExtension {
     public ColumnInfo[] createColumnInfos() {
         return new ColumnInfo[]{
             new ElementColumnInfo(),
-            new PercentageCoverageColumnInfo(1, "Class, %", getSuitesBundle(), getStateBean()),
-            new PercentageCoverageColumnInfo(2, "Method, %", getSuitesBundle(), getStateBean()),
-            new PercentageCoverageColumnInfo(3, "Line, %", getSuitesBundle(), getStateBean())
+            new PercentageCoverageColumnInfo(1, JavaCoverageLocalize.coverageViewColumnClass(), getSuitesBundle(), getStateBean()),
+            new PercentageCoverageColumnInfo(2, JavaCoverageLocalize.coverageViewColumnMethod(), getSuitesBundle(), getStateBean()),
+            new PercentageCoverageColumnInfo(3, JavaCoverageLocalize.coverageViewColumnLine(), getSuitesBundle(), getStateBean())
         };
     }
 
@@ -332,7 +333,7 @@ public class JavaCoverageViewExtension extends CoverageViewExtension {
     @Override
     @RequiredReadAction
     public boolean canSelectInCoverageView(Object object) {
-        PsiFile psiFile = object instanceof VirtualFile ? PsiManager.getInstance(getProject()).findFile((VirtualFile) object) : null;
+        PsiFile psiFile = object instanceof VirtualFile virtualFile ? PsiManager.getInstance(getProject()).findFile(virtualFile) : null;
         if (psiFile instanceof PsiClassOwner classOwner) {
             String packageName = classOwner.getPackageName();
             return isInCoverageScope(JavaPsiFacade.getInstance(getProject()).findPackage(packageName), getSuitesBundle());
