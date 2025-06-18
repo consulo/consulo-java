@@ -188,7 +188,8 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     public boolean isPackageFiltered(String packageFQName) {
         String[] filteredPackageNames = getFilteredPackageNames();
         for (String packName : filteredPackageNames) {
-            if (packName.equals(packageFQName) || packageFQName.startsWith(packName) && packageFQName.charAt(packName.length()) == '.') {
+            if (packName.equals(packageFQName)
+                || packageFQName.startsWith(packName) && packageFQName.charAt(packName.length()) == '.') {
                 return true;
             }
         }

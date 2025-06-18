@@ -51,7 +51,7 @@ java.coverage.engine.presentable.text:
 notification.group.coverage:
     text: Error loading or collecting coverage data
 project.class.files.are.out.of.date:
-    text: Project class files are out of date, this may lead to incomplete coverage information
+    text: Project class files are out of date, this may lead to incomplete coverage information. Would you like to recompile?
 project.is.out.of.date:
     text: Project Is out of Date
 record.coverage.filters.title:
