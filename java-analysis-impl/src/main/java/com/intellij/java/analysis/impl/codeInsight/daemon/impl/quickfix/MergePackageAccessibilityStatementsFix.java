@@ -19,11 +19,8 @@ import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.psi.PsiElement;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -47,24 +44,22 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
         myRole = role;
     }
 
-    @Nls
     @Nonnull
     @Override
     public String getText() {
-        return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.name", getKeyword(), myPackageName);
+        return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(getKeyword(), myPackageName).get();
     }
 
-    @Nls
     @Nonnull
     @Override
     public String getFamilyName() {
-        return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", getKeyword());
+        return JavaQuickFixLocalize.java9MergeModuleStatementsFixFamilyName(getKeyword()).get();
     }
 
     @Nonnull
     @Override
     protected String getReplacementText(@Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
-        final List<String> moduleNames = getModuleNames(statementsToMerge);
+        List<String> moduleNames = getModuleNames(statementsToMerge);
         if (!moduleNames.isEmpty()) {
             return getKeyword() + " " + myPackageName + " " + PsiKeyword.TO + " " + joinUniqueNames(moduleNames) + ";";
         }
@@ -73,9 +68,9 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 
     @Nonnull
     private static List<String> getModuleNames(@Nonnull List<PsiPackageAccessibilityStatement> statements) {
-        final List<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         for (PsiPackageAccessibilityStatement statement : statements) {
-            final List<String> moduleNames = statement.getModuleNames();
+            List<String> moduleNames = statement.getModuleNames();
             if (moduleNames.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -94,13 +89,10 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 
     @Nullable
     public static MergeModuleStatementsFix createFix(@Nullable PsiPackageAccessibilityStatement statement) {
-        if (statement != null) {
-            final PsiElement parent = statement.getParent();
-            if (parent instanceof PsiJavaModule) {
-                final String packageName = statement.getPackageName();
-                if (packageName != null) {
-                    return new MergePackageAccessibilityStatementsFix((PsiJavaModule) parent, packageName, statement.getRole());
-                }
+        if (statement != null && statement.getParent() instanceof PsiJavaModule javaModule) {
+            String packageName = statement.getPackageName();
+            if (packageName != null) {
+                return new MergePackageAccessibilityStatementsFix(javaModule, packageName, statement.getRole());
             }
         }
         return null;
@@ -108,25 +100,17 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 
     @Nonnull
     private static Iterable<PsiPackageAccessibilityStatement> getStatements(@Nonnull PsiJavaModule javaModule, @Nonnull Role role) {
-        switch (role) {
-            case OPENS:
-                return javaModule.getOpens();
-            case EXPORTS:
-                return javaModule.getExports();
-        }
-        LOG.error("Unexpected role " + role);
-        return Collections.emptyList();
+        return switch (role) {
+            case OPENS -> javaModule.getOpens();
+            case EXPORTS -> javaModule.getExports();
+        };
     }
 
     @Nonnull
     private String getKeyword() {
-        switch (myRole) {
-            case OPENS:
-                return PsiKeyword.OPENS;
-            case EXPORTS:
-                return PsiKeyword.EXPORTS;
-        }
-        LOG.error("Unexpected role " + myRole);
-        return "";
+        return switch (myRole) {
+            case OPENS -> PsiKeyword.OPENS;
+            case EXPORTS -> PsiKeyword.EXPORTS;
+        };
     }
 }
