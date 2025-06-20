@@ -197,13 +197,16 @@ public class ModuleHighlightUtil {
         for (T statement : statements) {
             String refText = ref.apply(statement).orElse(null);
             if (refText != null && !filter.add(refText)) {
-                HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(statement)
                     .descriptionAndTooltip(descriptionTemplate.apply(refText))
-                    .registerFix(factory().createDeleteFix(statement))
-                    .registerFix(MergeModuleStatementsFix.createFix(statement))
-                    .create();
-                results.add(info);
+                    .registerFix(factory().createDeleteFix(statement));
+
+                MergeModuleStatementsFix mergeModuleStatementsFix = MergeModuleStatementsFix.createFix(statement);
+                if (mergeModuleStatementsFix != null) {
+                    hlBuilder.registerFix(mergeModuleStatementsFix);
+                }
+                results.add(hlBuilder.create());
             }
         }
     }
