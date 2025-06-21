@@ -6,9 +6,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
-import consulo.ide.impl.idea.openapi.vfs.newvfs.ArchiveFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.newvfs.VfsImplUtil;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.util.collection.Maps;
 import consulo.util.lang.StringUtil;
@@ -20,15 +17,17 @@ import consulo.virtualFileSystem.event.BulkFileListener;
 import consulo.virtualFileSystem.event.VFileContentChangeEvent;
 import consulo.virtualFileSystem.event.VFileDeleteEvent;
 import consulo.virtualFileSystem.event.VFileEvent;
-
+import consulo.virtualFileSystem.impl.ArchiveHandler;
+import consulo.virtualFileSystem.impl.RawArchiveFileSystem;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @ExtensionImpl
-public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSystem {
+public class JrtFileSystemImpl extends RawArchiveFileSystem implements JrtFileSystem {
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
@@ -47,13 +46,13 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
 
   @Nonnull
   @Override
-  protected String extractLocalPath(@Nonnull String rootPath) {
+  public String extractLocalPath(@Nonnull String rootPath) {
     return StringUtil.trimEnd(rootPath, SEPARATOR);
   }
 
   @Nonnull
   @Override
-  protected String composeRootPath(@Nonnull String localPath) {
+  public String composeRootPath(@Nonnull String localPath) {
     return localPath + SEPARATOR;
   }
 
@@ -67,7 +66,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
 
   @Nonnull
   @Override
-  protected ArchiveHandler getHandler(@Nonnull VirtualFile entryFile) {
+  public ArchiveHandler getHandler(@Nonnull VirtualFile entryFile) {
     checkSubscription();
 
     String homePath = extractLocalPath(extractRootPath(entryFile.getPath()));
@@ -130,26 +129,6 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
         }
       }
     });
-  }
-
-  @Override
-  public VirtualFile findFileByPath(@Nonnull String path) {
-    return VfsImplUtil.findFileByPath(this, path);
-  }
-
-  @Override
-  public VirtualFile findFileByPathIfCached(@Nonnull String path) {
-    return VfsImplUtil.findFileByPathIfCached(this, path);
-  }
-
-  @Override
-  public VirtualFile refreshAndFindFileByPath(@Nonnull String path) {
-    return VfsImplUtil.refreshAndFindFileByPath(this, path);
-  }
-
-  @Override
-  public void refresh(boolean asynchronous) {
-    VfsImplUtil.refresh(this, asynchronous);
   }
 
   @Override
