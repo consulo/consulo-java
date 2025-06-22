@@ -66,7 +66,7 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
             }
             currentElement = method.getParent();
         }
-        PsiClass aClass = ApplicationConfigurationType.getMainClass(element);
+        PsiClass aClass = ReadAction.compute(() -> ApplicationConfigurationType.getMainClass(element));
         if (aClass == null) {
             return false;
         }
