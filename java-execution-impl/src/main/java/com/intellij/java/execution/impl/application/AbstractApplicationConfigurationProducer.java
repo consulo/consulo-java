@@ -82,17 +82,21 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
     }
 
     @Nullable
-    private static PsiMethod findMain(PsiElement element) {
-        PsiMethod method;
-        while ((method = PsiTreeUtil.getParentOfType(element, PsiMethod.class)) != null) {
-            if (PsiMethodUtil.isMainMethod(method)) {
-                return method;
+    private static PsiMethod findMain(final PsiElement element) {
+        return ReadAction.compute(() -> {
+            PsiElement target = element;
+
+            PsiMethod method;
+            while ((method = PsiTreeUtil.getParentOfType(target, PsiMethod.class)) != null) {
+                if (PsiMethodUtil.isMainMethod(method)) {
+                    return method;
+                }
+                else {
+                    target = method.getParent();
+                }
             }
-            else {
-                element = method.getParent();
-            }
-        }
-        return null;
+            return null;
+        });
     }
 
     @Override
