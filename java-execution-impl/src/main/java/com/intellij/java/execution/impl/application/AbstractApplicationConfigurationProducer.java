@@ -22,6 +22,7 @@ import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.application.ReadAction;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.Location;
 import consulo.language.psi.PsiElement;
@@ -75,7 +76,7 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
     }
 
     private void setupConfiguration(T configuration, PsiClass aClass, ConfigurationContext context) {
-        configuration.MAIN_CLASS_NAME = JavaExecutionUtil.getRuntimeQualifiedName(aClass);
+        configuration.MAIN_CLASS_NAME = ReadAction.compute(() -> JavaExecutionUtil.getRuntimeQualifiedName(aClass));
         configuration.setGeneratedName();
         setupConfigurationModule(context, configuration);
     }
