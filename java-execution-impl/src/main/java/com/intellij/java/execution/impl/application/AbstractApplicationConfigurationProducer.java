@@ -47,7 +47,7 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
         if (contextLocation == null) {
             return false;
         }
-        Location location = JavaExecutionUtil.stepIntoSingleClass(contextLocation);
+        Location location = ReadAction.compute(() -> JavaExecutionUtil.stepIntoSingleClass(contextLocation));
         if (location == null) {
             return false;
         }
