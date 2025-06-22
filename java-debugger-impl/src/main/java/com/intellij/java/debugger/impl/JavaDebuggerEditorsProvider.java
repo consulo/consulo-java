@@ -5,6 +5,7 @@ import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
+import consulo.application.ReadAction;
 import consulo.document.Document;
 import consulo.execution.debug.XDebuggerUtil;
 import consulo.execution.debug.XSourcePosition;
@@ -19,9 +20,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.virtualFileSystem.fileType.FileType;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -62,8 +63,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	@Override
 	public XExpression createExpression(@Nonnull Project project, @Nonnull Document document, @Nullable Language language, @Nonnull EvaluationMode mode)
 	{
-		PsiDocumentManager.getInstance(project).commitDocument(document);
-		PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+		PsiFile psiFile = ReadAction.compute(() -> PsiDocumentManager.getInstance(project).getPsiFile(document));
 		if(psiFile != null)
 		{
 			return XDebuggerUtil.getInstance().createExpression(psiFile.getText(), language, ((JavaCodeFragment) psiFile).importsToString(), mode);
