@@ -16,9 +16,6 @@ open module consulo.java {
     requires transitive consulo.java.language.impl;
     requires transitive consulo.java.manifest;
 
-    // TODO remove it in future
-    requires consulo.virtual.file.system.impl;
-
     requires velocity.engine.core;
 
     requires com.intellij.xml;

@@ -3,7 +3,7 @@ package com.intellij.java.impl.openapi.vfs.impl.jrt;
 
 import consulo.logging.Logger;
 import consulo.util.lang.ref.SoftReference;
-import consulo.virtualFileSystem.impl.ArchiveHandler;
+import consulo.virtualFileSystem.archive.ArchiveHandler;
 import jakarta.annotation.Nonnull;
 
 import java.io.File;

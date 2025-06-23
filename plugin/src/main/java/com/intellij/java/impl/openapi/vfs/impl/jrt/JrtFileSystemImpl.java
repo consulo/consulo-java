@@ -13,12 +13,12 @@ import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.NewVirtualFile;
 import consulo.virtualFileSystem.RefreshQueue;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.archive.ArchiveHandler;
+import consulo.virtualFileSystem.archive.BaseArchiveFileSystem;
 import consulo.virtualFileSystem.event.BulkFileListener;
 import consulo.virtualFileSystem.event.VFileContentChangeEvent;
 import consulo.virtualFileSystem.event.VFileDeleteEvent;
 import consulo.virtualFileSystem.event.VFileEvent;
-import consulo.virtualFileSystem.impl.ArchiveHandler;
-import consulo.virtualFileSystem.impl.RawArchiveFileSystem;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @ExtensionImpl
-public class JrtFileSystemImpl extends RawArchiveFileSystem implements JrtFileSystem {
+public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileSystem {
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
@@ -98,12 +98,12 @@ public class JrtFileSystemImpl extends RawArchiveFileSystem implements JrtFileSy
             String homePath = null;
 
             if (e instanceof VFileContentChangeEvent) {
-              VirtualFile file = ((VFileContentChangeEvent) e).getFile();
+              VirtualFile file = e.getFile();
               if ("release".equals(file.getName())) {
                 homePath = file.getParent().getPath();
               }
             } else if (e instanceof VFileDeleteEvent) {
-              homePath = ((VFileDeleteEvent) e).getFile().getPath();
+              homePath = e.getFile().getPath();
             }
 
             if (homePath != null) {
