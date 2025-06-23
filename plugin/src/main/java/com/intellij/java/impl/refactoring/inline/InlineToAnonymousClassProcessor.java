@@ -127,8 +127,6 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         }
         for (UsageInfo usage : usages) {
             if (isForcePreview(usage)) {
-                WindowManager.getInstance().getStatusBar(myProject)
-                    .setInfo(RefactoringLocalize.occurrencesFoundInCommentsStringsAndNonJavaFiles().get());
                 return true;
             }
         }

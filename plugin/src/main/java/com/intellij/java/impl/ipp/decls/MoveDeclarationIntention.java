@@ -18,7 +18,6 @@ package com.intellij.java.impl.ipp.decls;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
-import com.siyeh.IntentionPowerPackBundle;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
@@ -32,7 +31,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import consulo.project.ui.wm.StatusBar;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -93,9 +91,6 @@ public class MoveDeclarationIntention extends Intention {
     final Editor editor = editorManager.getSelectedTextEditor();
     final PsiElement[] elements = new PsiElement[]{element};
     highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-
-    StatusBar.Info.set(IntentionPowerPackBundle.message(
-      "status.bar.escape.highlighting.message"), project);
   }
 
   private static PsiDeclarationStatement moveDeclarationToReference(

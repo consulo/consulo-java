@@ -115,7 +115,6 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
         LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
         CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }
     }
@@ -169,8 +168,6 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
         });
       }, REFACTORING_NAME, null);
     }
-
-    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
   }
 
   @RequiredUIAccess

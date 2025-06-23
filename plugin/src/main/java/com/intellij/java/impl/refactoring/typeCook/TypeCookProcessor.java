@@ -25,7 +25,6 @@ import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
@@ -107,8 +106,6 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
     }
 
     myResult.apply (victims);
-
-    WindowManager.getInstance().getStatusBar(myProject).setInfo(myResult.getReport());
   }
 
   @Override

@@ -257,7 +257,6 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
               continue;
             }
             final int duplicatesNo = matches.size();
-            WindowManager.getInstance().getStatusBar(project).setInfo(getStatusMessage(duplicatesNo));
             CommandProcessor.getInstance().executeCommand(project, new Runnable() {
               @Override
               public void run() {
@@ -271,8 +270,6 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
                 });
               }
             }, REFACTORING_NAME, REFACTORING_NAME);
-
-            WindowManager.getInstance().getStatusBar(project).setInfo("");
           }
         } finally {
           a.finish();

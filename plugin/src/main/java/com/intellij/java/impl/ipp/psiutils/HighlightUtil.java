@@ -32,8 +32,6 @@ import consulo.language.editor.template.macro.MacroCallNode;
 import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
-import consulo.project.ui.wm.StatusBar;
-import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -74,13 +72,6 @@ public class HighlightUtil {
       findmodel.setSearchHighlighters(true);
       findmanager.setFindWasPerformed();
       findmanager.setFindNextModel(findmodel);
-      application.invokeLater(() -> {
-        final WindowManager windowManager = WindowManager.getInstance();
-        final StatusBar statusBar = windowManager.getStatusBar(project);
-        if (statusBar != null) {
-          statusBar.setInfo(statusBarText);
-        }
-      });
     });
   }
 

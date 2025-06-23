@@ -112,23 +112,6 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
       if (isOnTheFly()) {
         final Collection<PsiElement> shortenedElements = qualificationRemover.getShortenedElements();
         HighlightUtils.highlightElements(shortenedElements);
-        showStatusMessage(file.getProject(), shortenedElements.size());
-      }
-    }
-
-    private static void showStatusMessage(Project project, int elementCount) {
-      final WindowManager windowManager = WindowManager.getInstance();
-      final StatusBar statusBar = windowManager.getStatusBar(project);
-      if (statusBar == null) {
-        return;
-      }
-      if (elementCount == 1) {
-        statusBar.setInfo(InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.status.bar.escape.highlighting.message1"));
-      }
-      else {
-        statusBar.setInfo(InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.status.bar.escape.highlighting.message2",
-            elementCount - 1
-        ));
       }
     }
 

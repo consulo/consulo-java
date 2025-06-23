@@ -74,8 +74,6 @@ public class HighlightUtils {
       final HighlightManager highlightManager = HighlightManager.getInstance(project);
       highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       final WindowManager windowManager = WindowManager.getInstance();
-      final StatusBar statusBar = windowManager.getStatusBar(project);
-      statusBar.setInfo(InspectionGadgetsLocalize.pressEscapeToRemoveHighlightingMessage().get());
       final FindManager findmanager = FindManager.getInstance(project);
       FindModel findmodel = findmanager.getFindNextModel();
       if (findmodel == null) {

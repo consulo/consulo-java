@@ -66,7 +66,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
@@ -822,7 +821,6 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
               PsiElement[] exprsToHighlight = PsiUtilBase.toPsiElementArray(array);
               HighlightManager highlightManager = HighlightManager.getInstance(myProject);
                 highlightManager.addOccurrenceHighlights(myEditor, exprsToHighlight, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-              WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
             }
           }
         }

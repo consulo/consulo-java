@@ -151,9 +151,6 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
     dialog.show();
 
     if (!dialog.isOK()) {
-      if (occurrencesNumber > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
-      }
       return null;
     }
 

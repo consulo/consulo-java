@@ -463,8 +463,6 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     @Override
     protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
         if (UsageViewUtil.hasNonCodeUsages(usages)) {
-            WindowManager.getInstance().getStatusBar(myProject)
-                .setInfo(RefactoringLocalize.occurrencesFoundInCommentsStringsAndNonJavaFiles().get());
             return true;
         }
         else {

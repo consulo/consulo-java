@@ -40,8 +40,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.*;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
@@ -73,7 +71,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
@@ -1060,7 +1057,6 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     }
     HighlightManager highlightManager = HighlightManager.getInstance(project);
     highlightManager.addOccurrenceHighlights(editor, replacedOccurences, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
   }
 
   protected abstract void showErrorMessage(Project project, Editor editor, String message);

@@ -48,7 +48,6 @@ import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
@@ -209,7 +208,6 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
       highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
       final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
       editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.MAKE_VISIBLE);
-      WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
     }
   }
 

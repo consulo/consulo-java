@@ -68,9 +68,6 @@ public class IntroduceVariableHandler extends IntroduceVariableBase implements J
             validator);
     dialog.show();
     if (!dialog.isOK()) {
-      if (occurrences.length > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
-      }
     } else {
       if (editor != null) {
         for (RangeHighlighter highlighter : highlighters) {

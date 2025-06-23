@@ -1685,7 +1685,6 @@ public class ExtractMethodProcessor implements MatchProvider {
         RefactoringLocalize.thereAreMultipleExitPointsInTheSelectedCodeFragment()
       );
       CommonRefactoringUtil.showErrorHint(myProject, myEditor, message.get(), myRefactoringName, myHelpId);
-      WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
     }
   }
 

@@ -50,7 +50,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.*;
 import consulo.util.collection.MultiMap;
@@ -891,8 +890,6 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
             UsageInfoToUsageConverter.convert(new UsageInfoToUsageConverter.TargetElementsDescriptor(myClass), usages),
             presentation
         );
-
-        WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.instancesUpcastedToJavaLangObjectFound().get());
     }
 
     /**

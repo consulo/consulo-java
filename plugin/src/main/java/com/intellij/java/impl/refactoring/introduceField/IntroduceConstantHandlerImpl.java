@@ -192,9 +192,6 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     dialog.setReplaceAllOccurrences(replaceAllOccurrences);
     dialog.show();
     if (!dialog.isOK()) {
-      if (occurrences.length > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
-      }
       return null;
     }
     return new Settings(dialog.getEnteredName(), expr, occurrences, dialog.isReplaceAllOccurrences(), true, true,

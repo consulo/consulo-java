@@ -162,7 +162,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
       CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
-      WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
       return;
     }
 
@@ -204,7 +203,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
             RefactoringLocalize.variableIsAccessedForWritingAndUsedWithInlined(localName));
         CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }
     }
@@ -215,7 +213,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       LocalizeValue message =
           RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
       CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_VARIABLE);
-      WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
       return;
     }
 
@@ -241,7 +238,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
           project);
       dialog.show();
       if (!dialog.isOK()) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }
     }
@@ -266,7 +262,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
 
         if (editor != null && !project.getApplication().isUnitTestMode()) {
           highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-          WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         }
 
         for (final PsiExpression expr : exprs) {
