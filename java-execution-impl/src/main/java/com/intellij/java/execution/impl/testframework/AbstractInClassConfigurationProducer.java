@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ReadAction;
 import consulo.execution.RunnerAndConfigurationSettings;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.ConfigurationFromContext;
@@ -111,8 +111,15 @@ public abstract class AbstractInClassConfigurationProducer<T extends JavaTestCon
     }
 
     @Override
-    @RequiredReadAction
     protected boolean setupConfigurationFromContext(
+        T configuration,
+        ConfigurationContext context,
+        SimpleReference<PsiElement> sourceElement
+    ) {
+        return ReadAction.compute(() -> setupConfigurationFromContextImpl(configuration, context, sourceElement));
+    }
+
+    private boolean setupConfigurationFromContextImpl(
         T configuration,
         ConfigurationContext context,
         SimpleReference<PsiElement> sourceElement
