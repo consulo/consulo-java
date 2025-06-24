@@ -52,8 +52,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
-import consulo.ui.UIAccess;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
@@ -82,13 +80,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
             myEventThread = new DebuggerEventThread();
             Application.get().executeOnPooledThread(myEventThread);
         }
-    }
-
-    private static void showStatusText(DebugProcessEvents debugProcess, Event event) {
-        Requestor requestor = debugProcess.getRequestsManager().findRequestor(event.request());
-        Breakpoint breakpoint = requestor instanceof Breakpoint requestorBreakpoint ? requestorBreakpoint : null;
-        LocalizeValue text = debugProcess.getEventText(breakpoint, event);
-        debugProcess.showStatusText(text);
     }
 
     @Nonnull
@@ -305,8 +296,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
 
         LOG.debug("enter: processVMStartEvent()");
 
-        showStatusText(this, event);
-
         getSuspendManager().voteResume(suspendContext);
     }
 
@@ -351,9 +340,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
                 }
             });
 
-            String addressDisplayName = DebuggerUtils.getAddressDisplayName(getConnection());
-            LocalizeValue transportName = DebuggerUtils.getTransportName(getConnection());
-            showStatusText(JavaDebuggerLocalize.statusConnected(addressDisplayName, transportName));
             LOG.debug("leave: processVMStartEvent()");
 
             XDebugSession session = getSession().getXDebugSession();
@@ -388,10 +374,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
                 myEventThread = null;
             }
             closeProcess(false);
-        }
-
-        if (event != null) {
-            showStatusText(this, event);
         }
     }
 
@@ -439,7 +421,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
             getSuspendManager().voteResume(suspendContext);
         }
         else {
-            showStatusText(LocalizeValue.empty());
             if (myReturnValueWatcher != null) {
                 myReturnValueWatcher.disable();
             }
@@ -535,7 +516,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
                     //  myBreakpointManager.applyThreadFilter(DebugProcessEvents.this, event.thread());
                     //}
                     suspendManager.voteSuspend(suspendContext);
-                    showStatusText(DebugProcessEvents.this, event);
                 }
             }
         });

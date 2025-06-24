@@ -65,7 +65,6 @@ import consulo.execution.ExecutionUtil;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.fileEditor.statusBar.StatusBarUtil;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -95,7 +94,6 @@ import consulo.ui.ex.action.ActionsBundle;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Lists;
 import consulo.util.dataholder.UserDataHolderBase;
@@ -160,7 +158,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     @Nullable
     protected MethodReturnValueWatcher myReturnValueWatcher;
     protected final Disposable myDisposable = Disposable.newDisposable();
-    private final Alarm myStatusUpdateAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
 
     private final ThreadBlockedMonitor myThreadBlockedMonitor = new ThreadBlockedMonitor(this, myDisposable);
 
@@ -602,18 +599,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         }
         finally {
             myArguments = null;
-        }
-    }
-
-    public void showStatusText(@Nonnull LocalizeValue text) {
-        showStatusText(text.get());
-    }
-
-    @Deprecated
-    public void showStatusText(String text) {
-        if (!myStatusUpdateAlarm.isDisposed()) {
-            myStatusUpdateAlarm.cancelAllRequests();
-            myStatusUpdateAlarm.addRequest(() -> StatusBarUtil.setStatusBarInfo(myProject, text), 50);
         }
     }
 
@@ -1331,23 +1316,11 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                     " method " + (method == null ? "null" : method.name())
             );
         }
-
-        if (!internalEvaluate) {
-            if (method != null) {
-                showStatusText(JavaDebuggerLocalize.progressEvaluating(DebuggerUtilsEx.methodName(method)));
-            }
-            else {
-                showStatusText(JavaDebuggerLocalize.titleEvaluating());
-            }
-        }
     }
 
     private void afterMethodInvocation(SuspendContextImpl suspendContext, boolean internalEvaluate) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("after invocation in  thread " + suspendContext.getThread().name());
-        }
-        if (!internalEvaluate) {
-            showStatusText(LocalizeValue.empty());
         }
     }
 
@@ -1534,7 +1507,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         @Override
         public void contextAction(@Nonnull SuspendContextImpl suspendContext) {
-            showStatusText(JavaDebuggerLocalize.statusStepOut());
             ThreadReferenceProxyImpl thread = getContextThread();
             RequestHint hint = new RequestHint(thread, suspendContext, StepRequest.STEP_OUT);
             hint.setIgnoreFilters(mySession.shouldIgnoreSteppingFilters());
@@ -1573,7 +1545,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         @Override
         public void contextAction(@Nonnull SuspendContextImpl suspendContext) {
-            showStatusText(JavaDebuggerLocalize.statusStepInto());
             ThreadReferenceProxyImpl stepThread = getContextThread();
             RequestHint hint = mySmartStepFilter != null
                 ? new RequestHint(stepThread, suspendContext, mySmartStepFilter)
@@ -1636,8 +1607,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         @Override
         public void contextAction(@Nonnull SuspendContextImpl suspendContext) {
-            showStatusText(getStatusText());
-
             ThreadReferenceProxyImpl stepThread = getContextThread();
 
             RequestHint hint = getHint(suspendContext, stepThread);
@@ -1671,7 +1640,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         @Override
         public void contextAction(@Nonnull SuspendContextImpl suspendContext) {
-            showStatusText(JavaDebuggerLocalize.statusRunToCursor());
             cancelRunToCursorBreakpoint();
             if (myRunToCursorBreakpoint == null) {
                 return;
@@ -1753,7 +1721,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         @Override
         public void contextAction(@Nonnull SuspendContextImpl suspendContext) {
-            showStatusText(JavaDebuggerLocalize.statusProcessResumed());
             resumeAction();
             myDebugProcessDispatcher.getMulticaster().resumed(getSuspendContext());
         }
