@@ -31,7 +31,6 @@ import consulo.codeEditor.Editor;
 import consulo.compiler.TranslatingCompilerFilesMonitor;
 import consulo.dataContext.DataContext;
 import consulo.disposer.Disposer;
-import consulo.ide.impl.idea.ui.popup.NotLookupOrSearchCondition;
 import consulo.ide.impl.idea.ui.popup.PopupPositionManager;
 import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.language.editor.inject.InjectedEditorManager;
@@ -165,7 +164,6 @@ public class ShowByteCodeAction extends AnAction {
 
                     final JBPopup popup = JBPopupFactory.getInstance()
                         .createComponentPopupBuilder(component, null)
-                        .setRequestFocusCondition(project, NotLookupOrSearchCondition.INSTANCE)
                         .setProject(project)
                         .setDimensionServiceKey(project, "ByteCodeViewer", false)
                         .setResizable(true)
