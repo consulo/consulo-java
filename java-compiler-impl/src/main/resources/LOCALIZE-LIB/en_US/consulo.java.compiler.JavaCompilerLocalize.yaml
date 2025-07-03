@@ -1,3 +1,15 @@
+action.run.apt.0.text:
+    text: Process ''{0}'' _Annotations
+action.run.apt.default.text:
+    text: Process <default> _Annotations
+action.run.apt.description:
+    text: Run Annotation Processors on the selected scope
+action.run.apt.module.text:
+    text: Process Module ''{0}'' _Annotations
+action.run.apt.selected.files.text:
+    text: Process Selected Files _Annotations
+action.run.apt.text:
+    text: Process _Annotations
 add.notnull.assertions:
     text: Add @NotNull &assertions
 compiler.eclipse.embedded.name:

@@ -24,20 +24,18 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.Compiler;
 import consulo.compiler.CompilerManager;
 import consulo.compiler.action.CompileActionBase;
-import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.resourceCompiler.ResourceCompiler;
 import consulo.compiler.scope.FileSetCompileScope;
 import consulo.compiler.scope.ModuleCompileScope;
 import consulo.dataContext.DataContext;
+import consulo.java.compiler.localize.JavaCompilerLocalize;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
-import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
-import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
@@ -56,6 +54,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ProcessAnnotationsAction extends CompileActionBase {
+    public ProcessAnnotationsAction() {
+        super(JavaCompilerLocalize.actionRunAptText(), JavaCompilerLocalize.actionRunAptDescription(), null);
+    }
+
     @Override
     @RequiredUIAccess
     protected void doAction(DataContext dataContext, Project project) {
@@ -106,17 +108,18 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             return;
         }
 
+        presentation.setEnabled(true);
         presentation.setVisible(true);
-        presentation.setTextValue(createPresentationText(""));
+        presentation.setTextValue(JavaCompilerLocalize.actionRunAptText());
+
         FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
         if (moduleContext == null && scope == null) {
             presentation.setEnabled(false);
             return;
         }
 
-        LocalizeValue elementDescription = LocalizeValue.empty();
         if (moduleContext != null) {
-            elementDescription = CompilerLocalize.actionCompileDescriptionModule(moduleContext.getName());
+            presentation.setTextValue(JavaCompilerLocalize.actionRunAptModuleText(trimName(moduleContext.getName())));
         }
         else {
             PsiJavaPackage aPackage = null;
@@ -136,49 +139,33 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
             if (aPackage != null) {
                 String name = aPackage.getQualifiedName();
-                if (name.isEmpty()) {
-                    //noinspection HardCodedStringLiteral
-                    name = "<default>";
-                }
-                elementDescription = LocalizeValue.localizeTODO("'" + name + "'");
+                presentation.setTextValue(
+                    StringUtil.isNotEmpty(name)
+                        ? JavaCompilerLocalize.actionRunApt0Text(trimName(name))
+                        : JavaCompilerLocalize.actionRunAptDefaultText()
+                );
             }
             else if (files.size() == 1) {
                 VirtualFile file = files.iterator().next();
                 FileType fileType = file.getFileType();
                 if (CompilerManager.getInstance(project).isCompilableFileType(fileType)) {
-                    elementDescription = LocalizeValue.localizeTODO("'" + file.getName() + "'");
+                    presentation.setTextValue(JavaCompilerLocalize.actionRunApt0Text(trimName(file.getName())));
                 }
                 else {
-                    if (!ActionPlaces.MAIN_MENU.equals(event.getPlace())) {
-                        // the action should be invisible in popups for non-java files
-                        presentation.setEnabled(false);
-                        presentation.setVisible(false);
-                        return;
-                    }
+                    presentation.setEnabled(false);
+                    // the action should be invisible in popups for non-java files
+                    presentation.setVisible(ActionPlaces.MAIN_MENU.equals(event.getPlace()));
                 }
             }
             else {
-                elementDescription = CompilerLocalize.actionCompileDescriptionSelectedFiles();
+                presentation.setTextValue(JavaCompilerLocalize.actionRunAptSelectedFilesText());
             }
         }
-
-        if (elementDescription == null) {
-            presentation.setEnabled(false);
-            return;
-        }
-
-        presentation.setTextValue(createPresentationText(elementDescription.get()));
-        presentation.setEnabled(true);
     }
 
-    private static LocalizeValue createPresentationText(String elementDescription) {
-        int length = elementDescription.length();
-        String target = length > 23
-            ? (StringUtil.startsWithChar(elementDescription, '\'') ? "'..." : "...") + elementDescription.substring(length - 20, length)
-            : elementDescription;
-        return StringUtil.isEmpty(target)
-            ? ActionLocalize.actionRunaptText()
-            : ActionLocalize.actionRunapt1Text(target);
+    private static String trimName(String name) {
+        int length = name.length();
+        return length > 23 ? '…' + name.substring(length - 20, length) : name;
     }
 
     @Nullable
