@@ -30,7 +30,6 @@ import consulo.compiler.scope.FileSetCompileScope;
 import consulo.compiler.scope.ModuleCompileScope;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
-import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -46,7 +45,6 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nonnull;
@@ -55,13 +53,14 @@ import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ProcessAnnotationsAction extends CompileActionBase {
-    @RequiredUIAccess
     @Override
+    @RequiredUIAccess
     protected void doAction(DataContext dataContext, Project project) {
-        final Module module = dataContext.getData(LangDataKeys.MODULE_CONTEXT);
-        final Condition<Compiler> filter = compiler -> {
+        Module module = dataContext.getData(LangDataKeys.MODULE_CONTEXT);
+        Predicate<Compiler> filter = compiler -> {
             // EclipseLink CanonicalModelProcessor reads input from output hence adding ResourcesCompiler
             return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
         };
@@ -69,15 +68,15 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false, true), filter, null);
         }
         else {
-            final FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(VirtualFile.KEY_OF_ARRAY));
+            FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(VirtualFile.KEY_OF_ARRAY));
             if (scope != null) {
                 CompilerManager.getInstance(project).make(scope, filter, null);
             }
         }
     }
 
-    @RequiredUIAccess
     @Override
+    @RequiredReadAction
     public void update(@Nonnull AnActionEvent event) {
         super.update(event);
         Presentation presentation = event.getPresentation();
@@ -92,16 +91,16 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             return;
         }
 
-        final JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(project);
+        JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(project);
 
-        final Module module = event.getData(Module.KEY);
-        final Module moduleContext = event.getData(LangDataKeys.MODULE_CONTEXT);
+        Module module = event.getData(Module.KEY);
+        Module moduleContext = event.getData(LangDataKeys.MODULE_CONTEXT);
 
         if (module == null) {
             presentation.setEnabled(false);
             return;
         }
-        final AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
+        AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
         if (!profile.isEnabled() || (!profile.isObtainProcessorsFromClasspath() && profile.getProcessors().isEmpty())) {
             presentation.setEnabled(false);
             return;
@@ -109,7 +108,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
         presentation.setVisible(true);
         presentation.setTextValue(createPresentationText(""));
-        final FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
+        FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
         if (moduleContext == null && scope == null) {
             presentation.setEnabled(false);
             return;
@@ -121,9 +120,9 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         }
         else {
             PsiJavaPackage aPackage = null;
-            final Collection<VirtualFile> files = scope.getRootFiles();
+            Collection<VirtualFile> files = scope.getRootFiles();
             if (files.size() == 1) {
-                final PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
+                PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
                 if (directory != null) {
                     aPackage = JavaDirectoryService.getInstance().getPackage(directory);
                 }
@@ -144,7 +143,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
                 elementDescription = LocalizeValue.localizeTODO("'" + name + "'");
             }
             else if (files.size() == 1) {
-                final VirtualFile file = files.iterator().next();
+                VirtualFile file = files.iterator().next();
                 FileType fileType = file.getFileType();
                 if (CompilerManager.getInstance(project).isCompilableFileType(fileType)) {
                     elementDescription = LocalizeValue.localizeTODO("'" + file.getName() + "'");
@@ -172,11 +171,10 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         presentation.setEnabled(true);
     }
 
-    private static LocalizeValue createPresentationText(final String elementDescription) {
+    private static LocalizeValue createPresentationText(String elementDescription) {
         int length = elementDescription.length();
         String target = length > 23
-            ? (StringUtil.startsWithChar(elementDescription, '\'') ? "'..." : "...") +
-            elementDescription.substring(length - 20, length)
+            ? (StringUtil.startsWithChar(elementDescription, '\'') ? "'..." : "...") + elementDescription.substring(length - 20, length)
             : elementDescription;
         return StringUtil.isEmpty(target)
             ? ActionLocalize.actionRunaptText()
@@ -189,13 +187,12 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         if (files == null || files.length == 0) {
             return null;
         }
-        final PsiManager psiManager = PsiManager.getInstance(project);
-        final FileTypeManager typeManager = FileTypeManager.getInstance();
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        final CompilerManager compilerManager = CompilerManager.getInstance(project);
-        final List<VirtualFile> filesToCompile = new ArrayList<>();
-        final List<Module> affectedModules = new ArrayList<>();
-        for (final VirtualFile file : files) {
+        PsiManager psiManager = PsiManager.getInstance(project);
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        CompilerManager compilerManager = CompilerManager.getInstance(project);
+        List<VirtualFile> filesToCompile = new ArrayList<>();
+        List<Module> affectedModules = new ArrayList<>();
+        for (VirtualFile file : files) {
             if (!fileIndex.isInSourceContent(file)) {
                 continue;
             }
@@ -203,7 +200,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
                 continue;
             }
             if (file.isDirectory()) {
-                final PsiDirectory directory = psiManager.findDirectory(file);
+                PsiDirectory directory = psiManager.findDirectory(file);
                 if (directory == null || JavaDirectoryService.getInstance().getPackage(directory) == null) {
                     continue;
                 }
