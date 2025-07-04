@@ -21,6 +21,7 @@ import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.Annotat
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ReadAction;
 import consulo.compiler.Compiler;
 import consulo.compiler.CompilerManager;
 import consulo.compiler.action.CompileActionBase;
@@ -78,7 +79,6 @@ public class ProcessAnnotationsAction extends CompileActionBase {
     }
 
     @Override
-    @RequiredReadAction
     public void update(@Nonnull AnActionEvent event) {
         super.update(event);
         Presentation presentation = event.getPresentation();
@@ -102,7 +102,8 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             presentation.setEnabled(false);
             return;
         }
-        AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
+        AnnotationProcessingConfiguration profile =
+            ReadAction.compute(() -> compilerConfiguration.getAnnotationProcessingConfiguration(module));
         if (!profile.isEnabled() || (!profile.isObtainProcessorsFromClasspath() && profile.getProcessors().isEmpty())) {
             presentation.setEnabled(false);
             return;
@@ -112,7 +113,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         presentation.setVisible(true);
         presentation.setTextValue(JavaCompilerLocalize.actionRunAptText());
 
-        FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
+        FileSetCompileScope scope = ReadAction.compute(() -> getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY)));
         if (moduleContext == null && scope == null) {
             presentation.setEnabled(false);
             return;
@@ -125,7 +126,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             PsiJavaPackage aPackage = null;
             Collection<VirtualFile> files = scope.getRootFiles();
             if (files.size() == 1) {
-                PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
+                PsiDirectory directory = ReadAction.compute(() -> PsiManager.getInstance(project).findDirectory(files.iterator().next()));
                 if (directory != null) {
                     aPackage = JavaDirectoryService.getInstance().getPackage(directory);
                 }
