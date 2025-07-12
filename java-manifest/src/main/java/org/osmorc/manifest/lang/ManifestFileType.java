@@ -24,60 +24,56 @@
  */
 package org.osmorc.manifest.lang;
 
+import consulo.java.language.localize.JavaLanguageLocalize;
+import consulo.java.manifest.ManifestIcons;
 import consulo.language.Language;
 import consulo.language.file.LanguageFileType;
-import consulo.java.manifest.ManifestIcons;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
-public class ManifestFileType extends LanguageFileType
-{
-	public static LanguageFileType INSTANCE = new ManifestFileType();
+public class ManifestFileType extends LanguageFileType {
+    public static LanguageFileType INSTANCE = new ManifestFileType();
 
-	public ManifestFileType()
-	{
-		super(ManifestLanguage.INSTANCE);
-	}
+    public ManifestFileType() {
+        super(ManifestLanguage.INSTANCE);
+    }
 
-	public ManifestFileType(@Nonnull Language language)
-	{
-		super(language);
-	}
+    public ManifestFileType(@Nonnull Language language) {
+        super(language);
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getId()
-	{
-		return "MANIFEST";
-	}
+    @Override
+    @Nonnull
+    public String getId() {
+        return "MANIFEST";
+    }
 
-	@Override
-	@Nonnull
-	public LocalizeValue getDescription()
-	{
-		return LocalizeValue.localizeTODO("Manifest files");
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.manifestLanguageDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getDefaultExtension()
-	{
-		return "MF";
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getDescription() {
+        return LocalizeValue.localizeTODO("Manifest files");
+    }
 
-	@Override
-	@Nullable
-	public Image getIcon()
-	{
-		return ManifestIcons.ManifestFileType;
-	}
+    @Override
+    @Nonnull
+    public String getDefaultExtension() {
+        return "MF";
+    }
+
+    @Override
+    @Nullable
+    public Image getIcon() {
+        return ManifestIcons.ManifestFileType;
+    }
 }

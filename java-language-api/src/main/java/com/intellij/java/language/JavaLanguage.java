@@ -15,41 +15,38 @@
  */
 package com.intellij.java.language;
 
-import java.util.Arrays;
-
+import consulo.java.language.localize.JavaLanguageLocalize;
+import consulo.language.Language;
+import consulo.language.version.LanguageVersion;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import consulo.language.version.LanguageVersion;
-import consulo.language.Language;
+import java.util.Arrays;
 
 /**
  * @author max
  */
-public class JavaLanguage extends Language
-{
-	public static final JavaLanguage INSTANCE = new JavaLanguage();
+public class JavaLanguage extends Language {
+    public static final JavaLanguage INSTANCE = new JavaLanguage();
 
-	private JavaLanguage()
-	{
-		super("JAVA", "text/java", "application/x-java", "text/x-java");
-	}
+    private JavaLanguage() {
+        super("JAVA", "text/java", "application/x-java", "text/x-java");
+    }
 
-	@Override
-	public String getDisplayName()
-	{
-		return "Java";
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.javaLanguageDisplayName();
+    }
 
-	@Nonnull
-	@Override
-	public LanguageVersion[] findVersions()
-	{
-		return Arrays.stream(LanguageLevel.values()).map(LanguageLevel::toLangVersion).toArray(LanguageVersion[]::new);
-	}
+    @Nonnull
+    @Override
+    public LanguageVersion[] findVersions() {
+        return Arrays.stream(LanguageLevel.values()).map(LanguageLevel::toLangVersion).toArray(LanguageVersion[]::new);
+    }
 
-	@Override
-	public boolean isCaseSensitive()
-	{
-		return true;
-	}
+    @Override
+    public boolean isCaseSensitive() {
+        return true;
+    }
 }

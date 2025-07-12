@@ -17,12 +17,12 @@ package com.intellij.java.impl.application.options;
 
 import com.intellij.java.language.JavaLanguage;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationBundle;
+import consulo.application.localize.ApplicationLocalize;
 import consulo.configurable.Configurable;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -36,9 +36,10 @@ public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
         return new CodeStyleGenerationConfigurable(settings);
     }
 
+    @Nonnull
     @Override
-    public String getConfigurableDisplayName() {
-        return ApplicationBundle.message("title.code.generation");
+    public LocalizeValue getConfigurableDisplayName() {
+        return ApplicationLocalize.titleCodeGeneration();
     }
 
     @Override

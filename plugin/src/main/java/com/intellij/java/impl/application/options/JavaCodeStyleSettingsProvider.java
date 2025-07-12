@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.application.options;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.codeStyle.ui.setting.CodeStyleAbstractConfigurable;
-import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.JavaLanguage;
-import consulo.language.Language;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.Configurable;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 import consulo.language.codeStyle.CustomCodeStyleSettings;
-
+import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractConfigurable;
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -48,11 +47,6 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
                 return "reference.settingsdialog.codestyle.java";
             }
         };
-    }
-
-    @Override
-    public String getConfigurableDisplayName() {
-        return "Java";
     }
 
     @Nullable

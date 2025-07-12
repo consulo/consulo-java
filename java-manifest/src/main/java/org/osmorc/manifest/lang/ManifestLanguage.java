@@ -24,34 +24,32 @@
  */
 package org.osmorc.manifest.lang;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.Language;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
+import consulo.language.Language;
 import consulo.language.version.LanguageVersion;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
-public class ManifestLanguage extends Language
-{
-	public static final ManifestLanguage INSTANCE = new ManifestLanguage();
+public class ManifestLanguage extends Language {
+    public static final ManifestLanguage INSTANCE = new ManifestLanguage();
 
-	public ManifestLanguage()
-	{
-		super("MANIFEST");
-	}
+    public ManifestLanguage() {
+        super("MANIFEST");
+    }
 
-	@Override
-	public String getDisplayName()
-	{
-		return "Manifest";
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.manifestLanguageDisplayName();
+    }
 
-	@Nonnull
-	@Override
-	protected LanguageVersion[] findVersions()
-	{
-		return ManifestLanguageVersion.VALUES;
-	}
+    @Nonnull
+    @Override
+    protected LanguageVersion[] findVersions() {
+        return ManifestLanguageVersion.VALUES;
+    }
 }

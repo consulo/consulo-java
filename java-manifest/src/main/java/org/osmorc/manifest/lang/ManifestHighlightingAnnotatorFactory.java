@@ -1,6 +1,7 @@
 package org.osmorc.manifest.lang;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.dumb.DumbAware;
 import consulo.language.Language;
 import consulo.language.editor.annotation.Annotator;
 import consulo.language.editor.annotation.AnnotatorFactory;
@@ -13,7 +14,7 @@ import jakarta.annotation.Nullable;
  * @since 14/12/2022
  */
 @ExtensionImpl
-public class ManifestHighlightingAnnotatorFactory implements AnnotatorFactory {
+public class ManifestHighlightingAnnotatorFactory implements AnnotatorFactory, DumbAware {
   @Nullable
   @Override
   public Annotator createAnnotator() {

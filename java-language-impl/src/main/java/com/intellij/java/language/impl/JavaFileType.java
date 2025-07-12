@@ -22,37 +22,42 @@ import consulo.language.file.LanguageFileType;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class JavaFileType extends LanguageFileType {
-  @NonNls public static final String DEFAULT_EXTENSION = "java";
-  @NonNls public static final String DOT_DEFAULT_EXTENSION = ".java";
-  public static final JavaFileType INSTANCE = new JavaFileType();
+    public static final String DEFAULT_EXTENSION = "java";
+    public static final String DOT_DEFAULT_EXTENSION = ".java";
+    public static final JavaFileType INSTANCE = new JavaFileType();
 
-  private JavaFileType() {
-    super(JavaLanguage.INSTANCE);
-  }
+    private JavaFileType() {
+        super(JavaLanguage.INSTANCE);
+    }
 
-  @Override
-  @Nonnull
-  public String getId() {
-    return "JAVA";
-  }
+    @Override
+    @Nonnull
+    public String getId() {
+        return "JAVA";
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDescription() {
-    return JavaLanguageLocalize.filetypeDescriptionJava();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.filetypeDescriptionJava();
+    }
 
-  @Override
-  @Nonnull
-  public String getDefaultExtension() {
-    return DEFAULT_EXTENSION;
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getDescription() {
+        return JavaLanguageLocalize.filetypeDescriptionJava();
+    }
 
-  @Override
-  public Image getIcon() {
-    return JavaPsiImplIconGroup.filetypesJava();
-  }
+    @Override
+    @Nonnull
+    public String getDefaultExtension() {
+        return DEFAULT_EXTENSION;
+    }
+
+    @Override
+    public Image getIcon() {
+        return JavaPsiImplIconGroup.filetypesJava();
+    }
 }
