@@ -44,7 +44,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
     }
 
     public JarArchiveElementType() {
-        super("jar-archive", CompilerLocalize.elementTypeNameJarArchive().get());
+        super("jar-archive", CompilerLocalize.elementTypeNameJarArchive());
     }
 
     @Override
