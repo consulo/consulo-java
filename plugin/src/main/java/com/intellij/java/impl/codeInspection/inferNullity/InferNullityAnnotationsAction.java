@@ -65,7 +65,6 @@ import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -74,13 +73,13 @@ import java.util.function.Supplier;
 @ActionImpl(id = "InferNullity", parents =
 @ActionParentRef(value = @ActionRef(id = IdeActions.ACTION_CODE_MENU), relatedToAction = @ActionRef(id = "AnalyzeStacktrace"), anchor = ActionRefAnchor.AFTER))
 public class InferNullityAnnotationsAction extends BaseAnalysisAction {
-    private static final String INFER_NULLITY_ANNOTATIONS = "Infer Nullity Annotations";
+    private static final LocalizeValue INFER_NULLITY_ANNOTATIONS = LocalizeValue.localizeTODO("Infer Nullity Annotations");
     private static final String ANNOTATE_LOCAL_VARIABLES = "annotate.local.variables";
 
     private CheckBox myAnnotateLocalVariablesCb;
 
     public InferNullityAnnotationsAction() {
-        super("Infer Nullity", INFER_NULLITY_ANNOTATIONS);
+        super("Infer Nullity", INFER_NULLITY_ANNOTATIONS.get());
     }
 
     @Override
@@ -134,7 +133,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             Messages.showErrorDialog(
                 project,
                 "Infer Nullity Annotations requires the project language level be set to 1.5 or greater.",
-                INFER_NULLITY_ANNOTATIONS
+                INFER_NULLITY_ANNOTATIONS.get()
             );
             return;
         }
@@ -172,18 +171,17 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         @Nonnull Project project,
         @Nonnull Set<Module> modulesWithoutAnnotations,
         @Nonnull String annoFQN,
-        String title
+        @Nonnull LocalizeValue title
     ) {
         Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
         if (annotationsLib != null) {
-            @NonNls
             String message = "Module" + (modulesWithoutAnnotations.size() == 1 ? " " : "s ");
             message += StringUtil.join(modulesWithoutAnnotations, Module::getName, ", ");
             message += (modulesWithoutAnnotations.size() == 1 ? " doesn't" : " don't");
             message += " refer to the existing '" + annotationsLib.getName() + "' library" +
                 " with Consulo nullity annotations. Would you like to add the dependenc";
             message += (modulesWithoutAnnotations.size() == 1 ? "y" : "ies") + " now?";
-            if (Messages.showOkCancelDialog(project, message, title, UIUtil.getErrorIcon()) == Messages.OK) {
+            if (Messages.showOkCancelDialog(project, message, title.get(), UIUtil.getErrorIcon()) == Messages.OK) {
                 project.getApplication().runWriteAction(() ->
                 {
                     for (Module module : modulesWithoutAnnotations) {
@@ -257,7 +255,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         return () -> {
             LocalHistoryAction action = LocalHistory.getInstance().startAction(INFER_NULLITY_ANNOTATIONS);
             try {
-                new WriteCommandAction(project, INFER_NULLITY_ANNOTATIONS) {
+                new WriteCommandAction(project, INFER_NULLITY_ANNOTATIONS.get()) {
                     @Override
                     protected void run(@Nonnull Result result) throws Throwable {
                         UsageInfo[] infos = computable.get();
@@ -275,7 +273,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
                             }
 
                             SequentialModalProgressTask progressTask =
-                                new SequentialModalProgressTask(project, INFER_NULLITY_ANNOTATIONS, false);
+                                new SequentialModalProgressTask(project, INFER_NULLITY_ANNOTATIONS.get(), false);
                             progressTask.setMinIterationTime(200);
                             progressTask.setTask(new AnnotateTask(project, progressTask, infos));
                             ProgressManager.getInstance().run(progressTask);
@@ -346,7 +344,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
         usageView.addPerformOperationAction(
             refactoringRunnable,
-            INFER_NULLITY_ANNOTATIONS,
+            INFER_NULLITY_ANNOTATIONS.get(),
             canNotMakeString,
             INFER_NULLITY_ANNOTATIONS,
             false

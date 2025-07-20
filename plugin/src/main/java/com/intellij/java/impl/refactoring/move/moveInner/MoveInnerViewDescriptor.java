@@ -23,9 +23,9 @@ package com.intellij.java.impl.refactoring.move.moveInner;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import consulo.usage.localize.UsageLocalize;
 import jakarta.annotation.Nonnull;
 
 class MoveInnerViewDescriptor implements UsageViewDescriptor {
@@ -36,19 +36,23 @@ class MoveInnerViewDescriptor implements UsageViewDescriptor {
     myInnerClass = innerClass;
   }
 
+  @Override
   @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myInnerClass};
   }
 
+  @Override
   public String getProcessedElementsHeader() {
     return RefactoringLocalize.moveInnerClassToBeMoved().get();
   }
 
+  @Override
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
+    return UsageLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
+  @Override
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }

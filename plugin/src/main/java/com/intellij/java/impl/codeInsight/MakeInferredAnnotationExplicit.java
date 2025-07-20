@@ -37,6 +37,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.DumbService;
 import consulo.project.Project;
@@ -52,9 +53,10 @@ import java.util.Collections;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeInferredAnnotationExplicit", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
+  private static final LocalizeValue ACTION_NAME = LocalizeValue.localizeTODO("Make Inferred Annotations Explicit");
 
   public MakeInferredAnnotationExplicit() {
-    setText("Make Inferred Annotations Explicit");
+    setText(ACTION_NAME.get());
   }
 
   @Override
@@ -113,7 +115,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
                                                                                                                              Collections.singleton(
                                                                                                                                module),
                                                                                                                              qname,
-                                                                                                                             getText())) {
+                                                                                                                             ACTION_NAME)) {
         return;
       }
 

@@ -20,14 +20,14 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
+import consulo.usage.localize.UsageLocalize;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
 public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
@@ -40,19 +40,23 @@ public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
     myProcessedElementsHeader = StringUtil.capitalize(RefactoringLocalize.zeroToChangeSignature(UsageViewUtil.getType(method)).get());
   }
 
+  @Override
   @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myMethod};
   }
 
+  @Override
   public String getProcessedElementsHeader() {
     return myProcessedElementsHeader;
   }
 
+  @Override
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
+    return UsageLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
+  @Override
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }

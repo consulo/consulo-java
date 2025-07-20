@@ -16,12 +16,12 @@
  */
 package com.intellij.java.impl.refactoring.encapsulateFields;
 
+import com.intellij.java.language.psi.PsiField;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import consulo.usage.localize.UsageLocalize;
 import jakarta.annotation.Nonnull;
 
 class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
@@ -34,19 +34,23 @@ class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
     }
   }
 
+  @Override
   public String getProcessedElementsHeader() {
     return RefactoringLocalize.encapsulateFieldsFieldsToBeEncapsulated().get();
   }
 
+  @Override
   @Nonnull
   public PsiElement[] getElements() {
     return myFields;
   }
 
+  @Override
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
+    return UsageLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
+  @Override
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }

@@ -30,6 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
+import consulo.usage.localize.UsageLocalize;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
@@ -45,20 +46,24 @@ public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescripto
     myProcessedElementsHeader = RefactoringLocalize.makeStaticElementsHeader(who).get();
   }
 
+  @Override
   @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myMember};
   }
 
 
+  @Override
   public String getProcessedElementsHeader() {
     return myProcessedElementsHeader;
   }
 
+  @Override
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
+    return UsageLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
+  @Override
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
