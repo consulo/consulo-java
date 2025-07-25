@@ -64,6 +64,7 @@ import consulo.execution.ExecutionResult;
 import consulo.execution.ExecutionUtil;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
@@ -77,7 +78,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
-import consulo.platform.base.localize.ActionLocalize;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessOutputTypes;
@@ -1670,7 +1670,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                                 myRunToCursorBreakpoint.getSourcePosition().getFile().getName(),
                                 myRunToCursorBreakpoint.getLineIndex() + 1
                             ).get(),
-                            ActionLocalize.actionRuntocursorText().map(Presentation.NO_MNEMONIC).get()
+                            XDebuggerLocalize.actionRunToCursorText().map(Presentation.NO_MNEMONIC).get()
                         );
                         DebuggerSession session = debugProcess.getSession();
                         session.getContextManager().setState(
