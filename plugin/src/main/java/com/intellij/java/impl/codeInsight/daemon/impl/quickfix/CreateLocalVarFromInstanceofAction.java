@@ -25,10 +25,10 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorAction;
 import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.ide.impl.idea.openapi.editor.actions.EnterAction;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
@@ -47,6 +47,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -270,7 +272,11 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
                         if (declarationStatement != null) {
                             caretModel.moveToOffset(declarationStatement.getTextRange().getEndOffset());
                         }
-                        new EnterAction().actionPerformed(editor, DataManager.getInstance().getDataContext());
+
+                        EditorAction action = (EditorAction) ActionManager.getInstance().getAction(IdeActions.ACTION_EDITOR_ENTER);
+                        if (action != null) {
+                            action.actionPerformed(editor, DataManager.getInstance().getDataContext());
+                        }
                     });
                 }
             });

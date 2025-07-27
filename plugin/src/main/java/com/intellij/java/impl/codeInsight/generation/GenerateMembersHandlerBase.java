@@ -32,7 +32,6 @@ import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.ide.impl.idea.openapi.editor.actions.EnterAction;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.generation.ClassMember;
@@ -139,7 +138,6 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
         String textBeforeCaret = docText.subSequence(lineStartOffset, offset).toString();
         final String afterCaret = docText.subSequence(offset, document.getLineEndOffset(line)).toString();
         if (textBeforeCaret.trim().length() > 0 && StringUtil.isEmptyOrSpaces(afterCaret) && !editor.getSelectionModel().hasSelection()) {
-            EnterAction.insertNewLineAtCaret(editor);
             PsiDocumentManager.getInstance(project).commitDocument(document);
             offset = editor.getCaretModel().getOffset();
             col = editor.getCaretModel().getLogicalPosition().column;
