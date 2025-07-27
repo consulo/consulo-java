@@ -42,6 +42,7 @@ import consulo.execution.debug.AbstractDebuggerSession;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.evaluation.ValueLookupManager;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
@@ -53,7 +54,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import consulo.platform.base.localize.ActionLocalize;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessOutputTypes;
@@ -391,7 +391,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
             resumeAction(runToCursorCommand, Event.STEP);
         }
         catch (EvaluateException e) {
-            Messages.showErrorDialog(e.getMessage(), ActionLocalize.actionRuntocursorText().map(Presentation.NO_MNEMONIC).get());
+            Messages.showErrorDialog(e.getMessage(), XDebuggerLocalize.actionRunToCursorText().map(Presentation.NO_MNEMONIC).get());
         }
     }
 
