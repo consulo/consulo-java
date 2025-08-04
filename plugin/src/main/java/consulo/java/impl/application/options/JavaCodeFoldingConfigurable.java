@@ -18,20 +18,19 @@ package consulo.java.impl.application.options;
 
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationBundle;
 import consulo.configurable.ApplicationConfigurable;
 import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.disposer.Disposable;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -42,109 +41,109 @@ import java.util.function.Supplier;
  */
 @ExtensionImpl
 public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties implements ApplicationConfigurable {
-  private Provider<JavaCodeFoldingSettings> myJavaCodeFoldingSettingsProvider;
+    private Provider<JavaCodeFoldingSettings> myJavaCodeFoldingSettingsProvider;
 
-  @Inject
-  public JavaCodeFoldingConfigurable(Provider<JavaCodeFoldingSettings> javaCodeFoldingSettingsProvider) {
-    myJavaCodeFoldingSettingsProvider = javaCodeFoldingSettingsProvider;
-  }
+    @Inject
+    public JavaCodeFoldingConfigurable(Provider<JavaCodeFoldingSettings> javaCodeFoldingSettingsProvider) {
+        myJavaCodeFoldingSettingsProvider = javaCodeFoldingSettingsProvider;
+    }
 
-  @Nonnull
-  @Override
-  public String getId() {
-    return "editor.preferences.folding.java";
-  }
+    @Nonnull
+    @Override
+    public String getId() {
+        return "editor.preferences.folding.java";
+    }
 
-  @Nullable
-  @Override
-  public String getParentId() {
-    return "editor.preferences.folding";
-  }
+    @Nullable
+    @Override
+    public String getParentId() {
+        return "editor.preferences.folding";
+    }
 
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return "Java";
-  }
+    @Nonnull
+    @Override
+    public String getDisplayName() {
+        return "Java";
+    }
 
-  @RequiredUIAccess
-  @Nonnull
-  @Override
-  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable) {
-    VerticalLayout layout = VerticalLayout.create();
+    @RequiredUIAccess
+    @Nonnull
+    @Override
+    protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable) {
+        VerticalLayout layout = VerticalLayout.create();
 
-    JavaCodeFoldingSettings settings = myJavaCodeFoldingSettingsProvider.get();
+        JavaCodeFoldingSettings settings = myJavaCodeFoldingSettingsProvider.get();
 
-    checkBox(JavaBundle.message("checkbox.collapse.one.line.methods"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseOneLineMethods,
-             settings::setCollapseOneLineMethods);
+        checkBox(JavaLocalize.checkboxCollapseOneLineMethods(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseOneLineMethods,
+            settings::setCollapseOneLineMethods);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.simple.property.accessors"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseAccessors,
-             settings::setCollapseAccessors);
+        checkBox(JavaLocalize.checkboxCollapseSimplePropertyAccessors(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseAccessors,
+            settings::setCollapseAccessors);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.inner.classes"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseInnerClasses,
-             settings::setCollapseInnerClasses);
+        checkBox(JavaLocalize.checkboxCollapseInnerClasses(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseInnerClasses,
+            settings::setCollapseInnerClasses);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.anonymous.classes"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseAnonymousClasses,
-             settings::setCollapseAnonymousClasses);
+        checkBox(JavaLocalize.checkboxCollapseAnonymousClasses(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseAnonymousClasses,
+            settings::setCollapseAnonymousClasses);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.annotations"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseAnnotations,
-             settings::setCollapseAnnotations);
+        checkBox(JavaLocalize.checkboxCollapseAnnotations(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseAnnotations,
+            settings::setCollapseAnnotations);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.closures"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseLambdas,
-             settings::setCollapseLambdas);
+        checkBox(JavaLocalize.checkboxCollapseClosures(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseLambdas,
+            settings::setCollapseLambdas);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.generic.constructor.parameters"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseConstructorGenericParameters,
-             settings::setCollapseConstructorGenericParameters);
+        checkBox(JavaLocalize.checkboxCollapseGenericConstructorParameters(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseConstructorGenericParameters,
+            settings::setCollapseConstructorGenericParameters);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.i18n.messages"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseI18nMessages,
-             settings::setCollapseI18nMessages);
+        checkBox(JavaLocalize.checkboxCollapseI18nMessages(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseI18nMessages,
+            settings::setCollapseI18nMessages);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.suppress.warnings"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseSuppressWarnings,
-             settings::setCollapseSuppressWarnings);
+        checkBox(JavaLocalize.checkboxCollapseSuppressWarnings(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseSuppressWarnings,
+            settings::setCollapseSuppressWarnings);
 
-    checkBox(ApplicationBundle.message("checkbox.collapse.end.of.line.comments"),
-             layout,
-             propertyBuilder,
-             settings::isCollapseEndOfLineComments,
-             settings::setCollapseEndOfLineComments);
-    return layout;
-  }
+        checkBox(JavaLocalize.checkboxCollapseEndOfLineComments(),
+            layout,
+            propertyBuilder,
+            settings::isCollapseEndOfLineComments,
+            settings::setCollapseEndOfLineComments);
+        return layout;
+    }
 
-  @RequiredUIAccess
-  private void checkBox(String text,
-                        VerticalLayout layout,
-                        @Nonnull PropertyBuilder builder,
-                        @Nonnull Supplier<Boolean> getter,
-                        @Nonnull Consumer<Boolean> setter) {
-    CheckBox checkBox = CheckBox.create(text);
-    builder.add(checkBox, getter, setter);
-    layout.add(checkBox);
-  }
+    @RequiredUIAccess
+    private void checkBox(LocalizeValue text,
+                          VerticalLayout layout,
+                          @Nonnull PropertyBuilder builder,
+                          @Nonnull Supplier<Boolean> getter,
+                          @Nonnull Consumer<Boolean> setter) {
+        CheckBox checkBox = CheckBox.create(text);
+        builder.add(checkBox, getter, setter);
+        layout.add(checkBox);
+    }
 }

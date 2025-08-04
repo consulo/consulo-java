@@ -160,8 +160,30 @@ action.go.to.super.method.text:
     text: Go to super method
 annotation.processor.name:
     text: Annotation Processors
+checkbox.collapse.annotations:
+    text: Annotations
+checkbox.collapse.anonymous.classes:
+    text: Anonymous classes
+checkbox.collapse.closures:
+    text: '"Closures" (anonymous classes implementing one method)'
+checkbox.collapse.end.of.line.comments:
+    text: End of line comments sequence
+checkbox.collapse.file.header:
+    text: File header
+checkbox.collapse.generic.constructor.parameters:
+    text: Generic constructor and method parameters
+checkbox.collapse.html.style.attribute:
+    text: HTML 'style' attribute
+checkbox.collapse.i18n.messages:
+    text: I18n strings
+checkbox.collapse.inner.classes:
+    text: Inner classes
 checkbox.collapse.one.line.methods:
-    text: <html>One-line methods<html>
+    text: One-line methods
+checkbox.collapse.simple.property.accessors:
+    text: Simple property accessors
+checkbox.collapse.suppress.warnings:
+    text: '@SuppressWarnings'
 class.file.decompiled.text:
     text: Decompiled .class file
 class.file.open.source.action:
