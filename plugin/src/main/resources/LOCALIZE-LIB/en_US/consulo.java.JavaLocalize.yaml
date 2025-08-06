@@ -118,6 +118,8 @@ action.SliceBackward.description:
     text: Search for values which can be assigned to selected expression
 action.SliceBackward.text:
     text: Analyze Data Flow _to Here
+action.SliceForward.description:
+    text: Search for values escaped from this location
 action.SliceForward.text:
     text: Analyze Data Flow _from Here
 action.SliceSliceForward.description:

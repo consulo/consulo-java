@@ -19,6 +19,7 @@ import consulo.annotation.component.ActionImpl;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.action.CodeInsightAction;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -29,7 +30,7 @@ public class SliceForwardAction extends CodeInsightAction {
     private final SliceHandler myHandler = new SliceForwardHandler();
 
     public SliceForwardAction() {
-        getTemplatePresentation().setTextValue(JavaLocalize.actionSliceforwardText());
+        super(JavaLocalize.actionSliceforwardText(), JavaLocalize.actionSliceforwardDescription());
     }
 
     @Nonnull

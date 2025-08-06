@@ -29,8 +29,7 @@ public class SliceBackwardAction extends CodeInsightAction {
     private final SliceHandler myHandler = new SliceHandler(true);
 
     public SliceBackwardAction() {
-        getTemplatePresentation().setTextValue(JavaLocalize.actionSlicebackwardText());
-        getTemplatePresentation().setDescriptionValue(JavaLocalize.actionSlicebackwardDescription());
+        super(JavaLocalize.actionSlicebackwardText(), JavaLocalize.actionSlicebackwardDescription());
     }
 
     @Nonnull
