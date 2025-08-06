@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.slicer;
 
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.action.CodeInsightAction;
 import jakarta.annotation.Nonnull;
@@ -22,12 +24,18 @@ import jakarta.annotation.Nonnull;
 /**
  * @author cdr
  */
-public class SliceBackwardAction extends CodeInsightAction{
-  private final SliceHandler myHandler = new SliceHandler(true);
+@ActionImpl(id = "SliceBackward")
+public class SliceBackwardAction extends CodeInsightAction {
+    private final SliceHandler myHandler = new SliceHandler(true);
 
-  @Nonnull
-  @Override
-  protected CodeInsightActionHandler getHandler() {
-    return myHandler;
-  }
+    public SliceBackwardAction() {
+        getTemplatePresentation().setTextValue(JavaLocalize.actionSlicebackwardText());
+        getTemplatePresentation().setDescriptionValue(JavaLocalize.actionSlicebackwardDescription());
+    }
+
+    @Nonnull
+    @Override
+    protected CodeInsightActionHandler getHandler() {
+        return myHandler;
+    }
 }
