@@ -70,12 +70,6 @@
 			<add-to-group group-id="NewGroup1" anchor="first"/>
 		</action>
 
-		<group id="AnalyzeJavaMenu">
-			<action id="SliceBackward" class="com.intellij.java.impl.slicer.SliceBackwardAction"/>
-			<action id="SliceForward" class="com.intellij.java.impl.slicer.SliceForwardAction"/>
-			<add-to-group group-id="AnalyzeMenu" anchor="last"/>
-		</group>
-
 		<group id="RefactoringMenu1">
 			<action id="ChangeTypeSignature"
 					class="com.intellij.java.impl.refactoring.typeMigration.actions.ChangeTypeSignatureAction"
