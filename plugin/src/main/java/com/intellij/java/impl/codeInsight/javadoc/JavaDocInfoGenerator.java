@@ -34,9 +34,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.content.bundle.Sdk;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.LangBundle;
 import consulo.language.ast.ASTNode;
@@ -51,10 +49,12 @@ import consulo.logging.Logger;
 import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.io.StreamUtil;
 import consulo.util.jdom.JDOMUtil;
 import consulo.util.lang.*;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jdom.Document;
@@ -699,7 +699,7 @@ public class JavaDocInfoGenerator {
   public static void enumConstantOrdinal(StringBuilder buffer, PsiField field, PsiClass parentClass, final String newLine) {
     if (parentClass != null && field instanceof PsiEnumConstant) {
       final PsiField[] fields = parentClass.getFields();
-      final int idx = ArrayUtilRt.find(fields, field);
+      final int idx = ArrayUtil.find(fields, field);
       if (idx >= 0) {
         buffer.append(newLine);
         buffer.append("Enum constant ordinal: ").append(idx);
@@ -1308,7 +1308,7 @@ public class JavaDocInfoGenerator {
         if (commentStream == null) {
           return null;
         }
-        byte[] bytes = FileUtil.loadBytes(commentStream);
+        byte[] bytes = StreamUtil.loadFromStream(commentStream);
         text = new String(bytes, StandardCharsets.UTF_8);
       }
       text = StringUtil.replace(text, "<ClassName>", containingClassName);
@@ -1345,7 +1345,7 @@ public class JavaDocInfoGenerator {
     if (vFile == null) {
       return null;
     }
-    return VfsUtilCore.convertToURL(vFile.getUrl());
+    return VirtualFileUtil.convertToURL(vFile.getUrl());
   }
 
   protected void generateEpilogue(StringBuilder buffer) {

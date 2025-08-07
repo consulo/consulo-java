@@ -20,8 +20,8 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeUtil;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.Template;
@@ -77,7 +77,7 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
           builder.replaceElement(expression, new EmptyExpression());
         }
 
-        enumConstant = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(enumConstant);
+        enumConstant = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(enumConstant);
         final Template template = builder.buildTemplate();
 
         final Project project = targetClass.getProject();

@@ -34,7 +34,6 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.HelpManager;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
@@ -58,6 +57,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class MoveInnerDialog extends RefactoringDialog {
   private final Project myProject;
@@ -222,14 +222,12 @@ public class MoveInnerDialog extends RefactoringDialog {
         }
         PsiDirectory dir = RefactoringUtil.findPackageDirectoryInSourceRoot(newPackage, targetSourceRoot);
         if (dir == null) {
-          dir = ApplicationManager.getApplication().runWriteAction(new NullableComputable<PsiDirectory>() {
-            public PsiDirectory compute() {
-              try {
-                return RefactoringUtil.createPackageDirectoryInSourceRoot(newPackage, targetSourceRoot);
-              }
-              catch (IncorrectOperationException e) {
-                return null;
-              }
+          dir = ApplicationManager.getApplication().runWriteAction((Supplier<PsiDirectory>) () -> {
+            try {
+              return RefactoringUtil.createPackageDirectoryInSourceRoot(newPackage, targetSourceRoot);
+            }
+            catch (IncorrectOperationException e) {
+              return null;
             }
           });
         }

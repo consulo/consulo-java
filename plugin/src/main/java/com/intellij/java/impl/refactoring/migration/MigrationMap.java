@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import java.util.ArrayList;
+import consulo.util.io.FileUtil;
 
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import java.util.ArrayList;
 
 public class MigrationMap
 {

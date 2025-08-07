@@ -16,19 +16,15 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
-import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.EditorColorsScheme;
-import consulo.colorScheme.TextAttributes;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.find.FindManager;
 import consulo.find.FindModel;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.macro.MacroCallNode;
@@ -37,7 +33,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
-import consulo.project.ui.wm.StatusBar;
 import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
 
@@ -87,7 +82,7 @@ public class HighlightUtils {
 
   @RequiredReadAction
   public static void showRenameTemplate(PsiElement context, PsiNameIdentifierOwner element, PsiReference... references) {
-    context = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(context);
+    context = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(context);
     final Project project = context.getProject();
     final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
     final Editor editor = fileEditorManager.getSelectedTextEditor();

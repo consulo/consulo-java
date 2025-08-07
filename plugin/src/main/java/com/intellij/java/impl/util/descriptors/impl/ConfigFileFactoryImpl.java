@@ -21,7 +21,6 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.util.LanguageFileContentUtil;
 import consulo.logging.Logger;
@@ -30,6 +29,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 
@@ -82,7 +82,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
   @Nullable
   private VirtualFile createFileFromTemplate(@Nullable final Project project, String url, final String templateName, final boolean forceNew) {
     final LocalFileSystem fileSystem = LocalFileSystem.getInstance();
-    final File file = new File(VfsUtil.urlToPath(url));
+    final File file = new File(VirtualFileUtil.urlToPath(url));
     VirtualFile existingFile = fileSystem.refreshAndFindFileByIoFile(file);
     if (existingFile != null) {
       existingFile.refresh(false, false);

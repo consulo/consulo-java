@@ -28,9 +28,9 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.action.EditorAction;
 import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -245,7 +245,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
             if (decl == null) {
                 return;
             }
-            decl = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(decl);
+            decl = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(decl);
 
             PsiLocalVariable localVariable = (PsiLocalVariable) decl.getDeclaredElements()[0];
             TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(localVariable);

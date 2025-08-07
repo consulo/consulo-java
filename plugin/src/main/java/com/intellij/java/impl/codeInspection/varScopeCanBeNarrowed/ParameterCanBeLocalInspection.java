@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -38,6 +37,7 @@ import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Danila Ponomarenko
@@ -174,7 +174,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
       @Nullable final PsiExpression initializer,
       @Nonnull final PsiParameter parameter,
       @Nonnull final Collection<PsiReference> references,
-      @Nonnull final NotNullFunction<PsiDeclarationStatement, PsiElement> action
+      @Nonnull final Function<PsiDeclarationStatement, PsiElement> action
     ) {
       final PsiElement scope = parameter.getDeclarationScope();
       if (scope instanceof PsiMethod) {

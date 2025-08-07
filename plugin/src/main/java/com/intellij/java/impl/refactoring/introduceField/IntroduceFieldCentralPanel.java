@@ -19,8 +19,8 @@ import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.ApplicationPropertiesComponent;
 import consulo.application.util.function.Processor;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -45,7 +45,7 @@ public abstract class IntroduceFieldCentralPanel {
    protected static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.introduceField.IntroduceFieldDialog");
 
   private static final String INTRODUCE_FIELD_FINAL_CHECKBOX = "introduce.final.checkbox";
-  public static boolean ourLastCbFinalState = PropertiesComponent.getInstance().getBoolean(INTRODUCE_FIELD_FINAL_CHECKBOX, true);
+  public boolean ourLastCbFinalState = ApplicationPropertiesComponent.getInstance().getBoolean(INTRODUCE_FIELD_FINAL_CHECKBOX, true);
 
   protected final PsiClass myParentClass;
   protected final PsiExpression myInitializerExpression;
@@ -303,7 +303,7 @@ public abstract class IntroduceFieldCentralPanel {
   public void saveFinalState() {
     if (myCbFinal != null && myCbFinal.isEnabled()) {
       ourLastCbFinalState = myCbFinal.isSelected();
-      PropertiesComponent.getInstance().setValue(INTRODUCE_FIELD_FINAL_CHECKBOX, String.valueOf(ourLastCbFinalState));
+      ApplicationPropertiesComponent.getInstance().setValue(INTRODUCE_FIELD_FINAL_CHECKBOX, String.valueOf(ourLastCbFinalState));
     }
   }
 

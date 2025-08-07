@@ -25,13 +25,13 @@ import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
 import consulo.annotation.component.ActionRefAnchor;
+import consulo.application.ApplicationPropertiesComponent;
 import consulo.application.Result;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.SequentialModalProgressTask;
 import consulo.content.library.Library;
 import consulo.document.Document;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
 import consulo.language.editor.FileModificationService;
@@ -86,7 +86,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     @RequiredUIAccess
     protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
         boolean annotateLocaVars = myAnnotateLocalVariablesCb.getValueOrError();
-        PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocaVars);
+        ApplicationPropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocaVars);
         myAnnotateLocalVariablesCb = null;
 
         ProgressManager progressManager = ProgressManager.getInstance();
@@ -379,7 +379,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
         myAnnotateLocalVariablesCb =
             CheckBox.create(LocalizeValue.localizeTODO("Annotate local variables"));
-        myAnnotateLocalVariablesCb.setValue(PropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
+        myAnnotateLocalVariablesCb.setValue(ApplicationPropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
         layout.add(myAnnotateLocalVariablesCb);
     }
 

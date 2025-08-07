@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ApplicationPropertiesComponent;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.editor.FileModificationService;
@@ -119,7 +119,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     PsiDirectory srcDir = element.getContainingFile().getContainingDirectory();
     PsiJavaPackage srcPackage = JavaDirectoryService.getInstance().getPackage(srcDir);
 
-    final PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+    final ApplicationPropertiesComponent propertiesComponent = ApplicationPropertiesComponent.getInstance();
     final HashSet<VirtualFile> testFolders = new HashSet<>();
     checkForTestRoots(srcModule, testFolders);
     if (testFolders.isEmpty() && !propertiesComponent.getBoolean(CREATE_TEST_IN_THE_SAME_ROOT, false)) {

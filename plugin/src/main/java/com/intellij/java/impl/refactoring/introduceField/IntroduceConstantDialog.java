@@ -32,9 +32,9 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.HelpManager;
+import consulo.component.PropertiesComponent;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
@@ -46,6 +46,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
+import consulo.project.ProjectPropertiesComponent;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -265,7 +266,7 @@ class IntroduceConstantDialog extends DialogWrapper {
       && PsiUtil.isLanguageLevel5OrHigher(myParentClass)
       && JavaPsiFacade.getInstance(psiManager.getProject()).findClass(AnnotationUtil.NON_NLS, myParentClass.getResolveScope()) != null
     ) {
-      final PropertiesComponent component = PropertiesComponent.getInstance(myProject);
+      final PropertiesComponent component = ProjectPropertiesComponent.getInstance(myProject);
       myCbNonNls.setSelected(component.isTrueValue(NONNLS_SELECTED_PROPERTY));
       myCbNonNls.addItemListener(e -> component.setValue(NONNLS_SELECTED_PROPERTY, Boolean.toString(myCbNonNls.isSelected())));
     } else {

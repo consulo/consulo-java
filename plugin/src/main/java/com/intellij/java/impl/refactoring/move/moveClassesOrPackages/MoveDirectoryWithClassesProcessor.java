@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -43,6 +42,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -228,7 +228,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
         @Nonnull TargetDirectoryWrapper targetDirectory
     ) {
         PsiElement[] children = directory.getChildren();
-        String relativePath = VfsUtilCore.getRelativePath(directory.getVirtualFile(), rootDirectory.getVirtualFile(), '/');
+        String relativePath = VirtualFileUtil.getRelativePath(directory.getVirtualFile(), rootDirectory.getVirtualFile(), '/');
 
         TargetDirectoryWrapper newTargetDirectory = relativePath.isEmpty()
             ? targetDirectory

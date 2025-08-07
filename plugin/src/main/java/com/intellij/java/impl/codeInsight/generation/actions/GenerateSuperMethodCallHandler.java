@@ -19,18 +19,20 @@
  */
 package com.intellij.java.impl.codeInsight.generation.actions;
 
-import consulo.language.editor.action.CodeInsightActionHandler;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.language.psi.*;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.util.LanguageEditorUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -40,7 +42,7 @@ public class GenerateSuperMethodCallHandler implements CodeInsightActionHandler 
 
   @Override
   public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
-    if (!CodeInsightUtilBase.prepareEditorForWrite(editor)) return;
+    if (!LanguageEditorUtil.checkModificationAllowed(editor)) return;
     PsiMethod method = canInsertSuper(project, editor, file);
     try {
       PsiMethod template = (PsiMethod)method.copy();
@@ -55,7 +57,7 @@ public class GenerateSuperMethodCallHandler implements CodeInsightActionHandler 
       else {
         toGo = body.addAfter(superCall, body.getLBrace());
       }
-      toGo = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(toGo);
+      toGo = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(toGo);
       editor.getCaretModel().moveToOffset(toGo.getTextOffset());
       editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
     }

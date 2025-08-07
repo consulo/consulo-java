@@ -25,6 +25,7 @@ import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
@@ -308,7 +309,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
                                      final VirtualFile virtualFile,
                                      final VirtualFile targetVirtualFile) {
     final boolean inTestSourceContent = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(virtualFile);
-    final Module module = ModuleUtil.findModuleForFile(virtualFile, project);
+    final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
     if (targetVirtualFile != null &&
         module != null &&
         !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent).contains(targetVirtualFile)) {

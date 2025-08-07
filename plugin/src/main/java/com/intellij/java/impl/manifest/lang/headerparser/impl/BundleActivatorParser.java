@@ -28,9 +28,9 @@ package com.intellij.java.impl.manifest.lang.headerparser.impl;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.ClassKind;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -46,7 +46,7 @@ public class BundleActivatorParser extends AbstractHeaderParserImpl{
   @Override
   public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
     if (headerValuePart.getParent() instanceof Clause) {
-      final Module module = ModuleUtil.findModuleForPsiElement(headerValuePart);
+      final Module module = ModuleUtilCore.findModuleForPsiElement(headerValuePart);
       JavaClassReferenceProvider provider;
       if (module != null) {
         provider = new JavaClassReferenceProvider() {

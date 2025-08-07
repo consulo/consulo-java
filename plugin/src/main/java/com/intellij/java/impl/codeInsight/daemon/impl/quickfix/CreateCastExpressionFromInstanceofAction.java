@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.localize.CodeInsightLocalize;
@@ -64,7 +64,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
     assert instanceOfExpression.getContainingFile() == file : instanceOfExpression.getContainingFile() + "; file="+file;
     PsiElement decl = createAndInsertCast(instanceOfExpression, editor, file);
     if (decl == null) return;
-    decl = CodeStyleManager.getInstance(project).reformat(CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(decl));
+    decl = CodeStyleManager.getInstance(project).reformat(CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(decl));
     editor.getCaretModel().moveToOffset(decl.getTextRange().getEndOffset());
   }
 

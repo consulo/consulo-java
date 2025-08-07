@@ -25,7 +25,6 @@ import consulo.application.Application;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -41,6 +40,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ abstract class OverrideImplementMethodAction extends AnAction {
                             }
                         }
                         ReadonlyStatusHandler.OperationStatus status =
-                            ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(VfsUtil.toVirtualFileArray(files));
+                            ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(VirtualFileUtil.toVirtualFileArray(files));
                         if (!status.hasReadonlyFiles()) {
                             for (HierarchyNodeDescriptor selectedDescriptor : selectedDescriptors) {
                                 PsiElement aClass = ((MethodHierarchyNodeDescriptor)selectedDescriptor).getPsiClass();

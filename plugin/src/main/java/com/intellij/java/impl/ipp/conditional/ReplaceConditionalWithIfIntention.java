@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -33,7 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
+import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -84,7 +83,7 @@ public class ReplaceConditionalWithIfIntention extends Intention {
         return;
       }
       if (initializer instanceof PsiArrayInitializerExpression) {
-        final int conditionIdx = ArrayUtilRt.find(((PsiArrayInitializerExpression) initializer).getInitializers(), expression);
+        final int conditionIdx = ArrayUtil.find(((PsiArrayInitializerExpression) initializer).getInitializers(), expression);
         if (conditionIdx >= 0) {
           initializer = (PsiExpression) initializer.replace(RefactoringUtil.convertInitializerToNormalExpression(initializer,
               variable.getType()));

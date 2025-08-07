@@ -21,10 +21,10 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
@@ -113,7 +113,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
       CodeStyleSettingsManager.getSettings(project).GENERATE_FINAL_LOCALS && !CreateFromUsageUtils.isAccessedForWriting(expressions);
     PsiUtil.setModifierProperty(var, PsiModifier.FINAL, isFinal);
 
-    var = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(var);
+    var = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(var);
     if (var == null) return;
     TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(var);
     builder.replaceElement(var.getTypeElement(), expression);

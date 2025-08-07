@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.application.Application;
 import consulo.application.util.function.Computable;
@@ -31,7 +30,6 @@ import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ui.dualView.TreeTableView;
 import consulo.ide.impl.idea.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
 import consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo;
-import consulo.ide.impl.idea.util.containers.Convertor;
 import consulo.java.impl.intelliLang.config.MethodParameterInjection;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
@@ -63,7 +61,6 @@ import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -141,13 +138,9 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
 
     });
     init(injection.copy());
-    new TreeTableSpeedSearch(myParamsTable, new Convertor<>() {
-      @Nullable
-      @RequiredReadAction
-      public String convert(final TreePath o) {
-        final Object userObject = ((DefaultMutableTreeNode)o.getLastPathComponent()).getUserObject();
-        return userObject instanceof PsiNamedElement namedElement ? namedElement.getName() : null;
-      }
+    new TreeTableSpeedSearch(myParamsTable, o -> {
+      final Object userObject = ((DefaultMutableTreeNode)o.getLastPathComponent()).getUserObject();
+      return userObject instanceof PsiNamedElement namedElement ? namedElement.getName() : null;
     });
     new AnAction("Toggle") {
       @Override

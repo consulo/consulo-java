@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -60,7 +60,7 @@ public class JavaWithIfExpressionSurrounder extends JavaExpressionSurrounder{
     ifStatement = (PsiIfStatement)statement.replace(ifStatement);
 
     PsiCodeBlock block = ((PsiBlockStatement)ifStatement.getThenBranch()).getCodeBlock();
-    block = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(block);
+    block = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(block);
     TextRange range = block.getStatements()[0].getTextRange();
     editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());
     return new TextRange(range.getStartOffset(), range.getStartOffset());

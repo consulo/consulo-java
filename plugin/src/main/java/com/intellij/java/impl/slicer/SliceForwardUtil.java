@@ -21,14 +21,13 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -270,7 +269,7 @@ public class SliceForwardUtil {
     //method call
     else if (parent instanceof PsiExpressionList && parent.getParent() instanceof PsiCallExpression) {
       PsiExpression[] expressions = ((PsiExpressionList) parent).getExpressions();
-      int index = ArrayUtilRt.find(expressions, element);
+      int index = ArrayUtil.find(expressions, element);
       PsiCallExpression methodCall = (PsiCallExpression) parent.getParent();
       JavaResolveResult result = methodCall.resolveMethodGenerics();
       PsiMethod method = (PsiMethod) result.getElement();

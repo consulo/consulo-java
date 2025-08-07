@@ -1,13 +1,14 @@
 package com.intellij.psi.impl.source.tree.java;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.testFramework.LightIdeaTestCase;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.undoRedo.CommandProcessor;
 
 /**
  *  @author dsl
@@ -163,7 +164,7 @@ public abstract class JavadocParamTagsTest extends LightIdeaTestCase {
             final PsiDocTag[] tags = docComment.getTags();
             final PsiDocTag tag2 = factory.createParamTag("p2", "");
             docComment.addAfter(tag2, tags[0]);
-            docComment = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(docComment);
+            docComment = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(docComment);
             assertEquals(
               "/**\n" +
               " * Javadoc\n" +

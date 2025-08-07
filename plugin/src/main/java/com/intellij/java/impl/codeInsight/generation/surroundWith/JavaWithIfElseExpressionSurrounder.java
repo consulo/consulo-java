@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -47,7 +47,7 @@ public class JavaWithIfElseExpressionSurrounder extends JavaWithIfExpressionSurr
 
     PsiCodeBlock block = ((PsiBlockStatement)ifStatement.getThenBranch()).getCodeBlock();
 
-    PsiStatement afterStatement = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(block.getStatements()[0]);
+    PsiStatement afterStatement = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(block.getStatements()[0]);
     
     TextRange range = afterStatement.getTextRange();
     editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());

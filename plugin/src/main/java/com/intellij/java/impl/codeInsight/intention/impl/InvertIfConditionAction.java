@@ -31,7 +31,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -44,6 +43,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -311,7 +311,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
         if (body instanceof PsiBlockStatement blockStatement) {
           final PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
           if (statements.length > 0 && !PsiTreeUtil.isAncestor(statements[statements.length - 1], ifStatement, false) &&
-              ArrayUtilRt.find(statements, ifStatement) < 0) {
+              ArrayUtil.find(statements, ifStatement) < 0) {
             ifStatement.setElseBranch(thenBranch);
             return;
           }

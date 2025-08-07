@@ -31,13 +31,13 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.generation.DelegateMethodHandler;
 import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.util.LanguageEditorUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -74,7 +74,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
   @Override
   @RequiredUIAccess
   public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
-    if (!CodeInsightUtilBase.prepareEditorForWrite(editor)) {
+    if (!LanguageEditorUtil.checkModificationAllowed(editor)) {
       return;
     }
     if (!FileDocumentManager.getInstance().requestWriting(editor.getDocument(), project)) {

@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Collection;
-
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-
+import consulo.application.ApplicationPropertiesComponent;
 import jakarta.annotation.Nullable;
+
+import java.util.Collection;
 
 public class AnonymousTargetClassPreselectionUtil
 {
@@ -31,14 +30,14 @@ public class AnonymousTargetClassPreselectionUtil
 	{
 		if(firstClass instanceof PsiAnonymousClass)
 		{
-			PropertiesComponent.getInstance().setValue(PRESELECT_ANONYMOUS, aClass == firstClass);
+			ApplicationPropertiesComponent.getInstance().setValue(PRESELECT_ANONYMOUS, aClass == firstClass);
 		}
 	}
 
 	@Nullable
 	public static PsiClass getPreselection(Collection<PsiClass> classes, PsiClass firstClass)
 	{
-		if(firstClass instanceof PsiAnonymousClass && !PropertiesComponent.getInstance().getBoolean(PRESELECT_ANONYMOUS, true))
+		if(firstClass instanceof PsiAnonymousClass && !ApplicationPropertiesComponent.getInstance().getBoolean(PRESELECT_ANONYMOUS, true))
 		{
 			for(PsiClass aClass : classes)
 			{

@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInsight.editorActions.wordSelection.WordSelectioner;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.action.AbstractWordSelectioner;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
-import consulo.language.ast.IElementType;
 import consulo.util.lang.CharArrayUtil;
-import consulo.annotation.access.RequiredReadAction;
 
 import java.util.List;
 
 @ExtensionImpl
-public class DocTagSelectioner extends WordSelectioner {
+public class DocTagSelectioner extends AbstractWordSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {
     return e instanceof PsiDocTag;

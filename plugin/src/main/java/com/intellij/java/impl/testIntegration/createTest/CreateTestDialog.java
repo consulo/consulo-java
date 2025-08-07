@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
@@ -25,7 +26,6 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.util.TreeClassChooser;
@@ -35,9 +35,9 @@ import consulo.application.AllIcons;
 import consulo.application.HelpManager;
 import consulo.application.ReadAction;
 import consulo.application.Result;
+import consulo.component.PropertiesComponent;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.editor.WriteCommandAction;
@@ -54,6 +54,7 @@ import consulo.module.content.layer.ContentFolder;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.project.ProjectPropertiesComponent;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.action.AnAction;
@@ -256,7 +257,7 @@ public class CreateTestDialog extends DialogWrapper {
   }
 
   private PropertiesComponent getProperties() {
-    return PropertiesComponent.getInstance(myProject);
+    return ProjectPropertiesComponent.getInstance(myProject);
   }
 
   @Override

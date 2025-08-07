@@ -25,8 +25,8 @@ import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.hint.HintManager;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -41,7 +41,6 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -189,7 +188,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       GenerateMembersUtil.insertMembersAtOffset(file, offset, Collections.singletonList(info));
 
       final PsiMethod member = info.getPsiMember();
-      return member != null ? CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(member) : null;
+      return member != null ? CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(member) : null;
     }
 
     private static int findOffsetToInsertMethodTo(Editor editor, PsiFile file) {

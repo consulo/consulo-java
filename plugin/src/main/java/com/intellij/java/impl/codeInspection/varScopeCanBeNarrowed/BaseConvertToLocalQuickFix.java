@@ -20,11 +20,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
-import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -45,6 +43,8 @@ import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * refactored from {@link FieldCanBeLocalInspection.ConvertFieldToLocalQuickFix}
@@ -122,15 +122,11 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
           anchorAssignmentExpression.getRExpression(),
           variable,
           refsSet,
-          new NotNullFunction<>() {
-            @Nonnull
-            @Override
-            public PsiElement apply(PsiDeclarationStatement declaration) {
-              if (!mayBeFinal(firstElement, references)) {
-                PsiUtil.setModifierProperty((PsiModifierListOwner) declaration.getDeclaredElements()[0], PsiModifier.FINAL, false);
-              }
-              return anchor.replace(declaration);
+          declaration -> {
+            if (!mayBeFinal(firstElement, references)) {
+              PsiUtil.setModifierProperty((PsiModifierListOwner) declaration.getDeclaredElements()[0], PsiModifier.FINAL, false);
             }
+            return anchor.replace(declaration);
           }
       );
     }
@@ -141,13 +137,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
         variable.getInitializer(),
         variable,
         references,
-        new NotNullFunction<>() {
-          @Nonnull
-          @Override
-          public PsiElement apply(PsiDeclarationStatement declaration) {
-            return anchorBlock.addBefore(declaration, anchor);
-          }
-        }
+        declaration -> anchorBlock.addBefore(declaration, anchor)
     );
   }
 
@@ -158,12 +148,12 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     final @Nullable PsiExpression initializer,
     final @Nonnull V variable,
     final @Nonnull Collection<PsiReference> references,
-    final @Nonnull NotNullFunction<PsiDeclarationStatement, PsiElement> action
+    final @Nonnull Function<PsiDeclarationStatement, PsiElement> action
   ) {
     final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
 
     return project.getApplication().runWriteAction(
-      (Computable<PsiElement>)() -> {
+      (Supplier<PsiElement>)() -> {
         final PsiElement newDeclaration = moveDeclaration(elementFactory, localName, variable, initializer, action, references);
         beforeDelete(project, variable, newDeclaration);
         variable.normalizeDeclaration();
@@ -178,7 +168,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     String localName,
     V variable,
     PsiExpression initializer,
-    NotNullFunction<PsiDeclarationStatement, PsiElement> action,
+    Function<PsiDeclarationStatement, PsiElement> action,
     Collection<PsiReference> references
   ) {
     final PsiDeclarationStatement declaration =

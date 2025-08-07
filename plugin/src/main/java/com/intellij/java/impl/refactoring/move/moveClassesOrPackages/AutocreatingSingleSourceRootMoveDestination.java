@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.usage.UsageInfo;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -88,7 +88,7 @@ public class AutocreatingSingleSourceRootMoveDestination extends AutocreatingMov
   @Override
   public boolean isTargetAccessible(Project project, VirtualFile place) {
     final boolean inTestSourceContent = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(place);
-    final Module module = ModuleUtil.findModuleForFile(place, project);
+    final Module module = ModuleUtilCore.findModuleForFile(place, project);
     if (mySourceRoot != null &&
         module != null &&
         !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent).contains(mySourceRoot)) {

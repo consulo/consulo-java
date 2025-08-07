@@ -39,6 +39,7 @@ import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.ApplicationManager;
+import consulo.application.ApplicationPropertiesComponent;
 import consulo.codeEditor.*;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
@@ -46,8 +47,6 @@ import consulo.document.FileDocumentManager;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.language.editor.highlight.HighlightManager;
@@ -72,6 +71,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
@@ -166,7 +166,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
   }
 
   public static boolean isPreferStatements() {
-    return PropertiesComponent.getInstance().getBoolean(PREFER_STATEMENTS_OPTION, false);
+    return ApplicationPropertiesComponent.getInstance().getBoolean(PREFER_STATEMENTS_OPTION, false);
   }
 
   public static List<PsiExpression> collectExpressions(final PsiFile file, final Editor editor, final int offset) {
@@ -928,7 +928,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
             initializer.accept(new JavaRecursiveElementWalkingVisitor() {
               @Override
               public void visitReferenceExpression(PsiReferenceExpression expression) {
-                final int i = ArrayUtilRt.find(declaredElements, expression.resolve());
+                final int i = ArrayUtil.find(declaredElements, expression.resolve());
                 if (i > -1) {
                   usedFirstVar[0] = Math.max(i, usedFirstVar[0]);
                 }

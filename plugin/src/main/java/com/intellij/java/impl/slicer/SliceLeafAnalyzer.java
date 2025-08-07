@@ -22,7 +22,6 @@ import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
 import consulo.application.util.function.Computable;
 import consulo.ide.impl.idea.concurrency.ConcurrentCollectionFactory;
-import consulo.ide.impl.idea.util.NullableFunction;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.impl.ast.AstBufferUtil;
 import consulo.language.psi.PsiElement;
@@ -36,231 +35,246 @@ import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.collection.util.WalkingState;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.function.PairProcessor;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 /**
  * @author cdr
  */
 public class SliceLeafAnalyzer {
-  public static final HashingStrategy<PsiElement> LEAF_ELEMENT_EQUALITY = new HashingStrategy<PsiElement>() {
-    @Override
-    public int hashCode(final PsiElement element) {
-      if (element == null) return 0;
-      String text = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+    public static final HashingStrategy<PsiElement> LEAF_ELEMENT_EQUALITY = new HashingStrategy<>() {
         @Override
-        public String compute() {
-          PsiElement elementToCompare = element;
-          if (element instanceof PsiJavaReference) {
-            PsiElement resolved = ((PsiJavaReference)element).resolve();
-            if (resolved != null) {
-              elementToCompare = resolved;
+        public int hashCode(final PsiElement element) {
+            if (element == null) {
+                return 0;
             }
-          }
-          return elementToCompare instanceof PsiNamedElement ? ((PsiNamedElement)elementToCompare).getName()
-                                                             : AstBufferUtil.getTextSkippingWhitespaceComments(elementToCompare.getNode());
+            String text = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+                @Override
+                public String compute() {
+                    PsiElement elementToCompare = element;
+                    if (element instanceof PsiJavaReference) {
+                        PsiElement resolved = ((PsiJavaReference) element).resolve();
+                        if (resolved != null) {
+                            elementToCompare = resolved;
+                        }
+                    }
+                    return elementToCompare instanceof PsiNamedElement ? ((PsiNamedElement) elementToCompare).getName()
+                        : AstBufferUtil.getTextSkippingWhitespaceComments(elementToCompare.getNode());
+                }
+            });
+            return Comparing.hashcode(text);
         }
-      });
-      return Comparing.hashcode(text);
-    }
 
-    @Override
-    public boolean equals(final PsiElement o1, final PsiElement o2) {
-      return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
         @Override
-        public Boolean compute() {
-          return o1 != null && o2 != null && PsiEquivalenceUtil.areElementsEquivalent(o1, o2);
+        public boolean equals(final PsiElement o1, final PsiElement o2) {
+            return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
+                @Override
+                public Boolean compute() {
+                    return o1 != null && o2 != null && PsiEquivalenceUtil.areElementsEquivalent(o1, o2);
+                }
+            });
         }
-      });
-    }
-  };
-
-  static SliceNode filterTree(SliceNode oldRoot, NullableFunction<SliceNode, SliceNode> filter, PairProcessor<SliceNode, List<SliceNode>> postProcessor){
-    SliceNode filtered = filter.apply(oldRoot);
-    if (filtered == null) return null;
-
-    List<SliceNode> childrenFiltered = new ArrayList<SliceNode>();
-    if (oldRoot.myCachedChildren != null) {
-      for (SliceNode child : oldRoot.myCachedChildren) {
-        SliceNode childFiltered = filterTree(child, filter,postProcessor);
-        if (childFiltered != null) {
-          childrenFiltered.add(childFiltered);
-        }
-      }
-    }
-    boolean success = postProcessor == null || postProcessor.process(filtered, childrenFiltered);
-    if (!success) return null;
-    filtered.myCachedChildren = new ArrayList<SliceNode>(childrenFiltered);
-    return filtered;
-  }
-
-  private static void groupByValues(@Nonnull Collection<PsiElement> leaves,
-                                    @Nonnull SliceRootNode oldRoot,
-                                    @Nonnull Map<SliceNode, Collection<PsiElement>> map) {
-    assert oldRoot.myCachedChildren.size() == 1;
-    SliceRootNode root = createTreeGroupedByValues(leaves, oldRoot, map);
-
-    SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
-    SliceUsage rootUsage = oldRootStart.getValue();
-    String description = SliceManager.getElementDescription(null, rootUsage.getElement(), " (grouped by value)");
-    SliceManager.getInstance(root.getProject()).createToolWindow(true, root, true, description);
-  }
-
-  @Nonnull
-  public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, final Map<SliceNode, Collection<PsiElement>> map) {
-    SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
-    SliceRootNode root = oldRoot.copy();
-    root.setChanged();
-    root.targetEqualUsages.clear();
-    root.myCachedChildren = new ArrayList<SliceNode>(leaves.size());
-
-    for (final PsiElement leafExpression : leaves) {
-      SliceNode newNode = filterTree(oldRootStart, new NullableFunction<SliceNode, SliceNode>() {
-        @Override
-        public SliceNode apply(SliceNode oldNode) {
-          if (oldNode.getDuplicate() != null) return null;
-          if (!node(oldNode, map).contains(leafExpression)) return null;
-
-          return oldNode.copy();
-        }
-      }, new PairProcessor<SliceNode, List<SliceNode>>() {
-        @Override
-        public boolean process(SliceNode node, List<SliceNode> children) {
-          if (!children.isEmpty()) return true;
-          PsiElement element = node.getValue().getElement();
-          if (element == null) return false;
-          return element.getManager().areElementsEquivalent(element, leafExpression); // leaf can be there only if it's filtering expression
-        }
-      });
-
-      SliceLeafValueRootNode lvNode = new SliceLeafValueRootNode(root.getProject(), leafExpression, root, Collections.singletonList(newNode),
-                                                                 oldRoot.getValue().params);
-      root.myCachedChildren.add(lvNode);
-    }
-    return root;
-  }
-
-  public static void startAnalyzeValues(@Nonnull final AbstractTreeStructure treeStructure, @Nonnull final Runnable finish) {
-    final SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
-    final Ref<Collection<PsiElement>> leafExpressions = Ref.create(null);
-
-    final Map<SliceNode, Collection<PsiElement>> map = createMap();
-
-    ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
-      @Override
-      public void run(@Nonnull final ProgressIndicator indicator) {
-        Collection<PsiElement> l = calcLeafExpressions(root, treeStructure, map);
-        leafExpressions.set(l);
-      }
-
-      @Override
-      public void onCancel() {
-        finish.run();
-      }
-
-      @Override
-      public void onSuccess() {
-        try {
-          Collection<PsiElement> leaves = leafExpressions.get();
-          if (leaves == null) return;  //cancelled
-
-          if (leaves.isEmpty()) {
-            Messages.showErrorDialog("Unable to find leaf expressions to group by", "Cannot group");
-            return;
-          }
-
-          groupByValues(leaves, root, map);
-        }
-        finally {
-          finish.run();
-        }
-      }
-    });
-  }
-
-  public static Map<SliceNode, Collection<PsiElement>> createMap() {
-    return FactoryMap.createMap(sliceNode -> ConcurrentCollectionFactory.createConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY), () -> ConcurrentCollectionFactory.createMap(ContainerUtil.<SliceNode>identityStrategy()));
-  }
-
-  static class SliceNodeGuide implements WalkingState.TreeGuide<SliceNode> {
-    private final AbstractTreeStructure myTreeStructure;
-    // use tree structure because it's setting 'parent' fields in the process
-
-    SliceNodeGuide(@Nonnull AbstractTreeStructure treeStructure) {
-      myTreeStructure = treeStructure;
-    }
-
-    @Override
-    public SliceNode getNextSibling(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
-      if (parent == null) return null;
-
-      return element.getNext((List)parent.getChildren());
-    }
-
-    @Override
-    public SliceNode getPrevSibling(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
-      if (parent == null) return null;
-      return element.getPrev((List)parent.getChildren());
-    }
-
-    @Override
-    public SliceNode getFirstChild(@Nonnull SliceNode element) {
-      Object[] children = myTreeStructure.getChildElements(element);
-      return children.length == 0 ? null : (SliceNode)children[0];
-    }
-
-    @Override
-    public SliceNode getParent(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
-      return parent instanceof SliceNode ? (SliceNode)parent : null;
-    }
-  }
-
-  private static Collection<PsiElement> node(SliceNode node, Map<SliceNode, Collection<PsiElement>> map) {
-    return map.get(node);
-  }
-
-  @Nonnull
-  public static Collection<PsiElement> calcLeafExpressions(@Nonnull final SliceNode root,
-                                                           @Nonnull AbstractTreeStructure treeStructure,
-                                                           @Nonnull final Map<SliceNode, Collection<PsiElement>> map) {
-    final SliceNodeGuide guide = new SliceNodeGuide(treeStructure);
-    WalkingState<SliceNode> walkingState = new WalkingState<SliceNode>(guide) {
-      @Override
-      public void visit(@Nonnull SliceNode element) {
-        element.calculateDupNode();
-        node(element, map).clear();
-        SliceNode duplicate = element.getDuplicate();
-        if (duplicate != null) {
-          node(element, map).addAll(node(duplicate, map));
-        }
-        else {
-          final SliceUsage sliceUsage = element.getValue();
-
-          Collection<? extends AbstractTreeNode> children = element.getChildren();
-          if (children.isEmpty()) {
-            PsiElement value = ApplicationManager.getApplication().runReadAction((Computable<PsiElement>) sliceUsage::getElement);
-            node(element, map).addAll(Sets.newHashSet(Set.of(value), LEAF_ELEMENT_EQUALITY));
-          }
-          super.visit(element);
-        }
-      }
-
-      @Override
-      public void elementFinished(@Nonnull SliceNode element) {
-        SliceNode parent = guide.getParent(element);
-        if (parent != null) {
-          node(parent, map).addAll(node(element, map));
-        }
-      }
     };
-    walkingState.visit(root);
 
-    return node(root, map);
-  }
+    static SliceNode filterTree(SliceNode oldRoot, Function<SliceNode, SliceNode> filter, BiPredicate<SliceNode, List<SliceNode>> postProcessor) {
+        SliceNode filtered = filter.apply(oldRoot);
+        if (filtered == null) {
+            return null;
+        }
+
+        List<SliceNode> childrenFiltered = new ArrayList<>();
+        if (oldRoot.myCachedChildren != null) {
+            for (SliceNode child : oldRoot.myCachedChildren) {
+                SliceNode childFiltered = filterTree(child, filter, postProcessor);
+                if (childFiltered != null) {
+                    childrenFiltered.add(childFiltered);
+                }
+            }
+        }
+        boolean success = postProcessor == null || postProcessor.test(filtered, childrenFiltered);
+        if (!success) {
+            return null;
+        }
+        filtered.myCachedChildren = new ArrayList<>(childrenFiltered);
+        return filtered;
+    }
+
+    private static void groupByValues(@Nonnull Collection<PsiElement> leaves,
+                                      @Nonnull SliceRootNode oldRoot,
+                                      @Nonnull Map<SliceNode, Collection<PsiElement>> map) {
+        assert oldRoot.myCachedChildren.size() == 1;
+        SliceRootNode root = createTreeGroupedByValues(leaves, oldRoot, map);
+
+        SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
+        SliceUsage rootUsage = oldRootStart.getValue();
+        String description = SliceManager.getElementDescription(null, rootUsage.getElement(), " (grouped by value)");
+        SliceManager.getInstance(root.getProject()).createToolWindow(true, root, true, description);
+    }
+
+    @Nonnull
+    public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, final Map<SliceNode, Collection<PsiElement>> map) {
+        SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
+        SliceRootNode root = oldRoot.copy();
+        root.setChanged();
+        root.targetEqualUsages.clear();
+        root.myCachedChildren = new ArrayList<>(leaves.size());
+
+        for (final PsiElement leafExpression : leaves) {
+            SliceNode newNode = filterTree(oldRootStart, oldNode -> {
+                if (oldNode.getDuplicate() != null) {
+                    return null;
+                }
+                if (!node(oldNode, map).contains(leafExpression)) {
+                    return null;
+                }
+
+                return oldNode.copy();
+            }, (node, children) -> {
+                if (!children.isEmpty()) {
+                    return true;
+                }
+                PsiElement element = node.getValue().getElement();
+                if (element == null) {
+                    return false;
+                }
+                return element.getManager().areElementsEquivalent(element, leafExpression); // leaf can be there only if it's filtering expression
+            });
+
+            SliceLeafValueRootNode lvNode = new SliceLeafValueRootNode(root.getProject(), leafExpression, root, Collections.singletonList(newNode),
+                oldRoot.getValue().params);
+            root.myCachedChildren.add(lvNode);
+        }
+        return root;
+    }
+
+    public static void startAnalyzeValues(@Nonnull final AbstractTreeStructure treeStructure, @Nonnull final Runnable finish) {
+        final SliceRootNode root = (SliceRootNode) treeStructure.getRootElement();
+        final Ref<Collection<PsiElement>> leafExpressions = Ref.create(null);
+
+        final Map<SliceNode, Collection<PsiElement>> map = createMap();
+
+        ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
+            @Override
+            public void run(@Nonnull final ProgressIndicator indicator) {
+                Collection<PsiElement> l = calcLeafExpressions(root, treeStructure, map);
+                leafExpressions.set(l);
+            }
+
+            @Override
+            public void onCancel() {
+                finish.run();
+            }
+
+            @Override
+            public void onSuccess() {
+                try {
+                    Collection<PsiElement> leaves = leafExpressions.get();
+                    if (leaves == null) {
+                        return;  //cancelled
+                    }
+
+                    if (leaves.isEmpty()) {
+                        Messages.showErrorDialog("Unable to find leaf expressions to group by", "Cannot group");
+                        return;
+                    }
+
+                    groupByValues(leaves, root, map);
+                }
+                finally {
+                    finish.run();
+                }
+            }
+        });
+    }
+
+    public static Map<SliceNode, Collection<PsiElement>> createMap() {
+        return FactoryMap.createMap(sliceNode -> ConcurrentCollectionFactory.createConcurrentSet(SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY), () -> ConcurrentCollectionFactory.createMap(ContainerUtil.<SliceNode>identityStrategy()));
+    }
+
+    static class SliceNodeGuide implements WalkingState.TreeGuide<SliceNode> {
+        private final AbstractTreeStructure myTreeStructure;
+        // use tree structure because it's setting 'parent' fields in the process
+
+        SliceNodeGuide(@Nonnull AbstractTreeStructure treeStructure) {
+            myTreeStructure = treeStructure;
+        }
+
+        @Override
+        public SliceNode getNextSibling(@Nonnull SliceNode element) {
+            AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
+            if (parent == null) {
+                return null;
+            }
+
+            return element.getNext((List) parent.getChildren());
+        }
+
+        @Override
+        public SliceNode getPrevSibling(@Nonnull SliceNode element) {
+            AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
+            if (parent == null) {
+                return null;
+            }
+            return element.getPrev((List) parent.getChildren());
+        }
+
+        @Override
+        public SliceNode getFirstChild(@Nonnull SliceNode element) {
+            Object[] children = myTreeStructure.getChildElements(element);
+            return children.length == 0 ? null : (SliceNode) children[0];
+        }
+
+        @Override
+        public SliceNode getParent(@Nonnull SliceNode element) {
+            AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
+            return parent instanceof SliceNode ? (SliceNode) parent : null;
+        }
+    }
+
+    private static Collection<PsiElement> node(SliceNode node, Map<SliceNode, Collection<PsiElement>> map) {
+        return map.get(node);
+    }
+
+    @Nonnull
+    public static Collection<PsiElement> calcLeafExpressions(@Nonnull final SliceNode root,
+                                                             @Nonnull AbstractTreeStructure treeStructure,
+                                                             @Nonnull final Map<SliceNode, Collection<PsiElement>> map) {
+        final SliceNodeGuide guide = new SliceNodeGuide(treeStructure);
+        WalkingState<SliceNode> walkingState = new WalkingState<>(guide) {
+            @Override
+            public void visit(@Nonnull SliceNode element) {
+                element.calculateDupNode();
+                node(element, map).clear();
+                SliceNode duplicate = element.getDuplicate();
+                if (duplicate != null) {
+                    node(element, map).addAll(node(duplicate, map));
+                }
+                else {
+                    final SliceUsage sliceUsage = element.getValue();
+
+                    Collection<? extends AbstractTreeNode> children = element.getChildren();
+                    if (children.isEmpty()) {
+                        PsiElement value = ApplicationManager.getApplication().runReadAction((Computable<PsiElement>) sliceUsage::getElement);
+                        node(element, map).addAll(Sets.newHashSet(Set.of(value), LEAF_ELEMENT_EQUALITY));
+                    }
+                    super.visit(element);
+                }
+            }
+
+            @Override
+            public void elementFinished(@Nonnull SliceNode element) {
+                SliceNode parent = guide.getParent(element);
+                if (parent != null) {
+                    node(parent, map).addAll(node(element, map));
+                }
+            }
+        };
+        walkingState.visit(root);
+
+        return node(root, map);
+    }
 }

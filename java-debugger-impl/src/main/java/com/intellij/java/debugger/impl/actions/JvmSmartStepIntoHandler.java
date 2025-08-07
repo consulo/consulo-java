@@ -27,10 +27,11 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.ui.DebuggerUIUtil;
 import consulo.fileEditor.TextEditor;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.language.psi.PsiElement;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.ListPopup;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -78,7 +79,7 @@ public abstract class JvmSmartStepIntoHandler {
                             session.stepInto(true, createMethodFilter(chosenTarget));
                         }
                     });
-                ListPopupImpl popup = new ListPopupImpl(popupStep);
+                ListPopup popup = JBPopupFactory.getInstance().createListPopup(popupStep);
                 DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
                 DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
                 popup.addListSelectionListener(e -> {

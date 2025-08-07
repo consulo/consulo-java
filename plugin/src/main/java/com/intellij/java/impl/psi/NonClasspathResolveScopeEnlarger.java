@@ -7,12 +7,12 @@ import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
 import com.intellij.java.language.psi.PsiElementFinder;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.psi.ResolveScopeEnlarger;
 import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
                 if (finder instanceof NonClasspathClassFinder nonClasspathClassFinder) {
                     List<VirtualFile> roots = nonClasspathClassFinder.getClassRoots();
                     for (VirtualFile root : roots) {
-                        if (VfsUtilCore.isAncestor(root, file, true)) {
+                        if (VirtualFileUtil.isAncestor(root, file, true)) {
                             return NonClasspathDirectoriesScope.compose(roots);
                         }
                     }

@@ -43,6 +43,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.project.ProjectPropertiesComponent;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.Label;
@@ -224,11 +225,11 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
         }
         final PsiMethod containingMethod = getContainingMethod();
         if (containingMethod != null && containingMethod.hasModifierProperty(PsiModifier.PUBLIC)) {
-            PropertiesComponent.getInstance(myProject).setValue(EXTRACT_METHOD_DEFAULT_VISIBILITY, getVisibility());
+            ProjectPropertiesComponent.getInstance(myProject).setValue(EXTRACT_METHOD_DEFAULT_VISIBILITY, getVisibility());
         }
 
         if (myGenerateAnnotations != null && myGenerateAnnotations.isEnabled()) {
-            PropertiesComponent.getInstance(myProject).setValue(EXTRACT_METHOD_GENERATE_ANNOTATIONS, myGenerateAnnotations.getValueOrError(), true);
+            ProjectPropertiesComponent.getInstance(myProject).setValue(EXTRACT_METHOD_GENERATE_ANNOTATIONS, myGenerateAnnotations.getValueOrError(), true);
         }
         super.doOKAction();
     }
@@ -377,7 +378,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
         }
 
         if (myNullability != null && myNullability != Nullability.UNKNOWN) {
-            final boolean isSelected = PropertiesComponent.getInstance(myProject).getBoolean(EXTRACT_METHOD_GENERATE_ANNOTATIONS, true);
+            final boolean isSelected = ProjectPropertiesComponent.getInstance(myProject).getBoolean(EXTRACT_METHOD_GENERATE_ANNOTATIONS, true);
             myGenerateAnnotations = CheckBox.create(JavaRefactoringBundle.message("declare.generated.annotations"), isSelected);
             myGenerateAnnotations.addValueListener(e -> updateSignature());
             layout.add(myGenerateAnnotations);
@@ -409,7 +410,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
     private ComboBoxVisibilityPanel<String> createVisibilityPanel() {
         final JavaComboBoxVisibilityPanel panel = new JavaComboBoxVisibilityPanel();
         final PsiMethod containingMethod = getContainingMethod();
-        panel.setVisibility(containingMethod != null && containingMethod.hasModifierProperty(PsiModifier.PUBLIC) ? PropertiesComponent.getInstance(myProject).getValue
+        panel.setVisibility(containingMethod != null && containingMethod.hasModifierProperty(PsiModifier.PUBLIC) ? ProjectPropertiesComponent.getInstance(myProject).getValue
             (EXTRACT_METHOD_DEFAULT_VISIBILITY, PsiModifier.PRIVATE) : PsiModifier.PRIVATE);
         panel.addListener(e -> {
             updateSignature();

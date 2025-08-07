@@ -23,7 +23,6 @@ import consulo.application.util.function.Computable;
 import consulo.content.ContentIterator;
 import consulo.content.scope.SearchScope;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
@@ -40,11 +39,13 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
+import java.util.function.Supplier;
 
 public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
@@ -129,15 +130,10 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
     final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
     final Application application = ApplicationManager.getApplication();
     final VirtualFile[] contentRoots = application.runReadAction(
-      new Computable<VirtualFile[]>() {
-        @Override
-        public VirtualFile[] compute() {
-          return rootManager.getContentRootsFromAllModules();
-        }
-      });
+        (Supplier<VirtualFile[]>) () -> rootManager.getContentRootsFromAllModules());
     for (VirtualFile otherRoot : contentRoots) {
-      if (VfsUtilCore.isAncestor(otherRoot, file, false)) {
-        return VfsUtilCore.getRelativePath(file, otherRoot, '/');
+      if (VirtualFileUtil.isAncestor(otherRoot, file, false)) {
+        return VirtualFileUtil.getRelativePath(file, otherRoot, '/');
       }
     }
     return null;

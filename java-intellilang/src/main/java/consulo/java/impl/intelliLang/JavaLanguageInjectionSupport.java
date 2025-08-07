@@ -25,8 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.Result;
 import consulo.configurable.Configurable;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
-import consulo.ide.impl.idea.util.NullableFunction;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.impl.intelliLang.config.MethodParameterInjection;
 import consulo.java.impl.intelliLang.config.ui.MethodParameterPanel;
@@ -50,6 +48,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.DialogBuilder;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
@@ -119,14 +118,12 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
             return false;
         }
         final ArrayList<BaseInjection> originalInjections = new ArrayList<BaseInjection>(injectionsMap.keySet());
-        final List<BaseInjection> newInjections = ContainerUtil.mapNotNull(originalInjections, new NullableFunction<BaseInjection, BaseInjection>() {
-            public BaseInjection apply(final BaseInjection injection) {
-                final Pair<PsiMethod, Integer> pair = injectionsMap.get(injection);
-                final String placeText = getPatternStringForJavaPlace(pair.first, pair.second);
-                final BaseInjection newInjection = injection.copy();
-                newInjection.setPlaceEnabled(placeText, false);
-                return InjectorUtils.canBeRemoved(newInjection) ? null : newInjection;
-            }
+        final List<BaseInjection> newInjections = ContainerUtil.mapNotNull(originalInjections, injection -> {
+            final Pair<PsiMethod, Integer> pair = injectionsMap.get(injection);
+            final String placeText = getPatternStringForJavaPlace(pair.first, pair.second);
+            final BaseInjection newInjection = injection.copy();
+            newInjection.setPlaceEnabled(placeText, false);
+            return InjectorUtils.canBeRemoved(newInjection) ? null : newInjection;
         });
         configuration.replaceInjectionsWithUndo(project, newInjections, originalInjections, annotations);
         return true;
@@ -475,7 +472,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
                     }
                     if (isInjectable(method.getReturnType(), method.getProject())) {
                         final int parameterIndex = -1;
-                        int index = ArrayUtilRt.find(injection.getInjectionPlaces(), new InjectionPlace(
+                        int index = ArrayUtil.find(injection.getInjectionPlaces(), new InjectionPlace(
                             compiler.compileElementPattern(getPatternStringForJavaPlace(method, parameterIndex)), true));
                         final InjectionPlace place = index > -1 ? injection.getInjectionPlaces()[index] : null;
                         methodInfo.setReturnFlag(place != null && place.isEnabled() || includeAllPlaces);
@@ -485,7 +482,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
                     for (int i = 0; i < parameters.length; i++) {
                         final PsiParameter p = parameters[i];
                         if (isInjectable(p.getType(), p.getProject())) {
-                            int index = ArrayUtilRt.find(injection.getInjectionPlaces(),
+                            int index = ArrayUtil.find(injection.getInjectionPlaces(),
                                 new InjectionPlace(compiler.compileElementPattern(getPatternStringForJavaPlace(method, i)),
                                     true));
                             final InjectionPlace place = index > -1 ? injection.getInjectionPlaces()[index] : null;

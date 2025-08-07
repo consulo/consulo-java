@@ -18,9 +18,9 @@ package com.intellij.java.impl.openapi.roots.ui.configuration;
 import consulo.content.library.OrderRoot;
 import consulo.content.library.ui.LibraryRootsDetector;
 import consulo.ide.impl.idea.openapi.roots.libraries.ui.impl.RootDetectionUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.java.impl.library.JavaSourceRootDetector;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,31 +32,27 @@ import java.util.List;
  *
  * @author Constantine.Plotnikov
  */
-public class PathUIUtils
-{
-	private PathUIUtils()
-	{
-	}
+public class PathUIUtils {
+    private PathUIUtils() {
+    }
 
-	/**
-	 * This method takes a candidates for the project root, then scans the candidates and
-	 * if multiple candidates or non root source directories are found whithin some
-	 * directories, it shows a dialog that allows selecting or deselecting them.
-	 *
-	 * @param parentComponent         a parent parent or project
-	 * @param rootCandidates a candidates for roots
-	 * @return a array of source folders or empty array if non was selected or dialog was canceled.
-	 */
-	public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, final VirtualFile[] rootCandidates)
-	{
-		final List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(List.of(rootCandidates), parentComponent, null,
-				LibraryRootsDetector.of(Collections.singletonList(new JavaSourceRootDetector())),
-				Collections.emptyList());
-		final List<VirtualFile> result = new ArrayList<VirtualFile>();
-		for(OrderRoot root : orderRoots)
-		{
-			result.add(root.getFile());
-		}
-		return VfsUtil.toVirtualFileArray(result);
-	}
+    /**
+     * This method takes a candidates for the project root, then scans the candidates and
+     * if multiple candidates or non root source directories are found whithin some
+     * directories, it shows a dialog that allows selecting or deselecting them.
+     *
+     * @param parentComponent a parent parent or project
+     * @param rootCandidates  a candidates for roots
+     * @return a array of source folders or empty array if non was selected or dialog was canceled.
+     */
+    public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, final VirtualFile[] rootCandidates) {
+        final List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(List.of(rootCandidates), parentComponent, null,
+            LibraryRootsDetector.of(Collections.singletonList(new JavaSourceRootDetector())),
+            Collections.emptyList());
+        final List<VirtualFile> result = new ArrayList<VirtualFile>();
+        for (OrderRoot root : orderRoots) {
+            result.add(root.getFile());
+        }
+        return VirtualFileUtil.toVirtualFileArray(result);
+    }
 }

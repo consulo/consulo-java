@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteReferenceUsageInfo;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * @author ven
@@ -55,7 +55,7 @@ public class SafeDeleteExtendsClassUsageInfo extends SafeDeleteReferenceUsageInf
       final PsiReferenceList listToAddExtends = refClass.isInterface() == myExtendingClass.isInterface() ? myExtendingClass.getExtendsList() : extendingImplementsList;
       final PsiClassType[] existingRefTypes = listToAddExtends.getReferencedTypes();
       for (PsiClassType referenceType : referenceTypes) {
-        if (ArrayUtilRt.find(existingRefTypes, referenceType) > -1) continue;
+        if (ArrayUtil.find(existingRefTypes, referenceType) > -1) continue;
         listToAddExtends.add(elementFactory.createReferenceElementByType((PsiClassType) mySubstitutor.substitute(referenceType)));
       }
     }
@@ -65,7 +65,7 @@ public class SafeDeleteExtendsClassUsageInfo extends SafeDeleteReferenceUsageInf
       final PsiClassType[] existingRefTypes = extendingImplementsList.getReferencedTypes();
       PsiClassType[] referenceTypes = implementsList.getReferencedTypes();
       for (PsiClassType referenceType : referenceTypes) {
-        if (ArrayUtilRt.find(existingRefTypes, referenceType) > -1) continue;
+        if (ArrayUtil.find(existingRefTypes, referenceType) > -1) continue;
         extendingImplementsList.add(elementFactory.createReferenceElementByType((PsiClassType) mySubstitutor.substitute(referenceType)));
       }
     }

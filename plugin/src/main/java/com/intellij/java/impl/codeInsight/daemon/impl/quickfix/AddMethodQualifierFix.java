@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
@@ -32,11 +32,13 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,8 +162,8 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
         }
       };
 
-    final ListPopupImpl popup = new ListPopupImpl(step);
-    popup.showInBestPositionFor(editor);
+    final ListPopup popup = JBPopupFactory.getInstance().createListPopup(step);
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
   @RequiredWriteAction

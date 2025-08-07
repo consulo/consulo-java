@@ -1,15 +1,15 @@
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.logging.Logger;
-import consulo.ide.impl.idea.openapi.util.Comparing;
 import consulo.document.util.ProperTextRange;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
-import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
 
 import java.util.*;
 

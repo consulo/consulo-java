@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import consulo.application.Application;
 import consulo.disposer.Disposer;
 import consulo.fileChooser.FileChooserDescriptorFactory;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.module.Module;
 import consulo.platform.base.localize.CommonLocalize;
@@ -28,6 +27,8 @@ import consulo.ui.ex.awt.JBRadioButton;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.util.io.FilePermissionCopier;
+import consulo.util.io.FileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -149,7 +150,7 @@ public class LocateLibraryDialog extends DialogWrapper {
       }
       File dstFile = new File(dstDir, srcFile.getName());
       try {
-        FileUtil.copy(srcFile, dstFile);
+        FileUtil.copy(srcFile, dstFile, FilePermissionCopier.BY_NIO2);
       } catch (IOException e) {
         Messages.showErrorDialog(
           myProject,

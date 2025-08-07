@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
+import consulo.application.ApplicationPropertiesComponent;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
@@ -72,7 +72,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
   @Override
   protected void doOKAction() {
     if (myCbFinal.isEnabled()) {
-      PropertiesComponent.getInstance().setValue(PROPERTY_NAME, String.valueOf(myCbFinal.getValueOrError()));
+      ApplicationPropertiesComponent.getInstance().setValue(PROPERTY_NAME, String.valueOf(myCbFinal.getValueOrError()));
     }
 
     final PsiField[] fields = myTargetClass.getFields();
@@ -226,7 +226,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
 
     myCbFinal = CheckBox.create(CodeInsightLocalize.dialogCreateFieldFromParameterDeclareFinalCheckbox());
     if (myFieldMayBeFinal) {
-      myCbFinal.setValue(PropertiesComponent.getInstance().isTrueValue(PROPERTY_NAME));
+      myCbFinal.setValue(ApplicationPropertiesComponent.getInstance().isTrueValue(PROPERTY_NAME));
     }
     else {
       myCbFinal.setValue(false);

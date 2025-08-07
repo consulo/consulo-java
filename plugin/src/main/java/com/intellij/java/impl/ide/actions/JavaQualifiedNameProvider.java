@@ -24,8 +24,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.QualifiedNameProvider;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -37,7 +37,6 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -223,7 +222,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
         LOG.error(e);
       }
     }
-    CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(file);
+    CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(file);
     try {
       CodeStyleManager.getInstance(project).adjustLineIndent(file, offset);
     } catch (IncorrectOperationException e) {

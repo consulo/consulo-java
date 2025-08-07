@@ -21,7 +21,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.localize.CodeInsightLocalize;
@@ -72,7 +72,7 @@ public class AddVariableInitializerFix implements SyntheticIntentionAction {
     else {
       LOG.error("Unknown variable type: " + myVariable);
     }
-    PsiVariable var = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(myVariable);
+    PsiVariable var = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(myVariable);
     TextRange range = var.getInitializer().getTextRange();
     int offset = range.getStartOffset();
     editor.getCaretModel().moveToOffset(offset);

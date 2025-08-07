@@ -30,7 +30,6 @@ import consulo.dataContext.DataContext;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.action.CodeInsightActionHandler;
@@ -41,6 +40,7 @@ import consulo.language.editor.refactoring.ContextAwareActionHandler;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.editor.util.LanguageEditorUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -78,7 +78,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 
     @Override
     public final void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file) {
-        if (!CodeInsightUtilBase.prepareEditorForWrite(editor)) {
+        if (!LanguageEditorUtil.checkModificationAllowed(editor)) {
             return;
         }
         if (!FileDocumentManager.getInstance().requestWriting(editor.getDocument(), project)) {

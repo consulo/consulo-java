@@ -25,7 +25,6 @@ import com.intellij.xml.util.XmlUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.ast.TokenSet;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
@@ -40,6 +39,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.javaee.ExternalResourceManager;
 import consulo.xml.psi.xml.XmlEntityDecl;
 import consulo.xml.psi.xml.XmlFile;
@@ -196,7 +196,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
       try {
         final String url = ExternalResourceManager.getInstance().getResourceLocation(XmlUtil.HTML4_LOOSE_URI, project);
         if (url == null) { LOG.error("Namespace not found: " + XmlUtil.HTML4_LOOSE_URI); return; }
-        final VirtualFile vFile = VfsUtil.findFileByURL(new URL(url));
+        final VirtualFile vFile = VirtualFileUtil.findFileByURL(new URL(url));
         if (vFile == null) { LOG.error("Resource not found: " + url); return; }
         final PsiFile psiFile = PsiManager.getInstance(project).findFile(vFile);
         if (!(psiFile instanceof XmlFile)) { LOG.error("Unexpected resource: " + psiFile); return; }

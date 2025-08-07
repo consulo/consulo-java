@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
@@ -34,10 +33,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Collection;
 
 public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implements SyntheticIntentionAction {
@@ -98,7 +98,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
                 return expression;
               }
               final PsiClass psiClass = PsiUtil.resolveClassInType(componentType);
-              if (ArrayUtilRt.find(psiMethod.getTypeParameters(), psiClass) != -1) {
+              if (ArrayUtil.find(psiMethod.getTypeParameters(), psiClass) != -1) {
                 for (PsiClassType superType : psiClass.getSuperTypes()) {
                   if (TypeConversionUtil.isAssignable(superType, expressionType)) return expression;
                 }

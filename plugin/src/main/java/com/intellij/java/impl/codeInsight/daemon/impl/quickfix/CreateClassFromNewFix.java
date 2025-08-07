@@ -22,8 +22,8 @@ import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -104,7 +104,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
       setupSuperCall(aClass, constructor, templateBuilder);
 
       getReferenceElement(newExpression).bindToElement(aClass);
-      aClass = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(aClass);
+      aClass = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(aClass);
       final Template template = templateBuilder.buildTemplate();
       template.setToReformat(true);
 

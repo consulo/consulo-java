@@ -25,7 +25,7 @@ import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.find.FindManager;
 import consulo.find.FindModel;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.macro.MacroCallNode;
@@ -107,7 +107,7 @@ public class HighlightUtil {
 
   @RequiredReadAction
   public static void showRenameTemplate(PsiElement context, PsiNameIdentifierOwner element) {
-    context = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(context);
+    context = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(context);
     final Query<PsiReference> query = ReferencesSearch.search(element, element.getUseScope());
     final Collection<PsiReference> references = query.findAll();
     final Project project = context.getProject();

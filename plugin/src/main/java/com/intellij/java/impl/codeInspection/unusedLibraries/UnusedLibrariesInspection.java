@@ -12,8 +12,6 @@ import consulo.component.util.graph.InboundSemiGraph;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.inspection.*;
@@ -39,10 +37,12 @@ import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
@@ -142,12 +142,12 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
                         final String unusedLibraryRoots = StringUtil.join(files, VirtualFile::getPresentableName, ",");
                         LocalizeValue message =
                             JavaAnalysisLocalize.unusedLibraryRootsProblemDescriptor(unusedLibraryRoots, entry.getPresentableName());
-                        CommonProblemDescriptor descriptor = ((LibraryOrderEntry)entry).isModuleLevel()
+                        CommonProblemDescriptor descriptor = ((LibraryOrderEntry) entry).isModuleLevel()
                             ? manager.createProblemDescriptor(
-                                message.get(),
-                                module,
-                                new RemoveUnusedLibrary(entry.getPresentableName(), files)
-                            )
+                            message.get(),
+                            module,
+                            new RemoveUnusedLibrary(entry.getPresentableName(), files)
+                        )
                             : manager.createProblemDescriptor(message.get());
                         result.add(descriptor);
                     }
@@ -203,7 +203,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             Set<String> fromClassNames = new HashSet<>();
             Set<String> toClassNames = new HashSet<>();
 
-            VfsUtilCore.iterateChildrenRecursively(root, null, fileOrDir -> {
+            VirtualFileUtil.iterateChildrenRecursively(root, null, fileOrDir -> {
                 if (!fileOrDir.isDirectory() && fileOrDir.getName().endsWith(".class")) {
                     AbstractDependencyVisitor visitor = new AbstractDependencyVisitor() {
                         @Override
@@ -292,7 +292,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
                         model.removeOrderEntry(entry);
                     }
                     else {
-                        final Library library = ((LibraryOrderEntry)entry).getLibrary();
+                        final Library library = ((LibraryOrderEntry) entry).getLibrary();
                         if (library != null) {
                             final Library.ModifiableModel modifiableModel = library.getModifiableModel();
                             for (VirtualFile file : myFiles) {

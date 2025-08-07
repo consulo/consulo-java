@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.ide.util.DirectoryChooserUtil;
 import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
@@ -39,6 +38,7 @@ import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.localize.UsageLocalize;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -170,7 +170,7 @@ public class MoveClassesOrPackagesUtil {
         }
         PsiDirectory subdirectoryInDest;
         boolean isSourceRoot = RefactoringUtil.isSourceRoot(dir);
-        if (VfsUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
+        if (VirtualFileUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
             PsiDirectory exitsingSubdir = destination.findSubdirectory(targetName);
             if (exitsingSubdir == null) {
                 subdirectoryInDest = destination.createSubdirectory(targetName);
@@ -360,7 +360,7 @@ public class MoveClassesOrPackagesUtil {
         for (VirtualFile root : contentSourceRoots) {
             PsiDirectory[] directories = aPackage.getDirectories();
             for (PsiDirectory directory : directories) {
-                if (VfsUtil.isAncestor(root, directory.getVirtualFile(), false)) {
+                if (VirtualFileUtil.isAncestor(root, directory.getVirtualFile(), false)) {
                     targetDirectories.add(directory);
                     continue sourceRoots;
                 }

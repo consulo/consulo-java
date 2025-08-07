@@ -24,7 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
@@ -147,7 +147,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
       final PsiExpression newExpression = factory.createExpressionFromText(expressionText.toString(), element);
       PsiMethodCallExpression newMethodCallExpression = (PsiMethodCallExpression) methodCallExpression.replace(newExpression);
-      newMethodCallExpression = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(newMethodCallExpression);
+      newMethodCallExpression = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(newMethodCallExpression);
       final PsiReferenceExpression reference = getReference(newMethodCallExpression);
       HighlightUtils.showRenameTemplate(aClass, (PsiNameIdentifierOwner) field, reference);
     }

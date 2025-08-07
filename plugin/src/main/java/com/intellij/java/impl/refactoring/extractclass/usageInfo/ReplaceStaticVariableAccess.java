@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.refactoring.extractclass.usageInfo;
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
 
 public class ReplaceStaticVariableAccess extends FixableUsageInfo {
   private final PsiReferenceExpression expression;
@@ -58,7 +58,7 @@ public class ReplaceStaticVariableAccess extends FixableUsageInfo {
       if (resolved instanceof PsiMethod) {
         final PsiParameter[] parameters = ((PsiMethod)resolved).getParameterList().getParameters();
         final PsiExpression[] args = callExpression.getArgumentList().getExpressions();
-        final int idx = ArrayUtilRt.find(args, expression);
+        final int idx = ArrayUtil.find(args, expression);
         if (idx != -1 && parameters[idx].getType().equalsToText(delegateClass)) {
           return true;
         }

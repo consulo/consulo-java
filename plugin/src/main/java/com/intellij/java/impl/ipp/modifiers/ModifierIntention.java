@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.siyeh.IntentionPowerPackBundle;
 import consulo.application.WriteAction;
 import consulo.application.util.query.Query;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
@@ -38,6 +37,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
+import consulo.util.io.FileUtil;
 import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.MagicConstant;
 

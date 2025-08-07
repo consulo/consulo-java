@@ -22,15 +22,14 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.Language;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -49,7 +48,7 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
                                     PsiSubstitutor substitutor) {
     PsiElementFactory factory = JavaPsiFacade.getElementFactory(field.getProject());
 
-    field = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(field);
+    field = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(field);
     TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(field);
     if (!(expectedTypes instanceof ExpectedTypeInfo[])) {
       expectedTypes = ExpectedTypeInfo.EMPTY_ARRAY;
@@ -62,7 +61,7 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
       builder.replaceElement(field.getInitializer(), new EmptyExpression());
       PsiIdentifier identifier = field.getNameIdentifier();
       builder.setEndVariableAfter(identifier);
-      field = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(field);
+      field = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(field);
     }
     editor.getCaretModel().moveToOffset(field.getTextRange().getStartOffset());
     Template template = builder.buildInlineTemplate();

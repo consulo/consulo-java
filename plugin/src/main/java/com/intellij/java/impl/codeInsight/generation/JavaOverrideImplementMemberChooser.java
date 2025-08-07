@@ -20,15 +20,14 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
-import consulo.application.ApplicationManager;
 import consulo.application.util.NotNullLazyValue;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.project.ProjectPropertiesComponent;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.keymap.KeymapManager;
@@ -90,7 +89,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
         return elements;
       }
     };
-    final boolean merge = PropertiesComponent.getInstance(project).getBoolean(PROP_COMBINED_OVERRIDE_IMPLEMENT, true);
+    final boolean merge = ProjectPropertiesComponent.getInstance(project).getBoolean(PROP_COMBINED_OVERRIDE_IMPLEMENT, true);
 
     final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(aClass);
     //hide option if implement interface for 1.5 language level
@@ -98,7 +97,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
 
     final JavaOverrideImplementMemberChooser javaOverrideImplementMemberChooser =
       new JavaOverrideImplementMemberChooser(all, onlyPrimary, lazyElementsWithPercent, project, overrideVisible,
-        merge, toImplement, PropertiesComponent.getInstance(project).getBoolean(PROP_OVERRIDING_SORTED_OVERRIDE_IMPLEMENT));
+        merge, toImplement, ProjectPropertiesComponent.getInstance(project).getBoolean(PROP_OVERRIDING_SORTED_OVERRIDE_IMPLEMENT));
     javaOverrideImplementMemberChooser.setTitle(getChooserTitle(toImplement, merge));
 
     javaOverrideImplementMemberChooser.setCopyJavadocVisible(true);
@@ -167,8 +166,8 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
   @Override
   protected void doOKAction() {
     super.doOKAction();
-    PropertiesComponent.getInstance(myProject).setValue(PROP_COMBINED_OVERRIDE_IMPLEMENT, myMerge, true);
-    PropertiesComponent.getInstance(myProject).setValue(PROP_OVERRIDING_SORTED_OVERRIDE_IMPLEMENT, mySortedByOverriding);
+    ProjectPropertiesComponent.getInstance(myProject).setValue(PROP_COMBINED_OVERRIDE_IMPLEMENT, myMerge, true);
+    ProjectPropertiesComponent.getInstance(myProject).setValue(PROP_OVERRIDING_SORTED_OVERRIDE_IMPLEMENT, mySortedByOverriding);
   }
 
   @Override

@@ -15,14 +15,13 @@
  */
 package consulo.java.impl.intelliLang.pattern.compiler;
 
-import java.io.File;
-
-import jakarta.annotation.Nonnull;
-
 import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
+
+import java.io.File;
 
 class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 {
@@ -39,7 +38,7 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 	@Nonnull
 	public File getFile()
 	{
-		return VfsUtilCore.virtualToIoFile(myClassFile);
+		return VirtualFileUtil.virtualToIoFile(myClassFile);
 	}
 
 	@Nonnull

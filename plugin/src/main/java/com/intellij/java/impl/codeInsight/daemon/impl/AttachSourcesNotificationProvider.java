@@ -33,7 +33,6 @@ import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.fileChooser.IdeaFileChooser;
 import consulo.fileEditor.*;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.java.impl.JavaBundle;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -61,6 +60,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFilePathUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
@@ -326,7 +326,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		{
 			for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))
 			{
-				if (VfsUtilCore.isAncestor(classesRoot, myClassFile, true))
+				if (VirtualFileUtil.isAncestor(classesRoot, myClassFile, true))
 				{
 					return classesRoot;
 				}

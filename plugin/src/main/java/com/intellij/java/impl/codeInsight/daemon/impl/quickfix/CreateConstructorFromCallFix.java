@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
@@ -68,7 +68,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
                                                  getTargetSubstitutor(myConstructorCall));
       final PsiMethod superConstructor = CreateClassFromNewFix.setupSuperCall(targetClass, constructor, templateBuilder);
 
-      constructor = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(constructor);
+      constructor = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(constructor);
       Template template = templateBuilder.buildTemplate();
       final Editor editor = positionCursor(project, targetClass.getContainingFile(), targetClass);
       if (editor == null) return;

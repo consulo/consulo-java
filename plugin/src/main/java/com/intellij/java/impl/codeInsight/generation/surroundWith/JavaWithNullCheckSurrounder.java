@@ -19,8 +19,8 @@ package com.intellij.java.impl.codeInsight.generation.surroundWith;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -59,7 +59,7 @@ class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{
     String oldText = statement.getText();
     ifStatement = (PsiIfStatement)statement.replace(ifStatement);
     PsiCodeBlock block = ((PsiBlockStatement)ifStatement.getThenBranch()).getCodeBlock();
-    block = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(block);
+    block = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(block);
     PsiElement replace = block.getStatements()[0].replace(factory.createStatementFromText(oldText, block));
     int offset = replace.getTextRange().getEndOffset();
     return new TextRange(offset, offset);
