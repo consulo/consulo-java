@@ -18,6 +18,7 @@ package com.intellij.java.impl.javadoc.actions;
 import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
 import consulo.java.language.localize.JavadocLocalize;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
@@ -35,7 +36,12 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     private JavadocConfigurable myConfigurable;
 
     public GenerateJavadocAction() {
-        super(JavadocLocalize.javadocGenerateTitle().get(), JavadocLocalize.javadocGenerateTitle().get());
+        super(
+            JavaLocalize.actionGeneratejavadocText(),
+            JavaLocalize.actionGeneratejavadocDescription(),
+            JavadocLocalize.javadocGenerateTitle(),
+            JavadocLocalize.javadocGenerateTitle()
+        );
     }
 
     @Override

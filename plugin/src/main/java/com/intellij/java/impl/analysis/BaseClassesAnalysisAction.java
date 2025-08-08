@@ -34,8 +34,11 @@ import jakarta.annotation.Nonnull;
  * @author mike
  */
 public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
-    protected BaseClassesAnalysisAction(String title, String analysisNoon) {
-        super(title, analysisNoon);
+    protected BaseClassesAnalysisAction(@Nonnull LocalizeValue actionText,
+                                        @Nonnull LocalizeValue actionDescription,
+                                        @Nonnull LocalizeValue title,
+                                        @Nonnull LocalizeValue analysisNoon) {
+        super(actionText, actionDescription, title, analysisNoon);
     }
 
     protected abstract void analyzeClasses(Project project, AnalysisScope scope, ProgressIndicator indicator);

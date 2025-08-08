@@ -34,6 +34,7 @@ import consulo.content.library.Library;
 import consulo.document.Document;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.impl.action.BaseAnalysisAction;
@@ -79,7 +80,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     private CheckBox myAnnotateLocalVariablesCb;
 
     public InferNullityAnnotationsAction() {
-        super("Infer Nullity", INFER_NULLITY_ANNOTATIONS.get());
+        super(
+            JavaLocalize.actionInfernullityText(),
+            JavaLocalize.actionInfernullityDescription(),
+            LocalizeValue.localizeTODO("Infer Nullity"),
+            INFER_NULLITY_ANNOTATIONS
+        );
     }
 
     @Override
