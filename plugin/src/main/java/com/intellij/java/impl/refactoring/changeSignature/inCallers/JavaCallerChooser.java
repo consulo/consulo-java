@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.changeSignature.inCallers;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.ide.impl.idea.refactoring.changeSignature.CallerChooserBase;
+import consulo.language.editor.refactoring.changeSignature.CallerChooserBase;
 import consulo.project.Project;
 import consulo.ui.ex.awt.tree.Tree;
 

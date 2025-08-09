@@ -19,7 +19,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
+import consulo.language.editor.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.ex.awt.ListCellRendererWrapper;

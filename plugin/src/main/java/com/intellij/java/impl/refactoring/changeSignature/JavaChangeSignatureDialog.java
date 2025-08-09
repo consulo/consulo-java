@@ -33,22 +33,20 @@ import consulo.colorScheme.EditorFontType;
 import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.ide.impl.idea.refactoring.changeSignature.CallerChooserBase;
-import consulo.ide.impl.idea.refactoring.changeSignature.ChangeSignatureDialogBase;
-import consulo.ide.impl.idea.refactoring.changeSignature.MethodDescriptor;
-import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelItemBase;
-import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
-import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
 import consulo.ide.impl.idea.ui.TableColumnAnimator;
-import consulo.ide.impl.idea.util.ui.table.JBListTable;
-import consulo.ide.impl.idea.util.ui.table.JBTableRow;
-import consulo.ide.impl.idea.util.ui.table.JBTableRowEditor;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.changeSignature.CallerChooserBase;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureDialogBase;
+import consulo.language.editor.refactoring.changeSignature.MethodDescriptor;
+import consulo.language.editor.refactoring.changeSignature.ParameterTableModelItemBase;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.ui.CodeFragmentTableCellRenderer;
+import consulo.language.editor.refactoring.ui.JBListTableWitEditors;
+import consulo.language.editor.refactoring.ui.VisibilityPanelBase;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.editor.ui.awt.TextFieldCompletionProvider;
 import consulo.language.file.LanguageFileType;
@@ -63,8 +61,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.ui.ex.awt.*;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.ui.ex.awt.table.TableView;
+import consulo.ui.ex.awt.table.*;
 import consulo.ui.ex.awt.tree.Tree;
 import consulo.ui.ex.awt.util.DialogUtil;
 import consulo.ui.image.ImageEffects;
@@ -93,7 +90,7 @@ import static consulo.language.editor.refactoring.changeSignature.ChangeSignatur
  * @author Konstantin Bulenkov
  */
 public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<ParameterInfoImpl, PsiMethod, String, JavaMethodDescriptor,
-		ParameterTableModelItemBase<ParameterInfoImpl>, JavaParameterTableModel> {
+    ParameterTableModelItemBase<ParameterInfoImpl>, JavaParameterTableModel> {
   private ExceptionsTableModel myExceptionsModel;
   protected Set<PsiMethod> myMethodsToPropagateExceptions;
   private AnActionButton myPropExceptionsButton;
@@ -312,7 +309,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     if (!StringUtil.isEmpty(tail)) {
       text += " //" + tail;
     }
-    return JBListTable.createEditorTextFieldPresentation(getProject(), getFileType(), " " + text, selected, focused);
+    return JBListTableWitEditors.createEditorTextFieldPresentation(getProject(), getFileType(), " " + text, selected, focused);
   }
 
   @RequiredUIAccess

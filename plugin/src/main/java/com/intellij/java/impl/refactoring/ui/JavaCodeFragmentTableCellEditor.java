@@ -18,8 +18,8 @@ package com.intellij.java.impl.refactoring.ui;
 import com.intellij.java.impl.codeInsight.daemon.impl.JavaReferenceImporter;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.refactoring.ui.CodeFragmentTableCellEditorBase;
 import consulo.project.Project;
-import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellEditorBase;
 
 /**
  * @author dsl

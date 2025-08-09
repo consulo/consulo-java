@@ -28,8 +28,6 @@ import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import consulo.language.editor.impl.inspection.GlobalInspectionContextBase;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
-import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrapper;
-import consulo.language.editor.impl.inspection.scheme.LocalInspectionToolWrapper;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -47,10 +45,10 @@ import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.util.*;
 

@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.util.duplicates;
 
 import java.util.List;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nullable;
 
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
@@ -41,5 +42,5 @@ public interface MatchProvider
 	@Nullable
 	String getConfirmDuplicatePrompt(Match match);
 
-	String getReplaceDuplicatesTitle(int idx, int size);
+	LocalizeValue getReplaceDuplicatesTitle(int idx, int size);
 }

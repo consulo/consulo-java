@@ -15,19 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature.inCallers;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.language.editor.refactoring.changeSignature.MethodNodeBase;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.refactoring.changeSignature.MethodNodeBase;
-import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.project.Project;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
 import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;

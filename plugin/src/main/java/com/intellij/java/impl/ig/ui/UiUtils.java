@@ -22,11 +22,11 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.ListTable;
+import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.ui.ex.awt.util.ListUtil;
 import org.jetbrains.annotations.NonNls;
 

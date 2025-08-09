@@ -80,7 +80,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
@@ -1802,8 +1801,8 @@ public class ExtractMethodProcessor implements MatchProvider {
   }
 
   @Override
-  public String getReplaceDuplicatesTitle(int idx, int size) {
-    return RefactoringLocalize.processDuplicatesTitle(idx, size).get();
+  public LocalizeValue getReplaceDuplicatesTitle(int idx, int size) {
+    return RefactoringLocalize.processDuplicatesTitle(idx, size);
   }
 
   public InputVariables getInputVariables() {

@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.CommonClassNames;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.ui.ex.awt.table.ListTable;
+import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.collection.SmartList;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;

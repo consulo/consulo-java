@@ -27,9 +27,9 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.psi.PsiElement;
+import consulo.ui.ex.awt.table.ListTable;
+import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 

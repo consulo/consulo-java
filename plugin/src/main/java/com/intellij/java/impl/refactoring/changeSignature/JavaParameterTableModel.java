@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupManager;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
@@ -24,19 +22,21 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.idea.refactoring.changeSignature.ChangeSignatureDialogBase;
-import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelBase;
-import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelItemBase;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureDialogBase;
+import consulo.language.editor.refactoring.changeSignature.ParameterTableModelBase;
+import consulo.language.editor.refactoring.changeSignature.ParameterTableModelItemBase;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.ui.StringTableCellEditor;
-import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.ui.ex.awt.ColumnInfo;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;

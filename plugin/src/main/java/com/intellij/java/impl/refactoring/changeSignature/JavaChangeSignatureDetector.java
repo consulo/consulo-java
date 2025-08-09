@@ -23,8 +23,8 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.refactoring.changeSignature.inplace.LanguageChangeSignatureDetector;
 import consulo.language.Language;
+import consulo.language.editor.refactoring.changeSignature.inplace.LanguageChangeSignatureDetector;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
@@ -32,8 +32,8 @@ import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 @ExtensionImpl

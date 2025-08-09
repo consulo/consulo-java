@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.ide.impl.idea.refactoring.ui.ComboBoxVisibilityPanel;
+import consulo.language.editor.refactoring.ui.ComboBoxVisibilityPanel;
 
 import static com.intellij.java.language.util.VisibilityUtil.toPresentableText;
 

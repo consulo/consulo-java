@@ -24,7 +24,7 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
-import consulo.ide.impl.idea.refactoring.extractSuperclass.ExtractSuperBaseDialog;
+import consulo.language.editor.refactoring.extractSuperclass.ExtractSuperBaseDialog;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDirectory;

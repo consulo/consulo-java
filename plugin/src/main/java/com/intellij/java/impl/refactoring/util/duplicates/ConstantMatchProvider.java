@@ -24,6 +24,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
@@ -80,8 +81,8 @@ class ConstantMatchProvider implements MatchProvider
 	}
 
 	@Override
-	public String getReplaceDuplicatesTitle(int idx, int size)
+	public LocalizeValue getReplaceDuplicatesTitle(int idx, int size)
 	{
-		return RefactoringLocalize.processDuplicatesTitle(idx, size).get();
+		return RefactoringLocalize.processDuplicatesTitle(idx, size);
 	}
 }
