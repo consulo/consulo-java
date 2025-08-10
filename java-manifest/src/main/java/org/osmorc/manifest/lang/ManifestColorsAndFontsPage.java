@@ -27,10 +27,10 @@ package org.osmorc.manifest.lang;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.colorScheme.setting.AttributesDescriptor;
-import consulo.colorScheme.setting.ColorDescriptor;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -71,8 +71,8 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return "Manifest & Bnd";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Manifest & Bnd");
   }
 
   @Nonnull
@@ -83,11 +83,6 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
   @Nullable
   public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
     return ADDITIONAL_HIGHLIGHTING;
-  }
-
-  @Nonnull
-  public ColorDescriptor[] getColorDescriptors() {
-    return new ColorDescriptor[0];
   }
 
   @Nonnull

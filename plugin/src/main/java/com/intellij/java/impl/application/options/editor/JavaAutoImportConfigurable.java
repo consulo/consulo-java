@@ -16,8 +16,12 @@
 
 package com.intellij.java.impl.application.options.editor;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
+import consulo.application.localize.ApplicationLocalize;
 import consulo.configurable.ProjectConfigurable;
 import consulo.disposer.Disposable;
 import consulo.java.language.localize.JavaLanguageLocalize;
@@ -28,6 +32,10 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.TitledSeparator;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
@@ -42,11 +50,19 @@ import java.awt.*;
  */
 @ExtensionImpl
 public class JavaAutoImportConfigurable implements ProjectConfigurable {
-    private static final String INSERT_IMPORTS_ALWAYS = ApplicationBundle.message("combobox.insert.imports.all");
-    private static final String INSERT_IMPORTS_ASK = ApplicationBundle.message("combobox.insert.imports.ask");
-    private static final String INSERT_IMPORTS_NONE = ApplicationBundle.message("combobox.insert.imports.none");
+    public enum InsertImportOption {
+        INSERT_IMPORTS_ALWAYS(ApplicationLocalize.comboboxInsertImportsAll()),
+        INSERT_IMPORTS_ASK(ApplicationLocalize.comboboxInsertImportsAsk()),
+        INSERT_IMPORTS_NONE(ApplicationLocalize.comboboxInsertImportsNone());
 
-    private JComboBox mySmartPasteCombo;
+        private final LocalizeValue myText;
+
+        InsertImportOption(LocalizeValue text) {
+            myText = text;
+        }
+    }
+
+    private JComboBox<InsertImportOption> mySmartPasteCombo;
     private JCheckBox myCbShowImportPopup;
     private JPanel myWholePanel;
     private JCheckBox myCbAddUnambiguousImports;
@@ -57,9 +73,7 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
 
     @Inject
     public JavaAutoImportConfigurable(Project project) {
-        mySmartPasteCombo.addItem(INSERT_IMPORTS_ALWAYS);
-        mySmartPasteCombo.addItem(INSERT_IMPORTS_ASK);
-        mySmartPasteCombo.addItem(INSERT_IMPORTS_NONE);
+        init();
 
         myExcludePackagesTable = new ExcludeTable(project);
         myExcludeFromImportAndCompletionPanel.add(myExcludePackagesTable.getComponent(), BorderLayout.CENTER);
@@ -95,15 +109,15 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
 
         switch (codeInsightSettings.ADD_IMPORTS_ON_PASTE) {
             case CodeInsightSettings.YES:
-                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ALWAYS);
+                mySmartPasteCombo.setSelectedItem(InsertImportOption.INSERT_IMPORTS_ALWAYS);
                 break;
 
             case CodeInsightSettings.NO:
-                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_NONE);
+                mySmartPasteCombo.setSelectedItem(InsertImportOption.INSERT_IMPORTS_NONE);
                 break;
 
             case CodeInsightSettings.ASK:
-                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ASK);
+                mySmartPasteCombo.setSelectedItem(InsertImportOption.INSERT_IMPORTS_ASK);
                 break;
         }
 
@@ -165,11 +179,11 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
     }
 
     private int getSmartPasteValue() {
-        Object selectedItem = mySmartPasteCombo.getSelectedItem();
-        if (INSERT_IMPORTS_ALWAYS.equals(selectedItem)) {
+        InsertImportOption selectedItem = (InsertImportOption) mySmartPasteCombo.getSelectedItem();
+        if (InsertImportOption.INSERT_IMPORTS_ALWAYS.equals(selectedItem)) {
             return CodeInsightSettings.YES;
         }
-        else if (INSERT_IMPORTS_NONE.equals(selectedItem)) {
+        else if (InsertImportOption.INSERT_IMPORTS_NONE.equals(selectedItem)) {
             return CodeInsightSettings.NO;
         }
         else {
@@ -179,5 +193,119 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
 
     private static boolean isModified(JToggleButton checkBox, boolean value) {
         return checkBox.isSelected() != value;
+    }
+
+    private void init() {
+        myWholePanel = new JPanel();
+        myWholePanel.setLayout(new GridLayoutManager(6, 4, new Insets(0, 0, 0, 0), -1, -1));
+        myCbAddUnambiguousImports = new JCheckBox();
+        this.$$$loadButtonText$$$(myCbAddUnambiguousImports, ApplicationBundle.message("checkbox.add.unambiguous.imports.on.the.fly"));
+        myWholePanel.add(myCbAddUnambiguousImports, new GridConstraints(2, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, JBUI.scale(2), 0, 0), -1, -1));
+        myWholePanel.add(panel1, new GridConstraints(0, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        this.$$$loadLabelText$$$(label1, ApplicationBundle.message("combobox.paste.insert.imports"));
+        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mySmartPasteCombo = new JComboBox(InsertImportOption.values());
+        mySmartPasteCombo.setRenderer(new ColoredListCellRenderer<>() {
+            @Override
+            protected void customizeCellRenderer(@Nonnull JList<? extends InsertImportOption> jList, InsertImportOption o, int i, boolean b, boolean b1) {
+                if (o != null) {
+                    append(o.myText);
+                }
+            }
+        });
+        panel1.add(mySmartPasteCombo, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        myExcludeFromImportAndCompletionPanel = new JPanel();
+        myExcludeFromImportAndCompletionPanel.setLayout(new BorderLayout(0, 0));
+        myWholePanel.add(myExcludeFromImportAndCompletionPanel, new GridConstraints(5, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(JBUI.scale(400), JBUI.scale(150)), null, 0, false));
+        final TitledSeparator titledSeparator1 = new TitledSeparator();
+        titledSeparator1.setText(ApplicationBundle.message("exclude.from.completion.group"));
+        myWholePanel.add(titledSeparator1, new GridConstraints(4, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        myCbShowImportPopup = new JCheckBox();
+        myCbShowImportPopup.setText("classes");
+        myCbShowImportPopup.setMnemonic('C');
+        myCbShowImportPopup.setDisplayedMnemonicIndex(0);
+        myWholePanel.add(myCbShowImportPopup, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        myCbAddMethodImports = new JCheckBox();
+        myCbAddMethodImports.setText("static methods and fields");
+        myCbAddMethodImports.setMnemonic('S');
+        myCbAddMethodImports.setDisplayedMnemonicIndex(0);
+        myWholePanel.add(myCbAddMethodImports, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        myCbOptimizeImports = new JCheckBox();
+        this.$$$loadButtonText$$$(myCbOptimizeImports, ApplicationBundle.message("checkbox.optimize.imports.on.the.fly"));
+        myWholePanel.add(myCbOptimizeImports, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JBLabel jBLabel1 = new JBLabel();
+        jBLabel1.setText("Show import popup for:");
+        myWholePanel.add(jBLabel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        myWholePanel.add(spacer1, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        label1.setLabelFor(mySmartPasteCombo);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadLabelText$$$(JLabel component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) {
+                    break;
+                }
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setDisplayedMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadButtonText$$$(AbstractButton component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) {
+                    break;
+                }
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return myWholePanel;
     }
 }

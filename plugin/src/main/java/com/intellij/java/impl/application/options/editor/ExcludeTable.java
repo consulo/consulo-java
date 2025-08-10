@@ -38,6 +38,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -186,7 +187,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item> {
     }
 
     void reset() {
-        List<Item> rows = ContainerUtil.newArrayList();
+        List<Item> rows = new ArrayList<>();
         for (String s : CodeInsightSettings.getInstance().EXCLUDED_PACKAGES) {
             rows.add(new Item(s, ExclusionScope.IDE));
         }
