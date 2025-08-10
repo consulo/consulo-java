@@ -21,6 +21,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.ApplicationConfigurable;
 import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.disposer.Disposable;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.java.localize.JavaLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.ui.CheckBox;
@@ -62,8 +63,8 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
 
     @Nonnull
     @Override
-    public String getDisplayName() {
-        return "Java";
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
     @RequiredUIAccess

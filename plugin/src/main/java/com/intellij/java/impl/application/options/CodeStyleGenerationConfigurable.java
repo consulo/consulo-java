@@ -16,10 +16,12 @@
 package com.intellij.java.impl.application.options;
 
 import consulo.application.ApplicationBundle;
+import consulo.application.localize.ApplicationLocalize;
 import consulo.configurable.Configurable;
 import consulo.ide.impl.idea.application.options.codeStyle.CommenterForm;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import com.intellij.java.language.JavaLanguage;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.language.codeStyle.CodeStyleSettings;
@@ -76,8 +78,8 @@ public class CodeStyleGenerationConfigurable implements Configurable {
     }
 
     @Override
-    public String getDisplayName() {
-        return ApplicationBundle.message("title.code.generation");
+    public LocalizeValue getDisplayName() {
+        return ApplicationLocalize.titleCodeGeneration();
     }
 
     @Override

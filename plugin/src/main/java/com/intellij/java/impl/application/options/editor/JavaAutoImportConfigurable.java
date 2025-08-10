@@ -20,9 +20,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.configurable.ProjectConfigurable;
 import consulo.disposer.Disposable;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -75,9 +77,10 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         return "editor.preferences.import";
     }
 
+    @Nonnull
     @Override
-    public String getDisplayName() {
-        return "Java";
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
     public void addExcludePackage(String packageName) {

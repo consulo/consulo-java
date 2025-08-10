@@ -6,6 +6,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.disposer.Disposable;
+import consulo.java.compiler.localize.JavaCompilerLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.process.cmd.ParametersListUtil;
 import consulo.ui.CheckBox;
@@ -15,11 +16,10 @@ import consulo.ui.TextBoxWithExpandAction;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.LabeledBuilder;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -48,8 +48,8 @@ public class JavacConfigurable extends SimpleConfigurableByProperties implements
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Javac";
+  public LocalizeValue getDisplayName() {
+    return JavaCompilerLocalize.compilerJavacName();
   }
 
   @RequiredUIAccess

@@ -31,6 +31,7 @@ import consulo.execution.debug.frame.XValue;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.ui.XValueTree;
 import consulo.ide.setting.ShowSettingsUtil;
+import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.concurrent.AsyncResult;
@@ -71,7 +72,7 @@ public abstract class ArrayAction extends DebuggerAction {
         //if (index > 0) {
         //    title = title + " " + label.substring(index);
         //}
-        createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(
+        createNewRenderer(node, renderer, debuggerContext, LocalizeValue.ofNullable(node.getName())).doWhenDone(newRenderer -> setArrayRenderer(
             newRenderer,
             node,
             debuggerContext
@@ -83,7 +84,7 @@ public abstract class ArrayAction extends DebuggerAction {
         XValueNode node,
         ArrayRenderer original,
         @Nonnull DebuggerContextImpl debuggerContext,
-        String title
+        LocalizeValue title
     );
 
     @RequiredUIAccess
@@ -163,15 +164,16 @@ public abstract class ArrayAction extends DebuggerAction {
     }
 
     private static class NamedArrayConfigurable extends ArrayRendererConfigurable implements Configurable {
-        private final String myTitle;
+        private final LocalizeValue myTitle;
 
-        public NamedArrayConfigurable(String title, ArrayRenderer renderer) {
+        public NamedArrayConfigurable(LocalizeValue title, ArrayRenderer renderer) {
             super(renderer);
             myTitle = title;
         }
 
+        @Nonnull
         @Override
-        public String getDisplayName() {
+        public LocalizeValue getDisplayName() {
             return myTitle;
         }
 
@@ -189,7 +191,7 @@ public abstract class ArrayAction extends DebuggerAction {
             XValueNode node,
             ArrayRenderer original,
             @Nonnull DebuggerContextImpl debuggerContext,
-            String title
+            LocalizeValue title
         ) {
             ArrayRenderer clonedRenderer = original.clone();
             clonedRenderer.setForced(true);
@@ -209,7 +211,7 @@ public abstract class ArrayAction extends DebuggerAction {
             XValueNode node,
             ArrayRenderer original,
             @Nonnull DebuggerContextImpl debuggerContext,
-            String title
+            LocalizeValue title
         ) {
             //TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
             return AsyncResult.rejected();

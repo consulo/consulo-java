@@ -71,7 +71,7 @@ import java.util.List;
 @Singleton
 @ServiceImpl
 public class GenerateToStringActionHandlerImpl implements GenerateToStringActionHandler, CodeInsightActionHandler {
-    private static final Logger logger = Logger.getInstance("#GenerateToStringActionHandlerImpl");
+    private static final Logger logger = Logger.getInstance(GenerateToStringActionHandlerImpl.class);
 
     @Override
     public boolean startInWriteAction() {
@@ -250,8 +250,8 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
                         }
 
                         @Override
-                        public String getDisplayName() {
-                            return "toString() Generation Settings";
+                        public LocalizeValue getDisplayName() {
+                            return LocalizeValue.localizeTODO("toString() Generation Settings");
                         }
 
                         @Override

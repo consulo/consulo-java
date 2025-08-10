@@ -15,28 +15,26 @@
  */
 package com.intellij.java.impl.application.options;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import consulo.application.ApplicationBundle;
-import consulo.language.codeStyle.ui.setting.OptionTreeWithPreviewPanel;
-import com.intellij.java.language.impl.JavaFileType;
-import consulo.language.Language;
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.JavaFileType;
+import consulo.application.ApplicationBundle;
+import consulo.application.localize.ApplicationLocalize;
+import consulo.language.Language;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.setting.LanguageCodeStyleSettingsProvider;
+import consulo.language.codeStyle.ui.setting.OptionTreeWithPreviewPanel;
+import consulo.localize.LocalizeValue;
+import consulo.ui.ex.awt.CustomLineBorder;
 import consulo.ui.ex.awt.OnePixelDivider;
 import consulo.virtualFileSystem.fileType.FileType;
-import consulo.language.codeStyle.CodeStyleSettings;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.codeStyle.setting.LanguageCodeStyleSettingsProvider;
-import consulo.ui.ex.awt.CustomLineBorder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author max
@@ -179,8 +177,8 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
     }
 
     @Override
-    protected String getTabTitle() {
-        return ApplicationBundle.message("title.javadoc");
+    protected LocalizeValue getTabTitle() {
+        return ApplicationLocalize.titleJavadoc();
     }
 
     @Nullable

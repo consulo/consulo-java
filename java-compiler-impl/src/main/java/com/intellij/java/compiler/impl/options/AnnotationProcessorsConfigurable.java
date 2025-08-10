@@ -22,6 +22,7 @@ import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
@@ -51,8 +52,8 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Annotation Processors";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Annotation Processors");
   }
 
   @Override

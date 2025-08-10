@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.application.options;
 
-import consulo.application.ApplicationBundle;
-import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.colorScheme.EditorColorsScheme;
+import consulo.application.localize.ApplicationLocalize;
 import consulo.codeEditor.EditorHighlighter;
-import consulo.virtualFileSystem.fileType.FileType;
+import consulo.colorScheme.EditorColorsScheme;
 import consulo.language.codeStyle.CodeStyleSettings;
-
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
+import consulo.localize.LocalizeValue;
+import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -80,8 +80,9 @@ public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
         myImporsPanel.reset(settings);
     }
 
+    @Nonnull
     @Override
-    protected String getTabTitle() {
-        return ApplicationBundle.message("title.imports");
+    protected LocalizeValue getTabTitle() {
+        return ApplicationLocalize.titleImports();
     }
 }

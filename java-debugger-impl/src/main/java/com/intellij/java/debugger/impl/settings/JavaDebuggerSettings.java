@@ -15,13 +15,13 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.Configurable;
 import consulo.configurable.IdeaSimpleConfigurable;
-import consulo.configurable.OptionsBundle;
 import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import consulo.execution.debug.setting.XDebuggerSettings;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
@@ -44,61 +44,60 @@ import static java.util.Collections.singletonList;
  */
 @ExtensionImpl
 public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
-  @Inject
-  public JavaDebuggerSettings() {
-    super("java");
-  }
-
-  @Nonnull
-  @Override
-  public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
-    Supplier<DebuggerSettings> settingsSupplier = DebuggerSettings::getInstance;
-
-    switch (category) {
-      case GENERAL:
-        return singletonList(new NewDebuggerLaunchingConfigurable(settingsSupplier));
-      case DATA_VIEWS:
-        return createDataViewsConfigurable();
-      case STEPPING:
-        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.stepping",
-                                                           OptionsBundle.message("options.java.display.name"),
-                                                           DebuggerSteppingConfigurable.class,
-                                                           settingsSupplier));
-      case HOTSWAP:
-        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.hotswap",
-                                                           OptionsBundle.message("options.java.display" +
-                                                                                   ".name"),
-                                                           JavaHotSwapConfigurableUi.class,
-                                                           settingsSupplier));
+    @Inject
+    public JavaDebuggerSettings() {
+        super("java");
     }
-    return Collections.emptyList();
-  }
 
-  @SuppressWarnings("SpellCheckingInspection")
-  @Nonnull
-  public static List<Configurable> createDataViewsConfigurable() {
-    return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null),
-                                       IdeaSimpleConfigurable.create("reference.idesettings.debugger" +
-                                                                       ".typerenderers",
-                                                                     DebuggerBundle.message("user.renderers.configurable.display.name"),
-                                                                     UserRenderersConfigurable.class,
-                                                                     NodeRendererSettings::getInstance));
-  }
+    @Nonnull
+    @Override
+    public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
+        Supplier<DebuggerSettings> settingsSupplier = DebuggerSettings::getInstance;
 
-  @Override
-  public void generalApplied(@Nonnull DebuggerSettingsCategory category) {
-    if (category == DebuggerSettingsCategory.DATA_VIEWS) {
-      NodeRendererSettings.getInstance().fireRenderersChanged();
+        switch (category) {
+            case GENERAL:
+                return singletonList(new NewDebuggerLaunchingConfigurable(settingsSupplier));
+            case DATA_VIEWS:
+                return createDataViewsConfigurable();
+            case STEPPING:
+                return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.stepping",
+                    JavaLanguageLocalize.javaLanguageDisplayName(),
+                    DebuggerSteppingConfigurable.class,
+                    settingsSupplier));
+            case HOTSWAP:
+                return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.hotswap",
+                    JavaLanguageLocalize.javaLanguageDisplayName(),
+                    JavaHotSwapConfigurableUi.class,
+                    settingsSupplier));
+        }
+        return Collections.emptyList();
     }
-  }
 
-  @Nullable
-  @Override
-  public Element getState() {
-    return null;
-  }
+    @SuppressWarnings("SpellCheckingInspection")
+    @Nonnull
+    public static List<Configurable> createDataViewsConfigurable() {
+        return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null),
+            IdeaSimpleConfigurable.create("reference.idesettings.debugger.typerenderers",
+                JavaDebuggerLocalize.userRenderersConfigurableDisplayName(),
+                UserRenderersConfigurable.class,
+                NodeRendererSettings::getInstance)
+        );
+    }
 
-  @Override
-  public void loadState(Element state) {
-  }
+    @Override
+    public void generalApplied(@Nonnull DebuggerSettingsCategory category) {
+        if (category == DebuggerSettingsCategory.DATA_VIEWS) {
+            NodeRendererSettings.getInstance().fireRenderersChanged();
+        }
+    }
+
+    @Nullable
+    @Override
+    public Element getState() {
+        return null;
+    }
+
+    @Override
+    public void loadState(Element state) {
+    }
 }

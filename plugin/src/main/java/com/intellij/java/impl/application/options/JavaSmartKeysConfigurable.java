@@ -21,6 +21,8 @@ import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.disposer.Disposable;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
+import consulo.java.language.localize.JavaLanguageLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -76,7 +78,7 @@ public class JavaSmartKeysConfigurable extends SimpleConfigurableByProperties im
 
     @Nonnull
     @Override
-    public String getDisplayName() {
-        return "Java";
+    public LocalizeValue getDisplayName() {
+        return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 }

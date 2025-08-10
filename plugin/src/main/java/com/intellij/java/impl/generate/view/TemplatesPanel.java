@@ -25,6 +25,7 @@ import com.intellij.java.impl.generate.template.toString.ToStringTemplatesManage
 import com.intellij.java.language.psi.PsiType;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.NamedItemsListEditor;
 import consulo.util.collection.HashingStrategy;
@@ -102,9 +103,8 @@ public class TemplatesPanel extends NamedItemsListEditor<TemplateResource> {
   }
 
   @Override
-  @Nls
-  public String getDisplayName() {
-    return "Templates";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Templates");
   }
 
   @Override

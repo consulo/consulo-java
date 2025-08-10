@@ -15,76 +15,67 @@
  */
 package com.intellij.java.impl.generate;
 
-import javax.swing.JComponent;
-
-import consulo.configurable.Configurable;
-import consulo.logging.Logger;
-import org.jetbrains.java.generate.GenerateToStringContext;
 import com.intellij.java.analysis.impl.generate.config.Config;
 import com.intellij.java.impl.generate.view.ConfigUI;
+import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
+import consulo.localize.LocalizeValue;
+import consulo.logging.Logger;
 import consulo.project.Project;
+import org.jetbrains.java.generate.GenerateToStringContext;
+
+import javax.swing.*;
 
 /**
  * @author yole
  */
-public class GenerateToStringConfigurable implements Configurable
-{
-	private static final Logger log = Logger.getInstance("#GenerateToStringConfigurable");
+public class GenerateToStringConfigurable implements Configurable {
+    private static final Logger log = Logger.getInstance("#GenerateToStringConfigurable");
 
-	private ConfigUI configUI;
-	private final Project myProject;
+    private ConfigUI configUI;
+    private final Project myProject;
 
-	public GenerateToStringConfigurable(Project project)
-	{
-		myProject = project;
-	}
+    public GenerateToStringConfigurable(Project project) {
+        myProject = project;
+    }
 
-	@Override
-	public String getDisplayName()
-	{
-		return "Settings";
-	}
+    @Override
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.localizeTODO("Settings");
+    }
 
-	@Override
-	public String getHelpTopic()
-	{
-		return "editing.altInsert.tostring.settings";
-	}
+    @Override
+    public String getHelpTopic() {
+        return "editing.altInsert.tostring.settings";
+    }
 
-	@Override
-	public JComponent createComponent()
-	{
-		return configUI = new ConfigUI(GenerateToStringContext.getConfig(), myProject);
-	}
+    @Override
+    public JComponent createComponent() {
+        return configUI = new ConfigUI(GenerateToStringContext.getConfig(), myProject);
+    }
 
-	@Override
-	public boolean isModified()
-	{
-		return !GenerateToStringContext.getConfig().equals(configUI.getConfig());
-	}
+    @Override
+    public boolean isModified() {
+        return !GenerateToStringContext.getConfig().equals(configUI.getConfig());
+    }
 
-	@Override
-	public void apply() throws ConfigurationException
-	{
-		Config config = configUI.getConfig();
-		GenerateToStringContext.setConfig(config); // update context
+    @Override
+    public void apply() throws ConfigurationException {
+        Config config = configUI.getConfig();
+        GenerateToStringContext.setConfig(config); // update context
 
-		if(log.isDebugEnabled())
-		{
-			log.debug("Config updated:\n" + config);
-		}
-	}
+        if (log.isDebugEnabled()) {
+            log.debug("Config updated:\n" + config);
+        }
+    }
 
-	@Override
-	public void reset()
-	{
-		configUI.setConfig(GenerateToStringContext.getConfig());
-	}
+    @Override
+    public void reset() {
+        configUI.setConfig(GenerateToStringContext.getConfig());
+    }
 
-	@Override
-	public void disposeUIResources()
-	{
-		configUI = null;
-	}
+    @Override
+    public void disposeUIResources() {
+        configUI = null;
+    }
 }

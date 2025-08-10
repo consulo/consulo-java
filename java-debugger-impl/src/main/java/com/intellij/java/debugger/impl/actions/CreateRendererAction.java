@@ -73,7 +73,7 @@ public class CreateRendererAction extends AnAction {
                     UserRenderersConfigurable ui = new UserRenderersConfigurable();
                     IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new IdeaConfigurableBase<>(
                         "reference.idesettings.debugger.typerenderers",
-                        JavaDebuggerLocalize.userRenderersConfigurableDisplayName().get(),
+                        JavaDebuggerLocalize.userRenderersConfigurableDisplayName(),
                         "reference.idesettings.debugger.typerenderers"
                     ) {
                         @Nonnull

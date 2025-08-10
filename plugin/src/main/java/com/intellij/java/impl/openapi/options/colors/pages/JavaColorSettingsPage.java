@@ -24,10 +24,12 @@ import consulo.colorScheme.TextAttributesKey;
 import consulo.colorScheme.setting.AttributesDescriptor;
 import consulo.colorScheme.setting.ColorDescriptor;
 import consulo.configurable.OptionsBundle;
-import consulo.java.impl.JavaBundle;
+import consulo.java.language.localize.JavaLanguageLocalize;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.language.editor.highlight.SyntaxHighlighter;
 import consulo.language.editor.rawHighlight.RainbowHighlighter;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -70,11 +72,11 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.parameter"), JavaHighlightingColors.REASSIGNED_PARAMETER_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.implicit.anonymous.parameter"), JavaHighlightingColors.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.instance.field"), JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES),
-      new AttributesDescriptor(JavaBundle.message("options.java.attribute.descriptor.instance.final.field"), JavaHighlightingColors.INSTANCE_FINAL_FIELD_ATTRIBUTES),
+      new AttributesDescriptor(JavaLocalize.optionsJavaAttributeDescriptorInstanceFinalField(), JavaHighlightingColors.INSTANCE_FINAL_FIELD_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.field"), JavaHighlightingColors.STATIC_FIELD_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.final.field"), JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.parameter"), JavaHighlightingColors.PARAMETER_ATTRIBUTES),
-      new AttributesDescriptor(JavaBundle.message("options.java.attribute.descriptor.lambda.parameter"), JavaHighlightingColors.LAMBDA_PARAMETER_ATTRIBUTES),
+      new AttributesDescriptor(JavaLocalize.optionsJavaAttributeDescriptorLambdaParameter(), JavaHighlightingColors.LAMBDA_PARAMETER_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.method.call"), JavaHighlightingColors.METHOD_CALL_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.method.declaration"), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES),
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.constructor.call"), JavaHighlightingColors.CONSTRUCTOR_CALL_ATTRIBUTES),
@@ -130,20 +132,14 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return OptionsBundle.message("options.java.display.name");
+  public LocalizeValue getDisplayName() {
+    return JavaLanguageLocalize.javaLanguageDisplayName();
   }
 
   @Override
   @Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ourDescriptors;
-  }
-
-  @Override
-  @Nonnull
-  public ColorDescriptor[] getColorDescriptors() {
-    return ColorDescriptor.EMPTY_ARRAY;
   }
 
   @Override

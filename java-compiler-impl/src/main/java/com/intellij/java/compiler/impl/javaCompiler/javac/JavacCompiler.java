@@ -45,6 +45,7 @@ import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.JavaToolMonitor;
 import consulo.java.compiler.impl.javaCompiler.NewBackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.old.OldBackendCompilerProcessBuilder;
+import consulo.java.compiler.localize.JavaCompilerLocalize;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -54,6 +55,7 @@ import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.OrderEnumerator;
@@ -191,8 +193,8 @@ public class JavacCompiler implements BackendCompiler {
 
   @Override
   @Nonnull
-  public String getPresentableName() {
-    return JavaCompilerBundle.message("compiler.javac.name");
+  public LocalizeValue getPresentableName() {
+    return JavaCompilerLocalize.compilerJavacName();
   }
 
   @Override

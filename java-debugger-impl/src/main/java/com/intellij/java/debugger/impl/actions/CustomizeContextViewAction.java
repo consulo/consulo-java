@@ -27,6 +27,7 @@ import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -57,8 +58,8 @@ public class CustomizeContextViewAction extends DumbAwareAction {
             }
 
             @Override
-            public String getDisplayName() {
-                return JavaDebuggerLocalize.titleCustomizeDataViews().get();
+            public LocalizeValue getDisplayName() {
+                return JavaDebuggerLocalize.titleCustomizeDataViews();
             }
 
             @Override
@@ -73,7 +74,7 @@ public class CustomizeContextViewAction extends DumbAwareAction {
                     JComponent component = configurable.createComponent();
                     assert component != null;
                     component.setBorder(new EmptyBorder(8, 8, 8, 8));
-                    myTabbedPane.addTab(configurable.getDisplayName(), component);
+                    myTabbedPane.addTab(configurable.getDisplayName().get(), component);
                 }
             }
         });

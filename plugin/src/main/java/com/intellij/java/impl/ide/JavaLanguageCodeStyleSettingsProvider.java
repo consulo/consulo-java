@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.configurable.Configurable;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
@@ -55,7 +56,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   @Nonnull
   @Override
   public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings modelSettings) {
-    return new CodeStyleAbstractConfigurable(settings, modelSettings, "Java") {
+    return new CodeStyleAbstractConfigurable(settings, modelSettings, JavaLanguageLocalize.javaLanguageDisplayName()) {
       @Override
       protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
         return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);

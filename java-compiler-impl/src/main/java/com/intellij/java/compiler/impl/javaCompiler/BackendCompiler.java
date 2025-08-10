@@ -24,6 +24,7 @@ import consulo.compiler.scope.CompileScope;
 import consulo.component.extension.ExtensionPointName;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.localize.LocalizeValue;
 import consulo.process.ProcessHandler;
 
 import jakarta.annotation.Nonnull;
@@ -36,7 +37,7 @@ public interface BackendCompiler {
     ExtensionPointName<BackendCompiler> EP_NAME = ExtensionPointName.create(BackendCompiler.class);
 
     @Nonnull
-    String getPresentableName();
+    LocalizeValue getPresentableName();
 
     @Nullable
     default OutputParser createErrorParser(

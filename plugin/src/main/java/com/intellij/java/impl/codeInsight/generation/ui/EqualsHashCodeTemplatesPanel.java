@@ -21,6 +21,7 @@ import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.NamedItemsListEditor;
@@ -31,7 +32,6 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
@@ -110,9 +110,8 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
   }
 
   @Override
-  @Nls
-  public String getDisplayName() {
-    return "Templates";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Templates");
   }
 
   @Override

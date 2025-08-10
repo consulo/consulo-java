@@ -29,6 +29,7 @@ import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
@@ -83,9 +84,8 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
   }
 
   @Override
-  @Nls
-  public String getDisplayName() {
-    return "Advanced";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Advanced");
   }
 
   @Override
