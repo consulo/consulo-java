@@ -34,9 +34,9 @@ import consulo.execution.debug.frame.XValueMarkers;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.editor.FileColorManager;
-import consulo.language.psi.PsiFile;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -79,17 +79,19 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
+                    Project project = StackFrameDescriptorImpl.this.getDebugProcess().getProject();
+
                     mySourcePosition = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
-                    final PsiFile file = mySourcePosition != null ? mySourcePosition.getFile() : null;
+                    final VirtualFile file = mySourcePosition != null ? mySourcePosition.getVirtualFile() : null;
                     if (file == null) {
                         myIsInLibraryContent = true;
                     }
                     else {
-                        myBackgroundColor = FileColorManager.getInstance(file.getProject()).getFileColor(file);
+                        myBackgroundColor = FileColorManager.getInstance(project).getFileColor(file);
 
-                        final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(StackFrameDescriptorImpl.this.getDebugProcess().getProject()).getFileIndex();
-                        final VirtualFile vFile = file.getVirtualFile();
-                        myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) || projectFileIndex.isInLibrarySource(vFile));
+                        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+
+                        myIsInLibraryContent = projectFileIndex.isInLibraryClasses(file) || projectFileIndex.isInLibrarySource(file);
                     }
                 }
             });

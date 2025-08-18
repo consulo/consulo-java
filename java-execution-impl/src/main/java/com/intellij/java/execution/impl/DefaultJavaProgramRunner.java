@@ -44,6 +44,7 @@ import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
+import consulo.process.event.ProcessListener;
 import consulo.process.util.CapturingProcessAdapter;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -65,229 +66,236 @@ import java.util.List;
  */
 @ExtensionImpl(id = "defaultJavaRunRunner")
 public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
-  private final static String ourWiseThreadDumpProperty = "idea.java.run.wise.thread.dump";
+    private final static String ourWiseThreadDumpProperty = "idea.java.run.wise.thread.dump";
 
-  @NonNls
-  public static final String DEFAULT_JAVA_RUNNER_ID = "Run";
+    @NonNls
+    public static final String DEFAULT_JAVA_RUNNER_ID = "Run";
 
-  @Override
-  public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
-    return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile
-      && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
-  }
+    @Override
+    public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
+        return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile
+            && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
+    }
 
-  @Override
-  public void patch(OwnJavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException {
-    runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
-  }
+    @Override
+    public void patch(OwnJavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException {
+        runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
+    }
 
-  protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
-    FileDocumentManager.getInstance().saveAllDocuments();
+    protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
+        FileDocumentManager.getInstance().saveAllDocuments();
 
-    ExecutionResult executionResult;
-    boolean shouldAddDefaultActions = true;
-    if (state instanceof JavaCommandLine javaCommandLine) {
-      final OwnJavaParameters parameters = javaCommandLine.getJavaParameters();
-      patch(parameters, env.getRunnerSettings(), env.getRunProfile(), true);
+        ExecutionResult executionResult;
+        boolean shouldAddDefaultActions = true;
+        if (state instanceof JavaCommandLine javaCommandLine) {
+            final OwnJavaParameters parameters = javaCommandLine.getJavaParameters();
+            patch(parameters, env.getRunnerSettings(), env.getRunProfile(), true);
 
-      ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);
-      executionResult = state.execute(env.getExecutor(), this);
-      if (proxy != null) {
-        ProcessHandler handler = executionResult != null ? executionResult.getProcessHandler() : null;
-        if (handler != null) {
-          proxy.attach(handler);
-          handler.addProcessListener(new ProcessAdapter() {
-            @Override
-            public void processTerminated(@Nonnull ProcessEvent event) {
-              proxy.destroy();
+            ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);
+            executionResult = state.execute(env.getExecutor(), this);
+            if (proxy != null) {
+                ProcessHandler handler = executionResult != null ? executionResult.getProcessHandler() : null;
+                if (handler != null) {
+                    proxy.attach(handler);
+                    handler.addProcessListener(new ProcessAdapter() {
+                        @Override
+                        public void processTerminated(@Nonnull ProcessEvent event) {
+                            proxy.destroy();
+                        }
+                    });
+                }
+                else {
+                    proxy.destroy();
+                }
             }
-          });
-        } else {
-          proxy.destroy();
+
+            if (state instanceof JavaCommandLineState javaCommandLineState && !javaCommandLineState.shouldAddJavaProgramRunnerActions()) {
+                shouldAddDefaultActions = false;
+            }
         }
-      }
+        else {
+            executionResult = state.execute(env.getExecutor(), this);
+        }
 
-      if (state instanceof JavaCommandLineState javaCommandLineState && !javaCommandLineState.shouldAddJavaProgramRunnerActions()) {
-        shouldAddDefaultActions = false;
-      }
-    } else {
-      executionResult = state.execute(env.getExecutor(), this);
+        if (executionResult == null) {
+            return null;
+        }
+
+        onProcessStarted(env.getRunnerSettings(), executionResult);
+
+        final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
+        if (shouldAddDefaultActions) {
+            addDefaultActions(contentBuilder, executionResult);
+        }
+        return contentBuilder.showRunContent(env.getContentToReuse());
     }
 
-    if (executionResult == null) {
-      return null;
+    public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
     }
 
-    onProcessStarted(env.getRunnerSettings(), executionResult);
-
-    final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
-    if (shouldAddDefaultActions) {
-      addDefaultActions(contentBuilder, executionResult);
+    private static void addDefaultActions(@Nonnull RunContentBuilder contentBuilder, @Nonnull ExecutionResult executionResult) {
+        final ExecutionConsole executionConsole = executionResult.getExecutionConsole();
+        final JComponent consoleComponent = executionConsole != null ? executionConsole.getComponent() : null;
+        final ControlBreakAction controlBreakAction = new ControlBreakAction(executionResult.getProcessHandler());
+        if (consoleComponent != null) {
+            controlBreakAction.registerCustomShortcutSet(controlBreakAction.getShortcutSet(), consoleComponent);
+            final ProcessHandler processHandler = executionResult.getProcessHandler();
+            assert processHandler != null : executionResult;
+            processHandler.addProcessListener(new ProcessListener() {
+                @Override
+                public void processTerminated(@Nonnull final ProcessEvent event) {
+                    processHandler.removeProcessListener(this);
+                    controlBreakAction.unregisterCustomShortcutSet(consoleComponent);
+                }
+            });
+        }
+        contentBuilder.addAction(controlBreakAction);
+        contentBuilder.addAction(new SoftExitAction(executionResult.getProcessHandler()));
     }
-    return contentBuilder.showRunContent(env.getContentToReuse());
-  }
 
-  private static void addDefaultActions(@Nonnull RunContentBuilder contentBuilder, @Nonnull ExecutionResult executionResult) {
-    final ExecutionConsole executionConsole = executionResult.getExecutionConsole();
-    final JComponent consoleComponent = executionConsole != null ? executionConsole.getComponent() : null;
-    final ControlBreakAction controlBreakAction = new ControlBreakAction(executionResult.getProcessHandler());
-    if (consoleComponent != null) {
-      controlBreakAction.registerCustomShortcutSet(controlBreakAction.getShortcutSet(), consoleComponent);
-      final ProcessHandler processHandler = executionResult.getProcessHandler();
-      assert processHandler != null : executionResult;
-      processHandler.addProcessListener(new ProcessAdapter() {
+
+    private abstract static class ProxyBasedAction extends AnAction {
+        protected final ProcessHandler myProcessHandler;
+
+        protected ProxyBasedAction(LocalizeValue text, LocalizeValue description, Image icon, ProcessHandler processHandler) {
+            super(text, description, icon);
+            myProcessHandler = processHandler;
+        }
+
+        @RequiredUIAccess
         @Override
-        public void processTerminated(@Nonnull final ProcessEvent event) {
-          processHandler.removeProcessListener(this);
-          controlBreakAction.unregisterCustomShortcutSet(consoleComponent);
-        }
-      });
-    }
-    contentBuilder.addAction(controlBreakAction);
-    contentBuilder.addAction(new SoftExitAction(executionResult.getProcessHandler()));
-  }
-
-
-  private abstract static class ProxyBasedAction extends AnAction {
-    protected final ProcessHandler myProcessHandler;
-
-    protected ProxyBasedAction(LocalizeValue text, LocalizeValue description, Image icon, ProcessHandler processHandler) {
-      super(text, description, icon);
-      myProcessHandler = processHandler;
-    }
-
-    @RequiredUIAccess
-    @Override
-    public final void update(@Nonnull AnActionEvent event) {
-      ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
-      boolean available = proxy != null && available(proxy);
-      Presentation presentation = event.getPresentation();
-      if (!available) {
-        presentation.setEnabledAndVisible(false);
-      } else {
-        presentation.setVisible(true);
-        presentation.setEnabled(!myProcessHandler.isProcessTerminated());
-      }
-    }
-
-    @RequiredUIAccess
-    @Override
-    public final void actionPerformed(@Nonnull AnActionEvent e) {
-      ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
-      if (proxy != null) {
-        perform(e, proxy);
-      }
-    }
-
-    protected abstract boolean available(ProcessProxy proxy);
-
-    protected abstract void perform(AnActionEvent e, ProcessProxy proxy);
-  }
-
-  protected static class ControlBreakAction extends ProxyBasedAction {
-    public ControlBreakAction(final ProcessHandler processHandler) {
-      super(ExecutionLocalize.runConfigurationDumpThreadsActionName(), LocalizeValue.empty(), AllIcons.Actions.Dump, processHandler);
-      setShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_CANCEL, InputEvent.CTRL_DOWN_MASK)));
-    }
-
-    @Override
-    protected boolean available(ProcessProxy proxy) {
-      return proxy.canSendBreak();
-    }
-
-    @Override
-    protected void perform(AnActionEvent e, ProcessProxy proxy) {
-      boolean wise = Boolean.getBoolean(ourWiseThreadDumpProperty);
-      WiseDumpThreadsListener wiseListener = wise ? new WiseDumpThreadsListener(e.getData(Project.KEY), myProcessHandler) : null;
-
-      proxy.sendBreak();
-
-      if (wiseListener != null) {                                           
-        wiseListener.after();
-      }
-    }
-  }
-
-  private static class WiseDumpThreadsListener {
-    private final Project myProject;
-    private final ProcessHandler myProcessHandler;
-    private final CapturingProcessAdapter myListener;
-
-    public WiseDumpThreadsListener(final Project project, final ProcessHandler processHandler) {
-      myProject = project;
-      myProcessHandler = processHandler;
-
-      myListener = new CapturingProcessAdapter();
-      myProcessHandler.addProcessListener(myListener);
-    }
-
-    public void after() {
-      if (myProject == null) {
-        myProcessHandler.removeProcessListener(myListener);
-        return;
-      }
-      myProject.getApplication().executeOnPooledThread((Runnable) () ->
-      {
-        if (myProcessHandler.isProcessTerminated() || myProcessHandler.isProcessTerminating()) {
-          return;
-        }
-        List<ThreadState> threadStates = null;
-        final long start = System.currentTimeMillis();
-        while ((System.currentTimeMillis() - start) < 1000) {
-          final String stdout = myListener.getOutput().getStdout();
-          threadStates = ThreadDumpParser.parse(stdout);
-          if (threadStates == null || threadStates.isEmpty()) {
-            try {
-              //noinspection BusyWait
-              Thread.sleep(50);
-            } catch (InterruptedException ignored) {
-              //
+        public final void update(@Nonnull AnActionEvent event) {
+            ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
+            boolean available = proxy != null && available(proxy);
+            Presentation presentation = event.getPresentation();
+            if (!available) {
+                presentation.setEnabledAndVisible(false);
             }
-            threadStates = null;
-            continue;
-          }
-          break;
+            else {
+                presentation.setVisible(true);
+                presentation.setEnabled(!myProcessHandler.isProcessTerminated());
+            }
         }
-        myProcessHandler.removeProcessListener(myListener);
-        if (threadStates != null && !threadStates.isEmpty()) {
-          showThreadDump(myListener.getOutput().getStdout(), threadStates);
+
+        @RequiredUIAccess
+        @Override
+        public final void actionPerformed(@Nonnull AnActionEvent e) {
+            ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
+            if (proxy != null) {
+                perform(e, proxy);
+            }
         }
-      });
+
+        protected abstract boolean available(ProcessProxy proxy);
+
+        protected abstract void perform(AnActionEvent e, ProcessProxy proxy);
     }
 
-    private void showThreadDump(final String out, final List<ThreadState> threadStates) {
-      myProject.getApplication().invokeLater(
-        () -> AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1
-          ? new ThreadDumpConsoleFactory(myProject, threadStates) : null,
-          "<Stacktrace> " + DateFormatUtil.formatDateTime(System.currentTimeMillis()), out),
-        myProject.getApplication().getNoneModalityState()
-      );
-    }
-  }
+    protected static class ControlBreakAction extends ProxyBasedAction {
+        public ControlBreakAction(final ProcessHandler processHandler) {
+            super(ExecutionLocalize.runConfigurationDumpThreadsActionName(), LocalizeValue.empty(), AllIcons.Actions.Dump, processHandler);
+            setShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_CANCEL, InputEvent.CTRL_DOWN_MASK)));
+        }
 
-  protected static class SoftExitAction extends ProxyBasedAction {
-    public SoftExitAction(final ProcessHandler processHandler) {
-      super(ExecutionLocalize.runConfigurationExitActionName(), LocalizeValue.empty(), AllIcons.Actions.Exit, processHandler);
+        @Override
+        protected boolean available(ProcessProxy proxy) {
+            return proxy.canSendBreak();
+        }
+
+        @Override
+        protected void perform(AnActionEvent e, ProcessProxy proxy) {
+            boolean wise = Boolean.getBoolean(ourWiseThreadDumpProperty);
+            WiseDumpThreadsListener wiseListener = wise ? new WiseDumpThreadsListener(e.getData(Project.KEY), myProcessHandler) : null;
+
+            proxy.sendBreak();
+
+            if (wiseListener != null) {
+                wiseListener.after();
+            }
+        }
+    }
+
+    private static class WiseDumpThreadsListener {
+        private final Project myProject;
+        private final ProcessHandler myProcessHandler;
+        private final CapturingProcessAdapter myListener;
+
+        public WiseDumpThreadsListener(final Project project, final ProcessHandler processHandler) {
+            myProject = project;
+            myProcessHandler = processHandler;
+
+            myListener = new CapturingProcessAdapter();
+            myProcessHandler.addProcessListener(myListener);
+        }
+
+        public void after() {
+            if (myProject == null) {
+                myProcessHandler.removeProcessListener(myListener);
+                return;
+            }
+            myProject.getApplication().executeOnPooledThread((Runnable) () ->
+            {
+                if (myProcessHandler.isProcessTerminated() || myProcessHandler.isProcessTerminating()) {
+                    return;
+                }
+                List<ThreadState> threadStates = null;
+                final long start = System.currentTimeMillis();
+                while ((System.currentTimeMillis() - start) < 1000) {
+                    final String stdout = myListener.getOutput().getStdout();
+                    threadStates = ThreadDumpParser.parse(stdout);
+                    if (threadStates == null || threadStates.isEmpty()) {
+                        try {
+                            //noinspection BusyWait
+                            Thread.sleep(50);
+                        }
+                        catch (InterruptedException ignored) {
+                            //
+                        }
+                        threadStates = null;
+                        continue;
+                    }
+                    break;
+                }
+                myProcessHandler.removeProcessListener(myListener);
+                if (threadStates != null && !threadStates.isEmpty()) {
+                    showThreadDump(myListener.getOutput().getStdout(), threadStates);
+                }
+            });
+        }
+
+        private void showThreadDump(final String out, final List<ThreadState> threadStates) {
+            myProject.getApplication().invokeLater(
+                () -> AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1
+                        ? new ThreadDumpConsoleFactory(myProject, threadStates) : null,
+                    "<Stacktrace> " + DateFormatUtil.formatDateTime(System.currentTimeMillis()), out),
+                myProject.getApplication().getNoneModalityState()
+            );
+        }
+    }
+
+    protected static class SoftExitAction extends ProxyBasedAction {
+        public SoftExitAction(final ProcessHandler processHandler) {
+            super(ExecutionLocalize.runConfigurationExitActionName(), LocalizeValue.empty(), AllIcons.Actions.Exit, processHandler);
+        }
+
+        @Override
+        protected boolean available(ProcessProxy proxy) {
+            return proxy.canSendStop();
+        }
+
+        @Override
+        protected void perform(AnActionEvent e, ProcessProxy proxy) {
+            proxy.sendStop();
+        }
     }
 
     @Override
-    protected boolean available(ProcessProxy proxy) {
-      return proxy.canSendStop();
+    @Nonnull
+    public String getRunnerId() {
+        return DEFAULT_JAVA_RUNNER_ID;
     }
 
-    @Override
-    protected void perform(AnActionEvent e, ProcessProxy proxy) {
-      proxy.sendStop();
+    public static ProgramRunner getInstance() {
+        return RunnerRegistry.getInstance().findRunnerById(DEFAULT_JAVA_RUNNER_ID);
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getRunnerId() {
-    return DEFAULT_JAVA_RUNNER_ID;
-  }
-
-  public static ProgramRunner getInstance() {
-    return RunnerRegistry.getInstance().findRunnerById(DEFAULT_JAVA_RUNNER_ID);
-  }
 }
