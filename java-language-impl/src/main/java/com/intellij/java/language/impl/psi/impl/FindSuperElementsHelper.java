@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.language.impl.psi.PsiAnchor;
+import consulo.language.psi.PsiAnchor;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;

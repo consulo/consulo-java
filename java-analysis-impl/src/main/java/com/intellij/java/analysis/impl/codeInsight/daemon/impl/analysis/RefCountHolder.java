@@ -10,11 +10,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
 import consulo.language.editor.highlight.ReadWriteAccessDetector;
 import consulo.language.file.FileViewProvider;
-import consulo.language.impl.psi.PsiAnchor;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiNamedElement;
-import consulo.language.psi.PsiReference;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectFileIndex;
@@ -23,10 +19,8 @@ import consulo.project.Project;
 import consulo.util.collection.*;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
