@@ -19,127 +19,117 @@ import com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
-import consulo.ide.impl.idea.codeInsight.template.postfix.templates.PostfixLiveTemplate;
 import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
 import consulo.language.Language;
 import consulo.language.editor.completion.CompletionInitializationContext;
 import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import consulo.language.editor.postfixTemplate.PostfixTemplateProvider;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import consulo.language.psi.*;
 import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.dataholder.Key;
-
 import jakarta.annotation.Nonnull;
+import jakarta.inject.Inject;
+
 import java.util.Set;
+import java.util.function.Supplier;
 
 @ExtensionImpl
 public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
-  public static final Key<SmartPsiElementPointer<PsiElement>> ADDED_SEMICOLON = Key.create("postfix_added_semicolon");
+    public static final Key<SmartPsiElementPointer<PsiElement>> ADDED_SEMICOLON = Key.create("postfix_added_semicolon");
 
-  @Override
-  protected Set<PostfixTemplate> buildTemplates() {
-    return Set.of(new AssertStatementPostfixTemplate(this), new CastExpressionPostfixTemplate(),
-        new ElseStatementPostfixTemplate(), new ForAscendingPostfixTemplate(), new ForDescendingPostfixTemplate(),
-        new ForeachPostfixTemplate(), new FormatPostfixTemplate(this), new IfStatementPostfixTemplate(), new InstanceofExpressionPostfixTemplate
-            (), new InstanceofExpressionPostfixTemplate("inst"), new IntroduceFieldPostfixTemplate(), new IntroduceVariablePostfixTemplate(),
-        new IsNullCheckPostfixTemplate(), new NotExpressionPostfixTemplate(), new NotExpressionPostfixTemplate("!"),
-        new NotNullCheckPostfixTemplate(), new NotNullCheckPostfixTemplate("nn"), new ParenthesizedExpressionPostfixTemplate(),
-        new ReturnStatementPostfixTemplate(this), new SoutPostfixTemplate(this), new SwitchStatementPostfixTemplate(),
-        new SynchronizedStatementPostfixTemplate(this), new ThrowExceptionPostfixTemplate(this), new TryStatementPostfixTemplate(),
-        new TryWithResourcesPostfixTemplate(), new WhileStatementPostfixTemplate(this));
-  }
+    private final Application myApplication;
 
-  @Override
-  public boolean isTerminalSymbol(char currentChar) {
-    return currentChar == '.' || currentChar == '!';
-  }
+    @Inject
+    public JavaPostfixTemplateProvider(Application application) {
+        myApplication = application;
+    }
 
-  @Override
-  @RequiredUIAccess
-  public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
-    UIAccess.assertIsUIThread();
+    @Override
+    protected Set<PostfixTemplate> buildTemplates() {
+        return Set.of(new AssertStatementPostfixTemplate(this), new CastExpressionPostfixTemplate(),
+            new ElseStatementPostfixTemplate(), new ForAscendingPostfixTemplate(), new ForDescendingPostfixTemplate(),
+            new ForeachPostfixTemplate(), new FormatPostfixTemplate(this), new IfStatementPostfixTemplate(), new InstanceofExpressionPostfixTemplate
+                (), new InstanceofExpressionPostfixTemplate("inst"), new IntroduceFieldPostfixTemplate(), new IntroduceVariablePostfixTemplate(),
+            new IsNullCheckPostfixTemplate(), new NotExpressionPostfixTemplate(), new NotExpressionPostfixTemplate("!"),
+            new NotNullCheckPostfixTemplate(), new NotNullCheckPostfixTemplate("nn"), new ParenthesizedExpressionPostfixTemplate(),
+            new ReturnStatementPostfixTemplate(this), new SoutPostfixTemplate(this), new SwitchStatementPostfixTemplate(),
+            new SynchronizedStatementPostfixTemplate(this), new ThrowExceptionPostfixTemplate(this), new TryStatementPostfixTemplate(),
+            new TryWithResourcesPostfixTemplate(), new WhileStatementPostfixTemplate(this));
+    }
 
-    file.putUserData(ADDED_SEMICOLON, null);
-    if (isSemicolonNeeded(file, editor)) {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
-            public void run() {
-              Document document = file.getViewProvider().getDocument();
-              assert document != null;
-              EditorModificationUtil.insertStringAtCaret(editor, ";", false, false);
-              PsiDocumentManager.getInstance(file.getProject()).commitDocument(document);
-              PsiElement at = file.findElementAt(editor.getCaretModel().getOffset());
-              if (at != null && at.getNode().getElementType() == JavaTokenType.SEMICOLON) {
-                file.putUserData(ADDED_SEMICOLON, SmartPointerManager.getInstance(file.getProject()).createSmartPsiElementPointer
-                    (at));
-              }
+    @Override
+    public boolean isTerminalSymbol(char currentChar) {
+        return currentChar == '.' || currentChar == '!';
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
+        UIAccess.assertIsUIThread();
+
+        file.putUserData(ADDED_SEMICOLON, null);
+        if (isSemicolonNeeded(file, editor)) {
+            myApplication.runWriteAction(() -> CommandProcessor.getInstance().runUndoTransparentAction(() -> {
+                Document document = file.getViewProvider().getDocument();
+                assert document != null;
+                EditorModificationUtil.insertStringAtCaret(editor, ";", false, false);
+                PsiDocumentManager.getInstance(file.getProject()).commitDocument(document);
+                PsiElement at = file.findElementAt(editor.getCaretModel().getOffset());
+                if (at != null && at.getNode().getElementType() == JavaTokenType.SEMICOLON) {
+                    file.putUserData(ADDED_SEMICOLON, SmartPointerManager.getInstance(file.getProject()).createSmartPsiElementPointer
+                        (at));
+                }
+            }));
+        }
+    }
+
+    @Override
+    public void afterExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
+        final SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
+        if (pointer != null) {
+            final PsiElement addedSemicolon = pointer.getElement();
+            file.putUserData(ADDED_SEMICOLON, null);
+            if (addedSemicolon != null && addedSemicolon.isValid()) {
+                CommandProcessor.getInstance().runUndoTransparentAction(() ->
+                    myApplication.runWriteAction(addedSemicolon::delete));
             }
-          });
         }
-      });
     }
-  }
 
-  @Override
-  public void afterExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
-    final SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
-    if (pointer != null) {
-      final PsiElement addedSemicolon = pointer.getElement();
-      file.putUserData(ADDED_SEMICOLON, null);
-      if (addedSemicolon != null && addedSemicolon.isValid()) {
-        CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
-          @Override
-          public void run() {
-            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-              public void run() {
-                addedSemicolon.delete();
-              }
-            });
-          }
+    @Nonnull
+    @Override
+    public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @Nonnull Editor realEditor, final int currentOffset) {
+        return myApplication.runReadAction((Supplier<PsiFile>) () -> {
+            Document document = copyFile.getViewProvider().getDocument();
+            assert document != null;
+            CharSequence sequence = document.getCharsSequence();
+            StringBuilder fileContentWithSemicolon = new StringBuilder(sequence);
+            if (isSemicolonNeeded(copyFile, realEditor)) {
+                fileContentWithSemicolon.insert(currentOffset, ';');
+                return PostfixTemplatesUtils.copyFile(copyFile, fileContentWithSemicolon);
+            }
+
+            return copyFile;
         });
-      }
     }
-  }
 
-  @Nonnull
-  @Override
-  public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @Nonnull Editor realEditor, final int currentOffset) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<PsiFile>() {
-      @Override
-      public PsiFile compute() {
-        Document document = copyFile.getViewProvider().getDocument();
-        assert document != null;
-        CharSequence sequence = document.getCharsSequence();
-        StringBuilder fileContentWithSemicolon = new StringBuilder(sequence);
-        if (isSemicolonNeeded(copyFile, realEditor)) {
-          fileContentWithSemicolon.insert(currentOffset, ';');
-          return PostfixLiveTemplate.copyFile(copyFile, fileContentWithSemicolon);
-        }
+    public static void doNotDeleteSemicolon(@Nonnull PsiFile file) {
+        file.putUserData(ADDED_SEMICOLON, null);
+    }
 
-        return copyFile;
-      }
-    });
-  }
+    private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
+        return JavaCompletionContributor.semicolonNeeded(file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
+    }
 
-  public static void doNotDeleteSemicolon(@Nonnull PsiFile file) {
-    file.putUserData(ADDED_SEMICOLON, null);
-  }
-
-  private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
-    return JavaCompletionContributor.semicolonNeeded(file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
-  }
-
-  @Nonnull
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }
