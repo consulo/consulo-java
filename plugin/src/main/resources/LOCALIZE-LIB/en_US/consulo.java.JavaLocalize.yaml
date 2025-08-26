@@ -290,5 +290,15 @@ settings.inlay.java.turn.on.showInferred.annotations:
     text: Turn on Inferred Annotations
 settings.inlay.java.usages:
     text: Usages
+title.annotation:
+    text: Annotation
+title.class:
+    text: Class
+title.enum:
+    text: Enum
+title.interface:
+    text: Interface
 title.lambda:
     text: Lambda
+title.record:
+    text: Record

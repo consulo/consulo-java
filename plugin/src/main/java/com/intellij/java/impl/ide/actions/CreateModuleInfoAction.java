@@ -24,7 +24,7 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.IdeView;
 import consulo.ide.action.CreateFromTemplateActionBase;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
@@ -38,7 +38,6 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -52,7 +51,7 @@ import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
   public CreateModuleInfoAction() {
-    super(JavaBundle.message("action.create.new.module-info.title"), JavaBundle.message("action.create.new.module-info.description"), JavaFileType.INSTANCE.getIcon());
+    super(JavaLocalize.actionCreateNewModuleInfoTitle(), JavaLocalize.actionCreateNewModuleInfoDescription(), JavaFileType.INSTANCE.getIcon());
   }
 
   @Override

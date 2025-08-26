@@ -29,6 +29,7 @@ import consulo.ide.IdeView;
 import consulo.ide.action.CreateFromTemplateActionBase;
 import consulo.ide.localize.IdeLocalize;
 import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.psi.PsiDirectory;
 import consulo.module.content.ProjectFileIndex;
@@ -48,7 +49,7 @@ import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateU
  */
 public class CreatePackageInfoAction extends CreateFromTemplateActionBase implements DumbAware {
   public CreatePackageInfoAction() {
-    super(JavaBundle.message("action.create.new.package-info.title"), JavaBundle.message("action.create.new.package-info.description"), JavaFileType.INSTANCE.getIcon());
+    super(JavaLocalize.actionCreateNewPackageInfoTitle(), JavaLocalize.actionCreateNewPackageInfoDescription(), JavaFileType.INSTANCE.getIcon());
   }
 
   @Nullable

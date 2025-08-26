@@ -17,7 +17,6 @@
 package com.intellij.java.impl.ide.actions;
 
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
-import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
@@ -30,10 +29,13 @@ import consulo.application.dumb.DumbAware;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.action.CreateFileFromTemplateDialog;
+import consulo.java.language.localize.JavaCoreLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.module.extension.ModuleExtension;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
@@ -56,23 +58,23 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 
   @Override
   protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-    builder.setTitle(JavaCoreBundle.message("action.create.new.class"));
-    builder.addKind("Class", AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
-    builder.addKind("Interface", AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
+    builder.setTitle(JavaCoreLocalize.actionCreateNewClass());
+    builder.addKind(JavaLocalize.titleClass(), AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
+    builder.addKind(JavaLocalize.titleInterface(), AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
 
     LanguageLevel level = PsiUtil.getLanguageLevel(directory);
     if (level.isAtLeast(LanguageLevel.JDK_16)) {
-      builder.addKind("Record", PlatformIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
+      builder.addKind(JavaLocalize.titleRecord(), PlatformIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
     }
     if (level.isAtLeast(LanguageLevel.JDK_1_5)) {
-      builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
-      builder.addKind("Annotation", AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
+      builder.addKind(JavaLocalize.titleEnum(), AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
+      builder.addKind(JavaLocalize.titleAnnotation(), AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
     }
 
     for (FileTemplate template : FileTemplateManager.getInstance(project).getAllTemplates()) {
       final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
       if (handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory)) {
-        builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
+        builder.addKind(LocalizeValue.of(template.getName()), JavaFileType.INSTANCE.getIcon(), template.getName());
       }
     }
 
@@ -104,14 +106,16 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
     return JavaModuleExtension.class;
   }
 
+  @Nonnull
   @Override
-  protected String getErrorTitle() {
-    return JavaCoreBundle.message("title.cannot.create.class");
+  protected LocalizeValue getErrorTitle() {
+    return JavaCoreLocalize.titleCannotCreateClass();
   }
 
+  @Nonnull
   @Override
-  protected String getActionName(PsiDirectory directory, String newName, String templateName) {
-    return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(), newName));
+  protected LocalizeValue getActionName(PsiDirectory directory, String newName, String templateName) {
+    return JavaCoreLocalize.progressCreatingClass(StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(), newName));
   }
 
   @Override
