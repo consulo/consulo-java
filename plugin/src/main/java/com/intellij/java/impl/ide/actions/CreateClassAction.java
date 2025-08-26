@@ -53,7 +53,7 @@ import java.util.Map;
  */
 public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass> implements DumbAware {
   public CreateClassAction() {
-    super(null, null, AllIcons.Nodes.Class, true);
+    super(LocalizeValue.empty(), LocalizeValue.empty(), AllIcons.Nodes.Class, true);
   }
 
   @Override

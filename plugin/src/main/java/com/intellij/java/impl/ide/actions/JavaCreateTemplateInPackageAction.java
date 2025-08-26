@@ -21,23 +21,25 @@ import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.ide.action.CreateTemplateInPackageAction;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> extends CreateTemplateInPackageAction<T> {
-
-  protected JavaCreateTemplateInPackageAction(String text, String description, Image icon, boolean inSourceOnly) {
-    super(text, description, icon, inSourceOnly);
-  }
-
-  @Override
-  protected boolean checkPackageExists(PsiDirectory directory) {
-    PsiJavaPackage pkg = JavaDirectoryService.getInstance().getPackage(directory);
-    if (pkg == null) {
-      return false;
+    protected JavaCreateTemplateInPackageAction(@Nonnull LocalizeValue text, @Nonnull LocalizeValue description, @Nullable Image icon, boolean inSourceOnly) {
+        super(text, description, icon, inSourceOnly);
     }
 
-    String name = pkg.getQualifiedName();
-    return StringUtil.isEmpty(name) || PsiNameHelper.getInstance(directory.getProject()).isQualifiedName(name);
-  }
+    @Override
+    protected boolean checkPackageExists(PsiDirectory directory) {
+        PsiJavaPackage pkg = JavaDirectoryService.getInstance().getPackage(directory);
+        if (pkg == null) {
+            return false;
+        }
+
+        String name = pkg.getQualifiedName();
+        return StringUtil.isEmpty(name) || PsiNameHelper.getInstance(directory.getProject()).isQualifiedName(name);
+    }
 }
