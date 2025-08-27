@@ -124,6 +124,8 @@ public interface JavaElementType {
   IElementType INSTANCE_OF_EXPRESSION = new JavaCompositeElementType("INSTANCE_OF_EXPRESSION", PsiInstanceOfExpressionImpl::new);
   IElementType CLASS_OBJECT_ACCESS_EXPRESSION =
     new JavaCompositeElementType("CLASS_OBJECT_ACCESS_EXPRESSION", PsiClassObjectAccessExpressionImpl::new);
+  // TODO [VISTALL] stub just for using inside util
+  IElementType TEMPLATE_EXPRESSION = new IElementType("TEMPLATE_EXPRESSION", JavaLanguage.INSTANCE);
   IElementType EMPTY_EXPRESSION = new JavaCompositeElementType("EMPTY_EXPRESSION", PsiEmptyExpressionImpl::new, true);
   IElementType EXPRESSION_LIST = new JavaCompositeElementType("EXPRESSION_LIST", PsiExpressionListImpl::new, true);
   IElementType EMPTY_STATEMENT = new JavaCompositeElementType("EMPTY_STATEMENT", PsiEmptyStatementImpl::new);
