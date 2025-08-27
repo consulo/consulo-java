@@ -16,6 +16,7 @@
 package com.intellij.java.execution.impl.jar;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ReadAction;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.Location;
 import consulo.execution.action.RunConfigurationProducer;
@@ -40,7 +41,7 @@ public class JarApplicationConfigurationProducer extends RunConfigurationProduce
         ConfigurationContext context,
         SimpleReference<PsiElement> sourceElement
     ) {
-        VirtualFile file = getJarFileFromContext(context);
+        VirtualFile file = ReadAction.compute(() -> getJarFileFromContext(context));
         if (file != null) {
             configuration.setName(file.getName());
             configuration.setJarPath(file.getPath());
@@ -62,7 +63,7 @@ public class JarApplicationConfigurationProducer extends RunConfigurationProduce
 
     @Override
     public boolean isConfigurationFromContext(JarApplicationConfiguration configuration, ConfigurationContext context) {
-        VirtualFile file = getJarFileFromContext(context);
+        VirtualFile file = ReadAction.compute(() -> getJarFileFromContext(context));
         return file != null && FileUtil.pathsEqual(file.getPath(), configuration.getJarPath());
     }
 }
