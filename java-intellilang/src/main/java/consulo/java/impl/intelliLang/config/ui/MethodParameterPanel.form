@@ -52,7 +52,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="45135" class="consulo.ide.impl.idea.ui.dualView.TreeTableView" binding="myParamsTable" custom-create="true">
+              <component id="45135" class="consulo.ui.ex.awt.dualView.TreeTableView" binding="myParamsTable" custom-create="true">
                 <constraints/>
                 <properties/>
               </component>
