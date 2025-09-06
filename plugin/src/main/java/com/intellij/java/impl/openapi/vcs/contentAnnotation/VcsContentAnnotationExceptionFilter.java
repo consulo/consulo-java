@@ -33,18 +33,16 @@ import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
 import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.FilterMixin;
-import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
-import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotation;
-import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
-import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationSettings;
-import consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Trinity;
+import consulo.versionControlSystem.UpToDateLineNumberProvider;
 import consulo.versionControlSystem.change.ChangeListManager;
+import consulo.versionControlSystem.contentAnnotation.VcsContentAnnotation;
+import consulo.versionControlSystem.contentAnnotation.VcsContentAnnotationSettings;
 import consulo.versionControlSystem.history.VcsRevisionNumber;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.status.FileStatus;
@@ -108,7 +106,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     int startLineNumber,
     @Nonnull Consumer<? super AdditionalHighlight> consumer
   ) {
-    VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
+    VcsContentAnnotation vcsContentAnnotation = myProject.getInstance(VcsContentAnnotation.class);
     final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
     Trinity<PsiClass, PsiFile, String> previousLineResult = null;
 
@@ -220,7 +218,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     private UpToDateLineNumberProvider getProvider(VirtualFile vf, Document document) {
       UpToDateLineNumberProvider provider = myRecentlyChanged.get(vf);
       if (provider == null) {
-        provider = new UpToDateLineNumberProviderImpl(document, myProject);
+        provider = UpToDateLineNumberProvider.of(document, myProject);
         myRecentlyChanged.put(vf, provider);
       }
       return provider;
