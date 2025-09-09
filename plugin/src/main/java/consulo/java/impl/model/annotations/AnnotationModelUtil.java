@@ -1,6 +1,7 @@
 package consulo.java.impl.model.annotations;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.UsedInPlugin;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
@@ -10,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+@UsedInPlugin
 public class AnnotationModelUtil {
   private static class AnnotationGenericValueImpl<T> implements AnnotationGenericValue<T> {
     private T myValue;
@@ -72,8 +74,6 @@ public class AnnotationModelUtil {
           }
         }
       }
-    } else {
-      throw new UnsupportedOperationException();
     }
 
     return values;
