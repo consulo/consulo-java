@@ -24,6 +24,7 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
+import consulo.annotation.component.ActionImpl;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
@@ -48,6 +49,7 @@ import java.util.Map;
  * @author Eugene Zhuravlev
  * @author Sascha Weinreuter
  */
+@ActionImpl(id = "DumpThreads")
 public class ThreadDumpAction extends AnAction {
     public ThreadDumpAction() {
         super(

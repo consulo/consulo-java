@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
@@ -21,9 +20,11 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.breakpoints.MethodBreakpoint;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ActionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.DocumentUtil;
@@ -42,7 +43,21 @@ import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Set;
+
+@ActionImpl(id = "ToggleMethodBreakpoint")
 public class ToggleMethodBreakpointAction extends AnAction {
+    private static final Set<String> POPUP_PLACES = Set.of(
+        ActionPlaces.PROJECT_VIEW_POPUP,
+        ActionPlaces.STRUCTURE_VIEW_POPUP,
+        ActionPlaces.FAVORITES_VIEW_POPUP,
+        ActionPlaces.NAVIGATION_BAR_POPUP
+    );
+
+    public ToggleMethodBreakpointAction() {
+        super(JavaDebuggerLocalize.actionToggleMethodBreakpointText(), JavaDebuggerLocalize.actionToggleMethodBreakpointDescription());
+    }
+
     @Override
     @RequiredUIAccess
     public void update(@Nonnull AnActionEvent event) {
@@ -89,10 +104,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
         Document document = null;
 
         String place = event.getPlace();
-        if (ActionPlaces.PROJECT_VIEW_POPUP.equals(place)
-            || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(place)
-            || ActionPlaces.FAVORITES_VIEW_POPUP.equals(place)
-            || ActionPlaces.NAVIGATION_BAR_POPUP.equals(place)) {
+        if (POPUP_PLACES.contains(place)) {
             if (event.getData(PsiElement.KEY) instanceof PsiMethod m) {
                 PsiFile containingFile = m.getContainingFile();
                 if (containingFile != null) {

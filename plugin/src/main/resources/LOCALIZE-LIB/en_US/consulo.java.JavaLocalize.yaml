@@ -124,14 +124,6 @@ action.SliceForward.text:
     text: Analyze Data Flow _from Here
 action.SliceSliceForward.description:
     text: Search for values escaped from this location
-action.ToggleFieldBreakpoint.description:
-    text: Toggle field watchpoint for the field at caret
-action.ToggleFieldBreakpoint.text:
-    text: Toggle _Field Watchpoint
-action.ToggleMethodBreakpoint.description:
-    text: Toggle method breakpoint for the method at caret
-action.ToggleMethodBreakpoint.text:
-    text: Toggle _Method Breakpoint
 action.TurnRefsToSuper.description:
     text: Change usages of a class to those of its superclass or interface
 action.TurnRefsToSuper.text:
