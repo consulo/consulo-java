@@ -35,6 +35,8 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
@@ -57,7 +59,20 @@ import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Set;
+
+@ActionImpl(id = "ToggleFieldBreakpoint")
 public class ToggleFieldBreakpointAction extends AnAction {
+    private static final Set<String> POPUP_PLACES = Set.of(
+        ActionPlaces.PROJECT_VIEW_POPUP,
+        ActionPlaces.STRUCTURE_VIEW_POPUP,
+        ActionPlaces.FAVORITES_VIEW_POPUP
+    );
+
+    public ToggleFieldBreakpointAction() {
+        super(JavaDebuggerLocalize.actionToggleFieldBreakpointText(), JavaDebuggerLocalize.actionToggleFieldBreakpointDescription());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
@@ -111,9 +126,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
         boolean toEnable = place != null;
 
         Presentation presentation = event.getPresentation();
-        if (ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace())
-            || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace())
-            || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace())) {
+        if (POPUP_PLACES.contains(event.getPlace())) {
             presentation.setVisible(toEnable);
         }
         else if (DebuggerAction.isContextView(event)) {
@@ -123,7 +136,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
                 Document document = PsiDocumentManager.getInstance(project).getDocument(place.getFile());
                 if (document != null) {
                     int offset = place.getOffset();
-                    BreakpointManager breakpointManager = (DebuggerManagerEx.getInstanceEx(project)).getBreakpointManager();
+                    BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
                     Breakpoint fieldBreakpoint =
                         offset >= 0 ? breakpointManager.findBreakpoint(document, offset, FieldBreakpoint.CATEGORY) : null;
                     if (fieldBreakpoint != null) {
@@ -137,15 +150,14 @@ public class ToggleFieldBreakpointAction extends AnAction {
     }
 
     @Nullable
+    @RequiredReadAction
     public static SourcePosition getPlace(AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
         Project project = event.getData(Project.KEY);
         if (project == null) {
             return null;
         }
-        if (ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace())
-            || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace())
-            || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace())) {
+        if (POPUP_PLACES.contains(event.getPlace())) {
             return event.getData(PsiElement.KEY) instanceof PsiField field ? SourcePosition.createFromElement(field) : null;
         }
 
@@ -178,14 +190,17 @@ public class ToggleFieldBreakpointAction extends AnAction {
         if (DebuggerAction.isContextView(event)) {
             DebuggerTree tree = event.getData(DebuggerTree.DATA_KEY);
             if (tree != null && tree.getSelectionPath() != null) {
-                DebuggerTreeNodeImpl node = ((DebuggerTreeNodeImpl)tree.getSelectionPath().getLastPathComponent());
+                DebuggerTreeNodeImpl node = (DebuggerTreeNodeImpl) tree.getSelectionPath().getLastPathComponent();
                 if (node != null && node.getDescriptor() instanceof FieldDescriptorImpl fieldDescriptor) {
                     Field field = fieldDescriptor.getField();
                     DebuggerSession session = tree.getDebuggerContext().getDebuggerSession();
-                    PsiClass psiClass = DebuggerUtils.findClass(field.declaringType().name(), project, (session != null)
-                        ? session.getSearchScope() : GlobalSearchScope.allScope(project));
+                    PsiClass psiClass = DebuggerUtils.findClass(
+                        field.declaringType().name(),
+                        project,
+                        session != null ? session.getSearchScope() : GlobalSearchScope.allScope(project)
+                    );
                     if (psiClass != null) {
-                        psiClass = (PsiClass)psiClass.getNavigationElement();
+                        psiClass = (PsiClass) psiClass.getNavigationElement();
                         PsiField psiField = psiClass.findFieldByName(field.name(), true);
                         if (psiField != null) {
                             return SourcePosition.createFromElement(psiField);

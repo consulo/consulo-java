@@ -34,10 +34,18 @@ action.show.watches.text.hide:
     text: Hide Watches
 action.show.watches.text.show:
     text: Show Watches
-action.thread.dump.text:
-    text: Get Thread Dump
 action.thread.dump.description:
     text: Get stacktraces of all the threads within JVM at current moment
+action.thread.dump.text:
+    text: Get Thread Dump
+action.toggle.field.breakpoint.description:
+    text: Toggle field watchpoint for the field at caret
+action.toggle.field.breakpoint.text:
+    text: Toggle _Field Watchpoint
+action.toggle.method.breakpoint.description:
+    text: Toggle method breakpoint for the method at caret
+action.toggle.method.breakpoint.text:
+    text: Toggle _Method Breakpoint
 action.watch.method.return.value.description:
     text: Enables watching last executed method return value
 action.watches.method.return.value.disable:

@@ -123,20 +123,6 @@
 			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
 		</action>
 
-		<group id="ToggleBreakpointAction">
-			<action id="ToggleMethodBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleMethodBreakpointAction"/>
-			<action id="ToggleFieldBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleFieldBreakpointAction"/>
-			<!--Moved to XDebugger <action id="ToggleBreakpointEnabled" class="com.intellij.debugger.actions.ToggleBreakpointEnabledAction"/>-->
-			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
-		</group>
-
-		<action id="ExportThreads" class="com.intellij.java.debugger.impl.actions.ExportThreadsAction">
-			<add-to-group group-id="RunMenu" anchor="last"/>
-		</action>
-		<action id="DumpThreads" class="com.intellij.java.debugger.impl.actions.ThreadDumpAction">
-			<add-to-group group-id="RunMenu" anchor="last"/>
-		</action>
-
 		<action id="GenerateJavadoc" class="com.intellij.java.impl.javadoc.actions.GenerateJavadocAction" can-use-project-as-default="true" require-module-extensions="java">
 			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
 		</action>

@@ -19,6 +19,7 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.ExportDialog;
+import consulo.annotation.component.ActionImpl;
 import consulo.platform.Platform;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.platform.base.localize.ActionLocalize;
@@ -41,6 +42,7 @@ import java.io.IOException;
 /**
  * @author Jeka
  */
+@ActionImpl(id = "ExportThreads")
 public class ExportThreadsAction extends AnAction {
     public ExportThreadsAction() {
         super(ActionLocalize.actionExportthreadsText(), ActionLocalize.actionExportthreadsDescription(), PlatformIconGroup.actionsExport());
