@@ -15,7 +15,6 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
-
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
@@ -25,7 +24,6 @@ import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
 import consulo.application.util.diff.FilesTooBigForDiffException;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.actions.FormatChangedTextUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -35,14 +33,15 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
+import consulo.versionControlSystem.FormatChangedTextUtil;
 import consulo.versionControlSystem.change.Change;
 import consulo.versionControlSystem.change.ChangeListManager;
 import consulo.versionControlSystem.change.ContentRevision;
 import consulo.versionControlSystem.change.LocalChangeList;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.*;
 
