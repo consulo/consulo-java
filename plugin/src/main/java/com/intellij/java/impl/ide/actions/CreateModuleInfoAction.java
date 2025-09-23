@@ -18,6 +18,7 @@ package com.intellij.java.impl.ide.actions;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.fileTemplate.AttributesDefaults;
 import consulo.fileTemplate.FileTemplate;
@@ -26,12 +27,11 @@ import consulo.ide.IdeView;
 import consulo.ide.action.CreateFromTemplateActionBase;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.content.LanguageContentFolderScopes;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.FilenameIndex;
-import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
@@ -49,51 +49,67 @@ import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateU
 import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_CLASS;
 import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
+@ActionImpl(id = "NewModuleInfo")
 public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
-  public CreateModuleInfoAction() {
-    super(JavaLocalize.actionCreateNewModuleInfoTitle(), JavaLocalize.actionCreateNewModuleInfoDescription(), JavaFileType.INSTANCE.getIcon());
-  }
-
-  @Override
-  public void update(@Nonnull AnActionEvent e) {
-    if (!e.getPresentation().isVisible()) {
-      return;
-    }
-    DataContext ctx = e.getDataContext();
-    boolean available = Optional.ofNullable(ctx.getData(IdeView.KEY)).map(view -> getTargetDirectory(ctx, view)).filter(PsiUtil::isLanguageLevel9OrHigher).map
-        (ModuleUtilCore::findModuleForPsiElement).map(module -> FilenameIndex.getVirtualFilesByName(module.getProject(), MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module)).isEmpty()).orElse(false);
-    e.getPresentation().setEnabledAndVisible(available);
-  }
-
-  @Nullable
-  @Override
-  protected PsiDirectory getTargetDirectory(DataContext ctx, IdeView view) {
-    PsiDirectory[] directories = view.getDirectories();
-    if (directories.length == 1) {
-      PsiDirectory psiDir = directories[0];
-      VirtualFile vDir = psiDir.getVirtualFile();
-      ProjectFileIndex index = ProjectRootManager.getInstance(psiDir.getProject()).getFileIndex();
-      if (vDir.equals(index.getSourceRootForFile(vDir)) && index.isUnderContentFolderType(vDir, LanguageContentFolderScopes.onlyProduction())) {
-        return psiDir;
-      }
+    public CreateModuleInfoAction() {
+        super(
+            JavaLocalize.actionCreateNewModuleInfoTitle(),
+            JavaLocalize.actionCreateNewModuleInfoDescription(),
+            JavaFileType.INSTANCE.getIcon()
+        );
     }
 
-    return null;
-  }
+    @Override
+    public void update(@Nonnull AnActionEvent e) {
+        if (!e.getPresentation().isVisible()) {
+            return;
+        }
+        DataContext ctx = e.getDataContext();
+        boolean available = Optional.ofNullable(ctx.getData(IdeView.KEY))
+            .map(view -> getTargetDirectory(ctx, view))
+            .filter(PsiUtil::isLanguageLevel9OrHigher)
+            .map(PsiElement::getModule)
+            .map(
+                module -> FilenameIndex.getVirtualFilesByName(
+                    module.getProject(),
+                    MODULE_INFO_FILE,
+                    GlobalSearchScope.moduleScope(module)
+                ).isEmpty()
+            )
+            .orElse(false);
+        e.getPresentation().setEnabledAndVisible(available);
+    }
 
-  @Override
-  protected FileTemplate getTemplate(@Nonnull Project project, @Nonnull PsiDirectory dir) {
-    return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_MODULE_INFO_TEMPLATE_NAME);
-  }
+    @Nullable
+    @Override
+    protected PsiDirectory getTargetDirectory(DataContext ctx, IdeView view) {
+        PsiDirectory[] directories = view.getDirectories();
+        if (directories.length == 1) {
+            PsiDirectory psiDir = directories[0];
+            VirtualFile vDir = psiDir.getVirtualFile();
+            ProjectFileIndex index = ProjectRootManager.getInstance(psiDir.getProject()).getFileIndex();
+            if (vDir.equals(index.getSourceRootForFile(vDir))
+                && index.isUnderContentFolderType(vDir, LanguageContentFolderScopes.onlyProduction())) {
+                return psiDir;
+            }
+        }
 
-  @Override
-  protected AttributesDefaults getAttributesDefaults(@Nonnull DataContext ctx) {
-    return new AttributesDefaults(MODULE_INFO_CLASS).withFixedName(true);
-  }
+        return null;
+    }
 
-  @Override
-  protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file) {
-    Module module = ctx.getData(LangDataKeys.MODULE);
-    return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
-  }
+    @Override
+    protected FileTemplate getTemplate(@Nonnull Project project, @Nonnull PsiDirectory dir) {
+        return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_MODULE_INFO_TEMPLATE_NAME);
+    }
+
+    @Override
+    protected AttributesDefaults getAttributesDefaults(@Nonnull DataContext ctx) {
+        return new AttributesDefaults(MODULE_INFO_CLASS).withFixedName(true);
+    }
+
+    @Override
+    protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file) {
+        Module module = ctx.getData(Module.KEY);
+        return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
+    }
 }
