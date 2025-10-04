@@ -16,6 +16,7 @@
 package com.intellij.java.impl.psi.impl.migration;
 
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiPackageManager;
 import consulo.virtualFileSystem.VirtualFile;
@@ -28,7 +29,12 @@ public class MigrationPackageImpl extends PsiPackageImpl {
   private final PsiMigrationImpl myMigration;
 
   public MigrationPackageImpl(PsiMigrationImpl migration, String qualifiedName) {
-    super(migration.getManager(), PsiPackageManager.getInstance(migration.getManager().getProject()), JavaModuleExtension.class, qualifiedName);
+    super(migration.getManager(),
+        PsiPackageManager.getInstance(migration.getManager().getProject()),
+        JavaPsiFacade.getInstance(migration.getManager().getProject()),
+        JavaModuleExtension.class,
+        qualifiedName
+    );
     myMigration = migration;
   }
 

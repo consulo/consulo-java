@@ -16,6 +16,7 @@
 package consulo.java.impl.psi.impl;
 
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -25,7 +26,6 @@ import consulo.language.psi.PsiPackageManager;
 import consulo.language.psi.PsiPackageSupportProvider;
 import consulo.module.Module;
 import consulo.module.extension.ModuleExtension;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -34,23 +34,23 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider {
-  @Override
-  public boolean isSupported(@Nonnull ModuleExtension moduleExtension) {
-    return moduleExtension instanceof JavaModuleExtension;
-  }
+    @Override
+    public boolean isSupported(@Nonnull ModuleExtension moduleExtension) {
+        return moduleExtension instanceof JavaModuleExtension;
+    }
 
-  @Override
-  public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName) {
-    return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
-  }
+    @Override
+    public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName) {
+        return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
+    }
 
-  @Nonnull
-  @Override
-  public PsiPackage createPackage(
-      @Nonnull PsiManager psiManager,
-      @Nonnull PsiPackageManager packageManager,
-      @Nonnull Class<? extends ModuleExtension> extensionClass,
-      @Nonnull String packageName) {
-    return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
-  }
+    @Nonnull
+    @Override
+    public PsiPackage createPackage(
+        @Nonnull PsiManager psiManager,
+        @Nonnull PsiPackageManager packageManager,
+        @Nonnull Class<? extends ModuleExtension> extensionClass,
+        @Nonnull String packageName) {
+        return new PsiPackageImpl(psiManager, packageManager, JavaPsiFacade.getInstance(psiManager.getProject()), extensionClass, packageName);
+    }
 }

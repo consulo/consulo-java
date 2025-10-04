@@ -16,10 +16,7 @@
 package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.java.language.psi.PsiElementFinder;
-import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.LowMemoryWatcher;
 import consulo.application.util.function.CommonProcessors;
@@ -59,12 +56,14 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     private volatile PackageDirectoryCache myCache;
     private final PsiManager myManager;
     private final String[] myFileExtensions;
-    private PsiPackageManager myPackageManager;
+    private final PsiPackageManager myPackageManager;
+    private final JavaPsiFacade myJavaPsiFacade;
 
     public NonClasspathClassFinder(@Nonnull Project project, @Nonnull String... fileExtensions) {
         myProject = project;
         myPackageManager = PsiPackageManager.getInstance(myProject);
         myManager = PsiManager.getInstance(myProject);
+        myJavaPsiFacade = JavaPsiFacade.getInstance(project);
         myFileExtensions = ArrayUtil.append(fileExtensions, "class");
 
         MessageBusConnection connection = project.getMessageBus().connect(project);
@@ -184,7 +183,12 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     }
 
     private PsiPackageImpl createPackage(String qualifiedName) {
-        return new PsiPackageImpl(myManager, myPackageManager, JavaModuleExtension.class, qualifiedName);
+        return new PsiPackageImpl(myManager,
+            myPackageManager,
+            myJavaPsiFacade,
+            JavaModuleExtension.class,
+            qualifiedName
+        );
     }
 
     @Override

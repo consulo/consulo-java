@@ -56,6 +56,8 @@ import java.util.function.Predicate;
 
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable {
     private static final Logger LOGGER = Logger.getInstance(PsiPackageImpl.class);
+    
+    private final JavaPsiFacade myJavaPsiFacade;
 
     private volatile CachedValue<PsiModifierList> myAnnotationList;
     private volatile CachedValue<Collection<PsiDirectory>> myDirectories;
@@ -64,10 +66,12 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     public PsiPackageImpl(
         PsiManager manager,
         PsiPackageManager packageManager,
+        JavaPsiFacade javaPsiFacade,
         Class<? extends ModuleExtension> extensionClass,
         String qualifiedName
     ) {
         super(manager, packageManager, extensionClass, qualifiedName);
+        myJavaPsiFacade = javaPsiFacade;
     }
 
     @Override
@@ -183,7 +187,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     }
 
     private JavaPsiFacadeImpl getFacade() {
-        return (JavaPsiFacadeImpl)JavaPsiFacade.getInstance(myManager.getProject());
+        return (JavaPsiFacadeImpl) myJavaPsiFacade;
     }
 
     @RequiredReadAction
