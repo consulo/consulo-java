@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.impl.ide.actions;
 
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
@@ -24,7 +23,11 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.dumb.DumbAware;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
@@ -51,92 +54,106 @@ import java.util.Map;
  *
  * @since 5.1
  */
+@ActionImpl(id = "JavaNewClass", parents = @ActionParentRef(value = @ActionRef(id = "NewGroup1"), anchor = ActionRefAnchor.FIRST))
 public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass> implements DumbAware {
-  public CreateClassAction() {
-    super(LocalizeValue.empty(), LocalizeValue.empty(), AllIcons.Nodes.Class, true);
-  }
-
-  @Override
-  protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-    builder.setTitle(JavaCoreLocalize.actionCreateNewClass());
-    builder.addKind(JavaLocalize.titleClass(), AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
-    builder.addKind(JavaLocalize.titleInterface(), AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
-
-    LanguageLevel level = PsiUtil.getLanguageLevel(directory);
-    if (level.isAtLeast(LanguageLevel.JDK_16)) {
-      builder.addKind(JavaLocalize.titleRecord(), PlatformIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
-    }
-    if (level.isAtLeast(LanguageLevel.JDK_1_5)) {
-      builder.addKind(JavaLocalize.titleEnum(), AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
-      builder.addKind(JavaLocalize.titleAnnotation(), AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
+    public CreateClassAction() {
+        super(LocalizeValue.empty(), LocalizeValue.empty(), PlatformIconGroup.nodesClass(), true);
     }
 
-    for (FileTemplate template : FileTemplateManager.getInstance(project).getAllTemplates()) {
-      final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
-      if (handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory)) {
-        builder.addKind(LocalizeValue.of(template.getName()), JavaFileType.INSTANCE.getIcon(), template.getName());
-      }
-    }
+    @Override
+    @RequiredReadAction
+    protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
+        builder.setTitle(JavaCoreLocalize.actionCreateNewClass());
+        builder.addKind(JavaLocalize.titleClass(), PlatformIconGroup.nodesClass(), JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
+        builder.addKind(
+            JavaLocalize.titleInterface(),
+            PlatformIconGroup.nodesInterface(),
+            JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME
+        );
 
-    builder.setValidator(new InputValidatorEx() {
-      @Override
-      public String getErrorText(String inputString) {
-        if (inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString)) {
-          return "This is not a valid Java qualified name";
+        LanguageLevel level = PsiUtil.getLanguageLevel(directory);
+        if (level.isAtLeast(LanguageLevel.JDK_16)) {
+            builder.addKind(JavaLocalize.titleRecord(), PlatformIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
         }
-        return null;
-      }
+        if (level.isAtLeast(LanguageLevel.JDK_1_5)) {
+            builder.addKind(JavaLocalize.titleEnum(), PlatformIconGroup.nodesEnum(), JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
+            builder.addKind(
+                JavaLocalize.titleAnnotation(),
+                PlatformIconGroup.nodesAnnotationtype(),
+                JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME
+            );
+        }
 
-      @RequiredUIAccess
-      @Override
-      public boolean checkInput(String inputString) {
-        return true;
-      }
+        for (FileTemplate template : FileTemplateManager.getInstance(project).getAllTemplates()) {
+            JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
+            if (handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory)) {
+                builder.addKind(LocalizeValue.of(template.getName()), JavaFileType.INSTANCE.getIcon(), template.getName());
+            }
+        }
 
-      @RequiredUIAccess
-      @Override
-      public boolean canClose(String inputString) {
-        return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
-      }
-    });
-  }
+        builder.setValidator(new InputValidatorEx() {
+            @Override
+            public String getErrorText(String inputString) {
+                if (inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString)) {
+                    return "This is not a valid Java qualified name";
+                }
+                return null;
+            }
 
-  @Override
-  protected Class<? extends ModuleExtension> getModuleExtensionClass() {
-    return JavaModuleExtension.class;
-  }
+            @RequiredUIAccess
+            @Override
+            public boolean checkInput(String inputString) {
+                return true;
+            }
 
-  @Nonnull
-  @Override
-  protected LocalizeValue getErrorTitle() {
-    return JavaCoreLocalize.titleCannotCreateClass();
-  }
+            @RequiredUIAccess
+            @Override
+            public boolean canClose(String inputString) {
+                return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
+            }
+        });
+    }
 
-  @Nonnull
-  @Override
-  protected LocalizeValue getActionName(PsiDirectory directory, String newName, String templateName) {
-    return JavaCoreLocalize.progressCreatingClass(StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(), newName));
-  }
+    @Override
+    protected Class<? extends ModuleExtension> getModuleExtensionClass() {
+        return JavaModuleExtension.class;
+    }
 
-  @Override
-  protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
-    return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue getErrorTitle() {
+        return JavaCoreLocalize.titleCannotCreateClass();
+    }
 
-  @Override
-  protected String removeExtension(String templateName, String className) {
-    return StringUtil.trimEnd(className, ".java");
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue getActionName(PsiDirectory directory, String newName, String templateName) {
+        return JavaCoreLocalize.progressCreatingClass(StringUtil.getQualifiedName(
+            JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(),
+            newName
+        ));
+    }
 
-  @Override
-  protected PsiElement getNavigationElement(@Nonnull PsiClass createdElement) {
-    return createdElement.getLBrace();
-  }
+    @Override
+    protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
+        return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
+    }
 
-  @Override
-  protected void postProcess(PsiClass createdElement, String templateName, Map<String, String> customProperties) {
-    super.postProcess(createdElement, templateName, customProperties);
+    @Override
+    protected String removeExtension(String templateName, String className) {
+        return StringUtil.trimEnd(className, ".java");
+    }
 
-    moveCaretAfterNameIdentifier(createdElement);
-  }
+    @Override
+    protected PsiElement getNavigationElement(@Nonnull PsiClass createdElement) {
+        return createdElement.getLBrace();
+    }
+
+    @Override
+    @RequiredUIAccess
+    protected void postProcess(PsiClass createdElement, String templateName, Map<String, String> customProperties) {
+        super.postProcess(createdElement, templateName, customProperties);
+
+        moveCaretAfterNameIdentifier(createdElement);
+    }
 }

@@ -39,12 +39,6 @@
 	</permissions>
 
 	<actions>
-		<group id="NewJavaSpecialFile">
-			<action id="NewPackageInfo" class="com.intellij.java.impl.ide.actions.CreatePackageInfoAction" require-module-extensions="java"/>
-			<action id="NewModuleInfo" class="com.intellij.java.impl.ide.actions.CreateModuleInfoAction" require-module-extensions="java"/>
-			<add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
-		</group>
-
 		<group id="JavaGenerateGroup1">
 			<action id="GenerateTestMethod" class="com.intellij.java.impl.testIntegration.GenerateTestMethodAction"/>
 			<action id="GenerateSetUpMethod" class="com.intellij.java.impl.testIntegration.GenerateSetUpMethodAction"/>
@@ -65,10 +59,6 @@
 			<action id="GenerateSuperMethodCall" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSuperMethodCallAction"/>
 			<add-to-group group-id="GenerateGroup" anchor="last"/>
 		</group>
-
-		<action id="JavaNewClass" class="com.intellij.java.impl.ide.actions.CreateClassAction">
-			<add-to-group group-id="NewGroup1" anchor="first"/>
-		</action>
 
 		<group id="RefactoringMenu1">
 			<action id="ChangeTypeSignature"
