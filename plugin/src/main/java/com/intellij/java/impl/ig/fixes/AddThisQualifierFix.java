@@ -25,6 +25,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -32,8 +33,8 @@ import org.jetbrains.annotations.NonNls;
 public class AddThisQualifierFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.addThisQualifierQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.addThisQualifierQuickfix();
   }
 
   @Override

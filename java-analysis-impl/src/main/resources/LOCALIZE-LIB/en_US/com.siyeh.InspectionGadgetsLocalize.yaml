@@ -2000,14 +2000,20 @@ magic.number.display.name:
     text: Magic number
 magic.number.problem.descriptor:
     text: 'Magic number <code>#ref</code> #loc'
+make.class.cloneable.quickfix:
+    text: Make class 'Cloneable'
 make.class.final.fix.name:
     text: Make class ''{0}'' ''final''
+make.class.serializable.quickfix:
+    text: Make class 'Serializable'
 make.constructor.public:
     text: Make constructor 'public'
 make.field.final.quickfix:
     text: Make ''{0}'' ''final''
 make.initialization.explicit.quickfix:
     text: Make initialization explicit
+make.interface.cloneable.quickfix:
+    text: Make interface 'Cloneable'
 make.method.ctr.quickfix:
     text: Make method constructor
 make.method.final.fix.name:

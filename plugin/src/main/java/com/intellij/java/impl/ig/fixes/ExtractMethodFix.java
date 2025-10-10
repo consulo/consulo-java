@@ -25,13 +25,14 @@ import consulo.dataContext.DataManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class ExtractMethodFix extends InspectionGadgetsFix {
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.extractMethodQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.extractMethodQuickfix();
   }
 
   public void doFix(final Project project, ProblemDescriptor descriptor) {

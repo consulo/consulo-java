@@ -26,13 +26,14 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class MoveClassFix extends InspectionGadgetsFix {
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.moveClassQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.moveClassQuickfix();
   }
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {

@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -30,8 +31,8 @@ import org.jetbrains.annotations.NonNls;
 public class MakeInitializerExplicitFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.makeInitializationExplicitQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.makeInitializationExplicitQuickfix();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

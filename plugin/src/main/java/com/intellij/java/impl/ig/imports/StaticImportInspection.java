@@ -24,6 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import jakarta.annotation.Nonnull;
@@ -45,7 +46,7 @@ public class StaticImportInspection extends StaticImportInspectionBase {
     final PsiClass aClass = importStaticStatement.resolveTargetClass();
     if (aClass != null) {
       final String name = aClass.getQualifiedName();
-      result.add(new IgnoreClassFix(name, allowedClasses, "Allow static imports for class '" + name + "'"));
+      result.add(new IgnoreClassFix(name, allowedClasses, LocalizeValue.localizeTODO("Allow static imports for class '" + name + "'")));
     }
     result.add(buildFix(infos));
     return result.toArray(InspectionGadgetsFix.EMPTY_ARRAY);

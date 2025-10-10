@@ -25,6 +25,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -32,8 +33,8 @@ import org.jetbrains.annotations.NonNls;
 public class EqualityToEqualsFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.objectComparisonReplaceQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.objectComparisonReplaceQuickfix();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

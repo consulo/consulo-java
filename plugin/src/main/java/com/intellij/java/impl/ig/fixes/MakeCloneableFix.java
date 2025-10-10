@@ -16,13 +16,14 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -35,13 +36,11 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
+  public LocalizeValue getName() {
     if (isInterface) {
-      return InspectionGadgetsBundle.message(
-          "make.interface.cloneable.quickfix");
+      return InspectionGadgetsLocalize.makeInterfaceCloneableQuickfix();
     } else {
-      return InspectionGadgetsBundle.message(
-          "make.class.cloneable.quickfix");
+      return InspectionGadgetsLocalize.makeClassCloneableQuickfix();
     }
   }
 

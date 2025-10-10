@@ -26,6 +26,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -35,8 +36,8 @@ import java.util.Collection;
 public class InlineVariableFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.inlineVariableQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.inlineVariableQuickfix();
   }
 
   @Override

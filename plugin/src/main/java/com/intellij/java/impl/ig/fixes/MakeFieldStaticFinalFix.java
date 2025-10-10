@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -58,8 +59,8 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.makeStaticFinalQuickfix(fieldName).get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.makeStaticFinalQuickfix(fieldName);
   }
 
   @Override

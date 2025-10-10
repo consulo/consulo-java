@@ -15,25 +15,25 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class InlineCallFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.inlineCallQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.inlineCallQuickfix();
   }
 
   @RequiredReadAction

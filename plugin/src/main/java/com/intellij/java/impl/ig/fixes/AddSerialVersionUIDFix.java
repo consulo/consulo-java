@@ -25,14 +25,15 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class AddSerialVersionUIDFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.addSerialversionuidfieldQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.addSerialversionuidfieldQuickfix();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

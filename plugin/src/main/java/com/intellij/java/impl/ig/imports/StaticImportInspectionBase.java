@@ -32,6 +32,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -53,8 +54,8 @@ public class StaticImportInspectionBase extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticImportDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.staticImportDisplayName();
   }
 
   @Override
@@ -82,8 +83,8 @@ public class StaticImportInspectionBase extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getFamilyName() {
-      return InspectionGadgetsLocalize.staticImportReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.staticImportReplaceQuickfix();
     }
 
     @Override

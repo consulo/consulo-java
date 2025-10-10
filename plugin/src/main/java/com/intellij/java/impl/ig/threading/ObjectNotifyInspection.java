@@ -61,8 +61,8 @@ public class ObjectNotifyInspection extends BaseInspection {
   private static class ObjectNotifyFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.objectNotifyReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.objectNotifyReplaceQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

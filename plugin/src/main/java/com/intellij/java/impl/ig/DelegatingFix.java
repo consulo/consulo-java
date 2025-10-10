@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig;
 
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -33,12 +34,7 @@ public class DelegatingFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
-    return delegate.getName();
-  }
-
-  @Nonnull
-  public String getFamilyName() {
+  public LocalizeValue getName() {
     return delegate.getName();
   }
 

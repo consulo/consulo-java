@@ -25,14 +25,15 @@ import consulo.dataContext.DataManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class IntroduceConstantFix extends InspectionGadgetsFix {
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.introduceConstantQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.introduceConstantQuickfix();
   }
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {

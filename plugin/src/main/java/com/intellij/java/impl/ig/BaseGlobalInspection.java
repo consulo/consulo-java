@@ -23,27 +23,22 @@ import consulo.language.Language;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
-public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection
-{
-	@Override
-	@Nonnull
-	public final LocalizeValue getGroupDisplayName()
-	{
-		return GroupDisplayNameUtil.getGroupDisplayName(getClass());
-	}
+public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
+    @Override
+    @Nonnull
+    public final LocalizeValue getGroupDisplayName() {
+        return GroupDisplayNameUtil.getGroupDisplayName(getClass());
+    }
 
-	@Nullable
-	@Override
-	public Language getLanguage()
-	{
-		return JavaLanguage.INSTANCE;
-	}
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 
-	@Override
-	public boolean isEnabledByDefault()
-	{
-		return false;
-	}
+    @Override
+    public boolean isEnabledByDefault() {
+        return false;
+    }
 }

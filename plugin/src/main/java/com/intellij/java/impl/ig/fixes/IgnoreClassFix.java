@@ -5,6 +5,7 @@ package com.intellij.java.impl.ig.fixes;
 
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
@@ -22,24 +23,16 @@ public class IgnoreClassFix extends InspectionGadgetsFix {
   final String myQualifiedName;
   private final String myFixName;
 
-  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, String fixName) {
+  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, LocalizeValue fixName) {
     myIgnoredClasses = ignoredClasses;
     myQualifiedName = qualifiedName;
     myFixName = fixName;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getName() {
+  public LocalizeValue getName() {
     return myFixName;
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Ignore for these types";
   }
 
   @Override

@@ -28,6 +28,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import jakarta.annotation.Nonnull;
@@ -35,63 +36,47 @@ import jakarta.annotation.Nonnull;
 /**
  * @author Bas Leijdekkers
  */
-class MakePublicStaticVoidFix extends InspectionGadgetsFix
-{
-	private final String myName;
-	private final boolean myMakeStatic;
-	private final String myNewVisibility;
+class MakePublicStaticVoidFix extends InspectionGadgetsFix {
+    private final LocalizeValue myName;
+    private final boolean myMakeStatic;
+    private final String myNewVisibility;
 
-	public MakePublicStaticVoidFix(PsiMethod method, boolean makeStatic)
-	{
-		this(method, makeStatic, PsiModifier.PUBLIC);
-	}
+    public MakePublicStaticVoidFix(PsiMethod method, boolean makeStatic) {
+        this(method, makeStatic, PsiModifier.PUBLIC);
+    }
 
-	public MakePublicStaticVoidFix(PsiMethod method, boolean makeStatic, @PsiModifier.ModifierConstant String newVisibility)
-	{
-		String presentableVisibility = VisibilityUtil.getVisibilityString(newVisibility);
-		myName = "Change signature of \'" + PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_MODIFIERS | PsiFormatUtilBase
-				.SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_TYPE, PsiFormatUtilBase.SHOW_TYPE) + "\' to \'" + (presentableVisibility.isEmpty() ? "" : presentableVisibility + " ") + (makeStatic ?
-				"static " : "") + "void " + method.getName() + "()\'";
-		myMakeStatic = makeStatic;
-		myNewVisibility = newVisibility;
-	}
+    public MakePublicStaticVoidFix(PsiMethod method, boolean makeStatic, @PsiModifier.ModifierConstant String newVisibility) {
+        String presentableVisibility = VisibilityUtil.getVisibilityString(newVisibility);
+        myName = LocalizeValue.localizeTODO("Change signature of \'" + PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_MODIFIERS | PsiFormatUtilBase
+            .SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_TYPE, PsiFormatUtilBase.SHOW_TYPE) + "\' to \'" + (presentableVisibility.isEmpty() ? "" : presentableVisibility + " ") + (makeStatic ?
+            "static " : "") + "void " + method.getName() + "()\'");
+        myMakeStatic = makeStatic;
+        myNewVisibility = newVisibility;
+    }
 
-	@Override
-	protected void doFix(final Project project, ProblemDescriptor descriptor)
-	{
-		final PsiMethod method = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
-		if(method != null)
-		{
-			ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project, method, false, myNewVisibility, method.getName(), PsiType.VOID, new ParameterInfoImpl[0])
-			{
-				@Override
-				protected void performRefactoring(@Nonnull UsageInfo[] usages)
-				{
-					super.performRefactoring(usages);
-					PsiUtil.setModifierProperty(method, PsiModifier.STATIC, myMakeStatic);
-				}
-			};
-			csp.run();
-		}
-	}
+    @Override
+    protected void doFix(final Project project, ProblemDescriptor descriptor) {
+        final PsiMethod method = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
+        if (method != null) {
+            ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project, method, false, myNewVisibility, method.getName(), PsiType.VOID, new ParameterInfoImpl[0]) {
+                @Override
+                protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+                    super.performRefactoring(usages);
+                    PsiUtil.setModifierProperty(method, PsiModifier.STATIC, myMakeStatic);
+                }
+            };
+            csp.run();
+        }
+    }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Fix modifiers";
-	}
-
-	@Override
-	@Nonnull
-	public String getName()
-	{
-		return myName;
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getName() {
+        return myName;
+    }
 }
