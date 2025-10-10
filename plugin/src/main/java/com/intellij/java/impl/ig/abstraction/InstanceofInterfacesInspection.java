@@ -35,8 +35,8 @@ public class InstanceofInterfacesInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceofConcreteClassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.instanceofConcreteClassDisplayName();
   }
 
   @Override

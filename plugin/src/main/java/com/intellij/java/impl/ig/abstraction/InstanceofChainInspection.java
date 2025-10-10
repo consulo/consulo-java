@@ -42,8 +42,8 @@ public class InstanceofChainInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.chainOfInstanceofChecksDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.chainOfInstanceofChecksDisplayName();
   }
 
   @Override

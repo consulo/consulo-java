@@ -35,8 +35,8 @@ public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceVariableOfConcreteClassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.instanceVariableOfConcreteClassDisplayName();
   }
 
   @Override

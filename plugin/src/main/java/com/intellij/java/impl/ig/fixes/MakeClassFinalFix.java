@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.application.AccessToken;
-import consulo.application.WriteAction;
-import consulo.project.Project;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.util.IncorrectOperationException;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 
 /**
 * @author Bas Leijdekkers
@@ -50,8 +49,8 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.makeClassFinalFixName(className).get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.makeClassFinalFixName(className);
   }
 
   @Override

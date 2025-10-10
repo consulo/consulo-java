@@ -23,6 +23,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiNamedElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -30,8 +31,8 @@ import jakarta.annotation.Nullable;
 public class ClassReferencesSubclassInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classReferencesSubclassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classReferencesSubclassDisplayName();
   }
 
   @Nonnull
