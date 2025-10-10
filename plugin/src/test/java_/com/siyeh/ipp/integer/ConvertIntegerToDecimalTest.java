@@ -15,26 +15,49 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertIntegerToDecimalTest extends IPPTestCase {
-  public void testHexToDec1() { doTest(); }
-  public void testHexToDec2() { doTest(); }
-  public void testHexToDec3() { doTest(); }
-  public void testHexToDec4() { doTest(); }
-  public void testOctToDec1() { doTest(); }
-  public void testOctToDec2() { doTest(); }
-  public void testBinToDec1() { doTest(); }
-  public void testBinToDec2() { doTest(); }
+    public void testHexToDec1() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.integer.to.decimal.intention.name");
-  }
+    public void testHexToDec2() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "integer";
-  }
+    public void testHexToDec3() {
+        doTest();
+    }
+
+    public void testHexToDec4() {
+        doTest();
+    }
+
+    public void testOctToDec1() {
+        doTest();
+    }
+
+    public void testOctToDec2() {
+        doTest();
+    }
+
+    public void testBinToDec1() {
+        doTest();
+    }
+
+    public void testBinToDec2() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertIntegerToDecimalIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "integer";
+    }
 }

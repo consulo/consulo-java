@@ -15,25 +15,38 @@
  */
 package com.siyeh.ipp.trivialif;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertToNestedIfIntentionTest extends IPPTestCase {
 
-  public void testNested() { doTest(); }
-  public void testStaircase() { doTest(); }
-  public void testOneLevelStaircase() { assertIntentionNotAvailable(); }
+    public void testNested() {
+        doTest();
+    }
 
-  public void testAndOrMixed() { doTest(); }
-  public void testOrAndMixed() { doTest(); }
+    public void testStaircase() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.to.nested.if.intention.name");
-  }
+    public void testOneLevelStaircase() {
+        assertIntentionNotAvailable();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "trivialif/convert_to_nested_if";
-  }
+    public void testAndOrMixed() {
+        doTest();
+    }
+
+    public void testOrAndMixed() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertToNestedIfIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "trivialif/convert_to_nested_if";
+    }
 }

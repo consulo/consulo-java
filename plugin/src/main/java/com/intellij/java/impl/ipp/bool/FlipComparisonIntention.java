@@ -20,7 +20,6 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.localize.IntentionPowerPackLocalize;

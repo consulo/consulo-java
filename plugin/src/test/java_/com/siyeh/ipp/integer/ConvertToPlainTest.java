@@ -15,21 +15,29 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertToPlainTest extends IPPTestCase {
-  public void testToPlain() { doTest(); }
-  public void testNegatedFloatToPlain() { doTest(); }
-  public void testWithUnderscoresToPlain() { doTest(); }
+    public void testToPlain() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.to.plain.intention.name");
-  }
+    public void testNegatedFloatToPlain() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "float";
-  }
+    public void testWithUnderscoresToPlain() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertToPlainIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "float";
+    }
 }

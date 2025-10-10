@@ -15,21 +15,29 @@
  */
 package com.siyeh.ipp.bool;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class DemorgansIntentionTest extends IPPTestCase {
-  public void testNeedsParentheses() { doTest(); }
-  public void testNeedsMoreParentheses() { doTest(); }
-  public void testNotTooManyParentheses() { doTest(); }
+    public void testNeedsParentheses() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("demorgans.intention.name2");
-  }
+    public void testNeedsMoreParentheses() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "bool/demorgans";
-  }
+    public void testNotTooManyParentheses() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.demorgansIntentionName2().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "bool/demorgans";
+    }
 }

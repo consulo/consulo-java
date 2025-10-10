@@ -15,20 +15,25 @@
  */
 package com.siyeh.ipp.exceptions;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class SplitMultiCatchIntentionTest extends IPPTestCase {
-  public void testSimple() { doTest(); }
-  public void testTypeAnno() { doTest(); }
+    public void testSimple() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("split.multi.catch.intention.name");
-  }
+    public void testTypeAnno() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "exceptions/splitMultiCatch";
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.splitMultiCatchIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "exceptions/splitMultiCatch";
+    }
 }

@@ -21,7 +21,7 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.application.WriteAction;
 import consulo.application.util.query.Query;
 import consulo.language.editor.intention.LowPriorityAction;
@@ -96,11 +96,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
                 return MultiMap.empty();
             }
             final MultiMap<PsiElement, String> conflicts = new MultiMap();
-            conflicts.putValue(aClass, IntentionPowerPackBundle.message(
-                "0.is.declared.in.1.but.when.public.should.be.declared.in.a.file.named.2",
-                RefactoringUIUtil.getDescription(aClass, false),
-                RefactoringUIUtil.getDescription(javaFile, false),
-                CommonRefactoringUtil.htmlEmphasize(className + ".java")));
+            conflicts.putValue(aClass, IntentionPowerPackLocalize.zeroIsDeclaredIn1ButWhenPublicShouldBeDeclaredInAFileNamed2(RefactoringUIUtil.getDescription(aClass, false), RefactoringUIUtil.getDescription(javaFile, false), CommonRefactoringUtil.htmlEmphasize(className + ".java")).get());
             return conflicts;
         }
         final PsiModifierList modifierList = member.getModifierList();
@@ -113,25 +109,16 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
             SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(methodSignature -> {
                 final PsiMethod superMethod = methodSignature.getMethod();
                 if (!hasCompatibleVisibility(superMethod, true)) {
-                    conflicts.putValue(superMethod, IntentionPowerPackBundle.message(
-                        "0.will.have.incompatible.access.privileges.with.super.1",
-                        RefactoringUIUtil.getDescription(method, false),
-                        RefactoringUIUtil.getDescription(superMethod, true)));
+                    conflicts.putValue(superMethod, IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(superMethod, true)).get());
                 }
                 return true;
             });
             OverridingMethodsSearch.search(method).forEach(overridingMethod -> {
                 if (!isVisibleFromOverridingMethod(method, overridingMethod)) {
-                    conflicts.putValue(overridingMethod, IntentionPowerPackBundle.message(
-                        "0.will.no.longer.be.visible.from.overriding.1",
-                        RefactoringUIUtil.getDescription(method, false),
-                        RefactoringUIUtil.getDescription(overridingMethod, true)));
+                    conflicts.putValue(overridingMethod, IntentionPowerPackLocalize.zeroWillNoLongerBeVisibleFromOverriding1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(overridingMethod, true)).get());
                 }
                 else if (!hasCompatibleVisibility(overridingMethod, false)) {
-                    conflicts.putValue(overridingMethod, IntentionPowerPackBundle.message(
-                        "0.will.have.incompatible.access.privileges.with.overriding.1",
-                        RefactoringUIUtil.getDescription(method, false),
-                        RefactoringUIUtil.getDescription(overridingMethod, true)));
+                    conflicts.putValue(overridingMethod, IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithOverriding1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(overridingMethod, true)).get());
                 }
                 return false;
             });

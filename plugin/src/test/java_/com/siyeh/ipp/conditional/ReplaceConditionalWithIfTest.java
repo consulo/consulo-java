@@ -16,24 +16,37 @@
 package com.siyeh.ipp.conditional;
 
 import com.intellij.java.impl.ipp.conditional.ReplaceConditionalWithIfIntention;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @see ReplaceConditionalWithIfIntention
  */
 public abstract class ReplaceConditionalWithIfTest extends IPPTestCase {
 
-    public void testConditionalAsArgument() { doTest(); }
-    public void testComment() { doTest(); }
-    public void testParentheses() { doTest(); }
-    public void testConditionalInIf() { doTest(); }
-    public void testConditionalInBinaryExpression() { doTest(); }
+    public void testConditionalAsArgument() {
+        doTest();
+    }
+
+    public void testComment() {
+        doTest();
+    }
+
+    public void testParentheses() {
+        doTest();
+    }
+
+    public void testConditionalInIf() {
+        doTest();
+    }
+
+    public void testConditionalInBinaryExpression() {
+        doTest();
+    }
 
     @Override
     protected String getIntentionName() {
-        return IntentionPowerPackBundle.message(
-                "replace.conditional.with.if.intention.name");
+        return IntentionPowerPackLocalize.replaceConditionalWithIfIntentionName().get();
     }
 
     @Override

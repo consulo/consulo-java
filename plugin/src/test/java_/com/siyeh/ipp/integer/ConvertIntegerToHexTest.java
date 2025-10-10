@@ -15,26 +15,49 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertIntegerToHexTest extends IPPTestCase {
-  public void testDecToHex1() { doTest(); }
-  public void testDecToHex2() { doTest(); }
-  public void testDecToHex3() { doTest(); }
-  public void testDecToHex4() { doTest(); }
-  public void testOctToHex1() { doTest(); }
-  public void testOctToHex2() { doTest(); }
-  public void testBinToHex1() { doTest(); }
-  public void testBinToHex2() { doTest(); }
+    public void testDecToHex1() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.integer.to.hex.intention.name");
-  }
+    public void testDecToHex2() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "integer";
-  }
+    public void testDecToHex3() {
+        doTest();
+    }
+
+    public void testDecToHex4() {
+        doTest();
+    }
+
+    public void testOctToHex1() {
+        doTest();
+    }
+
+    public void testOctToHex2() {
+        doTest();
+    }
+
+    public void testBinToHex1() {
+        doTest();
+    }
+
+    public void testBinToHex2() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertIntegerToHexIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "integer";
+    }
 }

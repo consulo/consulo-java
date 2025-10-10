@@ -16,25 +16,36 @@
 package com.siyeh.ipp.expression;
 
 import com.intellij.java.impl.ipp.expression.FlipExpressionIntention;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @see FlipExpressionIntention
  */
 public abstract class FlipExpressionIntentionTest extends IPPTestCase {
-  public void testPrefix() { doTest(); }
-  public void testPolyadic() { doTest(); }
-  public void testNoChange() { assertIntentionNotAvailable(); }
-  public void testNoException() { assertIntentionNotAvailable(); }
+    public void testPrefix() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("flip.smth.intention.name1", "-");
-  }
+    public void testPolyadic() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "expression/flip_expression";
-  }
+    public void testNoChange() {
+        assertIntentionNotAvailable();
+    }
+
+    public void testNoException() {
+        assertIntentionNotAvailable();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.flipSmthIntentionName1("-").get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "expression/flip_expression";
+    }
 }

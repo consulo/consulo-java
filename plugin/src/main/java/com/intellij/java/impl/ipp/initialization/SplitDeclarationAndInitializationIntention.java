@@ -19,7 +19,6 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -127,8 +126,6 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
         final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
         codeStyleManager.reformat(field);
         codeStyleManager.reformat(classInitializer);
-        HighlightUtil.highlightElement(addedElement,
-            IntentionPowerPackBundle.message(
-                "press.escape.to.remove.highlighting.message"));
+        HighlightUtil.highlightElement(addedElement);
     }
 }

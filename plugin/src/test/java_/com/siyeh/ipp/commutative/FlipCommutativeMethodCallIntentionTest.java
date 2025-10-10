@@ -15,15 +15,17 @@
  */
 package com.siyeh.ipp.commutative;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class FlipCommutativeMethodCallIntentionTest extends IPPTestCase {
-    public void testSubstitution() { doTest(); }
+    public void testSubstitution() {
+        doTest();
+    }
 
     @Override
     protected String getIntentionName() {
-        return IntentionPowerPackBundle.message("flip.commutative.method.call.intention.name1", "foo");
+        return IntentionPowerPackLocalize.flipCommutativeMethodCallIntentionName1("foo").get();
     }
 
     @Override

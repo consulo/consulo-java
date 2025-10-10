@@ -15,21 +15,29 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertInterfaceToClassTest extends IPPTestCase {
-  public void testBasic() { doTest(); }
-  public void testExtensionMethods() { doTest(); }
-  public void testInnerInterface() { doTest(); }
+    public void testBasic() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "interfaceToClass";
-  }
+    public void testExtensionMethods() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.interface.to.class.intention.name");
-  }
+    public void testInnerInterface() {
+        doTest();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "interfaceToClass";
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertInterfaceToClassIntentionName().get();
+    }
 }

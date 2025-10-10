@@ -15,21 +15,29 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertToScientificNotationTest extends IPPTestCase {
-  public void testToSci() { doTest(); }
-  public void testNegatedFloatToSci() { doTest(); }
-  public void testWithUnderscoresToSci() { doTest(); }
+    public void testToSci() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.to.scientific.notation.intention.name");
-  }
+    public void testNegatedFloatToSci() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "float";
-  }
+    public void testWithUnderscoresToSci() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertToScientificNotationIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "float";
+    }
 }

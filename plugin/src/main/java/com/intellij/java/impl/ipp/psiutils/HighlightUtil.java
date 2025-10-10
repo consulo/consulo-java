@@ -43,9 +43,7 @@ public class HighlightUtil {
   private HighlightUtil() {
   }
 
-  public static void highlightElements(
-    @Nonnull final Collection<? extends PsiElement> elementCollection,
-    @Nonnull final String statusBarText) {
+  public static void highlightElements(@Nonnull final Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }
@@ -75,9 +73,9 @@ public class HighlightUtil {
     });
   }
 
-  public static void highlightElement(@Nonnull PsiElement element, @Nonnull final String statusBarText) {
+  public static void highlightElement(@Nonnull PsiElement element) {
     final List<PsiElement> elements = Collections.singletonList(element);
-    highlightElements(elements, statusBarText);
+    highlightElements(elements);
   }
 
   @RequiredReadAction

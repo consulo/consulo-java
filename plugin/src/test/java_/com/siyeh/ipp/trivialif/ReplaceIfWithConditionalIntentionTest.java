@@ -15,31 +15,30 @@
  */
 package com.siyeh.ipp.trivialif;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceIfWithConditionalIntentionTest extends IPPTestCase {
 
-  public void testReturnValueWithDiamonds() {
-    doTest();
-  }
+    public void testReturnValueWithDiamonds() {
+        doTest();
+    }
 
-  public void testReplaceableAssignmentsWithDiamonds() {
-    doTest();
-  }
+    public void testReplaceableAssignmentsWithDiamonds() {
+        doTest();
+    }
 
-  public void testReplaceableAssignmentsWithDiamondsLeave() {
-    doTest();
-  }
+    public void testReplaceableAssignmentsWithDiamondsLeave() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackLocalize.replaceIfWithConditionalIntentionName().get();
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceIfWithConditionalIntentionName().get();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "trivialif/replaceIfWithConditional";
-  }
+    @Override
+    protected String getRelativePath() {
+        return "trivialif/replaceIfWithConditional";
+    }
 }

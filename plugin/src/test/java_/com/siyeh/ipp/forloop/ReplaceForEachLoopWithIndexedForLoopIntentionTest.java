@@ -15,22 +15,29 @@
  */
 package com.siyeh.ipp.forloop;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceForEachLoopWithIndexedForLoopIntentionTest extends IPPTestCase {
-  public void testLabeledForLoop() { doTest(); }
-  public void testNormalForeachLoop() { doTest(); }
-  public void testNewArray() { doTest(); }
+    public void testLabeledForLoop() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackLocalize.replaceForEachLoopWithOptimizedIndexedForLoopIntentionName().get();
-  }
+    public void testNormalForeachLoop() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "forloop/indexed";
-  }
+    public void testNewArray() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceForEachLoopWithOptimizedIndexedForLoopIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "forloop/indexed";
+    }
 }

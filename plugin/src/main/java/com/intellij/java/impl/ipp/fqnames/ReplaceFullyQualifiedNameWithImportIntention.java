@@ -21,7 +21,6 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
 import com.intellij.java.impl.ipp.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -89,18 +88,7 @@ public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
         final QualificationRemover qualificationRemover = new QualificationRemover(fullyQualifiedText);
         file.accept(qualificationRemover);
         final Collection<PsiJavaCodeReferenceElement> shortenedElements = qualificationRemover.getShortenedElements();
-        final int elementCount = shortenedElements.size();
-        final String text;
-        if (elementCount == 1) {
-            text = IntentionPowerPackBundle.message(
-                "1.fully.qualified.name.status.bar.escape.highlighting.message");
-        }
-        else {
-            text = IntentionPowerPackBundle.message(
-                "multiple.fully.qualified.names.status.bar.escape.highlighting.message",
-                Integer.valueOf(elementCount));
-        }
-        HighlightUtil.highlightElements(shortenedElements, text);
+        HighlightUtil.highlightElements(shortenedElements);
     }
 
     private static class QualificationRemover extends JavaRecursiveElementWalkingVisitor {

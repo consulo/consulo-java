@@ -1,23 +1,25 @@
 
 package com.siyeh.ipp.concatenation;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @author Bas Leijdekkers
  */
 public abstract class MergeCallSequenceToChainIntentionTest extends IPPTestCase {
 
-  public void testAppend() { doTest(); }
+    public void testAppend() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("merge.call.sequence.to.chain.intention.name");
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.mergeCallSequenceToChainIntentionName().get();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "concatenation/merge_sequence";
-  }
+    @Override
+    protected String getRelativePath() {
+        return "concatenation/merge_sequence";
+    }
 }

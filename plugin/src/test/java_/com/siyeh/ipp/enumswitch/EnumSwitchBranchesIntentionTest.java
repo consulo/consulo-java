@@ -15,25 +15,25 @@
  */
 package com.siyeh.ipp.enumswitch;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class EnumSwitchBranchesIntentionTest extends IPPTestCase {
-  public void testWithoutBraces() throws Exception {
-    doTest();
-  }
+    public void testWithoutBraces() throws Exception {
+        doTest();
+    }
 
-  public void testNoActionAfterBraces() throws Exception {
-    assertIntentionNotAvailable();
-  }
+    public void testNoActionAfterBraces() throws Exception {
+        assertIntentionNotAvailable();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("create.enum.switch.branches.intention.name");
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.createEnumSwitchBranchesIntentionName().get();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "enumswitch";
-  }
+    @Override
+    protected String getRelativePath() {
+        return "enumswitch";
+    }
 }

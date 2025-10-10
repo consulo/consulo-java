@@ -15,24 +15,41 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertIntegerToOctalTest extends IPPTestCase {
-  public void testDecToOct1() { doTest(); }
-  public void testDecToOct2() { doTest(); }
-  public void testHexToOct1() { doTest(); }
-  public void testHexToOct2() { doTest(); }
-  public void testBinToOct1() { doTest(); }
-  public void testBinToOct2() { doTest(); }
+    public void testDecToOct1() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.integer.to.octal.intention.name");
-  }
+    public void testDecToOct2() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "integer";
-  }
+    public void testHexToOct1() {
+        doTest();
+    }
+
+    public void testHexToOct2() {
+        doTest();
+    }
+
+    public void testBinToOct1() {
+        doTest();
+    }
+
+    public void testBinToOct2() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertIntegerToOctalIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "integer";
+    }
 }

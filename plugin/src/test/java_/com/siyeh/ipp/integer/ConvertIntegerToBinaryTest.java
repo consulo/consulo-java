@@ -15,24 +15,41 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertIntegerToBinaryTest extends IPPTestCase {
-  public void testDecToBin1() { doTest(); }
-  public void testDecToBin2() { doTest(); }
-  public void testHexToBin1() { doTest(); }
-  public void testHexToBin2() { doTest(); }
-  public void testOctToBin1() { doTest(); }
-  public void testOctToBin2() { doTest(); }
+    public void testDecToBin1() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.integer.to.binary.intention.name");
-  }
+    public void testDecToBin2() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "integer";
-  }
+    public void testHexToBin1() {
+        doTest();
+    }
+
+    public void testHexToBin2() {
+        doTest();
+    }
+
+    public void testOctToBin1() {
+        doTest();
+    }
+
+    public void testOctToBin2() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertIntegerToBinaryIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "integer";
+    }
 }

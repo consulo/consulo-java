@@ -15,20 +15,33 @@
  */
 package com.siyeh.ipp.concatenation;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceConcatenationWithFormatStringTest extends IPPTestCase {
-    public void testNumericBinaryExpression() { doTest(); }
-    public void testHexadecimalLiteral() { doTest(); }
-    public void testPercentInLiteral() { doTest(); }
-    public void testParameters() { doTest(); }
-    public void testLineSeparator() { doTest(); }
+    public void testNumericBinaryExpression() {
+        doTest();
+    }
+
+    public void testHexadecimalLiteral() {
+        doTest();
+    }
+
+    public void testPercentInLiteral() {
+        doTest();
+    }
+
+    public void testParameters() {
+        doTest();
+    }
+
+    public void testLineSeparator() {
+        doTest();
+    }
 
     @Override
     protected String getIntentionName() {
-        return IntentionPowerPackBundle.message(
-                "replace.concatenation.with.format.string.intention.name");
+        return IntentionPowerPackLocalize.replaceConcatenationWithFormatStringIntentionName().get();
     }
 
     @Override
