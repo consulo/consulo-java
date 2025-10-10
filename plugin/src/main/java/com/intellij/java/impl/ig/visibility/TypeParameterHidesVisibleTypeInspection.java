@@ -31,7 +31,7 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
   @Nonnull
   public LocalizeValue getDisplayName() {
-    return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeDisplayName().;
+    return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
