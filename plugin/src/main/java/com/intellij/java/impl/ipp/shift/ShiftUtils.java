@@ -20,9 +20,7 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 
 class ShiftUtils {
-
   private ShiftUtils() {
-    super();
   }
 
   public static boolean isPowerOfTwo(PsiExpression rhs) {

@@ -22,63 +22,71 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceEqualsWithEqualityIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceEqualsWithEqualityIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceEqualsWithEqualityIntentionName();
+    }
 
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new EqualsPredicate();
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new EqualsPredicate();
+    }
 
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiMethodCallExpression call =
-      (PsiMethodCallExpression)element;
-    if (call == null) {
-      return;
+    @Override
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiMethodCallExpression call =
+            (PsiMethodCallExpression) element;
+        if (call == null) {
+            return;
+        }
+        final PsiReferenceExpression methodExpression =
+            call.getMethodExpression();
+        final PsiExpression target = methodExpression.getQualifierExpression();
+        if (target == null) {
+            return;
+        }
+        final PsiExpressionList argumentList = call.getArgumentList();
+        final PsiExpression arg = argumentList.getExpressions()[0];
+        final PsiExpression strippedTarget =
+            ParenthesesUtils.stripParentheses(target);
+        if (strippedTarget == null) {
+            return;
+        }
+        final PsiExpression strippedArg =
+            ParenthesesUtils.stripParentheses(arg);
+        if (strippedArg == null) {
+            return;
+        }
+        final String strippedArgText;
+        if (ParenthesesUtils.getPrecedence(strippedArg) >
+            ParenthesesUtils.EQUALITY_PRECEDENCE) {
+            strippedArgText = '(' + strippedArg.getText() + ')';
+        }
+        else {
+            strippedArgText = strippedArg.getText();
+        }
+        final String strippedTargetText;
+        if (ParenthesesUtils.getPrecedence(strippedTarget) >
+            ParenthesesUtils.EQUALITY_PRECEDENCE) {
+            strippedTargetText = '(' + strippedTarget.getText() + ')';
+        }
+        else {
+            strippedTargetText = strippedTarget.getText();
+        }
+        replaceExpression(strippedTargetText + "==" + strippedArgText, call);
     }
-    final PsiReferenceExpression methodExpression =
-      call.getMethodExpression();
-    final PsiExpression target = methodExpression.getQualifierExpression();
-    if (target == null) {
-      return;
-    }
-    final PsiExpressionList argumentList = call.getArgumentList();
-    final PsiExpression arg = argumentList.getExpressions()[0];
-    final PsiExpression strippedTarget =
-      ParenthesesUtils.stripParentheses(target);
-    if (strippedTarget == null) {
-      return;
-    }
-    final PsiExpression strippedArg =
-      ParenthesesUtils.stripParentheses(arg);
-    if (strippedArg == null) {
-      return;
-    }
-    final String strippedArgText;
-    if (ParenthesesUtils.getPrecedence(strippedArg) >
-        ParenthesesUtils.EQUALITY_PRECEDENCE) {
-      strippedArgText = '(' + strippedArg.getText() + ')';
-    }
-    else {
-      strippedArgText = strippedArg.getText();
-    }
-    final String strippedTargetText;
-    if (ParenthesesUtils.getPrecedence(strippedTarget) >
-        ParenthesesUtils.EQUALITY_PRECEDENCE) {
-      strippedTargetText = '(' + strippedTarget.getText() + ')';
-    }
-    else {
-      strippedTargetText = strippedTarget.getText();
-    }
-    replaceExpression(strippedTargetText + "==" + strippedArgText, call);
-  }
 }

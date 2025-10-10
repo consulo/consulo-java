@@ -15,47 +15,41 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import jakarta.annotation.Nonnull;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ipp.base.Intention;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public abstract class ConvertNumberIntentionBase extends Intention
-{
-	@Override
-	protected void processIntention(@Nonnull final PsiElement element) throws IncorrectOperationException
-	{
-		final PsiExpression expression = (PsiExpression) element;
-		final Number value = (Number) ExpressionUtils.computeConstantExpression(expression);
-		if(value == null)
-		{
-			return;
-		}
-		final PsiType type = expression.getType();
-		final boolean negated = ExpressionUtils.isNegative(expression);
+public abstract class ConvertNumberIntentionBase extends Intention {
+    @Override
+    protected void processIntention(@Nonnull final PsiElement element) throws IncorrectOperationException {
+        final PsiExpression expression = (PsiExpression) element;
+        final Number value = (Number) ExpressionUtils.computeConstantExpression(expression);
+        if (value == null) {
+            return;
+        }
+        final PsiType type = expression.getType();
+        final boolean negated = ExpressionUtils.isNegative(expression);
 
-		final String resultString = convertValue(value, type, negated);
-		if(resultString == null)
-		{
-			return;
-		}
+        final String resultString = convertValue(value, type, negated);
+        if (resultString == null) {
+            return;
+        }
 
-		if(negated)
-		{
-			PsiReplacementUtil.replaceExpression((PsiExpression) expression.getParent(), resultString);
-		}
-		else
-		{
-			PsiReplacementUtil.replaceExpression(expression, resultString);
-		}
-	}
+        if (negated) {
+            PsiReplacementUtil.replaceExpression((PsiExpression) expression.getParent(), resultString);
+        }
+        else {
+            PsiReplacementUtil.replaceExpression(expression, resultString);
+        }
+    }
 
-	@Nullable
-	protected abstract String convertValue(final Number value, final PsiType type, final boolean negated);
+    @Nullable
+    protected abstract String convertValue(final Number value, final PsiType type, final boolean negated);
 }
 

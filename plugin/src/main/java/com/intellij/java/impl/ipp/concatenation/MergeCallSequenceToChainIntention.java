@@ -18,11 +18,13 @@ package com.intellij.java.impl.ipp.concatenation;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -31,53 +33,58 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeCallSequenceToChainIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class MergeCallSequenceToChainIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.mergeCallSequenceToChainIntentionName();
+    }
 
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new CallSequencePredicate();
-  }
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new CallSequencePredicate();
+    }
 
-  @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    if (!(element instanceof PsiExpressionStatement)) {
-      return;
+    @Override
+    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        if (!(element instanceof PsiExpressionStatement)) {
+            return;
+        }
+        final PsiExpressionStatement statement = (PsiExpressionStatement) element;
+        final PsiExpressionStatement nextSibling = PsiTreeUtil.getNextSiblingOfType(statement, PsiExpressionStatement.class);
+        if (nextSibling == null) {
+            return;
+        }
+        final PsiExpression expression = statement.getExpression();
+        final StringBuilder newMethodCallExpression = new StringBuilder(expression.getText());
+        final PsiExpression expression1 = nextSibling.getExpression();
+        if (!(expression1 instanceof PsiMethodCallExpression)) {
+            return;
+        }
+        PsiMethodCallExpression methodCallExpression = getRootMethodCallExpression((PsiMethodCallExpression) expression1);
+        while (true) {
+            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            newMethodCallExpression.append('.').append(methodName).append(argumentList.getText());
+            final PsiElement parent = methodCallExpression.getParent();
+            final PsiElement grandParent = parent.getParent();
+            if (!(grandParent instanceof PsiMethodCallExpression)) {
+                break;
+            }
+            methodCallExpression = (PsiMethodCallExpression) grandParent;
+        }
+        replaceExpression(newMethodCallExpression.toString(), expression);
+        nextSibling.delete();
     }
-    final PsiExpressionStatement statement = (PsiExpressionStatement)element;
-    final PsiExpressionStatement nextSibling = PsiTreeUtil.getNextSiblingOfType(statement, PsiExpressionStatement.class);
-    if (nextSibling == null) {
-      return;
-    }
-    final PsiExpression expression = statement.getExpression();
-    final StringBuilder newMethodCallExpression = new StringBuilder(expression.getText());
-    final PsiExpression expression1 = nextSibling.getExpression();
-    if (!(expression1 instanceof PsiMethodCallExpression)) {
-      return;
-    }
-    PsiMethodCallExpression methodCallExpression = getRootMethodCallExpression((PsiMethodCallExpression)expression1);
-    while (true) {
-      final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      newMethodCallExpression.append('.').append(methodName).append(argumentList.getText());
-      final PsiElement parent = methodCallExpression.getParent();
-      final PsiElement grandParent = parent.getParent();
-      if (!(grandParent instanceof PsiMethodCallExpression)) {
-        break;
-      }
-      methodCallExpression = (PsiMethodCallExpression)grandParent;
-    }
-    replaceExpression(newMethodCallExpression.toString(), expression);
-    nextSibling.delete();
-  }
 
-  public static PsiMethodCallExpression getRootMethodCallExpression(PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
-    if (qualifierExpression instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)qualifierExpression;
-      return getRootMethodCallExpression(methodCallExpression);
+    public static PsiMethodCallExpression getRootMethodCallExpression(PsiMethodCallExpression expression) {
+        final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+        if (qualifierExpression instanceof PsiMethodCallExpression) {
+            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
+            return getRootMethodCallExpression(methodCallExpression);
+        }
+        return expression;
     }
-    return expression;
-  }
 }

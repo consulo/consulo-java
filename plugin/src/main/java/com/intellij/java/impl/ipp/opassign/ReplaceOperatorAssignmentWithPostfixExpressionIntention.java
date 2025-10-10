@@ -21,63 +21,68 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceOperatorAssignmentWithPostfixExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceOperatorAssignmentWithPostfixExpressionIntention
-  extends MutablyNamedIntention {
+    extends MutablyNamedIntention {
 
-  @Override
-  protected String getTextForElement(PsiElement element) {
-    final PsiAssignmentExpression assignment =
-      (PsiAssignmentExpression)element;
-    final PsiExpression expression = assignment.getLExpression();
-    final PsiJavaToken sign = assignment.getOperationSign();
-    final IElementType tokenType = sign.getTokenType();
-    final String replacementText;
-    if (JavaTokenType.PLUSEQ.equals(tokenType)) {
-      replacementText = expression.getText() + "++";
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.replaceWithOperatorAssignmentIntentionFamilyName();
     }
-    else {
-      replacementText = expression.getText() + "--";
-    }
-    return IntentionPowerPackBundle.message(
-      "replace.some.operator.with.other.intention.name",
-      sign.getText(), replacementText);
-  }
 
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new ReplaceOperatorAssignmentWithPostfixExpressionPredicate();
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue getTextForElement(PsiElement element) {
+        final PsiAssignmentExpression assignment =
+            (PsiAssignmentExpression) element;
+        final PsiExpression expression = assignment.getLExpression();
+        final PsiJavaToken sign = assignment.getOperationSign();
+        final IElementType tokenType = sign.getTokenType();
+        final String replacementText;
+        if (JavaTokenType.PLUSEQ.equals(tokenType)) {
+            replacementText = expression.getText() + "++";
+        }
+        else {
+            replacementText = expression.getText() + "--";
+        }
+        return IntentionPowerPackLocalize.replaceSomeOperatorWithOtherIntentionName(sign.getText(), replacementText);
+    }
 
-  @Override
-  protected void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiAssignmentExpression assignment =
-      (PsiAssignmentExpression)element;
-    final PsiExpression expression = assignment.getLExpression();
-    final String expressionText = expression.getText();
-    final IElementType tokenType = assignment.getOperationTokenType();
-    final String newExpressionText;
-    if (JavaTokenType.PLUSEQ.equals(tokenType)) {
-      newExpressionText = expressionText + "++";
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new ReplaceOperatorAssignmentWithPostfixExpressionPredicate();
     }
-    else if (JavaTokenType.MINUSEQ.equals(tokenType)) {
-      newExpressionText = expressionText + "--";
+
+    @Override
+    protected void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiAssignmentExpression assignment =
+            (PsiAssignmentExpression) element;
+        final PsiExpression expression = assignment.getLExpression();
+        final String expressionText = expression.getText();
+        final IElementType tokenType = assignment.getOperationTokenType();
+        final String newExpressionText;
+        if (JavaTokenType.PLUSEQ.equals(tokenType)) {
+            newExpressionText = expressionText + "++";
+        }
+        else if (JavaTokenType.MINUSEQ.equals(tokenType)) {
+            newExpressionText = expressionText + "--";
+        }
+        else {
+            return;
+        }
+        replaceExpression(newExpressionText, assignment);
     }
-    else {
-      return;
-    }
-    replaceExpression(newExpressionText, assignment);
-  }
 }

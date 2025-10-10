@@ -20,10 +20,12 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiConcatenationUtil;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -32,93 +34,98 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceConcatenationWithFormatStringIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class ReplaceConcatenationWithFormatStringIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceConcatenationWithFormatStringIntentionName();
+    }
 
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new Jdk5StringConcatenationPredicate();
-  }
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new Jdk5StringConcatenationPredicate();
+    }
 
-  @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
-    PsiElement parent = expression.getParent();
-    while (ConcatenationUtils.isConcatenation(parent)) {
-      expression = (PsiPolyadicExpression)parent;
-      parent = expression.getParent();
+    @Override
+    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        PsiPolyadicExpression expression = (PsiPolyadicExpression) element;
+        PsiElement parent = expression.getParent();
+        while (ConcatenationUtils.isConcatenation(parent)) {
+            expression = (PsiPolyadicExpression) parent;
+            parent = expression.getParent();
+        }
+        final StringBuilder formatString = new StringBuilder();
+        final List<PsiExpression> formatParameters = new ArrayList();
+        PsiConcatenationUtil.buildFormatString(expression, formatString, formatParameters, true);
+        if (replaceWithPrintfExpression(expression, formatString, formatParameters)) {
+            return;
+        }
+        final StringBuilder newExpression = new StringBuilder();
+        newExpression.append("java.lang.String.format(\"");
+        newExpression.append(formatString);
+        newExpression.append('\"');
+        for (PsiExpression formatParameter : formatParameters) {
+            newExpression.append(", ");
+            newExpression.append(formatParameter.getText());
+        }
+        newExpression.append(')');
+        replaceExpression(newExpression.toString(), expression);
     }
-    final StringBuilder formatString = new StringBuilder();
-    final List<PsiExpression> formatParameters = new ArrayList();
-    PsiConcatenationUtil.buildFormatString(expression, formatString, formatParameters, true);
-    if (replaceWithPrintfExpression(expression, formatString, formatParameters)) {
-      return;
-    }
-    final StringBuilder newExpression = new StringBuilder();
-    newExpression.append("java.lang.String.format(\"");
-    newExpression.append(formatString);
-    newExpression.append('\"');
-    for (PsiExpression formatParameter : formatParameters) {
-      newExpression.append(", ");
-      newExpression.append(formatParameter.getText());
-    }
-    newExpression.append(')');
-    replaceExpression(newExpression.toString(), expression);
-  }
 
-  private static boolean replaceWithPrintfExpression(PsiExpression expression, CharSequence formatString,
-                                                     List<PsiExpression> formatParameters) throws IncorrectOperationException {
-    final PsiElement expressionParent = expression.getParent();
-    if (!(expressionParent instanceof PsiExpressionList)) {
-      return false;
+    private static boolean replaceWithPrintfExpression(PsiExpression expression, CharSequence formatString,
+                                                       List<PsiExpression> formatParameters) throws IncorrectOperationException {
+        final PsiElement expressionParent = expression.getParent();
+        if (!(expressionParent instanceof PsiExpressionList)) {
+            return false;
+        }
+        final PsiElement grandParent = expressionParent.getParent();
+        if (!(grandParent instanceof PsiMethodCallExpression)) {
+            return false;
+        }
+        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        final String name = methodExpression.getReferenceName();
+        final boolean insertNewline;
+        if ("println".equals(name)) {
+            insertNewline = true;
+        }
+        else if ("print".equals(name)) {
+            insertNewline = false;
+        }
+        else {
+            return false;
+        }
+        final PsiMethod method = methodCallExpression.resolveMethod();
+        if (method == null) {
+            return false;
+        }
+        final PsiClass containingClass = method.getContainingClass();
+        if (containingClass == null) {
+            return false;
+        }
+        final String qualifiedName = containingClass.getQualifiedName();
+        if (!CommonClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName)
+            && !CommonClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
+            return false;
+        }
+        final StringBuilder newExpression = new StringBuilder();
+        final PsiExpression qualifier = methodExpression.getQualifierExpression();
+        if (qualifier != null) {
+            newExpression.append(qualifier.getText());
+            newExpression.append('.');
+        }
+        newExpression.append("printf(\"");
+        newExpression.append(formatString);
+        if (insertNewline) {
+            newExpression.append("%n");
+        }
+        newExpression.append('\"');
+        for (PsiExpression formatParameter : formatParameters) {
+            newExpression.append(", ");
+            newExpression.append(formatParameter.getText());
+        }
+        newExpression.append(')');
+        replaceExpression(newExpression.toString(), methodCallExpression);
+        return true;
     }
-    final PsiElement grandParent = expressionParent.getParent();
-    if (!(grandParent instanceof PsiMethodCallExpression)) {
-      return false;
-    }
-    final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
-    final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-    final String name = methodExpression.getReferenceName();
-    final boolean insertNewline;
-    if ("println".equals(name)) {
-      insertNewline = true;
-    }
-    else if ("print".equals(name)) {
-      insertNewline = false;
-    }
-    else {
-      return false;
-    }
-    final PsiMethod method = methodCallExpression.resolveMethod();
-    if (method == null) {
-      return false;
-    }
-    final PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null) {
-      return false;
-    }
-    final String qualifiedName = containingClass.getQualifiedName();
-    if (!CommonClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName)
-        && !CommonClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
-      return false;
-    }
-    final StringBuilder newExpression = new StringBuilder();
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
-    if (qualifier != null) {
-      newExpression.append(qualifier.getText());
-      newExpression.append('.');
-    }
-    newExpression.append("printf(\"");
-    newExpression.append(formatString);
-    if (insertNewline) {
-      newExpression.append("%n");
-    }
-    newExpression.append('\"');
-    for (PsiExpression formatParameter : formatParameters) {
-      newExpression.append(", ");
-      newExpression.append(formatParameter.getText());
-    }
-    newExpression.append(')');
-    replaceExpression(newExpression.toString(), methodCallExpression);
-    return true;
-  }
 }

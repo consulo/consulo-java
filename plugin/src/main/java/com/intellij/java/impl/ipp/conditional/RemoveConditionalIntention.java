@@ -20,39 +20,45 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveConditionalIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class RemoveConditionalIntention extends Intention {
-
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new RemoveConditionalPredicate();
-  }
-
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiConditionalExpression expression =
-      (PsiConditionalExpression)element;
-    final PsiExpression condition = expression.getCondition();
-    final PsiExpression thenExpression = expression.getThenExpression();
-    assert thenExpression != null;
-    @NonNls final String thenExpressionText = thenExpression.getText();
-    if ("true".equals(thenExpressionText)) {
-      final String newExpression = condition.getText();
-      replaceExpression(newExpression, expression);
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.removeConditionalIntentionName();
     }
-    else {
-      final String newExpression =
-        BoolUtils.getNegatedExpressionText(condition);
-      replaceExpression(newExpression, expression);
+
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new RemoveConditionalPredicate();
     }
-  }
+
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiConditionalExpression expression =
+            (PsiConditionalExpression) element;
+        final PsiExpression condition = expression.getCondition();
+        final PsiExpression thenExpression = expression.getThenExpression();
+        assert thenExpression != null;
+        @NonNls final String thenExpressionText = thenExpression.getText();
+        if ("true".equals(thenExpressionText)) {
+            final String newExpression = condition.getText();
+            replaceExpression(newExpression, expression);
+        }
+        else {
+            final String newExpression =
+                BoolUtils.getNegatedExpressionText(condition);
+            replaceExpression(newExpression, expression);
+        }
+    }
 }

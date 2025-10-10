@@ -18,42 +18,49 @@ package com.intellij.java.impl.ipp.chartostring;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CharToStringIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class CharToStringIntention extends Intention {
-
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new CharToStringPredicate();
-  }
-
-  @Override
-  public void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiLiteralExpression charLiteral =
-      (PsiLiteralExpression)element;
-    final String charLiteralText = charLiteral.getText();
-    final String stringLiteral = stringForCharLiteral(charLiteralText);
-    replaceExpression(stringLiteral, charLiteral);
-  }
-
-  private static String stringForCharLiteral(String charLiteral) {
-    if ("'\"'".equals(charLiteral)) {
-      return "\"\\\"\"";
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.charToStringIntentionName();
     }
-    else if ("'\\''".equals(charLiteral)) {
-      return "\"'\"";
+
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new CharToStringPredicate();
     }
-    else {
-      return '\"' + charLiteral.substring(1, charLiteral.length() - 1) +
-             '\"';
+
+    @Override
+    public void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiLiteralExpression charLiteral =
+            (PsiLiteralExpression) element;
+        final String charLiteralText = charLiteral.getText();
+        final String stringLiteral = stringForCharLiteral(charLiteralText);
+        replaceExpression(stringLiteral, charLiteral);
     }
-  }
+
+    private static String stringForCharLiteral(String charLiteral) {
+        if ("'\"'".equals(charLiteral)) {
+            return "\"\\\"\"";
+        }
+        else if ("'\\''".equals(charLiteral)) {
+            return "\"'\"";
+        }
+        else {
+            return '\"' + charLiteral.substring(1, charLiteral.length() - 1) +
+                '\"';
+        }
+    }
 }

@@ -17,8 +17,11 @@
 package com.intellij.java.impl.ipp.modifiers;
 
 import com.intellij.java.language.psi.PsiModifier;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -27,8 +30,14 @@ import consulo.language.editor.intention.IntentionMetaData;
 @IntentionMetaData(ignoreId = "java.MakePublicIntention", fileExtensions = "java", categories = {"Java", "Modifiers"})
 public class MakePublicIntention extends ModifierIntention {
 
-  @Override
-  protected String getModifier() {
-    return PsiModifier.PUBLIC;
-  }
+    @Override
+    protected String getModifier() {
+        return PsiModifier.PUBLIC;
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.makePublicIntentionName();
+    }
 }

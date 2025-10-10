@@ -21,53 +21,59 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPostfixExpression;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplacePostfixExpressionWithAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplacePostfixExpressionWithAssignmentIntention
-  extends MutablyNamedIntention {
+    extends MutablyNamedIntention {
 
-  @Override
-  protected String getTextForElement(PsiElement element) {
-    final PsiPostfixExpression postfixExpression =
-      (PsiPostfixExpression)element;
-    final PsiJavaToken sign = postfixExpression.getOperationSign();
-    final String signText = sign.getText();
-    final String replacementText = "=";
-    return IntentionPowerPackBundle.message(
-      "replace.some.operator.with.other.intention.name",
-      signText, replacementText);
-  }
-
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();
-  }
-
-  @Override
-  protected void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiPostfixExpression postfixExpression =
-      (PsiPostfixExpression)element;
-    final PsiExpression operand = postfixExpression.getOperand();
-    final String operandText = operand.getText();
-    final IElementType tokenType =
-      postfixExpression.getOperationTokenType();
-    if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
-      replaceExpression(operandText + '=' + operandText + "+1",
-                        postfixExpression);
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.replacePostfixExpressionWithAssignmentIntentionFamilyName();
     }
-    else if (JavaTokenType.MINUSMINUS.equals(tokenType)) {
-      replaceExpression(operandText + '=' + operandText + "-1",
-                        postfixExpression);
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getTextForElement(PsiElement element) {
+        final PsiPostfixExpression postfixExpression =
+            (PsiPostfixExpression) element;
+        final PsiJavaToken sign = postfixExpression.getOperationSign();
+        final String signText = sign.getText();
+        final String replacementText = "=";
+        return IntentionPowerPackLocalize.replaceSomeOperatorWithOtherIntentionName(signText, replacementText);
     }
-  }
+
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();
+    }
+
+    @Override
+    protected void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiPostfixExpression postfixExpression =
+            (PsiPostfixExpression) element;
+        final PsiExpression operand = postfixExpression.getOperand();
+        final String operandText = operand.getText();
+        final IElementType tokenType =
+            postfixExpression.getOperationTokenType();
+        if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
+            replaceExpression(operandText + '=' + operandText + "+1",
+                postfixExpression);
+        }
+        else if (JavaTokenType.MINUSMINUS.equals(tokenType)) {
+            replaceExpression(operandText + '=' + operandText + "-1",
+                postfixExpression);
+        }
+    }
 }

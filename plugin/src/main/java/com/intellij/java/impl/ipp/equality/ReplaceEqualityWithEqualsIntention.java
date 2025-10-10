@@ -21,67 +21,73 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceEqualityWithEqualsIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceEqualityWithEqualsIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceEqualityWithEqualsIntentionName();
+    }
 
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ObjectEqualityPredicate();
-  }
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ObjectEqualityPredicate();
+    }
 
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiBinaryExpression exp =
-      (PsiBinaryExpression)element;
-    final PsiExpression lhs = exp.getLOperand();
-    final PsiExpression rhs = exp.getROperand();
-    if (rhs == null) {
-      return;
-    }
-    final PsiExpression strippedLhs =
-      ParenthesesUtils.stripParentheses(lhs);
-    if (strippedLhs == null) {
-      return;
-    }
-    final PsiExpression strippedRhs =
-      ParenthesesUtils.stripParentheses(rhs);
-    if (strippedRhs == null) {
-      return;
-    }
-    final IElementType tokenType = exp.getOperationTokenType();
-    @NonNls final String expString;
-    if (tokenType.equals(JavaTokenType.EQEQ)) {
-      if (ParenthesesUtils.getPrecedence(strippedLhs) >
-          ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
-        expString = '(' + strippedLhs.getText() + ").equals(" +
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiBinaryExpression exp =
+            (PsiBinaryExpression) element;
+        final PsiExpression lhs = exp.getLOperand();
+        final PsiExpression rhs = exp.getROperand();
+        if (rhs == null) {
+            return;
+        }
+        final PsiExpression strippedLhs =
+            ParenthesesUtils.stripParentheses(lhs);
+        if (strippedLhs == null) {
+            return;
+        }
+        final PsiExpression strippedRhs =
+            ParenthesesUtils.stripParentheses(rhs);
+        if (strippedRhs == null) {
+            return;
+        }
+        final IElementType tokenType = exp.getOperationTokenType();
+        @NonNls final String expString;
+        if (tokenType.equals(JavaTokenType.EQEQ)) {
+            if (ParenthesesUtils.getPrecedence(strippedLhs) >
+                ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
+                expString = '(' + strippedLhs.getText() + ").equals(" +
                     strippedRhs.getText() + ')';
-      }
-      else {
-        expString = strippedLhs.getText() + ".equals(" +
+            }
+            else {
+                expString = strippedLhs.getText() + ".equals(" +
                     strippedRhs.getText() + ')';
-      }
+            }
+        }
+        else {
+            if (ParenthesesUtils.getPrecedence(strippedLhs) >
+                ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
+                expString = "!(" + strippedLhs.getText() + ").equals(" +
+                    strippedRhs.getText() + ')';
+            }
+            else {
+                expString = '!' + strippedLhs.getText() + ".equals(" +
+                    strippedRhs.getText() + ')';
+            }
+        }
+        replaceExpression(expString, exp);
     }
-    else {
-      if (ParenthesesUtils.getPrecedence(strippedLhs) >
-          ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
-        expString = "!(" + strippedLhs.getText() + ").equals(" +
-                    strippedRhs.getText() + ')';
-      }
-      else {
-        expString = '!' + strippedLhs.getText() + ".equals(" +
-                    strippedRhs.getText() + ')';
-      }
-    }
-    replaceExpression(expString, exp);
-  }
 }

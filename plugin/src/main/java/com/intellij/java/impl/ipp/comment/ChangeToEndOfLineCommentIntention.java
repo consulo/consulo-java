@@ -19,6 +19,7 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -26,46 +27,51 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiParserFacade;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ChangeToEndOfLineCommentIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class ChangeToEndOfLineCommentIntention extends Intention {
-
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new CStyleCommentPredicate();
-  }
-
-  public void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiComment comment = (PsiComment)element;
-    final Project project = comment.getProject();
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    final PsiElement parent = comment.getParent();
-    assert parent != null;
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final String commentText = comment.getText();
-    final PsiElement whitespace = comment.getNextSibling();
-    final String text = commentText.substring(2, commentText.length() - 2);
-    final String[] lines = text.split("\n");
-    for (int i = lines.length - 1; i >= 1; i--) {
-      final PsiComment nextComment =
-        factory.createCommentFromText("//" + lines[i].trim(),
-                                      parent);
-      parent.addAfter(nextComment, comment);
-      if (whitespace != null) {
-        final PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(project);
-        final PsiElement newWhiteSpace =
-          parserFacade.createWhiteSpaceFromText(whitespace.getText());
-        parent.addAfter(newWhiteSpace, comment);
-      }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.changeToEndOfLineCommentIntentionName();
     }
-    final PsiComment newComment =
-      factory.createCommentFromText("//" + lines[0], parent);
-    final PsiElement replacedComment = comment.replace(newComment);
-    codeStyleManager.reformat(replacedComment);
-  }
+
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new CStyleCommentPredicate();
+    }
+
+    public void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiComment comment = (PsiComment) element;
+        final Project project = comment.getProject();
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        final PsiElement parent = comment.getParent();
+        assert parent != null;
+        final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+        final String commentText = comment.getText();
+        final PsiElement whitespace = comment.getNextSibling();
+        final String text = commentText.substring(2, commentText.length() - 2);
+        final String[] lines = text.split("\n");
+        for (int i = lines.length - 1; i >= 1; i--) {
+            final PsiComment nextComment =
+                factory.createCommentFromText("//" + lines[i].trim(),
+                    parent);
+            parent.addAfter(nextComment, comment);
+            if (whitespace != null) {
+                final PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(project);
+                final PsiElement newWhiteSpace =
+                    parserFacade.createWhiteSpaceFromText(whitespace.getText());
+                parent.addAfter(newWhiteSpace, comment);
+            }
+        }
+        final PsiComment newComment =
+            factory.createCommentFromText("//" + lines[0], parent);
+        final PsiElement replacedComment = comment.replace(newComment);
+        codeStyleManager.reformat(replacedComment);
+    }
 }

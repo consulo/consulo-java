@@ -17,10 +17,12 @@ package com.intellij.java.impl.ipp.integer;
 
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiType;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import java.math.BigDecimal;
 
 /**
@@ -29,17 +31,27 @@ import java.math.BigDecimal;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertToPlainIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
-  @Override
-  protected String convertValue(final Number value, final PsiType type, final boolean negated) {
-    String text = new BigDecimal(value.toString()).toPlainString();
-    if (negated) text = "-" + text;
-    if (PsiType.FLOAT.equals(type)) text += "f";
-    return text;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.convertToPlainIntentionName();
+    }
 
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new ConvertToPlainPredicate();
-  }
+    @Override
+    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+        String text = new BigDecimal(value.toString()).toPlainString();
+        if (negated) {
+            text = "-" + text;
+        }
+        if (PsiType.FLOAT.equals(type)) {
+            text += "f";
+        }
+        return text;
+    }
+
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new ConvertToPlainPredicate();
+    }
 }

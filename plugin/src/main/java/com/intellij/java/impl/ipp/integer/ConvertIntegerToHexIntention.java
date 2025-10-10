@@ -17,39 +17,46 @@ package com.intellij.java.impl.ipp.integer;
 
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiType;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertIntegerToHexIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToHexIntention extends ConvertNumberIntentionBase {
-  @Override
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ConvertIntegerToHexPredicate();
-  }
-
-  @Override
-  protected String convertValue(final Number value, final PsiType type, final boolean negated) {
-    if (PsiType.INT.equals(type)) {
-      final int intValue = negated ? -value.intValue() : value.intValue();
-      return "0x" + Integer.toHexString(intValue);
-    }
-    else if (PsiType.LONG.equals(type)) {
-      final long longValue = negated ? -value.longValue() : value.longValue();
-      return "0x" + Long.toHexString(longValue) + "L";
-    }
-    else if (PsiType.FLOAT.equals(type)) {
-      final float floatValue = negated ? -value.floatValue() : value.floatValue();
-      return Float.toHexString(floatValue) + 'f';
-    }
-    else if (PsiType.DOUBLE.equals(type)) {
-      final double doubleValue = negated ? -value.doubleValue() : value.doubleValue();
-      return Double.toHexString(doubleValue);
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.convertIntegerToHexIntentionName();
     }
 
-    return null;
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ConvertIntegerToHexPredicate();
+    }
+
+    @Override
+    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+        if (PsiType.INT.equals(type)) {
+            final int intValue = negated ? -value.intValue() : value.intValue();
+            return "0x" + Integer.toHexString(intValue);
+        }
+        else if (PsiType.LONG.equals(type)) {
+            final long longValue = negated ? -value.longValue() : value.longValue();
+            return "0x" + Long.toHexString(longValue) + "L";
+        }
+        else if (PsiType.FLOAT.equals(type)) {
+            final float floatValue = negated ? -value.floatValue() : value.floatValue();
+            return Float.toHexString(floatValue) + 'f';
+        }
+        else if (PsiType.DOUBLE.equals(type)) {
+            final double doubleValue = negated ? -value.doubleValue() : value.doubleValue();
+            return Double.toHexString(doubleValue);
+        }
+
+        return null;
+    }
 }

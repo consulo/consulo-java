@@ -17,30 +17,38 @@ package com.intellij.java.impl.ipp.integer;
 
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiType;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertIntegerToOctalIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToOctalIntention extends ConvertNumberIntentionBase {
-  @Override
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ConvertIntegerToOctalPredicate();
-  }
-
-  @Override
-  protected String convertValue(final Number value, final PsiType type, final boolean negated) {
-    if (PsiType.INT.equals(type)) {
-      final int intValue = negated ? -value.intValue() : value.intValue();
-      return "0" + Integer.toOctalString(intValue);
-    }
-    else if (PsiType.LONG.equals(type)) {
-      final long longValue = negated ? -value.longValue() : value.longValue();
-      return "0" + Long.toOctalString(longValue) + "L";
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.convertIntegerToOctalIntentionName();
     }
 
-    return null;
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ConvertIntegerToOctalPredicate();
+    }
+
+    @Override
+    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+        if (PsiType.INT.equals(type)) {
+            final int intValue = negated ? -value.intValue() : value.intValue();
+            return "0" + Integer.toOctalString(intValue);
+        }
+        else if (PsiType.LONG.equals(type)) {
+            final long longValue = negated ? -value.longValue() : value.longValue();
+            return "0" + Long.toOctalString(longValue) + "L";
+        }
+
+        return null;
+    }
 }

@@ -19,12 +19,14 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.CopyPasteManager;
 import jakarta.annotation.Nonnull;
 
@@ -33,48 +35,53 @@ import java.awt.datatransfer.StringSelection;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SwapMethodCallArgumentsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class CopyConcatenatedStringToClipboardIntention extends Intention {
-
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new SimpleStringConcatenationPredicate(false);
-  }
-
-  @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    if (!(element instanceof PsiPolyadicExpression)) {
-      return;
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.copyConcatenatedStringToClipboardIntentionName();
     }
-    PsiPolyadicExpression concatenationExpression = (PsiPolyadicExpression)element;
-    final IElementType tokenType = concatenationExpression.getOperationTokenType();
-    if (tokenType != JavaTokenType.PLUS) {
-      return;
-    }
-    final PsiType type = concatenationExpression.getType();
-    if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
-      return;
-    }
-    final StringBuilder text = buildConcatenationText(concatenationExpression, new StringBuilder());
-    CopyPasteManager.getInstance().setContents(new StringSelection(text.toString()));
-  }
 
-  private static StringBuilder buildConcatenationText(PsiPolyadicExpression polyadicExpression, StringBuilder out) {
-    for (PsiElement element : polyadicExpression.getChildren()) {
-      if (element instanceof PsiExpression) {
-        final PsiExpression expression = (PsiExpression)element;
-        final Object value = ExpressionUtils.computeConstantExpression(expression);
-        if (value == null) {
-          out.append('?');
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new SimpleStringConcatenationPredicate(false);
+    }
+
+    @Override
+    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        if (!(element instanceof PsiPolyadicExpression)) {
+            return;
         }
-        else {
-          out.append(value.toString());
+        PsiPolyadicExpression concatenationExpression = (PsiPolyadicExpression) element;
+        final IElementType tokenType = concatenationExpression.getOperationTokenType();
+        if (tokenType != JavaTokenType.PLUS) {
+            return;
         }
-      }
-      else if (element instanceof PsiWhiteSpace && element.getText().contains("\n") &&
-               (out.length() == 0 || out.charAt(out.length() - 1) != '\n')) {
-        out.append('\n');
-      }
+        final PsiType type = concatenationExpression.getType();
+        if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+            return;
+        }
+        final StringBuilder text = buildConcatenationText(concatenationExpression, new StringBuilder());
+        CopyPasteManager.getInstance().setContents(new StringSelection(text.toString()));
     }
-    return out;
-  }
+
+    private static StringBuilder buildConcatenationText(PsiPolyadicExpression polyadicExpression, StringBuilder out) {
+        for (PsiElement element : polyadicExpression.getChildren()) {
+            if (element instanceof PsiExpression) {
+                final PsiExpression expression = (PsiExpression) element;
+                final Object value = ExpressionUtils.computeConstantExpression(expression);
+                if (value == null) {
+                    out.append('?');
+                }
+                else {
+                    out.append(value.toString());
+                }
+            }
+            else if (element instanceof PsiWhiteSpace && element.getText().contains("\n") &&
+                (out.length() == 0 || out.charAt(out.length() - 1) != '\n')) {
+                out.append('\n');
+            }
+        }
+        return out;
+    }
 }

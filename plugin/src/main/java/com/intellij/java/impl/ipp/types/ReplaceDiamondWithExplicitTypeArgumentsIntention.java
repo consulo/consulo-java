@@ -18,26 +18,32 @@ package com.intellij.java.impl.ipp.types;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceDiamondWithExplicitTypeArgumentsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ReplaceDiamondWithExplicitTypeArgumentsIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceDiamondWithExplicitTypeArgumentsIntentionName();
+    }
 
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new DiamondTypePredicate();
-  }
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new DiamondTypePredicate();
+    }
 
-  @Override
-  protected void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    PsiDiamondTypeUtil.replaceDiamondWithExplicitTypes(element);
-  }
+    @Override
+    protected void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        PsiDiamondTypeUtil.replaceDiamondWithExplicitTypes(element);
+    }
 }

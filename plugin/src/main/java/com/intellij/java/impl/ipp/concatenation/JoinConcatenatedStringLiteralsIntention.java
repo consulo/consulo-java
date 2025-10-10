@@ -20,11 +20,13 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
@@ -34,66 +36,71 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.JoinConcatenatedStringLiteralsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class JoinConcatenatedStringLiteralsIntention extends Intention {
-
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new StringConcatPredicate();
-  }
-
-  @Override
-  public void processIntention(PsiElement element) throws IncorrectOperationException {
-    if (element instanceof PsiWhiteSpace) {
-      element = element.getPrevSibling();
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.joinConcatenatedStringLiteralsIntentionName();
     }
-    if (!(element instanceof PsiJavaToken)) {
-      return;
+
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new StringConcatPredicate();
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)element.getParent();
-    StringBuilder newExpression = new StringBuilder();
-    final PsiElement[] children = polyadicExpression.getChildren();
-    final List<PsiElement> buffer = new ArrayList(3);
-    for (PsiElement child : children) {
-      if (child instanceof PsiJavaToken) {
-        if (token.equals(child)) {
-          final PsiLiteralExpression literalExpression = (PsiLiteralExpression)buffer.get(0);
-          final Object value = literalExpression.getValue();
-          assert value != null;
-          newExpression.append('"').append(StringUtil.escapeStringCharacters(value.toString()));
+
+    @Override
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
+        if (element instanceof PsiWhiteSpace) {
+            element = element.getPrevSibling();
         }
-        else {
-          for (PsiElement bufferedElement : buffer) {
+        if (!(element instanceof PsiJavaToken)) {
+            return;
+        }
+        final PsiJavaToken token = (PsiJavaToken) element;
+        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
+        StringBuilder newExpression = new StringBuilder();
+        final PsiElement[] children = polyadicExpression.getChildren();
+        final List<PsiElement> buffer = new ArrayList(3);
+        for (PsiElement child : children) {
+            if (child instanceof PsiJavaToken) {
+                if (token.equals(child)) {
+                    final PsiLiteralExpression literalExpression = (PsiLiteralExpression) buffer.get(0);
+                    final Object value = literalExpression.getValue();
+                    assert value != null;
+                    newExpression.append('"').append(StringUtil.escapeStringCharacters(value.toString()));
+                }
+                else {
+                    for (PsiElement bufferedElement : buffer) {
+                        newExpression.append(bufferedElement.getText());
+                    }
+                    buffer.clear();
+                    newExpression.append(child.getText());
+                }
+            }
+            else if (child instanceof PsiLiteralExpression) {
+                if (buffer.isEmpty()) {
+                    buffer.add(child);
+                }
+                else {
+                    final PsiLiteralExpression literalExpression = (PsiLiteralExpression) child;
+                    final Object value = literalExpression.getValue();
+                    assert value != null;
+                    newExpression.append(StringUtil.escapeStringCharacters(value.toString())).append('"');
+                    buffer.clear();
+                }
+            }
+            else {
+                if (buffer.isEmpty()) {
+                    newExpression.append(child.getText());
+                }
+                else {
+                    buffer.add(child);
+                }
+            }
+        }
+        for (PsiElement bufferedElement : buffer) {
             newExpression.append(bufferedElement.getText());
-          }
-          buffer.clear();
-          newExpression.append(child.getText());
         }
-      }
-      else if (child instanceof PsiLiteralExpression) {
-        if (buffer.isEmpty()) {
-          buffer.add(child);
-        }
-        else {
-          final PsiLiteralExpression literalExpression = (PsiLiteralExpression)child;
-          final Object value = literalExpression.getValue();
-          assert value != null;
-          newExpression.append(StringUtil.escapeStringCharacters(value.toString())).append('"');
-          buffer.clear();
-        }
-      }
-      else {
-        if (buffer.isEmpty()) {
-          newExpression.append(child.getText());
-        }
-        else {
-          buffer.add(child);
-        }
-      }
+        replaceExpression(newExpression.toString(), polyadicExpression);
     }
-    for (PsiElement bufferedElement : buffer) {
-      newExpression.append(bufferedElement.getText());
-    }
-    replaceExpression(newExpression.toString(), polyadicExpression);
-  }
 }

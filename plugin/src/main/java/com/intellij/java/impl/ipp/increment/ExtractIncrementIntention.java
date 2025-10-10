@@ -36,6 +36,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ExtractIncrementIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ExtractIncrementIntention extends MutablyNamedIntention {
 
+    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         final PsiJavaToken sign;

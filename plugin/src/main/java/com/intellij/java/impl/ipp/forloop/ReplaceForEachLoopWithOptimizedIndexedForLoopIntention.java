@@ -19,8 +19,11 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -29,46 +32,52 @@ import consulo.language.editor.intention.IntentionMetaData;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithOptimizedIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithOptimizedIndexedForLoopIntention extends ReplaceForEachLoopWithIndexedForLoopIntention {
-  @Override
-  protected void createForLoopDeclaration(PsiForeachStatement statement,
-                                          PsiExpression iteratedValue,
-                                          boolean isArray,
-                                          String iteratedValueText,
-                                          StringBuilder newStatement, final String indexText) {
-    
-    final String lengthText;
-    if (isArray) {
-      lengthText = createVariableName(iteratedValueText + "Length", PsiType.INT, statement);
-    }
-    else {
-      lengthText = createVariableName(iteratedValueText + "Size", PsiType.INT, statement);
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceForEachLoopWithOptimizedIndexedForLoopIntentionName();
     }
 
-    newStatement.append("for(int ");
-    newStatement.append(indexText);
-    newStatement.append(" = 0, ");
-    newStatement.append(lengthText);
-    newStatement.append(" = ");
-    if (iteratedValue instanceof PsiTypeCastExpression) {
-      newStatement.append('(');
-      newStatement.append(iteratedValueText);
-      newStatement.append(')');
+    @Override
+    protected void createForLoopDeclaration(PsiForeachStatement statement,
+                                            PsiExpression iteratedValue,
+                                            boolean isArray,
+                                            String iteratedValueText,
+                                            StringBuilder newStatement, final String indexText) {
+
+        final String lengthText;
+        if (isArray) {
+            lengthText = createVariableName(iteratedValueText + "Length", PsiType.INT, statement);
+        }
+        else {
+            lengthText = createVariableName(iteratedValueText + "Size", PsiType.INT, statement);
+        }
+
+        newStatement.append("for(int ");
+        newStatement.append(indexText);
+        newStatement.append(" = 0, ");
+        newStatement.append(lengthText);
+        newStatement.append(" = ");
+        if (iteratedValue instanceof PsiTypeCastExpression) {
+            newStatement.append('(');
+            newStatement.append(iteratedValueText);
+            newStatement.append(')');
+        }
+        else {
+            newStatement.append(iteratedValueText);
+        }
+        if (isArray) {
+            newStatement.append(".length;");
+        }
+        else {
+            newStatement.append(".size();");
+        }
+        newStatement.append(indexText);
+        newStatement.append('<');
+        newStatement.append(lengthText);
+        newStatement.append(';');
+        newStatement.append(indexText);
+        newStatement.append("++)");
+        newStatement.append("{ ");
     }
-    else {
-      newStatement.append(iteratedValueText);
-    }
-    if (isArray) {
-      newStatement.append(".length;");
-    }
-    else {
-      newStatement.append(".size();");
-    }
-    newStatement.append(indexText);
-    newStatement.append('<');
-    newStatement.append(lengthText);
-    newStatement.append(';');
-    newStatement.append(indexText);
-    newStatement.append("++)");
-    newStatement.append("{ ");
-  }
 }

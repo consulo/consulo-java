@@ -20,36 +20,43 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipConditionalIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class FlipConditionalIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.flipConditionalIntentionName();
+    }
 
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new FlipConditionalPredicate();
-  }
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new FlipConditionalPredicate();
+    }
 
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiConditionalExpression exp =
-      (PsiConditionalExpression)element;
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiConditionalExpression exp =
+            (PsiConditionalExpression) element;
 
-    final PsiExpression condition = exp.getCondition();
-    final PsiExpression elseExpression = exp.getElseExpression();
-    final PsiExpression thenExpression = exp.getThenExpression();
-    assert elseExpression != null;
-    assert thenExpression != null;
-    final String newExpression =
-      BoolUtils.getNegatedExpressionText(condition) + '?' +
-      elseExpression.getText() +
-      ':' +
-      thenExpression.getText();
-    replaceExpression(newExpression, exp);
-  }
+        final PsiExpression condition = exp.getCondition();
+        final PsiExpression elseExpression = exp.getElseExpression();
+        final PsiExpression thenExpression = exp.getThenExpression();
+        assert elseExpression != null;
+        assert thenExpression != null;
+        final String newExpression =
+            BoolUtils.getNegatedExpressionText(condition) + '?' +
+                elseExpression.getText() +
+                ':' +
+                thenExpression.getText();
+        replaceExpression(newExpression, exp);
+    }
 }

@@ -17,31 +17,38 @@ package com.intellij.java.impl.ipp.integer;
 
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiType;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertIntegerToBinaryIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToBinaryIntention extends ConvertNumberIntentionBase {
-  @Override
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ConvertIntegerToBinaryPredicate();
-  }
-
-  @Override
-  protected String convertValue(final Number value, final PsiType type, final boolean negated) {
-    if (PsiType.INT.equals(type)) {
-      final int intValue = negated ? -value.intValue() : value.intValue();
-      return "0b" + Integer.toBinaryString(intValue);
-    }
-    else if (PsiType.LONG.equals(type)) {
-      final long longValue = negated ? -value.longValue() : value.longValue();
-      return "0b" + Long.toBinaryString(longValue) + "L";
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.convertIntegerToBinaryIntentionName();
     }
 
-    return null;
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ConvertIntegerToBinaryPredicate();
+    }
+
+    @Override
+    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+        if (PsiType.INT.equals(type)) {
+            final int intValue = negated ? -value.intValue() : value.intValue();
+            return "0b" + Integer.toBinaryString(intValue);
+        }
+        else if (PsiType.LONG.equals(type)) {
+            final long longValue = negated ? -value.longValue() : value.longValue();
+            return "0b" + Long.toBinaryString(longValue) + "L";
+        }
+
+        return null;
+    }
 }

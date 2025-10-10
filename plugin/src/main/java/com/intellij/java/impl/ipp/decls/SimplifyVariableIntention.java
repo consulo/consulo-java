@@ -18,25 +18,33 @@ package com.intellij.java.impl.ipp.decls;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiVariable;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SimplifyVariableIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class SimplifyVariableIntention extends Intention {
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.simplifyVariableIntentionName();
+    }
 
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new SimplifyVariablePredicate();
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new SimplifyVariablePredicate();
+    }
 
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiVariable var = (PsiVariable)element;
-    var.normalizeDeclaration();
-  }
+    @Override
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiVariable var = (PsiVariable) element;
+        var.normalizeDeclaration();
+    }
 }

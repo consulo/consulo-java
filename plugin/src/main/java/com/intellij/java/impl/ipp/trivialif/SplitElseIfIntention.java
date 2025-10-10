@@ -20,34 +20,41 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiStatement;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitElseIfIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class SplitElseIfIntention extends Intention {
-
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new SplitElseIfPredicate();
-  }
-
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final PsiIfStatement parentStatement =
-      (PsiIfStatement)token.getParent();
-    if (parentStatement == null) {
-      return;
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.splitElseIfIntentionName();
     }
-    final PsiStatement elseBranch = parentStatement.getElseBranch();
-    if (elseBranch == null) {
-      return;
+
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new SplitElseIfPredicate();
     }
-    final String newStatement = '{' + elseBranch.getText() + '}';
-    replaceStatement(newStatement, elseBranch);
-  }
+
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiJavaToken token = (PsiJavaToken) element;
+        final PsiIfStatement parentStatement =
+            (PsiIfStatement) token.getParent();
+        if (parentStatement == null) {
+            return;
+        }
+        final PsiStatement elseBranch = parentStatement.getElseBranch();
+        if (elseBranch == null) {
+            return;
+        }
+        final String newStatement = '{' + elseBranch.getText() + '}';
+        replaceStatement(newStatement, elseBranch);
+    }
 }

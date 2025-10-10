@@ -20,34 +20,42 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiSwitchStatement;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceSwitchWithIfIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceSwitchWithIfIntention extends Intention {
-  @Override
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new SwitchPredicate();
-  }
-
-  @Override
-  public void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiJavaToken switchToken = (PsiJavaToken)element;
-    final PsiSwitchStatement switchStatement =
-      (PsiSwitchStatement)switchToken.getParent();
-    if (switchStatement == null) {
-      return;
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.replaceSwitchWithIfIntentionName();
     }
-    ConvertSwitchToIfIntention.doProcessIntention(switchStatement);
-  }
 
-  public static boolean canProcess(@Nonnull PsiSwitchStatement switchLabelStatement) {
-    return SwitchPredicate.checkSwitchStatement(switchLabelStatement);
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new SwitchPredicate();
+    }
+
+    @Override
+    public void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiJavaToken switchToken = (PsiJavaToken) element;
+        final PsiSwitchStatement switchStatement =
+            (PsiSwitchStatement) switchToken.getParent();
+        if (switchStatement == null) {
+            return;
+        }
+        ConvertSwitchToIfIntention.doProcessIntention(switchStatement);
+    }
+
+    public static boolean canProcess(@Nonnull PsiSwitchStatement switchLabelStatement) {
+        return SwitchPredicate.checkSwitchStatement(switchLabelStatement);
+    }
 }

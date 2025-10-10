@@ -33,6 +33,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.ReplaceWithOperatorAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntention {
 
+    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;

@@ -19,37 +19,43 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveUnnecessaryParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class RemoveUnnecessaryParenthesesIntention extends Intention {
-
-  @Override
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new UnnecessaryParenthesesPredicate();
-  }
-
-  @Override
-  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    if (element instanceof PsiParameterList) {
-      stripLambdaParameterParentheses((PsiParameterList)element);
-      return;
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.removeUnnecessaryParenthesesIntentionName();
     }
-    PsiExpression expression = (PsiExpression)element;
-    ParenthesesUtils.removeParentheses(expression, false);
-  }
 
-  public static void stripLambdaParameterParentheses(PsiParameterList element) {
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-    final String text = element.getParameters()[0].getName() + "->{}";
-    final PsiLambdaExpression expression = (PsiLambdaExpression)factory.createExpressionFromText(text, element);
-    element.replace(expression.getParameterList());
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new UnnecessaryParenthesesPredicate();
+    }
+
+    @Override
+    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        if (element instanceof PsiParameterList) {
+            stripLambdaParameterParentheses((PsiParameterList) element);
+            return;
+        }
+        PsiExpression expression = (PsiExpression) element;
+        ParenthesesUtils.removeParentheses(expression, false);
+    }
+
+    public static void stripLambdaParameterParentheses(PsiParameterList element) {
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        final String text = element.getParameters()[0].getName() + "->{}";
+        final PsiLambdaExpression expression = (PsiLambdaExpression) factory.createExpressionFromText(text, element);
+        element.replace(expression.getParameterList());
+    }
 }
