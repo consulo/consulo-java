@@ -21,164 +21,173 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ForLoopThatDoesntUseLoopVariableInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.forLoopNotUseLoopVariableDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final boolean condition = ((Boolean)infos[0]).booleanValue();
-    final boolean update = ((Boolean)infos[1]).booleanValue();
-    if (condition && update) {
-      return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorBothConditionAndUpdate().get();
-    }
-    if (condition) {
-      return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorCondition().get();
-    }
-    return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorUpdate().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ForLoopThatDoesntUseLoopVariableVisitor();
-  }
-
-  private static class ForLoopThatDoesntUseLoopVariableVisitor
-    extends BaseInspectionVisitor {
-
+public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitForStatement(@Nonnull PsiForStatement statement) {
-      super.visitForStatement(statement);
-      if (conditionUsesInitializer(statement)) {
-        if (!updateUsesInitializer(statement)) {
-          registerStatementError(statement,
-                                 Boolean.FALSE, Boolean.TRUE);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.forLoopNotUseLoopVariableDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final boolean condition = ((Boolean) infos[0]).booleanValue();
+        final boolean update = ((Boolean) infos[1]).booleanValue();
+        if (condition && update) {
+            return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorBothConditionAndUpdate().get();
         }
-      }
-      else {
-        if (updateUsesInitializer(statement)) {
-          registerStatementError(statement,
-                                 Boolean.TRUE, Boolean.FALSE);
+        if (condition) {
+            return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorCondition().get();
         }
-        else {
-          registerStatementError(statement,
-                                 Boolean.TRUE, Boolean.TRUE);
+        return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorUpdate().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ForLoopThatDoesntUseLoopVariableVisitor();
+    }
+
+    private static class ForLoopThatDoesntUseLoopVariableVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitForStatement(@Nonnull PsiForStatement statement) {
+            super.visitForStatement(statement);
+            if (conditionUsesInitializer(statement)) {
+                if (!updateUsesInitializer(statement)) {
+                    registerStatementError(statement,
+                        Boolean.FALSE, Boolean.TRUE
+                    );
+                }
+            }
+            else {
+                if (updateUsesInitializer(statement)) {
+                    registerStatementError(statement,
+                        Boolean.TRUE, Boolean.FALSE
+                    );
+                }
+                else {
+                    registerStatementError(statement,
+                        Boolean.TRUE, Boolean.TRUE
+                    );
+                }
+            }
         }
-      }
+
+        private static boolean conditionUsesInitializer(
+            PsiForStatement statement
+        ) {
+            final PsiStatement initialization = statement.getInitialization();
+            final PsiExpression condition = statement.getCondition();
+
+            if (initialization == null) {
+                return true;
+            }
+            if (condition == null) {
+                return true;
+            }
+            if (!(initialization instanceof PsiDeclarationStatement)) {
+                return true;
+            }
+            final PsiDeclarationStatement declaration =
+                (PsiDeclarationStatement) initialization;
+            final PsiElement[] declaredElements =
+                declaration.getDeclaredElements();
+            if (declaredElements.length != 1) {
+                return true;
+            }
+            if (declaredElements[0] == null ||
+                !(declaredElements[0] instanceof PsiLocalVariable)) {
+                return true;
+            }
+            final PsiLocalVariable localVar =
+                (PsiLocalVariable) declaredElements[0];
+            return expressionUsesVariable(condition, localVar);
+        }
+
+        private static boolean updateUsesInitializer(PsiForStatement statement) {
+            final PsiStatement initialization = statement.getInitialization();
+            final PsiStatement update = statement.getUpdate();
+
+            if (initialization == null) {
+                return true;
+            }
+            if (update == null) {
+                return true;
+            }
+            if (!(initialization instanceof PsiDeclarationStatement)) {
+                return true;
+            }
+            final PsiDeclarationStatement declaration =
+                (PsiDeclarationStatement) initialization;
+            final PsiElement[] declaredElements =
+                declaration.getDeclaredElements();
+            if (declaredElements.length != 1) {
+                return true;
+            }
+            if (declaredElements[0] == null ||
+                !(declaredElements[0] instanceof PsiLocalVariable)) {
+                return true;
+            }
+            final PsiLocalVariable localVar =
+                (PsiLocalVariable) declaredElements[0];
+            return statementUsesVariable(update, localVar);
+        }
+
+        private static boolean statementUsesVariable(
+            PsiStatement statement,
+            PsiLocalVariable localVar
+        ) {
+            final UseVisitor useVisitor = new UseVisitor(localVar);
+            statement.accept(useVisitor);
+            return useVisitor.isUsed();
+        }
+
+        private static boolean expressionUsesVariable(
+            PsiExpression expression,
+            PsiLocalVariable localVar
+        ) {
+            final UseVisitor useVisitor = new UseVisitor(localVar);
+            expression.accept(useVisitor);
+            return useVisitor.isUsed();
+        }
     }
 
-    private static boolean conditionUsesInitializer(
-      PsiForStatement statement) {
-      final PsiStatement initialization = statement.getInitialization();
-      final PsiExpression condition = statement.getCondition();
+    private static class UseVisitor extends JavaRecursiveElementVisitor {
 
-      if (initialization == null) {
-        return true;
-      }
-      if (condition == null) {
-        return true;
-      }
-      if (!(initialization instanceof PsiDeclarationStatement)) {
-        return true;
-      }
-      final PsiDeclarationStatement declaration =
-        (PsiDeclarationStatement)initialization;
-      final PsiElement[] declaredElements =
-        declaration.getDeclaredElements();
-      if (declaredElements.length != 1) {
-        return true;
-      }
-      if (declaredElements[0] == null ||
-          !(declaredElements[0] instanceof PsiLocalVariable)) {
-        return true;
-      }
-      final PsiLocalVariable localVar =
-        (PsiLocalVariable)declaredElements[0];
-      return expressionUsesVariable(condition, localVar);
+        private final PsiLocalVariable variable;
+        private boolean used = false;
+
+        private UseVisitor(PsiLocalVariable var) {
+            super();
+            variable = var;
+        }
+
+        @Override
+        public void visitElement(@Nonnull PsiElement element) {
+            if (!used) {
+                super.visitElement(element);
+            }
+        }
+
+        @Override
+        public void visitReferenceExpression(
+            @Nonnull PsiReferenceExpression ref
+        ) {
+            if (used) {
+                return;
+            }
+            super.visitReferenceExpression(ref);
+            final PsiElement resolvedElement = ref.resolve();
+            if (variable.equals(resolvedElement)) {
+                used = true;
+            }
+        }
+
+        public boolean isUsed() {
+            return used;
+        }
     }
-
-    private static boolean updateUsesInitializer(PsiForStatement statement) {
-      final PsiStatement initialization = statement.getInitialization();
-      final PsiStatement update = statement.getUpdate();
-
-      if (initialization == null) {
-        return true;
-      }
-      if (update == null) {
-        return true;
-      }
-      if (!(initialization instanceof PsiDeclarationStatement)) {
-        return true;
-      }
-      final PsiDeclarationStatement declaration =
-        (PsiDeclarationStatement)initialization;
-      final PsiElement[] declaredElements =
-        declaration.getDeclaredElements();
-      if (declaredElements.length != 1) {
-        return true;
-      }
-      if (declaredElements[0] == null ||
-          !(declaredElements[0] instanceof PsiLocalVariable)) {
-        return true;
-      }
-      final PsiLocalVariable localVar =
-        (PsiLocalVariable)declaredElements[0];
-      return statementUsesVariable(update, localVar);
-    }
-
-    private static boolean statementUsesVariable(PsiStatement statement,
-                                                 PsiLocalVariable localVar) {
-      final UseVisitor useVisitor = new UseVisitor(localVar);
-      statement.accept(useVisitor);
-      return useVisitor.isUsed();
-    }
-
-    private static boolean expressionUsesVariable(PsiExpression expression,
-                                                  PsiLocalVariable localVar) {
-      final UseVisitor useVisitor = new UseVisitor(localVar);
-      expression.accept(useVisitor);
-      return useVisitor.isUsed();
-    }
-  }
-
-  private static class UseVisitor extends JavaRecursiveElementVisitor {
-
-    private final PsiLocalVariable variable;
-    private boolean used = false;
-
-    private UseVisitor(PsiLocalVariable var) {
-      super();
-      variable = var;
-    }
-
-    @Override
-    public void visitElement(@Nonnull PsiElement element) {
-      if (!used) {
-        super.visitElement(element);
-      }
-    }
-
-    @Override
-    public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression ref) {
-      if (used) {
-        return;
-      }
-      super.visitReferenceExpression(ref);
-      final PsiElement resolvedElement = ref.resolve();
-      if (variable.equals(resolvedElement)) {
-        used = true;
-      }
-    }
-
-    public boolean isUsed() {
-      return used;
-    }
-  }
 }

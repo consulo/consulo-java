@@ -30,51 +30,49 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
-public class LocalVariableOfConcreteClassInspection
-  extends BaseInspection {
+public class LocalVariableOfConcreteClassInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreAbstractClasses = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreAbstractClasses = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.localVariableOfConcreteClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  @RequiredReadAction
-  public String buildErrorString(Object... arg) {
-    final PsiNamedElement variable = (PsiNamedElement)arg[0];
-    final String name = variable.getName();
-    return InspectionGadgetsLocalize.localVariableOfConcreteClassProblemDescriptor(name).get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.localVariableOfConcreteClassOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new LocalVariableOfConcreteClassVisitor();
-  }
-
-  private class LocalVariableOfConcreteClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.localVariableOfConcreteClassDisplayName();
+    }
 
     @Override
-    public void visitLocalVariable(
-      @Nonnull PsiLocalVariable variable) {
-      super.visitLocalVariable(variable);
-      final PsiTypeElement typeElement = variable.getTypeElement();
-      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
-                                                 ignoreAbstractClasses)) {
-        return;
-      }
-      registerError(typeElement, variable);
+    @Nonnull
+    @RequiredReadAction
+    public String buildErrorString(Object... arg) {
+        final PsiNamedElement variable = (PsiNamedElement) arg[0];
+        final String name = variable.getName();
+        return InspectionGadgetsLocalize.localVariableOfConcreteClassProblemDescriptor(name).get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.localVariableOfConcreteClassOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new LocalVariableOfConcreteClassVisitor();
+    }
+
+    private class LocalVariableOfConcreteClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitLocalVariable(
+            @Nonnull PsiLocalVariable variable
+        ) {
+            super.visitLocalVariable(variable);
+            final PsiTypeElement typeElement = variable.getTypeElement();
+            if (!ConcreteClassUtil.typeIsConcreteClass(typeElement, ignoreAbstractClasses)) {
+                return;
+            }
+            registerError(typeElement, variable);
+        }
+    }
 }

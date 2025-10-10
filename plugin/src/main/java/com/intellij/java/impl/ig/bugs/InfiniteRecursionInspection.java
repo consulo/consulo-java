@@ -22,49 +22,49 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InfiniteRecursionInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.infiniteRecursionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.infiniteRecursionProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new InfiniteRecursionVisitor();
-  }
-
-  private static class InfiniteRecursionVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.infiniteRecursionDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      super.visitMethod(method);
-      if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      if (!RecursionUtils.methodMayRecurse(method)) {
-        return;
-      }
-      if (!RecursionUtils.methodDefinitelyRecurses(method)) {
-        return;
-      }
-      registerMethodError(method);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.infiniteRecursionProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new InfiniteRecursionVisitor();
+    }
+
+    private static class InfiniteRecursionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            super.visitMethod(method);
+            if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (!RecursionUtils.methodMayRecurse(method)) {
+                return;
+            }
+            if (!RecursionUtils.methodDefinitelyRecurses(method)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

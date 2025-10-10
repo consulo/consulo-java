@@ -24,91 +24,89 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class AssignmentToSuperclassFieldInspection extends BaseInspection {
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assignmentToSuperclassFieldDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  @RequiredReadAction
-  protected String buildErrorString(Object... infos) {
-    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[0];
-    final PsiClass superclass = (PsiClass) infos[1];
-    return InspectionGadgetsLocalize.assignmentToSuperclassFieldProblemDescriptor(
-        referenceExpression.getReferenceName(),
-        superclass.getName()
-    ).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AssignmentToSuperclassFieldVisitor();
-  }
-
-  private static class AssignmentToSuperclassFieldVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitAssignmentExpression(PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      final PsiExpression lhs = expression.getLExpression();
-      checkSuperclassField(lhs);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.assignmentToSuperclassFieldDisplayName();
+    }
+
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    protected String buildErrorString(Object... infos) {
+        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[0];
+        final PsiClass superclass = (PsiClass) infos[1];
+        return InspectionGadgetsLocalize.assignmentToSuperclassFieldProblemDescriptor(
+            referenceExpression.getReferenceName(),
+            superclass.getName()
+        ).get();
     }
 
     @Override
-    public void visitPrefixExpression(PsiPrefixExpression expression) {
-      super.visitPrefixExpression(expression);
-      final PsiExpression operand = expression.getOperand();
-      checkSuperclassField(operand);
+    public BaseInspectionVisitor buildVisitor() {
+        return new AssignmentToSuperclassFieldVisitor();
     }
 
-    @Override
-    public void visitPostfixExpression(PsiPostfixExpression expression) {
-      super.visitPostfixExpression(expression);
-      final PsiExpression operand = expression.getOperand();
-      checkSuperclassField(operand);
-    }
+    private static class AssignmentToSuperclassFieldVisitor extends BaseInspectionVisitor {
 
-    private void checkSuperclassField(PsiExpression expression) {
-      if (!(expression instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
-      if (method == null || !method.isConstructor()) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
-      final PsiExpression qualifierExpression = referenceExpression.getQualifierExpression();
-      if (qualifierExpression != null &&
-          !(qualifierExpression instanceof PsiThisExpression) && !(qualifierExpression instanceof PsiSuperExpression)) {
-        return;
-      }
-      final PsiElement target = referenceExpression.resolve();
-      if (!(target instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField) target;
-      final PsiClass fieldClass = field.getContainingClass();
-      if (fieldClass == null) {
-        return;
-      }
-      final PsiClass assignmentClass = method.getContainingClass();
-      final String name = fieldClass.getQualifiedName();
-      if (name == null || !InheritanceUtil.isInheritor(assignmentClass, true, name)) {
-        return;
-      }
-      registerError(expression, referenceExpression, fieldClass);
+        @Override
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
+            super.visitAssignmentExpression(expression);
+            final PsiExpression lhs = expression.getLExpression();
+            checkSuperclassField(lhs);
+        }
+
+        @Override
+        public void visitPrefixExpression(PsiPrefixExpression expression) {
+            super.visitPrefixExpression(expression);
+            final PsiExpression operand = expression.getOperand();
+            checkSuperclassField(operand);
+        }
+
+        @Override
+        public void visitPostfixExpression(PsiPostfixExpression expression) {
+            super.visitPostfixExpression(expression);
+            final PsiExpression operand = expression.getOperand();
+            checkSuperclassField(operand);
+        }
+
+        private void checkSuperclassField(PsiExpression expression) {
+            if (!(expression instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
+            if (method == null || !method.isConstructor()) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
+            final PsiExpression qualifierExpression = referenceExpression.getQualifierExpression();
+            if (qualifierExpression != null &&
+                !(qualifierExpression instanceof PsiThisExpression) && !(qualifierExpression instanceof PsiSuperExpression)) {
+                return;
+            }
+            final PsiElement target = referenceExpression.resolve();
+            if (!(target instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) target;
+            final PsiClass fieldClass = field.getContainingClass();
+            if (fieldClass == null) {
+                return;
+            }
+            final PsiClass assignmentClass = method.getContainingClass();
+            final String name = fieldClass.getQualifiedName();
+            if (name == null || !InheritanceUtil.isInheritor(assignmentClass, true, name)) {
+                return;
+            }
+            registerError(expression, referenceExpression, fieldClass);
+        }
     }
-  }
 }

@@ -27,70 +27,69 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ComparableImplementedButEqualsNotOverriddenInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CompareToAndEqualsNotPairedVisitor();
-  }
-
-  private static class CompareToAndEqualsNotPairedVisitor
-    extends BaseInspectionVisitor {
+public class ComparableImplementedButEqualsNotOverriddenInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenDisplayName();
+    }
 
     @Override
-    public void visitClass(PsiClass aClass) {
-      super.visitClass(aClass);
-      final PsiMethod[] methods = aClass.findMethodsByName(
-        HardcodedMethodConstants.COMPARE_TO, false);
-      if (methods.length == 0) {
-        return;
-      }
-      final Project project = aClass.getProject();
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final GlobalSearchScope scope = aClass.getResolveScope();
-      final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
-      if (comparableClass == null) {
-        return;
-      }
-      if (!aClass.isInheritor(comparableClass, true)) {
-        return;
-      }
-      final PsiMethod compareToMethod = comparableClass.getMethods()[0];
-      boolean foundCompareTo = false;
-      for (PsiMethod method : methods) {
-        if (MethodSignatureUtil.isSuperMethod(compareToMethod, method)) {
-          foundCompareTo = true;
-          break;
-        }
-      }
-      if (!foundCompareTo) {
-        return;
-      }
-      final PsiMethod[] equalsMethods = aClass.findMethodsByName(
-        HardcodedMethodConstants.EQUALS, false);
-      for (PsiMethod equalsMethod : equalsMethods) {
-        if (MethodUtils.isEquals(equalsMethod)) {
-          return;
-        }
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CompareToAndEqualsNotPairedVisitor();
+    }
+
+    private static class CompareToAndEqualsNotPairedVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(PsiClass aClass) {
+            super.visitClass(aClass);
+            final PsiMethod[] methods = aClass.findMethodsByName(
+                HardcodedMethodConstants.COMPARE_TO, false);
+            if (methods.length == 0) {
+                return;
+            }
+            final Project project = aClass.getProject();
+            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            final GlobalSearchScope scope = aClass.getResolveScope();
+            final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
+            if (comparableClass == null) {
+                return;
+            }
+            if (!aClass.isInheritor(comparableClass, true)) {
+                return;
+            }
+            final PsiMethod compareToMethod = comparableClass.getMethods()[0];
+            boolean foundCompareTo = false;
+            for (PsiMethod method : methods) {
+                if (MethodSignatureUtil.isSuperMethod(compareToMethod, method)) {
+                    foundCompareTo = true;
+                    break;
+                }
+            }
+            if (!foundCompareTo) {
+                return;
+            }
+            final PsiMethod[] equalsMethods = aClass.findMethodsByName(
+                HardcodedMethodConstants.EQUALS, false);
+            for (PsiMethod equalsMethod : equalsMethods) {
+                if (MethodUtils.isEquals(equalsMethod)) {
+                    return;
+                }
+            }
+            registerClassError(aClass);
+        }
+    }
 }

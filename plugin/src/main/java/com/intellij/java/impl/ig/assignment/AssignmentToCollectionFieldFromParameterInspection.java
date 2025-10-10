@@ -30,96 +30,101 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
-public class AssignmentToCollectionFieldFromParameterInspection
-  extends BaseInspection {
+public class AssignmentToCollectionFieldFromParameterInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean ignorePrivateMethods = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean ignorePrivateMethods = true;
-
-  @Nonnull
-  public String getID() {
-    return "AssignmentToCollectionOrArrayFieldFromParameter";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterDisplayName().get();
-  }
-
-  @Nonnull
-  @RequiredReadAction
-  public String buildErrorString(Object... infos) {
-    final PsiExpression rhs = (PsiExpression)infos[0];
-    final PsiField field = (PsiField)infos[1];
-    final PsiType type = field.getType();
-    return type instanceof PsiArrayType
-      ? InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorArray(rhs.getText()).get()
-      : InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorCollection(rhs.getText()).get();
-  }
-
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.assignmentCollectionArrayFieldOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AssignmentToCollectionFieldFromParameterVisitor();
-  }
-
-  private class AssignmentToCollectionFieldFromParameterVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitAssignmentExpression(@Nonnull
-                                          PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      final PsiExpression rhs = expression.getRExpression();
-      if (!(rhs instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.EQ)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLExpression();
-      if (!(lhs instanceof PsiReferenceExpression)) {
-        return;
-      }
-      if (ignorePrivateMethods) {
-        final PsiMethod containingMethod =
-          PsiTreeUtil.getParentOfType(expression,
-                                      PsiMethod.class);
-        if (containingMethod == null ||
-            containingMethod.hasModifierProperty(
-              PsiModifier.PRIVATE)) {
-          return;
-        }
-      }
-      final PsiElement element = ((PsiReference)rhs).resolve();
-      if (!(element instanceof PsiParameter)) {
-        return;
-      }
-      if (!(element.getParent() instanceof PsiParameterList)) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)lhs;
-      final PsiElement referent = referenceExpression.resolve();
-      if (!(referent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)referent;
-      if (!CollectionUtils.isArrayOrCollectionField(field)) {
-        return;
-      }
-      registerError(lhs, rhs, field);
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "AssignmentToCollectionOrArrayFieldFromParameter";
     }
-  }
+
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterDisplayName();
+    }
+
+    @Nonnull
+    @RequiredReadAction
+    public String buildErrorString(Object... infos) {
+        final PsiExpression rhs = (PsiExpression) infos[0];
+        final PsiField field = (PsiField) infos[1];
+        final PsiType type = field.getType();
+        return type instanceof PsiArrayType
+            ? InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorArray(rhs.getText()).get()
+            : InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorCollection(rhs.getText()).get();
+    }
+
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.assignmentCollectionArrayFieldOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new AssignmentToCollectionFieldFromParameterVisitor();
+    }
+
+    private class AssignmentToCollectionFieldFromParameterVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull
+            PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            final PsiExpression rhs = expression.getRExpression();
+            if (!(rhs instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.EQ)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLExpression();
+            if (!(lhs instanceof PsiReferenceExpression)) {
+                return;
+            }
+            if (ignorePrivateMethods) {
+                final PsiMethod containingMethod =
+                    PsiTreeUtil.getParentOfType(
+                        expression,
+                        PsiMethod.class
+                    );
+                if (containingMethod == null ||
+                    containingMethod.hasModifierProperty(
+                        PsiModifier.PRIVATE)) {
+                    return;
+                }
+            }
+            final PsiElement element = ((PsiReference) rhs).resolve();
+            if (!(element instanceof PsiParameter)) {
+                return;
+            }
+            if (!(element.getParent() instanceof PsiParameterList)) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression =
+                (PsiReferenceExpression) lhs;
+            final PsiElement referent = referenceExpression.resolve();
+            if (!(referent instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) referent;
+            if (!CollectionUtils.isArrayOrCollectionField(field)) {
+                return;
+            }
+            registerError(lhs, rhs, field);
+        }
+    }
 }

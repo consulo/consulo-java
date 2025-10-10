@@ -25,64 +25,67 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class ParameterOfConcreteClassInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreAbstractClasses = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreAbstractClasses = false;
+    @Nonnull
+    @Override
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "MethodParameterOfConcreteClass";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "MethodParameterOfConcreteClass";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.concreteClassMethodParameterDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.concreteClassMethodParameterProblemDescriptor(infos).get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.parameterOfConcreteClassOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ParameterOfConcreteClassVisitor();
-  }
-
-  private class ParameterOfConcreteClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.concreteClassMethodParameterDisplayName();
+    }
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter parameter) {
-      super.visitParameter(parameter);
-
-      if (parameter.getDeclarationScope() instanceof PsiCatchSection) {
-        return;
-      }
-      final PsiTypeElement typeElement = parameter.getTypeElement();
-      if (typeElement == null) {
-        return;
-      }
-      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
-                                                 ignoreAbstractClasses)) {
-        return;
-      }
-      final String variableName = parameter.getName();
-      registerError(typeElement, variableName);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.concreteClassMethodParameterProblemDescriptor(infos).get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.parameterOfConcreteClassOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ParameterOfConcreteClassVisitor();
+    }
+
+    private class ParameterOfConcreteClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitParameter(@Nonnull PsiParameter parameter) {
+            super.visitParameter(parameter);
+
+            if (parameter.getDeclarationScope() instanceof PsiCatchSection) {
+                return;
+            }
+            final PsiTypeElement typeElement = parameter.getTypeElement();
+            if (typeElement == null) {
+                return;
+            }
+            if (!ConcreteClassUtil.typeIsConcreteClass(
+                typeElement,
+                ignoreAbstractClasses
+            )) {
+                return;
+            }
+            final String variableName = parameter.getName();
+            registerError(typeElement, variableName);
+        }
+    }
 }

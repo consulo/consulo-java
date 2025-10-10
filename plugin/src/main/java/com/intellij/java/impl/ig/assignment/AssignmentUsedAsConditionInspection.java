@@ -25,111 +25,120 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentUsedAsConditionInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assignmentUsedAsConditionDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.assignmentUsedAsConditionProblemDescriptor().get();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new AssignmentUsedAsConditionFix();
-  }
-
-  private static class AssignmentUsedAsConditionFix
-    extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.assignmentUsedAsConditionDisplayName();
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix().get();
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.assignmentUsedAsConditionProblemDescriptor().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiAssignmentExpression expression =
-        (PsiAssignmentExpression)descriptor.getPsiElement();
-      final PsiExpression leftExpression = expression.getLExpression();
-      final PsiExpression rightExpression = expression.getRExpression();
-      assert rightExpression != null;
-      final String newExpression =
-        leftExpression.getText() + "==" + rightExpression.getText();
-      replaceExpression(expression, newExpression);
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AssignmentUsedAsConditionVisitor();
-  }
-
-  private static class AssignmentUsedAsConditionVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      if (!WellFormednessUtils.isWellFormed(expression)) {
-        return;
-      }
-      final PsiElement parent = expression.getParent();
-      if (parent == null) {
-        return;
-      }
-      if (parent instanceof PsiIfStatement) {
-        checkIfStatementCondition((PsiIfStatement)parent, expression);
-      }
-      if (parent instanceof PsiWhileStatement) {
-        checkWhileStatementCondition((PsiWhileStatement)parent,
-                                     expression);
-      }
-      if (parent instanceof PsiForStatement) {
-        checkForStatementCondition((PsiForStatement)parent, expression);
-      }
-      if (parent instanceof PsiDoWhileStatement) {
-        checkDoWhileStatementCondition((PsiDoWhileStatement)parent,
-                                       expression);
-      }
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new AssignmentUsedAsConditionFix();
     }
 
-    private void checkIfStatementCondition(
-      PsiIfStatement ifStatement, PsiAssignmentExpression expression) {
-      final PsiExpression condition = ifStatement.getCondition();
-      if (expression.equals(condition)) {
-        registerError(expression);
-      }
+    private static class AssignmentUsedAsConditionFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiAssignmentExpression expression =
+                (PsiAssignmentExpression) descriptor.getPsiElement();
+            final PsiExpression leftExpression = expression.getLExpression();
+            final PsiExpression rightExpression = expression.getRExpression();
+            assert rightExpression != null;
+            final String newExpression =
+                leftExpression.getText() + "==" + rightExpression.getText();
+            replaceExpression(expression, newExpression);
+        }
     }
 
-    private void checkDoWhileStatementCondition(
-      PsiDoWhileStatement doWhileStatement, PsiAssignmentExpression expression) {
-      final PsiExpression condition = doWhileStatement.getCondition();
-      if (expression.equals(condition)) {
-        registerError(expression);
-      }
+    public BaseInspectionVisitor buildVisitor() {
+        return new AssignmentUsedAsConditionVisitor();
     }
 
-    private void checkForStatementCondition(
-      PsiForStatement forStatement, PsiAssignmentExpression expression) {
-      final PsiExpression condition = forStatement.getCondition();
-      if (expression.equals(condition)) {
-        registerError(expression);
-      }
-    }
+    private static class AssignmentUsedAsConditionVisitor
+        extends BaseInspectionVisitor {
 
-    private void checkWhileStatementCondition(
-      PsiWhileStatement whileStatement, PsiAssignmentExpression expression) {
-      final PsiExpression condition = whileStatement.getCondition();
-      if (expression.equals(condition)) {
-        registerError(expression);
-      }
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            if (!WellFormednessUtils.isWellFormed(expression)) {
+                return;
+            }
+            final PsiElement parent = expression.getParent();
+            if (parent == null) {
+                return;
+            }
+            if (parent instanceof PsiIfStatement) {
+                checkIfStatementCondition((PsiIfStatement) parent, expression);
+            }
+            if (parent instanceof PsiWhileStatement) {
+                checkWhileStatementCondition(
+                    (PsiWhileStatement) parent,
+                    expression
+                );
+            }
+            if (parent instanceof PsiForStatement) {
+                checkForStatementCondition((PsiForStatement) parent, expression);
+            }
+            if (parent instanceof PsiDoWhileStatement) {
+                checkDoWhileStatementCondition(
+                    (PsiDoWhileStatement) parent,
+                    expression
+                );
+            }
+        }
+
+        private void checkIfStatementCondition(
+            PsiIfStatement ifStatement, PsiAssignmentExpression expression
+        ) {
+            final PsiExpression condition = ifStatement.getCondition();
+            if (expression.equals(condition)) {
+                registerError(expression);
+            }
+        }
+
+        private void checkDoWhileStatementCondition(
+            PsiDoWhileStatement doWhileStatement, PsiAssignmentExpression expression
+        ) {
+            final PsiExpression condition = doWhileStatement.getCondition();
+            if (expression.equals(condition)) {
+                registerError(expression);
+            }
+        }
+
+        private void checkForStatementCondition(
+            PsiForStatement forStatement, PsiAssignmentExpression expression
+        ) {
+            final PsiExpression condition = forStatement.getCondition();
+            if (expression.equals(condition)) {
+                registerError(expression);
+            }
+        }
+
+        private void checkWhileStatementCondition(
+            PsiWhileStatement whileStatement, PsiAssignmentExpression expression
+        ) {
+            final PsiExpression condition = whileStatement.getCondition();
+            if (expression.equals(condition)) {
+                registerError(expression);
+            }
+        }
     }
-  }
 }

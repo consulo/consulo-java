@@ -24,59 +24,60 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assignmentToCatchBlockParameterDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.assignmentToCatchBlockParameterProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ExtractParameterAsLocalVariableFix();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AssignmentToCatchBlockParameterVisitor();
-  }
-
-  private static class AssignmentToCatchBlockParameterVisitor
-      extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.assignmentToCatchBlockParameterDisplayName();
+    }
 
     @Override
-    public void visitAssignmentExpression(
-        @Nonnull PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      if (!WellFormednessUtils.isWellFormed(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLExpression();
-      if (!(lhs instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression reference =
-          (PsiReferenceExpression) lhs;
-      final PsiElement variable = reference.resolve();
-      if (!(variable instanceof PsiParameter)) {
-        return;
-      }
-      final PsiParameter parameter = (PsiParameter) variable;
-      final PsiElement declarationScope = parameter.getDeclarationScope();
-      if (!(declarationScope instanceof PsiCatchSection)) {
-        return;
-      }
-      registerError(lhs);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.assignmentToCatchBlockParameterProblemDescriptor().get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ExtractParameterAsLocalVariableFix();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AssignmentToCatchBlockParameterVisitor();
+    }
+
+    private static class AssignmentToCatchBlockParameterVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            if (!WellFormednessUtils.isWellFormed(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLExpression();
+            if (!(lhs instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression reference =
+                (PsiReferenceExpression) lhs;
+            final PsiElement variable = reference.resolve();
+            if (!(variable instanceof PsiParameter)) {
+                return;
+            }
+            final PsiParameter parameter = (PsiParameter) variable;
+            final PsiElement declarationScope = parameter.getDeclarationScope();
+            if (!(declarationScope instanceof PsiCatchSection)) {
+                return;
+            }
+            registerError(lhs);
+        }
+    }
 }

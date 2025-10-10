@@ -33,140 +33,141 @@ import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
-public class AssignmentToMethodParameterInspection
-  extends BaseInspection {
+public class AssignmentToMethodParameterInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreTransformationOfOriginalParameter = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreTransformationOfOriginalParameter = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assignmentToMethodParameterDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.assignmentToMethodParameterProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.assignmentToMethodParameterIgnoreTransformationOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTransformationOfOriginalParameter");
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ExtractParameterAsLocalVariableFix();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AssignmentToMethodParameterVisitor();
-  }
-
-  private class AssignmentToMethodParameterVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      final PsiExpression lhs = expression.getLExpression();
-      final PsiParameter parameter = getMethodParameter(lhs);
-      if (parameter == null) {
-        return;
-      }
-      if (ignoreTransformationOfOriginalParameter) {
-        final PsiExpression rhs = expression.getRExpression();
-        if (rhs != null && VariableAccessUtils.variableIsUsed(parameter, rhs)) {
-          return;
-        }
-        final IElementType tokenType =
-          expression.getOperationTokenType();
-        if (tokenType == JavaTokenType.PLUSEQ ||
-            tokenType == JavaTokenType.MINUSEQ ||
-            tokenType == JavaTokenType.ASTERISKEQ ||
-            tokenType == JavaTokenType.DIVEQ ||
-            tokenType == JavaTokenType.ANDEQ ||
-            tokenType == JavaTokenType.OREQ ||
-            tokenType == JavaTokenType.XOREQ ||
-            tokenType == JavaTokenType.PERCEQ ||
-            tokenType == JavaTokenType.LTLTEQ ||
-            tokenType == JavaTokenType.GTGTEQ ||
-            tokenType == JavaTokenType.GTGTGTEQ) {
-          return;
-        }
-      }
-      registerError(lhs);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.assignmentToMethodParameterDisplayName();
+    }
+
+    @Nonnull
+    @Override
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.assignmentToMethodParameterProblemDescriptor().get();
     }
 
     @Override
-    public void visitPrefixExpression(
-      @Nonnull PsiPrefixExpression expression) {
-      if (ignoreTransformationOfOriginalParameter) {
-        return;
-      }
-      super.visitPrefixExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
-          !tokenType.equals(JavaTokenType.MINUSMINUS)) {
-        return;
-      }
-      final PsiExpression operand = expression.getOperand();
-      if (operand == null) {
-        return;
-      }
-      final PsiParameter parameter = getMethodParameter(operand);
-      if (parameter == null) {
-        return;
-      }
-      registerError(operand);
-    }
-
-    @Override
-    public void visitPostfixExpression(
-      @Nonnull PsiPostfixExpression expression) {
-      if (ignoreTransformationOfOriginalParameter) {
-        return;
-      }
-      super.visitPostfixExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
-          !tokenType.equals(JavaTokenType.MINUSMINUS)) {
-        return;
-      }
-      final PsiExpression operand = expression.getOperand();
-      final PsiParameter parameter = getMethodParameter(operand);
-      if (parameter == null) {
-        return;
-      }
-      registerError(operand);
-    }
-
     @Nullable
-    private PsiParameter getMethodParameter(PsiExpression expression) {
-      if (!(expression instanceof PsiReferenceExpression)) {
-        return null;
-      }
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)expression;
-      final PsiElement variable = referenceExpression.resolve();
-      if (!(variable instanceof PsiParameter)) {
-        return null;
-      }
-      final PsiParameter parameter = (PsiParameter)variable;
-      final PsiElement declarationScope = parameter.getDeclarationScope();
-      if (declarationScope instanceof PsiCatchSection) {
-        return null;
-      }
-      if (declarationScope instanceof PsiForeachStatement) {
-        return null;
-      }
-      return parameter;
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.assignmentToMethodParameterIgnoreTransformationOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTransformationOfOriginalParameter");
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ExtractParameterAsLocalVariableFix();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AssignmentToMethodParameterVisitor();
+    }
+
+    private class AssignmentToMethodParameterVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            final PsiExpression lhs = expression.getLExpression();
+            final PsiParameter parameter = getMethodParameter(lhs);
+            if (parameter == null) {
+                return;
+            }
+            if (ignoreTransformationOfOriginalParameter) {
+                final PsiExpression rhs = expression.getRExpression();
+                if (rhs != null && VariableAccessUtils.variableIsUsed(parameter, rhs)) {
+                    return;
+                }
+                final IElementType tokenType =
+                    expression.getOperationTokenType();
+                if (tokenType == JavaTokenType.PLUSEQ ||
+                    tokenType == JavaTokenType.MINUSEQ ||
+                    tokenType == JavaTokenType.ASTERISKEQ ||
+                    tokenType == JavaTokenType.DIVEQ ||
+                    tokenType == JavaTokenType.ANDEQ ||
+                    tokenType == JavaTokenType.OREQ ||
+                    tokenType == JavaTokenType.XOREQ ||
+                    tokenType == JavaTokenType.PERCEQ ||
+                    tokenType == JavaTokenType.LTLTEQ ||
+                    tokenType == JavaTokenType.GTGTEQ ||
+                    tokenType == JavaTokenType.GTGTGTEQ) {
+                    return;
+                }
+            }
+            registerError(lhs);
+        }
+
+        @Override
+        public void visitPrefixExpression(
+            @Nonnull PsiPrefixExpression expression
+        ) {
+            if (ignoreTransformationOfOriginalParameter) {
+                return;
+            }
+            super.visitPrefixExpression(expression);
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
+                !tokenType.equals(JavaTokenType.MINUSMINUS)) {
+                return;
+            }
+            final PsiExpression operand = expression.getOperand();
+            if (operand == null) {
+                return;
+            }
+            final PsiParameter parameter = getMethodParameter(operand);
+            if (parameter == null) {
+                return;
+            }
+            registerError(operand);
+        }
+
+        @Override
+        public void visitPostfixExpression(
+            @Nonnull PsiPostfixExpression expression
+        ) {
+            if (ignoreTransformationOfOriginalParameter) {
+                return;
+            }
+            super.visitPostfixExpression(expression);
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
+                !tokenType.equals(JavaTokenType.MINUSMINUS)) {
+                return;
+            }
+            final PsiExpression operand = expression.getOperand();
+            final PsiParameter parameter = getMethodParameter(operand);
+            if (parameter == null) {
+                return;
+            }
+            registerError(operand);
+        }
+
+        @Nullable
+        private PsiParameter getMethodParameter(PsiExpression expression) {
+            if (!(expression instanceof PsiReferenceExpression)) {
+                return null;
+            }
+            final PsiReferenceExpression referenceExpression =
+                (PsiReferenceExpression) expression;
+            final PsiElement variable = referenceExpression.resolve();
+            if (!(variable instanceof PsiParameter)) {
+                return null;
+            }
+            final PsiParameter parameter = (PsiParameter) variable;
+            final PsiElement declarationScope = parameter.getDeclarationScope();
+            if (declarationScope instanceof PsiCatchSection) {
+                return null;
+            }
+            if (declarationScope instanceof PsiForeachStatement) {
+                return null;
+            }
+            return parameter;
+        }
+    }
 }
