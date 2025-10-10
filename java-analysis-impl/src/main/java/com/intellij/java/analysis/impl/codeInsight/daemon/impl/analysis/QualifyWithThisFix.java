@@ -25,6 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -42,8 +43,8 @@ class QualifyWithThisFix implements SyntheticIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Qualify with " + myContainingClass.getName() + ".this";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Qualify with " + myContainingClass.getName() + ".this");
   }
 
   @Override

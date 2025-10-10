@@ -27,10 +27,10 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.util.Collection;
 
@@ -41,11 +41,10 @@ import java.util.Collection;
 public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(RedundantLambdaCodeBlockInspection.class);
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
   @Nonnull
@@ -54,11 +53,10 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Statement lambda can be replaced with expression lambda";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Statement lambda can be replaced with expression lambda");
   }
 
   @Override
@@ -143,8 +141,8 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
   private static class ReplaceWithExprFix implements LocalQuickFix, HighPriorityAction {
     @Nonnull
     @Override
-    public String getFamilyName() {
-      return "Replace with expression lambda";
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Replace with expression lambda");
     }
 
     @Override

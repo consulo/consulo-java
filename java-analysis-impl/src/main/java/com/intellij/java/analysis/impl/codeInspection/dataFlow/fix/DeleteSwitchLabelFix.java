@@ -11,6 +11,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
@@ -49,17 +50,10 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   @Nls(capitalization = Nls.Capitalization.Sentence)
   @Nonnull
   @Override
-  public String getName() {
-    return myBranch ?
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO(myBranch ?
         "Remove switch branch '" + myName + "'" :
-        "Remove switch label '" + myName + "'";
-  }
-
-  @Nls(capitalization = Nls.Capitalization.Sentence)
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Remove switch label";
+        "Remove switch label '" + myName + "'");
   }
 
   @Override

@@ -57,12 +57,12 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,14 +70,14 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CreateSubclassAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateSubclassAction implements IntentionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ImplementAbstractClassAction");
-  private String myText = CodeInsightLocalize.intentionImplementAbstractClassFamily().get();
-  @NonNls
+  private static final Logger LOG = Logger.getInstance(CreateSubclassAction.class);
+  private LocalizeValue myText = CodeInsightLocalize.intentionImplementAbstractClassFamily();
+
   private static final String IMPL_SUFFIX = "Impl";
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     return myText;
   }
 
@@ -125,12 +125,12 @@ public class CreateSubclassAction implements IntentionAction {
     return aClass.getLanguage() == JavaLanguage.INSTANCE;
   }
 
-  protected static String getTitle(PsiClass psiClass) {
+  protected static LocalizeValue getTitle(PsiClass psiClass) {
     return psiClass.isInterface()
-      ? CodeInsightLocalize.intentionImplementAbstractClassInterfaceText().get()
+      ? CodeInsightLocalize.intentionImplementAbstractClassInterfaceText()
       : psiClass.hasModifierProperty(PsiModifier.ABSTRACT)
-      ? CodeInsightLocalize.intentionImplementAbstractClassDefaultText().get()
-      : CodeInsightLocalize.intentionImplementAbstractClassSubclassText().get();
+      ? CodeInsightLocalize.intentionImplementAbstractClassDefaultText()
+      : CodeInsightLocalize.intentionImplementAbstractClassSubclassText();
   }
 
   @Override
@@ -147,7 +147,7 @@ public class CreateSubclassAction implements IntentionAction {
   }
 
   public static void createInnerClass(final PsiClass aClass) {
-    new WriteCommandAction(aClass.getProject(), getTitle(aClass), getTitle(aClass)) {
+    new WriteCommandAction(aClass.getProject(), getTitle(aClass).get(), getTitle(aClass).get()) {
       @Override
       @RequiredReadAction
       protected void run(Result result) throws Throwable {
@@ -205,7 +205,7 @@ public class CreateSubclassAction implements IntentionAction {
   public static PsiClass createSubclass(final PsiClass psiClass, final PsiDirectory targetDirectory, final String className) {
     final Project project = psiClass.getProject();
     final PsiClass[] targetClass = new PsiClass[1];
-    new WriteCommandAction(project, getTitle(psiClass), getTitle(psiClass)) {
+    new WriteCommandAction(project, getTitle(psiClass).get(), getTitle(psiClass).get()) {
       @Override
       protected void run(Result result) throws Throwable {
         IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
@@ -298,7 +298,7 @@ public class CreateSubclassAction implements IntentionAction {
                 startClassOffset.dispose();
               }
             }
-          }, getTitle(psiClass));
+          }, getTitle(psiClass).get());
         }
       }
     } catch (IncorrectOperationException e) {

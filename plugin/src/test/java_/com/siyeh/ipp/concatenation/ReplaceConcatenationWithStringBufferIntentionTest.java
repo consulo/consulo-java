@@ -1,23 +1,28 @@
 package com.siyeh.ipp.concatenation;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @author Bas Leijdekkers
  */
 public abstract class ReplaceConcatenationWithStringBufferIntentionTest extends IPPTestCase {
 
-  public void testNonStringConcatenationStart() { doTest(); }
-  public void testConcatenationInsideAppend() { doTest(); }
+    public void testNonStringConcatenationStart() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.concatenation.with.string.builder.intention.name");
-  }
+    public void testConcatenationInsideAppend() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "concatenation/string_builder";
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceConcatenationWithStringBuilderIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "concatenation/string_builder";
+    }
 }

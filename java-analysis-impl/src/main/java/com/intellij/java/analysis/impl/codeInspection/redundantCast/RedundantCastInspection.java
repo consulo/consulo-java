@@ -31,6 +31,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -137,8 +138,8 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
     @Nonnull
-    public String getFamilyName() {
-      return InspectionLocalize.inspectionRedundantCastRemoveQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.inspectionRedundantCastRemoveQuickfix();
     }
 
     @Override
@@ -154,14 +155,14 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionRedundantCastDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionRedundantCastDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
   }
 
   @Override

@@ -46,8 +46,8 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodOverloadsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.methodOverloadsDisplayName();
   }
 
   @Override

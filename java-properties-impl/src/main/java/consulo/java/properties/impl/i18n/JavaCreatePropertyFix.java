@@ -30,6 +30,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
@@ -50,8 +51,8 @@ public class JavaCreatePropertyFix extends CreatePropertyFix implements Syntheti
   }
 
   @Override
-  protected Pair<String, String> doAction(Project project, PsiElement psiElement, I18nizeQuickFixModel model) {
-    final Pair<String, String> result = super.doAction(project, psiElement, model);
+  protected Couple<String> doAction(Project project, PsiElement psiElement, I18nizeQuickFixModel model) {
+    final Couple<String> result = super.doAction(project, psiElement, model);
     if (result != null && psiElement instanceof PsiLiteralExpression) {
       final String key = result.first;
 

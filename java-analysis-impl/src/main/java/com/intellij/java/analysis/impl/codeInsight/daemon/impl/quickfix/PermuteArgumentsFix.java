@@ -23,18 +23,17 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -60,8 +59,8 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
 
     @Override
     @Nonnull
-    public String getText() {
-        return JavaQuickFixBundle.message("permute.arguments");
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.permuteArguments();
     }
 
     @Override

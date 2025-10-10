@@ -18,15 +18,15 @@ package com.intellij.java.analysis.impl.codeInsight.quickfix;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.content.bundle.Sdk;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -45,8 +45,8 @@ public class SetupJDKFix implements IntentionAction, HighPriorityAction, Synthet
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("setup.jdk.location.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.setupJdkLocationText();
   }
 
   @Override

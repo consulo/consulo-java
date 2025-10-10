@@ -143,14 +143,14 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesInternationalizationIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesInternationalizationIssues();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return CodeInsightLocalize.inspectionI18nDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return CodeInsightLocalize.inspectionI18nDisplayName();
   }
 
   @Nullable
@@ -400,8 +400,8 @@ public class I18nInspection extends BaseLocalInspectionTool {
     return new LocalQuickFix() {
       @Override
       @Nonnull
-      public String getName() {
-        return RefactoringLocalize.introduceConstantTitle().get();
+      public LocalizeValue getName() {
+        return RefactoringLocalize.introduceConstantTitle();
       }
 
       @Override
@@ -420,12 +420,6 @@ public class I18nInspection extends BaseLocalInspectionTool {
           },
           project.getDisposed()
         );
-      }
-
-      @Override
-      @Nonnull
-      public String getFamilyName() {
-        return getName();
       }
     };
   }

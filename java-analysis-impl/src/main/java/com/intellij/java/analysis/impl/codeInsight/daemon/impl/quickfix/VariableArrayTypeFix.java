@@ -20,12 +20,14 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.application.WriteAction;
 import consulo.application.presentation.TypePresentationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.findUsage.FindUsagesProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
@@ -36,16 +38,18 @@ import jakarta.annotation.Nullable;
 public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
   @Nonnull
   private final PsiArrayType myTargetType;
-  private final String myName;
-  private final String myFamilyName;
+  private final LocalizeValue myName;
 
   private VariableArrayTypeFix(@Nonnull PsiArrayInitializerExpression initializer, @Nonnull PsiArrayType arrayType, @Nonnull PsiVariable variable) {
     super(initializer);
     myTargetType = arrayType;
     PsiExpression myNewExpression = getNewExpressionLocal(initializer);
-    myName = myTargetType.equals(variable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.text", getNewText(myNewExpression, initializer),
-        myTargetType.getCanonicalText(), "") : JavaQuickFixBundle.message("fix.variable.type.text", formatType(variable), variable.getName(), myTargetType.getCanonicalText());
-    myFamilyName = JavaQuickFixBundle.message(myTargetType.equals(variable.getType()) && myNewExpression != null ? "change.new.operator.type.family" : "fix.variable.type.family");
+      if (myTargetType.equals(variable.getType()) && myNewExpression != null) {
+          myName = JavaQuickFixLocalize.changeNewOperatorTypeText(getNewText(myNewExpression, initializer), myTargetType.getCanonicalText(), "");
+      }
+      else {
+          myName = JavaQuickFixLocalize.fixVariableTypeText(formatType(variable), variable.getName(), myTargetType.getCanonicalText());
+      }
   }
 
   @Nullable
@@ -133,14 +137,8 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myName;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return myFamilyName;
   }
 
   @Override

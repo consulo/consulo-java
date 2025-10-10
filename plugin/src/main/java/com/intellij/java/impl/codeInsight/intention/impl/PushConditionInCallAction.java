@@ -27,6 +27,7 @@ import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -35,7 +36,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.PushConditionInCallAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
   public PushConditionInCallAction() {
-    setText("Push condition inside call");
+    setText(LocalizeValue.localizeTODO("Push condition inside call"));
   }
 
   @Override
@@ -80,8 +81,8 @@ public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
         }
       }
     }
-    setText("Push condition '" + conditionalExpression.getCondition().getText() + "' inside " +
-            (thenMethod.isConstructor() ? "constructor" : "method") + " call");
+    setText(LocalizeValue.localizeTODO("Push condition '" + conditionalExpression.getCondition().getText() + "' inside " +
+            (thenMethod.isConstructor() ? "constructor" : "method") + " call"));
     return true;
   }
 

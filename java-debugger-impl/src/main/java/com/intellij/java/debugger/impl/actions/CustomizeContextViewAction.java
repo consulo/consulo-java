@@ -25,10 +25,10 @@ import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
 import consulo.localize.LocalizeValue;
-import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
@@ -85,7 +85,7 @@ public class CustomizeContextViewAction extends DumbAwareAction {
     @Override
     @RequiredUIAccess
     public void update(AnActionEvent e) {
-        e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizecontextviewText());
+        e.getPresentation().setTextValue(XDebuggerLocalize.actionCustomizeContextViewText());
 
         Project project = e.getData(Project.KEY);
         XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);

@@ -20,6 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -34,14 +35,14 @@ public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool imp
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesImports().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesImports();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.unusedImport().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.unusedImport();
   }
 
   @Override

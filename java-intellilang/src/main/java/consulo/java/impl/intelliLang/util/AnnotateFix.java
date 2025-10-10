@@ -19,6 +19,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.NavigationItem;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -45,13 +46,8 @@ public class AnnotateFix implements LocalQuickFix {
   }
 
   @Nonnull
-  public String getName() {
-    return "Annotate with @" + StringUtil.getShortName(myAnnotationName);
-  }
-
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Annotate with @" + StringUtil.getShortName(myAnnotationName));
   }
 
   public boolean canApply() {

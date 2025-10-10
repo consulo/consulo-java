@@ -16,13 +16,10 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
-import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -43,14 +40,8 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 
     @Nonnull
     @Override
-    public String getText() {
-        return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(PsiKeyword.PROVIDES, myInterfaceName).get();
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return JavaQuickFixLocalize.java9MergeModuleStatementsFixFamilyName(PsiKeyword.PROVIDES).get();
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(PsiKeyword.PROVIDES, myInterfaceName);
     }
 
     @Nonnull

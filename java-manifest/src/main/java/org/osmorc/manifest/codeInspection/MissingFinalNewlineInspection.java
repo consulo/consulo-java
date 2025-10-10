@@ -31,31 +31,31 @@ import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestFile;
 import org.osmorc.manifest.lang.psi.Section;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 @ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
-  @Nls
+  @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return "General";
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.inspectionGeneralToolsGroupName();
   }
 
   @Nullable
@@ -64,10 +64,9 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return ManifestLanguage.INSTANCE;
   }
 
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return "Missing Final New Line";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Missing Final New Line");
   }
 
   @Nonnull
@@ -112,14 +111,10 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
       this.section = section;
     }
 
+    @Override
     @Nonnull
-    public String getName() {
-      return "Add newline";
-    }
-
-    @Nonnull
-    public String getFamilyName() {
-      return "Osmorc";
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Add newline");
     }
 
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {

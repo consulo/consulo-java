@@ -126,7 +126,7 @@ public class ModuleHighlightUtil {
             if (others.size() > 1) {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(range(element))
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleFileDuplicate().get())
+                    .descriptionAndTooltip(JavaErrorLocalize.moduleFileDuplicate())
                     .create();
                 others.stream()
                     .map(f -> PsiManager.getInstance(project).findFile(f))
@@ -134,7 +134,7 @@ public class ModuleHighlightUtil {
                     .findFirst()
                     .ifPresent(duplicate -> QuickFixAction.registerQuickFixAction(
                         info,
-                        new GoToSymbolFix(duplicate, JavaErrorLocalize.moduleOpenDuplicateText().get())
+                        new GoToSymbolFix(duplicate, JavaErrorLocalize.moduleOpenDuplicateText())
                     ));
                 return info;
             }
@@ -254,12 +254,12 @@ public class ModuleHighlightUtil {
     public static HighlightInfo checkFileLocation(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
         VirtualFile vFile = file.getVirtualFile();
         if (vFile != null) {
-            VirtualFile root = ProjectFileIndex.SERVICE.getInstance(file.getProject()).getSourceRootForFile(vFile);
+            VirtualFile root = ProjectFileIndex.getInstance(file.getProject()).getSourceRootForFile(vFile);
             if (root != null && !root.equals(vFile.getParent())) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WARNING)
                     .range(range(element))
                     .descriptionAndTooltip(JavaErrorLocalize.moduleFileWrongLocation())
-                    .registerFix(new MoveFileFix(vFile, root, JavaQuickFixLocalize.moveFileToSourceRootText().get()))
+                    .registerFix(new MoveFileFix(vFile, root, JavaQuickFixLocalize.moveFileToSourceRootText()))
                     .create();
             }
         }

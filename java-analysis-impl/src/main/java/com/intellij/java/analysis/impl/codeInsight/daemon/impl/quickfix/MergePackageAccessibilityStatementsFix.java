@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,14 +47,8 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 
     @Nonnull
     @Override
-    public String getText() {
-        return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(getKeyword(), myPackageName).get();
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return JavaQuickFixLocalize.java9MergeModuleStatementsFixFamilyName(getKeyword()).get();
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(getKeyword(), myPackageName);
     }
 
     @Nonnull

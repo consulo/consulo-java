@@ -30,6 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
@@ -95,7 +96,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Suppress with '" + nonNlsCommentPattern + "' comment";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Suppress with '" + nonNlsCommentPattern + "' comment");
   }
 }

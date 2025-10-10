@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.ig.threading;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
@@ -33,15 +35,13 @@ public class NotifyNotInSynchronizedContextInspection
   extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "notify.not.in.synchronized.context.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.notifyNotInSynchronizedContextDisplayName();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "notify.not.in.synchronized.context.problem.descriptor");
+    return InspectionGadgetsLocalize.notifyNotInSynchronizedContextProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -9,12 +9,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
@@ -28,8 +30,8 @@ import org.jetbrains.annotations.Nls;
 public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLocalInspectionTool<Object> {
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return JavaBundle.message("inspection.default.annotation.param");
+  public LocalizeValue getDisplayName() {
+    return JavaLocalize.inspectionDefaultAnnotationParam();
   }
 
   @Override
@@ -39,8 +41,8 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
 
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesDeclarationRedundancy();
   }
 
   @Nonnull
@@ -98,8 +100,8 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
     return new LocalQuickFixAndIntentionActionOnPsiElement(value) {
       @Nonnull
       @Override
-      public String getText() {
-        return JavaBundle.message("quickfix.family.remove.redundant.parameter");
+      public LocalizeValue getText() {
+        return JavaLocalize.quickfixFamilyRemoveRedundantParameter();
       }
 
       @Override
@@ -111,13 +113,6 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
         @Nonnull PsiElement psiElement1
       ) {
         psiElement.getParent().delete();
-      }
-
-      @Nls
-      @Nonnull
-      @Override
-      public String getFamilyName() {
-        return JavaBundle.message("quickfix.family.remove.redundant.parameter");
       }
     };
   }

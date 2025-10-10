@@ -20,6 +20,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,8 +32,8 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classEscapesDefinedScopeDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classEscapesDefinedScopeDisplayName();
   }
 
   @Nonnull

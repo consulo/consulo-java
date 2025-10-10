@@ -30,6 +30,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.disposer.Disposer;
 import consulo.ide.ServiceManager;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -41,6 +42,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
@@ -397,8 +399,8 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 
     @Override
     @Nonnull
-    public String getText() {
-      return JavaQuickFixBundle.message("fix.unused.symbol.injection.text", "fields", myQualifiedName);
+    public LocalizeValue getText() {
+      return JavaQuickFixLocalize.fixUnusedSymbolInjectionText("fields", myQualifiedName);
     }
 
     @Override

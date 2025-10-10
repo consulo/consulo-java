@@ -17,6 +17,7 @@ package com.siyeh.ipp.trivialif;
 
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceIfWithConditionalIntentionTest extends IPPTestCase {
 
@@ -34,7 +35,7 @@ public abstract class ReplaceIfWithConditionalIntentionTest extends IPPTestCase 
 
   @Override
   protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.if.with.conditional.intention.name");
+    return IntentionPowerPackLocalize.replaceIfWithConditionalIntentionName().get();
   }
 
   @Override

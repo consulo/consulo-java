@@ -18,7 +18,7 @@ import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.fileEditor.FileEditorManager;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -361,8 +361,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.inspectionJavadocProblemAddTag(myTag, myValue).get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.inspectionJavadocProblemAddTag(myTag, myValue);
     }
 
     @Override
@@ -410,12 +410,6 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
           editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
         }
       }
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return InspectionLocalize.inspectionJavadocProblemAddTagFamily().get();
     }
   }
 
@@ -879,8 +873,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.inspectionJavadocProblemAddParamTag(myName).get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.inspectionJavadocProblemAddParamTag(myName);
     }
 
     @Override
@@ -1309,14 +1303,14 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionJavadocDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionJavadocDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesJavadocIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesJavadocIssues();
   }
 
   @Override
@@ -1338,15 +1332,9 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return JavaQuickFixBundle.message("add.doctag.to.custom.tags", myTag);
+    public LocalizeValue getName() {
+      return JavaQuickFixLocalize.addDoctagToCustomTags(myTag);
     }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-     return JavaQuickFixBundle.message("fix.javadoc.family");
-   }
 
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {

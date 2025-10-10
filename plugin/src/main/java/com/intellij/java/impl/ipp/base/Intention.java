@@ -18,7 +18,6 @@ package com.intellij.java.impl.ipp.base;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
@@ -28,212 +27,182 @@ import consulo.language.editor.intention.BaseElementAtCaretIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 public abstract class Intention extends BaseElementAtCaretIntentionAction {
 
-  private final PsiElementPredicate predicate;
+    private final PsiElementPredicate predicate;
 
-  /**
-   * @noinspection AbstractMethodCallInConstructor, OverridableMethodCallInConstructor
-   */
-  protected Intention() {
-    predicate = getElementPredicate();
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element){
-    if (!isWritable(project, element)) {
-      return;
+    protected Intention() {
+        predicate = getElementPredicate();
     }
-    final PsiElement matchingElement = findMatchingElement(element, editor);
-    if (matchingElement == null) {
-      return;
-    }
-    processIntention(editor, matchingElement);
-  }
 
-  protected abstract void processIntention(@Nonnull PsiElement element);
-  
-  protected void processIntention(Editor editor, @Nonnull PsiElement element) {
-    processIntention(element);
-  }
-
-  @Nonnull
-  protected abstract PsiElementPredicate getElementPredicate();
-
-  protected static void replaceExpression(@Nonnull String newExpression, @Nonnull PsiExpression expression){
-    final Project project = expression.getProject();
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    final PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
-    final PsiElement insertedElement = expression.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformat(insertedElement);
-  }
-
-  protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @Nonnull PsiExpression expression){
-    final Project project = expression.getProject();
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    PsiExpression expressionToReplace = expression;
-    final String newExpressionText = newExpression.getText();
-    final String expString;
-    if (BoolUtils.isNegated(expression)) {
-      expressionToReplace = BoolUtils.findNegation(expression);
-      expString = newExpressionText;
-    }
-    else if (ComparisonUtils.isComparison(newExpression)) {
-      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)newExpression;
-      final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
-      final PsiExpression lhs = binaryExpression.getLOperand();
-      final PsiExpression rhs = binaryExpression.getROperand();
-      assert rhs != null;
-      expString = lhs.getText() + negatedComparison + rhs.getText();
-    }
-    else {
-      if (ParenthesesUtils.getPrecedence(newExpression) > ParenthesesUtils.PREFIX_PRECEDENCE) {
-        expString = "!(" + newExpressionText + ')';
-      }
-      else {
-        expString = '!' + newExpressionText;
-      }
-    }
-    final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
-    assert expressionToReplace != null;
-    final PsiElement insertedElement = expressionToReplace.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformat(insertedElement);
-  }
-
-  protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
-    final Project project = expression.getProject();
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiElementFactory factory = psiFacade.getElementFactory();
-    PsiExpression expressionToReplace = expression;
-    final String expString;
-    if (BoolUtils.isNegated(expression)) {
-      expressionToReplace = BoolUtils.findNegation(expressionToReplace);
-      expString = newExpression;
-    }
-    else {
-      PsiElement parent = expressionToReplace.getParent();
-      while (parent instanceof PsiParenthesizedExpression) {
-        expressionToReplace = (PsiExpression)parent;
-        parent = parent.getParent();
-      }
-      expString = "!(" + newExpression + ')';
-    }
-    final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
-    assert expressionToReplace != null;
-    final PsiElement insertedElement = expressionToReplace.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformat(insertedElement);
-  }
-
-  protected static void replaceStatement(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
-    final Project project = statement.getProject();
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
-    final PsiElement insertedElement = statement.replace(newStatement);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformat(insertedElement);
-  }
-
-  protected static void replaceStatementAndShorten(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
-    final Project project = statement.getProject();
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiElementFactory factory = psiFacade.getElementFactory();
-    final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
-    final PsiElement insertedElement = statement.replace(newStatement);
-    final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
-    final PsiElement shortenedElement = javaCodeStyleManager.shortenClassReferences(insertedElement);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformat(shortenedElement);
-  }
-
-  protected static void addStatementBefore(String newStatementText, PsiReturnStatement anchor) {
-    final Project project = anchor.getProject();
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    final PsiStatement newStatement = factory.createStatementFromText(newStatementText, anchor);
-    final PsiElement addedStatement = anchor.getParent().addBefore(newStatement, anchor);
-    CodeStyleManager.getInstance(project).reformat(addedStatement);
-  }
-
-  @Nullable
-  PsiElement findMatchingElement(@Nullable PsiElement element, Editor editor) {
-    while (element != null) {
-      if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
-        break;
-      }
-      if (predicate instanceof PsiElementEditorPredicate) {
-        if (((PsiElementEditorPredicate)predicate).satisfiedBy(element, editor)) {
-          return element;
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+        if (!isWritable(project, element)) {
+            return;
         }
-      }
-      else if (predicate.satisfiedBy(element)) {
-        return element;
-      }
-      element = element.getParent();
-      if (element instanceof PsiFile) {
-        break;
-      }
+        final PsiElement matchingElement = findMatchingElement(element, editor);
+        if (matchingElement == null) {
+            return;
+        }
+        processIntention(editor, matchingElement);
     }
-    return null;
-  }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    return findMatchingElement(element, editor) != null;
-  }
+    protected abstract void processIntention(@Nonnull PsiElement element);
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
-
-  private static boolean isWritable(Project project, PsiElement element) {
-    final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
-    if (virtualFile == null) {
-      return true;
+    protected void processIntention(Editor editor, @Nonnull PsiElement element) {
+        processIntention(element);
     }
-    final ReadonlyStatusHandler readonlyStatusHandler = ReadonlyStatusHandler.getInstance(project);
-    final ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(virtualFile);
-    return !operationStatus.hasReadonlyFiles();
-  }
 
-  protected String getPrefix() {
-    final Class<? extends Intention> aClass = getClass();
-    final String name = aClass.getSimpleName();
-    final StringBuilder buffer = new StringBuilder(name.length() + 10);
-    buffer.append(Character.toLowerCase(name.charAt(0)));
-    for (int i = 1; i < name.length(); i++) {
-      final char c = name.charAt(i);
-      if (Character.isUpperCase(c)) {
-        buffer.append('.');
-        buffer.append(Character.toLowerCase(c));
-      }
-      else {
-        buffer.append(c);
-      }
+    @Nonnull
+    protected abstract PsiElementPredicate getElementPredicate();
+
+    protected static void replaceExpression(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
+        final Project project = expression.getProject();
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        final PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
+        final PsiElement insertedElement = expression.replace(newCall);
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(insertedElement);
     }
-    return buffer.toString();
-  }
 
-  @Override
-  @Nonnull
-  public String getText() {
-    //noinspection UnresolvedPropertyKey
-    return IntentionPowerPackBundle.message(getPrefix() + ".name");
-  }
+    protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @Nonnull PsiExpression expression) {
+        final Project project = expression.getProject();
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiExpression expressionToReplace = expression;
+        final String newExpressionText = newExpression.getText();
+        final String expString;
+        if (BoolUtils.isNegated(expression)) {
+            expressionToReplace = BoolUtils.findNegation(expression);
+            expString = newExpressionText;
+        }
+        else if (ComparisonUtils.isComparison(newExpression)) {
+            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) newExpression;
+            final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
+            final PsiExpression lhs = binaryExpression.getLOperand();
+            final PsiExpression rhs = binaryExpression.getROperand();
+            assert rhs != null;
+            expString = lhs.getText() + negatedComparison + rhs.getText();
+        }
+        else {
+            if (ParenthesesUtils.getPrecedence(newExpression) > ParenthesesUtils.PREFIX_PRECEDENCE) {
+                expString = "!(" + newExpressionText + ')';
+            }
+            else {
+                expString = '!' + newExpressionText;
+            }
+        }
+        final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
+        assert expressionToReplace != null;
+        final PsiElement insertedElement = expressionToReplace.replace(newCall);
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(insertedElement);
+    }
 
-  @Nonnull
-  public String getFamilyName() {
-    //noinspection UnresolvedPropertyKey
-    return IntentionPowerPackBundle.defaultableMessage(getPrefix() + ".family.name");
-  }
+    protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
+        final Project project = expression.getProject();
+        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        final PsiElementFactory factory = psiFacade.getElementFactory();
+        PsiExpression expressionToReplace = expression;
+        final String expString;
+        if (BoolUtils.isNegated(expression)) {
+            expressionToReplace = BoolUtils.findNegation(expressionToReplace);
+            expString = newExpression;
+        }
+        else {
+            PsiElement parent = expressionToReplace.getParent();
+            while (parent instanceof PsiParenthesizedExpression) {
+                expressionToReplace = (PsiExpression) parent;
+                parent = parent.getParent();
+            }
+            expString = "!(" + newExpression + ')';
+        }
+        final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
+        assert expressionToReplace != null;
+        final PsiElement insertedElement = expressionToReplace.replace(newCall);
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(insertedElement);
+    }
+
+    protected static void replaceStatement(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+        final Project project = statement.getProject();
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
+        final PsiElement insertedElement = statement.replace(newStatement);
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(insertedElement);
+    }
+
+    protected static void replaceStatementAndShorten(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+        final Project project = statement.getProject();
+        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        final PsiElementFactory factory = psiFacade.getElementFactory();
+        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
+        final PsiElement insertedElement = statement.replace(newStatement);
+        final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+        final PsiElement shortenedElement = javaCodeStyleManager.shortenClassReferences(insertedElement);
+        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        codeStyleManager.reformat(shortenedElement);
+    }
+
+    protected static void addStatementBefore(String newStatementText, PsiReturnStatement anchor) {
+        final Project project = anchor.getProject();
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, anchor);
+        final PsiElement addedStatement = anchor.getParent().addBefore(newStatement, anchor);
+        CodeStyleManager.getInstance(project).reformat(addedStatement);
+    }
+
+    @Nullable
+    PsiElement findMatchingElement(@Nullable PsiElement element, Editor editor) {
+        while (element != null) {
+            if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
+                break;
+            }
+            if (predicate instanceof PsiElementEditorPredicate) {
+                if (((PsiElementEditorPredicate) predicate).satisfiedBy(element, editor)) {
+                    return element;
+                }
+            }
+            else if (predicate.satisfiedBy(element)) {
+                return element;
+            }
+            element = element.getParent();
+            if (element instanceof PsiFile) {
+                break;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+        return findMatchingElement(element, editor) != null;
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
+
+    private static boolean isWritable(Project project, PsiElement element) {
+        final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
+        if (virtualFile == null) {
+            return true;
+        }
+        final ReadonlyStatusHandler readonlyStatusHandler = ReadonlyStatusHandler.getInstance(project);
+        final ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(virtualFile);
+        return !operationStatus.hasReadonlyFiles();
+    }
+
+    @Override
+    @Nonnull
+    public abstract LocalizeValue getText();
 }

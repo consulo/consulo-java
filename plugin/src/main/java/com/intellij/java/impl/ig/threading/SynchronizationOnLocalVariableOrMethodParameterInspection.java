@@ -22,8 +22,8 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class SynchronizationOnLocalVariableOrMethodParameterInspection extends BaseInspection {
@@ -33,10 +33,9 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
   @SuppressWarnings({"PublicField"})
   public boolean reportMethodParameters = true;
 
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.synchronizationOnLocalVariableOrMethodParameterDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.synchronizationOnLocalVariableOrMethodParameterDisplayName();
   }
 
   public boolean isEnabledByDefault() {

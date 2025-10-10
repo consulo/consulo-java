@@ -21,90 +21,98 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.DemorgansIntention", fileExtensions = "java", categories = {
-		"Java",
-		"Boolean"
+    "Java",
+    "Boolean"
 })
 public class DemorgansIntention extends MutablyNamedIntention {
 
-  protected String getTextForElement(PsiElement element) {
-    final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression)element;
-    final IElementType tokenType = binaryExpression.getOperationTokenType();
-    if (tokenType.equals(JavaTokenType.ANDAND)) {
-      return IntentionPowerPackBundle.message("demorgans.intention.name1");
-    }
-    else {
-      return IntentionPowerPackBundle.message("demorgans.intention.name2");
-    }
-  }
-
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ConjunctionPredicate();
-  }
-
-  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)element;
-    final String newExpression = convertConjunctionExpression(polyadicExpression);
-    replaceExpressionWithNegatedExpressionString(newExpression, polyadicExpression);
-  }
-
-  private static String convertConjunctionExpression(PsiPolyadicExpression polyadicExpression) {
-    final IElementType tokenType = polyadicExpression.getOperationTokenType();
-    final String flippedConjunction;
-    final boolean tokenTypeAndAnd = tokenType.equals(JavaTokenType.ANDAND);
-    flippedConjunction = tokenTypeAndAnd ? "||" : "&&";
-    final StringBuilder result = new StringBuilder();
-    for (PsiExpression operand : polyadicExpression.getOperands()) {
-      if (result.length() != 0) {
-        result.append(flippedConjunction);
-      }
-      result.append(convertLeafExpression(operand, tokenTypeAndAnd));
-    }
-    return result.toString();
-  }
-
-  private static String convertLeafExpression(PsiExpression expression, boolean tokenTypeAndAnd) {
-    if (BoolUtils.isNegation(expression)) {
-      final PsiExpression negatedExpression = BoolUtils.getNegated(expression);
-      if (negatedExpression == null) {
-        return "";
-      }
-      if (tokenTypeAndAnd) {
-        if (ParenthesesUtils.getPrecedence(negatedExpression) > ParenthesesUtils.OR_PRECEDENCE) {
-          return '(' + negatedExpression.getText() + ')';
+    @Override
+    protected LocalizeValue getTextForElement(PsiElement element) {
+        final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) element;
+        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        if (tokenType.equals(JavaTokenType.ANDAND)) {
+            return IntentionPowerPackLocalize.demorgansIntentionName1();
         }
-      } else if (ParenthesesUtils.getPrecedence(negatedExpression) > ParenthesesUtils.AND_PRECEDENCE) {
-        return '(' + negatedExpression.getText() + ')';
-      }
-      return negatedExpression.getText();
+        else {
+            return IntentionPowerPackLocalize.demorgansIntentionName2();
+        }
     }
-    else if (ComparisonUtils.isComparison(expression)) {
-      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)expression;
-      final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
-      final PsiExpression lhs = binaryExpression.getLOperand();
-      final PsiExpression rhs = binaryExpression.getROperand();
-      assert rhs != null;
-      return lhs.getText() + negatedComparison + rhs.getText();
+
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.demorgansIntentionFamilyName();
     }
-    else if (ParenthesesUtils.getPrecedence(expression) > ParenthesesUtils.PREFIX_PRECEDENCE) {
-      return "!(" + expression.getText() + ')';
+
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ConjunctionPredicate();
     }
-    else {
-      return '!' + expression.getText();
+
+    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element;
+        final String newExpression = convertConjunctionExpression(polyadicExpression);
+        replaceExpressionWithNegatedExpressionString(newExpression, polyadicExpression);
     }
-  }
+
+    private static String convertConjunctionExpression(PsiPolyadicExpression polyadicExpression) {
+        final IElementType tokenType = polyadicExpression.getOperationTokenType();
+        final String flippedConjunction;
+        final boolean tokenTypeAndAnd = tokenType.equals(JavaTokenType.ANDAND);
+        flippedConjunction = tokenTypeAndAnd ? "||" : "&&";
+        final StringBuilder result = new StringBuilder();
+        for (PsiExpression operand : polyadicExpression.getOperands()) {
+            if (result.length() != 0) {
+                result.append(flippedConjunction);
+            }
+            result.append(convertLeafExpression(operand, tokenTypeAndAnd));
+        }
+        return result.toString();
+    }
+
+    private static String convertLeafExpression(PsiExpression expression, boolean tokenTypeAndAnd) {
+        if (BoolUtils.isNegation(expression)) {
+            final PsiExpression negatedExpression = BoolUtils.getNegated(expression);
+            if (negatedExpression == null) {
+                return "";
+            }
+            if (tokenTypeAndAnd) {
+                if (ParenthesesUtils.getPrecedence(negatedExpression) > ParenthesesUtils.OR_PRECEDENCE) {
+                    return '(' + negatedExpression.getText() + ')';
+                }
+            }
+            else if (ParenthesesUtils.getPrecedence(negatedExpression) > ParenthesesUtils.AND_PRECEDENCE) {
+                return '(' + negatedExpression.getText() + ')';
+            }
+            return negatedExpression.getText();
+        }
+        else if (ComparisonUtils.isComparison(expression)) {
+            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+            final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
+            final PsiExpression lhs = binaryExpression.getLOperand();
+            final PsiExpression rhs = binaryExpression.getROperand();
+            assert rhs != null;
+            return lhs.getText() + negatedComparison + rhs.getText();
+        }
+        else if (ParenthesesUtils.getPrecedence(expression) > ParenthesesUtils.PREFIX_PRECEDENCE) {
+            return "!(" + expression.getText() + ')';
+        }
+        else {
+            return '!' + expression.getText();
+        }
+    }
 }

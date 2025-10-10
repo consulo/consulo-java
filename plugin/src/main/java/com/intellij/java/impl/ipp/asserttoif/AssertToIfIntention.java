@@ -20,46 +20,52 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiAssertStatement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AssertToIfIntention", fileExtensions = "java", categories = {
-		"Java",
-		"Other"
+    "Java",
+    "Other"
 })
 public class AssertToIfIntention extends Intention {
-
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new AssertStatementPredicate();
-  }
-
-  @Override
-  public void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiAssertStatement assertStatement = (PsiAssertStatement)element;
-    final PsiExpression condition = assertStatement.getAssertCondition();
-    final PsiExpression description =
-      assertStatement.getAssertDescription();
-    final String negatedConditionString =
-      BoolUtils.getNegatedExpressionText(condition);
-    @NonNls final String newStatement;
-    if (description == null) {
-      newStatement = "if(" + negatedConditionString +
-                     "){ throw new java.lang.AssertionError();}";
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return IntentionPowerPackLocalize.assertToIfIntentionName();
     }
-    else {
-      newStatement = "if(" + negatedConditionString +
-                     "){ throw new java.lang.AssertionError(" +
-                     description.getText() + ");}";
+
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new AssertStatementPredicate();
     }
-    replaceStatement(newStatement, assertStatement);
-  }
+
+    @Override
+    public void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiAssertStatement assertStatement = (PsiAssertStatement) element;
+        final PsiExpression condition = assertStatement.getAssertCondition();
+        final PsiExpression description =
+            assertStatement.getAssertDescription();
+        final String negatedConditionString =
+            BoolUtils.getNegatedExpressionText(condition);
+        @NonNls final String newStatement;
+        if (description == null) {
+            newStatement = "if(" + negatedConditionString +
+                "){ throw new java.lang.AssertionError();}";
+        }
+        else {
+            newStatement = "if(" + negatedConditionString +
+                "){ throw new java.lang.AssertionError(" +
+                description.getText() + ");}";
+        }
+        replaceStatement(newStatement, assertStatement);
+    }
 }

@@ -25,6 +25,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -36,10 +37,9 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   extends BaseInspection {
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorDisplayName();
   }
 
   @Override

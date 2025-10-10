@@ -45,7 +45,7 @@ public class SplitIfAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(SplitIfAction.class);
 
   public SplitIfAction() {
-    setText(CodeInsightLocalize.intentionSplitIfFamily().get());
+    setText(CodeInsightLocalize.intentionSplitIfFamily());
   }
 
   @Override
@@ -73,7 +73,7 @@ public class SplitIfAction extends PsiElementBaseIntentionAction {
     if (!PsiTreeUtil.isAncestor(ifStatement.getCondition(), expression, false)) return false;
     if (ifStatement.getThenBranch() == null) return false;
 
-    setText(CodeInsightLocalize.intentionSplitIfText().get());
+    setText(CodeInsightLocalize.intentionSplitIfText());
 
     return true;
   }

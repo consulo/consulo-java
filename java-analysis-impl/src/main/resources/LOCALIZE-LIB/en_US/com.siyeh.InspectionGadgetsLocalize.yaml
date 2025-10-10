@@ -277,7 +277,7 @@ assignment.used.as.condition.replace.quickfix:
 atomic.field.updater.issues.display.name:
     text: Inconsistent 'AtomicFieldUpdater' declaration
 atomic.field.updater.not.static.final.display.name:
-    text: "'AtomicFieldUpdater' field not declared 'static final'"
+    text: '''AtomicFieldUpdater'' field not declared ''static final'''
 atomic.field.updater.not.static.final.problem.descriptor:
     text: '{0} field <code>#ref</code> is not declared ''''static final'''' #loc'
 auto.boxing.display.name:
@@ -303,7 +303,7 @@ auto.unboxing.make.unboxing.explicit.quickfix:
 auto.unboxing.problem.descriptor:
     text: 'Auto-unboxing <code>#ref</code> #loc'
 await.not.in.loop.display.name:
-    text: "'await()' not called in loop"
+    text: '''await()'' not called in loop'
 await.not.in.loop.problem.descriptor:
     text: 'Call to <code>#ref()</code> is not in loop #loc'
 await.without.corresponding.signal.display.name:
@@ -507,11 +507,11 @@ chained.method.call.problem.descriptor:
 change.modifier.quickfix:
     text: Make ''{0}''
 channel.opened.not.closed.display.name:
-    text: "'Channel' opened but not safely closed"
+    text: '''Channel'' opened but not safely closed'
 char.used.in.arithmetic.context.cast.quickfix:
     text: Insert cast to {0}
 char.used.in.arithmetic.context.display.name:
-    text: "'char' expression used in arithmetic context"
+    text: '''char'' expression used in arithmetic context'
 char.used.in.arithmetic.context.problem.descriptor:
     text: '''char'' <code>#ref</code> used in arithmetic context #loc'
 char.used.in.arithmetic.context.quickfix:
@@ -573,7 +573,7 @@ class.initializer.option:
 class.initializer.problem.descriptor:
     text: 'Non-''static'' initializer #loc'
 class.loader.instantiation.display.name:
-    text: "'ClassLoader' instantiation"
+    text: '''ClassLoader'' instantiation'
 class.loader.instantiation.problem.descriptor:
     text: 'Instantiation of <code>#ref</code> may pose security concerns #loc'
 class.may.be.interface.convert.quickfix:
@@ -735,7 +735,7 @@ collection.declared.by.class.problem.descriptor:
 collections.field.access.replaceable.by.method.call.display.name:
     text: Reference to empty collection field can be replaced with method call
 collections.field.access.replaceable.by.method.call.problem.descriptor:
-    text: "<code>#ref</code> can be replaced with ''Collections.{0}'' #loc"
+    text: '<code>#ref</code> can be replaced with ''''Collections.{0}'''' #loc'
 collections.field.access.replaceable.by.method.call.quickfix:
     text: Replace with ''{0}''
 collections.must.have.initial.capacity.display.name:
@@ -747,7 +747,7 @@ comparable.implemented.but.equals.not.overridden.display.name:
 comparable.implemented.but.equals.not.overridden.problem.descriptor:
     text: 'Class <code>#ref</code> implements ''java.lang.Comparable'' but does not override ''equals()'' #loc'
 comparator.not.serializable.display.name:
-    text: "'Comparator' class not declared 'Serializable'"
+    text: '''Comparator'' class not declared ''Serializable'''
 comparator.not.serializable.problem.descriptor:
     text: 'Comparator class <code>#ref</code> is not declared as Serializable #loc'
 comparison.of.short.and.char.display.name:
@@ -1154,6 +1154,8 @@ equals.replaceable.by.objects.call.quickfix:
     text: Replace with 'Objects.equals()' expression
 equals.replaceable.by.objects.check.not.null.option:
     text: Report only null safe 'equals' calls
+equals.to.equality.quickfix:
+    text: Replace 'equals()' with '=='
 equals.with.itself.display.name:
     text: '''equals()'' called on itself'
 equals.with.itself.problem.descriptor:
@@ -2150,8 +2152,12 @@ method.overloads.report.incompatible.option:
     text: Report even if parameter types are not compatible
 method.overrides.inaccessible.method.display.name:
     text: Method overrides inaccessible method of superclass
+method.overrides.package.local.method.display.name:
+    text: Method overrides package-private method of superclass located in other package
 method.overrides.package.local.method.problem.descriptor:
     text: 'Method <code>#ref()</code> overrides a package-private method of a superclass located in another package #loc'
+method.overrides.private.display.name:
+    text: Method overrides 'private' method of superclass
 method.overrides.private.display.name.problem.descriptor:
     text: 'Method <code>#ref()</code> overrides a ''private'' method of a superclass #loc'
 method.overrides.static.display.name:
@@ -2526,10 +2532,16 @@ noop.method.in.abstract.class.problem.descriptor:
     text: 'No-op Method <code>#ref()</code> should be made abstract #loc'
 normalize.declaration.quickfix:
     text: Split into separate declarations
+not.equals.to.equality.quickfix:
+    text: Replace '!equals()' with '!='
 notify.called.on.condition.display.name:
     text: '''notify()''  or ''notifyAll()'' called on ''java.util.concurrent.locks.Condition'' object'
 notify.called.on.condition.problem.descriptor:
     text: 'Call to <code>#ref()</code> on Condition object #loc'
+notify.not.in.synchronized.context.display.name:
+    text: '''notify()'' or ''notifyAll()'' while not synchronized'
+notify.not.in.synchronized.context.problem.descriptor:
+    text: 'Call to <code>#ref()</code> is made outside of a synchronized context #loc'
 notify.without.corresponding.wait.display.name:
     text: '''notify()'' without corresponding ''wait()'''
 notify.without.corresponding.wait.problem.descriptor:
@@ -2971,7 +2983,7 @@ readwriteobject.private.display.name:
 readwriteobject.private.problem.descriptor:
     text: '<code>#ref</code> not declared ''private'' #loc'
 recordstore.opened.not.safely.closed.display.name:
-    text: "'RecordStore' opened but not safely closed"
+    text: '''RecordStore'' opened but not safely closed'
 redundant.else.display.name:
     text: Redundant 'else'
 redundant.else.problem.descriptor:
@@ -4420,6 +4432,8 @@ wait.not.in.loop.display.name:
     text: '''wait()'' not called in loop'
 wait.not.in.loop.problem.descriptor:
     text: 'Call to <code>#ref()</code> is not in loop #loc'
+wait.not.in.synchronized.context.display.name:
+    text: '''wait()'' while not synchronized'
 wait.notify.not.in.synchronized.context.display.name:
     text: '''wait()'' or ''notify()'' is not in synchronized context'
 wait.notify.while.not.synchronized.on.problem.descriptor:

@@ -34,6 +34,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -49,8 +50,8 @@ import java.util.List;
 public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionReplaceConcatenationWithFormattedOutputText().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionReplaceConcatenationWithFormattedOutputText();
   }
 
   @Override

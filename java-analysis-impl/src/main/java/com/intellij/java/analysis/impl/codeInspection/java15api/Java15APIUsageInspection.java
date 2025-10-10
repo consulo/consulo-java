@@ -181,14 +181,14 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
     @Override
     @Nonnull
-    public String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
     }
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionLocalize.inspection15DisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspection15DisplayName();
     }
 
     @Override

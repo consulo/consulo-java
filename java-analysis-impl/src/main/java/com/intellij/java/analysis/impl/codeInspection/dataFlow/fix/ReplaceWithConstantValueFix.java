@@ -15,65 +15,52 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
+import com.intellij.java.analysis.impl.refactoring.extractMethod.ExtractMethodUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.analysis.impl.refactoring.extractMethod.ExtractMethodUtil;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
-public class ReplaceWithConstantValueFix implements LocalQuickFix
-{
-	private final String myPresentableName;
-	private final String myReplacementText;
+public class ReplaceWithConstantValueFix implements LocalQuickFix {
+    private final String myPresentableName;
+    private final String myReplacementText;
 
-	public ReplaceWithConstantValueFix(String presentableName, String replacementText)
-	{
-		myPresentableName = presentableName;
-		myReplacementText = replacementText;
-	}
+    public ReplaceWithConstantValueFix(String presentableName, String replacementText) {
+        myPresentableName = presentableName;
+        myReplacementText = replacementText;
+    }
 
-	@Nonnull
-	@Override
-	public String getName()
-	{
-		return "Replace with '" + myPresentableName + "'";
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return LocalizeValue.localizeTODO("Replace with '" + myPresentableName + "'");
+    }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Replace with constant value";
-	}
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiElement problemElement = descriptor.getPsiElement();
+        if (problemElement == null) {
+            return;
+        }
 
-	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
-	{
-		PsiElement problemElement = descriptor.getPsiElement();
-		if(problemElement == null)
-		{
-			return;
-		}
+        PsiMethodCallExpression call = problemElement.getParent() instanceof PsiExpressionList && problemElement.getParent().getParent() instanceof PsiMethodCallExpression ?
+            (PsiMethodCallExpression) problemElement.getParent().getParent() : null;
+        PsiMethod targetMethod = call == null ? null : call.resolveMethod();
 
-		PsiMethodCallExpression call = problemElement.getParent() instanceof PsiExpressionList && problemElement.getParent().getParent() instanceof PsiMethodCallExpression ?
-				(PsiMethodCallExpression) problemElement.getParent().getParent() : null;
-		PsiMethod targetMethod = call == null ? null : call.resolveMethod();
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+        problemElement.replace(facade.getElementFactory().createExpressionFromText(myReplacementText, null));
 
-		JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-		problemElement.replace(facade.getElementFactory().createExpressionFromText(myReplacementText, null));
-
-		if(targetMethod != null)
-		{
-			ExtractMethodUtil.addCastsToEnsureResolveTarget(targetMethod, call);
-		}
-	}
+        if (targetMethod != null) {
+            ExtractMethodUtil.addCastsToEnsureResolveTarget(targetMethod, call);
+        }
+    }
 }

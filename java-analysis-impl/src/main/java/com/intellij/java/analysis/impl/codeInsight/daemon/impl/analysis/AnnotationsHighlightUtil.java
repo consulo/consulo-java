@@ -925,8 +925,8 @@ public class AnnotationsHighlightUtil {
 
         @Nonnull
         @Override
-        public String getText() {
-            return "Remove";
+        public LocalizeValue getText() {
+            return LocalizeValue.localizeTODO("Remove");
         }
 
         @Override

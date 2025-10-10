@@ -23,6 +23,7 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
@@ -50,16 +51,16 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 
 	@Override
 	@Nonnull
-	public String getDisplayName()
+	public LocalizeValue getDisplayName()
 	{
-		return InspectionLocalize.booleanMethodIsAlwaysInvertedDisplayName().get();
+		return InspectionLocalize.booleanMethodIsAlwaysInvertedDisplayName();
 	}
 
 	@Override
 	@Nonnull
-	public String getGroupDisplayName()
+	public LocalizeValue getGroupDisplayName()
 	{
-		return InspectionLocalize.groupNamesDataFlowIssues().get();
+		return InspectionLocalize.groupNamesDataFlowIssues();
 	}
 
 	@Override
@@ -257,16 +258,9 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 	{
 		@Override
 		@Nonnull
-		public String getName()
+		public LocalizeValue getName()
 		{
-			return "Invert method";
-		}
-
-		@Override
-		@Nonnull
-		public String getFamilyName()
-		{
-			return getName();
+			return LocalizeValue.localizeTODO("Invert method");
 		}
 
 		@Override

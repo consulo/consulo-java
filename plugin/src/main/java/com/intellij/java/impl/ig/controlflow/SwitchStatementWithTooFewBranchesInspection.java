@@ -23,16 +23,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseInspection {
@@ -44,8 +43,8 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.switchStatementWithTooFewBranchesDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.switchStatementWithTooFewBranchesDisplayName();
   }
 
   @Override
@@ -154,18 +153,15 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
       myBranchCount = branchCount;
     }
 
-    @Nls(capitalization = Nls.Capitalization.Sentence)
     @Nonnull
     @Override
-    public String getName() {
-      return myBranchCount == 0 ? getFamilyName() : JavaQuickFixBundle.message("fix.replace.x.with.y", PsiKeyword.SWITCH, PsiKeyword.IF);
+    public LocalizeValue getName() {
+      return myBranchCount == 0 ? getFamilyName() : CommonQuickFixLocalize.fixReplaceXWithY(PsiKeyword.SWITCH, PsiKeyword.IF);
     }
 
-    @Nls(capitalization = Nls.Capitalization.Sentence)
     @Nonnull
-    @Override
-    public String getFamilyName() {
-      return JavaQuickFixBundle.message("fix.unwrap", PsiKeyword.SWITCH);
+    public LocalizeValue getFamilyName() {
+      return CommonQuickFixLocalize.fixUnwrap(PsiKeyword.SWITCH);
     }
 
     @Override

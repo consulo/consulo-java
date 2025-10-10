@@ -33,6 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -46,18 +47,16 @@ import org.jetbrains.annotations.Nls;
 public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(PossibleHeapPollutionVarargsInspection.class);
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Possible heap pollution from parameterized vararg type";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Possible heap pollution from parameterized vararg type");
   }
 
   @Override
@@ -107,14 +106,8 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   private static class AnnotateAsSafeVarargsQuickFix implements LocalQuickFix {
     @Nonnull
     @Override
-    public String getName() {
-      return "Annotate as @SafeVarargs";
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Annotate as @SafeVarargs");
     }
 
     @Override
@@ -132,14 +125,8 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   private static class MakeFinalAndAnnotateQuickFix implements LocalQuickFix {
     @Nonnull
     @Override
-    public String getName() {
-      return "Make final and annotate as @SafeVarargs";
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Make final and annotate as @SafeVarargs");
     }
 
     @Override

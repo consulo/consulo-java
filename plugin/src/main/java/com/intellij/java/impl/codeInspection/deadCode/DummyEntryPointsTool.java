@@ -21,6 +21,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.scheme.JobDescriptor;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -50,14 +51,14 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return "";
+  public LocalizeValue getGroupDisplayName() {
+    return LocalizeValue.of();
   }
 
   @Override

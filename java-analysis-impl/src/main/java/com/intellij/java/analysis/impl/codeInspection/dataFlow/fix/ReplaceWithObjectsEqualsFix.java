@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -45,17 +46,9 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	@Nls
 	@Nonnull
 	@Override
-	public String getName()
+	public LocalizeValue getName()
 	{
-		return "Replace '" + myQualifierText + ".equals(...)' with 'Objects.equals(" + myReplacementText + ", ...)'";
-	}
-
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Replace '.equals()' with 'Objects.equals()'";
+		return LocalizeValue.localizeTODO("Replace '" + myQualifierText + ".equals(...)' with 'Objects.equals(" + myReplacementText + ", ...)'");
 	}
 
 	@Override

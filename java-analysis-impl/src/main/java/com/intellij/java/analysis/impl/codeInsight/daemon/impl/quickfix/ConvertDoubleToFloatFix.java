@@ -26,6 +26,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -45,8 +46,8 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     @Nonnull
     @Override
     @RequiredReadAction
-    public String getText() {
-        return "Convert '" + myExpression.getText() + "' to float";
+    public LocalizeValue getText() {
+        return LocalizeValue.localizeTODO("Convert '" + myExpression.getText() + "' to float");
     }
 
     @Override

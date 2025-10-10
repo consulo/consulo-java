@@ -26,6 +26,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
@@ -58,8 +59,8 @@ public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Move '" + myClassName + "' to the beginning";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Move '" + myClassName + "' to the beginning");
   }
 
   @Override

@@ -19,28 +19,27 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.io.IOException;
 
 public class MoveFileFix implements SyntheticIntentionAction {
   private final VirtualFile myFile;
   private final VirtualFile myTarget;
-  private final String myMessage;
+  private final LocalizeValue myMessage;
 
-  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message) {
+  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull LocalizeValue message) {
     myFile = file;
     myTarget = target;
     myMessage = message;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myMessage;
   }
 

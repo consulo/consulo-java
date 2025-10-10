@@ -26,6 +26,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -56,8 +57,8 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
 
     @Nonnull
     @Override
-    public String getText() {
-        return "Add explicit type arguments";
+    public LocalizeValue getText() {
+        return LocalizeValue.localizeTODO("Add explicit type arguments");
     }
 
     @Override

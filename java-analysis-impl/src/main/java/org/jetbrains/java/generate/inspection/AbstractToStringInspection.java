@@ -19,6 +19,7 @@ import com.intellij.java.language.JavaLanguage;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
 
@@ -31,8 +32,8 @@ public abstract class AbstractToStringInspection extends LocalInspectionTool {
   protected static final Logger log = Logger.getInstance(AbstractToStringInspection.class);
 
   @Nonnull
-  public String getGroupDisplayName() {
-    return "toString() issues";
+  public LocalizeValue getGroupDisplayName() {
+    return LocalizeValue.localizeTODO("toString() issues");
   }
 
   @Nullable

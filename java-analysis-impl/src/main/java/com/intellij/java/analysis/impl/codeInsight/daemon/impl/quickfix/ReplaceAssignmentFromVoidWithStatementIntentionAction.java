@@ -22,6 +22,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
@@ -36,11 +37,10 @@ public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements Sy
     myLExpr = lExpr;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return "Remove left side of assignment";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Remove left side of assignment");
   }
 
   @Override

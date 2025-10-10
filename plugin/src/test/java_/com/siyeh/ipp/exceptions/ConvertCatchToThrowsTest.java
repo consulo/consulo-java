@@ -15,24 +15,41 @@
  */
 package com.siyeh.ipp.exceptions;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ConvertCatchToThrowsTest extends IPPTestCase {
-  public void testSingleCatch() { doTest(); }
-  public void testPluralCatches() { doTest(); }
-  public void testMultiCatch() { doTest(); }
-  public void testArmWithPluralCatches() { doTest(); }
-  public void testArmWithSingleCatch() { doTest(); }
-  public void testExistingThrows() { doTest(); }
+    public void testSingleCatch() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("convert.catch.to.throws.intention.name");
-  }
+    public void testPluralCatches() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "exceptions/catchToThrows";
-  }
+    public void testMultiCatch() {
+        doTest();
+    }
+
+    public void testArmWithPluralCatches() {
+        doTest();
+    }
+
+    public void testArmWithSingleCatch() {
+        doTest();
+    }
+
+    public void testExistingThrows() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.convertCatchToThrowsIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "exceptions/catchToThrows";
+    }
 }

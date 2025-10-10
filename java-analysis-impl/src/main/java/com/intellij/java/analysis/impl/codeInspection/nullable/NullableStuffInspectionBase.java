@@ -762,14 +762,14 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionLocalize.inspectionNullableProblemsDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionNullableProblemsDisplayName();
     }
 
     @Override
     @Nonnull
-    public String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesProbableBugs().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesProbableBugs();
     }
 
     @Override

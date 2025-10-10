@@ -17,6 +17,7 @@ package com.siyeh.ipp.forloop;
 
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceForEachLoopWithIndexedForLoopIntentionTest extends IPPTestCase {
   public void testLabeledForLoop() { doTest(); }
@@ -25,7 +26,7 @@ public abstract class ReplaceForEachLoopWithIndexedForLoopIntentionTest extends 
 
   @Override
   protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.for.each.loop.with.optimized.indexed.for.loop.intention.name");
+    return IntentionPowerPackLocalize.replaceForEachLoopWithOptimizedIndexedForLoopIntentionName().get();
   }
 
   @Override

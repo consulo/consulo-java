@@ -22,6 +22,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
@@ -29,17 +30,16 @@ import jakarta.annotation.Nonnull;
 
 public class GoToSymbolFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
-  private final String myMessage;
+  private final LocalizeValue myMessage;
 
-  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
+  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull LocalizeValue message) {
     myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
     myMessage = message;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myMessage;
   }
 

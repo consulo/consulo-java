@@ -2,6 +2,7 @@ package com.siyeh.ipp.decls;
 
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @author Bas Leijdekkers
@@ -14,7 +15,7 @@ public abstract class ChangeVariableTypeToRhsTypeIntentionTest extends IPPTestCa
 
   @Override
   protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("change.variable.type.to.rhs.type.intention.name", "ss", "ArrayList<String>");
+    return IntentionPowerPackLocalize.changeVariableTypeToRhsTypeIntentionName("ss", "ArrayList<String>").get();
   }
 
   @Override

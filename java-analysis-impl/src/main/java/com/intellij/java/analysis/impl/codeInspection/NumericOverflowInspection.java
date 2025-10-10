@@ -30,6 +30,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.Nls;
@@ -43,11 +44,10 @@ import jakarta.annotation.Nonnull;
 public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Key<String> HAS_OVERFLOW_IN_CHILD = Key.create("HAS_OVERFLOW_IN_CHILD");
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesNumericIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesNumericIssues();
   }
 
   @Override
@@ -55,11 +55,10 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     return true;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Numeric overflow";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Numeric overflow");
   }
 
   @Nonnull

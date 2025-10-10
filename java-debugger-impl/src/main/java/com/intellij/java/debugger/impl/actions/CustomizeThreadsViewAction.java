@@ -17,9 +17,9 @@ package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.debugger.impl.settings.ThreadsViewConfigurable;
-import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
@@ -46,6 +46,6 @@ public class CustomizeThreadsViewAction extends DebuggerAction {
     @RequiredUIAccess
     public void update(@Nonnull AnActionEvent e) {
         e.getPresentation().setVisible(true);
-        e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizethreadsviewText());
+        e.getPresentation().setTextValue(XDebuggerLocalize.actionCustomizeThreadsViewText());
     }
 }

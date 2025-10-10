@@ -46,14 +46,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
   private boolean myOnTheFly = false;
 
-  /**
-   * To appear in "Apply Fix" statement when multiple Quick Fixes exist
-   */
-  @Nonnull
-  public String getFamilyName() {
-    return "";
-  }
-
+  @Override
   public final void applyFix(@Nonnull Project project,
                              @Nonnull ProblemDescriptor descriptor) {
     final PsiElement problemElement = descriptor.getPsiElement();

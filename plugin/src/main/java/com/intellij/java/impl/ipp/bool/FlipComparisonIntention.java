@@ -23,58 +23,61 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipComparisonIntention", fileExtensions = "java", categories = {
-		"Java",
-		"Boolean"
+    "Java",
+    "Boolean"
 })
-public class FlipComparisonIntention extends MutablyNamedIntention
-{
+public class FlipComparisonIntention extends MutablyNamedIntention {
+    @Override
+    public LocalizeValue getTextForElement(PsiElement element) {
+        String operatorText = "";
+        String flippedOperatorText = "";
+        final PsiBinaryExpression expression = (PsiBinaryExpression) element;
+        if (expression != null) {
+            final PsiJavaToken sign = expression.getOperationSign();
+            operatorText = sign.getText();
+            flippedOperatorText = ComparisonUtils.getFlippedComparison(sign.getTokenType());
+        }
+        if (operatorText.equals(flippedOperatorText)) {
+            return IntentionPowerPackLocalize.flipSmthIntentionName(operatorText);
+        }
+        else {
+            return IntentionPowerPackLocalize.flipComparisonIntentionName(operatorText, flippedOperatorText);
+        }
+    }
 
-	public String getTextForElement(PsiElement element)
-	{
-		String operatorText = "";
-		String flippedOperatorText = "";
-		final PsiBinaryExpression expression = (PsiBinaryExpression) element;
-		if(expression != null)
-		{
-			final PsiJavaToken sign = expression.getOperationSign();
-			operatorText = sign.getText();
-			flippedOperatorText = ComparisonUtils.getFlippedComparison(sign.getTokenType());
-		}
-		if(operatorText.equals(flippedOperatorText))
-		{
-			return IntentionPowerPackBundle.message("flip.smth.intention.name", operatorText);
-		}
-		else
-		{
-			return IntentionPowerPackBundle.message("flip.comparison.intention.name", operatorText, flippedOperatorText);
-		}
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.flipComparisonIntentionFamilyName();
+    }
 
-	@Nonnull
-	public PsiElementPredicate getElementPredicate()
-	{
-		return new ComparisonPredicate();
-	}
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ComparisonPredicate();
+    }
 
-	public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException
-	{
-		final PsiBinaryExpression expression = (PsiBinaryExpression) element;
-		final PsiExpression lhs = expression.getLOperand();
-		final PsiExpression rhs = expression.getROperand();
-		final IElementType tokenType = expression.getOperationTokenType();
-		assert rhs != null;
-		final String expString = rhs.getText() +
-				ComparisonUtils.getFlippedComparison(tokenType) +
-				lhs.getText();
-		PsiReplacementUtil.replaceExpression(expression, expString);
-	}
+    @Override
+    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        final PsiBinaryExpression expression = (PsiBinaryExpression) element;
+        final PsiExpression lhs = expression.getLOperand();
+        final PsiExpression rhs = expression.getROperand();
+        final IElementType tokenType = expression.getOperationTokenType();
+        assert rhs != null;
+        final String expString = rhs.getText() +
+            ComparisonUtils.getFlippedComparison(tokenType) +
+            lhs.getText();
+        PsiReplacementUtil.replaceExpression(expression, expString);
+    }
 }

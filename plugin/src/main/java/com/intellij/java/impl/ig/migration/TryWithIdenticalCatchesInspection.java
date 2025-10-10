@@ -30,6 +30,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -61,11 +62,10 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     return new TryWithIdenticalCatchesVisitor();
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.tryWithIdenticalCatchesDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.tryWithIdenticalCatchesDisplayName();
   }
 
   @Override
@@ -170,8 +170,8 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.tryWithIdenticalCatchesQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.tryWithIdenticalCatchesQuickfix();
     }
 
     @Override

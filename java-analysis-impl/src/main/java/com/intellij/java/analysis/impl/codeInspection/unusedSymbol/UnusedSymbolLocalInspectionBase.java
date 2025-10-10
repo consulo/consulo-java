@@ -21,20 +21,20 @@ import com.intellij.java.language.psi.PsiModifier;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = HighlightInfoType.UNUSED_SYMBOL_SHORT_NAME;
   @NonNls
-  public static final String DISPLAY_NAME = HighlightInfoType.UNUSED_SYMBOL_DISPLAY_NAME;
+  public static final LocalizeValue DISPLAY_NAME = InspectionLocalize.inspectionDeadCodeDisplayName();
   @NonNls
   public static final String UNUSED_PARAMETERS_SHORT_NAME = "UnusedParameters";
 
@@ -133,19 +133,18 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesDeclarationRedundancy();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return DISPLAY_NAME;
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionDeadCodeDisplayName();
   }
 
   @Override
   @Nonnull
-  @NonNls
   public String getShortName() {
     return SHORT_NAME;
   }

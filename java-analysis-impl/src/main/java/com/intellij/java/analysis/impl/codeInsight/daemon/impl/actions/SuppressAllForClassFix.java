@@ -26,6 +26,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -62,8 +63,8 @@ public class SuppressAllForClassFix extends SuppressFix {
 
   @Override
   @Nonnull
-  public String getText() {
-    return InspectionLocalize.suppressAllForClass().get();
+  public LocalizeValue getText() {
+    return InspectionLocalize.suppressAllForClass();
   }
 
   @RequiredReadAction

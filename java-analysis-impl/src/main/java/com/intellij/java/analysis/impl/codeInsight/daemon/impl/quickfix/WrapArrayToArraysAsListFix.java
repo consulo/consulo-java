@@ -19,8 +19,10 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -40,11 +42,11 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {
-      return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.single.parameter.text");
+      return JavaQuickFixLocalize.wrapArrayToArraysAsListSingleParameterText();
     } else {
-      return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.parameter.text", myIndex + 1);
+      return JavaQuickFixLocalize.wrapArrayToArraysAsListParameterText(myIndex + 1);
     }
   }
 

@@ -48,7 +48,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");
 
   public AddSingleMemberStaticImportAction() {
-    setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportFamily().get());
+    setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportFamily());
   }
 
   /**
@@ -132,7 +132,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     String classQName = getStaticImportClass(element);
     if (classQName != null) {
-      setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportText(classQName).get());
+      setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportText(classQName));
     }
     return classQName != null;
   }

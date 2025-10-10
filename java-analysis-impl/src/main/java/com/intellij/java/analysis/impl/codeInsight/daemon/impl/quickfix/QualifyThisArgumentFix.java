@@ -37,6 +37,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -60,7 +61,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
         if (!myPsiClass.isValid()) {
             return false;
         }
-        setText("Qualify this expression with \'" + myPsiClass.getQualifiedName() + "\'");
+        setText(LocalizeValue.localizeTODO("Qualify this expression with \'" + myPsiClass.getQualifiedName() + "\'"));
         return true;
     }
 

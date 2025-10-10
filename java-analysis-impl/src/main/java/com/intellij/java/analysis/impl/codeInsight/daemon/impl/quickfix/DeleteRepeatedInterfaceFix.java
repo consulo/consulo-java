@@ -23,6 +23,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
@@ -41,8 +42,8 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Delete repeated '" + myConjunct.getText() + "'";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Delete repeated '" + myConjunct.getText() + "'");
   }
 
   @Override

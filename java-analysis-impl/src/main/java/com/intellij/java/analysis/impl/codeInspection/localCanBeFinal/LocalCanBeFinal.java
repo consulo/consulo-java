@@ -32,6 +32,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -267,14 +268,14 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionLocalCanBeFinalDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionLocalCanBeFinalDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesCodeStyleIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesCodeStyleIssues();
   }
 
   @Override
@@ -286,8 +287,8 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
     }
 
     @Override
@@ -304,12 +305,6 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
       } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
     }
   }
 

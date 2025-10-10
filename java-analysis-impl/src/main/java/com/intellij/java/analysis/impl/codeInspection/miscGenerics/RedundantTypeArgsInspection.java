@@ -27,6 +27,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -54,14 +55,14 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionRedundantTypeDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionRedundantTypeDisplayName();
   }
 
   @Override
@@ -167,8 +168,8 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   private static class MyQuickFixAction implements LocalQuickFix {
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix();
     }
 
     @Override
@@ -182,12 +183,6 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
       } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
     }
   }
 }

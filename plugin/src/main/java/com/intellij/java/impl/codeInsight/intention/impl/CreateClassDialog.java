@@ -30,6 +30,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.localize.CommonLocalize;
@@ -82,7 +83,7 @@ public class CreateClassDialog extends DialogWrapper {
 
   public CreateClassDialog(
     @Nonnull Project project,
-    @Nonnull String title,
+    @Nonnull LocalizeValue title,
     @Nonnull String targetClassName,
     @Nonnull String targetPackageName,
     @Nonnull ClassKind kind,

@@ -39,8 +39,8 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.whileLoopSpinsOnFieldDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.whileLoopSpinsOnFieldDisplayName();
   }
 
   @Override

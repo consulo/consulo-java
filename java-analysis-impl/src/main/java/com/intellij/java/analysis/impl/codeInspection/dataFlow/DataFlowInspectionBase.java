@@ -1445,11 +1445,11 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         if (fix == null) {
             return null;
         }
-        final String text = fix.getText();
+        final LocalizeValue text = fix.getText();
         return new LocalQuickFix() {
             @Nonnull
             @Override
-            public String getName() {
+            public LocalizeValue getName() {
                 return text;
             }
 
@@ -1472,12 +1472,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                     LOG.error(e);
                 }
             }
-
-            @Nonnull
-            @Override
-            public String getFamilyName() {
-                return JavaAnalysisLocalize.inspectionDataFlowSimplifyBooleanExpressionQuickfix().get();
-            }
         };
     }
 
@@ -1492,10 +1486,9 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     }
 
     @Override
-    public
     @Nonnull
-    String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesProbableBugs().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesProbableBugs();
     }
 
     @Override

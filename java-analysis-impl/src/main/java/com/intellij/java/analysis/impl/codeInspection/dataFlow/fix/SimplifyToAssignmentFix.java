@@ -25,6 +25,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -35,16 +36,9 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 {
 	@Nonnull
 	@Override
-	public String getName()
+	public LocalizeValue getName()
 	{
-		return InspectionLocalize.inspectionDataFlowSimplifyToAssignmentQuickfixName().get();
-	}
-
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return InspectionLocalize.inspectionDataFlowSimplifyBooleanExpressionQuickfix().get();
+		return InspectionLocalize.inspectionDataFlowSimplifyToAssignmentQuickfixName();
 	}
 
 	@Override

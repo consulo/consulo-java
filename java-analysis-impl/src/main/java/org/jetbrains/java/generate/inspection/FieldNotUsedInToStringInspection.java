@@ -22,6 +22,7 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.GenerateToStringContext;
@@ -41,8 +42,8 @@ import java.util.Set;
 public class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return "Field not used in 'toString()' method";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Field not used in 'toString()' method");
   }
 
   @Nonnull

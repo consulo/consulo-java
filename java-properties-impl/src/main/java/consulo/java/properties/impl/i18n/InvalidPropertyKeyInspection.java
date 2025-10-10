@@ -54,14 +54,14 @@ import java.util.*;
 public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesPropertiesFiles().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesPropertiesFiles();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return CodeInsightLocalize.inspectionUnresolvedPropertyKeyReferenceName().get();
+  public LocalizeValue getDisplayName() {
+    return CodeInsightLocalize.inspectionUnresolvedPropertyKeyReferenceName();
   }
 
   @Override

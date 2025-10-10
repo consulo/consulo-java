@@ -23,15 +23,12 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.*;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiPrimitiveType;
-import com.intellij.java.language.psi.PsiType;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 public class CastMethodArgumentFix extends MethodArgumentFix {
@@ -41,12 +38,12 @@ public class CastMethodArgumentFix extends MethodArgumentFix {
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {
-      return JavaQuickFixBundle.message("cast.single.parameter.text", JavaHighlightUtil.formatType(myToType));
+      return JavaQuickFixLocalize.castSingleParameterText(JavaHighlightUtil.formatType(myToType));
     }
 
-    return JavaQuickFixBundle.message("cast.parameter.text", myIndex + 1, JavaHighlightUtil.formatType(myToType));
+    return JavaQuickFixLocalize.castParameterText(myIndex + 1, JavaHighlightUtil.formatType(myToType));
   }
 
   private static class MyFixerActionFactory extends ArgumentFixerActionFactory {

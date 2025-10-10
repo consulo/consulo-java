@@ -28,6 +28,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.inject.advanced.InjectorUtils;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -45,7 +46,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
   }
 
   @Nonnull
-  public String getGroupDisplayName() {
+  public LocalizeValue getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
@@ -56,8 +57,8 @@ public class UnknownLanguageID extends LocalInspectionTool {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return "Unknown Language ID";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Unknown Language ID");
   }
 
   @Nonnull

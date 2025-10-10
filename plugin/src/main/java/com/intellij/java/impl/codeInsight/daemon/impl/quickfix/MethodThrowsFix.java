@@ -27,6 +27,7 @@ import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
@@ -53,16 +54,10 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return JavaQuickFixBundle.message(myShouldThrow ? "fix.throws.list.add.exception" : "fix.throws.list.remove.exception",
                                   myThrowsCanonicalText,
                                   myMethodName);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override

@@ -19,6 +19,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.language.editor.inspection.scheme.InspectionProfileManager;
@@ -35,22 +36,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class SpecialAnnotationsUtilBase {
-  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@Nonnull final String text,
-                                                                        @Nonnull final String family,
+  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@Nonnull final LocalizeValue text,
+                                                                        @Nonnull final LocalizeValue family,
                                                                         @Nonnull final List<String> targetList,
                                                                         @Nonnull final String qualifiedName,
                                                                         final PsiElement context) {
     return new LocalQuickFix() {
       @Override
       @Nonnull
-      public String getName() {
+      public LocalizeValue getName() {
         return text;
-      }
-
-      @Override
-      @Nonnull
-      public String getFamilyName() {
-        return family;
       }
 
       @Override

@@ -17,6 +17,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -50,7 +51,7 @@ public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Suppress for statement with comment";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Suppress for statement with comment");
   }
 }

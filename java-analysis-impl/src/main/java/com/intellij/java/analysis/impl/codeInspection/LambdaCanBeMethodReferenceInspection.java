@@ -37,6 +37,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.SyntaxTraverser;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
@@ -64,18 +65,17 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Lambda can be replaced with method reference";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Lambda can be replaced with method reference");
   }
 
   @Override
@@ -555,17 +555,10 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
       mySuffix = suffix;
     }
 
-    @Nls
     @Nonnull
     @Override
-    public String getName() {
-      return getFamilyName() + mySuffix;
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return "Replace lambda with method reference";
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Replace lambda with method reference" + mySuffix);
     }
 
     @Override

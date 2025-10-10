@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -42,8 +43,8 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return CodeInsightLocalize.removeAnnotation().get();
+  public LocalizeValue getName() {
+    return CodeInsightLocalize.removeAnnotation();
   }
 
   @Override
@@ -58,11 +59,5 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
     } else {
       ExternalAnnotationsManager.getInstance(project).deannotate(myListOwner, myAnnotation.getQualifiedName());
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
   }
 }

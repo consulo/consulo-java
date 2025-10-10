@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.GlobalInspectionTool;
@@ -24,7 +25,6 @@ import consulo.language.editor.inspection.GlobalInspectionTool;
  */
 public abstract class BaseSharedLocalInspection<T extends GlobalInspectionTool> extends BaseInspection
 {
-
 	protected final T mySettingsDelegate;
 
 	public BaseSharedLocalInspection(T settingsDelegate)
@@ -39,10 +39,9 @@ public abstract class BaseSharedLocalInspection<T extends GlobalInspectionTool> 
 		return mySettingsDelegate.getShortName();
 	}
 
-	@Nls
 	@Nonnull
 	@Override
-	public final String getDisplayName()
+	public final LocalizeValue getDisplayName()
 	{
 		return mySettingsDelegate.getDisplayName();
 	}

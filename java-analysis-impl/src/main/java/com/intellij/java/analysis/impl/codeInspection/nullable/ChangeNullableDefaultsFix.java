@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.nullable;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnnotation;
 import jakarta.annotation.Nonnull;
@@ -45,14 +46,8 @@ class ChangeNullableDefaultsFix implements LocalQuickFix {
 
   @Nonnull
   @Override
-  public String getName() {
-    return "Make \"" + (myNotNullName != null ? myNotNullName : myNullableName) + "\" default annotation";
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getName();
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Make \"" + (myNotNullName != null ? myNotNullName : myNullableName) + "\" default annotation");
   }
 
   @Override

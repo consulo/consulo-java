@@ -15,94 +15,94 @@
  */
 package com.siyeh.ipp.types;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceMethodReferenceWithLambdaIntentionTest extends IPPTestCase {
- 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.method.ref.with.lambda.intention.name");
-  }
 
-  @Override
-  protected String getRelativePath() {
-    return "types/methodRefs2lambda";
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceMethodRefWithLambdaIntentionName().get();
+    }
 
-  public void testStaticMethodRef() throws Exception {
-    doTest();
-  }
+    @Override
+    protected String getRelativePath() {
+        return "types/methodRefs2lambda";
+    }
 
-  public void testThisRefs() throws Exception {
-    doTest();
-  }
+    public void testStaticMethodRef() throws Exception {
+        doTest();
+    }
 
-  public void testSuperRefs() throws Exception {
-    doTest();
-  }
+    public void testThisRefs() throws Exception {
+        doTest();
+    }
 
-  public void testExprRefs() throws Exception {
-    doTest();
-  }
+    public void testSuperRefs() throws Exception {
+        doTest();
+    }
 
-  public void testReceiver() throws Exception {
-    doTest();
-  }
+    public void testExprRefs() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefs() throws Exception {
-    doTest();
-  } 
+    public void testReceiver() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefsDefaultConstructor() throws Exception {
-    doTest();
-  }
+    public void testNewRefs() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefsInnerClass() throws Exception {
-    doTest();
-  }
+    public void testNewRefsDefaultConstructor() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefsStaticInnerClass() throws Exception {
-    doTest();
-  }
+    public void testNewRefsInnerClass() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefsInference() throws Exception {
-    doTest();
-  }
+    public void testNewRefsStaticInnerClass() throws Exception {
+        doTest();
+    }
 
-  public void testNewRefsInference1() throws Exception {
-    doTest();
-  }
+    public void testNewRefsInference() throws Exception {
+        doTest();
+    }
 
-  public void testAmbiguity() throws Exception {
-    doTest();
-  }
+    public void testNewRefsInference1() throws Exception {
+        doTest();
+    }
 
-  public void testSubst() throws Exception {
-    doTest();
-  }
+    public void testAmbiguity() throws Exception {
+        doTest();
+    }
 
-  public void testTypeElementOnTheLeft() throws Exception {
-    doTest();
-  }
+    public void testSubst() throws Exception {
+        doTest();
+    }
 
-  public void testNewDefaultConstructor() throws Exception {
-    doTest();
-  }
+    public void testTypeElementOnTheLeft() throws Exception {
+        doTest();
+    }
 
-  public void testArrayConstructorRef() throws Exception {
-    doTest();
-  }
+    public void testNewDefaultConstructor() throws Exception {
+        doTest();
+    }
 
-  public void testArrayConstructorRef2Dim() throws Exception {
-    doTest();
-  }
+    public void testArrayConstructorRef() throws Exception {
+        doTest();
+    }
 
-  public void testArrayMethodRef() throws Exception {
-    doTest();
-  }
+    public void testArrayConstructorRef2Dim() throws Exception {
+        doTest();
+    }
 
-  public void testArrayConstructorRefUniqueParamName() throws Exception {
-    doTest();
-  }
+    public void testArrayMethodRef() throws Exception {
+        doTest();
+    }
+
+    public void testArrayConstructorRefUniqueParamName() throws Exception {
+        doTest();
+    }
 }

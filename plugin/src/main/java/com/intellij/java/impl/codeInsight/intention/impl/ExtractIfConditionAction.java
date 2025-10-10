@@ -40,7 +40,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ExtractIfConditionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   public ExtractIfConditionAction() {
-    setText(CodeInsightLocalize.intentionExtractIfConditionFamily().get());
+    setText(CodeInsightLocalize.intentionExtractIfConditionFamily());
   }
 
   @Override

@@ -28,6 +28,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.Couple;
@@ -131,14 +132,14 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionEqualsHashcodeDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionEqualsHashcodeDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return "";
+  public LocalizeValue getGroupDisplayName() {
+    return LocalizeValue.of();
   }
 
   @Override

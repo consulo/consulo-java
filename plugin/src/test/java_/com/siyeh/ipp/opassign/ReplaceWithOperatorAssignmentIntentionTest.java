@@ -16,8 +16,8 @@
 package com.siyeh.ipp.opassign;
 
 import com.intellij.java.impl.ipp.opassign.ReplaceWithOperatorAssignmentIntention;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @see ReplaceWithOperatorAssignmentIntention
@@ -28,7 +28,7 @@ public abstract class ReplaceWithOperatorAssignmentIntentionTest extends IPPTest
 
   @Override
   protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.assignment.with.operator.assignment.intention.name", "+");
+    return IntentionPowerPackLocalize.replaceAssignmentWithOperatorAssignmentIntentionName("+").get();
   }
 
   @Override

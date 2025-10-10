@@ -28,6 +28,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
@@ -52,8 +53,8 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.setLanguageLevelTo0(myLevel.getDescription().get()).get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.setLanguageLevelTo0(myLevel.getDescription().get());
   }
 
   private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level) {

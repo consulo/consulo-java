@@ -24,6 +24,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
 
@@ -43,8 +44,8 @@ public class InferLambdaParameterTypeIntention extends Intention {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Expand lambda to " + myInferredTypesText + " -> {...}";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Expand lambda to " + myInferredTypesText + " -> {...}");
   }
 
   @Override

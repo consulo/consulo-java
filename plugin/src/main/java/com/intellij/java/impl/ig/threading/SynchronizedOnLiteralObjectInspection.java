@@ -37,8 +37,8 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.synchronizedOnLiteralObjectName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.synchronizedOnLiteralObjectName();
   }
 
   @Override

@@ -27,6 +27,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -53,8 +54,8 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
 
     @Nonnull
     @Override
-    public String getText() {
-        return JavaQuickFixLocalize.removeRedundantArgumentsText(JavaHighlightUtil.formatMethod(myTargetMethod)).get();
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.removeRedundantArgumentsText(JavaHighlightUtil.formatMethod(myTargetMethod));
     }
 
     @Override

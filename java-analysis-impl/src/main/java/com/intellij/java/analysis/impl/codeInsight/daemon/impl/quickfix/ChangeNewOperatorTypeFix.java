@@ -33,6 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
@@ -49,12 +50,12 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
         return JavaQuickFixLocalize.changeNewOperatorTypeText(
             new PsiExpressionTrimRenderer.RenderFunction().apply(myExpression),
             myType.getPresentableText(),
             myType instanceof PsiArrayType ? "" : "()"
-        ).get();
+        );
     }
 
     @Override

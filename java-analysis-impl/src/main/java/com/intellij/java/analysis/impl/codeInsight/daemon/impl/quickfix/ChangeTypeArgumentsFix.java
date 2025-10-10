@@ -34,6 +34,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -62,16 +63,16 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
         PsiSubstitutor substitutor = inferTypeArguments();
-        return "Change type arguments to <" + StringUtil.join(
+        return LocalizeValue.localizeTODO("Change type arguments to <" + StringUtil.join(
             myPsiClass.getTypeParameters(),
             typeParameter -> {
                 PsiType substituted = substitutor.substitute(typeParameter);
                 return substituted != null ? substituted.getPresentableText() : CommonClassNames.JAVA_LANG_OBJECT;
             },
             ", "
-        ) + ">";
+        ) + ">");
     }
 
     @Override

@@ -20,8 +20,10 @@ import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 
 import jakarta.annotation.Nonnull;
@@ -35,12 +37,12 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {
-      return JavaQuickFixBundle.message("add.type.arguments.single.argument.text");
+      return JavaQuickFixLocalize.addTypeArgumentsSingleArgumentText();
     }
 
-    return JavaQuickFixBundle.message("add.type.arguments.text", myIndex + 1);
+    return JavaQuickFixLocalize.addTypeArgumentsText(myIndex + 1);
   }
 
   private static class MyFixerActionFactory extends ArgumentFixerActionFactory {

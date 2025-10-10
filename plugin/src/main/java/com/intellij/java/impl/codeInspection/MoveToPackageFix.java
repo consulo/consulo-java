@@ -23,7 +23,7 @@ import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.application.ApplicationManager;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -31,6 +31,7 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
@@ -48,14 +49,8 @@ public class MoveToPackageFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return JavaQuickFixBundle.message("move.class.to.package.text", myTargetPackage);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("move.class.to.package.family");
+  public LocalizeValue getName() {
+    return JavaQuickFixLocalize.moveClassToPackageText(myTargetPackage);
   }
 
   public boolean isAvailable(PsiFile myFile) {

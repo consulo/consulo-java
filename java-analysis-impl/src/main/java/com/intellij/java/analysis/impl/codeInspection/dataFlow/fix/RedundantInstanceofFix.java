@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -33,9 +34,9 @@ public class RedundantInstanceofFix implements LocalQuickFix
 {
 	@Override
 	@Nonnull
-	public String getFamilyName()
+	public LocalizeValue getName()
 	{
-		return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix().get();
+		return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix();
 	}
 
 	@Override

@@ -15,26 +15,25 @@
  */
 package consulo.java.properties.impl.psi;
 
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesLanguage;
+import com.intellij.lang.properties.psi.PropertiesFile;
+import com.intellij.lang.properties.psi.Property;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
 import consulo.language.Language;
-import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.ast.ASTNode;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import consulo.language.ast.ASTNode;
-import com.intellij.lang.properties.IProperty;
-import com.intellij.lang.properties.PropertiesBundle;
-import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.localize.LocalizeValue;
+import consulo.properties.localize.PropertiesLocalize;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,12 +55,12 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return PropertiesBundle.message("unused.message.format.parameter.display.name");
+  public LocalizeValue getDisplayName() {
+    return PropertiesLocalize.unusedMessageFormatParameterDisplayName();
   }
 
+  @Override
   @Nonnull
-  @NonNls
   public String getShortName() {
     return "UnusedMessageFormatParameter";
   }
@@ -73,7 +72,7 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
     final List<IProperty> properties = propertiesFile.getProperties();
     List<ProblemDescriptor> problemDescriptors = new ArrayList<ProblemDescriptor>();
     for (IProperty property : properties) {
-      @NonNls String name = property.getName();
+      String name = property.getName();
       if (name != null) {
         if (name.startsWith("log4j")) continue;
         if (name.startsWith(REGEXP + ".") || name.endsWith("." + REGEXP)) continue;
@@ -100,11 +99,11 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
           index = value.indexOf('{');
         }
         for (Integer integer : parameters) {
-          for (int i = 0; i < integer.intValue(); i++) {
+          for (int i = 0; i < integer; i++) {
             if (!parameters.contains(i)) {
               ASTNode[] nodes = property.getPsiElement().getNode().getChildren(null);
               PsiElement valElement = nodes.length < 3 ? property.getPsiElement() : nodes[2].getPsi();
-              final String message = PropertiesBundle.message("unused.message.format.parameter.problem.descriptor", integer.toString(), Integer.toString(i));
+              final String message = PropertiesLocalize.unusedMessageFormatParameterProblemDescriptor(integer.toString(), Integer.toString(i)).get();
               final String propertyKey = property.getKey();
               final LocalQuickFix[] fixes = isOnTheFly ? new LocalQuickFix[]{new RenameElementFix(((Property) property), propertyKey == null ? REGEXP : propertyKey + "." + REGEXP)} : null;
               problemDescriptors.add(manager.createProblemDescriptor(valElement, message, isOnTheFly, fixes, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));

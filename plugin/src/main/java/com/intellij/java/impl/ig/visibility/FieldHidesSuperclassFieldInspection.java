@@ -48,8 +48,8 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.fieldNameHidesInSuperclassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.fieldNameHidesInSuperclassDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

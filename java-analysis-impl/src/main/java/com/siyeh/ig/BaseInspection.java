@@ -23,13 +23,13 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
@@ -46,15 +46,13 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public abstract String getDisplayName();
+  public abstract LocalizeValue getDisplayName();
 
   @Override
-  @Nls
   @Nonnull
-  public final String getGroupDisplayName() {
+  public final LocalizeValue getGroupDisplayName() {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 

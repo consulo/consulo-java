@@ -24,25 +24,20 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiConditionalExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeCastExpression;
-import consulo.language.codeStyle.CodeStyleManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -55,14 +50,8 @@ public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement 
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("add.typecast.text", myType.getCanonicalText());
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.typecast.family");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.addTypecastText(myType.getCanonicalText());
   }
 
   @Override

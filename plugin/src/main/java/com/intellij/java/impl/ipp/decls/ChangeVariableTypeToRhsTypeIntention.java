@@ -23,11 +23,12 @@ package com.intellij.java.impl.ipp.decls;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -37,44 +38,49 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.ChangeVariableTypeToRhsTypeIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention {
 
-  @Nonnull
-  @Override
-  protected PsiElementPredicate getElementPredicate() {
-    return new ChangeVariableTypeToRhsTypePredicate();
-  }
+    @Nonnull
+    @Override
+    protected PsiElementPredicate getElementPredicate() {
+        return new ChangeVariableTypeToRhsTypePredicate();
+    }
 
-  @Override
-  protected String getTextForElement(PsiElement element) {
-    final PsiVariable variable = (PsiVariable)element.getParent();
-    final PsiExpression initializer = variable.getInitializer();
-    assert initializer != null;
-    final PsiType type = initializer.getType();
-    assert type != null;
-    return IntentionPowerPackBundle.message("change.variable.type.to.rhs.type.intention.name",
-                                            variable.getName(), type.getPresentableText());
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.changeVariableTypeToRhsTypeIntentionFamilyName();
+    }
 
-  @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiElement parent = element.getParent();
-    if (!(parent instanceof PsiVariable)) {
-      return;
+    @Override
+    protected LocalizeValue getTextForElement(PsiElement element) {
+        final PsiVariable variable = (PsiVariable) element.getParent();
+        final PsiExpression initializer = variable.getInitializer();
+        assert initializer != null;
+        final PsiType type = initializer.getType();
+        assert type != null;
+        return IntentionPowerPackLocalize.changeVariableTypeToRhsTypeIntentionName(variable.getName(), type.getPresentableText());
     }
-    final PsiVariable variable = (PsiVariable)parent;
-    final PsiExpression initializer = variable.getInitializer();
-    if (initializer == null) {
-      return;
+
+    @Override
+    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        final PsiElement parent = element.getParent();
+        if (!(parent instanceof PsiVariable)) {
+            return;
+        }
+        final PsiVariable variable = (PsiVariable) parent;
+        final PsiExpression initializer = variable.getInitializer();
+        if (initializer == null) {
+            return;
+        }
+        final PsiType type = initializer.getType();
+        if (type == null) {
+            return;
+        }
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        final PsiTypeElement typeElement = factory.createTypeElement(type);
+        final PsiTypeElement variableTypeElement = variable.getTypeElement();
+        if (variableTypeElement == null) {
+            return;
+        }
+        variableTypeElement.replace(typeElement);
     }
-    final PsiType type = initializer.getType();
-    if (type == null) {
-      return;
-    }
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-    final PsiTypeElement typeElement = factory.createTypeElement(type);
-    final PsiTypeElement variableTypeElement = variable.getTypeElement();
-    if (variableTypeElement == null) {
-      return;
-    }
-    variableTypeElement.replace(typeElement);
-  }
 }

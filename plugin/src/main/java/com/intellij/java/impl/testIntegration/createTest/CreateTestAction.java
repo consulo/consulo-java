@@ -33,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectRootManager;
@@ -58,13 +59,8 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   private static final String CREATE_TEST_IN_THE_SAME_ROOT = "create.test.in.the.same.root";
 
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionCreateTest().get();
-  }
-
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionCreateTest();
   }
 
   @RequiredReadAction

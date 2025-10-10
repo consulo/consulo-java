@@ -20,6 +20,7 @@ import consulo.ide.ServiceManager;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
 
@@ -41,14 +42,8 @@ public class GenerateToStringQuickFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return "Generate toString()";
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Generate";
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Generate toString()");
   }
 
   @Override

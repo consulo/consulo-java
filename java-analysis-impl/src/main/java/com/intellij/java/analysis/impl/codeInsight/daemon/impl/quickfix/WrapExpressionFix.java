@@ -27,6 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -62,12 +63,12 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
     @Nonnull
     @Override
     @RequiredReadAction
-    public String getText() {
+    public LocalizeValue getText() {
         PsiMethod wrapper = myExpression.isValid() && myExpectedType != null
             ? findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected)
             : null;
         String methodPresentation = wrapper != null ? wrapper.getContainingClass().getName() + "." + wrapper.getName() : "";
-        return JavaQuickFixLocalize.wrapExpressionUsingStaticAccessorText(methodPresentation).get();
+        return JavaQuickFixLocalize.wrapExpressionUsingStaticAccessorText(methodPresentation);
     }
 
     @Nullable

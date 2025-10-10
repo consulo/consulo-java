@@ -26,6 +26,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
@@ -47,14 +48,14 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     @Nonnull
     @Override
     @RequiredReadAction
-    public String getText() {
+    public LocalizeValue getText() {
         String convertedValue = convertedValue();
         boolean isString = isString(myLiteral.getType());
         return JavaQuickFixLocalize.fixSingleCharacterStringToCharLiteralText(
             myLiteral.getText(),
             quote(convertedValue, !isString),
             isString ? PsiType.CHAR.getCanonicalText() : "String"
-        ).get();
+        );
     }
 
     @Override

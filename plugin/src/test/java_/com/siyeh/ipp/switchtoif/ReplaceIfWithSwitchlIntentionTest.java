@@ -16,25 +16,33 @@
 package com.siyeh.ipp.switchtoif;
 
 import com.intellij.java.impl.ipp.switchtoif.ReplaceIfWithSwitchIntention;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @see ReplaceIfWithSwitchIntention
  */
 public abstract class ReplaceIfWithSwitchlIntentionTest extends IPPTestCase {
 
-  public void testComments() { doTest(); }
-  public void testLong() { assertIntentionNotAvailable(); }
-  public void testPolyadic() { doTest(); }
+    public void testComments() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.if.with.switch.intention.name");
-  }
+    public void testLong() {
+        assertIntentionNotAvailable();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "switchtoif/replace_if_with_switch";
-  }
+    public void testPolyadic() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceIfWithSwitchIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "switchtoif/replace_if_with_switch";
+    }
 }

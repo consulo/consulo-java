@@ -26,6 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -60,8 +61,8 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
 
   @Override
   @Nonnull
-  public String getName() {
-    return CodeInsightLocalize.quickfixI18nConcatentation().get();
+  public LocalizeValue getName() {
+    return CodeInsightLocalize.quickfixI18nConcatentation();
   }
 
   @Override

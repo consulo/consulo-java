@@ -44,8 +44,8 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedDisplayName();
   }
 
   @Override

@@ -15,65 +15,65 @@
  */
 package com.siyeh.ipp.types;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceLambdaWithAnonymousIntentionTest extends IPPTestCase {
-  public void testSimpleRunnable() {
-    doTest();
-  }
+    public void testSimpleRunnable() {
+        doTest();
+    }
 
-  public void testWithSubstitution() {
-    doTest();
-  }
-  
-  public void testSimpleWildcard() {
-    doTest();
-  }
+    public void testWithSubstitution() {
+        doTest();
+    }
 
-  public void testRenameParams() {
-    doTest();
-  }
+    public void testSimpleWildcard() {
+        doTest();
+    }
 
-  public void testSuperExpr() {
-    doTest();
-  }
+    public void testRenameParams() {
+        doTest();
+    }
 
-  public void testInsertFinal() {
-    doTest();
-  }
+    public void testSuperExpr() {
+        doTest();
+    }
 
-  public void testCyclicInference() {
-    assertIntentionNotAvailable();
-  }
+    public void testInsertFinal() {
+        doTest();
+    }
 
-  public void testNoFunctionalInterfaceFound() {
-    assertIntentionNotAvailable();
-  }
+    public void testCyclicInference() {
+        assertIntentionNotAvailable();
+    }
 
-  public void testAmbiguity() {
-    assertIntentionNotAvailable();
-  }
-  
-  public void testInsideAnonymous() {
-    assertIntentionNotAvailable();
-  }
+    public void testNoFunctionalInterfaceFound() {
+        assertIntentionNotAvailable();
+    }
 
-  public void testEffectivelyFinal() {
-    doTest();
-  }
+    public void testAmbiguity() {
+        assertIntentionNotAvailable();
+    }
 
-  public void testQualifyThis() {
-    doTest();
-  }
+    public void testInsideAnonymous() {
+        assertIntentionNotAvailable();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.lambda.with.anonymous.intention.name");
-  }
+    public void testEffectivelyFinal() {
+        doTest();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "types/lambda2anonymous";
-  }
+    public void testQualifyThis() {
+        doTest();
+    }
+
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceLambdaWithAnonymousIntentionName().get();
+    }
+
+    @Override
+    protected String getRelativePath() {
+        return "types/lambda2anonymous";
+    }
 }

@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -60,7 +61,7 @@ public class SuppressForClassFix extends SuppressFix {
 
   @Override
   @Nonnull
-  public String getText() {
-    return InspectionLocalize.suppressInspectionClass().get();
+  public LocalizeValue getText() {
+    return InspectionLocalize.suppressInspectionClass();
   }
 }

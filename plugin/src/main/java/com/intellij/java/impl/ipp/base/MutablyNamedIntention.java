@@ -15,36 +15,34 @@
  */
 package com.intellij.java.impl.ipp.base;
 
-import com.siyeh.IntentionPowerPackBundle;
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public abstract class MutablyNamedIntention extends Intention {
-  private String m_text = null;
+    private LocalizeValue myMText = LocalizeValue.of();
 
-  protected abstract String getTextForElement(PsiElement element);
+    @Nonnull
+    protected abstract LocalizeValue getTextForElement(PsiElement element);
 
-  @Override
-  @Nonnull
-  public final String getText() {
-    return m_text == null ? getNeutralText() : m_text;
-  }
-
-  private String getNeutralText() {
-    //noinspection UnresolvedPropertyKey
-    return IntentionPowerPackBundle.defaultableMessage(getPrefix() + ".family.name");
-  }
-
-  @Override
-  public final boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement node) {
-    final PsiElement element = findMatchingElement(node, editor);
-    if (element == null) {
-      return false;
+    @Override
+    @Nonnull
+    public final LocalizeValue getText() {
+        return myMText == LocalizeValue.of() ? getNeutralText() : myMText;
     }
-    m_text = getTextForElement(element);
-    return m_text != null;
-  }
+
+    @Nonnull
+    public abstract LocalizeValue getNeutralText();
+
+    @Override
+    public final boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement node) {
+        final PsiElement element = findMatchingElement(node, editor);
+        if (element == null) {
+            return false;
+        }
+        myMText = getTextForElement(element);
+        return myMText != LocalizeValue.of();
+    }
 }

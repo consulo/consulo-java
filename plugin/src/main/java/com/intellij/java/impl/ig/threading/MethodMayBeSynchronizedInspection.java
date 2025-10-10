@@ -25,6 +25,7 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -33,8 +34,8 @@ import jakarta.annotation.Nullable;
 public class MethodMayBeSynchronizedInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodMayBeSynchronizedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.methodMayBeSynchronizedDisplayName();
   }
 
   @Nonnull
@@ -55,8 +56,8 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.methodMayBeSynchronizedQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.methodMayBeSynchronizedQuickfix();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor)

@@ -30,6 +30,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -38,7 +39,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
   protected final PsiExpression myExpression;
   protected final PsiClass myPsiClass;
-  private String myText;
+  private LocalizeValue myText = LocalizeValue.of();
 
 
   public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
@@ -53,7 +54,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myText;
   }
 
@@ -69,7 +70,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
     if (!myPsiClass.isValid()) {
       return false;
     }
-    myText = "Qualify " + getQualifierText() + " expression with \'" + myPsiClass.getQualifiedName() + "\'";
+    myText = LocalizeValue.localizeTODO("Qualify " + getQualifierText() + " expression with \'" + myPsiClass.getQualifiedName() + "\'");
     return true;
   }
 

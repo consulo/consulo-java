@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
@@ -32,8 +33,8 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.extendsConcreteCollectionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.extendsConcreteCollectionDisplayName();
   }
 
   @Override

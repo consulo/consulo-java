@@ -46,8 +46,8 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.doubleCheckedLockingDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.doubleCheckedLockingDisplayName();
   }
 
   @Override

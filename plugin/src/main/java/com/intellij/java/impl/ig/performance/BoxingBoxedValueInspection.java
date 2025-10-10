@@ -26,6 +26,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -57,11 +58,10 @@ public class BoxingBoxedValueInspection extends BaseInspection {
     return true;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.boxingBoxedValueDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.boxingBoxedValueDisplayName();
   }
 
   @Nonnull
@@ -78,8 +78,8 @@ public class BoxingBoxedValueInspection extends BaseInspection {
   private static class BoxingBoxedValueFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.boxingBoxedValueQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.boxingBoxedValueQuickfix();
     }
 
     @Override

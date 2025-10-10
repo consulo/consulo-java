@@ -22,7 +22,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
@@ -32,13 +32,14 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,15 +57,9 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     PsiExpression expression = getSubExpression();
-    return JavaQuickFixBundle.message("simplify.boolean.expression.text", expression.getText(), mySubExpressionValue);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("simplify.boolean.expression.family");
+    return JavaQuickFixLocalize.simplifyBooleanExpressionText(expression.getText(), mySubExpressionValue);
   }
 
   @Override

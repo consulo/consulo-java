@@ -22,6 +22,7 @@ import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
@@ -43,7 +44,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     final String[] myAnnotationsToRemove;
     @SafeFieldForPreview
     final PsiNameValuePair[] myPairs; // not used when registering local quick fix
-    protected final String myText;
+    protected final LocalizeValue myText;
     private final ExternalAnnotationsManager.AnnotationPlace myAnnotationPlace;
 
     @RequiredReadAction
@@ -73,20 +74,20 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
 
     @RequiredReadAction
-    public static String calcText(PsiModifierListOwner modifierListOwner, @Nullable String annotation) {
+    public static LocalizeValue calcText(PsiModifierListOwner modifierListOwner, @Nullable String annotation) {
         String shortName = annotation == null ? null : annotation.substring(annotation.lastIndexOf('.') + 1);
         if (modifierListOwner instanceof PsiNamedElement namedElement) {
             String name = namedElement.getName();
             if (name != null) {
                 JavaElementKind type = JavaElementKind.fromElement(modifierListOwner).lessDescriptive();
                 return shortName == null
-                    ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElement(type.object(), name).get()
-                    : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElementAs(type.object(), name, shortName).get();
+                    ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElement(type.object(), name)
+                    : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElementAs(type.object(), name, shortName);
             }
         }
         return shortName == null
-            ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotate().get()
-            : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateAs(shortName).get();
+            ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotate()
+            : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateAs(shortName);
     }
 
     @Nullable
@@ -125,14 +126,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
         return myText;
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return JavaAnalysisLocalize.intentionAddAnnotationFamily().get();
     }
 
     @Override

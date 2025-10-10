@@ -23,17 +23,18 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressManager;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,8 @@ public class AnnotateMethodFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return getFamilyName() + " " + getPreposition() + " \'@" + ClassUtil.extractClassName(myAnnotation) + "\'";
+  public LocalizeValue getName() {
+    return LocalizeValue.join(getFamilyName(), LocalizeValue.space(), LocalizeValue.of(getPreposition()), LocalizeValue.of(" \'@"), LocalizeValue.of(ClassUtil.extractClassName(myAnnotation)), LocalizeValue.of("\'"));
   }
 
   @Nonnull
@@ -63,17 +64,16 @@ public class AnnotateMethodFix implements LocalQuickFix {
     return "with";
   }
 
-  @Override
   @Nonnull
-  public String getFamilyName() {
+  private LocalizeValue getFamilyName() {
     if (annotateSelf()) {
       if (annotateOverriddenMethods()) {
-        return JavaInspectionsBundle.message("inspection.annotate.overridden.method.and.self.quickfix.family.name");
+        return JavaInspectionsLocalize.inspectionAnnotateOverriddenMethodAndSelfQuickfixFamilyName();
       } else {
-        return JavaInspectionsBundle.message("inspection.annotate.method.quickfix.family.name");
+        return JavaInspectionsLocalize.inspectionAnnotateMethodQuickfixFamilyName();
       }
     } else {
-      return JavaInspectionsBundle.message("inspection.annotate.overridden.method.quickfix.family.name");
+      return JavaInspectionsLocalize.inspectionAnnotateOverriddenMethodQuickfixFamilyName();
     }
   }
 

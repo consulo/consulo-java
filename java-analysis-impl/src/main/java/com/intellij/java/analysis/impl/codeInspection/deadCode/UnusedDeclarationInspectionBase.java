@@ -67,6 +67,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiNonJavaFileReferenceProcessor;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
@@ -125,14 +126,14 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionDeadCodeDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionDeadCodeDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesDeclarationRedundancy();
   }
 
   @Override

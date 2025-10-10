@@ -28,6 +28,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -46,8 +47,8 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
 
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionMoveInitializerToSetUp().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionMoveInitializerToSetUp();
   }
 
   @Override

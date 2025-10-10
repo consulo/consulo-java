@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.*;
-import consulo.language.editor.inspection.localize.InspectionLocalize;
-import consulo.language.editor.intention.HighPriorityAction;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
-import consulo.project.Project;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.Nls;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -40,18 +39,16 @@ import jakarta.annotation.Nonnull;
 public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(ExplicitTypeCanBeDiamondInspection.class);
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Explicit type can be replaced with <>";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Explicit type can be replaced with <>");
   }
 
   @Override
@@ -89,14 +86,8 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
   private static class ReplaceWithDiamondFix implements LocalQuickFix, HighPriorityAction {
     @Nonnull
     @Override
-    public String getName() {
-      return "Replace with <>";
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Replace with <>");
     }
 
     @Override

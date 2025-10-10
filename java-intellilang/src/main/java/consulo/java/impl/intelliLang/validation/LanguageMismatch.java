@@ -30,6 +30,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -63,13 +64,13 @@ public class LanguageMismatch extends LocalInspectionTool {
   }
 
   @Nonnull
-  public String getGroupDisplayName() {
+  public LocalizeValue getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return "Language Mismatch";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Language Mismatch");
   }
 
   @Nullable
@@ -163,8 +164,8 @@ public class LanguageMismatch extends LocalInspectionTool {
               final String initializer = annotation.getParameterList().getText();
               final AnnotateFix fix = new AnnotateFix(declOwner, annotation.getQualifiedName(), initializer) {
                 @Nonnull
-                public String getName() {
-                  return initializer == null ? super.getName() : super.getName() + initializer;
+                public LocalizeValue getName() {
+                  return initializer == null ? super.getName() : LocalizeValue.join(super.getName(), LocalizeValue.of(initializer));
                 }
               };
 

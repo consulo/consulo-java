@@ -19,6 +19,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.language.util.IncorrectOperationException;
@@ -33,13 +34,8 @@ public class RemoveAnnotationFix implements LocalQuickFix {
   }
 
   @Nonnull
-  public String getName() {
-    return "Remove Annotation";
-  }
-
-  @Nonnull
-  public String getFamilyName() {
-    return myTool.getGroupDisplayName();
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Remove Annotation");
   }
 
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {

@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.util.function.Processor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +50,8 @@ public class AddToIgnoreIfAnnotatedByListQuickFix
 			public boolean process(String qualifiedName)
 			{
 				fixes.add(new DelegatingFix(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
-					InspectionGadgetsLocalize.add0ToIgnoreIfAnnotatedByListQuickfix(qualifiedName).get(),
-					JavaQuickFixBundle.message("fix.add.special.annotation.family"),
+					InspectionGadgetsLocalize.add0ToIgnoreIfAnnotatedByListQuickfix(qualifiedName),
+                    JavaQuickFixLocalize.fixAddSpecialAnnotationFamily(),
 					configurationList,
 					qualifiedName,
 					modifierListOwner

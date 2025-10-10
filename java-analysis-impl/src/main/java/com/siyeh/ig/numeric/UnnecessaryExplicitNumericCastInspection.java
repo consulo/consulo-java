@@ -28,9 +28,9 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,11 +56,10 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
     binaryPromotionOperators.add(JavaTokenType.OR);
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastDisplayName();
   }
 
   @Nonnull
@@ -79,8 +78,8 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastQuickfix();
     }
 
     @Override

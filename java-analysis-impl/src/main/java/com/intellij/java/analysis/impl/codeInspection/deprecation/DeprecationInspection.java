@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import consulo.annotation.DeprecationInfo;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.language.editor.DeprecationUtil;
+import consulo.java.analysis.codeInspection.DeprecationUtil;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -34,10 +34,10 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -47,7 +47,7 @@ import java.util.List;
 public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<DeprecationInspectionState> {
   public static final String SHORT_NAME = DeprecationUtil.DEPRECATION_SHORT_NAME;
   public static final String ID = DeprecationUtil.DEPRECATION_ID;
-  public static final String DISPLAY_NAME = DeprecationUtil.DEPRECATION_DISPLAY_NAME;
+  public static final LocalizeValue DISPLAY_NAME = DeprecationUtil.DEPRECATION_DISPLAY_NAME;
 
   @Override
   @Nonnull
@@ -70,7 +70,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
   @Override
   @Nonnull
-  public String getDisplayName() {
+  public LocalizeValue getDisplayName() {
     return DISPLAY_NAME;
   }
 

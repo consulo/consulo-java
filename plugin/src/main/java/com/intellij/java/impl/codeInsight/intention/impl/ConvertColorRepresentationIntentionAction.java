@@ -36,7 +36,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ConvertColorRepresentationIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ConvertColorRepresentationIntentionAction extends BaseColorIntentionAction {
   public ConvertColorRepresentationIntentionAction() {
-    setText(CodeInsightLocalize.intentionConvertColorRepresentationFamily().get());
+    setText(CodeInsightLocalize.intentionConvertColorRepresentationFamily());
   }
 
   @Override
@@ -70,7 +70,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
       return false;
     }
 
-    setText(CodeInsightLocalize.intentionConvertColorRepresentationText(newArguments.getText()).get());
+    setText(CodeInsightLocalize.intentionConvertColorRepresentationText(newArguments.getText()));
 
     return true;
   }

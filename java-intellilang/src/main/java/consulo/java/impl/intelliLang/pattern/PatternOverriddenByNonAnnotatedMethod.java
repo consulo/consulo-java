@@ -30,6 +30,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -57,13 +58,13 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
   }
 
   @Nonnull
-  public String getGroupDisplayName() {
+  public LocalizeValue getGroupDisplayName() {
     return PatternValidator.PATTERN_VALIDATION;
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return "Non-annotated Method overrides @Pattern Method";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Non-annotated Method overrides @Pattern Method");
   }
 
   @Nonnull

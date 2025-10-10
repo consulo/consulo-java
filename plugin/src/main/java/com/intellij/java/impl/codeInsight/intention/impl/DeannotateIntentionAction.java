@@ -35,6 +35,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
@@ -55,8 +56,8 @@ public class DeannotateIntentionAction implements IntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.deannotateIntentionActionText().get() + (myAnnotationName != null ? " " + myAnnotationName : "");
+  public LocalizeValue getText() {
+    return LocalizeValue.join(CodeInsightLocalize.deannotateIntentionActionText(), LocalizeValue.of((myAnnotationName != null ? " " + myAnnotationName : "")));
   }
 
   @Override
@@ -170,7 +171,7 @@ public class DeannotateIntentionAction implements IntentionAction {
     final ExternalAnnotationsManager annotationsManager,
     final PsiModifierListOwner listOwner
   ) {
-    new WriteCommandAction(project, getText()) {
+    new WriteCommandAction(project, getText().get()) {
       @Override
       protected void run(final Result result) throws Throwable {
         final VirtualFile virtualFile = file.getVirtualFile();

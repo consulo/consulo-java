@@ -3,6 +3,7 @@ package com.siyeh.ipp.opassign;
 import com.intellij.java.impl.ipp.opassign.ReplaceOperatorAssignmentWithAssignmentIntention;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 /**
  * @see ReplaceOperatorAssignmentWithAssignmentIntention
@@ -13,11 +14,11 @@ public abstract class ReplaceOperatorAssignmentWithAssignmentIntentionTest exten
   public void testStringOpAssign() { doTest(); }
   public void testByteOpAssign() { doTest(); }
   public void testPrecedence() { doTest(); }
-  public void testPolyadicAssignment() { doTest(IntentionPowerPackBundle.message("replace.operator.assignment.with.assignment.intention.name", "*=")); }
+  public void testPolyadicAssignment() { doTest(IntentionPowerPackLocalize.replaceOperatorAssignmentWithAssignmentIntentionName("*=").get()); }
 
   @Override
   protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.operator.assignment.with.assignment.intention.name", "+=");
+    return IntentionPowerPackLocalize.replaceOperatorAssignmentWithAssignmentIntentionName("+=").get();
   }
 
   @Override

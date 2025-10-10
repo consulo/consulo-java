@@ -13,6 +13,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -90,8 +91,8 @@ public final class DfaOptionalSupport {
 
         @Nonnull
         @Override
-        public String getFamilyName() {
-            return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()").get();
+        public LocalizeValue getName() {
+            return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()");
         }
 
         @Override

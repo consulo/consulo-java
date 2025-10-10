@@ -39,18 +39,10 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
         myValue = value;
     }
 
-    @Nls
     @Nonnull
     @Override
-    public String getName() {
-        return myMessage.get();
-    }
-
-    @Nls
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return "Set inspection option";
+    public LocalizeValue getName() {
+        return myMessage;
     }
 
     @Override

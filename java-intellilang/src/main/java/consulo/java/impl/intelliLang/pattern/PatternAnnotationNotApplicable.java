@@ -28,6 +28,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -51,13 +52,13 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
   }
 
   @Nonnull
-  public String getGroupDisplayName() {
+  public LocalizeValue getGroupDisplayName() {
     return PatternValidator.PATTERN_VALIDATION;
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return "Pattern Annotation not applicable";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Pattern Annotation not applicable");
   }
 
   @Nonnull

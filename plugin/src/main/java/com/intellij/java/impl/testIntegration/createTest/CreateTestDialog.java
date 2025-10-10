@@ -105,7 +105,7 @@ public class CreateTestDialog extends DialogWrapper {
   @RequiredUIAccess
   public CreateTestDialog(
     @Nonnull Project project,
-    @Nonnull String title,
+    @Nonnull LocalizeValue title,
     PsiClass targetClass,
     PsiJavaPackage targetPackage,
     Module targetModule

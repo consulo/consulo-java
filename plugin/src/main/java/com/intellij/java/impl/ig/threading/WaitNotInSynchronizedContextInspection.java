@@ -20,9 +20,11 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -39,15 +41,14 @@ public class WaitNotInSynchronizedContextInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "wait.not.in.synchronized.context.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.waitNotInSynchronizedContextDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    @NonNls final String text;
+    final String text;
     if (infos.length > 0) {
       final PsiElement element = (PsiElement)infos[0];
       text = element.getText();

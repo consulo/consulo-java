@@ -20,6 +20,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.siyeh.ig.GroupDisplayNameUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
@@ -27,9 +28,8 @@ import org.jetbrains.annotations.Nls;
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection
 {
 	@Override
-	@Nls
 	@Nonnull
-	public final String getGroupDisplayName()
+	public final LocalizeValue getGroupDisplayName()
 	{
 		return GroupDisplayNameUtil.getGroupDisplayName(getClass());
 	}

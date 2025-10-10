@@ -49,7 +49,7 @@ import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeQuickFix");
+  private static final Logger LOG = Logger.getInstance(I18nizeQuickFix.class);
   private TextRange mySelectionRange;
 
   @Override
@@ -60,14 +60,8 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
 
   @Override
   @Nonnull
-  public String getName() {
-    return CodeInsightLocalize.inspectionI18nQuickfix().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
+  public LocalizeValue getName() {
+    return CodeInsightLocalize.inspectionI18nQuickfix();
   }
 
   @Override

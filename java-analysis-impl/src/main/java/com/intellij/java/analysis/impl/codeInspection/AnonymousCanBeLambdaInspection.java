@@ -40,13 +40,13 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -60,18 +60,16 @@ import java.util.function.UnaryOperator;
 public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool<AnonymousCanBeLambdaInspectionState> {
   public static final Logger LOG = Logger.getInstance(AnonymousCanBeLambdaInspection.class);
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Anonymous type can be replaced with lambda";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Anonymous type can be replaced with lambda");
   }
 
   @Override
@@ -390,8 +388,8 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
   private static class ReplaceWithLambdaFix implements LocalQuickFix, HighPriorityAction {
     @Nonnull
     @Override
-    public String getFamilyName() {
-      return "Replace with lambda";
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Replace with lambda");
     }
 
     @Override

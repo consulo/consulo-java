@@ -22,7 +22,7 @@ import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -31,9 +31,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 
 @ExtensionImpl
@@ -46,7 +47,7 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected String getTextForElement(PsiElement element) {
+  protected LocalizeValue getTextForElement(PsiElement element) {
     final PsiAnnotation annotation = (PsiAnnotation)element;
     final String qualifiedName = annotation.getQualifiedName();
     if (qualifiedName == null) {
@@ -55,14 +56,10 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
     final String annotationName = ClassUtil.extractClassName(qualifiedName);
     final PsiElement grandParent = element.getParent().getParent();
     if (grandParent instanceof PsiMethod) {
-      return IntentionPowerPackBundle.message(
-        "annotate.overridden.methods.intention.method.name",
-        annotationName);
+      return IntentionPowerPackLocalize.annotateOverriddenMethodsIntentionMethodName(annotationName);
     }
     else {
-      return IntentionPowerPackBundle.message(
-        "annotate.overridden.methods.intention.parameters.name",
-        annotationName);
+      return IntentionPowerPackLocalize.annotateOverriddenMethodsIntentionParametersName(annotationName);
     }
   }
 

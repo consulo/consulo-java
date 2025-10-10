@@ -27,6 +27,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -42,9 +43,8 @@ public class MethodOverridesPackageLocalMethodInspection
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.overrides.package.local.method.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.methodOverridesPackageLocalMethodDisplayName();
   }
 
   @Nonnull

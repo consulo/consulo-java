@@ -20,59 +20,66 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.NegateComparisonIntention", fileExtensions = "java", categories = {
-		"Java",
-		"Boolean"
+    "Java",
+    "Boolean"
 })
 public class NegateComparisonIntention extends MutablyNamedIntention {
-
-  public String getTextForElement(PsiElement element) {
-    String operatorText = "";
-    String negatedOperatorText = "";
-    final PsiBinaryExpression exp = (PsiBinaryExpression)element;
-    if (exp != null) {
-      final PsiJavaToken sign = exp.getOperationSign();
-      operatorText = sign.getText();
-      negatedOperatorText =
-        ComparisonUtils.getNegatedComparison(sign.getTokenType());
+    @Nonnull
+    @Override
+    public LocalizeValue getTextForElement(PsiElement element) {
+        String operatorText = "";
+        String negatedOperatorText = "";
+        final PsiBinaryExpression exp = (PsiBinaryExpression) element;
+        if (exp != null) {
+            final PsiJavaToken sign = exp.getOperationSign();
+            operatorText = sign.getText();
+            negatedOperatorText =
+                ComparisonUtils.getNegatedComparison(sign.getTokenType());
+        }
+        if (operatorText.equals(negatedOperatorText)) {
+            return IntentionPowerPackLocalize.negateComparisonIntentionName(operatorText);
+        }
+        else {
+            return IntentionPowerPackLocalize.negateComparisonIntentionName1(operatorText, negatedOperatorText);
+        }
     }
-    if (operatorText.equals(negatedOperatorText)) {
-      return IntentionPowerPackBundle.message(
-        "negate.comparison.intention.name", operatorText);
-    }
-    else {
-      return IntentionPowerPackBundle.message(
-        "negate.comparison.intention.name1", operatorText,
-        negatedOperatorText);
-    }
-  }
 
-  @Nonnull
-  public PsiElementPredicate getElementPredicate() {
-    return new ComparisonPredicate();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.negateComparisonIntentionFamilyName();
+    }
 
-  public void processIntention(PsiElement element)
-    throws IncorrectOperationException {
-    final PsiBinaryExpression expression =
-      (PsiBinaryExpression)element;
-    final PsiExpression lhs = expression.getLOperand();
-    final PsiExpression rhs = expression.getROperand();
-    final String negatedOperator =
-      ComparisonUtils.getNegatedComparison(expression.getOperationTokenType());
-    final String lhsText = lhs.getText();
-    assert rhs != null;
-    final String rhsText = rhs.getText();
-    replaceExpressionWithNegatedExpressionString(lhsText +
-                                                 negatedOperator + rhsText, expression);
-  }
+    @Override
+    @Nonnull
+    public PsiElementPredicate getElementPredicate() {
+        return new ComparisonPredicate();
+    }
+
+    @Override
+    public void processIntention(PsiElement element)
+        throws IncorrectOperationException {
+        final PsiBinaryExpression expression =
+            (PsiBinaryExpression) element;
+        final PsiExpression lhs = expression.getLOperand();
+        final PsiExpression rhs = expression.getROperand();
+        final String negatedOperator =
+            ComparisonUtils.getNegatedComparison(expression.getOperationTokenType());
+        final String lhsText = lhs.getText();
+        assert rhs != null;
+        final String rhsText = rhs.getText();
+        replaceExpressionWithNegatedExpressionString(lhsText +
+            negatedOperator + rhsText, expression);
+    }
 }

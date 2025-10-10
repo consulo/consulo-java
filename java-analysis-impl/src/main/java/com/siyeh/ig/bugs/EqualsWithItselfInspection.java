@@ -24,6 +24,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import org.jetbrains.annotations.Nls;
 
 import jakarta.annotation.Nonnull;
@@ -35,8 +36,8 @@ public abstract class EqualsWithItselfInspection extends BaseInspection {
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.equalsWithItselfDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.equalsWithItselfDisplayName();
   }
 
   @Nonnull

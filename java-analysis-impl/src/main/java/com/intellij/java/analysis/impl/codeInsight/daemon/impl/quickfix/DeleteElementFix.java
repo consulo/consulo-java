@@ -18,43 +18,33 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.application.WriteAction;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private final String myText;
+  private final LocalizeValue myText;
 
   public DeleteElementFix(@Nonnull PsiElement element) {
     super(element);
-    myText = null;
+    myText = LocalizeValue.of();
   }
 
-  public DeleteElementFix(@Nonnull PsiElement element, @Nonnull @Nls String text) {
+  public DeleteElementFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text) {
     super(element);
     myText = text;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return ObjectUtil.notNull(myText, getFamilyName());
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("delete.element.fix.text");
+  public LocalizeValue getText() {
+    return myText == LocalizeValue.of() ? JavaQuickFixLocalize.deleteElementFixText() : myText;
   }
 
   @Override

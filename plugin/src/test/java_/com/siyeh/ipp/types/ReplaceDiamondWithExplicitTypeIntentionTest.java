@@ -15,33 +15,33 @@
  */
 package com.siyeh.ipp.types;
 
-import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.IPPTestCase;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 
 public abstract class ReplaceDiamondWithExplicitTypeIntentionTest extends IPPTestCase {
-  public void testAnonymousClass() {
-    doTest();
-  }
+    public void testAnonymousClass() {
+        doTest();
+    }
 
-  public void testApplicableDiamond() {
-    doTest();
-  }
+    public void testApplicableDiamond() {
+        doTest();
+    }
 
-  public void testApplicableDiamondCheckFormatting() {
-    doTest();
-  }
+    public void testApplicableDiamondCheckFormatting() {
+        doTest();
+    }
 
-  public void testExplicitTypeArgs() {
-    doTest();
-  }
+    public void testExplicitTypeArgs() {
+        doTest();
+    }
 
-  @Override
-  protected String getIntentionName() {
-    return IntentionPowerPackBundle.message("replace.diamond.with.explicit.type.arguments.intention.name");
-  }
+    @Override
+    protected String getIntentionName() {
+        return IntentionPowerPackLocalize.replaceDiamondWithExplicitTypeArgumentsIntentionName().get();
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "types/diamond2explicit";
-  }
+    @Override
+    protected String getRelativePath() {
+        return "types/diamond2explicit";
+    }
 }

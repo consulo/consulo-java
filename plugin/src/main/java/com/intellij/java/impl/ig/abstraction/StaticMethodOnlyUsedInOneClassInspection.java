@@ -50,6 +50,7 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactor
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
@@ -75,9 +76,9 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
 	@Override
 	@Nonnull
-	public String getDisplayName()
+	public LocalizeValue getDisplayName()
 	{
-		return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassDisplayName().get();
+		return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassDisplayName();
 	}
 
 	@Nonnull
@@ -406,10 +407,10 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 			}
 
 			@Override
-			@Nonnull
-			public String getFamilyName()
+            @Nonnull
+			public LocalizeValue getName()
 			{
-				return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassQuickfix().get();
+				return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassQuickfix();
 			}
 
 			@Nonnull

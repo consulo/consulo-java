@@ -19,47 +19,52 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddArrayCreationExpressionIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
 
-  @Override
-  @Nonnull
-  protected PsiElementPredicate getElementPredicate() {
-    return new ArrayCreationExpressionPredicate();
-  }
-
-  @Override
-  protected String getTextForElement(PsiElement element) {
-    final PsiArrayInitializerExpression arrayInitializerExpression =
-      (PsiArrayInitializerExpression)element;
-    final PsiType type = arrayInitializerExpression.getType();
-    assert type != null;
-    return IntentionPowerPackBundle.message(
-      "add.array.creation.expression.intention.name",
-      type.getPresentableText());
-  }
-
-  @Override
-  protected void processIntention(@Nonnull PsiElement element)
-    throws IncorrectOperationException {
-    final PsiArrayInitializerExpression arrayInitializerExpression =
-      (PsiArrayInitializerExpression)element;
-    final PsiType type = arrayInitializerExpression.getType();
-    if (type == null) {
-      return;
+    @Override
+    @Nonnull
+    protected PsiElementPredicate getElementPredicate() {
+        return new ArrayCreationExpressionPredicate();
     }
-    final String typeText = type.getCanonicalText();
-    final String newExpressionText =
-      "new " + typeText + arrayInitializerExpression.getText();
-    replaceExpression(newExpressionText, arrayInitializerExpression);
-  }
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getTextForElement(PsiElement element) {
+        final PsiArrayInitializerExpression arrayInitializerExpression =
+            (PsiArrayInitializerExpression) element;
+        final PsiType type = arrayInitializerExpression.getType();
+        assert type != null;
+        return IntentionPowerPackLocalize.addArrayCreationExpressionIntentionName(type.getPresentableText());
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getNeutralText() {
+        return IntentionPowerPackLocalize.addArrayCreationExpressionIntentionFamilyName();
+    }
+
+    @Override
+    protected void processIntention(@Nonnull PsiElement element)
+        throws IncorrectOperationException {
+        final PsiArrayInitializerExpression arrayInitializerExpression =
+            (PsiArrayInitializerExpression) element;
+        final PsiType type = arrayInitializerExpression.getType();
+        if (type == null) {
+            return;
+        }
+        final String typeText = type.getCanonicalText();
+        final String newExpressionText =
+            "new " + typeText + arrayInitializerExpression.getText();
+        replaceExpression(newExpressionText, arrayInitializerExpression);
+    }
 }

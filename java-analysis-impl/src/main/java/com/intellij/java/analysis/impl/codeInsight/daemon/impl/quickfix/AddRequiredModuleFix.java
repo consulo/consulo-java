@@ -18,16 +18,15 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Pavel.Dolgov
@@ -40,18 +39,10 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
     myRequiredName = requiredName;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("module.info.add.requires.name", myRequiredName);
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("module.info.add.requires.family.name");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.moduleInfoAddRequiresName(myRequiredName);
   }
 
   @Override

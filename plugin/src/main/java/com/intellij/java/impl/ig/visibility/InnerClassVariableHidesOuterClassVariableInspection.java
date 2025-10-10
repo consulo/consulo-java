@@ -47,8 +47,8 @@ public class InnerClassVariableHidesOuterClassVariableInspection
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.innerClassFieldHidesOuterDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.innerClassFieldHidesOuterDisplayName();
   }
 
   @Nonnull

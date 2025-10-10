@@ -28,6 +28,7 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
@@ -51,18 +52,17 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Anonymous type can be replaced with method reference";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Anonymous type can be replaced with method reference");
   }
 
   @Override
@@ -124,8 +124,8 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
   private static class ReplaceWithMethodRefFix implements LocalQuickFix {
     @Nonnull
     @Override
-    public String getFamilyName() {
-      return "Replace with method reference";
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Replace with method reference");
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -36,14 +37,8 @@ public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(name).get();
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Remove redundant statement";
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(name);
   }
 
   @Override

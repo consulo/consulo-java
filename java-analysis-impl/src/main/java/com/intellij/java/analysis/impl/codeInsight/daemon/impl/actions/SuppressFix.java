@@ -33,8 +33,8 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -53,9 +53,9 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
 
   @Override
   @Nonnull
-  public String getText() {
-    String myText = super.getText();
-    return StringUtil.isEmpty(myText) ? "Suppress for member" : myText;
+  public LocalizeValue getText() {
+    LocalizeValue text = super.getText();
+    return text == LocalizeValue.of() ? LocalizeValue.localizeTODO("Suppress for member") : text;
   }
 
   @Override
@@ -93,10 +93,10 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     }
     setText(
       container instanceof PsiClass
-        ? InspectionLocalize.suppressInspectionClass().get()
+        ? InspectionLocalize.suppressInspectionClass()
         : container instanceof PsiMethod
-        ? InspectionLocalize.suppressInspectionMethod().get()
-        : InspectionLocalize.suppressInspectionField().get()
+        ? InspectionLocalize.suppressInspectionMethod()
+        : InspectionLocalize.suppressInspectionField()
     );
     return true;
   }

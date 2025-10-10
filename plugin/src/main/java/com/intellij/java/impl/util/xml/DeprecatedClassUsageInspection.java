@@ -18,6 +18,7 @@ package com.intellij.java.impl.util.xml;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -26,6 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.ResolvingHint;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.codeInspection.XmlSuppressableInspectionTool;
 import consulo.xml.lang.xml.XMLLanguage;
@@ -33,8 +35,6 @@ import consulo.xml.psi.XmlElementVisitor;
 import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -42,92 +42,74 @@ import jakarta.annotation.Nullable;
  * @author Dmitry Avdeev
  */
 @ExtensionImpl
-public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool
-{
+public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return XMLLanguage.INSTANCE;
+    }
 
-	@Nullable
-	@Override
-	public Language getLanguage()
-	{
-		return XMLLanguage.INSTANCE;
-	}
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 
-	@Nonnull
-	@Override
-	public HighlightDisplayLevel getDefaultLevel()
-	{
-		return HighlightDisplayLevel.WARNING;
-	}
+    @Nonnull
+    @Override
+    public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
+                                          boolean isOnTheFly,
+                                          @Nonnull LocalInspectionToolSession session,
+                                          Object state) {
+        return new XmlElementVisitor() {
+            @Override
+            public void visitXmlTag(XmlTag tag) {
+                if (tag.getValue().getTextElements().length > 0) {
+                    checkReferences(tag, holder);
+                }
+            }
 
-	@Nonnull
-	@Override
-	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
-										  boolean isOnTheFly,
-										  @Nonnull LocalInspectionToolSession session,
-										  Object state)
-	{
-		return new XmlElementVisitor()
-		{
-			@Override
-			public void visitXmlTag(XmlTag tag)
-			{
-				if(tag.getValue().getTextElements().length > 0)
-				{
-					checkReferences(tag, holder);
-				}
-			}
+            @Override
+            public void visitXmlAttribute(XmlAttribute attribute) {
+                checkReferences(attribute, holder);
+            }
 
-			@Override
-			public void visitXmlAttribute(XmlAttribute attribute)
-			{
-				checkReferences(attribute, holder);
-			}
+            @Override
+            public void visitXmlAttributeValue(XmlAttributeValue value) {
+                checkReferences(value, holder);
+            }
+        };
+    }
 
-			@Override
-			public void visitXmlAttributeValue(XmlAttributeValue value)
-			{
-				checkReferences(value, holder);
-			}
-		};
-	}
+    private static void checkReferences(PsiElement psiElement, ProblemsHolder holder) {
+        PsiReference[] references = psiElement.getReferences();
+        PsiReference last = ArrayUtil.getLastElement(references);
+        if (last != null && (!(last instanceof ResolvingHint) || ((ResolvingHint) last).canResolveTo(PsiDocCommentOwner.class))) {
+            PsiElement resolve = last.resolve();
+            DeprecationInspection.checkDeprecated(resolve, psiElement, last.getRangeInElement(), holder);
+        }
+    }
 
-	private static void checkReferences(PsiElement psiElement, ProblemsHolder holder)
-	{
-		PsiReference[] references = psiElement.getReferences();
-		PsiReference last = ArrayUtil.getLastElement(references);
-		if(last != null && (!(last instanceof ResolvingHint) || ((ResolvingHint) last).canResolveTo(PsiDocCommentOwner.class)))
-		{
-			PsiElement resolve = last.resolve();
-			DeprecationInspection.checkDeprecated(resolve, psiElement, last.getRangeInElement(), holder);
-		}
-	}
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-	@Override
-	public boolean isEnabledByDefault()
-	{
-		return true;
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return JavaLanguageLocalize.javaLanguageDisplayName();
+    }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getGroupDisplayName()
-	{
-		return "Java";
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.localizeTODO("Deprecated API usage in XML");
+    }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return "Deprecated API usage in XML";
-	}
-
-	@Nonnull
-	@Override
-	public String getShortName()
-	{
-		return "DeprecatedClassUsageInspection";
-	}
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return "DeprecatedClassUsageInspection";
+    }
 }

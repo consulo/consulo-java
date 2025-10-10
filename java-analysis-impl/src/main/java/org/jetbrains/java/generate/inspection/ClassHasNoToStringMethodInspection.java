@@ -23,6 +23,7 @@ import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.GenerateToStringContext;
@@ -38,8 +39,8 @@ import org.jetbrains.java.generate.GenerateToStringUtils;
 public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return "Class does not override 'toString()' method";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Class does not override 'toString()' method");
   }
 
   @Override

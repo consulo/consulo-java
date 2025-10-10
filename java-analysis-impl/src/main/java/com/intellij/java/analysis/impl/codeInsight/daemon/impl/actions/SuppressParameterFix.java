@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierList;
@@ -43,8 +44,8 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
 
   @Override
   @Nonnull
-  public String getText() {
-    return "Suppress for parameter";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Suppress for parameter");
   }
 
   @Nullable

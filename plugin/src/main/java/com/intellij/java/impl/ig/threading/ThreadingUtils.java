@@ -30,7 +30,7 @@ class ThreadingUtils {
     @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    final String methodName = methodExpression.getReferenceName();
     if (!"wait".equals(methodName)) {
       return false;
     }

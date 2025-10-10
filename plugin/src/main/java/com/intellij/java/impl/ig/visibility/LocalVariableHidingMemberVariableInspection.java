@@ -26,6 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -46,8 +47,8 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.localVariableHidesMemberVariableDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.localVariableHidesMemberVariableDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

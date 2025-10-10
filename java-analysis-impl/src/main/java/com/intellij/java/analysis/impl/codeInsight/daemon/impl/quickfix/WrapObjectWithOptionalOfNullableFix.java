@@ -30,6 +30,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
@@ -54,12 +55,12 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
         if (myArgList.getExpressionCount() == 1) {
-            return JavaQuickFixLocalize.wrapWithOptionalSingleParameterText().get();
+            return JavaQuickFixLocalize.wrapWithOptionalSingleParameterText();
         }
         else {
-            return JavaQuickFixLocalize.wrapWithOptionalParameterText(myIndex + 1).get();
+            return JavaQuickFixLocalize.wrapWithOptionalParameterText(myIndex + 1);
         }
     }
 
@@ -73,12 +74,6 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
         class MyFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
             protected MyFix(@Nullable PsiElement element) {
                 super(element);
-            }
-
-            @Nonnull
-            @Override
-            public String getFamilyName() {
-                return JavaQuickFixLocalize.wrapWithOptionalSingleParameterText().get();
             }
 
             @RequiredReadAction
@@ -108,8 +103,8 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
             @Nonnull
             @Override
-            public String getText() {
-                return getFamilyName();
+            public LocalizeValue getText() {
+                return JavaQuickFixLocalize.wrapWithOptionalSingleParameterText();
             }
         }
         return new MyFix(expression);

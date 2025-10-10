@@ -30,6 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
@@ -42,7 +43,7 @@ import java.util.List;
  * @author cdr
  */
 public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.AnnotateMethodFix");
+  private static final Logger LOG = Logger.getInstance(AnnotateOverriddenMethodParameterFix.class);
   private final String myAnnotation;
   private final String[] myAnnosToRemove;
 
@@ -53,8 +54,8 @@ public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return InspectionLocalize.annotateOverriddenMethodsParameters(ClassUtil.extractClassName(myAnnotation)).get();
+  public LocalizeValue getName() {
+    return InspectionLocalize.annotateOverriddenMethodsParameters(ClassUtil.extractClassName(myAnnotation));
   }
 
   @Override
@@ -95,11 +96,5 @@ public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
         LOG.error(e);
       }
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
   }
 }

@@ -15,55 +15,40 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import jakarta.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-public class SurroundWithRequireNonNullFix implements LocalQuickFix
-{
-	private final String myText;
-	private final SmartPsiElementPointer<PsiExpression> myQualifierPointer;
+public class SurroundWithRequireNonNullFix implements LocalQuickFix {
+    private final String myText;
+    private final SmartPsiElementPointer<PsiExpression> myQualifierPointer;
 
-	public SurroundWithRequireNonNullFix(@Nonnull PsiExpression expressionToSurround)
-	{
-		myText = expressionToSurround.getText();
-		myQualifierPointer = SmartPointerManager.getInstance(expressionToSurround.getProject()).createSmartPsiElementPointer(expressionToSurround);
-	}
+    public SurroundWithRequireNonNullFix(@Nonnull PsiExpression expressionToSurround) {
+        myText = expressionToSurround.getText();
+        myQualifierPointer = SmartPointerManager.getInstance(expressionToSurround.getProject()).createSmartPsiElementPointer(expressionToSurround);
+    }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getName()
-	{
-		return JavaInspectionsBundle.message("inspection.surround.requirenonnull.quickfix", myText);
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return JavaInspectionsLocalize.inspectionSurroundRequirenonnullQuickfix(myText);
+    }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaInspectionsBundle.message("inspection.surround.requirenonnull.quickfix", "");
-	}
-
-	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
-	{
-		PsiExpression qualifier = myQualifierPointer.getElement();
-		if(qualifier == null)
-		{
-			return;
-		}
-		PsiExpression replacement = JavaPsiFacade.getElementFactory(project).createExpressionFromText("java.util.Objects.requireNonNull(" + qualifier.getText() + ")", qualifier);
-		JavaCodeStyleManager.getInstance(project).shortenClassReferences(qualifier.replace(replacement));
-	}
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiExpression qualifier = myQualifierPointer.getElement();
+        if (qualifier == null) {
+            return;
+        }
+        PsiExpression replacement = JavaPsiFacade.getElementFactory(project).createExpressionFromText("java.util.Objects.requireNonNull(" + qualifier.getText() + ")", qualifier);
+        JavaCodeStyleManager.getInstance(project).shortenClassReferences(qualifier.replace(replacement));
+    }
 }
