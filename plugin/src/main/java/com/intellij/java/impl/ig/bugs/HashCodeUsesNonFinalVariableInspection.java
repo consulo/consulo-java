@@ -24,68 +24,72 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
-public class HashCodeUsesNonFinalVariableInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "NonFinalFieldReferencedInHashCode";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalFieldInHashcodeDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalFieldInHashcodeProblemDescriptor().get();
-  }
-
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new HashCodeUsesNonFinalVariableVisitor();
-  }
-
-  private static class HashCodeUsesNonFinalVariableVisitor
-    extends BaseInspectionVisitor {
-
+public class HashCodeUsesNonFinalVariableInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      final boolean isHashCode = MethodUtils.isHashCode(method);
-      if (isHashCode) {
-        method.accept(new JavaRecursiveElementVisitor() {
-
-          @Override
-          public void visitClass(PsiClass aClass) {
-            // Do not recurse into.
-          }
-
-          @Override
-          public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression expression) {
-            super.visitReferenceExpression(expression);
-            final PsiElement element = expression.resolve();
-            if (!(element instanceof PsiField)) {
-              return;
-            }
-            final PsiField field = (PsiField)element;
-            if (field.hasModifierProperty(PsiModifier.FINAL)) {
-              return;
-            }
-            registerError(expression, field);
-          }
-        });
-      }
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "NonFinalFieldReferencedInHashCode";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalFieldInHashcodeDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalFieldInHashcodeProblemDescriptor().get();
+    }
+
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return MakeFieldFinalFix.buildFix(field);
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new HashCodeUsesNonFinalVariableVisitor();
+    }
+
+    private static class HashCodeUsesNonFinalVariableVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            final boolean isHashCode = MethodUtils.isHashCode(method);
+            if (isHashCode) {
+                method.accept(new JavaRecursiveElementVisitor() {
+
+                    @Override
+                    public void visitClass(PsiClass aClass) {
+                        // Do not recurse into.
+                    }
+
+                    @Override
+                    public void visitReferenceExpression(
+                        @Nonnull PsiReferenceExpression expression
+                    ) {
+                        super.visitReferenceExpression(expression);
+                        final PsiElement element = expression.resolve();
+                        if (!(element instanceof PsiField)) {
+                            return;
+                        }
+                        final PsiField field = (PsiField) element;
+                        if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                            return;
+                        }
+                        registerError(expression, field);
+                    }
+                });
+            }
+        }
+    }
 }

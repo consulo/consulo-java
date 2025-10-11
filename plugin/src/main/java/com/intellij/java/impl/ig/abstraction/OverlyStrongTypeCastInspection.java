@@ -38,167 +38,166 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class OverlyStrongTypeCastInspection extends BaseInspection {
-
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreInMatchingInstanceof = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.overlyStrongTypeCastDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    final PsiType expectedType = (PsiType)infos[0];
-    final String typeText = expectedType.getPresentableText();
-    return InspectionGadgetsLocalize.overlyStrongTypeCastProblemDescriptor(typeText).get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.overlyStrongTypeCastIgnoreInMatchingInstanceofOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInMatchingInstanceof");
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new OverlyStrongCastFix();
-  }
-
-  private static class OverlyStrongCastFix extends InspectionGadgetsFix {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreInMatchingInstanceof = false;
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.overlyStrongTypeCastWeakenQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.overlyStrongTypeCastDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement castTypeElement = descriptor.getPsiElement();
-      final PsiTypeCastExpression expression =
-        (PsiTypeCastExpression)castTypeElement.getParent();
-      if (expression == null) {
-        return;
-      }
-      final PsiType expectedType =
-        ExpectedTypeUtils.findExpectedType(expression, true);
-      if (expectedType == null) {
-        return;
-      }
-      final PsiExpression operand = expression.getOperand();
-      if (operand == null) {
-        return;
-      }
-      @NonNls
-      final String newExpression =
-        '(' + expectedType.getCanonicalText() + ')' +
-        operand.getText();
-      replaceExpressionAndShorten(expression, newExpression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final PsiType expectedType = (PsiType) infos[0];
+        final String typeText = expectedType.getPresentableText();
+        return InspectionGadgetsLocalize.overlyStrongTypeCastProblemDescriptor(typeText).get();
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new OverlyStrongTypeCastVisitor();
-  }
-
-  private class OverlyStrongTypeCastVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(
-      @Nonnull PsiTypeCastExpression expression) {
-      super.visitTypeCastExpression(expression);
-      final PsiExpression operand = expression.getOperand();
-      if (operand == null) {
-        return;
-      }
-      final PsiType operandType = operand.getType();
-      if (operandType == null) {
-        return;
-      }
-      final PsiType type = expression.getType();
-      if (type == null) {
-        return;
-      }
-      final PsiType expectedType =
-        ExpectedTypeUtils.findExpectedType(expression, true);
-      if (expectedType == null) {
-        return;
-      }
-      if (expectedType.equals(type)) {
-        return;
-      }
-      final PsiClass resolved = PsiUtil.resolveClassInType(expectedType);
-      if (resolved != null && !resolved.isPhysical()) {
-        return;
-      }
-      if (expectedType.isAssignableFrom(operandType)) {
-        //then it's redundant, and caught by the built-in exception
-        return;
-      }
-      if (isTypeParameter(expectedType)) {
-        return;
-      }
-      if (expectedType instanceof PsiArrayType) {
-        final PsiArrayType arrayType = (PsiArrayType)expectedType;
-        final PsiType componentType = arrayType.getDeepComponentType();
-        if (isTypeParameter(componentType)) {
-          return;
-        }
-      }
-      if (type instanceof PsiPrimitiveType ||
-          expectedType instanceof PsiPrimitiveType) {
-        return;
-      }
-      if (PsiPrimitiveType.getUnboxedType(type) != null ||
-          PsiPrimitiveType.getUnboxedType(expectedType) != null) {
-        return;
-      }
-      if (expectedType instanceof PsiClassType) {
-        final PsiClassType expectedClassType =
-          (PsiClassType)expectedType;
-        final PsiClassType expectedRawType =
-          expectedClassType.rawType();
-        if (type.equals(expectedRawType)) {
-          return;
-        }
-        if (type instanceof PsiClassType) {
-          final PsiClassType classType = (PsiClassType)type;
-          final PsiClassType rawType = classType.rawType();
-          if (rawType.equals(expectedRawType)) {
-            return;
-          }
-        }
-        if (type instanceof PsiArrayType) {
-          return;
-        }
-      }
-      if (ignoreInMatchingInstanceof &&
-          InstanceOfUtils.hasAgreeingInstanceof(expression)) {
-        return;
-      }
-      final PsiTypeElement castTypeElement = expression.getCastType();
-      if (castTypeElement == null) {
-        return;
-      }
-      registerError(castTypeElement, expectedType);
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.overlyStrongTypeCastIgnoreInMatchingInstanceofOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInMatchingInstanceof");
     }
 
-    private boolean isTypeParameter(PsiType type) {
-      if (!(type instanceof PsiClassType)) {
-        return false;
-      }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
-      if (aClass == null) {
-        return false;
-      }
-      return aClass instanceof PsiTypeParameter;
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new OverlyStrongCastFix();
     }
-  }
+
+    private static class OverlyStrongCastFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.overlyStrongTypeCastWeakenQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement castTypeElement = descriptor.getPsiElement();
+            final PsiTypeCastExpression expression =
+                (PsiTypeCastExpression) castTypeElement.getParent();
+            if (expression == null) {
+                return;
+            }
+            final PsiType expectedType =
+                ExpectedTypeUtils.findExpectedType(expression, true);
+            if (expectedType == null) {
+                return;
+            }
+            final PsiExpression operand = expression.getOperand();
+            if (operand == null) {
+                return;
+            }
+            @NonNls final String newExpression =
+                '(' + expectedType.getCanonicalText() + ')' +
+                    operand.getText();
+            replaceExpressionAndShorten(expression, newExpression);
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new OverlyStrongTypeCastVisitor();
+    }
+
+    private class OverlyStrongTypeCastVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTypeCastExpression(
+            @Nonnull PsiTypeCastExpression expression
+        ) {
+            super.visitTypeCastExpression(expression);
+            final PsiExpression operand = expression.getOperand();
+            if (operand == null) {
+                return;
+            }
+            final PsiType operandType = operand.getType();
+            if (operandType == null) {
+                return;
+            }
+            final PsiType type = expression.getType();
+            if (type == null) {
+                return;
+            }
+            final PsiType expectedType =
+                ExpectedTypeUtils.findExpectedType(expression, true);
+            if (expectedType == null) {
+                return;
+            }
+            if (expectedType.equals(type)) {
+                return;
+            }
+            final PsiClass resolved = PsiUtil.resolveClassInType(expectedType);
+            if (resolved != null && !resolved.isPhysical()) {
+                return;
+            }
+            if (expectedType.isAssignableFrom(operandType)) {
+                //then it's redundant, and caught by the built-in exception
+                return;
+            }
+            if (isTypeParameter(expectedType)) {
+                return;
+            }
+            if (expectedType instanceof PsiArrayType) {
+                final PsiArrayType arrayType = (PsiArrayType) expectedType;
+                final PsiType componentType = arrayType.getDeepComponentType();
+                if (isTypeParameter(componentType)) {
+                    return;
+                }
+            }
+            if (type instanceof PsiPrimitiveType ||
+                expectedType instanceof PsiPrimitiveType) {
+                return;
+            }
+            if (PsiPrimitiveType.getUnboxedType(type) != null ||
+                PsiPrimitiveType.getUnboxedType(expectedType) != null) {
+                return;
+            }
+            if (expectedType instanceof PsiClassType) {
+                final PsiClassType expectedClassType =
+                    (PsiClassType) expectedType;
+                final PsiClassType expectedRawType =
+                    expectedClassType.rawType();
+                if (type.equals(expectedRawType)) {
+                    return;
+                }
+                if (type instanceof PsiClassType) {
+                    final PsiClassType classType = (PsiClassType) type;
+                    final PsiClassType rawType = classType.rawType();
+                    if (rawType.equals(expectedRawType)) {
+                        return;
+                    }
+                }
+                if (type instanceof PsiArrayType) {
+                    return;
+                }
+            }
+            if (ignoreInMatchingInstanceof &&
+                InstanceOfUtils.hasAgreeingInstanceof(expression)) {
+                return;
+            }
+            final PsiTypeElement castTypeElement = expression.getCastType();
+            if (castTypeElement == null) {
+                return;
+            }
+            registerError(castTypeElement, expectedType);
+        }
+
+        private boolean isTypeParameter(PsiType type) {
+            if (!(type instanceof PsiClassType)) {
+                return false;
+            }
+            final PsiClassType classType = (PsiClassType) type;
+            final PsiClass aClass = classType.resolve();
+            if (aClass == null) {
+                return false;
+            }
+            return aClass instanceof PsiTypeParameter;
+        }
+    }
 }

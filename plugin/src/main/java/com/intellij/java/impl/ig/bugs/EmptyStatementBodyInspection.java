@@ -16,146 +16,148 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class EmptyStatementBodyInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_reportEmptyBlocks = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_reportEmptyBlocks = true;
-
-  @Nonnull
-  public String getID() {
-    return "StatementWithEmptyBody";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.statementWithEmptyBodyDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.statementWithEmptyBodyProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.statementWithEmptyBodyIncludeOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_reportEmptyBlocks");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new EmptyStatementVisitor();
-  }
-
-  private class EmptyStatementVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
-      super.visitDoWhileStatement(statement);
-      checkLoopStatement(statement);
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "StatementWithEmptyBody";
     }
 
+    @Nonnull
     @Override
-    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
-      super.visitWhileStatement(statement);
-      checkLoopStatement(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.statementWithEmptyBodyDisplayName();
     }
 
-    @Override
-    public void visitForStatement(@Nonnull PsiForStatement statement) {
-      super.visitForStatement(statement);
-      checkLoopStatement(statement);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.statementWithEmptyBodyProblemDescriptor().get();
     }
 
-    @Override
-    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
-      super.visitForeachStatement(statement);
-      checkLoopStatement(statement);
+    public boolean isEnabledByDefault() {
+        return true;
     }
 
-    private void checkLoopStatement(PsiLoopStatement statement) {
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.statementWithEmptyBodyIncludeOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_reportEmptyBlocks");
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new EmptyStatementVisitor();
+    }
+
+    private class EmptyStatementVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+            super.visitDoWhileStatement(statement);
+            checkLoopStatement(statement);
+        }
+
+        @Override
+        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+            super.visitWhileStatement(statement);
+            checkLoopStatement(statement);
+        }
+
+        @Override
+        public void visitForStatement(@Nonnull PsiForStatement statement) {
+            super.visitForStatement(statement);
+            checkLoopStatement(statement);
+        }
+
+        @Override
+        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+            super.visitForeachStatement(statement);
+            checkLoopStatement(statement);
+        }
+
+        private void checkLoopStatement(PsiLoopStatement statement) {
      /* if (JspPsiUtil.isInJspFile(statement)) {
         return;
       }  */
-      final PsiStatement body = statement.getBody();
-      if (body == null || !isEmpty(body)) {
-        return;
-      }
-      registerStatementError(statement);
-    }
+            final PsiStatement body = statement.getBody();
+            if (body == null || !isEmpty(body)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
 
-    @Override
-    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
-      super.visitIfStatement(statement);
+        @Override
+        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+            super.visitIfStatement(statement);
       /*if (JspPsiUtil.isInJspFile(statement)) {
         return;
       } */
-      final PsiStatement thenBranch = statement.getThenBranch();
-      if (thenBranch != null && isEmpty(thenBranch)) {
-        registerStatementError(statement);
-        return;
-      }
-      final PsiStatement elseBranch = statement.getElseBranch();
-      if (elseBranch != null && isEmpty(elseBranch)) {
-        final PsiElement elseToken = statement.getElseElement();
-        if (elseToken == null) {
-          return;
+            final PsiStatement thenBranch = statement.getThenBranch();
+            if (thenBranch != null && isEmpty(thenBranch)) {
+                registerStatementError(statement);
+                return;
+            }
+            final PsiStatement elseBranch = statement.getElseBranch();
+            if (elseBranch != null && isEmpty(elseBranch)) {
+                final PsiElement elseToken = statement.getElseElement();
+                if (elseToken == null) {
+                    return;
+                }
+                registerError(elseToken);
+            }
         }
-        registerError(elseToken);
-      }
-    }
 
-    @Override
-    public void visitSwitchStatement(PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
+        @Override
+        public void visitSwitchStatement(PsiSwitchStatement statement) {
+            super.visitSwitchStatement(statement);
      /* if (JspPsiUtil.isInJspFile(statement)) {
         return;
       } */
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null || !isEmpty(body)) {
-        return;
-      }
-      registerStatementError(statement);
-    }
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null || !isEmpty(body)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
 
-    private boolean isEmpty(PsiElement body) {
-      if (body instanceof PsiEmptyStatement) {
-        return true;
-      }
-      else if (body instanceof PsiBlockStatement) {
-        final PsiBlockStatement block = (PsiBlockStatement)body;
-        return isEmpty(block.getCodeBlock());
-      }
-      else if (m_reportEmptyBlocks && body instanceof PsiCodeBlock) {
-        final PsiCodeBlock codeBlock = (PsiCodeBlock)body;
-        final PsiStatement[] statements = codeBlock.getStatements();
-        if (statements.length == 0) {
-          return true;
-        }
-        for (PsiStatement statement : statements) {
-          if (!isEmpty(statement)) {
+        private boolean isEmpty(PsiElement body) {
+            if (body instanceof PsiEmptyStatement) {
+                return true;
+            }
+            else if (body instanceof PsiBlockStatement) {
+                final PsiBlockStatement block = (PsiBlockStatement) body;
+                return isEmpty(block.getCodeBlock());
+            }
+            else if (m_reportEmptyBlocks && body instanceof PsiCodeBlock) {
+                final PsiCodeBlock codeBlock = (PsiCodeBlock) body;
+                final PsiStatement[] statements = codeBlock.getStatements();
+                if (statements.length == 0) {
+                    return true;
+                }
+                for (PsiStatement statement : statements) {
+                    if (!isEmpty(statement)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
             return false;
-          }
         }
-        return true;
-      }
-      return false;
     }
-  }
 }

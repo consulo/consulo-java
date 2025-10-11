@@ -24,66 +24,71 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "NonFinalFieldReferenceInEquals";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalFieldInEqualsDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalFieldInEqualsProblemDescriptor().get();
-  }
-
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new EqualsUsesNonFinalVariableVisitor();
-  }
-
-  private static class EqualsUsesNonFinalVariableVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (MethodUtils.isEquals(method)) {
-        method.accept(new JavaRecursiveElementVisitor() {
-
-          @Override
-          public void visitClass(PsiClass aClass) {
-            // Do not recurse into.
-          }
-
-          @Override
-          public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression expression) {
-            super.visitReferenceExpression(expression);
-            final PsiElement element = expression.resolve();
-            if (!(element instanceof PsiField)) {
-              return;
-            }
-            final PsiField field = (PsiField)element;
-            if (field.hasModifierProperty(PsiModifier.FINAL)) {
-              return;
-            }
-            registerError(expression, field);
-          }
-        });
-      }
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "NonFinalFieldReferenceInEquals";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalFieldInEqualsDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalFieldInEqualsProblemDescriptor().get();
+    }
+
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return MakeFieldFinalFix.buildFix(field);
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new EqualsUsesNonFinalVariableVisitor();
+    }
+
+    private static class EqualsUsesNonFinalVariableVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (MethodUtils.isEquals(method)) {
+                method.accept(new JavaRecursiveElementVisitor() {
+
+                    @Override
+                    public void visitClass(PsiClass aClass) {
+                        // Do not recurse into.
+                    }
+
+                    @Override
+                    public void visitReferenceExpression(
+                        @Nonnull PsiReferenceExpression expression
+                    ) {
+                        super.visitReferenceExpression(expression);
+                        final PsiElement element = expression.resolve();
+                        if (!(element instanceof PsiField)) {
+                            return;
+                        }
+                        final PsiField field = (PsiField) element;
+                        if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                            return;
+                        }
+                        registerError(expression, field);
+                    }
+                });
+            }
+        }
+    }
 }

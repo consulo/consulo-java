@@ -29,49 +29,50 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class MethodReturnOfConcreteClassInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreAbstractClasses = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreAbstractClasses = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodReturnConcreteClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.methodReturnConcreteClassProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.methodReturnOfConcreteClassOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MethodReturnOfConcreteClassVisitor();
-  }
-
-  private class MethodReturnOfConcreteClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      super.visitMethod(method);
-      if (method.isConstructor()) {
-        return;
-      }
-      final PsiTypeElement typeElement = method.getReturnTypeElement();
-      if (typeElement == null) {
-        return;
-      }
-      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
-                                                 ignoreAbstractClasses)) {
-        return;
-      }
-      registerError(typeElement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.methodReturnConcreteClassDisplayName();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.methodReturnConcreteClassProblemDescriptor().get();
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.methodReturnOfConcreteClassOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MethodReturnOfConcreteClassVisitor();
+    }
+
+    private class MethodReturnOfConcreteClassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            super.visitMethod(method);
+            if (method.isConstructor()) {
+                return;
+            }
+            final PsiTypeElement typeElement = method.getReturnTypeElement();
+            if (typeElement == null) {
+                return;
+            }
+            if (!ConcreteClassUtil.typeIsConcreteClass(
+                typeElement,
+                ignoreAbstractClasses
+            )) {
+                return;
+            }
+            registerError(typeElement);
+        }
+    }
 }

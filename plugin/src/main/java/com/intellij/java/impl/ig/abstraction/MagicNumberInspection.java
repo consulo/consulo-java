@@ -28,134 +28,135 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class MagicNumberInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInHashCode = true;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInHashCode = true;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInTestCode = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInTestCode = false;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInAnnotations = true;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInAnnotations = true;
-
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInitialCapacity = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.magicNumberDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.magicNumberProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("magic.number.ignore.option"), "ignoreInHashCode");
-    panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.test.code"), "ignoreInTestCode");
-    panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.annotations"),"ignoreInAnnotations");
-    panel.addCheckbox(InspectionGadgetsBundle.message("ignore.as.initial.capacity"), "ignoreInitialCapacity");
-    return panel;
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new IntroduceConstantFix();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MagicNumberVisitor();
-  }
-
-  private class MagicNumberVisitor extends BaseInspectionVisitor {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInitialCapacity = false;
 
     @Override
-    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
-      super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
-      if (!ClassUtils.isPrimitiveNumericType(type) || PsiType.CHAR.equals(type)) {
-        return;
-      }
-      if (isSpecialCaseLiteral(expression) || ExpressionUtils.isDeclaredConstant(expression)) {
-        return;
-      }
-      if (ignoreInHashCode) {
-        final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
-        if (MethodUtils.isHashCode(containingMethod)) {
-          return;
-        }
-      }
-      if (ignoreInTestCode && TestUtils.isInTestCode(expression)) {
-        return;
-      }
-      if (ignoreInAnnotations) {
-        final boolean insideAnnotation = AnnotationUtil.isInsideAnnotation(expression);
-        if (insideAnnotation) {
-          return;
-        }
-      }
-      if (ignoreInitialCapacity) {
-        final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class, true, PsiMember.class);
-        if (expressionList != null) {
-          final PsiElement parent = expressionList.getParent();
-          if (parent instanceof PsiNewExpression) {
-            final PsiNewExpression newExpression = (PsiNewExpression)parent;
-            if (TypeUtils.expressionHasTypeOrSubtype(
-                newExpression,
-                CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
-                CommonClassNames.JAVA_UTIL_MAP,
-                CommonClassNames.JAVA_UTIL_COLLECTION
-            ) != null) {
-              return;
-            }
-          }
-        }
-      }
-      final PsiElement parent = expression.getParent();
-      if (parent instanceof PsiPrefixExpression) {
-        registerError(parent);
-      }
-      else {
-        registerError(expression);
-      }
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.magicNumberDisplayName();
     }
 
-    private boolean isSpecialCaseLiteral(PsiLiteralExpression expression) {
-      final Object object = ExpressionUtils.computeConstantExpression(expression);
-      if (object instanceof Integer) {
-        final int i = ((Integer)object).intValue();
-        return i >= 0 && i <= 10 || i == 100 || i == 1000;
-      }
-      else if (object instanceof Long) {
-        final long l = ((Long)object).longValue();
-        return l >= 0L && l <= 2L;
-      }
-      else if (object instanceof Double) {
-        final double d = ((Double)object).doubleValue();
-        return d == 1.0 || d == 0.0;
-      }
-      else if (object instanceof Float) {
-        final float f = ((Float)object).floatValue();
-        return f == 1.0f || f == 0.0f;
-      }
-      return false;
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.magicNumberProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(InspectionGadgetsBundle.message("magic.number.ignore.option"), "ignoreInHashCode");
+        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.test.code"), "ignoreInTestCode");
+        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.annotations"), "ignoreInAnnotations");
+        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.as.initial.capacity"), "ignoreInitialCapacity");
+        return panel;
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new IntroduceConstantFix();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MagicNumberVisitor();
+    }
+
+    private class MagicNumberVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+            super.visitLiteralExpression(expression);
+            final PsiType type = expression.getType();
+            if (!ClassUtils.isPrimitiveNumericType(type) || PsiType.CHAR.equals(type)) {
+                return;
+            }
+            if (isSpecialCaseLiteral(expression) || ExpressionUtils.isDeclaredConstant(expression)) {
+                return;
+            }
+            if (ignoreInHashCode) {
+                final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+                if (MethodUtils.isHashCode(containingMethod)) {
+                    return;
+                }
+            }
+            if (ignoreInTestCode && TestUtils.isInTestCode(expression)) {
+                return;
+            }
+            if (ignoreInAnnotations) {
+                final boolean insideAnnotation = AnnotationUtil.isInsideAnnotation(expression);
+                if (insideAnnotation) {
+                    return;
+                }
+            }
+            if (ignoreInitialCapacity) {
+                final PsiExpressionList expressionList =
+                    PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class, true, PsiMember.class);
+                if (expressionList != null) {
+                    final PsiElement parent = expressionList.getParent();
+                    if (parent instanceof PsiNewExpression) {
+                        final PsiNewExpression newExpression = (PsiNewExpression) parent;
+                        if (TypeUtils.expressionHasTypeOrSubtype(
+                            newExpression,
+                            CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
+                            CommonClassNames.JAVA_UTIL_MAP,
+                            CommonClassNames.JAVA_UTIL_COLLECTION
+                        ) != null) {
+                            return;
+                        }
+                    }
+                }
+            }
+            final PsiElement parent = expression.getParent();
+            if (parent instanceof PsiPrefixExpression) {
+                registerError(parent);
+            }
+            else {
+                registerError(expression);
+            }
+        }
+
+        private boolean isSpecialCaseLiteral(PsiLiteralExpression expression) {
+            final Object object = ExpressionUtils.computeConstantExpression(expression);
+            if (object instanceof Integer) {
+                final int i = ((Integer) object).intValue();
+                return i >= 0 && i <= 10 || i == 100 || i == 1000;
+            }
+            else if (object instanceof Long) {
+                final long l = ((Long) object).longValue();
+                return l >= 0L && l <= 2L;
+            }
+            else if (object instanceof Double) {
+                final double d = ((Double) object).doubleValue();
+                return d == 1.0 || d == 0.0;
+            }
+            else if (object instanceof Float) {
+                final float f = ((Float) object).floatValue();
+                return f == 1.0f || f == 0.0f;
+            }
+            return false;
+        }
+    }
 }

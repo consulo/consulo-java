@@ -21,68 +21,70 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CastToIncompatibleInterfaceInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.castingToIncompatibleInterfaceDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.castingToIncompatibleInterfaceProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new CastToIncompatibleInterfaceVisitor();
-  }
-
-  private static class CastToIncompatibleInterfaceVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitTypeCastExpression(
-      @Nonnull PsiTypeCastExpression expression) {
-      super.visitTypeCastExpression(expression);
-      final PsiTypeElement castTypeElement = expression.getCastType();
-      if (castTypeElement == null) {
-        return;
-      }
-      final PsiType castType = castTypeElement.getType();
-      if (!(castType instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClassType castClassType = (PsiClassType)castType;
-      final PsiExpression operand = expression.getOperand();
-      if (operand == null) {
-        return;
-      }
-      final PsiType operandType = operand.getType();
-      if (!(operandType instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClassType operandClassType = (PsiClassType)operandType;
-      final PsiClass castClass = castClassType.resolve();
-      if (castClass == null) {
-        return;
-      }
-      if (!castClass.isInterface()) {
-        return;
-      }
-      final PsiClass operandClass = operandClassType.resolve();
-      if (operandClass == null) {
-        return;
-      }
-      if (operandClass.isInterface()) {
-        return;
-      }
-      if (InheritanceUtil.existsMutualSubclass(operandClass, castClass)) {
-        return;
-      }
-      registerError(castTypeElement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.castingToIncompatibleInterfaceDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.castingToIncompatibleInterfaceProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new CastToIncompatibleInterfaceVisitor();
+    }
+
+    private static class CastToIncompatibleInterfaceVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTypeCastExpression(
+            @Nonnull PsiTypeCastExpression expression
+        ) {
+            super.visitTypeCastExpression(expression);
+            final PsiTypeElement castTypeElement = expression.getCastType();
+            if (castTypeElement == null) {
+                return;
+            }
+            final PsiType castType = castTypeElement.getType();
+            if (!(castType instanceof PsiClassType)) {
+                return;
+            }
+            final PsiClassType castClassType = (PsiClassType) castType;
+            final PsiExpression operand = expression.getOperand();
+            if (operand == null) {
+                return;
+            }
+            final PsiType operandType = operand.getType();
+            if (!(operandType instanceof PsiClassType)) {
+                return;
+            }
+            final PsiClassType operandClassType = (PsiClassType) operandType;
+            final PsiClass castClass = castClassType.resolve();
+            if (castClass == null) {
+                return;
+            }
+            if (!castClass.isInterface()) {
+                return;
+            }
+            final PsiClass operandClass = operandClassType.resolve();
+            if (operandClass == null) {
+                return;
+            }
+            if (operandClass.isInterface()) {
+                return;
+            }
+            if (InheritanceUtil.existsMutualSubclass(operandClass, castClass)) {
+                return;
+            }
+            registerError(castTypeElement);
+        }
+    }
 }

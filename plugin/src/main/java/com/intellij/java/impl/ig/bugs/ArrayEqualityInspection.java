@@ -26,125 +26,127 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArrayEqualityInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.arrayComparisonDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.arrayComparisonProblemDescriptor().get();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiArrayType type = (PsiArrayType)infos[0];
-    final PsiType componentType = type.getComponentType();
-    if (componentType instanceof PsiArrayType) {
-      return new ArrayEqualityFix(true);
-    }
-    return new ArrayEqualityFix(false);
-  }
-
-  private static class ArrayEqualityFix extends InspectionGadgetsFix {
-
-    private final boolean deepEquals;
-
-    public ArrayEqualityFix(boolean deepEquals) {
-      this.deepEquals = deepEquals;
-    }
-
     @Nonnull
     @Override
-    public String getName() {
-      return deepEquals
-        ? InspectionGadgetsLocalize.replaceWithArraysDeepEquals().get()
-        : InspectionGadgetsLocalize.replaceWithArraysEquals().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.arrayComparisonDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiBinaryExpression)) {
-        return;
-      }
-      final PsiBinaryExpression binaryExpression =
-        (PsiBinaryExpression)parent;
-      final IElementType tokenType =
-        binaryExpression.getOperationTokenType();
-      @NonNls final StringBuilder newExpressionText = new StringBuilder();
-      if (JavaTokenType.NE.equals(tokenType)) {
-        newExpressionText.append('!');
-      }
-      else if (!JavaTokenType.EQEQ.equals(tokenType)) {
-        return;
-      }
-      if (deepEquals) {
-        newExpressionText.append("java.util.Arrays.deepEquals(");
-      }
-      else {
-        newExpressionText.append("java.util.Arrays.equals(");
-      }
-      newExpressionText.append(binaryExpression.getLOperand().getText());
-      newExpressionText.append(',');
-      final PsiExpression rhs = binaryExpression.getROperand();
-      if (rhs == null) {
-        return;
-      }
-      newExpressionText.append(rhs.getText());
-      newExpressionText.append(')');
-      replaceExpressionAndShorten(binaryExpression,
-                                  newExpressionText.toString());
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.arrayComparisonProblemDescriptor().get();
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ArrayEqualityVisitor();
-  }
-
-  private static class ArrayEqualityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
-      if (rhs == null) {
-        return;
-      }
-      if (!ComparisonUtils.isEqualityComparison(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiType lhsType = lhs.getType();
-      if (!(lhsType instanceof PsiArrayType)) {
-        return;
-      }
-      if (!(rhs.getType() instanceof PsiArrayType)) {
-        return;
-      }
-      final String lhsText = lhs.getText();
-      if (PsiKeyword.NULL.equals(lhsText)) {
-        return;
-      }
-      final String rhsText = rhs.getText();
-      if (PsiKeyword.NULL.equals(rhsText)) {
-        return;
-      }
-      final PsiJavaToken sign = expression.getOperationSign();
-      registerError(sign, lhsType);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiArrayType type = (PsiArrayType) infos[0];
+        final PsiType componentType = type.getComponentType();
+        if (componentType instanceof PsiArrayType) {
+            return new ArrayEqualityFix(true);
+        }
+        return new ArrayEqualityFix(false);
     }
-  }
+
+    private static class ArrayEqualityFix extends InspectionGadgetsFix {
+        private final boolean deepEquals;
+
+        public ArrayEqualityFix(boolean deepEquals) {
+            this.deepEquals = deepEquals;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return deepEquals
+                ? InspectionGadgetsLocalize.replaceWithArraysDeepEquals()
+                : InspectionGadgetsLocalize.replaceWithArraysEquals();
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiBinaryExpression)) {
+                return;
+            }
+            final PsiBinaryExpression binaryExpression =
+                (PsiBinaryExpression) parent;
+            final IElementType tokenType =
+                binaryExpression.getOperationTokenType();
+            @NonNls final StringBuilder newExpressionText = new StringBuilder();
+            if (JavaTokenType.NE.equals(tokenType)) {
+                newExpressionText.append('!');
+            }
+            else if (!JavaTokenType.EQEQ.equals(tokenType)) {
+                return;
+            }
+            if (deepEquals) {
+                newExpressionText.append("java.util.Arrays.deepEquals(");
+            }
+            else {
+                newExpressionText.append("java.util.Arrays.equals(");
+            }
+            newExpressionText.append(binaryExpression.getLOperand().getText());
+            newExpressionText.append(',');
+            final PsiExpression rhs = binaryExpression.getROperand();
+            if (rhs == null) {
+                return;
+            }
+            newExpressionText.append(rhs.getText());
+            newExpressionText.append(')');
+            replaceExpressionAndShorten(
+                binaryExpression,
+                newExpressionText.toString()
+            );
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ArrayEqualityVisitor();
+    }
+
+    private static class ArrayEqualityVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(
+            @Nonnull PsiBinaryExpression expression
+        ) {
+            super.visitBinaryExpression(expression);
+            final PsiExpression rhs = expression.getROperand();
+            if (rhs == null) {
+                return;
+            }
+            if (!ComparisonUtils.isEqualityComparison(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLOperand();
+            final PsiType lhsType = lhs.getType();
+            if (!(lhsType instanceof PsiArrayType)) {
+                return;
+            }
+            if (!(rhs.getType() instanceof PsiArrayType)) {
+                return;
+            }
+            final String lhsText = lhs.getText();
+            if (PsiKeyword.NULL.equals(lhsText)) {
+                return;
+            }
+            final String rhsText = rhs.getText();
+            if (PsiKeyword.NULL.equals(rhsText)) {
+                return;
+            }
+            final PsiJavaToken sign = expression.getOperationSign();
+            registerError(sign, lhsType);
+        }
+    }
 }

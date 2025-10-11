@@ -24,50 +24,48 @@ import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class ConstantAssertConditionInspection extends BaseInspection {
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantAssertConditionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.constantAssertConditionProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantAssertConditionVisitor();
-  }
-
-  private static class ConstantAssertConditionVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.constantAssertConditionDisplayName();
+    }
 
     @Override
-    public void visitAssertStatement(PsiAssertStatement statement) {
-      super.visitAssertStatement(statement);
-      final PsiExpression assertCondition =
-        statement.getAssertCondition();
-      final PsiExpression expression =
-        ParenthesesUtils.stripParentheses(assertCondition);
-      if (expression == null) {
-        return;
-      }
-      if (BoolUtils.isFalse(expression)) {
-        return;
-      }
-      if (!PsiUtil.isConstantExpression(expression)) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.constantAssertConditionProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantAssertConditionVisitor();
+    }
+
+    private static class ConstantAssertConditionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAssertStatement(PsiAssertStatement statement) {
+            super.visitAssertStatement(statement);
+            final PsiExpression assertCondition =
+                statement.getAssertCondition();
+            final PsiExpression expression =
+                ParenthesesUtils.stripParentheses(assertCondition);
+            if (expression == null) {
+                return;
+            }
+            if (BoolUtils.isFalse(expression)) {
+                return;
+            }
+            if (!PsiUtil.isConstantExpression(expression)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

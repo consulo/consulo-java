@@ -23,41 +23,42 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedAssignmentInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nestedAssignmentDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nestedAssignmentProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NestedAssignmentVisitor();
-  }
-
-  private static class NestedAssignmentVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      final PsiElement parent = expression.getParent();
-      if (parent == null) {
-        return;
-      }
-      final PsiElement grandparent = parent.getParent();
-      if (parent instanceof PsiExpressionStatement ||
-          grandparent instanceof PsiExpressionListStatement) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nestedAssignmentDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nestedAssignmentProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NestedAssignmentVisitor();
+    }
+
+    private static class NestedAssignmentVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            final PsiElement parent = expression.getParent();
+            if (parent == null) {
+                return;
+            }
+            final PsiElement grandparent = parent.getParent();
+            if (parent instanceof PsiExpressionStatement ||
+                grandparent instanceof PsiExpressionListStatement) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

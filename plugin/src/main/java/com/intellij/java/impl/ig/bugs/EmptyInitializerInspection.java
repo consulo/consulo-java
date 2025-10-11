@@ -26,69 +26,74 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class EmptyInitializerInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "EmptyClassInitializer";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.emptyClassInitializerDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.emptyClassInitializerProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new EmptyInitializerFix();
-  }
-
-  private static class EmptyInitializerFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "EmptyClassInitializer";
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.emptyClassInitializerDeleteQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement codeBlock = element.getParent();
-      assert codeBlock != null;
-      final PsiElement classInitializer = codeBlock.getParent();
-      assert classInitializer != null;
-      deleteElement(classInitializer);
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new EmptyInitializerVisitor();
-  }
-
-  private static class EmptyInitializerVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitClassInitializer(
-      @Nonnull PsiClassInitializer initializer) {
-      super.visitClassInitializer(initializer);
-      final PsiCodeBlock body = initializer.getBody();
-      if (!codeBlockIsEmpty(body)) {
-        return;
-      }
-      registerClassInitializerError(initializer);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.emptyClassInitializerDisplayName();
     }
 
-    private static boolean codeBlockIsEmpty(PsiCodeBlock codeBlock) {
-      final PsiStatement[] statements = codeBlock.getStatements();
-      return statements.length == 0;
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.emptyClassInitializerProblemDescriptor().get();
     }
-  }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new EmptyInitializerFix();
+    }
+
+    private static class EmptyInitializerFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.emptyClassInitializerDeleteQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement codeBlock = element.getParent();
+            assert codeBlock != null;
+            final PsiElement classInitializer = codeBlock.getParent();
+            assert classInitializer != null;
+            deleteElement(classInitializer);
+        }
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new EmptyInitializerVisitor();
+    }
+
+    private static class EmptyInitializerVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClassInitializer(
+            @Nonnull PsiClassInitializer initializer
+        ) {
+            super.visitClassInitializer(initializer);
+            final PsiCodeBlock body = initializer.getBody();
+            if (!codeBlockIsEmpty(body)) {
+                return;
+            }
+            registerClassInitializerError(initializer);
+        }
+
+        private static boolean codeBlockIsEmpty(PsiCodeBlock codeBlock) {
+            final PsiStatement[] statements = codeBlock.getStatements();
+            return statements.length == 0;
+        }
+    }
 }

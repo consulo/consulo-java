@@ -24,40 +24,41 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstantiationOfUtilityClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instantiationUtilityClassDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.instantiationUtilityClassProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InstantiationOfUtilityClassVisitor();
-  }
-
-  private static class InstantiationOfUtilityClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-      final PsiType type = expression.getType();
-      if (!(type instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClass aClass = ((PsiClassType)type).resolve();
-      if (aClass == null) {
-        return;
-      }
-      if (!UtilityClassUtil.isUtilityClass(aClass)) {
-        return;
-      }
-      registerNewExpressionError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.instantiationUtilityClassDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.instantiationUtilityClassProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InstantiationOfUtilityClassVisitor();
+    }
+
+    private static class InstantiationOfUtilityClassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            final PsiType type = expression.getType();
+            if (!(type instanceof PsiClassType)) {
+                return;
+            }
+            final PsiClass aClass = ((PsiClassType) type).resolve();
+            if (aClass == null) {
+                return;
+            }
+            if (!UtilityClassUtil.isUtilityClass(aClass)) {
+                return;
+            }
+            registerNewExpressionError(expression);
+        }
+    }
 }

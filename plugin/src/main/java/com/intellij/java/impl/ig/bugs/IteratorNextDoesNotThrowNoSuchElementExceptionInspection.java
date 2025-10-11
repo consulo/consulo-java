@@ -25,96 +25,98 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import java.util.Set;
 
 @ExtensionImpl
-public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection
-  extends BaseInspection {
+public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern("[a-zA-Z_0-9.]+")
+    public String getID() {
+        return "IteratorNextCanNotThrowNoSuchElementException";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "IteratorNextCanNotThrowNoSuchElementException";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new IteratorNextDoesNotThrowNoSuchElementExceptionVisitor();
-  }
-
-  private static class IteratorNextDoesNotThrowNoSuchElementExceptionVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // note: no call to super
-      if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
-        return;
-      }
-      final Set<PsiClassType> exceptions =
-        ExceptionUtils.calculateExceptionsThrown(method);
-      for (final PsiType exception : exceptions) {
-        if (exception.equalsToText(
-          "java.util.NoSuchElementException")) {
-          return;
-        }
-      }
-      if (IteratorUtils.containsCallToIteratorNext(method, null, false)) {
-        return;
-      }
-      final CalledMethodsVisitor visitor = new CalledMethodsVisitor();
-      method.accept(visitor);
-      if (visitor.isNoSuchElementExceptionThrown()) {
-        return;
-      }
-      registerMethodError(method);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionProblemDescriptor().get();
     }
-  }
-
-  private static class CalledMethodsVisitor
-    extends JavaRecursiveElementVisitor {
-
-    private boolean noSuchElementExceptionThrown = false;
 
     @Override
-    public void visitMethodCallExpression(
-      PsiMethodCallExpression expression) {
-      if (noSuchElementExceptionThrown) {
-        return;
-      }
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final PsiElement method = methodExpression.resolve();
-      if (method == null) {
-        return;
-      }
-      final Set<PsiClassType> exceptions =
-        ExceptionUtils.calculateExceptionsThrown(method);
-      for (final PsiType exception : exceptions) {
-        if (exception.equalsToText(
-          "java.util.NoSuchElementException")) {
-          noSuchElementExceptionThrown = true;
-        }
-      }
+    public BaseInspectionVisitor buildVisitor() {
+        return new IteratorNextDoesNotThrowNoSuchElementExceptionVisitor();
     }
 
-    public boolean isNoSuchElementExceptionThrown() {
-      return noSuchElementExceptionThrown;
+    private static class IteratorNextDoesNotThrowNoSuchElementExceptionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // note: no call to super
+            if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
+                return;
+            }
+            final Set<PsiClassType> exceptions =
+                ExceptionUtils.calculateExceptionsThrown(method);
+            for (final PsiType exception : exceptions) {
+                if (exception.equalsToText(
+                    "java.util.NoSuchElementException")) {
+                    return;
+                }
+            }
+            if (IteratorUtils.containsCallToIteratorNext(method, null, false)) {
+                return;
+            }
+            final CalledMethodsVisitor visitor = new CalledMethodsVisitor();
+            method.accept(visitor);
+            if (visitor.isNoSuchElementExceptionThrown()) {
+                return;
+            }
+            registerMethodError(method);
+        }
     }
-  }
+
+    private static class CalledMethodsVisitor
+        extends JavaRecursiveElementVisitor {
+
+        private boolean noSuchElementExceptionThrown = false;
+
+        @Override
+        public void visitMethodCallExpression(
+            PsiMethodCallExpression expression
+        ) {
+            if (noSuchElementExceptionThrown) {
+                return;
+            }
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression =
+                expression.getMethodExpression();
+            final PsiElement method = methodExpression.resolve();
+            if (method == null) {
+                return;
+            }
+            final Set<PsiClassType> exceptions =
+                ExceptionUtils.calculateExceptionsThrown(method);
+            for (final PsiType exception : exceptions) {
+                if (exception.equalsToText(
+                    "java.util.NoSuchElementException")) {
+                    noSuchElementExceptionThrown = true;
+                }
+            }
+        }
+
+        public boolean isNoSuchElementExceptionThrown() {
+            return noSuchElementExceptionThrown;
+        }
+    }
 }

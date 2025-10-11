@@ -22,40 +22,42 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceofThisInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceofCheckForThisDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.instanceofCheckForThisProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InstanceofThisVisitor();
-  }
-
-  private static class InstanceofThisVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
-      super.visitThisExpression(thisValue);
-      if (thisValue.getQualifier() != null) {
-        return;
-      }
-      final PsiElement parent =
-        PsiTreeUtil.skipParentsOfType(thisValue, PsiParenthesizedExpression.class,
-                                      PsiConditionalExpression.class, PsiTypeCastExpression.class);
-      if (!(parent instanceof PsiInstanceOfExpression)) {
-        return;
-      }
-      registerError(thisValue);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.instanceofCheckForThisDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.instanceofCheckForThisProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InstanceofThisVisitor();
+    }
+
+    private static class InstanceofThisVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
+            super.visitThisExpression(thisValue);
+            if (thisValue.getQualifier() != null) {
+                return;
+            }
+            final PsiElement parent =
+                PsiTreeUtil.skipParentsOfType(thisValue, PsiParenthesizedExpression.class,
+                    PsiConditionalExpression.class, PsiTypeCastExpression.class
+                );
+            if (!(parent instanceof PsiInstanceOfExpression)) {
+                return;
+            }
+            registerError(thisValue);
+        }
+    }
 }

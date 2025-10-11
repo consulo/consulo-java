@@ -24,41 +24,41 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
-public class IteratorHasNextCallsIteratorNextInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new IteratorHasNextCallsIteratorNext();
-  }
-
-  private static class IteratorHasNextCallsIteratorNext
-    extends BaseInspectionVisitor {
-
+public class IteratorHasNextCallsIteratorNextInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // note: no call to super
-      @NonNls final String name = method.getName();
-      if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.HAS_NEXT)) {
-        return;
-      }
-      if (!IteratorUtils.containsCallToIteratorNext(method, null, true)) {
-        return;
-      }
-      registerMethodError(method);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new IteratorHasNextCallsIteratorNext();
+    }
+
+    private static class IteratorHasNextCallsIteratorNext
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // note: no call to super
+            @NonNls final String name = method.getName();
+            if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.HAS_NEXT)) {
+                return;
+            }
+            if (!IteratorUtils.containsCallToIteratorNext(method, null, true)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

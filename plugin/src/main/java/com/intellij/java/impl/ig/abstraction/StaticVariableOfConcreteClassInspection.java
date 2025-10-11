@@ -30,52 +30,50 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class StaticVariableOfConcreteClassInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreAbstractClasses = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreAbstractClasses = false;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticVariableOfConcreteClassDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticVariableOfConcreteClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.staticVariableOfConcreteClassProblemDescriptor(infos[0]).get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.staticVariableOfConcreteClassOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticVariableOfConcreteClassVisitor();
-  }
-
-  private class StaticVariableOfConcreteClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.staticVariableOfConcreteClassProblemDescriptor(infos[0]).get();
+    }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      super.visitField(field);
-      if (!field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiTypeElement typeElement = field.getTypeElement();
-      if (typeElement == null) {
-        return;
-      }
-      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
-                                                 ignoreAbstractClasses)) {
-        return;
-      }
-      final String variableName = field.getName();
-      registerError(typeElement, variableName);
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.staticVariableOfConcreteClassOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticVariableOfConcreteClassVisitor();
+    }
+
+    private class StaticVariableOfConcreteClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            super.visitField(field);
+            if (!field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiTypeElement typeElement = field.getTypeElement();
+            if (typeElement == null) {
+                return;
+            }
+            if (!ConcreteClassUtil.typeIsConcreteClass(typeElement, ignoreAbstractClasses)) {
+                return;
+            }
+            final String variableName = field.getName();
+            registerError(typeElement, variableName);
+        }
+    }
 }
