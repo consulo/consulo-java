@@ -25,87 +25,90 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class FinalizeInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreTrivialFinalizers = true;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreTrivialFinalizers = true;
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "FinalizeDeclaration";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "FinalizeDeclaration";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalizeDeclarationDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalizeDeclarationDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalizeDeclarationProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.ignoreTrivialFinalizersOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTrivialFinalizers");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalizeDeclaredVisitor();
-  }
-
-  private class FinalizeDeclaredVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalizeDeclarationProblemDescriptor().get();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super;
-      final String methodName = method.getName();
-      if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      if (ignoreTrivialFinalizers && isTrivial(method)) {
-        return;
-      }
-      registerMethodError(method);
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.ignoreTrivialFinalizersOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTrivialFinalizers");
     }
 
-    private boolean isTrivial(PsiMethod method) {
-      final PsiCodeBlock body = method.getBody();
-      if (body == null) {
-        return true;
-      }
-      final PsiStatement[] statements = body.getStatements();
-      if (statements.length == 0) {
-        return true;
-      }
-      final Project project = method.getProject();
-      final JavaPsiFacade psiFacade =
-        JavaPsiFacade.getInstance(project);
-      final PsiConstantEvaluationHelper evaluationHelper =
-        psiFacade.getConstantEvaluationHelper();
-      for (PsiStatement statement : statements) {
-        if (!(statement instanceof PsiIfStatement)) {
-          return false;
-        }
-        final PsiIfStatement ifStatement =
-          (PsiIfStatement)statement;
-        final PsiExpression condition = ifStatement.getCondition();
-        final Object result =
-          evaluationHelper.computeConstantExpression(condition);
-        if (result == null || !result.equals(Boolean.FALSE)) {
-          return false;
-        }
-      }
-      return true;
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalizeDeclaredVisitor();
     }
-  }
+
+    private class FinalizeDeclaredVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super;
+            final String methodName = method.getName();
+            if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            if (ignoreTrivialFinalizers && isTrivial(method)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+
+        private boolean isTrivial(PsiMethod method) {
+            final PsiCodeBlock body = method.getBody();
+            if (body == null) {
+                return true;
+            }
+            final PsiStatement[] statements = body.getStatements();
+            if (statements.length == 0) {
+                return true;
+            }
+            final Project project = method.getProject();
+            final JavaPsiFacade psiFacade =
+                JavaPsiFacade.getInstance(project);
+            final PsiConstantEvaluationHelper evaluationHelper =
+                psiFacade.getConstantEvaluationHelper();
+            for (PsiStatement statement : statements) {
+                if (!(statement instanceof PsiIfStatement)) {
+                    return false;
+                }
+                final PsiIfStatement ifStatement =
+                    (PsiIfStatement) statement;
+                final PsiExpression condition = ifStatement.getCondition();
+                final Object result =
+                    evaluationHelper.computeConstantExpression(condition);
+                if (result == null || !result.equals(Boolean.FALSE)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }

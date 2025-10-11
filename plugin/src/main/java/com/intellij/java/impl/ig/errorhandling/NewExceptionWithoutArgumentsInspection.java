@@ -25,85 +25,84 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreWithoutParameters = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreWithoutParameters = false;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.newExceptionWithoutArgumentsDisplayName();
+    }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.newExceptionWithoutArgumentsDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.newExceptionWithoutArgumentsProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.newExceptionWithoutArgumentsIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreWithoutParameters");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NewExceptionWithoutArgumentsVisitor();
-  }
-
-  private class NewExceptionWithoutArgumentsVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.newExceptionWithoutArgumentsProblemDescriptor().get();
+    }
 
     @Override
-    public void visitNewExpression(PsiNewExpression expression) {
-      super.visitNewExpression(expression);
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList == null) {
-        return;
-      }
-      final PsiExpression[] expressions = argumentList.getExpressions();
-      if (expressions.length != 0) {
-        return;
-      }
-      final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
-      if (classReference == null) {
-        return;
-      }
-      final PsiElement target = classReference.resolve();
-      if (!(target instanceof PsiClass)) {
-        return;
-      }
-      final PsiClass aClass = (PsiClass)target;
-      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
-        return;
-      }
-      if (ignoreWithoutParameters) {
-        if (!hasAccessibleConstructorWithParameters(aClass, expression)) return;
-      }
-      registerNewExpressionError(expression);
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.newExceptionWithoutArgumentsIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreWithoutParameters");
     }
 
-    private boolean hasAccessibleConstructorWithParameters(PsiClass aClass, PsiElement context) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      for (PsiMethod constructor : constructors) {
-        final PsiParameterList parameterList = constructor.getParameterList();
-        final int count = parameterList.getParametersCount();
-        if (count <= 0) {
-          continue;
-        }
-        final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper();
-        if (resolveHelper.isAccessible(constructor, context, aClass)) {
-          return true;
-        }
-      }
-      return false;
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NewExceptionWithoutArgumentsVisitor();
     }
-  }
+
+    private class NewExceptionWithoutArgumentsVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitNewExpression(PsiNewExpression expression) {
+            super.visitNewExpression(expression);
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList == null) {
+                return;
+            }
+            final PsiExpression[] expressions = argumentList.getExpressions();
+            if (expressions.length != 0) {
+                return;
+            }
+            final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
+            if (classReference == null) {
+                return;
+            }
+            final PsiElement target = classReference.resolve();
+            if (!(target instanceof PsiClass)) {
+                return;
+            }
+            final PsiClass aClass = (PsiClass) target;
+            if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
+                return;
+            }
+            if (ignoreWithoutParameters) {
+                if (!hasAccessibleConstructorWithParameters(aClass, expression)) {
+                    return;
+                }
+            }
+            registerNewExpressionError(expression);
+        }
+
+        private boolean hasAccessibleConstructorWithParameters(PsiClass aClass, PsiElement context) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            for (PsiMethod constructor : constructors) {
+                final PsiParameterList parameterList = constructor.getParameterList();
+                final int count = parameterList.getParametersCount();
+                if (count <= 0) {
+                    continue;
+                }
+                final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper();
+                if (resolveHelper.isAccessible(constructor, context, aClass)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

@@ -15,40 +15,37 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import com.intellij.java.language.psi.PsiField;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
-public class NonFinalStaticVariableUsedInClassInitializationInspection
-  extends BaseInspection {
+public class NonFinalStaticVariableUsedInClassInitializationInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationDisplayName().get();
-  }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationProblemDescriptor().get();
+    }
 
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationProblemDescriptor().get();
-  }
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return MakeFieldFinalFix.buildFix(field);
+    }
 
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonFinalStaticVariableUsedInClassInitializationVisitor();
-  }
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonFinalStaticVariableUsedInClassInitializationVisitor();
+    }
 }

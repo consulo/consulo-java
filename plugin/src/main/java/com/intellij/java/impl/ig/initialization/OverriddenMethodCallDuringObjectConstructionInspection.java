@@ -25,59 +25,59 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverriddenMethodCallDuringObjectConstructionInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.overriddenMethodCallInConstructorDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.overriddenMethodCallInConstructorProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new OverriddenMethodCallInConstructorVisitor();
-  }
-
-  private static class OverriddenMethodCallInConstructorVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.overriddenMethodCallInConstructorDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
-        return;
-      }
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (qualifier != null) {
-        if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
-          return;
-        }
-      }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-      if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiMethod calledMethod = expression.resolveMethod();
-      if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
-        return;
-      }
-      final PsiClass calledMethodClass = calledMethod.getContainingClass();
-      if (!InheritanceUtil.isInheritorOrSelf(containingClass, calledMethodClass, true)) {
-        return;
-      }
-      if (!MethodUtils.isOverriddenInHierarchy(calledMethod, containingClass)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.overriddenMethodCallInConstructorProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new OverriddenMethodCallInConstructorVisitor();
+    }
+
+    private static class OverriddenMethodCallInConstructorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
+                return;
+            }
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null) {
+                if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
+                    return;
+                }
+            }
+            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiMethod calledMethod = expression.resolveMethod();
+            if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
+                return;
+            }
+            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            if (!InheritanceUtil.isInheritorOrSelf(containingClass, calledMethodClass, true)) {
+                return;
+            }
+            if (!MethodUtils.isOverriddenInHierarchy(calledMethod, containingClass)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

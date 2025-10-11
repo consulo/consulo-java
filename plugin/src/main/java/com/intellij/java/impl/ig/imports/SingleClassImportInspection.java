@@ -23,54 +23,55 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SingleClassImportInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.singleClassImportDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.singleClassImportProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new PackageImportVisitor();
-  }
-
-  private static class PackageImportVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (!(aClass.getParent() instanceof PsiJavaFile)) {
-        return;
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.singleClassImportDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.singleClassImportProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new PackageImportVisitor();
+    }
+
+    private static class PackageImportVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (!(aClass.getParent() instanceof PsiJavaFile)) {
+                return;
+            }
      /* if (JspPsiUtil.isInJspFile(aClass.getContainingFile())) {
         return;
       }     */
-      final PsiJavaFile file = (PsiJavaFile)aClass.getParent();
-      if (file == null) {
-        return;
-      }
-      if (!file.getClasses()[0].equals(aClass)) {
-        return;
-      }
-      final PsiImportList importList = file.getImportList();
-      if (importList == null) {
-        return;
-      }
-      final PsiImportStatement[] importStatements =
-        importList.getImportStatements();
-      for (final PsiImportStatement importStatement : importStatements) {
-        if (!importStatement.isOnDemand()) {
-          registerError(importStatement);
+            final PsiJavaFile file = (PsiJavaFile) aClass.getParent();
+            if (file == null) {
+                return;
+            }
+            if (!file.getClasses()[0].equals(aClass)) {
+                return;
+            }
+            final PsiImportList importList = file.getImportList();
+            if (importList == null) {
+                return;
+            }
+            final PsiImportStatement[] importStatements =
+                importList.getImportStatements();
+            for (final PsiImportStatement importStatement : importStatements) {
+                if (!importStatement.isOnDemand()) {
+                    registerError(importStatement);
+                }
+            }
         }
-      }
     }
-  }
 }

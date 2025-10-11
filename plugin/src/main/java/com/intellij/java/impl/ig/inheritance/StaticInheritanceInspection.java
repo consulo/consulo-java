@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -30,70 +31,73 @@ import java.util.Set;
 
 @ExtensionImpl
 public class StaticInheritanceInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticInheritanceDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.staticInheritanceProblemDescriptor().get();
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    return new InspectionGadgetsFix[]{new StaticInheritanceFix(false), new StaticInheritanceFix(true)};
-  }
-
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticInheritanceVisitor();
-  }
-
-  private static class StaticInheritanceVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      final PsiReferenceList implementsList = aClass.getImplementsList();
-      if (implementsList == null) {
-        return;
-      }
-      final PsiJavaCodeReferenceElement[] references =
-        implementsList.getReferenceElements();
-      for (final PsiJavaCodeReferenceElement reference : references) {
-        final PsiClass iface = (PsiClass)reference.resolve();
-        if (iface != null) {
-          if (interfaceContainsOnlyConstants(iface, new HashSet<PsiClass>())) {
-            registerError(reference);
-          }
-        }
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticInheritanceDisplayName();
     }
 
-    private static boolean interfaceContainsOnlyConstants(
-      PsiClass iface, Set<PsiClass> visitedIntefaces) {
-      if (!visitedIntefaces.add(iface)) {
-        return true;
-      }
-      if (iface.getAllFields().length == 0) {
-        // ignore it, it's either a true interface or just a marker
-        return false;
-      }
-      if (iface.getMethods().length != 0) {
-        return false;
-      }
-      final PsiClass[] parentInterfaces = iface.getInterfaces();
-      for (final PsiClass parentInterface : parentInterfaces) {
-        if (!interfaceContainsOnlyConstants(parentInterface,
-                                            visitedIntefaces)) {
-          return false;
-        }
-      }
-      return true;
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.staticInheritanceProblemDescriptor().get();
     }
-  }
+
+    @Nonnull
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        return new InspectionGadgetsFix[]{new StaticInheritanceFix(false), new StaticInheritanceFix(true)};
+    }
+
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticInheritanceVisitor();
+    }
+
+    private static class StaticInheritanceVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            final PsiReferenceList implementsList = aClass.getImplementsList();
+            if (implementsList == null) {
+                return;
+            }
+            final PsiJavaCodeReferenceElement[] references =
+                implementsList.getReferenceElements();
+            for (final PsiJavaCodeReferenceElement reference : references) {
+                final PsiClass iface = (PsiClass) reference.resolve();
+                if (iface != null) {
+                    if (interfaceContainsOnlyConstants(iface, new HashSet<PsiClass>())) {
+                        registerError(reference);
+                    }
+                }
+            }
+        }
+
+        private static boolean interfaceContainsOnlyConstants(
+            PsiClass iface, Set<PsiClass> visitedIntefaces
+        ) {
+            if (!visitedIntefaces.add(iface)) {
+                return true;
+            }
+            if (iface.getAllFields().length == 0) {
+                // ignore it, it's either a true interface or just a marker
+                return false;
+            }
+            if (iface.getMethods().length != 0) {
+                return false;
+            }
+            final PsiClass[] parentInterfaces = iface.getInterfaces();
+            for (final PsiClass parentInterface : parentInterfaces) {
+                if (!interfaceContainsOnlyConstants(
+                    parentInterface,
+                    visitedIntefaces
+                )) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }

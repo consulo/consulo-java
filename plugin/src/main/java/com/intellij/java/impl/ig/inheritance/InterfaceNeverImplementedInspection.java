@@ -30,48 +30,48 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class InterfaceNeverImplementedInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean ignoreInterfacesThatOnlyDeclareConstants = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean ignoreInterfacesThatOnlyDeclareConstants = false;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.interfaceNeverImplementedDisplayName().get();
-  }
-
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.interfaceNeverImplementedOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInterfacesThatOnlyDeclareConstants");
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.interfaceNeverImplementedProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InterfaceNeverImplementedVisitor();
-  }
-
-  private class InterfaceNeverImplementedVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (ignoreInterfacesThatOnlyDeclareConstants &&
-          aClass.getMethods().length == 0) {
-        if (aClass.getFields().length != 0) {
-          return;
-        }
-      }
-      if (InheritanceUtil.hasImplementation(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.interfaceNeverImplementedDisplayName();
     }
-  }
+
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.interfaceNeverImplementedOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInterfacesThatOnlyDeclareConstants");
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.interfaceNeverImplementedProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InterfaceNeverImplementedVisitor();
+    }
+
+    private class InterfaceNeverImplementedVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (ignoreInterfacesThatOnlyDeclareConstants &&
+                aClass.getMethods().length == 0) {
+                if (aClass.getFields().length != 0) {
+                    return;
+                }
+            }
+            if (InheritanceUtil.hasImplementation(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

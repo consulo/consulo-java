@@ -26,56 +26,59 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class DateToStringInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "CallToDateToString";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "CallToDateToString";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.callToDateTostringDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.callToDateTostringProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new DateToStringVisitor();
-  }
-
-  private static class DateToStringVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.callToDateTostringDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final String methodName = MethodCallUtils.getMethodName(expression);
-      if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
-        return;
-      }
-      final PsiType targetType = MethodCallUtils.getTargetType(expression);
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_UTIL_DATE, targetType)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList.getExpressions().length != 0) {
-        return;
-      }
-      if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.callToDateTostringProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new DateToStringVisitor();
+    }
+
+    private static class DateToStringVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression expression
+        ) {
+            super.visitMethodCallExpression(expression);
+            final String methodName = MethodCallUtils.getMethodName(expression);
+            if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
+                return;
+            }
+            final PsiType targetType = MethodCallUtils.getTargetType(expression);
+            if (!TypeUtils.typeEquals(CommonClassNames.JAVA_UTIL_DATE, targetType)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList.getExpressions().length != 0) {
+                return;
+            }
+            if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

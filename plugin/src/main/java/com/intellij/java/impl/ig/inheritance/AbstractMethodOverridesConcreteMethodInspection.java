@@ -23,63 +23,62 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class AbstractMethodOverridesConcreteMethodInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AbstractMethodOverridesConcreteMethodVisitor();
-  }
-
-  private static class AbstractMethodOverridesConcreteMethodVisitor
-    extends BaseInspectionVisitor {
+public class AbstractMethodOverridesConcreteMethodInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //no call to super, so we don't drill into anonymous classes
-      if (method.isConstructor()) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (containingClass.isInterface() ||
-          containingClass.isAnnotationType()) {
-        return;
-      }
-      if (!method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      final PsiMethod[] superMethods = method.findSuperMethods();
-      for (final PsiMethod superMethod : superMethods) {
-        final PsiClass superClass = superMethod.getContainingClass();
-        if (superClass == null) {
-          continue;
-        }
-        final String superClassName = superClass.getQualifiedName();
-        if (!superClass.isInterface() &&
-            !CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
-            !superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-          registerMethodError(method);
-          return;
-        }
-      }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AbstractMethodOverridesConcreteMethodVisitor();
+    }
+
+    private static class AbstractMethodOverridesConcreteMethodVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //no call to super, so we don't drill into anonymous classes
+            if (method.isConstructor()) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (containingClass.isInterface() ||
+                containingClass.isAnnotationType()) {
+                return;
+            }
+            if (!method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final PsiMethod[] superMethods = method.findSuperMethods();
+            for (final PsiMethod superMethod : superMethods) {
+                final PsiClass superClass = superMethod.getContainingClass();
+                if (superClass == null) {
+                    continue;
+                }
+                final String superClassName = superClass.getQualifiedName();
+                if (!superClass.isInterface() &&
+                    !CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
+                    !superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                    registerMethodError(method);
+                    return;
+                }
+            }
+        }
+    }
 }

@@ -22,53 +22,52 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class AbstractClassExtendsConcreteClassInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.abstractClassExtendsConcreteClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.abstractClassExtendsConcreteClassProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AbstractClassExtendsConcreteClassVisitor();
-  }
-
-  private static class AbstractClassExtendsConcreteClassVisitor
-    extends BaseInspectionVisitor {
+public class AbstractClassExtendsConcreteClassInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.abstractClassExtendsConcreteClassDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      final PsiClass superClass = aClass.getSuperClass();
-      if (superClass == null) {
-        return;
-      }
-      if (superClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      final String superclassName = superClass.getQualifiedName();
-      if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.abstractClassExtendsConcreteClassProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AbstractClassExtendsConcreteClassVisitor();
+    }
+
+    private static class AbstractClassExtendsConcreteClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final PsiClass superClass = aClass.getSuperClass();
+            if (superClass == null) {
+                return;
+            }
+            if (superClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final String superclassName = superClass.getQualifiedName();
+            if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

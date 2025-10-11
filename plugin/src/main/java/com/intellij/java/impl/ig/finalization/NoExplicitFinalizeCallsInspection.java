@@ -26,55 +26,62 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class NoExplicitFinalizeCallsInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "FinalizeCalledExplicitly";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalizeCalledExplicitlyDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalizeCalledExplicitlyProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NoExplicitFinalizeCallsVisitor();
-  }
-
-  private static class NoExplicitFinalizeCallsVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!MethodCallUtils.isCallToMethod(expression, null, PsiType.VOID,
-                                          HardcodedMethodConstants.FINALIZE)) {
-        return;
-      }
-      final PsiMethod containingMethod =
-        PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
-      if (containingMethod == null) {
-        return;
-      }
-      if (MethodUtils.methodMatches(containingMethod, null, PsiType.VOID,
-                                    HardcodedMethodConstants.FINALIZE)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "FinalizeCalledExplicitly";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalizeCalledExplicitlyDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalizeCalledExplicitlyProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NoExplicitFinalizeCallsVisitor();
+    }
+
+    private static class NoExplicitFinalizeCallsVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression expression
+        ) {
+            super.visitMethodCallExpression(expression);
+            if (!MethodCallUtils.isCallToMethod(expression, null, PsiType.VOID,
+                HardcodedMethodConstants.FINALIZE
+            )) {
+                return;
+            }
+            final PsiMethod containingMethod =
+                PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+            if (containingMethod == null) {
+                return;
+            }
+            if (MethodUtils.methodMatches(containingMethod, null, PsiType.VOID,
+                HardcodedMethodConstants.FINALIZE
+            )) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

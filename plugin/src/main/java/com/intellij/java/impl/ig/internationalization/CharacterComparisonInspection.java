@@ -25,57 +25,59 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CharacterComparisonInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "CharacterComparison";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "CharacterComparison";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.characterComparisonDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.characterComparisonProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CharacterComparisonVisitor();
-  }
-
-  private static class CharacterComparisonVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.characterComparisonDisplayName();
+    }
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
-      if (!ComparisonUtils.isComparison(expression) || ComparisonUtils.isEqualityComparison(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLOperand();
-      if (!isCharacter(lhs) || !isCharacter(rhs)) {
-        return;
-      }
-      if (NonNlsUtils.isNonNlsAnnotated(lhs) || NonNlsUtils.isNonNlsAnnotated(rhs)) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.characterComparisonProblemDescriptor().get();
     }
 
-    private static boolean isCharacter(@Nullable PsiExpression expression) {
-      return ExpressionUtils.hasType(expression, PsiKeyword.CHAR)
-          || ExpressionUtils.hasType(expression, CommonClassNames.JAVA_LANG_CHARACTER);
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CharacterComparisonVisitor();
     }
-  }
+
+    private static class CharacterComparisonVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+            super.visitBinaryExpression(expression);
+            final PsiExpression rhs = expression.getROperand();
+            if (!ComparisonUtils.isComparison(expression) || ComparisonUtils.isEqualityComparison(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLOperand();
+            if (!isCharacter(lhs) || !isCharacter(rhs)) {
+                return;
+            }
+            if (NonNlsUtils.isNonNlsAnnotated(lhs) || NonNlsUtils.isNonNlsAnnotated(rhs)) {
+                return;
+            }
+            registerError(expression);
+        }
+
+        private static boolean isCharacter(@Nullable PsiExpression expression) {
+            return ExpressionUtils.hasType(expression, PsiKeyword.CHAR)
+                || ExpressionUtils.hasType(expression, CommonClassNames.JAVA_LANG_CHARACTER);
+        }
+    }
 }
