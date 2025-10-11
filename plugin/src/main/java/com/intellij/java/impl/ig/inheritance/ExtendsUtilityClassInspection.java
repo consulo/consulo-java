@@ -32,58 +32,57 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ExtendsUtilityClassInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreUtilityClasses = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreUtilityClasses = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classExtendsUtilityClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  @RequiredReadAction
-  protected String buildErrorString(Object... infos) {
-    final PsiClass superClass = (PsiClass)infos[0];
-    final String superClassName = superClass.getName();
-    return InspectionGadgetsLocalize.classExtendsUtilityClassProblemDescriptor(superClassName).get();
-  }
-
-  @Nullable
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.classExtendsUtilityClassIgnoreUtilityClassOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreUtilityClasses");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassExtendsUtilityClassVisitor();
-  }
-
-  private class ClassExtendsUtilityClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classExtendsUtilityClassDisplayName();
+    }
 
     @Override
-    public void visitClass(PsiClass aClass) {
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      final PsiClass superClass = aClass.getSuperClass();
-      if (superClass == null) {
-        return;
-      }
-      if (superClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      if (!UtilityClassUtil.isUtilityClass(superClass)) {
-        return;
-      }
-      if (ignoreUtilityClasses && UtilityClassUtil.isUtilityClass(aClass, false)) {
-        return;
-      }
-      registerClassError(aClass, superClass);
+    @Nonnull
+    @RequiredReadAction
+    protected String buildErrorString(Object... infos) {
+        final PsiClass superClass = (PsiClass) infos[0];
+        final String superClassName = superClass.getName();
+        return InspectionGadgetsLocalize.classExtendsUtilityClassProblemDescriptor(superClassName).get();
     }
-  }
+
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.classExtendsUtilityClassIgnoreUtilityClassOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreUtilityClasses");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassExtendsUtilityClassVisitor();
+    }
+
+    private class ClassExtendsUtilityClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(PsiClass aClass) {
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            final PsiClass superClass = aClass.getSuperClass();
+            if (superClass == null) {
+                return;
+            }
+            if (superClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (!UtilityClassUtil.isUtilityClass(superClass)) {
+                return;
+            }
+            if (ignoreUtilityClasses && UtilityClassUtil.isUtilityClass(aClass, false)) {
+                return;
+            }
+            registerClassError(aClass, superClass);
+        }
+    }
 }

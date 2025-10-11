@@ -28,67 +28,68 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalizeNotProtectedInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalizeDeclaredProtectedVisitor();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new ProtectedFinalizeFix();
-  }
-
-  private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedDisplayName();
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.makeProtectedQuickfix().get();
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedProblemDescriptor().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement methodName = descriptor.getPsiElement();
-      final PsiMethod method = (PsiMethod)methodName.getParent();
-      assert method != null;
-      final PsiModifierList modifiers = method.getModifierList();
-      modifiers.setModifierProperty(PsiModifier.PUBLIC, false);
-      modifiers.setModifierProperty(PsiModifier.PRIVATE, false);
-      modifiers.setModifierProperty(PsiModifier.PROTECTED, true);
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalizeDeclaredProtectedVisitor();
     }
-  }
 
-  private static class FinalizeDeclaredProtectedVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super;
-      final String methodName = method.getName();
-      if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      registerMethodError(method);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new ProtectedFinalizeFix();
     }
-  }
+
+    private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.makeProtectedQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement methodName = descriptor.getPsiElement();
+            final PsiMethod method = (PsiMethod) methodName.getParent();
+            assert method != null;
+            final PsiModifierList modifiers = method.getModifierList();
+            modifiers.setModifierProperty(PsiModifier.PUBLIC, false);
+            modifiers.setModifierProperty(PsiModifier.PRIVATE, false);
+            modifiers.setModifierProperty(PsiModifier.PROTECTED, true);
+        }
+    }
+
+    private static class FinalizeDeclaredProtectedVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super;
+            final String methodName = method.getName();
+            if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

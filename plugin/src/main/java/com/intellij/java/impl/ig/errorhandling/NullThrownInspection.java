@@ -25,72 +25,64 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class NullThrownInspection extends BaseInspection {
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nullThrownDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nullThrownProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ThrowNullFix();
-  }
-
-  private static class ThrowNullFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nullThrownDisplayName();
+    }
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.nullThrownQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nullThrownProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElementFactory factory =
-        JavaPsiFacade.getElementFactory(project);
-      final PsiExpression newExpression =
-        factory.createExpressionFromText(
-          "new java.lang.NullPointerException()", element);
-      element.replace(newExpression);
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ThrowNullFix();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ThrowNullVisitor();
-  }
+    private static class ThrowNullFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.nullThrownQuickfix();
+        }
 
-  private static class ThrowNullVisitor extends BaseInspectionVisitor {
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            final PsiExpression newExpression = factory.createExpressionFromText("new java.lang.NullPointerException()", element);
+            element.replace(newExpression);
+        }
+    }
 
     @Override
-    public void visitThrowStatement(PsiThrowStatement statement) {
-      super.visitThrowStatement(statement);
-      final PsiExpression exception =
-        ParenthesesUtils.stripParentheses(statement.getException());
-      if (!(exception instanceof PsiLiteralExpression)) {
-        return;
-      }
-      final PsiType type = exception.getType();
-      if (!PsiType.NULL.equals(type)) {
-        return;
-      }
-      registerError(exception);
+    public BaseInspectionVisitor buildVisitor() {
+        return new ThrowNullVisitor();
     }
-  }
+
+    private static class ThrowNullVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitThrowStatement(PsiThrowStatement statement) {
+            super.visitThrowStatement(statement);
+            final PsiExpression exception = ParenthesesUtils.stripParentheses(statement.getException());
+            if (!(exception instanceof PsiLiteralExpression)) {
+                return;
+            }
+            final PsiType type = exception.getType();
+            if (!PsiType.NULL.equals(type)) {
+                return;
+            }
+            registerError(exception);
+        }
+    }
 }

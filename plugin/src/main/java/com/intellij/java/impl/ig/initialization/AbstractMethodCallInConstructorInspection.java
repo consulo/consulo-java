@@ -22,53 +22,54 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractMethodCallInConstructorInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.abstractMethodCallInConstructorDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.abstractMethodCallInConstructorProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AbstractMethodCallInConstructorVisitor();
-  }
-
-  private static class AbstractMethodCallInConstructorVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
-        return;
-      }
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (qualifier != null) {
-        if (!(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
-          return;
-        }
-      }
-      final PsiMethod calledMethod = (PsiMethod)methodExpression.resolve();
-      if (calledMethod == null || calledMethod.isConstructor() || !calledMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      final PsiClass calledMethodClass = calledMethod.getContainingClass();
-      if (calledMethodClass == null) {
-        return;
-      }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-      if (!calledMethodClass.equals(containingClass)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.abstractMethodCallInConstructorDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.abstractMethodCallInConstructorProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new AbstractMethodCallInConstructorVisitor();
+    }
+
+    private static class AbstractMethodCallInConstructorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
+                return;
+            }
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null) {
+                if (!(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
+                    return;
+                }
+            }
+            final PsiMethod calledMethod = (PsiMethod) methodExpression.resolve();
+            if (calledMethod == null || calledMethod.isConstructor() || !calledMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            if (calledMethodClass == null) {
+                return;
+            }
+            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            if (!calledMethodClass.equals(containingClass)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

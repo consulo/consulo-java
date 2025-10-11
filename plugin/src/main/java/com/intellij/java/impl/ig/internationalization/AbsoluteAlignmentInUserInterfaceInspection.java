@@ -95,7 +95,6 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
     }
 
     private static class AbsoluteAlignmentInUserInterfaceFix extends InspectionGadgetsFix {
-
         private final String myClassName;
         private final String myReplacement;
 

@@ -21,43 +21,47 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ReturnFromFinallyBlockInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "ReturnInsideFinallyBlock";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.returnFromFinallyBlockDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.returnFromFinallyBlockProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReturnFromFinallyBlockVisitor();
-  }
-
-  private static class ReturnFromFinallyBlockVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
-      super.visitReturnStatement(statement);
-      if (!ControlFlowUtils.isInFinallyBlock(statement)) {
-        return;
-      }
-      registerStatementError(statement);
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ReturnInsideFinallyBlock";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.returnFromFinallyBlockDisplayName();
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.returnFromFinallyBlockProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReturnFromFinallyBlockVisitor();
+    }
+
+    private static class ReturnFromFinallyBlockVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            super.visitReturnStatement(statement);
+            if (!ControlFlowUtils.isInFinallyBlock(statement)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

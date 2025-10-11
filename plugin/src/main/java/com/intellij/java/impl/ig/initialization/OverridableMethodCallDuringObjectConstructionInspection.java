@@ -30,105 +30,104 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverridableMethodCallDuringObjectConstructionInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.overridableMethodCallInConstructorDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.overridableMethodCallInConstructorProblemDescriptor().get();
-  }
-
-  @Override
-  @Nonnull
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)infos[0];
-    final PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
-    final PsiMethod method = methodCallExpression.resolveMethod();
-    if (method == null) {
-      return InspectionGadgetsFix.EMPTY_ARRAY;
-    }
-    final PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null || !containingClass.equals(callClass) || MethodUtils.isOverridden(method)) {
-      return InspectionGadgetsFix.EMPTY_ARRAY;
-    }
-    final String methodName = method.getName();
-    return new InspectionGadgetsFix[]{
-      new MakeClassFinalFix(containingClass),
-      new MakeMethodFinalFix(methodName)
-    };
-  }
-
-  private static class MakeMethodFinalFix extends InspectionGadgetsFix {
-
-    private final String methodName;
-
-    MakeMethodFinalFix(String methodName) {
-      this.methodName = methodName;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.overridableMethodCallInConstructorDisplayName();
     }
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.makeMethodFinalFixName(methodName).get();
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.overridableMethodCallInConstructorProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement methodName = descriptor.getPsiElement();
-      final PsiElement methodExpression = methodName.getParent();
-      final PsiMethodCallExpression methodCall = (PsiMethodCallExpression)methodExpression.getParent();
-      final PsiMethod method = methodCall.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiModifierList modifierList = method.getModifierList();
-      modifierList.setModifierProperty(PsiModifier.FINAL, true);
-    }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new OverridableMethodCallInConstructorVisitor();
-  }
-
-  private static class OverridableMethodCallInConstructorVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
-        return;
-      }
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (qualifier != null) {
-        if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
-          return;
+    @Nonnull
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
+        final PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
+        final PsiMethod method = methodCallExpression.resolveMethod();
+        if (method == null) {
+            return InspectionGadgetsFix.EMPTY_ARRAY;
         }
-      }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-      if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiMethod calledMethod = expression.resolveMethod();
-      if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
-        return;
-      }
-      final PsiClass calledMethodClass = calledMethod.getContainingClass();
-      if (calledMethodClass == null || !calledMethodClass.equals(containingClass)) {
-        return;
-      }
-      registerMethodCallError(expression, expression);
+        final PsiClass containingClass = method.getContainingClass();
+        if (containingClass == null || !containingClass.equals(callClass) || MethodUtils.isOverridden(method)) {
+            return InspectionGadgetsFix.EMPTY_ARRAY;
+        }
+        final String methodName = method.getName();
+        return new InspectionGadgetsFix[]{
+            new MakeClassFinalFix(containingClass),
+            new MakeMethodFinalFix(methodName)
+        };
     }
-  }
+
+    private static class MakeMethodFinalFix extends InspectionGadgetsFix {
+        private final String methodName;
+
+        MakeMethodFinalFix(String methodName) {
+            this.methodName = methodName;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.makeMethodFinalFixName(methodName);
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement methodName = descriptor.getPsiElement();
+            final PsiElement methodExpression = methodName.getParent();
+            final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodExpression.getParent();
+            final PsiMethod method = methodCall.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiModifierList modifierList = method.getModifierList();
+            modifierList.setModifierProperty(PsiModifier.FINAL, true);
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new OverridableMethodCallInConstructorVisitor();
+    }
+
+    private static class OverridableMethodCallInConstructorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
+                return;
+            }
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null) {
+                if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
+                    return;
+                }
+            }
+            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiMethod calledMethod = expression.resolveMethod();
+            if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
+                return;
+            }
+            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            if (calledMethodClass == null || !calledMethodClass.equals(containingClass)) {
+                return;
+            }
+            registerMethodCallError(expression, expression);
+        }
+    }
 }

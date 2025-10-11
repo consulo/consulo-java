@@ -15,64 +15,65 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTryStatement;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedTryStatementInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nestedTryStatementDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nestedTryStatementProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NestedTryStatementVisitor();
-  }
-
-  private static class NestedTryStatementVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
-      super.visitTryStatement(statement);
-      final PsiTryStatement parentTry =
-        PsiTreeUtil.getParentOfType(statement,
-                                    PsiTryStatement.class);
-      if (parentTry == null) {
-        return;
-      }
-      final PsiCodeBlock tryBlock = parentTry.getTryBlock();
-      if (tryBlock == null) {
-        return;
-      }
-      if (!PsiTreeUtil.isAncestor(tryBlock, statement, true)) {
-        return;
-      }
-      final PsiMethod containingMethod =
-        PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-      final PsiMethod containingContainingMethod =
-        PsiTreeUtil.getParentOfType(parentTry, PsiMethod.class);
-      if (containingMethod == null ||
-          containingContainingMethod == null ||
-          !containingMethod.equals(containingContainingMethod)) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nestedTryStatementDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nestedTryStatementProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NestedTryStatementVisitor();
+    }
+
+    private static class NestedTryStatementVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+            super.visitTryStatement(statement);
+            final PsiTryStatement parentTry =
+                PsiTreeUtil.getParentOfType(
+                    statement,
+                    PsiTryStatement.class
+                );
+            if (parentTry == null) {
+                return;
+            }
+            final PsiCodeBlock tryBlock = parentTry.getTryBlock();
+            if (tryBlock == null) {
+                return;
+            }
+            if (!PsiTreeUtil.isAncestor(tryBlock, statement, true)) {
+                return;
+            }
+            final PsiMethod containingMethod =
+                PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
+            final PsiMethod containingContainingMethod =
+                PsiTreeUtil.getParentOfType(parentTry, PsiMethod.class);
+            if (containingMethod == null ||
+                containingContainingMethod == null ||
+                !containingMethod.equals(containingContainingMethod)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

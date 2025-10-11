@@ -21,39 +21,40 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowFromFinallyBlockInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.throwFromFinallyBlockDisplayName().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.throwFromFinallyBlockProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ThrowFromFinallyBlockVisitor();
-  }
-
-  private static class ThrowFromFinallyBlockVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitThrowStatement(PsiThrowStatement statement) {
-      super.visitThrowStatement(statement);
-      if (!ControlFlowUtils.isInFinallyBlock(statement)) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.throwFromFinallyBlockDisplayName();
     }
-  }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.throwFromFinallyBlockProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ThrowFromFinallyBlockVisitor();
+    }
+
+    private static class ThrowFromFinallyBlockVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitThrowStatement(PsiThrowStatement statement) {
+            super.visitThrowStatement(statement);
+            if (!ControlFlowUtils.isInFinallyBlock(statement)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

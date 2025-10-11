@@ -22,49 +22,47 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceofCatchParameterInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceofCatchParameterDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.instanceofCatchParameterProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InstanceofCatchParameterVisitor();
-  }
-
-  private static class InstanceofCatchParameterVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitInstanceOfExpression(
-      @Nonnull PsiInstanceOfExpression exp) {
-      super.visitInstanceOfExpression(exp);
-      if (!ControlFlowUtils.isInCatchBlock(exp)) {
-        return;
-      }
-      final PsiExpression operand = exp.getOperand();
-      if (!(operand instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression ref = (PsiReferenceExpression)operand;
-      final PsiElement referent = ref.resolve();
-      if (!(referent instanceof PsiParameter)) {
-        return;
-      }
-      final PsiParameter parameter = (PsiParameter)referent;
-      if (!(parameter.getDeclarationScope() instanceof PsiCatchSection)) {
-        return;
-      }
-      registerError(exp);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.instanceofCatchParameterDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.instanceofCatchParameterProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InstanceofCatchParameterVisitor();
+    }
+
+    private static class InstanceofCatchParameterVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression exp) {
+            super.visitInstanceOfExpression(exp);
+            if (!ControlFlowUtils.isInCatchBlock(exp)) {
+                return;
+            }
+            final PsiExpression operand = exp.getOperand();
+            if (!(operand instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression ref = (PsiReferenceExpression) operand;
+            final PsiElement referent = ref.resolve();
+            if (!(referent instanceof PsiParameter)) {
+                return;
+            }
+            final PsiParameter parameter = (PsiParameter) referent;
+            if (!(parameter.getDeclarationScope() instanceof PsiCatchSection)) {
+                return;
+            }
+            registerError(exp);
+        }
+    }
 }

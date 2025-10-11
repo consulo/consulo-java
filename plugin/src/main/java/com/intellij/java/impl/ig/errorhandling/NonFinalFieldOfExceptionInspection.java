@@ -26,52 +26,53 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class NonFinalFieldOfExceptionInspection extends BaseInspection {
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalFieldOfExceptionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalFieldOfExceptionProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonFinalFieldOfExceptionVisitor();
-  }
-
-  private static class NonFinalFieldOfExceptionVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalFieldOfExceptionDisplayName();
+    }
 
     @Override
-    public void visitField(PsiField field) {
-      super.visitField(field);
-      if (field.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
-        return;
-      }
-      registerFieldError(field, field);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalFieldOfExceptionProblemDescriptor().get();
     }
-  }
+
+    @Override
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return MakeFieldFinalFix.buildFix(field);
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonFinalFieldOfExceptionVisitor();
+    }
+
+    private static class NonFinalFieldOfExceptionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(PsiField field) {
+            super.visitField(field);
+            if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
+                return;
+            }
+            registerFieldError(field, field);
+        }
+    }
 }
