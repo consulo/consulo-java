@@ -31,90 +31,91 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "CloneDoesntDeclareCloneNotSupportedException";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "CloneDoesntDeclareCloneNotSupportedException";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new CloneDeclaresCloneNotSupportedInspectionFix();
-  }
-
-  private static class CloneDeclaresCloneNotSupportedInspectionFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDisplayName();
+    }
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDeclareQuickfix().get();
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionProblemDescriptor().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-      final PsiMethod method = (PsiMethod)methodNameIdentifier.getParent();
-      PsiUtil.addException(method, "java.lang.CloneNotSupportedException");
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CloneDeclaresCloneNotSupportedExceptionVisitor();
-  }
-
-  private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!CloneUtils.isClone(method)) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      if (MethodUtils.hasInThrows(method, "java.lang.CloneNotSupportedException")) {
-        return;
-      }
-      final MethodSignatureBackedByPsiMethod signature = SuperMethodsSearch.search(method, null, true, false).findFirst();
-      if (signature == null) {
-        return;
-      }
-      final PsiMethod superMethod = signature.getMethod();
-      if (!MethodUtils.hasInThrows(superMethod, "java.lang.CloneNotSupportedException")) {
-        return;
-      }
-      registerMethodError(method);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new CloneDeclaresCloneNotSupportedInspectionFix();
     }
-  }
+
+    private static class CloneDeclaresCloneNotSupportedInspectionFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDeclareQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement methodNameIdentifier = descriptor.getPsiElement();
+            final PsiMethod method = (PsiMethod) methodNameIdentifier.getParent();
+            PsiUtil.addException(method, "java.lang.CloneNotSupportedException");
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CloneDeclaresCloneNotSupportedExceptionVisitor();
+    }
+
+    private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!CloneUtils.isClone(method)) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            if (MethodUtils.hasInThrows(method, "java.lang.CloneNotSupportedException")) {
+                return;
+            }
+            final MethodSignatureBackedByPsiMethod signature = SuperMethodsSearch.search(method, null, true, false).findFirst();
+            if (signature == null) {
+                return;
+            }
+            final PsiMethod superMethod = signature.getMethod();
+            if (!MethodUtils.hasInThrows(superMethod, "java.lang.CloneNotSupportedException")) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

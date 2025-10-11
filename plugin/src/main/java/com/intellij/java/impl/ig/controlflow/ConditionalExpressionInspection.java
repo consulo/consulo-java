@@ -29,52 +29,52 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ConditionalExpressionInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreSimpleAssignmentsAndReturns = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreSimpleAssignmentsAndReturns = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.conditionalExpressionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.conditionalExpressionProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.conditionalExpressionOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSimpleAssignmentsAndReturns");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConditionalExpressionVisitor();
-  }
-
-  private class ConditionalExpressionVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.conditionalExpressionDisplayName();
+    }
 
     @Override
-    public void visitConditionalExpression(
-      PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      if (ignoreSimpleAssignmentsAndReturns) {
-        PsiElement parent = expression.getParent();
-        while (parent instanceof PsiParenthesizedExpression) {
-          parent = parent.getParent();
-        }
-        if (parent instanceof PsiAssignmentExpression ||
-            parent instanceof PsiReturnStatement ||
-            parent instanceof PsiLocalVariable) {
-          return;
-        }
-      }
-      registerError(expression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.conditionalExpressionProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.conditionalExpressionOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSimpleAssignmentsAndReturns");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConditionalExpressionVisitor();
+    }
+
+    private class ConditionalExpressionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitConditionalExpression(
+            PsiConditionalExpression expression
+        ) {
+            super.visitConditionalExpression(expression);
+            if (ignoreSimpleAssignmentsAndReturns) {
+                PsiElement parent = expression.getParent();
+                while (parent instanceof PsiParenthesizedExpression) {
+                    parent = parent.getParent();
+                }
+                if (parent instanceof PsiAssignmentExpression ||
+                    parent instanceof PsiReturnStatement ||
+                    parent instanceof PsiLocalVariable) {
+                    return;
+                }
+            }
+            registerError(expression);
+        }
+    }
 }

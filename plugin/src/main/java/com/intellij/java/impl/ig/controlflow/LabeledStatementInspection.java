@@ -21,34 +21,35 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LabeledStatementInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.labeledStatementDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.labeledStatementProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new LabeledStatementVisitor();
-  }
-
-  private static class LabeledStatementVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitLabeledStatement(PsiLabeledStatement statement) {
-      super.visitLabeledStatement(statement);
-      final PsiIdentifier labelIdentifier =
-        statement.getLabelIdentifier();
-      registerError(labelIdentifier);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.labeledStatementDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.labeledStatementProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new LabeledStatementVisitor();
+    }
+
+    private static class LabeledStatementVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitLabeledStatement(PsiLabeledStatement statement) {
+            super.visitLabeledStatement(statement);
+            final PsiIdentifier labelIdentifier =
+                statement.getLabelIdentifier();
+            registerError(labelIdentifier);
+        }
+    }
 }

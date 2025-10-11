@@ -28,104 +28,104 @@ import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
-public class EnumSwitchStatementWhichMissesCasesInspection
-  extends BaseInspection {
+public class EnumSwitchStatementWhichMissesCasesInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesDisplayName().get();
-  }
-
-  /**
-   * @noinspection PublicField
-   */
-  public boolean ignoreSwitchStatementsWithDefault = false;
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiSwitchStatement switchStatement =
-      (PsiSwitchStatement)infos[0];
-    assert switchStatement != null;
-    final PsiExpression switchStatementExpression =
-      switchStatement.getExpression();
-    assert switchStatementExpression != null;
-    final PsiType switchStatementType =
-      switchStatementExpression.getType();
-    assert switchStatementType != null;
-    final String switchStatementTypeText =
-      switchStatementType.getPresentableText();
-    return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesProblemDescriptor(switchStatementTypeText).get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchStatementsWithDefault");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new EnumSwitchStatementWhichMissesCasesVisitor();
-  }
-
-  private class EnumSwitchStatementWhichMissesCasesVisitor
-    extends BaseInspectionVisitor {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean ignoreSwitchStatementsWithDefault = false;
 
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
-      if (!switchStatementMissingCases(statement)) {
-        return;
-      }
-      registerStatementError(statement, statement);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiSwitchStatement switchStatement =
+            (PsiSwitchStatement) infos[0];
+        assert switchStatement != null;
+        final PsiExpression switchStatementExpression =
+            switchStatement.getExpression();
+        assert switchStatementExpression != null;
+        final PsiType switchStatementType =
+            switchStatementExpression.getType();
+        assert switchStatementType != null;
+        final String switchStatementTypeText =
+            switchStatementType.getPresentableText();
+        return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesProblemDescriptor(switchStatementTypeText).get();
     }
 
-    private boolean switchStatementMissingCases(
-      PsiSwitchStatement statement) {
-      final PsiExpression expression = statement.getExpression();
-      if (expression == null) {
-        return false;
-      }
-      final PsiType type = expression.getType();
-      if (!(type instanceof PsiClassType)) {
-        return false;
-      }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
-      if (aClass == null || !aClass.isEnum()) {
-        return false;
-      }
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null) {
-        return false;
-      }
-      final PsiStatement[] statements = body.getStatements();
-      int numCases = 0;
-      for (final PsiStatement child : statements) {
-        if (child instanceof PsiSwitchLabelStatement) {
-          final PsiSwitchLabelStatement switchLabelStatement =
-            (PsiSwitchLabelStatement)child;
-          if (!switchLabelStatement.isDefaultCase()) {
-            numCases++;
-          }
-          else if (ignoreSwitchStatementsWithDefault) {
-            return false;
-          }
-        }
-      }
-      final PsiField[] fields = aClass.getFields();
-      int numEnums = 0;
-      for (final PsiField field : fields) {
-        if (!(field instanceof PsiEnumConstant)) {
-          continue;
-        }
-        numEnums++;
-      }
-      return numEnums != numCases;
+    @Override
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchStatementsWithDefault");
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new EnumSwitchStatementWhichMissesCasesVisitor();
+    }
+
+    private class EnumSwitchStatementWhichMissesCasesVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitSwitchStatement(
+            @Nonnull PsiSwitchStatement statement
+        ) {
+            super.visitSwitchStatement(statement);
+            if (!switchStatementMissingCases(statement)) {
+                return;
+            }
+            registerStatementError(statement, statement);
+        }
+
+        private boolean switchStatementMissingCases(
+            PsiSwitchStatement statement
+        ) {
+            final PsiExpression expression = statement.getExpression();
+            if (expression == null) {
+                return false;
+            }
+            final PsiType type = expression.getType();
+            if (!(type instanceof PsiClassType)) {
+                return false;
+            }
+            final PsiClassType classType = (PsiClassType) type;
+            final PsiClass aClass = classType.resolve();
+            if (aClass == null || !aClass.isEnum()) {
+                return false;
+            }
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null) {
+                return false;
+            }
+            final PsiStatement[] statements = body.getStatements();
+            int numCases = 0;
+            for (final PsiStatement child : statements) {
+                if (child instanceof PsiSwitchLabelStatement) {
+                    final PsiSwitchLabelStatement switchLabelStatement =
+                        (PsiSwitchLabelStatement) child;
+                    if (!switchLabelStatement.isDefaultCase()) {
+                        numCases++;
+                    }
+                    else if (ignoreSwitchStatementsWithDefault) {
+                        return false;
+                    }
+                }
+            }
+            final PsiField[] fields = aClass.getFields();
+            int numEnums = 0;
+            for (final PsiField field : fields) {
+                if (!(field instanceof PsiEnumConstant)) {
+                    continue;
+                }
+                numEnums++;
+            }
+            return numEnums != numCases;
+        }
+    }
 }

@@ -29,102 +29,103 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class CloneableImplementsCloneInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreCloneableDueToInheritance = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreCloneableDueToInheritance = false;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "CloneableClassWithoutClone";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cloneableClassWithoutCloneDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.cloneableClassWithoutCloneProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.cloneableClassWithoutCloneIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreCloneableDueToInheritance");
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new CreateCloneMethodFix();
-  }
-
-  private static class CreateCloneMethodFix extends InspectionGadgetsFix {
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.cloneableClassWithoutCloneQuickfix().get();
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "CloneableClassWithoutClone";
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.cloneableClassWithoutCloneDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiClass)) {
-        return;
-      }
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-      final StringBuilder cloneMethod = new StringBuilder("public ");
-      cloneMethod.append(element.getText());
-      cloneMethod.append(" clone() throws java.lang.CloneNotSupportedException {\nreturn (");
-      cloneMethod.append(element.getText());
-      cloneMethod.append(") super.clone();\n}");
-      final PsiMethod method = factory.createMethodFromText(cloneMethod.toString(), element);
-      parent.add(method);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.cloneableClassWithoutCloneProblemDescriptor().get();
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CloneableImplementsCloneVisitor();
-  }
-
-  private class CloneableImplementsCloneVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter) {
-        return;
-      }
-      if (m_ignoreCloneableDueToInheritance) {
-        if (!CloneUtils.isDirectlyCloneable(aClass)) {
-          return;
-        }
-      }
-      else if (!CloneUtils.isCloneable(aClass)) {
-        return;
-      }
-      final PsiMethod[] methods = aClass.getMethods();
-      for (final PsiMethod method : methods) {
-        if (CloneUtils.isClone(method)) {
-          return;
-        }
-      }
-      registerClassError(aClass);
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.cloneableClassWithoutCloneIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreCloneableDueToInheritance");
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new CreateCloneMethodFix();
+    }
+
+    private static class CreateCloneMethodFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.cloneableClassWithoutCloneQuickfix();
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiClass)) {
+                return;
+            }
+            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            final StringBuilder cloneMethod = new StringBuilder("public ");
+            cloneMethod.append(element.getText());
+            cloneMethod.append(" clone() throws java.lang.CloneNotSupportedException {\nreturn (");
+            cloneMethod.append(element.getText());
+            cloneMethod.append(") super.clone();\n}");
+            final PsiMethod method = factory.createMethodFromText(cloneMethod.toString(), element);
+            parent.add(method);
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CloneableImplementsCloneVisitor();
+    }
+
+    private class CloneableImplementsCloneVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter) {
+                return;
+            }
+            if (m_ignoreCloneableDueToInheritance) {
+                if (!CloneUtils.isDirectlyCloneable(aClass)) {
+                    return;
+                }
+            }
+            else if (!CloneUtils.isCloneable(aClass)) {
+                return;
+            }
+            final PsiMethod[] methods = aClass.getMethods();
+            for (final PsiMethod method : methods) {
+                if (CloneUtils.isClone(method)) {
+                    return;
+                }
+            }
+            registerClassError(aClass);
+        }
+    }
 }

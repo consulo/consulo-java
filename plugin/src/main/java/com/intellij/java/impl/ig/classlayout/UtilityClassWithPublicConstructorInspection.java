@@ -28,97 +28,96 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class UtilityClassWithPublicConstructorInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.utilityClassWithPublicConstructorDisplayName().get();
-  }
-
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.utilityClassWithPublicConstructorProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiClass psiClass = (PsiClass)infos[0];
-    if (psiClass.getConstructors().length > 1) {
-      return new UtilityClassWithPublicConstructorFix(true);
-    }
-    else {
-      return new UtilityClassWithPublicConstructorFix(false);
-    }
-  }
-
-  private static class UtilityClassWithPublicConstructorFix
-    extends InspectionGadgetsFix {
-
-    private final boolean m_multipleConstructors;
-
-    UtilityClassWithPublicConstructorFix(boolean multipleConstructors) {
-      super();
-      m_multipleConstructors = multipleConstructors;
-    }
-
+public class UtilityClassWithPublicConstructorInspection extends BaseInspection {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.utilityClassWithPublicConstructorMakeQuickfix(m_multipleConstructors ? 1 : 2).get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.utilityClassWithPublicConstructorDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement classNameIdentifier = descriptor.getPsiElement();
-      final PsiClass psiClass = (PsiClass)classNameIdentifier.getParent();
-      if (psiClass == null) {
-        return;
-      }
-      final PsiMethod[] constructors = psiClass.getConstructors();
-      for (PsiMethod constructor : constructors) {
-        final PsiModifierList modifierList =
-          constructor.getModifierList();
-        modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
-      }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.utilityClassWithPublicConstructorProblemDescriptor().get();
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticClassWithPublicConstructorVisitor();
-  }
-
-  private static class StaticClassWithPublicConstructorVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!UtilityClassUtil.isUtilityClass(aClass)) {
-        return;
-      }
-      if (!hasPublicConstructor(aClass)) {
-        return;
-      }
-      registerClassError(aClass, aClass);
-    }
-
-    private static boolean hasPublicConstructor(PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      for (final PsiMethod constructor : constructors) {
-        if (constructor.hasModifierProperty(PsiModifier.PUBLIC)) {
-          return true;
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiClass psiClass = (PsiClass) infos[0];
+        if (psiClass.getConstructors().length > 1) {
+            return new UtilityClassWithPublicConstructorFix(true);
         }
-      }
-      return false;
+        else {
+            return new UtilityClassWithPublicConstructorFix(false);
+        }
     }
-  }
+
+    private static class UtilityClassWithPublicConstructorFix
+        extends InspectionGadgetsFix {
+
+        private final boolean m_multipleConstructors;
+
+        UtilityClassWithPublicConstructorFix(boolean multipleConstructors) {
+            super();
+            m_multipleConstructors = multipleConstructors;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.utilityClassWithPublicConstructorMakeQuickfix(m_multipleConstructors ? 1 : 2);
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement classNameIdentifier = descriptor.getPsiElement();
+            final PsiClass psiClass = (PsiClass) classNameIdentifier.getParent();
+            if (psiClass == null) {
+                return;
+            }
+            final PsiMethod[] constructors = psiClass.getConstructors();
+            for (PsiMethod constructor : constructors) {
+                final PsiModifierList modifierList =
+                    constructor.getModifierList();
+                modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
+            }
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticClassWithPublicConstructorVisitor();
+    }
+
+    private static class StaticClassWithPublicConstructorVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!UtilityClassUtil.isUtilityClass(aClass)) {
+                return;
+            }
+            if (!hasPublicConstructor(aClass)) {
+                return;
+            }
+            registerClassError(aClass, aClass);
+        }
+
+        private static boolean hasPublicConstructor(PsiClass aClass) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            for (final PsiMethod constructor : constructors) {
+                if (constructor.hasModifierProperty(PsiModifier.PUBLIC)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

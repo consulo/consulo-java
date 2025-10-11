@@ -24,77 +24,64 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class InfiniteLoopStatementInspection extends BaseInspection
-{
+public class InfiniteLoopStatementInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.infiniteLoopStatementDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.infiniteLoopStatementDisplayName().get();
-	}
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-	@Override
-	public boolean isEnabledByDefault()
-	{
-		return true;
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.infiniteLoopStatementProblemDescriptor().get();
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsLocalize.infiniteLoopStatementProblemDescriptor().get();
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new InfiniteLoopStatementsVisitor();
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new InfiniteLoopStatementsVisitor();
-	}
+    private static class InfiniteLoopStatementsVisitor extends BaseInspectionVisitor {
 
-	private static class InfiniteLoopStatementsVisitor extends BaseInspectionVisitor
-	{
+        @Override
+        public void visitForStatement(@Nonnull PsiForStatement statement) {
+            super.visitForStatement(statement);
+            checkStatement(statement);
+        }
 
-		@Override
-		public void visitForStatement(@Nonnull PsiForStatement statement)
-		{
-			super.visitForStatement(statement);
-			checkStatement(statement);
-		}
+        @Override
+        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+            super.visitWhileStatement(statement);
+            checkStatement(statement);
+        }
 
-		@Override
-		public void visitWhileStatement(@Nonnull PsiWhileStatement statement)
-		{
-			super.visitWhileStatement(statement);
-			checkStatement(statement);
-		}
+        @Override
+        public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+            super.visitDoWhileStatement(statement);
+            checkStatement(statement);
+        }
 
-		@Override
-		public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement)
-		{
-			super.visitDoWhileStatement(statement);
-			checkStatement(statement);
-		}
-
-		private void checkStatement(PsiStatement statement)
-		{
-			if(ControlFlowUtils.statementMayCompleteNormally(statement))
-			{
-				return;
-			}
-			if(ControlFlowUtils.containsReturn(statement))
-			{
-				return;
-			}
-			if(ControlFlowUtils.containsSystemExit(statement))
-			{
-				return;
-			}
-			registerStatementError(statement);
-		}
-	}
+        private void checkStatement(PsiStatement statement) {
+            if (ControlFlowUtils.statementMayCompleteNormally(statement)) {
+                return;
+            }
+            if (ControlFlowUtils.containsReturn(statement)) {
+                return;
+            }
+            if (ControlFlowUtils.containsSystemExit(statement)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

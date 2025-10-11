@@ -25,88 +25,88 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ConstantConditionalExpressionInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantConditionalExpressionDisplayName().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiConditionalExpression expression = (PsiConditionalExpression)infos[0];
-    return InspectionGadgetsLocalize.constantConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
-  }
-
-  static String calculateReplacementExpression(
-    PsiConditionalExpression exp) {
-    final PsiExpression thenExpression = exp.getThenExpression();
-    final PsiExpression elseExpression = exp.getElseExpression();
-    final PsiExpression condition = exp.getCondition();
-    assert thenExpression != null;
-    assert elseExpression != null;
-    if (BoolUtils.isTrue(condition)) {
-      return thenExpression.getText();
-    }
-    else {
-      return elseExpression.getText();
-    }
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new ConstantConditionalFix();
-  }
-
-  private static class ConstantConditionalFix extends InspectionGadgetsFix {
-
+public class ConstantConditionalExpressionInspection extends BaseInspection {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.constantConditionalExpressionDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiConditionalExpression expression = (PsiConditionalExpression)descriptor.getPsiElement();
-      final String newExpression = calculateReplacementExpression(expression);
-      replaceExpression(expression, newExpression);
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantConditionalExpressionVisitor();
-  }
-
-  private static class ConstantConditionalExpressionVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitConditionalExpression(PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      final PsiExpression condition = expression.getCondition();
-      final PsiExpression thenExpression = expression.getThenExpression();
-      if (thenExpression == null) {
-        return;
-      }
-      final PsiExpression elseExpression = expression.getElseExpression();
-      if (elseExpression == null) {
-        return;
-      }
-      if (BoolUtils.isFalse(condition) || BoolUtils.isTrue(condition)) {
-        registerError(expression, expression);
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
+        return InspectionGadgetsLocalize.constantConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
     }
-  }
+
+    static String calculateReplacementExpression(
+        PsiConditionalExpression exp
+    ) {
+        final PsiExpression thenExpression = exp.getThenExpression();
+        final PsiExpression elseExpression = exp.getElseExpression();
+        final PsiExpression condition = exp.getCondition();
+        assert thenExpression != null;
+        assert elseExpression != null;
+        if (BoolUtils.isTrue(condition)) {
+            return thenExpression.getText();
+        }
+        else {
+            return elseExpression.getText();
+        }
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new ConstantConditionalFix();
+    }
+
+    private static class ConstantConditionalFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+            final String newExpression = calculateReplacementExpression(expression);
+            replaceExpression(expression, newExpression);
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantConditionalExpressionVisitor();
+    }
+
+    private static class ConstantConditionalExpressionVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitConditionalExpression(PsiConditionalExpression expression) {
+            super.visitConditionalExpression(expression);
+            final PsiExpression condition = expression.getCondition();
+            final PsiExpression thenExpression = expression.getThenExpression();
+            if (thenExpression == null) {
+                return;
+            }
+            final PsiExpression elseExpression = expression.getElseExpression();
+            if (elseExpression == null) {
+                return;
+            }
+            if (BoolUtils.isFalse(condition) || BoolUtils.isTrue(condition)) {
+                registerError(expression, expression);
+            }
+        }
+    }
 }

@@ -13,155 +13,127 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.impl.ig.classlayout;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.project.Project;
-import consulo.util.concurrent.AsyncResult;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameterList;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.util.concurrent.AsyncResult;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
-public class PublicConstructorInspection extends BaseInspection
-{
+public class PublicConstructorInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.publicConstructorDisplayName();
+    }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.publicConstructorDisplayName().get();
-	}
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return (Boolean) infos[0]
+            ? InspectionGadgetsLocalize.publicDefaultConstructorProblemDescriptor().get()
+            : InspectionGadgetsLocalize.publicConstructorProblemDescriptor().get();
+    }
 
-	@Nonnull
-	@Override
-	protected String buildErrorString(Object... infos)
-	{
-		return (Boolean)infos[0]
-			? InspectionGadgetsLocalize.publicDefaultConstructorProblemDescriptor().get()
-			: InspectionGadgetsLocalize.publicConstructorProblemDescriptor().get();
-	}
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
 
-	@Override
-	protected boolean buildQuickFixesOnlyForOnTheFlyErrors()
-	{
-		return true;
-	}
+    @Nullable
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ReplaceConstructorWithFactoryMethodFix();
+    }
 
-	@Nullable
-	@Override
-	protected InspectionGadgetsFix buildFix(Object... infos)
-	{
-		return new ReplaceConstructorWithFactoryMethodFix();
-	}
+    private class ReplaceConstructorWithFactoryMethodFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.publicConstructorQuickfix();
+        }
 
-	private class ReplaceConstructorWithFactoryMethodFix extends InspectionGadgetsFix
-	{
+        @Override
+        protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class, PsiMethod.class);
+            final AsyncResult<DataContext> context = DataManager.getInstance().getDataContextFromFocus();
+            context.doWhenDone(dataContext -> {
+                final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+                final RefactoringActionHandler handler = factory.createReplaceConstructorWithFactoryHandler();
+                handler.invoke(project, new PsiElement[]{element}, dataContext);
+            });
+        }
+    }
 
-		@Nonnull
-		@Override
-		public String getName()
-		{
-			return InspectionGadgetsLocalize.publicConstructorQuickfix().get();
-		}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new PublicConstructorVisitor();
+    }
 
-		@Override
-		protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException
-		{
-			final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class, PsiMethod.class);
-			final AsyncResult<DataContext> context = DataManager.getInstance().getDataContextFromFocus();
-			context.doWhenDone(dataContext -> {
-				final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
-				final RefactoringActionHandler handler = factory.createReplaceConstructorWithFactoryHandler();
-				handler.invoke(project, new PsiElement[]{element}, dataContext);
-			});
-		}
-	}
+    private static class PublicConstructorVisitor extends BaseInspectionVisitor {
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new PublicConstructorVisitor();
-	}
+        @Override
+        public void visitMethod(PsiMethod method) {
+            super.visitMethod(method);
+            if (!method.isConstructor()) {
+                return;
+            }
+            if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (SerializationUtils.isExternalizable(aClass)) {
+                final PsiParameterList parameterList = method.getParameterList();
+                if (parameterList.getParametersCount() == 0) {
+                    return;
+                }
+            }
+            registerMethodError(method, Boolean.FALSE);
+        }
 
-	private static class PublicConstructorVisitor extends BaseInspectionVisitor
-	{
-
-		@Override
-		public void visitMethod(PsiMethod method)
-		{
-			super.visitMethod(method);
-			if(!method.isConstructor())
-			{
-				return;
-			}
-			if(!method.hasModifierProperty(PsiModifier.PUBLIC))
-			{
-				return;
-			}
-			final PsiClass aClass = method.getContainingClass();
-			if(aClass == null || aClass.hasModifierProperty(PsiModifier.ABSTRACT))
-			{
-				return;
-			}
-			if(SerializationUtils.isExternalizable(aClass))
-			{
-				final PsiParameterList parameterList = method.getParameterList();
-				if(parameterList.getParametersCount() == 0)
-				{
-					return;
-				}
-			}
-			registerMethodError(method, Boolean.FALSE);
-		}
-
-		@Override
-		public void visitClass(PsiClass aClass)
-		{
-			super.visitClass(aClass);
-			if(aClass.isInterface() || aClass.isEnum())
-			{
-				return;
-			}
-			if(!aClass.hasModifierProperty(PsiModifier.PUBLIC) || aClass.hasModifierProperty(PsiModifier.ABSTRACT))
-			{
-				return;
-			}
-			final PsiMethod[] constructors = aClass.getConstructors();
-			if(constructors.length > 0)
-			{
-				return;
-			}
-			if(SerializationUtils.isExternalizable(aClass))
-			{
-				return;
-			}
-			registerClassError(aClass, Boolean.TRUE);
-		}
-	}
+        @Override
+        public void visitClass(PsiClass aClass) {
+            super.visitClass(aClass);
+            if (aClass.isInterface() || aClass.isEnum()) {
+                return;
+            }
+            if (!aClass.hasModifierProperty(PsiModifier.PUBLIC) || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final PsiMethod[] constructors = aClass.getConstructors();
+            if (constructors.length > 0) {
+                return;
+            }
+            if (SerializationUtils.isExternalizable(aClass)) {
+                return;
+            }
+            registerClassError(aClass, Boolean.TRUE);
+        }
+    }
 }

@@ -18,26 +18,28 @@ package com.intellij.java.impl.ig.cloneable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CloneCallsSuperCloneInspection extends BaseInspection {
     @Nonnull
     @Override
+    @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CloneDoesntCallSuperClone";
     }
 
     @Nonnull
     @Override
-    public String getDisplayName() {
-        return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneDisplayName();
     }
 
     @Nonnull

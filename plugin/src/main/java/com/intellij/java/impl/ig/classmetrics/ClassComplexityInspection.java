@@ -21,82 +21,85 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
-public class ClassComplexityInspection
-  extends ClassMetricInspection {
+public class ClassComplexityInspection extends ClassMetricInspection {
+    private static final int DEFAULT_COMPLEXITY_LIMIT = 80;
 
-  private static final int DEFAULT_COMPLEXITY_LIMIT = 80;
-
-  @Nonnull
-  public String getID() {
-    return "OverlyComplexClass";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.overlyComplexClassDisplayName().get();
-  }
-
-  protected int getDefaultLimit() {
-    return DEFAULT_COMPLEXITY_LIMIT;
-  }
-
-  protected String getConfigurationLabel() {
-    return InspectionGadgetsLocalize.cyclomaticComplexityLimitOption().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Integer totalComplexity = (Integer)infos[0];
-    return InspectionGadgetsLocalize.overlyComplexClassProblemDescriptor(totalComplexity).get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassComplexityVisitor();
-  }
-
-  private class ClassComplexityVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // note: no call to super
-      final int totalComplexity = calculateTotalComplexity(aClass);
-      if (totalComplexity <= getLimit()) {
-        return;
-      }
-      registerClassError(aClass, Integer.valueOf(totalComplexity));
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "OverlyComplexClass";
     }
 
-    private int calculateTotalComplexity(PsiClass aClass) {
-      final PsiMethod[] methods = aClass.getMethods();
-      int totalComplexity = calculateComplexityForMethods(methods);
-      totalComplexity += calculateInitializerComplexity(aClass);
-      return totalComplexity;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.overlyComplexClassDisplayName();
     }
 
-    private int calculateInitializerComplexity(PsiClass aClass) {
-      final ComplexityVisitor visitor = new ComplexityVisitor();
-      int complexity = 0;
-      final PsiClassInitializer[] initializers = aClass.getInitializers();
-      for (final PsiClassInitializer initializer : initializers) {
-        visitor.reset();
-        initializer.accept(visitor);
-        complexity += visitor.getComplexity();
-      }
-      return complexity;
+    protected int getDefaultLimit() {
+        return DEFAULT_COMPLEXITY_LIMIT;
     }
 
-    private int calculateComplexityForMethods(PsiMethod[] methods) {
-      final ComplexityVisitor visitor = new ComplexityVisitor();
-      int complexity = 0;
-      for (final PsiMethod method : methods) {
-        visitor.reset();
-        method.accept(visitor);
-        complexity += visitor.getComplexity();
-      }
-      return complexity;
+    protected String getConfigurationLabel() {
+        return InspectionGadgetsLocalize.cyclomaticComplexityLimitOption().get();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Integer totalComplexity = (Integer) infos[0];
+        return InspectionGadgetsLocalize.overlyComplexClassProblemDescriptor(totalComplexity).get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassComplexityVisitor();
+    }
+
+    private class ClassComplexityVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // note: no call to super
+            final int totalComplexity = calculateTotalComplexity(aClass);
+            if (totalComplexity <= getLimit()) {
+                return;
+            }
+            registerClassError(aClass, Integer.valueOf(totalComplexity));
+        }
+
+        private int calculateTotalComplexity(PsiClass aClass) {
+            final PsiMethod[] methods = aClass.getMethods();
+            int totalComplexity = calculateComplexityForMethods(methods);
+            totalComplexity += calculateInitializerComplexity(aClass);
+            return totalComplexity;
+        }
+
+        private int calculateInitializerComplexity(PsiClass aClass) {
+            final ComplexityVisitor visitor = new ComplexityVisitor();
+            int complexity = 0;
+            final PsiClassInitializer[] initializers = aClass.getInitializers();
+            for (final PsiClassInitializer initializer : initializers) {
+                visitor.reset();
+                initializer.accept(visitor);
+                complexity += visitor.getComplexity();
+            }
+            return complexity;
+        }
+
+        private int calculateComplexityForMethods(PsiMethod[] methods) {
+            final ComplexityVisitor visitor = new ComplexityVisitor();
+            int complexity = 0;
+            for (final PsiMethod method : methods) {
+                visitor.reset();
+                method.accept(visitor);
+                complexity += visitor.getComplexity();
+            }
+            return complexity;
+        }
+    }
 }

@@ -21,42 +21,42 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SingletonInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.singletonDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.singletonProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean runForWholeFile() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SingletonVisitor();
-  }
-
-  private static class SingletonVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.singletonDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!SingletonUtil.isSingleton(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.singletonProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public boolean runForWholeFile() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SingletonVisitor();
+    }
+
+    private static class SingletonVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!SingletonUtil.isSingleton(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

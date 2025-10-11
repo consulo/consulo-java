@@ -23,81 +23,83 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
-public class AnonymousClassMethodCountInspection
-  extends ClassMetricInspection {
+public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
+    private static final int DEFAULT_METHOD_COUNT_LIMIT = 1;
 
-  private static final int DEFAULT_METHOD_COUNT_LIMIT = 1;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "AnonymousInnerClassWithTooManyMethods";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsDisplayName().get();
-  }
-
-  @Override
-  protected int getDefaultLimit() {
-    return DEFAULT_METHOD_COUNT_LIMIT;
-  }
-
-  @Override
-  protected String getConfigurationLabel() {
-    return InspectionGadgetsLocalize.methodCountLimitOption().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveAnonymousToInnerClassFix();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Integer count = (Integer)infos[0];
-    return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsProblemDescriptor(count).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AnonymousClassMethodCountVisitor();
-  }
-
-  private class AnonymousClassMethodCountVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass psiClass) {
-      // no call to super, to prevent double counting
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "AnonymousInnerClassWithTooManyMethods";
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsDisplayName();
     }
 
     @Override
-    public void visitAnonymousClass(
-      @Nonnull PsiAnonymousClass aClass) {
-      if (aClass instanceof PsiEnumConstantInitializer) {
-        return;
-      }
-      final int totalMethodCount = calculateTotalMethodCount(aClass);
-      if (totalMethodCount <= getLimit()) {
-        return;
-      }
-      registerClassError(aClass, Integer.valueOf(totalMethodCount));
+    protected int getDefaultLimit() {
+        return DEFAULT_METHOD_COUNT_LIMIT;
     }
 
-    private int calculateTotalMethodCount(PsiClass aClass) {
-      return aClass.getMethods().length - aClass.getConstructors().length;
+    @Override
+    protected String getConfigurationLabel() {
+        return InspectionGadgetsLocalize.methodCountLimitOption().get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveAnonymousToInnerClassFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Integer count = (Integer) infos[0];
+        return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsProblemDescriptor(count).get();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AnonymousClassMethodCountVisitor();
+    }
+
+    private class AnonymousClassMethodCountVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass psiClass) {
+            // no call to super, to prevent double counting
+        }
+
+        @Override
+        public void visitAnonymousClass(
+            @Nonnull PsiAnonymousClass aClass
+        ) {
+            if (aClass instanceof PsiEnumConstantInitializer) {
+                return;
+            }
+            final int totalMethodCount = calculateTotalMethodCount(aClass);
+            if (totalMethodCount <= getLimit()) {
+                return;
+            }
+            registerClassError(aClass, Integer.valueOf(totalMethodCount));
+        }
+
+        private int calculateTotalMethodCount(PsiClass aClass) {
+            return aClass.getMethods().length - aClass.getConstructors().length;
+        }
+    }
 }

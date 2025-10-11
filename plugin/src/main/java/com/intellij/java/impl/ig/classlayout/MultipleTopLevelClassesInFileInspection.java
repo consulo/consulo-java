@@ -24,57 +24,58 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MultipleTopLevelClassesInFileInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.multipleTopLevelClassesInFileDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.multipleTopLevelClassesInFileProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveClassFix();
-  }
-
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new MultipleTopLevelClassesInFileVisitor();
-  }
-
-  private static class MultipleTopLevelClassesInFileVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!(aClass.getParent() instanceof PsiJavaFile)) {
-        return;
-      }
-      final PsiJavaFile file = (PsiJavaFile)aClass.getParent();
-      if (file == null) {
-        return;
-      }
-      int numClasses = 0;
-      final PsiElement[] children = file.getChildren();
-      for (final PsiElement child : children) {
-        if (child instanceof PsiClass) {
-          numClasses++;
-        }
-      }
-      if (numClasses <= 1) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.multipleTopLevelClassesInFileDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.multipleTopLevelClassesInFileProblemDescriptor().get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveClassFix();
+    }
+
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new MultipleTopLevelClassesInFileVisitor();
+    }
+
+    private static class MultipleTopLevelClassesInFileVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!(aClass.getParent() instanceof PsiJavaFile)) {
+                return;
+            }
+            final PsiJavaFile file = (PsiJavaFile) aClass.getParent();
+            if (file == null) {
+                return;
+            }
+            int numClasses = 0;
+            final PsiElement[] children = file.getChildren();
+            for (final PsiElement child : children) {
+                if (child instanceof PsiClass) {
+                    numClasses++;
+                }
+            }
+            if (numClasses <= 1) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }
