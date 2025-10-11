@@ -25,52 +25,52 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalPrivateMethodInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalPrivateMethodDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalPrivateMethodProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalPrivateMethodVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RemoveModifierFix((String)infos[0]);
-  }
-
-  private static class FinalPrivateMethodVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalPrivateMethodDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //no call to super, so we don't drill into anonymous classes
-      if (!method.hasModifierProperty(PsiModifier.FINAL)
-          || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      if (AnnotationUtil.isAnnotated(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS, false) && method.isVarArgs()) {
-        return;
-      }
-      registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalPrivateMethodProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalPrivateMethodVisitor();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RemoveModifierFix((String) infos[0]);
+    }
+
+    private static class FinalPrivateMethodVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //no call to super, so we don't drill into anonymous classes
+            if (!method.hasModifierProperty(PsiModifier.FINAL)
+                || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            if (AnnotationUtil.isAnnotated(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS, false) && method.isVarArgs()) {
+                return;
+            }
+            registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+        }
+    }
 }

@@ -23,41 +23,42 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LimitedScopeInnerClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.limitedScopeInnerClassDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.limitedScopeInnerClassProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveClassFix();
-  }
-
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new LimitedScopeInnerClassVisitor();
-  }
-
-  private static class LimitedScopeInnerClassVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.getParent() instanceof PsiDeclarationStatement) {
-        registerClassError(aClass);
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.limitedScopeInnerClassDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.limitedScopeInnerClassProblemDescriptor().get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveClassFix();
+    }
+
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new LimitedScopeInnerClassVisitor();
+    }
+
+    private static class LimitedScopeInnerClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.getParent() instanceof PsiDeclarationStatement) {
+                registerClassError(aClass);
+            }
+        }
+    }
 }

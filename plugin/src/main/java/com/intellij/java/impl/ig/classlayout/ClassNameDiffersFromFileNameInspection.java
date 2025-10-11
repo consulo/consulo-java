@@ -26,88 +26,74 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
-public class ClassNameDiffersFromFileNameInspection extends BaseInspection
-{
+public class ClassNameDiffersFromFileNameInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classNameDiffersFromFileNameDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.classNameDiffersFromFileNameDisplayName().get();
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.classNameDiffersFromFileNameProblemDescriptor().get();
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsLocalize.classNameDiffersFromFileNameProblemDescriptor().get();
-	}
+    @Override
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiJavaFile file = (PsiJavaFile) infos[0];
+        final String fileName = file.getName();
+        final int prefixIndex = fileName.indexOf((int) '.');
+        final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
+        final PsiClass[] classes = file.getClasses();
+        for (PsiClass psiClass : classes) {
+            final String className = psiClass.getName();
+            if (filenameWithoutPrefix.equals(className)) {
+                return null;
+            }
+        }
+        return new RenameFix(filenameWithoutPrefix);
+    }
 
-	@Override
-	@Nullable
-	protected InspectionGadgetsFix buildFix(Object... infos)
-	{
-		final PsiJavaFile file = (PsiJavaFile) infos[0];
-		final String fileName = file.getName();
-		final int prefixIndex = fileName.indexOf((int) '.');
-		final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
-		final PsiClass[] classes = file.getClasses();
-		for(PsiClass psiClass : classes)
-		{
-			final String className = psiClass.getName();
-			if(filenameWithoutPrefix.equals(className))
-			{
-				return null;
-			}
-		}
-		return new RenameFix(filenameWithoutPrefix);
-	}
+    @Override
+    public boolean shouldInspect(PsiFile file) {
+        return !FileTypeUtils.isInServerPageFile(file);
+    }
 
-	@Override
-	public boolean shouldInspect(PsiFile file)
-	{
-		return !FileTypeUtils.isInServerPageFile(file);
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassNameDiffersFromFileNameVisitor();
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new ClassNameDiffersFromFileNameVisitor();
-	}
+    private static class ClassNameDiffersFromFileNameVisitor extends BaseInspectionVisitor {
 
-	private static class ClassNameDiffersFromFileNameVisitor extends BaseInspectionVisitor
-	{
-
-		@Override
-		public void visitClass(@Nonnull PsiClass aClass)
-		{
-			final PsiElement parent = aClass.getParent();
-			if(!(parent instanceof PsiJavaFile))
-			{
-				return;
-			}
-			final PsiJavaFile file = (PsiJavaFile) parent;
-			final String className = aClass.getName();
-			if(className == null)
-			{
-				return;
-			}
-			final String fileName = file.getName();
-			final int prefixIndex = fileName.indexOf((int) '.');
-			if(prefixIndex < 0)
-			{
-				return;
-			}
-			final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
-			if(className.equals(filenameWithoutPrefix))
-			{
-				return;
-			}
-			registerClassError(aClass, file);
-		}
-	}
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            final PsiElement parent = aClass.getParent();
+            if (!(parent instanceof PsiJavaFile)) {
+                return;
+            }
+            final PsiJavaFile file = (PsiJavaFile) parent;
+            final String className = aClass.getName();
+            if (className == null) {
+                return;
+            }
+            final String fileName = file.getName();
+            final int prefixIndex = fileName.indexOf((int) '.');
+            if (prefixIndex < 0) {
+                return;
+            }
+            final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
+            if (className.equals(filenameWithoutPrefix)) {
+                return;
+            }
+            registerClassError(aClass, file);
+        }
+    }
 }

@@ -24,44 +24,46 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ObjectEqualsNullInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.objectEqualsNullDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.objectEqualsNullProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ObjectEqualsNullVisitor();
-  }
-
-  private static class ObjectEqualsNullVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
-      super.visitMethodCallExpression(call);
-      if (!MethodCallUtils.isEqualsCall(call)) {
-        return;
-      }
-      final PsiExpressionList argumentList = call.getArgumentList();
-      final PsiExpression[] args = argumentList.getExpressions();
-      if (args.length == 0 || !ExpressionUtils.isNullLiteral(args[0])) {
-        return;
-      }
-      registerError(args[0]);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.objectEqualsNullDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.objectEqualsNullProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ObjectEqualsNullVisitor();
+    }
+
+    private static class ObjectEqualsNullVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression call
+        ) {
+            super.visitMethodCallExpression(call);
+            if (!MethodCallUtils.isEqualsCall(call)) {
+                return;
+            }
+            final PsiExpressionList argumentList = call.getArgumentList();
+            final PsiExpression[] args = argumentList.getExpressions();
+            if (args.length == 0 || !ExpressionUtils.isNullLiteral(args[0])) {
+                return;
+            }
+            registerError(args[0]);
+        }
+    }
 }

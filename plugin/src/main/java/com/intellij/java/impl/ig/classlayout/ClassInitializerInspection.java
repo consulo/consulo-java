@@ -23,46 +23,50 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ClassInitializerInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "NonStaticInitializer";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "NonStaticInitializer";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classInitializerDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classInitializerDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.classInitializerProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ChangeModifierFix(PsiModifier.STATIC);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassInitializerVisitor();
-  }
-
-  private static class ClassInitializerVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.classInitializerProblemDescriptor().get();
+    }
 
     @Override
-    public void visitClassInitializer(PsiClassInitializer initializer) {
-      super.visitClassInitializer(initializer);
-      if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      registerClassInitializerError(initializer);
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ChangeModifierFix(PsiModifier.STATIC);
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassInitializerVisitor();
+    }
+
+    private static class ClassInitializerVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClassInitializer(PsiClassInitializer initializer) {
+            super.visitClassInitializer(initializer);
+            if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            registerClassInitializerError(initializer);
+        }
+    }
 }

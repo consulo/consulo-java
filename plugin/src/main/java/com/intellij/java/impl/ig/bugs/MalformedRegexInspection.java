@@ -27,6 +27,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.regex.Pattern;
@@ -34,69 +35,68 @@ import java.util.regex.PatternSyntaxException;
 
 @ExtensionImpl
 public class MalformedRegexInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.malformedRegularExpressionDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return infos.length == 0
-      ? InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor1().get()
-      : InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor2(infos[0]).get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MalformedRegexVisitor();
-  }
-
-  private static class MalformedRegexVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.malformedRegularExpressionDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList == null) {
-        return;
-      }
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length == 0) {
-        return;
-      }
-      final PsiExpression argument = arguments[0];
-      if (!ExpressionUtils.hasStringType(argument)) {
-        return;
-      }
-      if (!PsiUtil.isConstantExpression(argument)) {
-        return;
-      }
-      final PsiType regexType = argument.getType();
-      final String value = (String)ConstantExpressionUtil.computeCastTo(argument, regexType);
-      if (value == null) {
-        return;
-      }
-      if (!MethodCallUtils.isCallToRegexMethod(expression)) {
-        return;
-      }
-      //noinspection UnusedCatchParameter,ProhibitedExceptionCaught
-      try {
-        Pattern.compile(value);
-      }
-      catch (PatternSyntaxException e) {
-        registerError(argument, e.getDescription());
-      }
-      catch (NullPointerException e) {
-        registerError(argument); // due to a bug in the sun regex code
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return infos.length == 0
+            ? InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor1().get()
+            : InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor2(infos[0]).get();
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MalformedRegexVisitor();
+    }
+
+    private static class MalformedRegexVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList == null) {
+                return;
+            }
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length == 0) {
+                return;
+            }
+            final PsiExpression argument = arguments[0];
+            if (!ExpressionUtils.hasStringType(argument)) {
+                return;
+            }
+            if (!PsiUtil.isConstantExpression(argument)) {
+                return;
+            }
+            final PsiType regexType = argument.getType();
+            final String value = (String) ConstantExpressionUtil.computeCastTo(argument, regexType);
+            if (value == null) {
+                return;
+            }
+            if (!MethodCallUtils.isCallToRegexMethod(expression)) {
+                return;
+            }
+            //noinspection UnusedCatchParameter,ProhibitedExceptionCaught
+            try {
+                Pattern.compile(value);
+            }
+            catch (PatternSyntaxException e) {
+                registerError(argument, e.getDescription());
+            }
+            catch (NullPointerException e) {
+                registerError(argument); // due to a bug in the sun regex code
+            }
+        }
+    }
 }

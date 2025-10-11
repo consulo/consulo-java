@@ -27,85 +27,88 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class NonShortCircuitBooleanInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "NonShortCircuitBooleanExpression";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionProblemDescriptor().get();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new NonShortCircuitBooleanFix();
-  }
-
-  private static class NonShortCircuitBooleanFix
-    extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "NonShortCircuitBooleanExpression";
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionReplaceQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiPolyadicExpression expression = (PsiPolyadicExpression)descriptor.getPsiElement();
-      final IElementType tokenType = expression.getOperationTokenType();
-      final String operandText = getShortCircuitOperand(tokenType);
-      final PsiExpression[] operands = expression.getOperands();
-      final StringBuilder newExpression = new StringBuilder();
-      for (PsiExpression operand : operands) {
-        if (newExpression.length() != 0) {
-          newExpression.append(operandText);
-        }
-        newExpression.append(operand.getText());
-      }
-      replaceExpression(expression, newExpression.toString());
-    }
-
-    private static String getShortCircuitOperand(IElementType tokenType) {
-      if (tokenType.equals(JavaTokenType.AND)) {
-        return "&&";
-      }
-      else {
-        return "||";
-      }
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonShortCircuitBooleanVisitor();
-  }
-
-  private static class NonShortCircuitBooleanVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitPolyadicExpression(PsiPolyadicExpression expression) {
-      super.visitPolyadicExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.AND) && !tokenType.equals(JavaTokenType.OR)) {
-        return;
-      }
-      final PsiType type = expression.getType();
-      if (type == null) {
-        return;
-      }
-      if (!type.equals(PsiType.BOOLEAN)) {
-        return;
-      }
-      registerError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionProblemDescriptor().get();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new NonShortCircuitBooleanFix();
+    }
+
+    private static class NonShortCircuitBooleanFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionReplaceQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiPolyadicExpression expression = (PsiPolyadicExpression) descriptor.getPsiElement();
+            final IElementType tokenType = expression.getOperationTokenType();
+            final String operandText = getShortCircuitOperand(tokenType);
+            final PsiExpression[] operands = expression.getOperands();
+            final StringBuilder newExpression = new StringBuilder();
+            for (PsiExpression operand : operands) {
+                if (newExpression.length() != 0) {
+                    newExpression.append(operandText);
+                }
+                newExpression.append(operand.getText());
+            }
+            replaceExpression(expression, newExpression.toString());
+        }
+
+        private static String getShortCircuitOperand(IElementType tokenType) {
+            if (tokenType.equals(JavaTokenType.AND)) {
+                return "&&";
+            }
+            else {
+                return "||";
+            }
+        }
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonShortCircuitBooleanVisitor();
+    }
+
+    private static class NonShortCircuitBooleanVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
+            super.visitPolyadicExpression(expression);
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.AND) && !tokenType.equals(JavaTokenType.OR)) {
+                return;
+            }
+            final PsiType type = expression.getType();
+            if (type == null) {
+                return;
+            }
+            if (!type.equals(PsiType.BOOLEAN)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

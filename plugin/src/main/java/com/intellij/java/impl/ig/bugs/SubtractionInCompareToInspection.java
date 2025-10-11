@@ -26,39 +26,40 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SubtractionInCompareToInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.subtractionInComparetoDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.subtractionInComparetoProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SubtractionInCompareToVisitor();
-  }
-
-  private static class SubtractionInCompareToVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitPolyadicExpression(PsiPolyadicExpression expression) {
-      super.visitPolyadicExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.MINUS)) {
-        return;
-      }
-      final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
-      if (!MethodUtils.isCompareTo(method)) {
-        return;
-      }
-      registerError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.subtractionInComparetoDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.subtractionInComparetoProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SubtractionInCompareToVisitor();
+    }
+
+    private static class SubtractionInCompareToVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
+            super.visitPolyadicExpression(expression);
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.MINUS)) {
+                return;
+            }
+            final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
+            if (!MethodUtils.isCompareTo(method)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

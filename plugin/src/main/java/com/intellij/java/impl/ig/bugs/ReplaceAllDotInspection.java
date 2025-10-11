@@ -22,77 +22,78 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ReplaceAllDotInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.replaceAllDotDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.replaceAllDotProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReplaceAllDotVisitor();
-  }
-
-  private static class ReplaceAllDotVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.replaceAllDotDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      @NonNls final String methodName =
-        methodExpression.getReferenceName();
-      if (!"replaceAll".equals(methodName)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length != 2) {
-        return;
-      }
-      final PsiExpression argument = arguments[0];
-      if (!PsiUtil.isConstantExpression(argument)) {
-        return;
-      }
-      final PsiType argumentType = argument.getType();
-      if (argumentType == null) {
-        return;
-      }
-      final String canonicalText = argumentType.getCanonicalText();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
-        return;
-      }
-      final String argValue = (String)ConstantExpressionUtil.computeCastTo(argument, argumentType);
-      if (!".".equals(argValue)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      final String qualifiedName = containingClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.replaceAllDotProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReplaceAllDotVisitor();
+    }
+
+    private static class ReplaceAllDotVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression expression
+        ) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression =
+                expression.getMethodExpression();
+            @NonNls final String methodName =
+                methodExpression.getReferenceName();
+            if (!"replaceAll".equals(methodName)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length != 2) {
+                return;
+            }
+            final PsiExpression argument = arguments[0];
+            if (!PsiUtil.isConstantExpression(argument)) {
+                return;
+            }
+            final PsiType argumentType = argument.getType();
+            if (argumentType == null) {
+                return;
+            }
+            final String canonicalText = argumentType.getCanonicalText();
+            if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
+                return;
+            }
+            final String argValue = (String) ConstantExpressionUtil.computeCastTo(argument, argumentType);
+            if (!".".equals(argValue)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            final String qualifiedName = containingClass.getQualifiedName();
+            if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

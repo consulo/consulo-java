@@ -24,49 +24,49 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalMethodInFinalClassInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalMethodInFinalClassDisplayName().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalMethodInFinalClassVisitor();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalMethodInFinalClassProblemDescriptor().get();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RemoveModifierFix((String)infos[0]);
-  }
-
-  private static class FinalMethodInFinalClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalMethodInFinalClassDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!method.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null || containingClass.isEnum()) {
-        return;
-      }
-      if (!containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalMethodInFinalClassVisitor();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalMethodInFinalClassProblemDescriptor().get();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RemoveModifierFix((String) infos[0]);
+    }
+
+    private static class FinalMethodInFinalClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!method.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null || containingClass.isEnum()) {
+                return;
+            }
+            if (!containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+        }
+    }
 }

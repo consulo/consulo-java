@@ -27,59 +27,60 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringEqualityInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringComparisonDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringComparisonProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ObjectEqualityVisitor();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new EqualityToEqualsFix();
-  }
-
-  private static class ObjectEqualityVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      if (!ComparisonUtils.isEqualityComparison(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLOperand();
-      if (!ExpressionUtils.hasStringType(lhs)) {
-        return;
-      }
-      final PsiExpression rhs = expression.getROperand();
-      if (rhs == null || !ExpressionUtils.hasStringType(rhs)) {
-        return;
-      }
-      final String lhsText = lhs.getText();
-      if (PsiKeyword.NULL.equals(lhsText)) {
-        return;
-      }
-      final String rhsText = rhs.getText();
-      if (PsiKeyword.NULL.equals(rhsText)) {
-        return;
-      }
-      final PsiJavaToken sign = expression.getOperationSign();
-      registerError(sign);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringComparisonDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringComparisonProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ObjectEqualityVisitor();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new EqualityToEqualsFix();
+    }
+
+    private static class ObjectEqualityVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+            super.visitBinaryExpression(expression);
+            if (!ComparisonUtils.isEqualityComparison(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLOperand();
+            if (!ExpressionUtils.hasStringType(lhs)) {
+                return;
+            }
+            final PsiExpression rhs = expression.getROperand();
+            if (rhs == null || !ExpressionUtils.hasStringType(rhs)) {
+                return;
+            }
+            final String lhsText = lhs.getText();
+            if (PsiKeyword.NULL.equals(lhsText)) {
+                return;
+            }
+            final String rhsText = rhs.getText();
+            if (PsiKeyword.NULL.equals(rhsText)) {
+                return;
+            }
+            final PsiJavaToken sign = expression.getOperationSign();
+            registerError(sign);
+        }
+    }
 }
