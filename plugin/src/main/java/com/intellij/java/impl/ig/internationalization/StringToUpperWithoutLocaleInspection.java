@@ -25,80 +25,82 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "StringToUpperCaseOrToLowerCaseWithoutLocale";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiReferenceExpression methodExpression = (PsiReferenceExpression)infos[0];
-    final PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
-    if (annotatableQualifier == null) {
-      return null;
-    }
-    return new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableQualifier));
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringToUpperWithoutLocaleVisitor();
-  }
-
-  private static class StringToUpperWithoutLocaleVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      if (!HardcodedMethodConstants.TO_UPPER_CASE.equals(methodName) &&
-          !HardcodedMethodConstants.TO_LOWER_CASE.equals(methodName)) {
-        return;
-      }
-      if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() == 1) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      final String className = containingClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
-        return;
-      }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
-        return;
-      }
-      registerMethodCallError(expression, methodExpression);
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "StringToUpperCaseOrToLowerCaseWithoutLocale";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleProblemDescriptor().get();
+    }
+
+    @Override
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiReferenceExpression methodExpression = (PsiReferenceExpression) infos[0];
+        final PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
+        if (annotatableQualifier == null) {
+            return null;
+        }
+        return new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableQualifier));
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringToUpperWithoutLocaleVisitor();
+    }
+
+    private static class StringToUpperWithoutLocaleVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!HardcodedMethodConstants.TO_UPPER_CASE.equals(methodName) &&
+                !HardcodedMethodConstants.TO_LOWER_CASE.equals(methodName)) {
+                return;
+            }
+            if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() == 1) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            final String className = containingClass.getQualifiedName();
+            if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+                return;
+            }
+            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
+                return;
+            }
+            registerMethodCallError(expression, methodExpression);
+        }
+    }
 }

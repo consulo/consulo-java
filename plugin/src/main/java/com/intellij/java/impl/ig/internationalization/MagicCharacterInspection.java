@@ -24,66 +24,63 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MagicCharacterInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.magicCharacterDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.magicCharacterProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new IntroduceConstantFix();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CharacterLiteralsShouldBeExplicitlyDeclaredVisitor();
-  }
-
-  private static class CharacterLiteralsShouldBeExplicitlyDeclaredVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.magicCharacterDisplayName();
+    }
 
     @Override
-    public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
-      super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
-      if (type == null) {
-        return;
-      }
-      if (!type.equals(PsiType.CHAR)) {
-        return;
-      }
-      final String text = expression.getText();
-      if (text == null) {
-        return;
-      }
-      if (text.equals(" ")) {
-        return;
-      }
-      if (ExpressionUtils.isDeclaredConstant(expression)) {
-        return;
-      }
-      if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.magicCharacterProblemDescriptor().get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new IntroduceConstantFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CharacterLiteralsShouldBeExplicitlyDeclaredVisitor();
+    }
+
+    private static class CharacterLiteralsShouldBeExplicitlyDeclaredVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+            super.visitLiteralExpression(expression);
+            final PsiType type = expression.getType();
+            if (type == null) {
+                return;
+            }
+            if (!type.equals(PsiType.CHAR)) {
+                return;
+            }
+            final String text = expression.getText();
+            if (text == null) {
+                return;
+            }
+            if (text.equals(" ")) {
+                return;
+            }
+            if (ExpressionUtils.isDeclaredConstant(expression)) {
+                return;
+            }
+            if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

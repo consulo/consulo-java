@@ -31,69 +31,69 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreClassesWithNoConstructors = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreClassesWithNoConstructors = true;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classWithoutNoArgConstructorDisplayName().get();
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.classWithoutNoArgConstructorIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreClassesWithNoConstructors");
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.classWithoutNoArgConstructorProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassWithoutNoArgConstructorVisitor();
-  }
-
-  private class ClassWithoutNoArgConstructorVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isEnum() ||
-          aClass.isAnnotationType()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter) {
-        return;
-      }
-      if (m_ignoreClassesWithNoConstructors &&
-          !classHasConstructor(aClass)) {
-        return;
-      }
-      if (classHasNoArgConstructor(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classWithoutNoArgConstructorDisplayName();
     }
 
-    private boolean classHasNoArgConstructor(PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      for (final PsiMethod constructor : constructors) {
-        final PsiParameterList parameterList =
-          constructor.getParameterList();
-        if (parameterList.getParametersCount() == 0) {
-          return true;
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.classWithoutNoArgConstructorIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreClassesWithNoConstructors");
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.classWithoutNoArgConstructorProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ClassWithoutNoArgConstructorVisitor();
+    }
+
+    private class ClassWithoutNoArgConstructorVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isEnum() ||
+                aClass.isAnnotationType()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter) {
+                return;
+            }
+            if (m_ignoreClassesWithNoConstructors &&
+                !classHasConstructor(aClass)) {
+                return;
+            }
+            if (classHasNoArgConstructor(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
         }
-      }
-      return false;
-    }
 
-    private boolean classHasConstructor(PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      return constructors.length != 0;
+        private boolean classHasNoArgConstructor(PsiClass aClass) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            for (final PsiMethod constructor : constructors) {
+                final PsiParameterList parameterList =
+                    constructor.getParameterList();
+                if (parameterList.getParametersCount() == 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private boolean classHasConstructor(PsiClass aClass) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            return constructors.length != 0;
+        }
     }
-  }
 }

@@ -8,84 +8,78 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import java.util.Arrays;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 @ExtensionImpl
-public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extends BaseInspection
-{
-	private static final String[] STATIC_CONFIGS = {
-			"org.junit.BeforeClass",
-			"org.junit.AfterClass",
-			"org.junit.jupiter.api.BeforeAll",
-			"org.junit.jupiter.api.AfterAll"
-	};
+public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extends BaseInspection {
+    private static final String[] STATIC_CONFIGS = {
+        "org.junit.BeforeClass",
+        "org.junit.AfterClass",
+        "org.junit.jupiter.api.BeforeAll",
+        "org.junit.jupiter.api.AfterAll"
+    };
 
-	protected static boolean isJunit4Annotation(String annotation)
-	{
-		return annotation.endsWith("Class");
-	}
+    protected static boolean isJunit4Annotation(String annotation) {
+        return annotation.endsWith("Class");
+    }
 
-	@Override
-	@Nonnull
-	public String getID()
-	{
-		return "BeforeOrAfterWithIncorrectSignature";
-	}
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "BeforeOrAfterWithIncorrectSignature";
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgDisplayName().get();
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgProblemDescriptor(infos[1]).get();
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgProblemDescriptor(infos[1]).get();
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new BeforeClassOrAfterClassIsPublicStaticVoidNoArgVisitor();
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new BeforeClassOrAfterClassIsPublicStaticVoidNoArgVisitor();
+    }
 
-	private static class BeforeClassOrAfterClassIsPublicStaticVoidNoArgVisitor extends BaseInspectionVisitor
-	{
+    private static class BeforeClassOrAfterClassIsPublicStaticVoidNoArgVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super;
+            String annotation = Arrays.stream(STATIC_CONFIGS)
+                .filter(anno -> AnnotationUtil.isAnnotated(method, anno, CHECK_HIERARCHY))
+                .findFirst()
+                .orElse(null);
+            if (annotation == null) {
+                return;
+            }
+            final PsiType returnType = method.getReturnType();
+            if (returnType == null) {
+                return;
+            }
+            final PsiClass targetClass = method.getContainingClass();
+            if (targetClass == null) {
+                return;
+            }
 
-		@Override
-		public void visitMethod(@Nonnull PsiMethod method)
-		{
-			//note: no call to super;
-			String annotation = Arrays.stream(STATIC_CONFIGS).filter(anno -> AnnotationUtil.isAnnotated(method, anno, CHECK_HIERARCHY)).findFirst().orElse(null);
-			if(annotation == null)
-			{
-				return;
-			}
-			final PsiType returnType = method.getReturnType();
-			if(returnType == null)
-			{
-				return;
-			}
-			final PsiClass targetClass = method.getContainingClass();
-			if(targetClass == null)
-			{
-				return;
-			}
-
-			final PsiParameterList parameterList = method.getParameterList();
-			boolean junit4Annotation = isJunit4Annotation(annotation);
-			if(junit4Annotation && (parameterList.getParametersCount() != 0 || !method.hasModifierProperty(PsiModifier.PUBLIC)) || !returnType.equals(PsiType.VOID) || !method.hasModifierProperty
-					(PsiModifier.STATIC) && (junit4Annotation || !TestUtils.testInstancePerClass(targetClass)))
-			{
-				registerMethodError(method, method, annotation);
-			}
-		}
-	}
+            final PsiParameterList parameterList = method.getParameterList();
+            boolean junit4Annotation = isJunit4Annotation(annotation);
+            if (junit4Annotation && (parameterList.getParametersCount() != 0 || !method.isPublic())
+                || !PsiType.VOID.equals(returnType)
+                || !method.isStatic() && (junit4Annotation || !TestUtils.testInstancePerClass(targetClass))) {
+                registerMethodError(method, method, annotation);
+            }
+        }
+    }
 }

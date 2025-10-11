@@ -20,33 +20,34 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EnumClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.enumeratedClassDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.enumeratedClassProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new EnumClassVisitor();
-  }
-
-  private static class EnumClassVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.isEnum()) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.enumeratedClassDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.enumeratedClassProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new EnumClassVisitor();
+    }
+
+    private static class EnumClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.isEnum()) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

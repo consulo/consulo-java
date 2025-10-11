@@ -21,63 +21,66 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "BeforeOrAfterWithIncorrectSignature";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "BeforeOrAfterWithIncorrectSignature";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new BeforeOrAfterIsPublicVoidNoArgVisitor();
-  }
-
-  private static class BeforeOrAfterIsPublicVoidNoArgVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super;
-      if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
-        return;
-      }
-      final PsiType returnType = method.getReturnType();
-      if (returnType == null) {
-        return;
-      }
-      final PsiClass targetClass = method.getContainingClass();
-      if (targetClass == null) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        registerMethodError(method);
-      }
-      else if (!returnType.equals(PsiType.VOID)) {
-        registerMethodError(method);
-      }
-      else if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
-        registerMethodError(method);
-      }
-      else if (method.hasModifierProperty(PsiModifier.STATIC)) {
-        registerMethodError(method);
-      }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new BeforeOrAfterIsPublicVoidNoArgVisitor();
+    }
+
+    private static class BeforeOrAfterIsPublicVoidNoArgVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super;
+            if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
+                return;
+            }
+            final PsiType returnType = method.getReturnType();
+            if (returnType == null) {
+                return;
+            }
+            final PsiClass targetClass = method.getContainingClass();
+            if (targetClass == null) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                registerMethodError(method);
+            }
+            else if (!returnType.equals(PsiType.VOID)) {
+                registerMethodError(method);
+            }
+            else if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+                registerMethodError(method);
+            }
+            else if (method.hasModifierProperty(PsiModifier.STATIC)) {
+                registerMethodError(method);
+            }
+        }
+    }
 }

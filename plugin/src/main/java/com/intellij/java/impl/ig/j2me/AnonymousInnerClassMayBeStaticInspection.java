@@ -24,57 +24,58 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveAnonymousToInnerClassFix(
-      InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassQuickfix().get()
-    );
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AnonymousInnerClassMayBeStaticVisitor();
-  }
-
-  private static class AnonymousInnerClassMayBeStaticVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!(aClass instanceof PsiAnonymousClass)) {
-        return;
-      }
-      if (aClass instanceof PsiEnumConstantInitializer) {
-        return;
-      }
-      final PsiMember containingMember =
-        PsiTreeUtil.getParentOfType(aClass, PsiMember.class);
-      if (containingMember == null ||
-          containingMember.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiAnonymousClass anAnonymousClass =
-        (PsiAnonymousClass)aClass;
-      final InnerClassReferenceVisitor visitor =
-        new InnerClassReferenceVisitor(anAnonymousClass);
-      anAnonymousClass.accept(visitor);
-      if (!visitor.canInnerClassBeStatic()) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassProblemDescriptor().get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveAnonymousToInnerClassFix(
+            InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassQuickfix().get()
+        );
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new AnonymousInnerClassMayBeStaticVisitor();
+    }
+
+    private static class AnonymousInnerClassMayBeStaticVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!(aClass instanceof PsiAnonymousClass)) {
+                return;
+            }
+            if (aClass instanceof PsiEnumConstantInitializer) {
+                return;
+            }
+            final PsiMember containingMember =
+                PsiTreeUtil.getParentOfType(aClass, PsiMember.class);
+            if (containingMember == null ||
+                containingMember.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiAnonymousClass anAnonymousClass =
+                (PsiAnonymousClass) aClass;
+            final InnerClassReferenceVisitor visitor =
+                new InnerClassReferenceVisitor(anAnonymousClass);
+            anAnonymousClass.accept(visitor);
+            if (!visitor.canInnerClassBeStatic()) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

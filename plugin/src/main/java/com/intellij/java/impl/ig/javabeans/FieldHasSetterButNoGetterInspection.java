@@ -24,43 +24,43 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FieldHasSetterButNoGetterInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.fieldHasSetterButNoGetterDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.fieldHasSetterButNoGetterProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new FieldHasSetterButNoGetterVisitor();
-  }
-
-  private static class FieldHasSetterButNoGetterVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      final String propertyName = PropertyUtil.suggestPropertyName(field);
-      final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
-      final PsiClass containingClass = field.getContainingClass();
-      final PsiMethod setter = PropertyUtil.findPropertySetter(containingClass, propertyName, isStatic, false);
-      if (setter == null) {
-        return;
-      }
-      final PsiMethod getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
-      if (getter != null) {
-        return;
-      }
-      registerFieldError(field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.fieldHasSetterButNoGetterDisplayName();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.fieldHasSetterButNoGetterProblemDescriptor().get();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new FieldHasSetterButNoGetterVisitor();
+    }
+
+    private static class FieldHasSetterButNoGetterVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            final String propertyName = PropertyUtil.suggestPropertyName(field);
+            final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+            final PsiClass containingClass = field.getContainingClass();
+            final PsiMethod setter = PropertyUtil.findPropertySetter(containingClass, propertyName, isStatic, false);
+            if (setter == null) {
+                return;
+            }
+            final PsiMethod getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
+            if (getter != null) {
+                return;
+            }
+            registerFieldError(field);
+        }
+    }
 }

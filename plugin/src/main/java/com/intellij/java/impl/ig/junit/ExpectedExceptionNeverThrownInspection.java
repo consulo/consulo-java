@@ -23,19 +23,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.util.Set;
 
 @ExtensionImpl
-public class ExpectedExceptionNeverThrownInspection
-  extends BaseInspection {
-  @Nls
+public class ExpectedExceptionNeverThrownInspection extends BaseInspection {
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.expectedExceptionNeverThrownDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.expectedExceptionNeverThrownDisplayName();
   }
 
   @Nonnull

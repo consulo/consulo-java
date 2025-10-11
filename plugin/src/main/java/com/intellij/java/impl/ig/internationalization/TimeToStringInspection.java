@@ -21,62 +21,67 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class TimeToStringInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "CallToTimeToString";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.timeTostringCallDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.timeTostringCallProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new TimeToStringVisitor();
-  }
-
-  private static class TimeToStringVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
-        return;
-      }
-      if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String className = aClass.getQualifiedName();
-      if (!"java.sql.Time".equals(className)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "CallToTimeToString";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.timeTostringCallDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.timeTostringCallProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new TimeToStringVisitor();
+    }
+
+    private static class TimeToStringVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression expression
+        ) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression =
+                expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
+                return;
+            }
+            if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String className = aClass.getQualifiedName();
+            if (!"java.sql.Time".equals(className)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

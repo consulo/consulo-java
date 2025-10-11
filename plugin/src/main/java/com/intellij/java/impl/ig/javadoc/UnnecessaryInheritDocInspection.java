@@ -30,89 +30,87 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UnnecessaryInheritDocInspection extends BaseInspection {
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryInheritDocDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.unnecessaryInheritDocProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessaryInheritDocFix();
-  }
-
-  private static class UnnecessaryInheritDocFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryInheritDocDisplayName();
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.unnecessaryInheritDocQuickfix().get();
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.unnecessaryInheritDocProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      if (!(element instanceof PsiDocTag)) {
-        return;
-      }
-      final PsiDocTag docTag = (PsiDocTag)element;
-      final PsiDocComment docComment = docTag.getContainingComment();
-      docComment.delete();
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessaryInheritDocFix();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryInheritDocVisitor();
-  }
+    private static class UnnecessaryInheritDocFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.unnecessaryInheritDocQuickfix();
+        }
 
-  private static class UnnecessaryInheritDocVisitor
-    extends BaseInspectionVisitor {
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            if (!(element instanceof PsiDocTag)) {
+                return;
+            }
+            final PsiDocTag docTag = (PsiDocTag) element;
+            final PsiDocComment docComment = docTag.getContainingComment();
+            docComment.delete();
+        }
+    }
 
     @Override
-    public void visitDocTag(PsiDocTag tag) {
-      if (!(tag instanceof PsiInlineDocTag)) {
-        return;
-      }
-      @NonNls final String name = tag.getName();
-      if (!"inheritDoc".equals(name)) {
-        return;
-      }
-      final PsiDocComment docComment = tag.getContainingComment();
-      if (docComment == null) {
-        return;
-      }
-      final PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
-        docComment, PsiDocToken.class);
-      if (docTokens == null) {
-        return;
-      }
-      for (PsiDocToken docToken : docTokens) {
-        final IElementType tokenType = docToken.getTokenType();
-        if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
-          continue;
-        }
-        if (!StringUtil.isEmptyOrSpaces(docToken.getText())) {
-          return;
-        }
-      }
-      registerError(tag);
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryInheritDocVisitor();
     }
-  }
+
+    private static class UnnecessaryInheritDocVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitDocTag(PsiDocTag tag) {
+            if (!(tag instanceof PsiInlineDocTag)) {
+                return;
+            }
+            @NonNls final String name = tag.getName();
+            if (!"inheritDoc".equals(name)) {
+                return;
+            }
+            final PsiDocComment docComment = tag.getContainingComment();
+            if (docComment == null) {
+                return;
+            }
+            final PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
+                docComment, PsiDocToken.class);
+            if (docTokens == null) {
+                return;
+            }
+            for (PsiDocToken docToken : docTokens) {
+                final IElementType tokenType = docToken.getTokenType();
+                if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
+                    continue;
+                }
+                if (!StringUtil.isEmptyOrSpaces(docToken.getText())) {
+                    return;
+                }
+            }
+            registerError(tag);
+        }
+    }
 }
