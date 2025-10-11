@@ -28,90 +28,83 @@ import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
-public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
-  extends BaseInspection {
+public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public int m_limit = 64;
 
-  /**
-   * @noinspection PublicField
-   */
-  public int m_limit = 64;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorProblemDescriptor().get();
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorMaximumNumberOfElementsOption();
-    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new CheckForOutOfMemoryOnLargeArrayAllocationVisitor();
-  }
-
-  private class CheckForOutOfMemoryOnLargeArrayAllocationVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-      super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
-      if (!(type instanceof PsiArrayType)) {
-        return;
-      }
-      int size = 1;
-      final PsiExpression[] dimensions = expression.getArrayDimensions();
-      for (final PsiExpression dimension : dimensions) {
-        final Integer intValue =
-          (Integer)ConstantExpressionUtil.computeCastTo(
-            dimension, PsiType.INT);
-        if (intValue != null) {
-          size *= intValue.intValue();
-        }
-      }
-      if (size <= m_limit) {
-        return;
-      }
-      if (outOfMemoryExceptionCaught(expression)) {
-        return;
-      }
-      registerNewExpressionError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorDisplayName();
     }
 
-    private boolean outOfMemoryExceptionCaught(PsiElement element) {
-      PsiElement currentElement = element;
-      while (true) {
-        final PsiTryStatement containingTryStatement =
-          PsiTreeUtil.getParentOfType(currentElement,
-                                      PsiTryStatement.class);
-        if (containingTryStatement == null) {
-          return false;
-        }
-        if (catchesOutOfMemoryException(containingTryStatement)) {
-          return true;
-        }
-        currentElement = containingTryStatement;
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorProblemDescriptor().get();
     }
 
-    private boolean catchesOutOfMemoryException(PsiTryStatement statement) {
-      final PsiCatchSection[] sections = statement.getCatchSections();
-      for (final PsiCatchSection section : sections) {
-        final PsiType catchType = section.getCatchType();
-        if (catchType != null) {
-          final String typeText = catchType.getCanonicalText();
-          if ("java.lang.OutOfMemoryError".equals(typeText)) {
-            return true;
-          }
-        }
-      }
-      return false;
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorMaximumNumberOfElementsOption();
+        return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new CheckForOutOfMemoryOnLargeArrayAllocationVisitor();
+    }
+
+    private class CheckForOutOfMemoryOnLargeArrayAllocationVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            super.visitNewExpression(expression);
+            final PsiType type = expression.getType();
+            if (!(type instanceof PsiArrayType)) {
+                return;
+            }
+            int size = 1;
+            final PsiExpression[] dimensions = expression.getArrayDimensions();
+            for (final PsiExpression dimension : dimensions) {
+                final Integer intValue = (Integer) ConstantExpressionUtil.computeCastTo(dimension, PsiType.INT);
+                if (intValue != null) {
+                    size *= intValue.intValue();
+                }
+            }
+            if (size <= m_limit) {
+                return;
+            }
+            if (outOfMemoryExceptionCaught(expression)) {
+                return;
+            }
+            registerNewExpressionError(expression);
+        }
+
+        private boolean outOfMemoryExceptionCaught(PsiElement element) {
+            PsiElement currentElement = element;
+            while (true) {
+                final PsiTryStatement containingTryStatement = PsiTreeUtil.getParentOfType(currentElement, PsiTryStatement.class);
+                if (containingTryStatement == null) {
+                    return false;
+                }
+                if (catchesOutOfMemoryException(containingTryStatement)) {
+                    return true;
+                }
+                currentElement = containingTryStatement;
+            }
+        }
+
+        private boolean catchesOutOfMemoryException(PsiTryStatement statement) {
+            final PsiCatchSection[] sections = statement.getCatchSections();
+            for (final PsiCatchSection section : sections) {
+                final PsiType catchType = section.getCatchType();
+                if (catchType != null) {
+                    final String typeText = catchType.getCanonicalText();
+                    if ("java.lang.OutOfMemoryError".equals(typeText)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 }

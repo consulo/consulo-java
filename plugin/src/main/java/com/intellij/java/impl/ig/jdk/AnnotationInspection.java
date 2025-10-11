@@ -20,34 +20,34 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnnotationInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.annotationDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.annotationProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new AnnotationVisitor();
-  }
-
-  private static class AnnotationVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.annotationDisplayName();
+    }
 
     @Override
-    public void visitAnnotation(PsiAnnotation annotation) {
-      super.visitAnnotation(annotation);
-      registerError(annotation);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.annotationProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new AnnotationVisitor();
+    }
+
+    private static class AnnotationVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAnnotation(PsiAnnotation annotation) {
+            super.visitAnnotation(annotation);
+            registerError(annotation);
+        }
+    }
 }

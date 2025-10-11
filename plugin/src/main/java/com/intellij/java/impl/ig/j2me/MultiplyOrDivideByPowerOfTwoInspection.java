@@ -37,176 +37,177 @@ import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
-public class MultiplyOrDivideByPowerOfTwoInspection
-  extends BaseInspection {
-
-  /**
-   * @noinspection PublicField
-   */
-  public boolean checkDivision = false;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDisplayName().get();
-  }
-
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDivideOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "checkDivision");
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(calculateReplacementShift((PsiExpression)infos[0])).get();
-  }
-
-  static String calculateReplacementShift(PsiExpression expression) {
-    final PsiExpression lhs;
-    final PsiExpression rhs;
-    final String operator;
-    if (expression instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression exp = (PsiAssignmentExpression)expression;
-      lhs = exp.getLExpression();
-      rhs = exp.getRExpression();
-      final IElementType tokenType = exp.getOperationTokenType();
-      if (tokenType.equals(JavaTokenType.ASTERISKEQ)) {
-        operator = "<<=";
-      }
-      else {
-        operator = ">>=";
-      }
-    }
-    else {
-      final PsiBinaryExpression exp = (PsiBinaryExpression)expression;
-      lhs = exp.getLOperand();
-      rhs = exp.getROperand();
-      final IElementType tokenType = exp.getOperationTokenType();
-      if (tokenType.equals(JavaTokenType.ASTERISK)) {
-        operator = "<<";
-      }
-      else {
-        operator = ">>";
-      }
-    }
-    final String lhsText;
-    if (ParenthesesUtils.getPrecedence(lhs) >
-        ParenthesesUtils.SHIFT_PRECEDENCE) {
-      lhsText = '(' + lhs.getText() + ')';
-    }
-    else {
-      lhsText = lhs.getText();
-    }
-    String expString =
-      lhsText + operator + ShiftUtils.getLogBaseTwo(rhs);
-    final PsiElement parent = expression.getParent();
-    if (parent instanceof PsiExpression) {
-      if (!(parent instanceof PsiParenthesizedExpression) &&
-          ParenthesesUtils.getPrecedence((PsiExpression)parent) <
-          ParenthesesUtils.SHIFT_PRECEDENCE) {
-        expString = '(' + expString + ')';
-      }
-    }
-    return expString;
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    if (expression instanceof PsiBinaryExpression) {
-      final PsiBinaryExpression binaryExpression =
-        (PsiBinaryExpression)expression;
-      final IElementType operationTokenType =
-        binaryExpression.getOperationTokenType();
-      if (JavaTokenType.DIV.equals(operationTokenType)) {
-        return null;
-      }
-    }
-    else if (expression instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression =
-        (PsiAssignmentExpression)expression;
-      final IElementType operationTokenType =
-        assignmentExpression.getOperationTokenType();
-      if (JavaTokenType.DIVEQ.equals(operationTokenType)) {
-        return null;
-      }
-    }
-    return new MultiplyByPowerOfTwoFix();
-  }
-
-  private static class MultiplyByPowerOfTwoFix extends InspectionGadgetsFix {
+public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean checkDivision = false;
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoReplaceQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
-      final String newExpression = calculateReplacementShift(expression);
-      replaceExpression(expression, newExpression);
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantShiftVisitor();
-  }
-
-  private class ConstantShiftVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
-      if (rhs == null) {
-        return;
-      }
-
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.ASTERISK)) {
-        if (!checkDivision || !tokenType.equals(JavaTokenType.DIV)) {
-          return;
-        }
-      }
-      if (!ShiftUtils.isPowerOfTwo(rhs)) {
-        return;
-      }
-      final PsiType type = expression.getType();
-      if (type == null) {
-        return;
-      }
-      if (!ClassUtils.isIntegral(type)) {
-        return;
-      }
-      registerError(expression, expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDisplayName();
     }
 
-    @Override
-    public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
-      super.visitAssignmentExpression(expression);
-      if (!WellFormednessUtils.isWellFormed(expression)) {
-        return;
-      }
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!tokenType.equals(JavaTokenType.ASTERISKEQ)) {
-        if (!checkDivision || !tokenType.equals(JavaTokenType.DIVEQ)) {
-          return;
-        }
-      }
-      final PsiExpression rhs = expression.getRExpression();
-      if (!ShiftUtils.isPowerOfTwo(rhs)) {
-        return;
-      }
-      final PsiType type = expression.getType();
-      if (type == null) {
-        return;
-      }
-      if (!ClassUtils.isIntegral(type)) {
-        return;
-      }
-      registerError(expression, expression);
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDivideOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "checkDivision");
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(calculateReplacementShift((PsiExpression) infos[0]))
+            .get();
+    }
+
+    static String calculateReplacementShift(PsiExpression expression) {
+        final PsiExpression lhs;
+        final PsiExpression rhs;
+        final String operator;
+        if (expression instanceof PsiAssignmentExpression) {
+            final PsiAssignmentExpression exp = (PsiAssignmentExpression) expression;
+            lhs = exp.getLExpression();
+            rhs = exp.getRExpression();
+            final IElementType tokenType = exp.getOperationTokenType();
+            if (tokenType.equals(JavaTokenType.ASTERISKEQ)) {
+                operator = "<<=";
+            }
+            else {
+                operator = ">>=";
+            }
+        }
+        else {
+            final PsiBinaryExpression exp = (PsiBinaryExpression) expression;
+            lhs = exp.getLOperand();
+            rhs = exp.getROperand();
+            final IElementType tokenType = exp.getOperationTokenType();
+            if (tokenType.equals(JavaTokenType.ASTERISK)) {
+                operator = "<<";
+            }
+            else {
+                operator = ">>";
+            }
+        }
+        final String lhsText;
+        if (ParenthesesUtils.getPrecedence(lhs) >
+            ParenthesesUtils.SHIFT_PRECEDENCE) {
+            lhsText = '(' + lhs.getText() + ')';
+        }
+        else {
+            lhsText = lhs.getText();
+        }
+        String expString =
+            lhsText + operator + ShiftUtils.getLogBaseTwo(rhs);
+        final PsiElement parent = expression.getParent();
+        if (parent instanceof PsiExpression) {
+            if (!(parent instanceof PsiParenthesizedExpression) &&
+                ParenthesesUtils.getPrecedence((PsiExpression) parent) <
+                    ParenthesesUtils.SHIFT_PRECEDENCE) {
+                expString = '(' + expString + ')';
+            }
+        }
+        return expString;
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiExpression expression = (PsiExpression) infos[0];
+        if (expression instanceof PsiBinaryExpression) {
+            final PsiBinaryExpression binaryExpression =
+                (PsiBinaryExpression) expression;
+            final IElementType operationTokenType =
+                binaryExpression.getOperationTokenType();
+            if (JavaTokenType.DIV.equals(operationTokenType)) {
+                return null;
+            }
+        }
+        else if (expression instanceof PsiAssignmentExpression) {
+            final PsiAssignmentExpression assignmentExpression =
+                (PsiAssignmentExpression) expression;
+            final IElementType operationTokenType =
+                assignmentExpression.getOperationTokenType();
+            if (JavaTokenType.DIVEQ.equals(operationTokenType)) {
+                return null;
+            }
+        }
+        return new MultiplyByPowerOfTwoFix();
+    }
+
+    private static class MultiplyByPowerOfTwoFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoReplaceQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
+            final String newExpression = calculateReplacementShift(expression);
+            replaceExpression(expression, newExpression);
+        }
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantShiftVisitor();
+    }
+
+    private class ConstantShiftVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(
+            @Nonnull PsiBinaryExpression expression
+        ) {
+            super.visitBinaryExpression(expression);
+            final PsiExpression rhs = expression.getROperand();
+            if (rhs == null) {
+                return;
+            }
+
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.ASTERISK)) {
+                if (!checkDivision || !tokenType.equals(JavaTokenType.DIV)) {
+                    return;
+                }
+            }
+            if (!ShiftUtils.isPowerOfTwo(rhs)) {
+                return;
+            }
+            final PsiType type = expression.getType();
+            if (type == null) {
+                return;
+            }
+            if (!ClassUtils.isIntegral(type)) {
+                return;
+            }
+            registerError(expression, expression);
+        }
+
+        @Override
+        public void visitAssignmentExpression(
+            @Nonnull PsiAssignmentExpression expression
+        ) {
+            super.visitAssignmentExpression(expression);
+            if (!WellFormednessUtils.isWellFormed(expression)) {
+                return;
+            }
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!tokenType.equals(JavaTokenType.ASTERISKEQ)) {
+                if (!checkDivision || !tokenType.equals(JavaTokenType.DIVEQ)) {
+                    return;
+                }
+            }
+            final PsiExpression rhs = expression.getRExpression();
+            if (!ShiftUtils.isPowerOfTwo(rhs)) {
+                return;
+            }
+            final PsiType type = expression.getType();
+            if (type == null) {
+                return;
+            }
+            if (!ClassUtils.isIntegral(type)) {
+                return;
+            }
+            registerError(expression, expression);
+        }
+    }
 }

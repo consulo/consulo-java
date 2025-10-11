@@ -21,36 +21,37 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InterfaceWithOnlyOneDirectInheritorInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.interfaceOneInheritorDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.interfaceOneInheritorProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InterfaceWithOnlyOneDirectInheritorVisitor();
-  }
-
-  private static class InterfaceWithOnlyOneDirectInheritorVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (!InheritanceUtil.hasOneInheritor(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.interfaceOneInheritorDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.interfaceOneInheritorProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InterfaceWithOnlyOneDirectInheritorVisitor();
+    }
+
+    private static class InterfaceWithOnlyOneDirectInheritorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (!InheritanceUtil.hasOneInheritor(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

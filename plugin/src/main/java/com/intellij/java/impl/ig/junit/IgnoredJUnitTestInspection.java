@@ -24,61 +24,62 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class IgnoredJUnitTestInspection extends BaseInspection {
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.ignoredJunitTestDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.ignoredJunitTestDisplayName();
+    }
 
-  @Nonnull
-  @Override
-  @RequiredReadAction
-  protected String buildErrorString(Object... infos) {
-    final PsiNamedElement info = (PsiNamedElement)infos[0];
-    return info instanceof PsiClass
-      ? InspectionGadgetsLocalize.ignoredJunitTestClassproblemDescriptor(info.getName()).get()
-      : InspectionGadgetsLocalize.ignoredJunitTestMethodProblemDescriptor(info.getName()).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new IgnoredJUnitTestVisitor();
-  }
-
-  private static class IgnoredJUnitTestVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    protected String buildErrorString(Object... infos) {
+        final PsiNamedElement info = (PsiNamedElement) infos[0];
+        return info instanceof PsiClass
+            ? InspectionGadgetsLocalize.ignoredJunitTestClassproblemDescriptor(info.getName()).get()
+            : InspectionGadgetsLocalize.ignoredJunitTestMethodProblemDescriptor(info.getName()).get();
+    }
 
     @Override
-    public void visitAnnotation(PsiAnnotation annotation) {
-      super.visitAnnotation(annotation);
-      final PsiModifierListOwner modifierListOwner =
-        PsiTreeUtil.getParentOfType(annotation,
-                                    PsiModifierListOwner.class);
-      if (!(modifierListOwner instanceof PsiClass ||
-            modifierListOwner instanceof PsiMethod)) {
-        return;
-      }
-      final PsiJavaCodeReferenceElement nameReferenceElement =
-        annotation.getNameReferenceElement();
-      if (nameReferenceElement == null) {
-        return;
-      }
-      final PsiElement target = nameReferenceElement.resolve();
-      if (!(target instanceof PsiClass)) {
-        return;
-      }
-      final PsiClass aClass = (PsiClass)target;
-      @NonNls final String qualifiedName = aClass.getQualifiedName();
-      if (!"org.junit.Ignore".equals(qualifiedName)) {
-        return;
-      }
-      registerError(annotation, modifierListOwner);
+    public BaseInspectionVisitor buildVisitor() {
+        return new IgnoredJUnitTestVisitor();
     }
-  }
+
+    private static class IgnoredJUnitTestVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitAnnotation(PsiAnnotation annotation) {
+            super.visitAnnotation(annotation);
+            final PsiModifierListOwner modifierListOwner =
+                PsiTreeUtil.getParentOfType(
+                    annotation,
+                    PsiModifierListOwner.class
+                );
+            if (!(modifierListOwner instanceof PsiClass ||
+                modifierListOwner instanceof PsiMethod)) {
+                return;
+            }
+            final PsiJavaCodeReferenceElement nameReferenceElement =
+                annotation.getNameReferenceElement();
+            if (nameReferenceElement == null) {
+                return;
+            }
+            final PsiElement target = nameReferenceElement.resolve();
+            if (!(target instanceof PsiClass)) {
+                return;
+            }
+            final PsiClass aClass = (PsiClass) target;
+            @NonNls final String qualifiedName = aClass.getQualifiedName();
+            if (!"org.junit.Ignore".equals(qualifiedName)) {
+                return;
+            }
+            registerError(annotation, modifierListOwner);
+        }
+    }
 }

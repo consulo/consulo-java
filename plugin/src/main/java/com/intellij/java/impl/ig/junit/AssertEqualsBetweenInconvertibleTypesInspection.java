@@ -23,17 +23,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspection {
-
-  @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesDisplayName().get();
+  @Override
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesDisplayName();
   }
 
   @Override

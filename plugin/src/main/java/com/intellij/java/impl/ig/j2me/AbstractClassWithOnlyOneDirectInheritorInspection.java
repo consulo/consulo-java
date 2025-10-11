@@ -23,42 +23,43 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractClassWithOnlyOneDirectInheritorInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AbstractClassWithOnlyOneDirectInheritorVisitor();
-  }
-
-  private static class AbstractClassWithOnlyOneDirectInheritorVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter) {
-        return;
-      }
-      if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      if (!InheritanceUtil.hasOneInheritor(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new AbstractClassWithOnlyOneDirectInheritorVisitor();
+    }
+
+    private static class AbstractClassWithOnlyOneDirectInheritorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter) {
+                return;
+            }
+            if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (!InheritanceUtil.hasOneInheritor(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

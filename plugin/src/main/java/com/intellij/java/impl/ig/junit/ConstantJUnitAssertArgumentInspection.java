@@ -22,8 +22,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
@@ -31,63 +31,60 @@ import java.util.Set;
 
 @ExtensionImpl
 public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
+    private static final Set<String> ASSERT_METHODS = new HashSet<>();
 
-  @NonNls
-  private static final Set<String> ASSERT_METHODS = new HashSet<>();
+    static {
+        ASSERT_METHODS.add("assertTrue");
+        ASSERT_METHODS.add("assertFalse");
+        ASSERT_METHODS.add("assertNull");
+        ASSERT_METHODS.add("assertNotNull");
+    }
 
-  static {
-    ASSERT_METHODS.add("assertTrue");
-    ASSERT_METHODS.add("assertFalse");
-    ASSERT_METHODS.add("assertNull");
-    ASSERT_METHODS.add("assertNotNull");
-  }
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantJunitAssertArgumentDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.constantJunitAssertArgumentProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantJUnitAssertArgumentVisitor();
-  }
-
-  private static class ConstantJUnitAssertArgumentVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.constantJunitAssertArgumentDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
-      if (!ASSERT_METHODS.contains(methodName)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
-          !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length == 0) {
-        return;
-      }
-      final PsiExpression lastArgument = arguments[arguments.length - 1];
-      if (!PsiUtil.isConstantExpression(lastArgument)) {
-        return;
-      }
-      registerError(lastArgument);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.constantJunitAssertArgumentProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantJUnitAssertArgumentVisitor();
+    }
+
+    private static class ConstantJUnitAssertArgumentVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls final String methodName = methodExpression.getReferenceName();
+            if (!ASSERT_METHODS.contains(methodName)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
+                !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length == 0) {
+                return;
+            }
+            final PsiExpression lastArgument = arguments[arguments.length - 1];
+            if (!PsiUtil.isConstantExpression(lastArgument)) {
+                return;
+            }
+            registerError(lastArgument);
+        }
+    }
 }

@@ -34,6 +34,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -48,201 +49,201 @@ import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlTagValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return (Boolean)infos[1]
-      ? InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoExistsProblemDescriptor().get()
-      : InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoProblemDescriptor().get();
-    }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final boolean packageInfoExists = (Boolean)infos[1];
-    if (packageInfoExists) {
-      return new DeletePackageDotHtmlFix();
-    }
-    final String aPackage = (String) infos[0];
-    return new PackageDotHtmlMayBePackageInfoFix(aPackage);
-  }
-
-  private static class DeletePackageDotHtmlFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDeleteQuickfix().get();
-    }
-
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
-      if (!(element instanceof XmlFile)) {
-        return;
-      }
-      final XmlFile xmlFile = (XmlFile) element;
-      new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.delete.command"), xmlFile) {
-        @Override
-        protected void run() throws Throwable {
-          element.delete();
-        }
-
-        @Override
-        protected UndoConfirmationPolicy getUndoConfirmationPolicy() {
-          return UndoConfirmationPolicy.REQUEST_CONFIRMATION;
-        }
-      }.execute();
-    }
-  }
-
-  private static class PackageDotHtmlMayBePackageInfoFix extends InspectionGadgetsFix {
-
-    private final String aPackage;
-
-    public PackageDotHtmlMayBePackageInfoFix(String aPackage) {
-      this.aPackage = aPackage;
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDisplayName();
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoConvertQuickfix().get();
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return (Boolean) infos[1]
+            ? InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoExistsProblemDescriptor().get()
+            : InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(final Project project, ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
-      if (!(element instanceof XmlFile)) {
-        return;
-      }
-      final XmlFile xmlFile = (XmlFile) element;
-      final PsiDirectory directory = xmlFile.getContainingDirectory();
-      if (directory == null) {
-        return;
-      }
-      final PsiFile file = directory.findFile("package-info.java");
-      if (file != null) {
-        return;
-      }
-      new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.convert.command"), file) {
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final boolean packageInfoExists = (Boolean) infos[1];
+        if (packageInfoExists) {
+            return new DeletePackageDotHtmlFix();
+        }
+        final String aPackage = (String) infos[0];
+        return new PackageDotHtmlMayBePackageInfoFix(aPackage);
+    }
+
+    private static class DeletePackageDotHtmlFix extends InspectionGadgetsFix {
+        @Nonnull
         @Override
-        protected void run() throws Throwable {
-          final PsiJavaFile file = (PsiJavaFile) directory.createFile("package-info.java");
-          CommandProcessor.getInstance().addAffectedFiles(project, file.getVirtualFile());
-          final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-          String packageInfoText = getPackageInfoText(xmlFile);
-          if (packageInfoText == null) {
-            packageInfoText = xmlFile.getText();
-          }
-          final StringBuilder commentText = new StringBuilder("/**\n");
-          final String[] lines = StringUtil.splitByLines(packageInfoText);
-          boolean appended = false;
-          for (String line : lines) {
-            if (!appended && line.length() == 0) {
-              // skip empty lines at the beginning
-              continue;
-            }
-            commentText.append(" * ").append(line).append('\n');
-            appended = true;
-          }
-          commentText.append("*/");
-          final PsiDocComment comment = elementFactory.createDocCommentFromText(commentText.toString());
-          if (aPackage.length() > 0) {
-            final PsiPackageStatement packageStatement = elementFactory.createPackageStatement(aPackage);
-            final PsiElement addedElement = file.add(packageStatement);
-            file.addBefore(comment, addedElement);
-          } else {
-            file.add(comment);
-          }
-          element.delete();
-          if (!isOnTheFly()) {
-            return;
-          }
-          final AsyncResult<DataContext> dataContextFromFocus = DataManager.getInstance().getDataContextFromFocus();
-          dataContextFromFocus.doWhenDone(dataContext -> {
-            final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-            final VirtualFile virtualFile = file.getVirtualFile();
-            if (virtualFile == null) {
-              return;
-            }
-            editorManager.openFile(virtualFile, true);
-          });
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDeleteQuickfix();
         }
 
         @Override
-        protected UndoConfirmationPolicy getUndoConfirmationPolicy() {
-          return UndoConfirmationPolicy.REQUEST_CONFIRMATION;
+        protected void doFix(Project project, ProblemDescriptor descriptor) {
+            final PsiElement element = descriptor.getPsiElement();
+            if (!(element instanceof XmlFile)) {
+                return;
+            }
+            final XmlFile xmlFile = (XmlFile) element;
+            new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.delete.command"), xmlFile) {
+                @Override
+                protected void run() throws Throwable {
+                    element.delete();
+                }
+
+                @Override
+                protected UndoConfirmationPolicy getUndoConfirmationPolicy() {
+                    return UndoConfirmationPolicy.REQUEST_CONFIRMATION;
+                }
+            }.execute();
         }
-      }.execute();
     }
 
-    @Nullable
-    private static String getPackageInfoText(XmlFile xmlFile) {
-      final XmlTag rootTag = xmlFile.getRootTag();
-      if (rootTag == null) {
-        return null;
-      }
-      final PsiElement[] children = rootTag.getChildren();
-      for (PsiElement child : children) {
-        if (!(child instanceof HtmlTag)) {
-          continue;
+    private static class PackageDotHtmlMayBePackageInfoFix extends InspectionGadgetsFix {
+
+        private final String aPackage;
+
+        public PackageDotHtmlMayBePackageInfoFix(String aPackage) {
+            this.aPackage = aPackage;
         }
-        final HtmlTag htmlTag = (HtmlTag) child;
-        @NonNls final String name = htmlTag.getName();
-        if ("body".equals(name)) {
-          final XmlTagValue value = htmlTag.getValue();
-          return value.getText();
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoConvertQuickfix();
         }
-      }
-      return null;
+
+        @Override
+        protected void doFix(final Project project, ProblemDescriptor descriptor) {
+            final PsiElement element = descriptor.getPsiElement();
+            if (!(element instanceof XmlFile)) {
+                return;
+            }
+            final XmlFile xmlFile = (XmlFile) element;
+            final PsiDirectory directory = xmlFile.getContainingDirectory();
+            if (directory == null) {
+                return;
+            }
+            final PsiFile file = directory.findFile("package-info.java");
+            if (file != null) {
+                return;
+            }
+            new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.convert.command"), file) {
+                @Override
+                protected void run() throws Throwable {
+                    final PsiJavaFile file = (PsiJavaFile) directory.createFile("package-info.java");
+                    CommandProcessor.getInstance().addAffectedFiles(project, file.getVirtualFile());
+                    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+                    String packageInfoText = getPackageInfoText(xmlFile);
+                    if (packageInfoText == null) {
+                        packageInfoText = xmlFile.getText();
+                    }
+                    final StringBuilder commentText = new StringBuilder("/**\n");
+                    final String[] lines = StringUtil.splitByLines(packageInfoText);
+                    boolean appended = false;
+                    for (String line : lines) {
+                        if (!appended && line.length() == 0) {
+                            // skip empty lines at the beginning
+                            continue;
+                        }
+                        commentText.append(" * ").append(line).append('\n');
+                        appended = true;
+                    }
+                    commentText.append("*/");
+                    final PsiDocComment comment = elementFactory.createDocCommentFromText(commentText.toString());
+                    if (aPackage.length() > 0) {
+                        final PsiPackageStatement packageStatement = elementFactory.createPackageStatement(aPackage);
+                        final PsiElement addedElement = file.add(packageStatement);
+                        file.addBefore(comment, addedElement);
+                    }
+                    else {
+                        file.add(comment);
+                    }
+                    element.delete();
+                    if (!isOnTheFly()) {
+                        return;
+                    }
+                    final AsyncResult<DataContext> dataContextFromFocus = DataManager.getInstance().getDataContextFromFocus();
+                    dataContextFromFocus.doWhenDone(dataContext -> {
+                        final FileEditorManager editorManager = FileEditorManager.getInstance(project);
+                        final VirtualFile virtualFile = file.getVirtualFile();
+                        if (virtualFile == null) {
+                            return;
+                        }
+                        editorManager.openFile(virtualFile, true);
+                    });
+                }
+
+                @Override
+                protected UndoConfirmationPolicy getUndoConfirmationPolicy() {
+                    return UndoConfirmationPolicy.REQUEST_CONFIRMATION;
+                }
+            }.execute();
+        }
+
+        @Nullable
+        private static String getPackageInfoText(XmlFile xmlFile) {
+            final XmlTag rootTag = xmlFile.getRootTag();
+            if (rootTag == null) {
+                return null;
+            }
+            final PsiElement[] children = rootTag.getChildren();
+            for (PsiElement child : children) {
+                if (!(child instanceof HtmlTag)) {
+                    continue;
+                }
+                final HtmlTag htmlTag = (HtmlTag) child;
+                @NonNls final String name = htmlTag.getName();
+                if ("body".equals(name)) {
+                    final XmlTagValue value = htmlTag.getValue();
+                    return value.getText();
+                }
+            }
+            return null;
+        }
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new PackageDotHtmlMayBePackageInfoVisitor();
-  }
-
-  private static class PackageDotHtmlMayBePackageInfoVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitFile(PsiFile file) {
-      super.visitFile(file);
-      if (!(file instanceof XmlFile)) {
-        return;
-      }
-      @NonNls final String fileName = file.getName();
-      if (!"package.html".equals(fileName)) {
-        return;
-      }
-      final PsiDirectory directory = file.getContainingDirectory();
-      if (directory == null) {
-        return;
-      }
-      final String aPackage = getPackage(directory);
-      if (aPackage == null) {
-        return;
-      }
-      final boolean exists = directory.findFile("package-info.java") != null;
-      registerError(file, aPackage, Boolean.valueOf(exists));
+    public BaseInspectionVisitor buildVisitor() {
+        return new PackageDotHtmlMayBePackageInfoVisitor();
     }
 
-    public static String getPackage(@Nonnull PsiDirectory directory) {
-      final VirtualFile virtualFile = directory.getVirtualFile();
-      final Project project = directory.getProject();
-      final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
-      final ProjectFileIndex fileIndex = projectRootManager.getFileIndex();
-      return fileIndex.getPackageNameByDirectory(virtualFile);
+    private static class PackageDotHtmlMayBePackageInfoVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitFile(PsiFile file) {
+            super.visitFile(file);
+            if (!(file instanceof XmlFile)) {
+                return;
+            }
+            @NonNls final String fileName = file.getName();
+            if (!"package.html".equals(fileName)) {
+                return;
+            }
+            final PsiDirectory directory = file.getContainingDirectory();
+            if (directory == null) {
+                return;
+            }
+            final String aPackage = getPackage(directory);
+            if (aPackage == null) {
+                return;
+            }
+            final boolean exists = directory.findFile("package-info.java") != null;
+            registerError(file, aPackage, Boolean.valueOf(exists));
+        }
+
+        public static String getPackage(@Nonnull PsiDirectory directory) {
+            final VirtualFile virtualFile = directory.getVirtualFile();
+            final Project project = directory.getProject();
+            final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
+            final ProjectFileIndex fileIndex = projectRootManager.getFileIndex();
+            return fileIndex.getPackageNameByDirectory(virtualFile);
+        }
     }
-  }
 }

@@ -23,47 +23,47 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SimpleDateFormatWithoutLocaleVisitor();
-  }
-
-  private static class SimpleDateFormatWithoutLocaleVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleDisplayName();
+    }
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-      super.visitNewExpression(expression);
-      if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList == null) {
-        return;
-      }
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      for (PsiExpression argument : arguments) {
-        if (ExpressionUtils.hasType(argument, "java.util.Locale")) {
-          return;
-        }
-      }
-      registerError(expression);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SimpleDateFormatWithoutLocaleVisitor();
+    }
+
+    private static class SimpleDateFormatWithoutLocaleVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            super.visitNewExpression(expression);
+            if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList == null) {
+                return;
+            }
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            for (PsiExpression argument : arguments) {
+                if (ExpressionUtils.hasType(argument, "java.util.Locale")) {
+                    return;
+                }
+            }
+            registerError(expression);
+        }
+    }
 }

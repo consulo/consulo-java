@@ -21,14 +21,11 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
 
 @ExtensionImpl
-public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspection extends BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase
-{
-
-	@Override
-	protected InspectionGadgetsFix buildFix(Object... infos)
-	{
-		final PsiMethod method = (PsiMethod) infos[0];
-		String targetModifier = isJunit4Annotation((String) infos[1]) ? PsiModifier.PUBLIC : PsiModifier.PACKAGE_LOCAL;
-		return new MakePublicStaticVoidFix(method, true, targetModifier);
-	}
+public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspection extends BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase {
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiMethod method = (PsiMethod) infos[0];
+        String targetModifier = isJunit4Annotation((String) infos[1]) ? PsiModifier.PUBLIC : PsiModifier.PACKAGE_LOCAL;
+        return new MakePublicStaticVoidFix(method, true, targetModifier);
+    }
 }
