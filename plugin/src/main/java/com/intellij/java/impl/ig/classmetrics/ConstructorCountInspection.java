@@ -20,90 +20,94 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.GridBag;
 import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class ConstructorCountInspection extends ClassMetricInspection {
+    private static final int CONSTRUCTOR_COUNT_LIMIT = 5;
 
-  private static final int CONSTRUCTOR_COUNT_LIMIT = 5;
+    public boolean ignoreDeprecatedConstructors = false;
 
-  public boolean ignoreDeprecatedConstructors = false;
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ClassWithTooManyConstructors";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "ClassWithTooManyConstructors";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.tooManyConstructorsDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.tooManyConstructorsDisplayName().get();
-  }
+    protected int getDefaultLimit() {
+        return CONSTRUCTOR_COUNT_LIMIT;
+    }
 
-  protected int getDefaultLimit() {
-    return CONSTRUCTOR_COUNT_LIMIT;
-  }
-
-  protected String getConfigurationLabel() {
-    return InspectionGadgetsLocalize.tooManyConstructorsCountLimitOption().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final JLabel label = new JLabel(getConfigurationLabel());
-    final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final CheckBox includeCheckBox = new CheckBox(
-      InspectionGadgetsLocalize.tooManyConstructorsIgnoreDeprecatedOption().get(),
-      this,
-      "ignoreDeprecatedConstructors"
-    );
-
-    final GridBag bag = new GridBag();
-    bag.setDefaultInsets(0, 0, 0, UIUtil.DEFAULT_HGAP);
-    bag.setDefaultAnchor(GridBagConstraints.WEST);
-    final JPanel panel = new JPanel(new GridBagLayout());
-    panel.add(label, bag.nextLine().next());
-    panel.add(valueField, bag.next().weightx(1.0));
-    panel.add(includeCheckBox, bag.nextLine().next().coverLine().weighty(1.0).anchor(GridBagConstraints.NORTHWEST));
-    return panel;
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Integer count = (Integer)infos[0];
-    return InspectionGadgetsLocalize.tooManyConstructorsProblemDescriptor(count).get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstructorCountVisitor();
-  }
-
-  private class ConstructorCountVisitor extends BaseInspectionVisitor {
+    protected String getConfigurationLabel() {
+        return InspectionGadgetsLocalize.tooManyConstructorsCountLimitOption().get();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      final int constructorCount = calculateTotalConstructorCount(aClass);
-      if (constructorCount <= getLimit()) {
-        return;
-      }
-      registerClassError(aClass, Integer.valueOf(constructorCount));
+    public JComponent createOptionsPanel() {
+        final JLabel label = new JLabel(getConfigurationLabel());
+        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        final CheckBox includeCheckBox = new CheckBox(
+            InspectionGadgetsLocalize.tooManyConstructorsIgnoreDeprecatedOption().get(),
+            this,
+            "ignoreDeprecatedConstructors"
+        );
+
+        final GridBag bag = new GridBag();
+        bag.setDefaultInsets(0, 0, 0, UIUtil.DEFAULT_HGAP);
+        bag.setDefaultAnchor(GridBagConstraints.WEST);
+        final JPanel panel = new JPanel(new GridBagLayout());
+        panel.add(label, bag.nextLine().next());
+        panel.add(valueField, bag.next().weightx(1.0));
+        panel.add(includeCheckBox, bag.nextLine().next().coverLine().weighty(1.0).anchor(GridBagConstraints.NORTHWEST));
+        return panel;
     }
 
-    private int calculateTotalConstructorCount(PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      if (!ignoreDeprecatedConstructors) {
-        return constructors.length;
-      }
-      int count = 0;
-      for (PsiMethod constructor : constructors) {
-        if (!constructor.isDeprecated()) {
-          count++;
-        }
-      }
-      return count;
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Integer count = (Integer) infos[0];
+        return InspectionGadgetsLocalize.tooManyConstructorsProblemDescriptor(count).get();
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstructorCountVisitor();
+    }
+
+    private class ConstructorCountVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            final int constructorCount = calculateTotalConstructorCount(aClass);
+            if (constructorCount <= getLimit()) {
+                return;
+            }
+            registerClassError(aClass, Integer.valueOf(constructorCount));
+        }
+
+        private int calculateTotalConstructorCount(PsiClass aClass) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            if (!ignoreDeprecatedConstructors) {
+                return constructors.length;
+            }
+            int count = 0;
+            for (PsiMethod constructor : constructors) {
+                if (!constructor.isDeprecated()) {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
 }

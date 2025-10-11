@@ -24,53 +24,51 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class NonFinalUtilityClassInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalUtilityClassDisplayName();
+    }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalUtilityClassDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalUtilityClassProblemDescriptor().get();
+    }
 
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalUtilityClassProblemDescriptor().get();
-  }
-
-  @Nullable
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MakeClassFinalFix((PsiClass)infos[0]);
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonFinalUtilityClassVisitor();
-  }
-
-  private static class NonFinalUtilityClassVisitor extends BaseInspectionVisitor {
+    @Nullable
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MakeClassFinalFix((PsiClass) infos[0]);
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!UtilityClassUtil.isUtilityClass(aClass)) {
-        return;
-      }
-      if (aClass.hasModifierProperty(PsiModifier.FINAL) ||
-        aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      registerClassError(aClass, aClass);
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonFinalUtilityClassVisitor();
     }
-  }
+
+    private static class NonFinalUtilityClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!UtilityClassUtil.isUtilityClass(aClass)) {
+                return;
+            }
+            if (aClass.hasModifierProperty(PsiModifier.FINAL) ||
+                aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            registerClassError(aClass, aClass);
+        }
+    }
 }

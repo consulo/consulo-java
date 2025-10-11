@@ -23,49 +23,50 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NoopMethodInAbstractClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.noopMethodInAbstractClassDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.noopMethodInAbstractClassProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NoopMethodInAbstractClassVisitor();
-  }
-
-  private static class NoopMethodInAbstractClassVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (method.isConstructor()) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (containingClass.isInterface() || containingClass.isAnnotationType()) {
-        return;
-      }
-      if (!containingClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE)) {
-        return;
-      }
-      if (!MethodUtils.isEmpty(method)) {
-        return;
-      }
-      registerMethodError(method);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.noopMethodInAbstractClassDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.noopMethodInAbstractClassProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NoopMethodInAbstractClassVisitor();
+    }
+
+    private static class NoopMethodInAbstractClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (method.isConstructor()) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (containingClass.isInterface() || containingClass.isAnnotationType()) {
+                return;
+            }
+            if (!containingClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE)) {
+                return;
+            }
+            if (!MethodUtils.isEmpty(method)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

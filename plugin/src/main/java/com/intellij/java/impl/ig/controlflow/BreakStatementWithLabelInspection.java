@@ -21,45 +21,46 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BreakStatementWithLabelInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.breakStatementWithLabelDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.breakStatementWithLabelProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new BreakStatementWithLabelVisitor();
-  }
-
-  private static class BreakStatementWithLabelVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
-      super.visitBreakStatement(statement);
-      final PsiIdentifier labelIdentifier =
-        statement.getLabelIdentifier();
-      if (labelIdentifier == null) {
-        return;
-      }
-
-      final String labelText = labelIdentifier.getText();
-      if (labelText == null) {
-        return;
-      }
-      if (labelText.length() == 0) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.breakStatementWithLabelDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.breakStatementWithLabelProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new BreakStatementWithLabelVisitor();
+    }
+
+    private static class BreakStatementWithLabelVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+            super.visitBreakStatement(statement);
+            final PsiIdentifier labelIdentifier =
+                statement.getLabelIdentifier();
+            if (labelIdentifier == null) {
+                return;
+            }
+
+            final String labelText = labelIdentifier.getText();
+            if (labelText == null) {
+                return;
+            }
+            if (labelText.length() == 0) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

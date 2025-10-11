@@ -25,55 +25,53 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class NonFinalFieldInEnumInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalFieldInEnumDisplayName();
+    }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalFieldInEnumDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    protected String buildErrorString(Object... infos) {
+        final PsiClass enumClass = (PsiClass) infos[0];
+        return InspectionGadgetsLocalize.nonFinalFieldInEnumProblemDescriptor(enumClass.getName()).get();
+    }
 
-  @Nonnull
-  @Override
-  @RequiredReadAction
-  protected String buildErrorString(Object... infos) {
-    final PsiClass enumClass = (PsiClass)infos[0];
-    return InspectionGadgetsLocalize.nonFinalFieldInEnumProblemDescriptor(enumClass.getName()).get();
-  }
-
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[1];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonFinalFieldInEnumVisitor();
-  }
-
-  private static class NonFinalFieldInEnumVisitor extends BaseInspectionVisitor {
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[1];
+        return MakeFieldFinalFix.buildFix(field);
+    }
 
     @Override
-    public void visitField(PsiField field) {
-      super.visitField(field);
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null || !containingClass.isEnum()) {
-        return;
-      }
-      if (field.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      registerFieldError(field, containingClass, field);
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonFinalFieldInEnumVisitor();
     }
-  }
+
+    private static class NonFinalFieldInEnumVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(PsiField field) {
+            super.visitField(field);
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null || !containingClass.isEnum()) {
+                return;
+            }
+            if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            registerFieldError(field, containingClass, field);
+        }
+    }
 }

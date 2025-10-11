@@ -34,107 +34,107 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ForLoopReplaceableByWhileInspection extends BaseInspection {
-
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreLoopsWithoutConditions = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.forLoopReplaceableByWhileDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "ForLoopReplaceableByWhile";
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.forLoopReplaceableByWhileProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.forLoopReplaceableByWhileIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreLoopsWithoutConditions");
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new ReplaceForByWhileFix();
-  }
-
-  private static class ReplaceForByWhileFix extends InspectionGadgetsFix {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreLoopsWithoutConditions = false;
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.forLoopReplaceableByWhileReplaceQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.forLoopReplaceableByWhileDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement forKeywordElement = descriptor.getPsiElement();
-      final PsiForStatement forStatement = (PsiForStatement)forKeywordElement.getParent();
-      assert forStatement != null;
-      final PsiExpression condition = forStatement.getCondition();
-      final PsiStatement body = forStatement.getBody();
-      final String bodyText;
-      if (body == null) {
-        bodyText = "";
-      }
-      else {
-        bodyText = body.getText();
-      }
-      @NonNls final String whileStatement;
-      if (condition == null) {
-        whileStatement = "while(true)" + bodyText;
-      }
-      else {
-        whileStatement = "while(" + condition.getText() + ')' +
-                         bodyText;
-      }
-      replaceStatement(forStatement, whileStatement);
+    @Nonnull
+    public String getID() {
+        return "ForLoopReplaceableByWhile";
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ForLoopReplaceableByWhileVisitor();
-  }
-
-  private class ForLoopReplaceableByWhileVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(
-      @Nonnull PsiForStatement statement) {
-      super.visitForStatement(statement);
-      final PsiStatement initialization = statement.getInitialization();
-      if (initialization != null &&
-          !(initialization instanceof PsiEmptyStatement)) {
-        return;
-      }
-      final PsiStatement update = statement.getUpdate();
-      if (update != null && !(update instanceof PsiEmptyStatement)) {
-        return;
-      }
-      if (m_ignoreLoopsWithoutConditions) {
-        final PsiExpression condition = statement.getCondition();
-        if (condition == null) {
-          return;
-        }
-        final String conditionText = condition.getText();
-        if (PsiKeyword.TRUE.equals(conditionText)) {
-          return;
-        }
-      }
-      registerStatementError(statement);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.forLoopReplaceableByWhileProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.forLoopReplaceableByWhileIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreLoopsWithoutConditions");
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new ReplaceForByWhileFix();
+    }
+
+    private static class ReplaceForByWhileFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.forLoopReplaceableByWhileReplaceQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement forKeywordElement = descriptor.getPsiElement();
+            final PsiForStatement forStatement = (PsiForStatement) forKeywordElement.getParent();
+            assert forStatement != null;
+            final PsiExpression condition = forStatement.getCondition();
+            final PsiStatement body = forStatement.getBody();
+            final String bodyText;
+            if (body == null) {
+                bodyText = "";
+            }
+            else {
+                bodyText = body.getText();
+            }
+            @NonNls final String whileStatement;
+            if (condition == null) {
+                whileStatement = "while(true)" + bodyText;
+            }
+            else {
+                whileStatement = "while(" + condition.getText() + ')' +
+                    bodyText;
+            }
+            replaceStatement(forStatement, whileStatement);
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ForLoopReplaceableByWhileVisitor();
+    }
+
+    private class ForLoopReplaceableByWhileVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitForStatement(
+            @Nonnull PsiForStatement statement
+        ) {
+            super.visitForStatement(statement);
+            final PsiStatement initialization = statement.getInitialization();
+            if (initialization != null &&
+                !(initialization instanceof PsiEmptyStatement)) {
+                return;
+            }
+            final PsiStatement update = statement.getUpdate();
+            if (update != null && !(update instanceof PsiEmptyStatement)) {
+                return;
+            }
+            if (m_ignoreLoopsWithoutConditions) {
+                final PsiExpression condition = statement.getCondition();
+                if (condition == null) {
+                    return;
+                }
+                final String conditionText = condition.getText();
+                if (PsiKeyword.TRUE.equals(conditionText)) {
+                    return;
+                }
+            }
+            registerStatementError(statement);
+        }
+    }
 }

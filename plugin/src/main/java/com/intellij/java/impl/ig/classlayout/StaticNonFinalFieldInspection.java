@@ -23,42 +23,43 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class StaticNonFinalFieldInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticNonFinalFieldDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.staticNonFinalFieldProblemDescriptor().get();
-  }
-
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return MakeFieldFinalFix.buildFix(field);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticNonFinalFieldVisitor();
-  }
-
-  private static class StaticNonFinalFieldVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (!field.hasModifierProperty(PsiModifier.STATIC) ||
-          field.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      registerFieldError(field, field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticNonFinalFieldDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.staticNonFinalFieldProblemDescriptor().get();
+    }
+
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return MakeFieldFinalFix.buildFix(field);
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticNonFinalFieldVisitor();
+    }
+
+    private static class StaticNonFinalFieldVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (!field.hasModifierProperty(PsiModifier.STATIC) ||
+                field.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            registerFieldError(field, field);
+        }
+    }
 }

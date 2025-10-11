@@ -23,54 +23,56 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DefaultNotLastCaseInSwitchInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new DefaultNotLastCaseInSwitchVisitor();
-  }
-
-  private static class DefaultNotLastCaseInSwitchVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null) {
-        return;
-      }
-      final PsiStatement[] statements = body.getStatements();
-      boolean labelSeen = false;
-      for (int i = statements.length - 1; i >= 0; i--) {
-        final PsiStatement child = statements[i];
-        if (child instanceof PsiSwitchLabelStatement) {
-          final PsiSwitchLabelStatement label =
-            (PsiSwitchLabelStatement)child;
-          if (label.isDefaultCase()) {
-            if (labelSeen) {
-              registerStatementError(label);
-            }
-            return;
-          }
-          else {
-            labelSeen = true;
-          }
-        }
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new DefaultNotLastCaseInSwitchVisitor();
+    }
+
+    private static class DefaultNotLastCaseInSwitchVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitSwitchStatement(
+            @Nonnull PsiSwitchStatement statement
+        ) {
+            super.visitSwitchStatement(statement);
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null) {
+                return;
+            }
+            final PsiStatement[] statements = body.getStatements();
+            boolean labelSeen = false;
+            for (int i = statements.length - 1; i >= 0; i--) {
+                final PsiStatement child = statements[i];
+                if (child instanceof PsiSwitchLabelStatement) {
+                    final PsiSwitchLabelStatement label =
+                        (PsiSwitchLabelStatement) child;
+                    if (label.isDefaultCase()) {
+                        if (labelSeen) {
+                            registerStatementError(label);
+                        }
+                        return;
+                    }
+                    else {
+                        labelSeen = true;
+                    }
+                }
+            }
+        }
+    }
 }

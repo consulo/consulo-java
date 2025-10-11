@@ -21,41 +21,42 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ContinueStatementWithLabelInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.continueStatementWithLabelDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.continueStatementWithLabelProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ContinueStatementWithLabelVisitor();
-  }
-
-  private static class ContinueStatementWithLabelVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
-      super.visitContinueStatement(statement);
-      final PsiIdentifier label = statement.getLabelIdentifier();
-      if (label == null) {
-        return;
-      }
-      final String labelText = label.getText();
-      if (labelText == null) {
-        return;
-      }
-      if (labelText.length() == 0) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.continueStatementWithLabelDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.continueStatementWithLabelProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ContinueStatementWithLabelVisitor();
+    }
+
+    private static class ContinueStatementWithLabelVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+            super.visitContinueStatement(statement);
+            final PsiIdentifier label = statement.getLabelIdentifier();
+            if (label == null) {
+                return;
+            }
+            final String labelText = label.getText();
+            if (labelText == null) {
+                return;
+            }
+            if (labelText.length() == 0) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

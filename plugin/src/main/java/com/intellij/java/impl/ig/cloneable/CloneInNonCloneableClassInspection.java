@@ -24,52 +24,52 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneInNonCloneableClassInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cloneMethodInNonCloneableClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
-    final String className = aClass.getName();
-    return aClass.isInterface()
-      ? InspectionGadgetsLocalize.cloneMethodInNonCloneableInterfaceProblemDescriptor(className).get()
-      : InspectionGadgetsLocalize.cloneMethodInNonCloneableClassProblemDescriptor(className).get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
-    return new MakeCloneableFix(aClass.isInterface());
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CloneInNonCloneableClassVisitor();
-  }
-
-  private static class CloneInNonCloneableClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.cloneMethodInNonCloneableClassDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!CloneUtils.isClone(method)) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null ||
-          CloneUtils.isCloneable(containingClass)) {
-        return;
-      }
-      registerMethodError(method, containingClass);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiClass aClass = (PsiClass) infos[0];
+        final String className = aClass.getName();
+        return aClass.isInterface()
+            ? InspectionGadgetsLocalize.cloneMethodInNonCloneableInterfaceProblemDescriptor(className).get()
+            : InspectionGadgetsLocalize.cloneMethodInNonCloneableClassProblemDescriptor(className).get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiClass aClass = (PsiClass) infos[0];
+        return new MakeCloneableFix(aClass.isInterface());
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CloneInNonCloneableClassVisitor();
+    }
+
+    private static class CloneInNonCloneableClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!CloneUtils.isClone(method)) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null ||
+                CloneUtils.isCloneable(containingClass)) {
+                return;
+            }
+            registerMethodError(method, containingClass);
+        }
+    }
 }

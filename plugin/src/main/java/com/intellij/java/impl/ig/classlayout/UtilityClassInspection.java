@@ -27,59 +27,59 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class UtilityClassInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-  @SuppressWarnings({"PublicField"})
-  public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.utilityClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.utilityClassProblemDescriptor().get();
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner) infos[0], ignorableAnnotations);
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    return SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations,
-      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
-    );
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UtilityClassVisitor();
-  }
-
-  private class UtilityClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.utilityClassDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!UtilityClassUtil.isUtilityClass(aClass)) {
-        return;
-      }
-      if (AnnotationUtil.isAnnotated(aClass, ignorableAnnotations)) {
-        return;
-      }
-      registerClassError(aClass, aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.utilityClassProblemDescriptor().get();
     }
-  }
+
+    @Nonnull
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner) infos[0], ignorableAnnotations);
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        return SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+            ignorableAnnotations,
+            InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+        );
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new UtilityClassVisitor();
+    }
+
+    private class UtilityClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!UtilityClassUtil.isUtilityClass(aClass)) {
+                return;
+            }
+            if (AnnotationUtil.isAnnotated(aClass, ignorableAnnotations)) {
+                return;
+            }
+            registerClassError(aClass, aClass);
+        }
+    }
 }

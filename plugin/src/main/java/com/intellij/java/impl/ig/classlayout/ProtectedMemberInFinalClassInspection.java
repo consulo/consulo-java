@@ -42,172 +42,173 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ProtectedMemberInFinalClassInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.protectedMemberInFinalClassDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.protectedMemberInFinalClassDisplayName().get();
-  }
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.protectedMemberInFinalClassProblemDescriptor().get();
+    }
 
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.protectedMemberInFinalClassProblemDescriptor().get();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RemoveModifierFix((String)infos[0]);
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    return new InspectionGadgetsFix[] {
-      new RemoveModifierFix((String)infos[0]),
-      new MakePrivateFix()
-    };
-  }
-
-  private static class MakePrivateFix extends InspectionGadgetsFix {
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RemoveModifierFix((String) infos[0]);
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.makePrivateQuickfix().get();
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        return new InspectionGadgetsFix[]{
+            new RemoveModifierFix((String) infos[0]),
+            new MakePrivateFix()
+        };
     }
 
-    @Override
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      final PsiElement grandParent = parent.getParent();
-      if (!(grandParent instanceof PsiMember)) {
-        return;
-      }
-      final PsiMember member = (PsiMember)grandParent;
-      final PsiModifierList modifierList = member.getModifierList();
-      if (modifierList == null) {
-        return;
-      }
-      final MultiMap<PsiElement, String> conflicts = new MultiMap();
-      if (member instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)member;
-        SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(
-        new Processor<MethodSignatureBackedByPsiMethod>() {
-          @Override
-          public boolean process(MethodSignatureBackedByPsiMethod methodSignature) {
-            final PsiMethod superMethod = methodSignature.getMethod();
-              conflicts.putValue(
-                  superMethod,
-                  InspectionGadgetsLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
-                      RefactoringUIUtil.getDescription(method, false),
-                      RefactoringUIUtil.getDescription(superMethod, true)
-                  ).get()
-              );
-            return true;
-          }
-        });
-      OverridingMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
+    private static class MakePrivateFix extends InspectionGadgetsFix {
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.makePrivateQuickfix();
+        }
+
         @Override
-        public boolean process(PsiMethod overridingMethod) {
-            conflicts.putValue(
-                overridingMethod,
-                InspectionGadgetsLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
-                    RefactoringUIUtil.getDescription(method, false),
-                    RefactoringUIUtil.getDescription(overridingMethod, true)
-                ).get()
-            );
-          return false;
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            final PsiElement grandParent = parent.getParent();
+            if (!(grandParent instanceof PsiMember)) {
+                return;
+            }
+            final PsiMember member = (PsiMember) grandParent;
+            final PsiModifierList modifierList = member.getModifierList();
+            if (modifierList == null) {
+                return;
+            }
+            final MultiMap<PsiElement, String> conflicts = new MultiMap();
+            if (member instanceof PsiMethod) {
+                final PsiMethod method = (PsiMethod) member;
+                SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(
+                    new Processor<MethodSignatureBackedByPsiMethod>() {
+                        @Override
+                        public boolean process(MethodSignatureBackedByPsiMethod methodSignature) {
+                            final PsiMethod superMethod = methodSignature.getMethod();
+                            conflicts.putValue(
+                                superMethod,
+                                InspectionGadgetsLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
+                                    RefactoringUIUtil.getDescription(method, false),
+                                    RefactoringUIUtil.getDescription(superMethod, true)
+                                ).get()
+                            );
+                            return true;
+                        }
+                    });
+                OverridingMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
+                    @Override
+                    public boolean process(PsiMethod overridingMethod) {
+                        conflicts.putValue(
+                            overridingMethod,
+                            InspectionGadgetsLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
+                                RefactoringUIUtil.getDescription(method, false),
+                                RefactoringUIUtil.getDescription(overridingMethod, true)
+                            ).get()
+                        );
+                        return false;
+                    }
+                });
+            }
+            final PsiModifierList modifierListCopy = (PsiModifierList) modifierList.copy();
+            modifierListCopy.setModifierProperty(PsiModifier.PRIVATE, true);
+            final Query<PsiReference> search = ReferencesSearch.search(member, member.getResolveScope());
+            search.forEach(new Processor<PsiReference>() {
+                @Override
+                public boolean process(PsiReference reference) {
+                    final PsiElement element = reference.getElement();
+                    if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element, null, null)) {
+                        final PsiElement context =
+                            PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiField.class, PsiClass.class, PsiFile.class);
+                        conflicts.putValue(
+                            element,
+                            RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
+                                RefactoringUIUtil.getDescription(member, false),
+                                PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
+                                RefactoringUIUtil.getDescription(context, true)
+                            ).get()
+                        );
+                    }
+                    return true;
+                }
+            });
+            final boolean conflictsDialogOK;
+            if (conflicts.isEmpty()) {
+                conflictsDialogOK = true;
+            }
+            else {
+                if (!isOnTheFly()) {
+                    return;
+                }
+                final ConflictsDialog conflictsDialog = new ConflictsDialog(member.getProject(), conflicts, new Runnable() {
+                    @Override
+                    public void run() {
+                        final AccessToken token = WriteAction.start();
+                        try {
+                            modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
+                        }
+                        finally {
+                            token.finish();
+                        }
+                    }
+                });
+                conflictsDialog.show();
+                conflictsDialogOK = conflictsDialog.isOK();
+            }
+            if (conflictsDialogOK) {
+                modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
+            }
         }
-      });
-      }
-      final PsiModifierList modifierListCopy = (PsiModifierList)modifierList.copy();
-      modifierListCopy.setModifierProperty(PsiModifier.PRIVATE, true);
-      final Query<PsiReference> search = ReferencesSearch.search(member, member.getResolveScope());
-      search.forEach(new Processor<PsiReference>() {
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ProtectedMemberInFinalClassVisitor();
+    }
+
+    private static class ProtectedMemberInFinalClassVisitor extends BaseInspectionVisitor {
+
         @Override
-        public boolean process(PsiReference reference) {
-          final PsiElement element = reference.getElement();
-          if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element, null, null)) {
-            final PsiElement context =
-              PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiField.class, PsiClass.class, PsiFile.class);
-            conflicts.putValue(
-              element,
-              RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(RefactoringUIUtil.getDescription(member, false),
-                PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
-                RefactoringUIUtil.getDescription(context, true)
-              ).get()
-            );
-          }
-          return true;
-        }
-      });
-      final boolean conflictsDialogOK;
-      if (conflicts.isEmpty()) {
-        conflictsDialogOK = true;
-      } else {
-        if (!isOnTheFly()) {
-          return;
-        }
-        final ConflictsDialog conflictsDialog = new ConflictsDialog(member.getProject(), conflicts, new Runnable() {
-          @Override
-          public void run() {
-            final AccessToken token = WriteAction.start();
-            try {
-              modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!method.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
             }
-            finally {
-              token.finish();
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
             }
-          }
-        });
-        conflictsDialog.show();
-        conflictsDialogOK = conflictsDialog.isOK();
-      }
-      if (conflictsDialogOK) {
-        modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
-      }
+            if (MethodUtils.hasSuper(method)) {
+                return;
+            }
+            registerModifierError(PsiModifier.PROTECTED, method, PsiModifier.PROTECTED);
+        }
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
+            }
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            registerModifierError(PsiModifier.PROTECTED, field, PsiModifier.PROTECTED);
+        }
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ProtectedMemberInFinalClassVisitor();
-  }
-
-  private static class ProtectedMemberInFinalClassVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!method.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      if (MethodUtils.hasSuper(method)) {
-        return;
-      }
-      registerModifierError(PsiModifier.PROTECTED, method, PsiModifier.PROTECTED);
-    }
-
-    @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      registerModifierError(PsiModifier.PROTECTED, field, PsiModifier.PROTECTED);
-    }
-  }
 }
