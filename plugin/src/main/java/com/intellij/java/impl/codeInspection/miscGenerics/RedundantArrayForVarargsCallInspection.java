@@ -30,6 +30,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -44,173 +45,184 @@ import java.util.List;
  */
 @ExtensionImpl
 public class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase {
-  private static final Logger LOG = Logger.getInstance(RedundantArrayForVarargsCallInspection.class);
-  private final LocalQuickFix myQuickFixAction = new MyQuickFix();
+    private static final Logger LOG = Logger.getInstance(RedundantArrayForVarargsCallInspection.class);
+    private final LocalQuickFix myQuickFixAction = new MyQuickFix();
 
-  private static class MyQuickFix implements LocalQuickFix {
-    @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      PsiNewExpression arrayCreation = (PsiNewExpression) descriptor.getPsiElement();
-      if (arrayCreation == null || !arrayCreation.isValid()) return;
-      if (!FileModificationService.getInstance().prepareFileForWrite(arrayCreation.getContainingFile())) return;
-      InlineUtil.inlineArrayCreationForVarargs(arrayCreation);
+    private static class MyQuickFix implements LocalQuickFix {
+        @Override
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiNewExpression arrayCreation = (PsiNewExpression) descriptor.getPsiElement();
+            if (arrayCreation == null || !arrayCreation.isValid()) {
+                return;
+            }
+            if (!FileModificationService.getInstance().prepareFileForWrite(arrayCreation.getContainingFile())) {
+                return;
+            }
+            InlineUtil.inlineArrayCreationForVarargs(arrayCreation);
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionLocalize.inspectionRedundantArrayCreationQuickfix();
+        }
     }
 
     @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
-    }
+    public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager manager, final boolean isOnTheFly, Object state) {
+        if (!PsiUtil.isLanguageLevel5OrHigher(place)) {
+            return null;
+        }
+        final List<ProblemDescriptor> problems = new ArrayList<>();
+        place.accept(new JavaRecursiveElementWalkingVisitor() {
+            @Override
+            public void visitCallExpression(@Nonnull PsiCallExpression expression) {
+                super.visitCallExpression(expression);
+                checkCall(expression);
+            }
 
-    @Override
-    @Nonnull
-    public String getName() {
-      return InspectionLocalize.inspectionRedundantArrayCreationQuickfix().get();
-    }
-  }
+            @Override
+            public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
+                super.visitEnumConstant(enumConstant);
+                checkCall(enumConstant);
+            }
 
-  @Override
-  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager manager, final boolean isOnTheFly, Object state) {
-    if (!PsiUtil.isLanguageLevel5OrHigher(place)) return null;
-    final List<ProblemDescriptor> problems = new ArrayList<>();
-    place.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override
-      public void visitCallExpression(@Nonnull PsiCallExpression expression) {
-        super.visitCallExpression(expression);
-        checkCall(expression);
-      }
+            @Override
+            public void visitClass(@Nonnull PsiClass aClass) {
+                //do not go inside to prevent multiple signals of the same problem
+            }
 
-      @Override
-      public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
-        super.visitEnumConstant(enumConstant);
-        checkCall(enumConstant);
-      }
+            private void checkCall(PsiCall expression) {
+                final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
+                PsiElement element = resolveResult.getElement();
+                final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+                if (element instanceof PsiMethod method && method.isVarArgs()) {
+                    PsiParameter[] parameters = method.getParameterList().getParameters();
+                    PsiExpressionList argumentList = expression.getArgumentList();
+                    if (argumentList != null) {
+                        PsiExpression[] args = argumentList.getExpressions();
+                        if (parameters.length == args.length) {
+                            PsiExpression lastArg = args[args.length - 1];
+                            PsiParameter lastParameter = parameters[args.length - 1];
+                            PsiType lastParamType = lastParameter.getType();
+                            LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
+                            if (lastArg instanceof PsiNewExpression newExpression &&
+                                substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).equals(lastArg.getType())) {
+                                PsiExpression[] initializers = getInitializers(newExpression);
+                                if (initializers != null) {
+                                    if (isSafeToFlatten(expression, method, initializers)) {
+                                        final ProblemDescriptor descriptor = manager.createProblemDescriptor(
+                                            lastArg,
+                                            InspectionLocalize.inspectionRedundantArrayCreationForVarargsCallDescriptor().get(),
+                                            myQuickFixAction,
+                                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                            isOnTheFly
+                                        );
 
-      @Override
-      public void visitClass(@Nonnull PsiClass aClass) {
-        //do not go inside to prevent multiple signals of the same problem
-      }
-
-      private void checkCall(PsiCall expression) {
-        final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
-        PsiElement element = resolveResult.getElement();
-        final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-        if (element instanceof PsiMethod method && method.isVarArgs()) {
-          PsiParameter[] parameters = method.getParameterList().getParameters();
-          PsiExpressionList argumentList = expression.getArgumentList();
-          if (argumentList != null) {
-            PsiExpression[] args = argumentList.getExpressions();
-            if (parameters.length == args.length) {
-              PsiExpression lastArg = args[args.length - 1];
-              PsiParameter lastParameter = parameters[args.length - 1];
-              PsiType lastParamType = lastParameter.getType();
-              LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
-              if (lastArg instanceof PsiNewExpression newExpression &&
-                  substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).equals(lastArg.getType())) {
-                PsiExpression[] initializers = getInitializers(newExpression);
-                if (initializers != null) {
-                  if (isSafeToFlatten(expression, method, initializers)) {
-                    final ProblemDescriptor descriptor = manager.createProblemDescriptor(
-                      lastArg,
-                      InspectionLocalize.inspectionRedundantArrayCreationForVarargsCallDescriptor().get(),
-                      myQuickFixAction,
-                      ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                      isOnTheFly
-                    );
-
-                    problems.add(descriptor);
-                  }
+                                        problems.add(descriptor);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
-        }
-      }
 
-      private boolean isSafeToFlatten(PsiCall callExpression, PsiMethod oldRefMethod, PsiExpression[] arrayElements) {
-        if (arrayElements.length == 1) {
-          PsiType type = arrayElements[0].getType();
-          // change foo(new Object[]{array}) to foo(array) is not safe
-          if (PsiType.NULL.equals(type) || type instanceof PsiArrayType) return false;
-        }
-        PsiCall copy = (PsiCall) callExpression.copy();
-        PsiExpressionList copyArgumentList = copy.getArgumentList();
-        LOG.assertTrue(copyArgumentList != null);
-        PsiExpression[] args = copyArgumentList.getExpressions();
-        try {
-          args[args.length - 1].delete();
-          if (arrayElements.length > 0) {
-            copyArgumentList.addRange(arrayElements[0], arrayElements[arrayElements.length - 1]);
-          }
-          final Project project = callExpression.getProject();
-          final JavaResolveResult resolveResult;
-          if (callExpression instanceof PsiEnumConstant enumConstant) {
-            final PsiClass containingClass = enumConstant.getContainingClass();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-            final PsiClassType classType = facade.getElementFactory().createType(containingClass);
-            resolveResult = facade.getResolveHelper().resolveConstructor(classType, copyArgumentList, enumConstant);
-            return resolveResult.isValidResult() && resolveResult.getElement() == oldRefMethod;
-          } else {
-            resolveResult = copy.resolveMethodGenerics();
-            if (!resolveResult.isValidResult() || resolveResult.getElement() != oldRefMethod) {
-              return false;
+            private boolean isSafeToFlatten(PsiCall callExpression, PsiMethod oldRefMethod, PsiExpression[] arrayElements) {
+                if (arrayElements.length == 1) {
+                    PsiType type = arrayElements[0].getType();
+                    // change foo(new Object[]{array}) to foo(array) is not safe
+                    if (PsiType.NULL.equals(type) || type instanceof PsiArrayType) {
+                        return false;
+                    }
+                }
+                PsiCall copy = (PsiCall) callExpression.copy();
+                PsiExpressionList copyArgumentList = copy.getArgumentList();
+                LOG.assertTrue(copyArgumentList != null);
+                PsiExpression[] args = copyArgumentList.getExpressions();
+                try {
+                    args[args.length - 1].delete();
+                    if (arrayElements.length > 0) {
+                        copyArgumentList.addRange(arrayElements[0], arrayElements[arrayElements.length - 1]);
+                    }
+                    final Project project = callExpression.getProject();
+                    final JavaResolveResult resolveResult;
+                    if (callExpression instanceof PsiEnumConstant enumConstant) {
+                        final PsiClass containingClass = enumConstant.getContainingClass();
+                        final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+                        final PsiClassType classType = facade.getElementFactory().createType(containingClass);
+                        resolveResult = facade.getResolveHelper().resolveConstructor(classType, copyArgumentList, enumConstant);
+                        return resolveResult.isValidResult() && resolveResult.getElement() == oldRefMethod;
+                    }
+                    else {
+                        resolveResult = copy.resolveMethodGenerics();
+                        if (!resolveResult.isValidResult() || resolveResult.getElement() != oldRefMethod) {
+                            return false;
+                        }
+                        final ExpectedTypeInfo[] expectedTypes =
+                            ExpectedTypesProvider.getExpectedTypes((PsiCallExpression) callExpression, false);
+                        final PsiType expressionType = ((PsiCallExpression) copy).getType();
+                        for (ExpectedTypeInfo expectedType : expectedTypes) {
+                            if (!expectedType.getType().isAssignableFrom(expressionType)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                }
+                catch (IncorrectOperationException e) {
+                    return false;
+                }
             }
-            final ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getExpectedTypes((PsiCallExpression) callExpression, false);
-            final PsiType expressionType = ((PsiCallExpression) copy).getType();
-            for (ExpectedTypeInfo expectedType : expectedTypes) {
-              if (!expectedType.getType().isAssignableFrom(expressionType)) {
-                return false;
-              }
-            }
-            return true;
-          }
-        } catch (IncorrectOperationException e) {
-          return false;
+        });
+        if (problems.isEmpty()) {
+            return null;
         }
-      }
-    });
-    if (problems.isEmpty()) return null;
-    return problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
-
-  @Nullable
-  private static PsiExpression[] getInitializers(final PsiNewExpression newExpression) {
-    PsiArrayInitializerExpression initializer = newExpression.getArrayInitializer();
-    if (initializer != null) {
-      return initializer.getInitializers();
-    }
-    PsiExpression[] dims = newExpression.getArrayDimensions();
-    if (dims.length > 0) {
-      PsiExpression firstDimension = dims[0];
-      Object value =
-          JavaPsiFacade.getInstance(newExpression.getProject()).getConstantEvaluationHelper().computeConstantExpression(firstDimension);
-      if (value instanceof Integer intValue && intValue == 0) return PsiExpression.EMPTY_ARRAY;
+        return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    return null;
-  }
+    @Nullable
+    private static PsiExpression[] getInitializers(final PsiNewExpression newExpression) {
+        PsiArrayInitializerExpression initializer = newExpression.getArrayInitializer();
+        if (initializer != null) {
+            return initializer.getInitializers();
+        }
+        PsiExpression[] dims = newExpression.getArrayDimensions();
+        if (dims.length > 0) {
+            PsiExpression firstDimension = dims[0];
+            Object value =
+                JavaPsiFacade.getInstance(newExpression.getProject())
+                    .getConstantEvaluationHelper()
+                    .computeConstantExpression(firstDimension);
+            if (value instanceof Integer intValue && intValue == 0) {
+                return PsiExpression.EMPTY_ARRAY;
+            }
+        }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+        return null;
+    }
 
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionRedundantArrayCreationDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
+    }
 
-  @Override
-  @Nonnull
-  @NonNls
-  public String getShortName() {
-    return "RedundantArrayCreation";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionRedundantArrayCreationDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    @NonNls
+    public String getShortName() {
+        return "RedundantArrayCreation";
+    }
 }

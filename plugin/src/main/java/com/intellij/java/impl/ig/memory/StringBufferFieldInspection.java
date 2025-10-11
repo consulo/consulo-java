@@ -22,42 +22,40 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferFieldInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringbufferFieldDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiType type = (PsiType)infos[0];
-    final String typeName = type.getPresentableText();
-    return InspectionGadgetsLocalize.stringbufferFieldProblemDescriptor(typeName).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringBufferFieldVisitor();
-  }
-
-  private static class StringBufferFieldVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringbufferFieldDisplayName();
+    }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      super.visitField(field);
-      final PsiType type = field.getType();
-      if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&
-          !type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER)) {
-        return;
-      }
-      registerFieldError(field, type);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiType type = (PsiType) infos[0];
+        final String typeName = type.getPresentableText();
+        return InspectionGadgetsLocalize.stringbufferFieldProblemDescriptor(typeName).get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringBufferFieldVisitor();
+    }
+
+    private static class StringBufferFieldVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            super.visitField(field);
+            final PsiType type = field.getType();
+            if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&
+                !type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER)) {
+                return;
+            }
+            registerFieldError(field, type);
+        }
+    }
 }

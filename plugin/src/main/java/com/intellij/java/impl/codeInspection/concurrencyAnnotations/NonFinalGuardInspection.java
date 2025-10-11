@@ -25,100 +25,99 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
+    }
 
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
-  }
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return "Non-final @GuardedBy field";
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "NonFinalGuard";
-  }
-
-
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
-    return new Visitor(holder);
-  }
-
-  private static class Visitor extends JavaElementVisitor {
-    private final ProblemsHolder myHolder;
-
-    public Visitor(ProblemsHolder holder) {
-
-      myHolder = holder;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.localizeTODO("Non-final @GuardedBy field");
     }
 
     @Override
-    public void visitAnnotation(PsiAnnotation annotation) {
-      super.visitAnnotation(annotation);
-      if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
-        return;
-      }
-      final String guardValue = JCiPUtil.getGuardValue(annotation);
-      if (guardValue == null || "this".equals(guardValue)) {
-        return;
-      }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
-      if (containingClass == null) {
-        return;
-      }
-      final PsiField guardField = containingClass.findFieldByName(guardValue, true);
-      if (guardField == null) {
-        return;
-      }
-      if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
-      if (member == null) {
-        return;
-      }
-      myHolder.registerProblem(member, "Non-final @GuardedBy field #ref #loc");
+    @Nonnull
+    public String getShortName() {
+        return "NonFinalGuard";
     }
 
+
     @Override
-    public void visitDocTag(PsiDocTag psiDocTag) {
-      super.visitDocTag(psiDocTag);
-      if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
-        return;
-      }
-      final String guardValue = JCiPUtil.getGuardValue(psiDocTag);
-      if ("this".equals(guardValue)) {
-        return;
-      }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
-      if (containingClass == null) {
-        return;
-      }
-      final PsiField guardField = containingClass.findFieldByName(guardValue, true);
-      if (guardField == null) {
-        return;
-      }
-      if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      myHolder.registerProblem(psiDocTag, "Non-final @GuardedBy field \"" + guardValue + "\" #loc");
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        return new Visitor(holder);
     }
-  }
+
+    private static class Visitor extends JavaElementVisitor {
+        private final ProblemsHolder myHolder;
+
+        public Visitor(ProblemsHolder holder) {
+
+            myHolder = holder;
+        }
+
+        @Override
+        public void visitAnnotation(PsiAnnotation annotation) {
+            super.visitAnnotation(annotation);
+            if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
+                return;
+            }
+            final String guardValue = JCiPUtil.getGuardValue(annotation);
+            if (guardValue == null || "this".equals(guardValue)) {
+                return;
+            }
+            final PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
+            if (containingClass == null) {
+                return;
+            }
+            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            if (guardField == null) {
+                return;
+            }
+            if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
+            if (member == null) {
+                return;
+            }
+            myHolder.registerProblem(member, "Non-final @GuardedBy field #ref #loc");
+        }
+
+        @Override
+        public void visitDocTag(PsiDocTag psiDocTag) {
+            super.visitDocTag(psiDocTag);
+            if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
+                return;
+            }
+            final String guardValue = JCiPUtil.getGuardValue(psiDocTag);
+            if ("this".equals(guardValue)) {
+                return;
+            }
+            final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
+            if (containingClass == null) {
+                return;
+            }
+            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            if (guardField == null) {
+                return;
+            }
+            if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            myHolder.registerProblem(psiDocTag, "Non-final @GuardedBy field \"" + guardValue + "\" #loc");
+        }
+    }
 }

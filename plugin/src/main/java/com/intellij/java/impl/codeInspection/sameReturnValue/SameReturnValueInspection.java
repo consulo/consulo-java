@@ -35,110 +35,93 @@ import jakarta.annotation.Nullable;
  * @author max
  */
 @ExtensionImpl
-public class SameReturnValueInspection extends GlobalJavaInspectionTool
-{
-	@Override
-	@Nullable
-	public CommonProblemDescriptor[] checkElement(
-		@Nonnull RefEntity refEntity,
-		@Nonnull AnalysisScope scope,
-		@Nonnull InspectionManager manager,
-		@Nonnull GlobalInspectionContext globalContext,
-		@Nonnull ProblemDescriptionsProcessor processor,
-		@Nonnull Object state
-	)
-	{
-		if (refEntity instanceof RefMethod refMethod)
-		{
-			if (refMethod.isConstructor() || refMethod.hasSuperMethods())
-			{
-				return null;
-			}
+public class SameReturnValueInspection extends GlobalJavaInspectionTool {
+    @Override
+    @Nullable
+    public CommonProblemDescriptor[] checkElement(
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor processor,
+        @Nonnull Object state
+    ) {
+        if (refEntity instanceof RefMethod refMethod) {
+            if (refMethod.isConstructor() || refMethod.hasSuperMethods()) {
+                return null;
+            }
 
-			String returnValue = refMethod.getReturnValueIfSame();
-			if (returnValue != null)
-			{
-				final LocalizeValue message;
-				if (refMethod.getDerivedMethods().isEmpty())
-				{
-					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor("<code>" + returnValue + "</code>");
-				}
-				else if (refMethod.hasBody())
-				{
-					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor1("<code>" + returnValue + "</code>");
-				}
-				else
-				{
-					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor2("<code>" + returnValue + "</code>");
-				}
+            String returnValue = refMethod.getReturnValueIfSame();
+            if (returnValue != null) {
+                final LocalizeValue message;
+                if (refMethod.getDerivedMethods().isEmpty()) {
+                    message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor("<code>" + returnValue + "</code>");
+                }
+                else if (refMethod.hasBody()) {
+                    message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor1("<code>" + returnValue + "</code>");
+                }
+                else {
+                    message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor2("<code>" + returnValue + "</code>");
+                }
 
-				return new ProblemDescriptor[]{
-					manager.createProblemDescriptor(
-						refMethod.getElement().getNavigationElement(),
-						message.get(),
-						false,
-						null,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-					)
-				};
-			}
-		}
+                return new ProblemDescriptor[]{
+                    manager.createProblemDescriptor(
+                        refMethod.getElement().getNavigationElement(),
+                        message.get(),
+                        false,
+                        null,
+                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+                    )
+                };
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 
-	@Override
-	protected boolean queryExternalUsagesRequests(
-		final RefManager manager,
-		final GlobalJavaInspectionContext globalContext,
-		final ProblemDescriptionsProcessor processor,
-		Object state
-	)
-	{
-		manager.iterate(new RefJavaVisitor()
-		{
-			@Override
-			public void visitElement(@Nonnull RefEntity refEntity)
-			{
-				if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null)
-				{
-					refEntity.accept(new RefJavaVisitor()
-					{
-						@Override
-						public void visitMethod(@Nonnull final RefMethod refMethod)
-						{
-							globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
-								processor.ignoreElement(refMethod);
-								return false;
-							});
-						}
-					});
-				}
-			}
-		});
+    @Override
+    protected boolean queryExternalUsagesRequests(
+        final RefManager manager,
+        final GlobalJavaInspectionContext globalContext,
+        final ProblemDescriptionsProcessor processor,
+        Object state
+    ) {
+        manager.iterate(new RefJavaVisitor() {
+            @Override
+            public void visitElement(@Nonnull RefEntity refEntity) {
+                if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
+                    refEntity.accept(new RefJavaVisitor() {
+                        @Override
+                        public void visitMethod(@Nonnull final RefMethod refMethod) {
+                            globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
+                                processor.ignoreElement(refMethod);
+                                return false;
+                            });
+                        }
+                    });
+                }
+            }
+        });
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionLocalize.inspectionSameReturnValueDisplayName().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionSameReturnValueDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getGroupDisplayName()
-	{
-		return InspectionLocalize.groupNamesDeclarationRedundancy().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
+    }
 
-	@Override
-	@Nonnull
-	public String getShortName()
-	{
-		return "SameReturnValue";
-	}
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "SameReturnValue";
+    }
 }

@@ -28,177 +28,196 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 /**
- * User: anna
- * Date: 15-Nov-2005
+ * @author anna
+ * @since 2005-11-15
  */
 @ExtensionImpl
 public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionVariableAssignedToItselfDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionVariableAssignedToItselfDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  @NonNls
-  public String getShortName() {
-    return "SillyAssignment";
-  }
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "SillyAssignment";
+    }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
-    boolean isOnTheFly,
-    LocalInspectionToolSession session,
-    Object state
-  ) {
-    return new JavaElementVisitor() {
+    @Override
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        return new JavaElementVisitor() {
 
-      @Override public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
-        checkSillyAssignment(expression, holder);
-      }
+            @Override
+            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+                checkSillyAssignment(expression, holder);
+            }
 
-      @Override
-      public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
-        visitElement(expression);
-      }
+            @Override
+            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+                visitElement(expression);
+            }
 
-      @Override
-      @RequiredReadAction
-      public void visitVariable(@Nonnull final PsiVariable variable) {
-        final PsiExpression initializer = PsiUtil.deparenthesizeExpression(variable.getInitializer());
-        if (initializer instanceof PsiAssignmentExpression assignmentExpression) {
-          final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(assignmentExpression.getLExpression());
-          checkExpression(variable, lExpr);
+            @Override
+            @RequiredReadAction
+            public void visitVariable(@Nonnull final PsiVariable variable) {
+                final PsiExpression initializer = PsiUtil.deparenthesizeExpression(variable.getInitializer());
+                if (initializer instanceof PsiAssignmentExpression assignmentExpression) {
+                    final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(assignmentExpression.getLExpression());
+                    checkExpression(variable, lExpr);
+                }
+                else {
+                    checkExpression(variable, initializer);
+                }
+            }
+
+            @RequiredReadAction
+            private void checkExpression(PsiVariable variable, PsiExpression expression) {
+                if (!(expression instanceof PsiReferenceExpression)) {
+                    return;
+                }
+                final PsiReferenceExpression refExpr = (PsiReferenceExpression) expression;
+                final PsiExpression qualifier = refExpr.getQualifierExpression();
+                if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression
+                    || variable.hasModifierProperty(PsiModifier.STATIC)) {
+                    if (refExpr.isReferenceTo(variable)) {
+                        holder.registerProblem(
+                            expression,
+                            InspectionLocalize.assignmentToDeclaredVariableProblemDescriptor(variable.getName()).get(),
+                            ProblemHighlightType.LIKE_UNUSED_SYMBOL
+                        );
+                    }
+                }
+            }
+        };
+    }
+
+    private static void checkSillyAssignment(PsiAssignmentExpression assignment, ProblemsHolder holder) {
+        if (assignment.getOperationTokenType() != JavaTokenType.EQ) {
+            return;
+        }
+        PsiExpression lExpression = assignment.getLExpression();
+        PsiExpression rExpression = assignment.getRExpression();
+        if (rExpression == null) {
+            return;
+        }
+        lExpression = PsiUtil.deparenthesizeExpression(lExpression);
+        rExpression = PsiUtil.deparenthesizeExpression(rExpression);
+        if (!(lExpression instanceof PsiReferenceExpression)) {
+            return;
+        }
+        PsiReferenceExpression rRef;
+        if (rExpression instanceof PsiReferenceExpression rReferenceExpression) {
+            rRef = rReferenceExpression;
+        }
+        else if (rExpression instanceof PsiAssignmentExpression rAssignmentExpression) {
+            final PsiExpression assignee = PsiUtil.deparenthesizeExpression(rAssignmentExpression.getLExpression());
+            if (assignee instanceof PsiReferenceExpression referenceExpressionAssignee) {
+                rRef = referenceExpressionAssignee;
+            }
+            else {
+                return;
+            }
         }
         else {
-          checkExpression(variable, initializer);
+            return;
         }
-      }
-
-      @RequiredReadAction
-      private void checkExpression(PsiVariable variable, PsiExpression expression) {
-        if (!(expression instanceof PsiReferenceExpression)) {
-          return;
+        PsiReferenceExpression lRef = (PsiReferenceExpression) lExpression;
+        PsiManager manager = assignment.getManager();
+        if (!sameInstanceReferences(lRef, rRef, manager)) {
+            return;
         }
-        final PsiReferenceExpression refExpr = (PsiReferenceExpression)expression;
-        final PsiExpression qualifier = refExpr.getQualifierExpression();
-        if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression
-          || variable.hasModifierProperty(PsiModifier.STATIC)) {
-          if (refExpr.isReferenceTo(variable)) {
-            holder.registerProblem(
-              expression,
-              InspectionLocalize.assignmentToDeclaredVariableProblemDescriptor(variable.getName()).get(),
-              ProblemHighlightType.LIKE_UNUSED_SYMBOL
-            );
-          }
+        final PsiVariable variable = (PsiVariable) lRef.resolve();
+        if (variable == null) {
+            return;
         }
-      }
-    };
-  }
-
-  private static void checkSillyAssignment(PsiAssignmentExpression assignment, ProblemsHolder holder) {
-    if (assignment.getOperationTokenType() != JavaTokenType.EQ) return;
-    PsiExpression lExpression = assignment.getLExpression();
-    PsiExpression rExpression = assignment.getRExpression();
-    if (rExpression == null) return;
-    lExpression = PsiUtil.deparenthesizeExpression(lExpression);
-    rExpression = PsiUtil.deparenthesizeExpression(rExpression);
-    if (!(lExpression instanceof PsiReferenceExpression)) return;
-    PsiReferenceExpression rRef;
-    if (rExpression instanceof PsiReferenceExpression rReferenceExpression) {
-      rRef = rReferenceExpression;
-    }
-    else if (rExpression instanceof PsiAssignmentExpression rAssignmentExpression) {
-      final PsiExpression assignee = PsiUtil.deparenthesizeExpression(rAssignmentExpression.getLExpression());
-      if (assignee instanceof PsiReferenceExpression referenceExpressionAssignee) {
-        rRef = referenceExpressionAssignee;
-      }
-      else {
-        return;
-      }
-    }
-    else {
-      return;
-    }
-    PsiReferenceExpression lRef = (PsiReferenceExpression)lExpression;
-    PsiManager manager = assignment.getManager();
-    if (!sameInstanceReferences(lRef, rRef, manager)) {
-      return;
-    }
-    final PsiVariable variable = (PsiVariable)lRef.resolve();
-    if (variable == null) {
-      return;
-    }
-    holder.registerProblem(
-      assignment,
-      InspectionLocalize.assignmentToItselfProblemDescriptor(variable.getName()).get(),
-      ProblemHighlightType.LIKE_UNUSED_SYMBOL
-    );
-  }
-
-  /**
-   * @return true if both expressions resolve to the same variable/class or field in the same instance of the class
-   */
-  @RequiredReadAction
-  private static boolean sameInstanceReferences(
-    @Nullable PsiJavaCodeReferenceElement lRef,
-    @Nullable PsiJavaCodeReferenceElement rRef,
-    PsiManager manager
-  ) {
-    if (lRef == null && rRef == null) return true;
-    if (lRef == null || rRef == null) return false;
-    PsiElement lResolved = lRef.resolve();
-    PsiElement rResolved = rRef.resolve();
-    if (!manager.areElementsEquivalent(lResolved, rResolved)) return false;
-    if (!(lResolved instanceof PsiVariable)) return false;
-    final PsiVariable variable = (PsiVariable)lResolved;
-    if (variable.hasModifierProperty(PsiModifier.STATIC)) return true;
-
-    final PsiElement lQualifier = lRef.getQualifier();
-    final PsiElement rQualifier = rRef.getQualifier();
-    if (lQualifier instanceof PsiJavaCodeReferenceElement lJavaRef && rQualifier instanceof PsiJavaCodeReferenceElement rJavaRef) {
-      return sameInstanceReferences(lJavaRef, rJavaRef, manager);
+        holder.registerProblem(
+            assignment,
+            InspectionLocalize.assignmentToItselfProblemDescriptor(variable.getName()).get(),
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL
+        );
     }
 
-    if (Comparing.equal(lQualifier, rQualifier)) return true;
-    boolean lThis = lQualifier == null || lQualifier instanceof PsiThisExpression || lQualifier instanceof PsiSuperExpression;
-    boolean rThis = rQualifier == null || rQualifier instanceof PsiThisExpression || rQualifier instanceof PsiSuperExpression;
-    if (lThis && rThis) {
-      final PsiJavaCodeReferenceElement llQualifier = getQualifier(lQualifier);
-      final PsiJavaCodeReferenceElement rrQualifier = getQualifier(rQualifier);
-      return sameInstanceReferences(llQualifier, rrQualifier, manager);
-    }
-    return false;
-  }
-
-  @RequiredReadAction
-  private static PsiJavaCodeReferenceElement getQualifier(PsiElement qualifier) {
-    if (qualifier instanceof PsiThisExpression thisExpression) {
-      final PsiJavaCodeReferenceElement thisQualifier = thisExpression.getQualifier();
-      if (thisQualifier != null) {
-        final PsiClass innerMostClass = PsiTreeUtil.getParentOfType(thisQualifier, PsiClass.class);
-        if (innerMostClass == thisQualifier.resolve()) {
-          return null;
+    /**
+     * @return true if both expressions resolve to the same variable/class or field in the same instance of the class
+     */
+    @RequiredReadAction
+    private static boolean sameInstanceReferences(
+        @Nullable PsiJavaCodeReferenceElement lRef,
+        @Nullable PsiJavaCodeReferenceElement rRef,
+        PsiManager manager
+    ) {
+        if (lRef == null && rRef == null) {
+            return true;
         }
-      }
-      return thisQualifier;
-    } else if (qualifier != null) {
-      return  ((PsiSuperExpression)qualifier).getQualifier();
+        if (lRef == null || rRef == null) {
+            return false;
+        }
+        PsiElement lResolved = lRef.resolve();
+        PsiElement rResolved = rRef.resolve();
+        if (!manager.areElementsEquivalent(lResolved, rResolved)) {
+            return false;
+        }
+        if (!(lResolved instanceof PsiVariable)) {
+            return false;
+        }
+        final PsiVariable variable = (PsiVariable) lResolved;
+        if (variable.hasModifierProperty(PsiModifier.STATIC)) {
+            return true;
+        }
+
+        final PsiElement lQualifier = lRef.getQualifier();
+        final PsiElement rQualifier = rRef.getQualifier();
+        if (lQualifier instanceof PsiJavaCodeReferenceElement lJavaRef && rQualifier instanceof PsiJavaCodeReferenceElement rJavaRef) {
+            return sameInstanceReferences(lJavaRef, rJavaRef, manager);
+        }
+
+        if (Comparing.equal(lQualifier, rQualifier)) {
+            return true;
+        }
+        boolean lThis = lQualifier == null || lQualifier instanceof PsiThisExpression || lQualifier instanceof PsiSuperExpression;
+        boolean rThis = rQualifier == null || rQualifier instanceof PsiThisExpression || rQualifier instanceof PsiSuperExpression;
+        if (lThis && rThis) {
+            final PsiJavaCodeReferenceElement llQualifier = getQualifier(lQualifier);
+            final PsiJavaCodeReferenceElement rrQualifier = getQualifier(rQualifier);
+            return sameInstanceReferences(llQualifier, rrQualifier, manager);
+        }
+        return false;
     }
-    return null;
-  }
+
+    @RequiredReadAction
+    private static PsiJavaCodeReferenceElement getQualifier(PsiElement qualifier) {
+        if (qualifier instanceof PsiThisExpression thisExpression) {
+            final PsiJavaCodeReferenceElement thisQualifier = thisExpression.getQualifier();
+            if (thisQualifier != null) {
+                final PsiClass innerMostClass = PsiTreeUtil.getParentOfType(thisQualifier, PsiClass.class);
+                if (innerMostClass == thisQualifier.resolve()) {
+                    return null;
+                }
+            }
+            return thisQualifier;
+        }
+        else if (qualifier != null) {
+            return ((PsiSuperExpression) qualifier).getQualifier();
+        }
+        return null;
+    }
 }

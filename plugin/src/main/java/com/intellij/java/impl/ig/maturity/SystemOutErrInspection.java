@@ -24,55 +24,58 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SystemOutErrInspection extends BaseInspection {
 
-  @Nonnull
-  public String getID() {
-    return "UseOfSystemOutOrSystemErr";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.useSystemOutErrDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.useSystemOutErrProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SystemOutErrVisitor();
-  }
-
-  private static class SystemOutErrVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression expression) {
-      super.visitReferenceExpression(expression);
-      final String name = expression.getReferenceName();
-      if (!HardcodedMethodConstants.OUT.equals(name) &&
-          !HardcodedMethodConstants.ERR.equals(name)) {
-        return;
-      }
-      final PsiElement referent = expression.resolve();
-      if (!(referent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)referent;
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      final String className = containingClass.getQualifiedName();
-      if (!"java.lang.System".equals(className)) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    public String getID() {
+        return "UseOfSystemOutOrSystemErr";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.useSystemOutErrDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.useSystemOutErrProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SystemOutErrVisitor();
+    }
+
+    private static class SystemOutErrVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReferenceExpression(
+            @Nonnull PsiReferenceExpression expression
+        ) {
+            super.visitReferenceExpression(expression);
+            final String name = expression.getReferenceName();
+            if (!HardcodedMethodConstants.OUT.equals(name) &&
+                !HardcodedMethodConstants.ERR.equals(name)) {
+                return;
+            }
+            final PsiElement referent = expression.resolve();
+            if (!(referent instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) referent;
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            final String className = containingClass.getQualifiedName();
+            if (!"java.lang.System".equals(className)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

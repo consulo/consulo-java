@@ -26,157 +26,127 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * User: anna
- * Date: 09-Jan-2006
+ * @author anna
+ * @since 2006-01-09
  */
 @ExtensionImpl
-public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
-{
+public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
 
-	@Nonnull
-	@Override
-	public HighlightDisplayLevel getDefaultLevel()
-	{
-		return HighlightDisplayLevel.WARNING;
-	}
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 
-	@Override
-	public boolean isEnabledByDefault()
-	{
-		return true;
-	}
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-	@Nullable
-	@Override
-	public Language getLanguage()
-	{
-		return JavaLanguage.INSTANCE;
-	}
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 
-	@Override
-	public RefGraphAnnotator getAnnotator(@Nonnull final RefManager refManager, @Nonnull Object state)
-	{
-		return new UnnecessaryModuleDependencyAnnotator(refManager);
-	}
+    @Override
+    public RefGraphAnnotator getAnnotator(@Nonnull final RefManager refManager, @Nonnull Object state) {
+        return new UnnecessaryModuleDependencyAnnotator(refManager);
+    }
 
-	@Override
-	public CommonProblemDescriptor[] checkElement(
-		@Nonnull RefEntity refEntity,
-		@Nonnull AnalysisScope scope,
-		@Nonnull InspectionManager manager,
-		@Nonnull final GlobalInspectionContext globalContext,
-		@Nonnull Object state
-	)
-	{
-		if(refEntity instanceof RefModule)
-		{
-			final RefModule refModule = (RefModule) refEntity;
-			final Module module = refModule.getModule();
-			final Module[] declaredDependencies = ModuleRootManager.getInstance(module).getDependencies();
-			List<CommonProblemDescriptor> descriptors = new ArrayList<>();
-			final Set<Module> modules = refModule.getUserData(UnnecessaryModuleDependencyAnnotator.DEPENDENCIES);
-			for(final Module dependency : declaredDependencies)
-			{
-				if(modules == null || !modules.contains(dependency))
-				{
-					final CommonProblemDescriptor problemDescriptor;
-					if(scope.containsModule(dependency))
-					{ //external references are rejected -> annotator doesn't provide any information on them -> false positives
-						problemDescriptor = manager.createProblemDescriptor(
-							InspectionLocalize.unnecessaryModuleDependencyProblemDescriptor(module.getName(), dependency.getName()).get(),
-							new RemoveModuleDependencyFix(module, dependency)
-						);
-					}
-					else
-					{
-						LocalizeValue message = InspectionLocalize.suspectedModuleDependencyProblemDescriptor(
-							module.getName(),
-							dependency.getName(),
-							scope.getDisplayName(),
-							dependency.getName()
-						);
-						problemDescriptor = manager.createProblemDescriptor(message.get());
-					}
-					descriptors.add(problemDescriptor);
-				}
-			}
-			return descriptors.isEmpty() ? null : descriptors.toArray(new CommonProblemDescriptor[descriptors.size()]);
-		}
-		return null;
-	}
+    @Override
+    public CommonProblemDescriptor[] checkElement(
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull final GlobalInspectionContext globalContext,
+        @Nonnull Object state
+    ) {
+        if (refEntity instanceof RefModule) {
+            final RefModule refModule = (RefModule) refEntity;
+            final Module module = refModule.getModule();
+            final Module[] declaredDependencies = ModuleRootManager.getInstance(module).getDependencies();
+            List<CommonProblemDescriptor> descriptors = new ArrayList<>();
+            final Set<Module> modules = refModule.getUserData(UnnecessaryModuleDependencyAnnotator.DEPENDENCIES);
+            for (final Module dependency : declaredDependencies) {
+                if (modules == null || !modules.contains(dependency)) {
+                    final CommonProblemDescriptor problemDescriptor;
+                    if (scope.containsModule(dependency)) { //external references are rejected -> annotator doesn't provide any information on them -> false positives
+                        problemDescriptor = manager.createProblemDescriptor(
+                            InspectionLocalize.unnecessaryModuleDependencyProblemDescriptor(module.getName(), dependency.getName()).get(),
+                            new RemoveModuleDependencyFix(module, dependency)
+                        );
+                    }
+                    else {
+                        LocalizeValue message = InspectionLocalize.suspectedModuleDependencyProblemDescriptor(
+                            module.getName(),
+                            dependency.getName(),
+                            scope.getDisplayName(),
+                            dependency.getName()
+                        );
+                        problemDescriptor = manager.createProblemDescriptor(message.get());
+                    }
+                    descriptors.add(problemDescriptor);
+                }
+            }
+            return descriptors.isEmpty() ? null : descriptors.toArray(new CommonProblemDescriptor[descriptors.size()]);
+        }
+        return null;
+    }
 
-	@Override
-	@Nonnull
-	public String getGroupDisplayName()
-	{
-		return InspectionLocalize.groupNamesDeclarationRedundancy().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionLocalize.unnecessaryModuleDependencyDisplayName().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.unnecessaryModuleDependencyDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getShortName()
-	{
-		return "UnnecessaryModuleDependencyInspection";
-	}
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "UnnecessaryModuleDependencyInspection";
+    }
 
-	public static class RemoveModuleDependencyFix implements QuickFix
-	{
-		private final Module myModule;
-		private final Module myDependency;
+    public static class RemoveModuleDependencyFix implements QuickFix {
+        private final Module myModule;
+        private final Module myDependency;
 
-		public RemoveModuleDependencyFix(Module module, Module dependency)
-		{
-			myModule = module;
-			myDependency = dependency;
-		}
+        public RemoveModuleDependencyFix(Module module, Module dependency) {
+            myModule = module;
+            myDependency = dependency;
+        }
 
-		@Override
-		@Nonnull
-		public String getName()
-		{
-			return "Remove dependency";
-		}
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return LocalizeValue.localizeTODO("Remove dependency");
+        }
 
-		@Override
-		@Nonnull
-		public String getFamilyName()
-		{
-			return getName();
-		}
-
-		@Override
-		@RequiredWriteAction
-		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
-		{
-			final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
-			for(OrderEntry entry : model.getOrderEntries())
-			{
-				if(entry instanceof ModuleOrderEntry)
-				{
-					final Module mDependency = ((ModuleOrderEntry) entry).getModule();
-					if(Comparing.equal(mDependency, myDependency))
-					{
-						model.removeOrderEntry(entry);
-						break;
-					}
-				}
-			}
-			model.commit();
-		}
-	}
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
+            final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
+            for (OrderEntry entry : model.getOrderEntries()) {
+                if (entry instanceof ModuleOrderEntry) {
+                    final Module mDependency = ((ModuleOrderEntry) entry).getModule();
+                    if (Comparing.equal(mDependency, myDependency)) {
+                        model.removeOrderEntry(entry);
+                        break;
+                    }
+                }
+            }
+            model.commit();
+        }
+    }
 }

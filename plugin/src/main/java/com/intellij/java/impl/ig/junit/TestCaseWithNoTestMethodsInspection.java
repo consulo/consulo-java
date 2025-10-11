@@ -34,76 +34,77 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
-
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreSupers = false;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "JUnitTestCaseWithNoTests";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.testCaseWithNoTestMethodsDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.testCaseWithNoTestMethodsProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.testCaseWithNoTestMethodsOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSupers");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new TestCaseWithNoTestMethodsVisitor();
-  }
-
-  private class TestCaseWithNoTestMethodsVisitor
-    extends BaseInspectionVisitor {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreSupers = false;
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.isInterface()
-          || aClass.isEnum()
-          || aClass.isAnnotationType()
-          || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter) {
-        return;
-      }
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       "junit.framework.TestCase")) {
-        return;
-      }
-      final PsiMethod[] methods = aClass.getMethods();
-      for (final PsiMethod method : methods) {
-        if (TestUtils.isJUnitTestMethod(method)) {
-          return;
-        }
-      }
-      if (ignoreSupers) {
-        final PsiClass superClass = aClass.getSuperClass();
-        if (superClass != null) {
-          final PsiMethod[] superMethods = superClass.getMethods();
-          for (PsiMethod superMethod : superMethods) {
-            if (TestUtils.isJUnitTestMethod(superMethod)) {
-              return;
-            }
-          }
-        }
-      }
-      registerClassError(aClass);
+    @Nonnull
+    public String getID() {
+        return "JUnitTestCaseWithNoTests";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.testCaseWithNoTestMethodsDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.testCaseWithNoTestMethodsProblemDescriptor().get();
+    }
+
+    @Override
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.testCaseWithNoTestMethodsOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSupers");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new TestCaseWithNoTestMethodsVisitor();
+    }
+
+    private class TestCaseWithNoTestMethodsVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.isInterface()
+                || aClass.isEnum()
+                || aClass.isAnnotationType()
+                || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter) {
+                return;
+            }
+            if (!InheritanceUtil.isInheritor(
+                aClass,
+                "junit.framework.TestCase"
+            )) {
+                return;
+            }
+            final PsiMethod[] methods = aClass.getMethods();
+            for (final PsiMethod method : methods) {
+                if (TestUtils.isJUnitTestMethod(method)) {
+                    return;
+                }
+            }
+            if (ignoreSupers) {
+                final PsiClass superClass = aClass.getSuperClass();
+                if (superClass != null) {
+                    final PsiMethod[] superMethods = superClass.getMethods();
+                    for (PsiMethod superMethod : superMethods) {
+                        if (TestUtils.isJUnitTestMethod(superMethod)) {
+                            return;
+                        }
+                    }
+                }
+            }
+            registerClassError(aClass);
+        }
+    }
 }

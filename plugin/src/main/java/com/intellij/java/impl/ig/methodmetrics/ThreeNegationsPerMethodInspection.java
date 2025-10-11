@@ -22,71 +22,71 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class ThreeNegationsPerMethodInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreInEquals = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreInEquals = true;
-
-  @SuppressWarnings("UnusedDeclaration")
-  public boolean ignoreInAssert = false;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "MethodWithMoreThanThreeNegations";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.threeNegationsPerMethodDisplayName().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreOption().get(), "m_ignoreInEquals");
-    panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreAssertOption().get(), "ignoreInAssert");
-    return panel;
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Integer negationCount = (Integer)infos[0];
-    return InspectionGadgetsLocalize.threeNegationsPerMethodProblemDescriptor(negationCount).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ThreeNegationsPerMethodVisitor();
-  }
-
-  private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
+    @SuppressWarnings("UnusedDeclaration")
+    public boolean ignoreInAssert = false;
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // note: no call to super
-      if (method.getNameIdentifier() == null) {
-        return;
-      }
-      final NegationCountVisitor visitor = new NegationCountVisitor(ignoreInAssert);
-      method.accept(visitor);
-      final int negationCount = visitor.getCount();
-      if (negationCount <= 3) {
-        return;
-      }
-      if (m_ignoreInEquals && MethodUtils.isEquals(method)) {
-        return;
-      }
-      registerMethodError(method, Integer.valueOf(negationCount));
+    @Nonnull
+    public String getID() {
+        return "MethodWithMoreThanThreeNegations";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.threeNegationsPerMethodDisplayName();
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreOption().get(), "m_ignoreInEquals");
+        panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreAssertOption().get(), "ignoreInAssert");
+        return panel;
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Integer negationCount = (Integer) infos[0];
+        return InspectionGadgetsLocalize.threeNegationsPerMethodProblemDescriptor(negationCount).get();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ThreeNegationsPerMethodVisitor();
+    }
+
+    private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // note: no call to super
+            if (method.getNameIdentifier() == null) {
+                return;
+            }
+            final NegationCountVisitor visitor = new NegationCountVisitor(ignoreInAssert);
+            method.accept(visitor);
+            final int negationCount = visitor.getCount();
+            if (negationCount <= 3) {
+                return;
+            }
+            if (m_ignoreInEquals && MethodUtils.isEquals(method)) {
+                return;
+            }
+            registerMethodError(method, Integer.valueOf(negationCount));
+        }
+    }
 }

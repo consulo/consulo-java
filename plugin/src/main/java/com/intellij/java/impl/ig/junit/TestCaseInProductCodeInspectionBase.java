@@ -21,55 +21,47 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class TestCaseInProductCodeInspectionBase extends BaseInspection
-{
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.testCaseInProductCodeDisplayName().get();
-	}
+public class TestCaseInProductCodeInspectionBase extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.testCaseInProductCodeDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getID()
-	{
-		return "JUnitTestCaseInProductSource";
-	}
+    @Override
+    @Nonnull
+    public String getID() {
+        return "JUnitTestCaseInProductSource";
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsLocalize.testCaseInProductCodeProblemDescriptor().get();
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.testCaseInProductCodeProblemDescriptor().get();
+    }
 
-	@Override
-	protected boolean buildQuickFixesOnlyForOnTheFlyErrors()
-	{
-		return true;
-	}
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new TestCaseInProductCodeVisitor();
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new TestCaseInProductCodeVisitor();
+    }
 
-	private static class TestCaseInProductCodeVisitor extends BaseInspectionVisitor
-	{
+    private static class TestCaseInProductCodeVisitor extends BaseInspectionVisitor {
 
-		@Override
-		public void visitClass(@Nonnull PsiClass aClass)
-		{
-			if(TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass))
-			{
-				return;
-			}
-			registerClassError(aClass);
-		}
-	}
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

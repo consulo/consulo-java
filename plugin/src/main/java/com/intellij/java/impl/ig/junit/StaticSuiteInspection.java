@@ -24,60 +24,63 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class StaticSuiteInspection extends BaseInspection {
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "SuiteNotDeclaredStatic";
-  }
+    @Override
+    @Nonnull
+    public String getID() {
+        return "SuiteNotDeclaredStatic";
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticSuiteDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.staticSuiteProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticSuiteVisitor();
-  }
-
-  private static class StaticSuiteVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticSuiteDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super
-      @NonNls final String methodName = method.getName();
-      if (!"suite".equals(methodName)) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       "junit.framework.TestCase")) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      registerMethodError(method);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.staticSuiteProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticSuiteVisitor();
+    }
+
+    private static class StaticSuiteVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super
+            @NonNls final String methodName = method.getName();
+            if (!"suite".equals(methodName)) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            if (!InheritanceUtil.isInheritor(
+                aClass,
+                "junit.framework.TestCase"
+            )) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

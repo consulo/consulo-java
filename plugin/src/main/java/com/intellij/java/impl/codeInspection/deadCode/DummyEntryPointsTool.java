@@ -30,41 +30,38 @@ import jakarta.annotation.Nullable;
  */
 @SuppressWarnings("ExtensionImplIsNotAnnotatedInspection")
 public class DummyEntryPointsTool extends UnusedDeclarationInspection {
-  public DummyEntryPointsTool() {
-  }
+    @Override
+    public void runInspection(
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
+    ) {
+    }
 
-  @Override
-  public void runInspection(
-    @Nonnull AnalysisScope scope,
-    @Nonnull InspectionManager manager,
-    @Nonnull GlobalInspectionContext globalContext,
-    @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-    Object state
-  ) {
-  }
+    @Nullable
+    @Override
+    public JobDescriptor[] getAdditionalJobs() {
+        return JobDescriptor.EMPTY_ARRAY;
+    }
 
-  @Nullable
-  @Override
-  public JobDescriptor[] getAdditionalJobs() {
-    return JobDescriptor.EMPTY_ARRAY;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName();
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return LocalizeValue.of();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return LocalizeValue.of();
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    //noinspection InspectionDescriptionNotFoundInspection
-    return "";
-  }
+    @Override
+    @Nonnull
+    public String getShortName() {
+        //noinspection InspectionDescriptionNotFoundInspection
+        return "";
+    }
 }

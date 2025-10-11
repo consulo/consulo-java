@@ -15,6 +15,7 @@ import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -32,8 +33,14 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 
     @Nonnull
     @Override
-    public String getDisplayName() {
-        return InspectionLocalize.inspectionSuspiciousCollectionsMethodCallsDisplayName().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesProbableBugs();
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionSuspiciousCollectionsMethodCallsDisplayName();
     }
 
     @Override
@@ -98,12 +105,6 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
                 }
             }
         };
-    }
-
-    @Override
-    @Nonnull
-    public String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesProbableBugs().get();
     }
 
     @Override

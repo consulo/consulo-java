@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -33,8 +34,9 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.testCaseWithConstructorDisplayName().get();
+  @Override
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.testCaseWithConstructorDisplayName();
   }
 
   @Nonnull

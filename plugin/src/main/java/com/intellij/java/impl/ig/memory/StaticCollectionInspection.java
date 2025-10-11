@@ -31,47 +31,45 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class StaticCollectionInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreWeakCollections = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreWeakCollections = false;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticCollectionDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.staticCollectionProblemDescriptor().get();
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.staticCollectionIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreWeakCollections");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticCollectionVisitor();
-  }
-
-  private class StaticCollectionVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (!field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiType type = field.getType();
-      if (!CollectionUtils.isCollectionClassOrInterface(type)) {
-        return;
-      }
-      if (!m_ignoreWeakCollections ||
-          CollectionUtils.isWeakCollectionClass(type)) {
-        return;
-      }
-      registerFieldError(field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticCollectionDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.staticCollectionProblemDescriptor().get();
+    }
+
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.staticCollectionIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreWeakCollections");
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticCollectionVisitor();
+    }
+
+    private class StaticCollectionVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (!field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiType type = field.getType();
+            if (!CollectionUtils.isCollectionClassOrInterface(type)) {
+                return;
+            }
+            if (!m_ignoreWeakCollections || CollectionUtils.isWeakCollectionClass(type)) {
+                return;
+            }
+            registerFieldError(field);
+        }
+    }
 }
