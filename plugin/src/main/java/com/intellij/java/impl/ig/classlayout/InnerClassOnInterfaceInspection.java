@@ -15,92 +15,94 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
+import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MoveClassFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class InnerClassOnInterfaceInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreInnerInterfaces = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreInnerInterfaces = false;
-
-  @Nonnull
-  public String getID() {
-    return "InnerClassOfInterface";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.innerClassOnInterfaceDisplayName().get();
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.innerClassOnInterfaceIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInnerInterfaces");
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiClass parentInterface = (PsiClass)infos[0];
-    final String interfaceName = parentInterface.getName();
-    return InspectionGadgetsLocalize.innerClassOnInterfaceProblemDescriptor(interfaceName).get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveClassFix();
-  }
-
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new InnerClassOnInterfaceVisitor();
-  }
-
-  private class InnerClassOnInterfaceVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so that it doesn't drill down to inner classes
-      if (!aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      final PsiClass[] innerClasses = aClass.getInnerClasses();
-      for (final PsiClass innerClass : innerClasses) {
-        if (isInnerClass(innerClass)) {
-          registerClassError(innerClass, aClass);
-        }
-      }
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "InnerClassOfInterface";
     }
 
-    private boolean isInnerClass(PsiClass innerClass) {
-      if (innerClass.isEnum()) {
-        return false;
-      }
-      if (innerClass.isAnnotationType()) {
-        return false;
-      }
-      if (innerClass instanceof PsiTypeParameter ||
-          innerClass instanceof PsiAnonymousClass) {
-        return false;
-      }
-      return !(innerClass.isInterface() && m_ignoreInnerInterfaces);
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.innerClassOnInterfaceDisplayName();
     }
-  }
+
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.innerClassOnInterfaceIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInnerInterfaces");
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiClass parentInterface = (PsiClass) infos[0];
+        final String interfaceName = parentInterface.getName();
+        return InspectionGadgetsLocalize.innerClassOnInterfaceProblemDescriptor(interfaceName).get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveClassFix();
+    }
+
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new InnerClassOnInterfaceVisitor();
+    }
+
+    private class InnerClassOnInterfaceVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so that it doesn't drill down to inner classes
+            if (!aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            final PsiClass[] innerClasses = aClass.getInnerClasses();
+            for (final PsiClass innerClass : innerClasses) {
+                if (isInnerClass(innerClass)) {
+                    registerClassError(innerClass, aClass);
+                }
+            }
+        }
+
+        private boolean isInnerClass(PsiClass innerClass) {
+            if (innerClass.isEnum()) {
+                return false;
+            }
+            if (innerClass.isAnnotationType()) {
+                return false;
+            }
+            if (innerClass instanceof PsiTypeParameter ||
+                innerClass instanceof PsiAnonymousClass) {
+                return false;
+            }
+            return !(innerClass.isInterface() && m_ignoreInnerInterfaces);
+        }
+    }
 }

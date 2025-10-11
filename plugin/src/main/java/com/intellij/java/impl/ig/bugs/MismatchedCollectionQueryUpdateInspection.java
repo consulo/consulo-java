@@ -55,9 +55,7 @@ import java.util.stream.Collectors;
 import static com.siyeh.ig.psiutils.ClassUtils.isImmutable;
 
 @ExtensionImpl
-public class MismatchedCollectionQueryUpdateInspection
-    extends BaseInspection {
-
+public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
     private static final CallMatcher TRANSFORMED = CallMatcher.staticCall(
         CommonClassNames.JAVA_UTIL_COLLECTIONS,
         "asLifoQueue",
@@ -166,17 +164,17 @@ public class MismatchedCollectionQueryUpdateInspection
         return panel;
     }
 
-    @Pattern(VALID_ID_PATTERN)
-    @Override
     @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "MismatchedQueryAndUpdateOfCollection";
     }
 
-    @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionGadgetsLocalize.mismatchedUpdateCollectionDisplayName().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.mismatchedUpdateCollectionDisplayName();
     }
 
     @Override

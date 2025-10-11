@@ -24,48 +24,49 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousInnerClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.anonymousInnerClassDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.anonymousInnerClassProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveAnonymousToInnerClassFix();
-  }
-
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new AnonymousInnerClassVisitor();
-  }
-
-  private static class AnonymousInnerClassVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      //no call to super here, to avoid double counting
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.anonymousInnerClassDisplayName();
     }
 
-    @Override
-    public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
-      super.visitAnonymousClass(aClass);
-      if (aClass instanceof PsiEnumConstantInitializer) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.anonymousInnerClassProblemDescriptor().get();
     }
-  }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveAnonymousToInnerClassFix();
+    }
+
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new AnonymousInnerClassVisitor();
+    }
+
+    private static class AnonymousInnerClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            //no call to super here, to avoid double counting
+        }
+
+        @Override
+        public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+            super.visitAnonymousClass(aClass);
+            if (aClass instanceof PsiEnumConstantInitializer) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

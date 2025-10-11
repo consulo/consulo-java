@@ -22,43 +22,44 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ResultOfObjectAllocationIgnoredVisitor();
-  }
-
-  private static class ResultOfObjectAllocationIgnoredVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
-      super.visitExpressionStatement(statement);
-      final PsiExpression expression = statement.getExpression();
-      if (!(expression instanceof PsiNewExpression)) {
-        return;
-      }
-      final PsiNewExpression newExpression = (PsiNewExpression)expression;
-      final PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
-      if (arrayDimensions.length != 0) {
-        return;
-      }
-      if (newExpression.getArrayInitializer() != null) {
-        return;
-      }
-      registerNewExpressionError(newExpression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ResultOfObjectAllocationIgnoredVisitor();
+    }
+
+    private static class ResultOfObjectAllocationIgnoredVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+            super.visitExpressionStatement(statement);
+            final PsiExpression expression = statement.getExpression();
+            if (!(expression instanceof PsiNewExpression)) {
+                return;
+            }
+            final PsiNewExpression newExpression = (PsiNewExpression) expression;
+            final PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
+            if (arrayDimensions.length != 0) {
+                return;
+            }
+            if (newExpression.getArrayInitializer() != null) {
+                return;
+            }
+            registerNewExpressionError(newExpression);
+        }
+    }
 }

@@ -23,43 +23,43 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalClassInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalClassProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalStaticClassVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RemoveModifierFix((String)infos[0]);
-  }
-
-  private static class FinalStaticClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalClassDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      //no call to super, so we don't drill into inner classes
-      if (!aClass.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      registerModifierError(PsiModifier.FINAL, aClass, PsiModifier.FINAL);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalClassProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalStaticClassVisitor();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RemoveModifierFix((String) infos[0]);
+    }
+
+    private static class FinalStaticClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            //no call to super, so we don't drill into inner classes
+            if (!aClass.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            registerModifierError(PsiModifier.FINAL, aClass, PsiModifier.FINAL);
+        }
+    }
 }

@@ -25,75 +25,80 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ResultSetIndexZeroInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "UseOfIndexZeroInJDBCResultSet";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "UseOfIndexZeroInJDBCResultSet";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.use0indexInJdbcResultsetDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return (Boolean)infos[0]
-      ? InspectionGadgetsLocalize.use0indexInJdbcResultsetProblemDescriptor().get()
-      : InspectionGadgetsLocalize.use0indexInJdbcPreparedStatementProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ResultSetIndexZeroVisitor();
-  }
-
-  private static class ResultSetIndexZeroVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.use0indexInJdbcResultsetDisplayName();
+    }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
-      if (methodName == null) {
-        return;
-      }
-      final boolean resultSet;
-      if (methodName.startsWith("get") || methodName.startsWith("update")) {
-        resultSet = true;
-      } else if (methodName.startsWith("set")) {
-        resultSet = false;
-      } else {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length == 0) {
-        return;
-      }
-      final PsiExpression argument = arguments[0];
-      final Object val = ExpressionUtils.computeConstantExpression(argument);
-      if (!(val instanceof Integer) || ((Integer)val).intValue() != 0) {
-        return;
-      }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (resultSet) {
-        if (TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.sql.ResultSet")) {
-          registerError(argument, Boolean.valueOf(resultSet));
-        }
-      } else {
-        if (TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.sql.PreparedStatement")) {
-          registerError(argument, Boolean.valueOf(resultSet));
-        }
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return (Boolean) infos[0]
+            ? InspectionGadgetsLocalize.use0indexInJdbcResultsetProblemDescriptor().get()
+            : InspectionGadgetsLocalize.use0indexInJdbcPreparedStatementProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ResultSetIndexZeroVisitor();
+    }
+
+    private static class ResultSetIndexZeroVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls final String methodName = methodExpression.getReferenceName();
+            if (methodName == null) {
+                return;
+            }
+            final boolean resultSet;
+            if (methodName.startsWith("get") || methodName.startsWith("update")) {
+                resultSet = true;
+            }
+            else if (methodName.startsWith("set")) {
+                resultSet = false;
+            }
+            else {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length == 0) {
+                return;
+            }
+            final PsiExpression argument = arguments[0];
+            final Object val = ExpressionUtils.computeConstantExpression(argument);
+            if (!(val instanceof Integer) || ((Integer) val).intValue() != 0) {
+                return;
+            }
+            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (resultSet) {
+                if (TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.sql.ResultSet")) {
+                    registerError(argument, Boolean.valueOf(resultSet));
+                }
+            }
+            else {
+                if (TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.sql.PreparedStatement")) {
+                    registerError(argument, Boolean.valueOf(resultSet));
+                }
+            }
+        }
+    }
 }

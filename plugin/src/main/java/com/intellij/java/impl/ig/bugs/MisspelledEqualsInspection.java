@@ -24,44 +24,45 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledEqualsInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.misspelledEqualsDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.misspelledEqualsProblemDescriptor().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameFix(HardcodedMethodConstants.EQUALS);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new MisspelledEqualsVisitor();
-  }
-
-  private static class MisspelledEqualsVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super
-      @NonNls final String methodName = method.getName();
-      if (!"equal".equals(methodName)) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 1) {
-        return;
-      }
-      registerMethodError(method);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.misspelledEqualsDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.misspelledEqualsProblemDescriptor().get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameFix(HardcodedMethodConstants.EQUALS);
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new MisspelledEqualsVisitor();
+    }
+
+    private static class MisspelledEqualsVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super
+            @NonNls final String methodName = method.getName();
+            if (!"equal".equals(methodName)) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 1) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

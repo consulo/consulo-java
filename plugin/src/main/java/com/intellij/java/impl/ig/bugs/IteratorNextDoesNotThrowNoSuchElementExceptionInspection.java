@@ -35,7 +35,7 @@ import java.util.Set;
 public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends BaseInspection {
     @Nonnull
     @Override
-    @Pattern("[a-zA-Z_0-9.]+")
+    @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "IteratorNextCanNotThrowNoSuchElementException";
     }

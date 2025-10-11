@@ -20,61 +20,61 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MarkerInterfaceInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.markerInterfaceDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.markerInterfaceProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MarkerInterfaceVisitor();
-  }
-
-  private static class MarkerInterfaceVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.markerInterfaceDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      final PsiField[] fields = aClass.getFields();
-      if (fields.length != 0) {
-        return;
-      }
-      final PsiMethod[] methods = aClass.getMethods();
-      if (methods.length != 0) {
-        return;
-      }
-      final PsiReferenceList extendsList = aClass.getExtendsList();
-      if (extendsList != null) {
-        final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
-        if (referenceElements.length > 0) {
-          if (referenceElements.length > 1) {
-            return;
-          }
-          final PsiReferenceParameterList parameterList = referenceElements[0].getParameterList();
-          if (parameterList == null) {
-            return;
-          }
-          final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
-          if (typeParameterElements.length != 0) {
-            return;
-          }
-        }
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.markerInterfaceProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MarkerInterfaceVisitor();
+    }
+
+    private static class MarkerInterfaceVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            final PsiField[] fields = aClass.getFields();
+            if (fields.length != 0) {
+                return;
+            }
+            final PsiMethod[] methods = aClass.getMethods();
+            if (methods.length != 0) {
+                return;
+            }
+            final PsiReferenceList extendsList = aClass.getExtendsList();
+            if (extendsList != null) {
+                final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+                if (referenceElements.length > 0) {
+                    if (referenceElements.length > 1) {
+                        return;
+                    }
+                    final PsiReferenceParameterList parameterList = referenceElements[0].getParameterList();
+                    if (parameterList == null) {
+                        return;
+                    }
+                    final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
+                    if (typeParameterElements.length != 0) {
+                        return;
+                    }
+                }
+            }
+            registerClassError(aClass);
+        }
+    }
 }

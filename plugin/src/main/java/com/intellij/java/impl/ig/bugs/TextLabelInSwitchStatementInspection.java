@@ -20,48 +20,49 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TextLabelInSwitchStatementInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.textLabelInSwitchStatementDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.textLabelInSwitchStatementProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new TextLabelInSwitchStatementVisitor();
-  }
-
-  private static class TextLabelInSwitchStatementVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null) {
-        return;
-      }
-      final PsiStatement[] statements = body.getStatements();
-      for (PsiStatement statement1 : statements) {
-        checkForLabel(statement1);
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.textLabelInSwitchStatementDisplayName();
     }
 
-    private void checkForLabel(PsiStatement statement) {
-      if (!(statement instanceof PsiLabeledStatement)) {
-        return;
-      }
-      final PsiLabeledStatement labeledStatement =
-        (PsiLabeledStatement)statement;
-      final PsiIdentifier label = labeledStatement.getLabelIdentifier();
-      registerError(label);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.textLabelInSwitchStatementProblemDescriptor().get();
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new TextLabelInSwitchStatementVisitor();
+    }
+
+    private static class TextLabelInSwitchStatementVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSwitchStatement(
+            @Nonnull PsiSwitchStatement statement
+        ) {
+            super.visitSwitchStatement(statement);
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null) {
+                return;
+            }
+            final PsiStatement[] statements = body.getStatements();
+            for (PsiStatement statement1 : statements) {
+                checkForLabel(statement1);
+            }
+        }
+
+        private void checkForLabel(PsiStatement statement) {
+            if (!(statement instanceof PsiLabeledStatement)) {
+                return;
+            }
+            final PsiLabeledStatement labeledStatement = (PsiLabeledStatement) statement;
+            final PsiIdentifier label = labeledStatement.getLabelIdentifier();
+            registerError(label);
+        }
+    }
 }

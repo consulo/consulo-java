@@ -24,69 +24,70 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NumberEqualityInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.numberComparisonDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.numberComparisonProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NumberEqualityVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new EqualityToEqualsFix();
-  }
-
-  private static class NumberEqualityVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.numberComparisonDisplayName();
+    }
 
     @Override
-    public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
-      if (rhs == null) {
-        return;
-      }
-      if (!ComparisonUtils.isEqualityComparison(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLOperand();
-      if (!hasNumberType(lhs) || !hasNumberType(rhs)) {
-        return;
-      }
-      final String lhsText = lhs.getText();
-      if (PsiKeyword.NULL.equals(lhsText)) {
-        return;
-      }
-      final String rhsText = rhs.getText();
-      if (PsiKeyword.NULL.equals(rhsText)) {
-        return;
-      }
-      final PsiJavaToken sign = expression.getOperationSign();
-      registerError(sign);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.numberComparisonProblemDescriptor().get();
     }
 
-    private static boolean hasNumberType(PsiExpression expression) {
-      return TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_NUMBER);
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NumberEqualityVisitor();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new EqualityToEqualsFix();
+    }
+
+    private static class NumberEqualityVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(
+            @Nonnull PsiBinaryExpression expression
+        ) {
+            super.visitBinaryExpression(expression);
+            final PsiExpression rhs = expression.getROperand();
+            if (rhs == null) {
+                return;
+            }
+            if (!ComparisonUtils.isEqualityComparison(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLOperand();
+            if (!hasNumberType(lhs) || !hasNumberType(rhs)) {
+                return;
+            }
+            final String lhsText = lhs.getText();
+            if (PsiKeyword.NULL.equals(lhsText)) {
+                return;
+            }
+            final String rhsText = rhs.getText();
+            if (PsiKeyword.NULL.equals(rhsText)) {
+                return;
+            }
+            final PsiJavaToken sign = expression.getOperationSign();
+            registerError(sign);
+        }
+
+        private static boolean hasNumberType(PsiExpression expression) {
+            return TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_NUMBER);
+        }
+    }
 }

@@ -23,44 +23,45 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalStaticMethodInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finalStaticMethodDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finalStaticMethodProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinalStaticMethodVisitor();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RemoveModifierFix((String)infos[0]);
-  }
-
-  private static class FinalStaticMethodVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //no call to super, so we don't drill into anonymous classes
-      if (!method.hasModifierProperty(PsiModifier.FINAL)
-          || !method.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finalStaticMethodDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finalStaticMethodProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinalStaticMethodVisitor();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RemoveModifierFix((String) infos[0]);
+    }
+
+    private static class FinalStaticMethodVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //no call to super, so we don't drill into anonymous classes
+            if (!method.hasModifierProperty(PsiModifier.FINAL)
+                || !method.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            registerModifierError(PsiModifier.FINAL, method, PsiModifier.FINAL);
+        }
+    }
 }

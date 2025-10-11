@@ -20,76 +20,74 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class SuspiciousArrayCastInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.suspiciousArrayCastDisplayName();
+    }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.suspiciousArrayCastDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.suspiciousArrayCastProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SuspiciousArrayCastVisitor();
-  }
-
-  private static class SuspiciousArrayCastVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.suspiciousArrayCastProblemDescriptor().get();
+    }
 
     @Override
-    public void visitTypeCastExpression(PsiTypeCastExpression expression) {
-      super.visitTypeCastExpression(expression);
-      final PsiTypeElement typeElement = expression.getCastType();
-      if (typeElement == null) {
-        return;
-      }
-      final PsiType castType = typeElement.getType();
-      if (!(castType instanceof PsiArrayType)) {
-        return;
-      }
-      final PsiExpression operand = expression.getOperand();
-      if (operand == null) {
-        return;
-      }
-      final PsiType type = operand.getType();
-      if (!(type instanceof PsiArrayType)) {
-        return;
-      }
-      final PsiType castComponentType = castType.getDeepComponentType();
-      if (!(castComponentType instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClassType castClassType = (PsiClassType)castComponentType;
-      final PsiClass castClass = castClassType.resolve();
-      if (castClass == null) {
-        return;
-      }
-      final PsiType componentType = type.getDeepComponentType();
-      if (!(componentType instanceof PsiClassType)) {
-        return;
-      }
-      final PsiClassType classType = (PsiClassType)componentType;
-      final PsiClass aClass = classType.resolve();
-      if (aClass == null) {
-        return;
-      }
-      if (!castClass.isInheritor(aClass, true)) {
-        return;
-      }
-      registerError(typeElement);
+    public BaseInspectionVisitor buildVisitor() {
+        return new SuspiciousArrayCastVisitor();
     }
-  }
+
+    private static class SuspiciousArrayCastVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTypeCastExpression(PsiTypeCastExpression expression) {
+            super.visitTypeCastExpression(expression);
+            final PsiTypeElement typeElement = expression.getCastType();
+            if (typeElement == null) {
+                return;
+            }
+            final PsiType castType = typeElement.getType();
+            if (!(castType instanceof PsiArrayType)) {
+                return;
+            }
+            final PsiExpression operand = expression.getOperand();
+            if (operand == null) {
+                return;
+            }
+            final PsiType type = operand.getType();
+            if (!(type instanceof PsiArrayType)) {
+                return;
+            }
+            final PsiType castComponentType = castType.getDeepComponentType();
+            if (!(castComponentType instanceof PsiClassType)) {
+                return;
+            }
+            final PsiClassType castClassType = (PsiClassType) castComponentType;
+            final PsiClass castClass = castClassType.resolve();
+            if (castClass == null) {
+                return;
+            }
+            final PsiType componentType = type.getDeepComponentType();
+            if (!(componentType instanceof PsiClassType)) {
+                return;
+            }
+            final PsiClassType classType = (PsiClassType) componentType;
+            final PsiClass aClass = classType.resolve();
+            if (aClass == null) {
+                return;
+            }
+            if (!castClass.isInheritor(aClass, true)) {
+                return;
+            }
+            registerError(typeElement);
+        }
+    }
 }

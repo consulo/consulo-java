@@ -24,140 +24,140 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class VariableNotUsedInsideIfInspection extends BaseInspection {
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.variableNotUsedInsideIfDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.variableNotUsedInsideIfProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new VariableNotUsedInsideIfVisitor();
-  }
-
-  private static class VariableNotUsedInsideIfVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitConditionalExpression(PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      final PsiExpression condition = expression.getCondition();
-      if (!(condition instanceof PsiBinaryExpression)) {
-        return;
-      }
-      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)condition;
-      final PsiReferenceExpression referenceExpression = extractVariableReference(binaryExpression);
-      if (referenceExpression == null) {
-        return;
-      }
-      final IElementType tokenType = binaryExpression.getOperationTokenType();
-      if (tokenType == JavaTokenType.EQEQ) {
-        checkVariableUsage(referenceExpression, expression.getThenExpression(), expression.getElseExpression());
-      }
-      else if (tokenType == JavaTokenType.NE) {
-        checkVariableUsage(referenceExpression, expression.getElseExpression(), expression.getThenExpression());
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.variableNotUsedInsideIfDisplayName();
     }
 
     @Override
-    public void visitIfStatement(PsiIfStatement statement) {
-      super.visitIfStatement(statement);
-      final PsiExpression condition = statement.getCondition();
-      if (!(condition instanceof PsiBinaryExpression)) {
-        return;
-      }
-      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)condition;
-      final PsiReferenceExpression referenceExpression = extractVariableReference(binaryExpression);
-      if (referenceExpression == null) {
-        return;
-      }
-      final IElementType tokenType = binaryExpression.getOperationTokenType();
-      if (tokenType == JavaTokenType.EQEQ) {
-        checkVariableUsage(referenceExpression, statement.getThenBranch(), statement.getElseBranch());
-      }
-      else if (tokenType == JavaTokenType.NE) {
-        checkVariableUsage(referenceExpression, statement.getElseBranch(), statement.getThenBranch());
-      }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.variableNotUsedInsideIfProblemDescriptor().get();
     }
 
-    private void checkVariableUsage(PsiReferenceExpression referenceExpression,
-                                    PsiElement thenContext, PsiElement elseContext) {
-      if (thenContext == null) {
-        return;
-      }
-      final PsiElement target = referenceExpression.resolve();
-      if (!(target instanceof PsiVariable)) {
-        return;
-      }
-      final PsiVariable variable = (PsiVariable)target;
-      if (contextExits(thenContext) || VariableAccessUtils.variableIsAssigned(variable, thenContext)) {
-        return;
-      }
-      if (elseContext != null &&
-          (contextExits(elseContext) || VariableAccessUtils.variableIsUsed(variable, elseContext))) {
-        return;
-      }
-      registerError(referenceExpression);
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new VariableNotUsedInsideIfVisitor();
     }
 
-    private static PsiReferenceExpression extractVariableReference(PsiBinaryExpression expression) {
-      final PsiExpression lhs = ParenthesesUtils.stripParentheses(expression.getLOperand());
-      if (lhs == null) {
-        return null;
-      }
-      final PsiExpression rhs = ParenthesesUtils.stripParentheses(expression.getROperand());
-      if (rhs == null) {
-        return null;
-      }
-      if (PsiType.NULL.equals(rhs.getType())) {
-        if (!(lhs instanceof PsiReferenceExpression)) {
-          return null;
+    private static class VariableNotUsedInsideIfVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitConditionalExpression(PsiConditionalExpression expression) {
+            super.visitConditionalExpression(expression);
+            final PsiExpression condition = expression.getCondition();
+            if (!(condition instanceof PsiBinaryExpression)) {
+                return;
+            }
+            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) condition;
+            final PsiReferenceExpression referenceExpression = extractVariableReference(binaryExpression);
+            if (referenceExpression == null) {
+                return;
+            }
+            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            if (tokenType == JavaTokenType.EQEQ) {
+                checkVariableUsage(referenceExpression, expression.getThenExpression(), expression.getElseExpression());
+            }
+            else if (tokenType == JavaTokenType.NE) {
+                checkVariableUsage(referenceExpression, expression.getElseExpression(), expression.getThenExpression());
+            }
         }
-        return (PsiReferenceExpression)lhs;
-      }
-      if (PsiType.NULL.equals(lhs.getType())) {
-        if (!(rhs instanceof PsiReferenceExpression)) {
-          return null;
-        }
-        return (PsiReferenceExpression)rhs;
-      }
-      return null;
-    }
 
-    private static boolean contextExits(PsiElement context) {
-      if (context instanceof PsiBlockStatement) {
-        final PsiBlockStatement blockStatement = (PsiBlockStatement)context;
-        final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-        final PsiStatement[] statements = codeBlock.getStatements();
-        if (statements.length == 0) {
-          return false;
+        @Override
+        public void visitIfStatement(PsiIfStatement statement) {
+            super.visitIfStatement(statement);
+            final PsiExpression condition = statement.getCondition();
+            if (!(condition instanceof PsiBinaryExpression)) {
+                return;
+            }
+            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) condition;
+            final PsiReferenceExpression referenceExpression = extractVariableReference(binaryExpression);
+            if (referenceExpression == null) {
+                return;
+            }
+            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            if (tokenType == JavaTokenType.EQEQ) {
+                checkVariableUsage(referenceExpression, statement.getThenBranch(), statement.getElseBranch());
+            }
+            else if (tokenType == JavaTokenType.NE) {
+                checkVariableUsage(referenceExpression, statement.getElseBranch(), statement.getThenBranch());
+            }
         }
-        final PsiStatement lastStatement = statements[statements.length - 1];
-        return statementExits(lastStatement);
-      }
-      else {
-        return statementExits(context);
-      }
-    }
 
-    private static boolean statementExits(PsiElement context) {
-      return context instanceof PsiReturnStatement ||
-             context instanceof PsiThrowStatement ||
-             context instanceof PsiBreakStatement ||
-             context instanceof PsiContinueStatement;
+        private void checkVariableUsage(
+            PsiReferenceExpression referenceExpression,
+            PsiElement thenContext, PsiElement elseContext
+        ) {
+            if (thenContext == null) {
+                return;
+            }
+            final PsiElement target = referenceExpression.resolve();
+            if (!(target instanceof PsiVariable)) {
+                return;
+            }
+            final PsiVariable variable = (PsiVariable) target;
+            if (contextExits(thenContext) || VariableAccessUtils.variableIsAssigned(variable, thenContext)) {
+                return;
+            }
+            if (elseContext != null &&
+                (contextExits(elseContext) || VariableAccessUtils.variableIsUsed(variable, elseContext))) {
+                return;
+            }
+            registerError(referenceExpression);
+        }
+
+        private static PsiReferenceExpression extractVariableReference(PsiBinaryExpression expression) {
+            final PsiExpression lhs = ParenthesesUtils.stripParentheses(expression.getLOperand());
+            if (lhs == null) {
+                return null;
+            }
+            final PsiExpression rhs = ParenthesesUtils.stripParentheses(expression.getROperand());
+            if (rhs == null) {
+                return null;
+            }
+            if (PsiType.NULL.equals(rhs.getType())) {
+                if (!(lhs instanceof PsiReferenceExpression)) {
+                    return null;
+                }
+                return (PsiReferenceExpression) lhs;
+            }
+            if (PsiType.NULL.equals(lhs.getType())) {
+                if (!(rhs instanceof PsiReferenceExpression)) {
+                    return null;
+                }
+                return (PsiReferenceExpression) rhs;
+            }
+            return null;
+        }
+
+        private static boolean contextExits(PsiElement context) {
+            if (context instanceof PsiBlockStatement) {
+                final PsiBlockStatement blockStatement = (PsiBlockStatement) context;
+                final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+                final PsiStatement[] statements = codeBlock.getStatements();
+                if (statements.length == 0) {
+                    return false;
+                }
+                final PsiStatement lastStatement = statements[statements.length - 1];
+                return statementExits(lastStatement);
+            }
+            else {
+                return statementExits(context);
+            }
+        }
+
+        private static boolean statementExits(PsiElement context) {
+            return context instanceof PsiReturnStatement ||
+                context instanceof PsiThrowStatement ||
+                context instanceof PsiBreakStatement ||
+                context instanceof PsiContinueStatement;
+        }
     }
-  }
 }

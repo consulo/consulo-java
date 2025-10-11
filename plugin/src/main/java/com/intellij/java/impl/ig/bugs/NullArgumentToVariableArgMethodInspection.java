@@ -22,65 +22,66 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class NullArgumentToVariableArgMethodInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nullArgumentToVarArgMethodDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nullArgumentToVarArgMethodProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NullArgumentToVariableArgVisitor();
-  }
-
-  private static class NullArgumentToVariableArgVisitor
-    extends BaseInspectionVisitor {
-
+public class NullArgumentToVariableArgMethodInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
-      super.visitMethodCallExpression(call);
-
-      if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
-        return;
-      }
-      final PsiExpressionList argumentList = call.getArgumentList();
-      final PsiExpression[] args = argumentList.getExpressions();
-      if (args.length == 0) {
-        return;
-      }
-      final PsiExpression lastArg = args[args.length - 1];
-      if (!ExpressionUtils.isNullLiteral(lastArg)) {
-        return;
-      }
-      final PsiMethod method = call.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != args.length) {
-        return;
-      }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiParameter lastParameter =
-        parameters[parameters.length - 1];
-      if (!lastParameter.isVarArgs()) {
-        return;
-      }
-      registerError(lastArg);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nullArgumentToVarArgMethodDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nullArgumentToVarArgMethodProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NullArgumentToVariableArgVisitor();
+    }
+
+    private static class NullArgumentToVariableArgVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression call
+        ) {
+            super.visitMethodCallExpression(call);
+
+            if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
+                return;
+            }
+            final PsiExpressionList argumentList = call.getArgumentList();
+            final PsiExpression[] args = argumentList.getExpressions();
+            if (args.length == 0) {
+                return;
+            }
+            final PsiExpression lastArg = args[args.length - 1];
+            if (!ExpressionUtils.isNullLiteral(lastArg)) {
+                return;
+            }
+            final PsiMethod method = call.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != args.length) {
+                return;
+            }
+            final PsiParameter[] parameters = parameterList.getParameters();
+            final PsiParameter lastParameter =
+                parameters[parameters.length - 1];
+            if (!lastParameter.isVarArgs()) {
+                return;
+            }
+            registerError(lastArg);
+        }
+    }
 }

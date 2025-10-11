@@ -26,111 +26,118 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class StaticCallOnSubclassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "StaticMethodReferencedViaSubclass";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticMethodViaSubclassDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiClass declaringClass = (PsiClass)infos[0];
-    final PsiClass referencedClass = (PsiClass)infos[1];
-    return InspectionGadgetsLocalize.staticMethodViaSubclassProblemDescriptor(
-      declaringClass.getQualifiedName(),
-      referencedClass.getQualifiedName()
-    ).get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new StaticCallOnSubclassFix();
-  }
-
-  private static class StaticCallOnSubclassFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "StaticMethodReferencedViaSubclass";
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.staticMethodViaSubclassRationalizeQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
-      if (expression == null) {
-        return;
-      }
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)expression.getParent();
-      final String methodName = expression.getReferenceName();
-      if (call == null) {
-        return;
-      }
-      final PsiMethod method = call.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      final PsiExpressionList argumentList = call.getArgumentList();
-      if (containingClass == null) {
-        return;
-      }
-      final String containingClassName = containingClass.getQualifiedName();
-      final String argText = argumentList.getText();
-      replaceExpressionAndShorten(call, containingClassName + '.' + methodName + argText);
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new StaticCallOnSubclassVisitor();
-  }
-
-  private static class StaticCallOnSubclassVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
-      super.visitMethodCallExpression(call);
-      final PsiReferenceExpression methodExpression =
-        call.getMethodExpression();
-      final PsiElement qualifier = methodExpression.getQualifier();
-      if (!(qualifier instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiMethod method = call.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      if (!method.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiElement referent = ((PsiReference)qualifier).resolve();
-      if (!(referent instanceof PsiClass)) {
-        return;
-      }
-      final PsiClass referencedClass = (PsiClass)referent;
-      final PsiClass declaringClass = method.getContainingClass();
-      if (declaringClass == null) {
-        return;
-      }
-      if (declaringClass.equals(referencedClass)) {
-        return;
-      }
-      final PsiClass containingClass =
-        ClassUtils.getContainingClass(call);
-      if (!ClassUtils.isClassVisibleFromClass(containingClass,
-                                              declaringClass)) {
-        return;
-      }
-      registerMethodCallError(call, declaringClass, referencedClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.staticMethodViaSubclassDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiClass declaringClass = (PsiClass) infos[0];
+        final PsiClass referencedClass = (PsiClass) infos[1];
+        return InspectionGadgetsLocalize.staticMethodViaSubclassProblemDescriptor(
+            declaringClass.getQualifiedName(),
+            referencedClass.getQualifiedName()
+        ).get();
+    }
+
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new StaticCallOnSubclassFix();
+    }
+
+    private static class StaticCallOnSubclassFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.staticMethodViaSubclassRationalizeQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
+            final PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
+            if (expression == null) {
+                return;
+            }
+            final PsiMethodCallExpression call = (PsiMethodCallExpression) expression.getParent();
+            final String methodName = expression.getReferenceName();
+            if (call == null) {
+                return;
+            }
+            final PsiMethod method = call.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            final PsiExpressionList argumentList = call.getArgumentList();
+            if (containingClass == null) {
+                return;
+            }
+            final String containingClassName = containingClass.getQualifiedName();
+            final String argText = argumentList.getText();
+            replaceExpressionAndShorten(call, containingClassName + '.' + methodName + argText);
+        }
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new StaticCallOnSubclassVisitor();
+    }
+
+    private static class StaticCallOnSubclassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(
+            @Nonnull PsiMethodCallExpression call
+        ) {
+            super.visitMethodCallExpression(call);
+            final PsiReferenceExpression methodExpression =
+                call.getMethodExpression();
+            final PsiElement qualifier = methodExpression.getQualifier();
+            if (!(qualifier instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiMethod method = call.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            if (!method.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiElement referent = ((PsiReference) qualifier).resolve();
+            if (!(referent instanceof PsiClass)) {
+                return;
+            }
+            final PsiClass referencedClass = (PsiClass) referent;
+            final PsiClass declaringClass = method.getContainingClass();
+            if (declaringClass == null) {
+                return;
+            }
+            if (declaringClass.equals(referencedClass)) {
+                return;
+            }
+            final PsiClass containingClass =
+                ClassUtils.getContainingClass(call);
+            if (!ClassUtils.isClassVisibleFromClass(
+                containingClass,
+                declaringClass
+            )) {
+                return;
+            }
+            registerMethodCallError(call, declaringClass, referencedClass);
+        }
+    }
 }

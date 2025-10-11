@@ -21,40 +21,41 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantDeclaredInInterfaceDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.constantDeclaredInInterfaceProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantDeclaredInInterfaceVisitor();
-  }
-
-  private static class ConstantDeclaredInInterfaceVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      //no call to super, so we don't drill into anonymous classes
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (!containingClass.isInterface() &&
-          !containingClass.isAnnotationType()) {
-        return;
-      }
-      registerFieldError(field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.constantDeclaredInInterfaceDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.constantDeclaredInInterfaceProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantDeclaredInInterfaceVisitor();
+    }
+
+    private static class ConstantDeclaredInInterfaceVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            //no call to super, so we don't drill into anonymous classes
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (!containingClass.isInterface() &&
+                !containingClass.isAnnotationType()) {
+                return;
+            }
+            registerFieldError(field);
+        }
+    }
 }

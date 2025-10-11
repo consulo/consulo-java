@@ -29,7 +29,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
@@ -40,92 +39,91 @@ import javax.swing.*;
 @ExtensionImpl
 public class StringConcatenationMissingWhitespaceInspection extends BaseInspection {
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreNonStringLiterals = false;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreNonStringLiterals = false;
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceDisplayName().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceDisplayName();
+    }
 
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreNonStringLiterals");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringConcatenationMissingWhitespaceVisitor();
-  }
-
-  private class StringConcatenationMissingWhitespaceVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceProblemDescriptor().get();
+    }
 
     @Override
-    public void visitPolyadicExpression(PsiPolyadicExpression expression) {
-      super.visitPolyadicExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
-      if (!JavaTokenType.PLUS.equals(tokenType) || !ExpressionUtils.hasStringType(expression)) {
-        return;
-      }
-      final boolean formatCall = FormatUtils.isFormatCallArgument(expression);
-      final PsiExpression[] operands = expression.getOperands();
-      PsiExpression lhs = operands[0];
-      for (int i = 1; i < operands.length; i++) {
-        final PsiExpression rhs = operands[i];
-        if (isMissingWhitespace(lhs, rhs, formatCall)) {
-          final PsiJavaToken token = expression.getTokenBeforeOperand(rhs);
-          if (token != null) {
-            registerError(token);
-          }
-        }
-        lhs = rhs;
-      }
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreNonStringLiterals");
     }
 
-    private boolean isMissingWhitespace(PsiExpression lhs, PsiExpression rhs, boolean formatCall) {
-      @NonNls final String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
-      if (lhsLiteral != null) {
-        final int length = lhsLiteral.length();
-        if (length == 0) {
-          return false;
-        }
-        if (formatCall && lhsLiteral.endsWith("%n")) {
-          return false;
-        }
-        final char c = lhsLiteral.charAt(length - 1);
-        if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
-          return false;
-        }
-      }
-      else if (ignoreNonStringLiterals) {
-        return false;
-      }
-      @NonNls final String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
-      if (rhsLiteral != null) {
-        if (rhsLiteral.isEmpty()) {
-          return false;
-        }
-        if (formatCall && rhsLiteral.startsWith("%n")) {
-          return false;
-        }
-        final char c = rhsLiteral.charAt(0);
-        if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
-          return false;
-        }
-      }
-      else if (ignoreNonStringLiterals) {
-        return false;
-      }
-      return true;
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringConcatenationMissingWhitespaceVisitor();
     }
-  }
+
+    private class StringConcatenationMissingWhitespaceVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
+            super.visitPolyadicExpression(expression);
+            final IElementType tokenType = expression.getOperationTokenType();
+            if (!JavaTokenType.PLUS.equals(tokenType) || !ExpressionUtils.hasStringType(expression)) {
+                return;
+            }
+            final boolean formatCall = FormatUtils.isFormatCallArgument(expression);
+            final PsiExpression[] operands = expression.getOperands();
+            PsiExpression lhs = operands[0];
+            for (int i = 1; i < operands.length; i++) {
+                final PsiExpression rhs = operands[i];
+                if (isMissingWhitespace(lhs, rhs, formatCall)) {
+                    final PsiJavaToken token = expression.getTokenBeforeOperand(rhs);
+                    if (token != null) {
+                        registerError(token);
+                    }
+                }
+                lhs = rhs;
+            }
+        }
+
+        private boolean isMissingWhitespace(PsiExpression lhs, PsiExpression rhs, boolean formatCall) {
+            @NonNls final String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
+            if (lhsLiteral != null) {
+                final int length = lhsLiteral.length();
+                if (length == 0) {
+                    return false;
+                }
+                if (formatCall && lhsLiteral.endsWith("%n")) {
+                    return false;
+                }
+                final char c = lhsLiteral.charAt(length - 1);
+                if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
+                    return false;
+                }
+            }
+            else if (ignoreNonStringLiterals) {
+                return false;
+            }
+            @NonNls final String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
+            if (rhsLiteral != null) {
+                if (rhsLiteral.isEmpty()) {
+                    return false;
+                }
+                if (formatCall && rhsLiteral.startsWith("%n")) {
+                    return false;
+                }
+                final char c = rhsLiteral.charAt(0);
+                if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
+                    return false;
+                }
+            }
+            else if (ignoreNonStringLiterals) {
+                return false;
+            }
+            return true;
+        }
+    }
 }

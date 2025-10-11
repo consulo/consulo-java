@@ -28,6 +28,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -36,8 +37,8 @@ import jakarta.annotation.Nullable;
 public class ClassMayBeInterfaceInspection extends BaseInspection {
     @Nonnull
     @Override
-    public String getDisplayName() {
-        return InspectionGadgetsLocalize.classMayBeInterfaceDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classMayBeInterfaceDisplayName();
     }
 
     @Nonnull
@@ -54,15 +55,15 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     private static class ClassMayBeInterfaceFix extends InspectionGadgetsFix {
         @Nonnull
         @Override
-        public String getName() {
-            return InspectionGadgetsLocalize.classMayBeInterfaceConvertQuickfix().get();
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.classMayBeInterfaceConvertQuickfix();
         }
 
         @Override
         @RequiredReadAction
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiIdentifier classNameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
-            final PsiClass interfaceClass = (PsiClass)classNameIdentifier.getParent();
+            final PsiIdentifier classNameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
+            final PsiClass interfaceClass = (PsiClass) classNameIdentifier.getParent();
             moveSubClassExtendsToImplements(interfaceClass);
             changeClassToInterface(interfaceClass);
             moveImplementsToExtends(interfaceClass);

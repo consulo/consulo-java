@@ -25,116 +25,116 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MalformedFormatStringInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.malformedFormatStringDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Object value = infos[0];
-    if (value instanceof Exception) {
-      return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorMalformed().get();
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.malformedFormatStringDisplayName();
     }
-    final Validator[] validators = (Validator[])value;
-    final int argumentCount = ((Integer)infos[1]).intValue();
-    if (validators.length < argumentCount) {
-      return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.many.arguments");
-    }
-    if (validators.length > argumentCount) {
-      return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.few.arguments");
-    }
-    return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.arguments.do.not.match.type");
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MalformedFormatStringVisitor();
-  }
-
-  private static class MalformedFormatStringVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!FormatUtils.isFormatCall(expression)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length == 0) {
-        return;
-      }
-      final PsiExpression firstArgument = arguments[0];
-      final PsiType type = firstArgument.getType();
-      if (type == null) {
-        return;
-      }
-      final int formatArgumentIndex;
-      if ("java.util.Locale".equals(type.getCanonicalText()) && arguments.length > 1) {
-        formatArgumentIndex = 1;
-      }
-      else {
-        formatArgumentIndex = 0;
-      }
-      final PsiExpression formatArgument = arguments[formatArgumentIndex];
-      if (!ExpressionUtils.hasStringType(formatArgument)) {
-        return;
-      }
-      if (!PsiUtil.isConstantExpression(formatArgument)) {
-        return;
-      }
-      final PsiType formatType = formatArgument.getType();
-      if (formatType == null) {
-        return;
-      }
-      final String value = (String)ConstantExpressionUtil.computeCastTo(formatArgument, formatType);
-      if (value == null) {
-        return;
-      }
-      final int argumentCount = arguments.length - (formatArgumentIndex + 1);
-      final Validator[] validators;
-      try {
-        validators = FormatDecode.decode(value, argumentCount);
-      }
-      catch (Exception e) {
-        registerError(formatArgument, e);
-        return;
-      }
-      if (validators.length != argumentCount) {
-        if (argumentCount == 1) {
-          final PsiExpression argument = arguments[formatArgumentIndex + 1];
-          final PsiType argumentType = argument.getType();
-          if (argumentType instanceof PsiArrayType) {
-            return;
-          }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Object value = infos[0];
+        if (value instanceof Exception) {
+            return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorMalformed().get();
         }
-        registerError(formatArgument, validators, Integer.valueOf(argumentCount));
-        return;
-      }
-      for (int i = 0; i < validators.length; i++) {
-        final Validator validator = validators[i];
-        final PsiType argumentType = arguments[i + formatArgumentIndex + 1].getType();
-        if (argumentType == null) {
-          continue;
+        final Validator[] validators = (Validator[]) value;
+        final int argumentCount = ((Integer) infos[1]).intValue();
+        if (validators.length < argumentCount) {
+            return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.many.arguments");
         }
-        if (!validator.valid(argumentType)) {
-          registerError(formatArgument, validators, Integer.valueOf(argumentCount));
-          return;
+        if (validators.length > argumentCount) {
+            return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.few.arguments");
         }
-      }
+        return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.arguments.do.not.match.type");
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MalformedFormatStringVisitor();
+    }
+
+    private static class MalformedFormatStringVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!FormatUtils.isFormatCall(expression)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length == 0) {
+                return;
+            }
+            final PsiExpression firstArgument = arguments[0];
+            final PsiType type = firstArgument.getType();
+            if (type == null) {
+                return;
+            }
+            final int formatArgumentIndex;
+            if ("java.util.Locale".equals(type.getCanonicalText()) && arguments.length > 1) {
+                formatArgumentIndex = 1;
+            }
+            else {
+                formatArgumentIndex = 0;
+            }
+            final PsiExpression formatArgument = arguments[formatArgumentIndex];
+            if (!ExpressionUtils.hasStringType(formatArgument)) {
+                return;
+            }
+            if (!PsiUtil.isConstantExpression(formatArgument)) {
+                return;
+            }
+            final PsiType formatType = formatArgument.getType();
+            if (formatType == null) {
+                return;
+            }
+            final String value = (String) ConstantExpressionUtil.computeCastTo(formatArgument, formatType);
+            if (value == null) {
+                return;
+            }
+            final int argumentCount = arguments.length - (formatArgumentIndex + 1);
+            final Validator[] validators;
+            try {
+                validators = FormatDecode.decode(value, argumentCount);
+            }
+            catch (Exception e) {
+                registerError(formatArgument, e);
+                return;
+            }
+            if (validators.length != argumentCount) {
+                if (argumentCount == 1) {
+                    final PsiExpression argument = arguments[formatArgumentIndex + 1];
+                    final PsiType argumentType = argument.getType();
+                    if (argumentType instanceof PsiArrayType) {
+                        return;
+                    }
+                }
+                registerError(formatArgument, validators, Integer.valueOf(argumentCount));
+                return;
+            }
+            for (int i = 0; i < validators.length; i++) {
+                final Validator validator = validators[i];
+                final PsiType argumentType = arguments[i + formatArgumentIndex + 1].getType();
+                if (argumentType == null) {
+                    continue;
+                }
+                if (!validator.valid(argumentType)) {
+                    registerError(formatArgument, validators, Integer.valueOf(argumentCount));
+                    return;
+                }
+            }
+        }
+    }
 }

@@ -15,58 +15,57 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantDeclaredInAbstractClassInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantDeclaredInAbstractClassDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.constantDeclaredInAbstractClassProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ConstantDeclaredInAbstractClassVisitor();
-  }
-
-  private static class ConstantDeclaredInAbstractClassVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      //no call to super, so we don't drill into anonymous classes
-      if (!field.hasModifierProperty(PsiModifier.STATIC) ||
-          !field.hasModifierProperty(PsiModifier.PUBLIC) ||
-          !field.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (containingClass.isInterface() ||
-          containingClass.isAnnotationType() ||
-          containingClass.isEnum()) {
-        return;
-      }
-      if (!containingClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      registerFieldError(field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.constantDeclaredInAbstractClassDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.constantDeclaredInAbstractClassProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConstantDeclaredInAbstractClassVisitor();
+    }
+
+    private static class ConstantDeclaredInAbstractClassVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            //no call to super, so we don't drill into anonymous classes
+            if (!field.hasModifierProperty(PsiModifier.STATIC) ||
+                !field.hasModifierProperty(PsiModifier.PUBLIC) ||
+                !field.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (containingClass.isInterface() ||
+                containingClass.isAnnotationType() ||
+                containingClass.isEnum()) {
+                return;
+            }
+            if (!containingClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            registerFieldError(field);
+        }
+    }
 }
