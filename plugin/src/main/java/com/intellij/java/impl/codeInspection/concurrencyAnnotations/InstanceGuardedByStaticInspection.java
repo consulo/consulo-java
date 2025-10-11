@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
-import consulo.language.editor.inspection.localize.InspectionLocalize;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -34,15 +33,14 @@ public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTo
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
   }
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return "Instance member guarded by static field";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Instance member guarded by static field");
   }
 
   @Override

@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
@@ -33,8 +34,8 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
   private static final Pattern newlines = Pattern.compile("\\\\n|\\\\r|\\\\0{0,1}12|\\\\0{0,1}15");
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.hardcodedLineSeparatorDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.hardcodedLineSeparatorDisplayName();
   }
 
   @Nonnull

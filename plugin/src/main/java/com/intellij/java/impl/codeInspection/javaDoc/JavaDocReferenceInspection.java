@@ -30,6 +30,7 @@ import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -48,6 +49,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.proximity.PsiProximityComparator;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.util.concurrent.AsyncResult;
@@ -258,14 +260,14 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionJavadocRefDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionJavadocRefDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesJavadocIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesJavadocIssues();
   }
 
   @Override
@@ -289,14 +291,8 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return JavaQuickFixBundle.message("add.qualifier");
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return JavaQuickFixBundle.message("add.qualifier");
+    public LocalizeValue getName() {
+      return JavaQuickFixLocalize.addQualifier();
     }
 
     @Override
@@ -349,14 +345,8 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return "Change to ...";
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Change to ...");
     }
 
     @Override
@@ -393,14 +383,8 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return "Remove @" + myTagName + " " + myParamName;
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return LocalizeValue.localizeTODO("Remove @" + myTagName + " " + myParamName);
     }
 
     @Override

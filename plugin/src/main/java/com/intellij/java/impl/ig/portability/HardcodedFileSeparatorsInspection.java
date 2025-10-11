@@ -122,8 +122,8 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.hardcodedFileSeparatorDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.hardcodedFileSeparatorDisplayName();
   }
 
   @Nonnull

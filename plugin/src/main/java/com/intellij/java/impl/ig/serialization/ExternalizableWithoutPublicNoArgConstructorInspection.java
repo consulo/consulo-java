@@ -27,6 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -37,12 +38,10 @@ import org.jetbrains.annotations.Nls;
  */
 @ExtensionImpl
 public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseInspection {
-
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorDisplayName();
   }
 
   @Nonnull
@@ -82,8 +81,8 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.makeConstructorPublic().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.makeConstructorPublic();
     }
 
     @Override

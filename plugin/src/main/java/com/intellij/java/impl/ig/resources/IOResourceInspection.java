@@ -25,6 +25,7 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -72,8 +73,8 @@ public class IOResourceInspection extends ResourceInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.iOResourceOpenedNotClosedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.iOResourceOpenedNotClosedDisplayName();
   }
 
   @Override

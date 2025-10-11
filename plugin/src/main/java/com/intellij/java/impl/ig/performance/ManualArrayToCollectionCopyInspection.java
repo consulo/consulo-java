@@ -31,6 +31,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -41,8 +42,8 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.manualArrayToCollectionCopyDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.manualArrayToCollectionCopyDisplayName();
   }
 
   @Override
@@ -65,8 +66,8 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.manualArrayToCollectionCopyReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.manualArrayToCollectionCopyReplaceQuickfix();
     }
 
     @Override

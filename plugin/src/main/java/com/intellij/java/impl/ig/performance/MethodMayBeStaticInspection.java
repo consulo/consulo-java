@@ -31,6 +31,7 @@ import consulo.component.extension.ExtensionPoint;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
@@ -50,8 +51,8 @@ public class MethodMayBeStaticInspection extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionGadgetsLocalize.methodMayBeStaticDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.methodMayBeStaticDisplayName();
     }
 
     @Override

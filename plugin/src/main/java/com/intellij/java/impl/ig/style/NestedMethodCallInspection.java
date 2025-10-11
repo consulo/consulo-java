@@ -41,8 +41,8 @@ public class NestedMethodCallInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nestedMethodCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.nestedMethodCallDisplayName();
   }
 
   @Override

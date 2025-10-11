@@ -28,6 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -38,8 +39,8 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.innerClassMayBeStaticDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.innerClassMayBeStaticDisplayName();
   }
 
   @Override
@@ -61,8 +62,8 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
   private static class InnerClassMayBeStaticFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.makeStaticQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.makeStaticQuickfix();
     }
 
     @Override

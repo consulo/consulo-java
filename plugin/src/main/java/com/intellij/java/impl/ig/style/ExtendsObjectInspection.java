@@ -24,6 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +33,8 @@ public class ExtendsObjectInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.extendsObjectDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.extendsObjectDisplayName();
   }
 
   @Override
@@ -60,8 +61,8 @@ public class ExtendsObjectInspection extends BaseInspection {
 
   private static class ExtendsObjectFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix();
     }
 
     @Override

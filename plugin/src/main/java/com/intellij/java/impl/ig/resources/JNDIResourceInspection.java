@@ -42,8 +42,8 @@ public class JNDIResourceInspection extends ResourceInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.jndiResourceOpenedNotClosedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.jndiResourceOpenedNotClosedDisplayName();
   }
 
   @Override

@@ -41,8 +41,8 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.implicitCallToSuperDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.implicitCallToSuperDisplayName();
   }
 
   @Override
@@ -65,8 +65,8 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   private static class AddExplicitSuperCall extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.implicitCallToSuperMakeExplicitQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.implicitCallToSuperMakeExplicitQuickfix();
     }
 
     @Override

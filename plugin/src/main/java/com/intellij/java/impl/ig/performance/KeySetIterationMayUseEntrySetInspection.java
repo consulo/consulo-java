@@ -30,6 +30,7 @@ import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -45,9 +46,8 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  @Nls
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetDisplayName();
   }
 
   @Override

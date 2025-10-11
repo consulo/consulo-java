@@ -23,6 +23,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -51,8 +52,8 @@ public class LoggingConditionDisagreesWithLogStatementInspection extends BaseIns
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.loggingConditionDisagreesWithLogStatementDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.loggingConditionDisagreesWithLogStatementDisplayName();
   }
 
   @Override

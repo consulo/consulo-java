@@ -26,6 +26,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
@@ -59,8 +60,8 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.loggerInitializedWithForeignClassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.loggerInitializedWithForeignClassDisplayName();
   }
 
   @Override
@@ -95,8 +96,8 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.loggerInitializedWithForeignClassQuickfix(newClassName).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.loggerInitializedWithForeignClassQuickfix(newClassName);
     }
 
     @Override

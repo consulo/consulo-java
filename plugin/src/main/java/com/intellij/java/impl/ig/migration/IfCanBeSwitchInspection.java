@@ -32,11 +32,11 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
@@ -67,11 +67,10 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     return true;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.ifCanBeSwitchDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.ifCanBeSwitchDisplayName();
   }
 
   @Nonnull
@@ -154,8 +153,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.ifCanBeSwitchQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.ifCanBeSwitchQuickfix();
     }
 
     @Override

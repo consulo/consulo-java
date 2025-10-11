@@ -27,6 +27,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -37,8 +38,8 @@ public class NonExceptionNameEndsWithExceptionInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonExceptionNameEndsWithExceptionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.nonExceptionNameEndsWithExceptionDisplayName();
   }
 
   @Override
@@ -71,8 +72,8 @@ public class NonExceptionNameEndsWithExceptionInspection
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.nonExceptionNameEndsWithExceptionQuickfix(name).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.nonExceptionNameEndsWithExceptionQuickfix(name);
     }
 
     @Override

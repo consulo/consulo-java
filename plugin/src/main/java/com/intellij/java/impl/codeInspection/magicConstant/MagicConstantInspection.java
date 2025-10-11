@@ -43,6 +43,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
@@ -67,18 +68,17 @@ import java.util.*;
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   public static final Key<Boolean> NO_ANNOTATIONS_FOUND = Key.create("REPORTED_NO_ANNOTATIONS_FOUND");
 
-  @Nls
   @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesProbableBugs().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesProbableBugs();
   }
 
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return "Magic Constant";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Magic Constant");
   }
 
   @Nonnull
@@ -247,14 +247,8 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     holder.registerProblem(file, text, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix() {
       @Nonnull
       @Override
-      public String getName() {
-        return "Attach annotations";
-      }
-
-      @Nonnull
-      @Override
-      public String getFamilyName() {
-        return getName();
+      public LocalizeValue getName() {
+        return LocalizeValue.localizeTODO("Attach annotations");
       }
 
       @Override

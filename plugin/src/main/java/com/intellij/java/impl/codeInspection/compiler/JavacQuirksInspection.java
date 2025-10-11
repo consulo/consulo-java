@@ -21,21 +21,21 @@ import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class JavacQuirksInspection extends BaseLocalInspectionTool {
-  @Nls @Nonnull
+  @Nonnull
   @Override
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesCompilerIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesCompilerIssues();
   }
 
-  @Nls @Nonnull
+  @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionCompilerJavacQuirksName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionCompilerJavacQuirksName();
   }
 
   @Nonnull

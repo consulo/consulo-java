@@ -29,6 +29,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -50,8 +51,8 @@ public class JUnitRuleInspection extends BaseInspection {
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.junitRuleDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.junitRuleDisplayName();
   }
 
   @Nullable
@@ -72,7 +73,7 @@ public class JUnitRuleInspection extends BaseInspection {
   @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    return infos.length > 1 ? new MakePublicStaticFix((String)infos[1], (String)infos[2]) : null;
+    return infos.length > 1 ? new MakePublicStaticFix(LocalizeValue.of((String) infos[1]), (String)infos[2]) : null;
   }
 
   @Override
@@ -130,10 +131,10 @@ public class JUnitRuleInspection extends BaseInspection {
   }
 
   private static class MakePublicStaticFix extends InspectionGadgetsFix {
-    private final String myName;
+    private final LocalizeValue myName;
     private final boolean myMakeStatic;
 
-    public MakePublicStaticFix(String name, String annotation) {
+    public MakePublicStaticFix(LocalizeValue name, String annotation) {
       myName = name;
       myMakeStatic = annotation.equals(CLASS_RULE_FQN);
     }
@@ -152,7 +153,7 @@ public class JUnitRuleInspection extends BaseInspection {
 
     @Nonnull
     @Override
-    public String getName() {
+    public LocalizeValue getName() {
       return myName;
     }
   }

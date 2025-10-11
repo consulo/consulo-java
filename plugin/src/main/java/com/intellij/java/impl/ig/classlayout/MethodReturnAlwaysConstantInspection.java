@@ -28,6 +28,7 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
 
@@ -40,8 +41,8 @@ public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalIns
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName();
   }
 
   public CommonProblemDescriptor[] checkElement(

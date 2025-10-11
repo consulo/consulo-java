@@ -26,6 +26,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -39,8 +40,8 @@ public class LongLiteralsEndingWithLowercaseLInspection
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLDisplayName();
   }
 
   @Nonnull
@@ -58,8 +59,8 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
   private static class LongLiteralFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLReplaceQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

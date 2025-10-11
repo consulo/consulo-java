@@ -32,92 +32,92 @@ import javax.swing.*;
 @ExtensionImpl
 public class MultipleDeclarationInspection extends BaseInspection {
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreForLoopDeclarations = true;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.multipleDeclarationDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "MultipleVariablesInDeclaration";
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.multipleDeclarationProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.multipleDeclarationOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreForLoopDeclarations");
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new NormalizeDeclarationFix();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MultipleDeclarationVisitor();
-  }
-
-  private class MultipleDeclarationVisitor
-    extends BaseInspectionVisitor {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreForLoopDeclarations = true;
 
     @Override
-    public void visitDeclarationStatement(
-      PsiDeclarationStatement statement) {
-      super.visitDeclarationStatement(statement);
-      if (statement.getDeclaredElements().length <= 1) {
-        return;
-      }
-      final PsiElement parent = statement.getParent();
-      if (ignoreForLoopDeclarations &&
-          parent instanceof PsiForStatement) {
-        return;
-      }
-      final PsiElement[] declaredElements =
-        statement.getDeclaredElements();
-      for (int i = 1; i < declaredElements.length; i++) {
-        //skip the first one;
-        final PsiElement declaredElement = declaredElements[i];
-        if (!(declaredElement instanceof PsiVariable)) {
-          continue;
-        }
-        final PsiVariable variable =
-          (PsiVariable)declaredElement;
-        registerVariableError(variable);
-      }
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.multipleDeclarationDisplayName();
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      super.visitField(field);
-      if (childrenContainTypeElement(field)) {
-        return;
-      }
-      if (field instanceof PsiEnumConstant) {
-        return;
-      }
-      registerFieldError(field);
+    @Nonnull
+    public String getID() {
+        return "MultipleVariablesInDeclaration";
     }
 
-    public boolean childrenContainTypeElement(PsiElement field) {
-      final PsiElement[] children = field.getChildren();
-      for (PsiElement aChildren : children) {
-        if (aChildren instanceof PsiTypeElement) {
-          return true;
-        }
-      }
-      return false;
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.multipleDeclarationProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.multipleDeclarationOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreForLoopDeclarations");
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new NormalizeDeclarationFix();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MultipleDeclarationVisitor();
+    }
+
+    private class MultipleDeclarationVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitDeclarationStatement(
+            PsiDeclarationStatement statement) {
+            super.visitDeclarationStatement(statement);
+            if (statement.getDeclaredElements().length <= 1) {
+                return;
+            }
+            final PsiElement parent = statement.getParent();
+            if (ignoreForLoopDeclarations &&
+                parent instanceof PsiForStatement) {
+                return;
+            }
+            final PsiElement[] declaredElements =
+                statement.getDeclaredElements();
+            for (int i = 1; i < declaredElements.length; i++) {
+                //skip the first one;
+                final PsiElement declaredElement = declaredElements[i];
+                if (!(declaredElement instanceof PsiVariable)) {
+                    continue;
+                }
+                final PsiVariable variable =
+                    (PsiVariable) declaredElement;
+                registerVariableError(variable);
+            }
+        }
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            super.visitField(field);
+            if (childrenContainTypeElement(field)) {
+                return;
+            }
+            if (field instanceof PsiEnumConstant) {
+                return;
+            }
+            registerFieldError(field);
+        }
+
+        public boolean childrenContainTypeElement(PsiElement field) {
+            final PsiElement[] children = field.getChildren();
+            for (PsiElement aChildren : children) {
+                if (aChildren instanceof PsiTypeElement) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

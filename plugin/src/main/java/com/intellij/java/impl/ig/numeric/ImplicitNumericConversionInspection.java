@@ -30,6 +30,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
@@ -68,8 +69,8 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.implicitNumericConversionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.implicitNumericConversionDisplayName();
   }
 
   @Override
@@ -112,16 +113,16 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
 
   private static class ImplicitNumericConversionFix extends InspectionGadgetsFix {
 
-    private final String m_name;
+    private final LocalizeValue m_name;
 
     ImplicitNumericConversionFix(PsiExpression expression, PsiType expectedType) {
       m_name = isConvertible(expression, expectedType)
-        ? InspectionGadgetsLocalize.implicitNumericConversionConvertQuickfix(expectedType.getCanonicalText()).get()
-        : InspectionGadgetsLocalize.implicitNumericConversionMakeExplicitQuickfix().get();
+        ? InspectionGadgetsLocalize.implicitNumericConversionConvertQuickfix(expectedType.getCanonicalText())
+        : InspectionGadgetsLocalize.implicitNumericConversionMakeExplicitQuickfix();
     }
 
     @Nonnull
-    public String getName() {
+    public LocalizeValue getName() {
       return m_name;
     }
 

@@ -30,6 +30,7 @@ import consulo.deadCodeNotWorking.impl.TextField;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.table.ListTable;
@@ -70,8 +71,8 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.logStatementGuardedByLogConditionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.logStatementGuardedByLogConditionDisplayName();
   }
 
   @Override
@@ -113,8 +114,8 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   private class LogStatementGuardedByLogConditionFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.logStatementGuardedByLogConditionQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.logStatementGuardedByLogConditionQuickfix();
     }
 
     @Override

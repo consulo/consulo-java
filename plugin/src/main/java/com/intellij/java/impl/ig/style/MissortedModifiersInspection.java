@@ -45,8 +45,8 @@ public class MissortedModifiersInspection extends BaseInspection {
   public boolean m_requireAnnotationsFirst = true;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.missortedModifiersDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.missortedModifiersDisplayName();
   }
 
   @Nonnull
@@ -70,8 +70,8 @@ public class MissortedModifiersInspection extends BaseInspection {
   private static class SortModifiersFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.missortedModifiersSortQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.missortedModifiersSortQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

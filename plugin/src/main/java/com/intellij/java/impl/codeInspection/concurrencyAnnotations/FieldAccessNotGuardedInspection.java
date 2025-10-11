@@ -25,25 +25,23 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
   }
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return "Unguarded field access";
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.localizeTODO("Unguarded field access");
   }
 
   @Override

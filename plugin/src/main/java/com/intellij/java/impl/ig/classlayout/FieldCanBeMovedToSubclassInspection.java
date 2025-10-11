@@ -27,9 +27,10 @@ import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,8 +39,8 @@ public abstract class FieldCanBeMovedToSubclassInspection extends BaseGlobalInsp
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return null;
+  public LocalizeValue getDisplayName() {
+    return LocalizeValue.of();
     //return InspectionGadgetsBundle.message("field.can.be.moved.so.subclass.display.name");
   }
 

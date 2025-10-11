@@ -25,14 +25,15 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FieldMayBeStaticInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.fieldMayBeStaticDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.fieldMayBeStaticDisplayName();
   }
 
   public BaseInspectionVisitor buildVisitor() {

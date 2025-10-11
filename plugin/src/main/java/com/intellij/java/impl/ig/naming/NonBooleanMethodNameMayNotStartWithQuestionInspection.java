@@ -28,6 +28,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
@@ -64,8 +65,8 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionDisplayName();
   }
 
   @Override

@@ -26,6 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -37,8 +38,8 @@ public class LengthOneStringsInConcatenationInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.lengthOneStringsInConcatenationDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.lengthOneStringsInConcatenationDisplayName();
   }
 
   @Override
@@ -64,8 +65,8 @@ public class LengthOneStringsInConcatenationInspection
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.lengthOneStringsInConcatenationReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.lengthOneStringsInConcatenationReplaceQuickfix();
     }
 
     @Override

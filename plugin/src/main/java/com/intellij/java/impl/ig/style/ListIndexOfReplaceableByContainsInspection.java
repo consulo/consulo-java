@@ -28,6 +28,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -39,8 +40,8 @@ public class ListIndexOfReplaceableByContainsInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.indexofReplaceableByContainsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.indexofReplaceableByContainsDisplayName();
   }
 
   @Override
@@ -101,8 +102,8 @@ public class ListIndexOfReplaceableByContainsInspection
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.replaceIndexofWithContainsQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.replaceIndexofWithContainsQuickfix();
     }
   }
 

@@ -56,8 +56,8 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongDisplayName();
   }
 
   @Override

@@ -29,6 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -37,11 +38,10 @@ import org.jetbrains.annotations.Nls;
 public class MultipleExceptionsDeclaredOnTestMethodInspection
   extends BaseInspection {
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodDisplayName();
   }
 
   @Nonnull
@@ -57,8 +57,8 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
 
   private static class MultipleExceptionsDeclaredOnTestMethodFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodQuickfix();
     }
 
     @Override

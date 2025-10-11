@@ -24,6 +24,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ import java.util.List;
 public class MultipleTypedDeclarationInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.multipleTypedDeclarationDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.multipleTypedDeclarationDisplayName();
   }
 
   @Nonnull

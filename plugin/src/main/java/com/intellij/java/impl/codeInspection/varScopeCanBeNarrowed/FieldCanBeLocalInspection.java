@@ -78,14 +78,14 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesClassStructure().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesClassStructure();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionFieldCanBeLocalDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionFieldCanBeLocalDisplayName();
   }
 
   @Override

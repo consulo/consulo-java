@@ -33,6 +33,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -56,8 +57,8 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
 
   @Override
   @Nonnull
-  public final String getName() {
-    return InspectionLocalize.inspectionConvertToLocalQuickfix().get();
+  public final LocalizeValue getName() {
+    return InspectionLocalize.inspectionConvertToLocalQuickfix();
   }
 
   @Override
@@ -210,12 +211,6 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
         referenceExpression.replace(refExpr);
       }
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
   }
 
   @Nullable
