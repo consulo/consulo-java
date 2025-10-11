@@ -25,6 +25,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -32,66 +33,65 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ProtectedInnerClassInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreEnums = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreEnums = false;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInterfaces = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInterfaces = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.protectedInnerClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.protectedInnerClassProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsLocalize.protectedInnerClassIgnoreEnumOption().get(), "ignoreEnums");
-    panel.addCheckbox(InspectionGadgetsLocalize.protectedInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
-    return panel;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveClassFix();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ProtectedInnerClassVisitor();
-  }
-
-  private class ProtectedInnerClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.protectedInnerClassDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      if (!ClassUtils.isInnerClass(aClass)) {
-        return;
-      }
-      if (ignoreEnums && aClass.isEnum()) {
-        return;
-      }
-      if (ignoreInterfaces && aClass.isInterface()) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.protectedInnerClassProblemDescriptor().get();
     }
-  }
+
+    @Override
+    @Nullable
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(InspectionGadgetsLocalize.protectedInnerClassIgnoreEnumOption().get(), "ignoreEnums");
+        panel.addCheckbox(InspectionGadgetsLocalize.protectedInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
+        return panel;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveClassFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ProtectedInnerClassVisitor();
+    }
+
+    private class ProtectedInnerClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
+            }
+            if (!ClassUtils.isInnerClass(aClass)) {
+                return;
+            }
+            if (ignoreEnums && aClass.isEnum()) {
+                return;
+            }
+            if (ignoreInterfaces && aClass.isInterface()) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

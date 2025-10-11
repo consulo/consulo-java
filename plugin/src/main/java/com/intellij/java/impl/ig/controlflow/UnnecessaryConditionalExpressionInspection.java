@@ -25,92 +25,98 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
-public class UnnecessaryConditionalExpressionInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "RedundantConditionalExpression";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryConditionalExpressionDisplayName().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryConditionalExpressionVisitor();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiConditionalExpression expression = (PsiConditionalExpression)infos[0];
-    return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
-  }
-
-  static String calculateReplacementExpression(
-    PsiConditionalExpression exp) {
-    final PsiExpression thenExpression = exp.getThenExpression();
-    final PsiExpression elseExpression = exp.getElseExpression();
-    final PsiExpression condition = exp.getCondition();
-
-    if (BoolUtils.isFalse(thenExpression) &&
-        BoolUtils.isTrue(elseExpression)) {
-      return BoolUtils.getNegatedExpressionText(condition);
+public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "RedundantConditionalExpression";
     }
-    else {
-      return condition.getText();
-    }
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessaryConditionalFix();
-  }
-
-  private static class UnnecessaryConditionalFix
-    extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiConditionalExpression expression = (PsiConditionalExpression)descriptor.getPsiElement();
-      final String newExpression = calculateReplacementExpression(expression);
-      replaceExpression(expression, newExpression);
-    }
-  }
-
-  private static class UnnecessaryConditionalExpressionVisitor
-    extends BaseInspectionVisitor {
-
     @Override
-    public void visitConditionalExpression(
-      PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      final PsiExpression thenExpression = expression.getThenExpression();
-      if (thenExpression == null) {
-        return;
-      }
-      final PsiExpression elseExpression = expression.getElseExpression();
-      if (elseExpression == null) {
-        return;
-      }
-      if (BoolUtils.isFalse(thenExpression) &&
-          BoolUtils.isTrue(elseExpression) ||
-          BoolUtils.isTrue(thenExpression) &&
-          BoolUtils.isFalse(elseExpression)) {
-        registerError(expression, expression);
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryConditionalExpressionDisplayName();
     }
-  }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryConditionalExpressionVisitor();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
+        return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression))
+            .get();
+    }
+
+    static String calculateReplacementExpression(
+        PsiConditionalExpression exp
+    ) {
+        final PsiExpression thenExpression = exp.getThenExpression();
+        final PsiExpression elseExpression = exp.getElseExpression();
+        final PsiExpression condition = exp.getCondition();
+
+        if (BoolUtils.isFalse(thenExpression) &&
+            BoolUtils.isTrue(elseExpression)) {
+            return BoolUtils.getNegatedExpressionText(condition);
+        }
+        else {
+            return condition.getText();
+        }
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessaryConditionalFix();
+    }
+
+    private static class UnnecessaryConditionalFix
+        extends InspectionGadgetsFix {
+
+        @Nonnull
+        public String getName() {
+            return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+            final String newExpression = calculateReplacementExpression(expression);
+            replaceExpression(expression, newExpression);
+        }
+    }
+
+    private static class UnnecessaryConditionalExpressionVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitConditionalExpression(
+            PsiConditionalExpression expression
+        ) {
+            super.visitConditionalExpression(expression);
+            final PsiExpression thenExpression = expression.getThenExpression();
+            if (thenExpression == null) {
+                return;
+            }
+            final PsiExpression elseExpression = expression.getElseExpression();
+            if (elseExpression == null) {
+                return;
+            }
+            if (BoolUtils.isFalse(thenExpression) &&
+                BoolUtils.isTrue(elseExpression) ||
+                BoolUtils.isTrue(thenExpression) &&
+                    BoolUtils.isFalse(elseExpression)) {
+                registerError(expression, expression);
+            }
+        }
+    }
 }

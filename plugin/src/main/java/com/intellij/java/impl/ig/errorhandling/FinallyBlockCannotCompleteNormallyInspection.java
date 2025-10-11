@@ -24,56 +24,59 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
-public class FinallyBlockCannotCompleteNormallyInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "finally";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyProblemDescriptor().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new FinallyBlockCannotCompleteNormallyVisitor();
-  }
-
-  private static class FinallyBlockCannotCompleteNormallyVisitor
-    extends BaseInspectionVisitor {
-
+public class FinallyBlockCannotCompleteNormallyInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
-      super.visitTryStatement(statement);
-      final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
-      if (finallyBlock == null) {
-        return;
-      }
-      if (ControlFlowUtils.codeBlockMayCompleteNormally(finallyBlock)) {
-        return;
-      }
-      final PsiElement[] children = statement.getChildren();
-      for (final PsiElement child : children) {
-        final String childText = child.getText();
-        if (PsiKeyword.FINALLY.equals(childText)) {
-          registerError(child);
-          return;
-        }
-      }
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "finally";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyDisplayName();
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyProblemDescriptor().get();
+    }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new FinallyBlockCannotCompleteNormallyVisitor();
+    }
+
+    private static class FinallyBlockCannotCompleteNormallyVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+            super.visitTryStatement(statement);
+            final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
+            if (finallyBlock == null) {
+                return;
+            }
+            if (ControlFlowUtils.codeBlockMayCompleteNormally(finallyBlock)) {
+                return;
+            }
+            final PsiElement[] children = statement.getChildren();
+            for (final PsiElement child : children) {
+                final String childText = child.getText();
+                if (PsiKeyword.FINALLY.equals(childText)) {
+                    registerError(child);
+                    return;
+                }
+            }
+        }
+    }
 }

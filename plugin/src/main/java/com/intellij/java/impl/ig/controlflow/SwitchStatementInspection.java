@@ -20,30 +20,31 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SwitchStatementInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.switchStatementDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.statementProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SwitchStatementVisitor();
-  }
-
-  private static class SwitchStatementVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.switchStatementDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.statementProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SwitchStatementVisitor();
+    }
+
+    private static class SwitchStatementVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+            super.visitSwitchStatement(statement);
+            registerStatementError(statement);
+        }
+    }
 }

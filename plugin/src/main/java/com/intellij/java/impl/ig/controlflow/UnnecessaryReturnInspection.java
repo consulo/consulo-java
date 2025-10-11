@@ -28,104 +28,106 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class UnnecessaryReturnInspection extends BaseInspection {
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInThenBranch = false;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInThenBranch = false;
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "UnnecessaryReturnStatement";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryReturnDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return (Boolean)infos[0]
-      ? InspectionGadgetsLocalize.unnecessaryReturnConstructorProblemDescriptor().get()
-      : InspectionGadgetsLocalize.unnecessaryReturnProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.unnecessaryReturnOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInThenBranch");
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new DeleteUnnecessaryStatementFix("return");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryReturnVisitor();
-  }
-
-  private class UnnecessaryReturnVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
-      super.visitReturnStatement(statement);
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "UnnecessaryReturnStatement";
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryReturnDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return (Boolean) infos[0]
+            ? InspectionGadgetsLocalize.unnecessaryReturnConstructorProblemDescriptor().get()
+            : InspectionGadgetsLocalize.unnecessaryReturnProblemDescriptor().get();
+    }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.unnecessaryReturnOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInThenBranch");
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new DeleteUnnecessaryStatementFix("return");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryReturnVisitor();
+    }
+
+    private class UnnecessaryReturnVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            super.visitReturnStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       } */
-      if (statement.getReturnValue() != null) {
-        return;
-      }
-      final PsiElement methodParent = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, PsiLambdaExpression.class);
-      PsiCodeBlock codeBlock = null;
-      final boolean constructor;
-      if (methodParent instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)methodParent;
-        codeBlock = method.getBody();
-        constructor = method.isConstructor();
-      }
-      else if (methodParent instanceof PsiLambdaExpression) {
-        constructor = false;
-        final PsiLambdaExpression lambdaExpression = (PsiLambdaExpression)methodParent;
-        final PsiElement lambdaBody = lambdaExpression.getBody();
-        if (lambdaBody instanceof PsiCodeBlock) {
-          codeBlock = (PsiCodeBlock)lambdaBody;
+            if (statement.getReturnValue() != null) {
+                return;
+            }
+            final PsiElement methodParent = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, PsiLambdaExpression.class);
+            PsiCodeBlock codeBlock = null;
+            final boolean constructor;
+            if (methodParent instanceof PsiMethod) {
+                final PsiMethod method = (PsiMethod) methodParent;
+                codeBlock = method.getBody();
+                constructor = method.isConstructor();
+            }
+            else if (methodParent instanceof PsiLambdaExpression) {
+                constructor = false;
+                final PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) methodParent;
+                final PsiElement lambdaBody = lambdaExpression.getBody();
+                if (lambdaBody instanceof PsiCodeBlock) {
+                    codeBlock = (PsiCodeBlock) lambdaBody;
+                }
+            }
+            else {
+                return;
+            }
+            if (codeBlock == null) {
+                return;
+            }
+            if (!ControlFlowUtils.blockCompletesWithStatement(codeBlock, statement)) {
+                return;
+            }
+            if (ignoreInThenBranch && isInThenBranch(statement)) {
+                return;
+            }
+            registerStatementError(statement, Boolean.valueOf(constructor));
         }
-      }
-      else {
-        return;
-      }
-      if (codeBlock == null) {
-        return;
-      }
-      if (!ControlFlowUtils.blockCompletesWithStatement(codeBlock, statement)) {
-        return;
-      }
-      if (ignoreInThenBranch && isInThenBranch(statement)) {
-        return;
-      }
-      registerStatementError(statement, Boolean.valueOf(constructor));
-    }
 
-    private boolean isInThenBranch(PsiStatement statement) {
-      final PsiIfStatement ifStatement =
-        PsiTreeUtil.getParentOfType(statement, PsiIfStatement.class, true, PsiMethod.class, PsiLambdaExpression.class);
-      if (ifStatement == null) {
-        return false;
-      }
-      final PsiStatement elseBranch = ifStatement.getElseBranch();
-      return elseBranch != null && !PsiTreeUtil.isAncestor(elseBranch, statement, true);
+        private boolean isInThenBranch(PsiStatement statement) {
+            final PsiIfStatement ifStatement =
+                PsiTreeUtil.getParentOfType(statement, PsiIfStatement.class, true, PsiMethod.class, PsiLambdaExpression.class);
+            if (ifStatement == null) {
+                return false;
+            }
+            final PsiStatement elseBranch = ifStatement.getElseBranch();
+            return elseBranch != null && !PsiTreeUtil.isAncestor(elseBranch, statement, true);
+        }
     }
-  }
 }

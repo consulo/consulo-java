@@ -28,47 +28,47 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseInspection {
+    private static final int DEFAULT_BRANCH_LIMIT = 10;
+    /**
+     * this is public for the DefaultJDOMExternalizer thingy
+     *
+     * @noinspection PublicField
+     */
+    public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  private static final int DEFAULT_BRANCH_LIMIT = 10;
-  /**
-   * this is public for the DefaultJDOMExternalizer thingy
-   *
-   * @noinspection PublicField
-   */
-  public int m_limit = DEFAULT_BRANCH_LIMIT;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.switchStatementWithTooManyBranchesDisplayName().get();
-  }
-
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.ifStatementWithTooManyBranchesMaxOption();
-    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    final Integer branchCount = (Integer)infos[0];
-    return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SwitchStatementWithTooManyBranchesVisitor();
-  }
-
-  private class SwitchStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null) {
-        return;
-      }
-      final int branchCount = SwitchUtils.calculateBranchCount(statement);
-      if (branchCount <= m_limit) {
-        return;
-      }
-      registerStatementError(statement, branchCount);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.switchStatementWithTooManyBranchesDisplayName();
     }
-  }
+
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.ifStatementWithTooManyBranchesMaxOption();
+        return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final Integer branchCount = (Integer) infos[0];
+        return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SwitchStatementWithTooManyBranchesVisitor();
+    }
+
+    private class SwitchStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null) {
+                return;
+            }
+            final int branchCount = SwitchUtils.calculateBranchCount(statement);
+            if (branchCount <= m_limit) {
+                return;
+            }
+            registerStatementError(statement, branchCount);
+        }
+    }
 }

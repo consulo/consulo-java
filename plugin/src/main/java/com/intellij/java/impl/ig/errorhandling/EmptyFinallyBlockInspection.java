@@ -27,149 +27,152 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyFinallyBlockInspection extends BaseInspection {
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.emptyFinallyBlockDisplayName().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.emptyFinallyBlockProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final Integer count = (Integer)infos[0];
-    if (count == 0) {
-      return new RemoveTryFinallyBlockFix();
-    }
-    else {
-      return new RemoveFinallyBlockFix();
-    }
-  }
-
-  private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.removeTryFinallyBlockQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.emptyFinallyBlockDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
-      if (tryStatement == null) {
-        return;
-      }
-      final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
-      if (tryBlock == null) {
-        return;
-      }
-      final PsiElement parent = tryStatement.getParent();
-      if (parent == null) {
-        return;
-      }
-
-      final PsiResourceList resources = tryStatement.getResourceList();
-      if (resources != null) {
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        for (PsiResourceVariable resource : resources.getResourceVariables()) {
-          final PsiStatement statement = factory.createStatementFromText(resource.getText() + ";", parent);
-          parent.addBefore(statement, tryStatement);
-        }
-      }
-
-      final PsiElement first = tryBlock.getFirstBodyElement();
-      final PsiElement last = tryBlock.getLastBodyElement();
-      if (first != null && last != null) {
-        parent.addRangeAfter(first, last, tryStatement);
-      }
-
-      tryStatement.delete();
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
 
-  private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
+    @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.removeFinallyBlockQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.emptyFinallyBlockProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiTryStatement tryStatement =
-        PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
-      if (tryStatement == null) {
-        return;
-      }
-      final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
-      if (finallyBlock == null) {
-        return;
-      }
-      deleteUntilFinally(finallyBlock);
-    }
-
-    private static void deleteUntilFinally(PsiElement element) {
-      if (element instanceof PsiJavaToken) {
-        final PsiJavaToken keyword = (PsiJavaToken)element;
-        final IElementType tokenType = keyword.getTokenType();
-        if (tokenType.equals(JavaTokenType.FINALLY_KEYWORD)) {
-          keyword.delete();
-          return;
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final Integer count = (Integer) infos[0];
+        if (count == 0) {
+            return new RemoveTryFinallyBlockFix();
         }
-      }
-      deleteUntilFinally(element.getPrevSibling());
-      if (!(element instanceof PsiWhiteSpace)) {
-        element.delete();
-      }
+        else {
+            return new RemoveFinallyBlockFix();
+        }
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new EmptyFinallyBlockVisitor();
-  }
+    private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.removeTryFinallyBlockQuickfix();
+        }
 
-  private static class EmptyFinallyBlockVisitor
-    extends BaseInspectionVisitor {
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
+            if (tryStatement == null) {
+                return;
+            }
+            final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+            if (tryBlock == null) {
+                return;
+            }
+            final PsiElement parent = tryStatement.getParent();
+            if (parent == null) {
+                return;
+            }
+
+            final PsiResourceList resources = tryStatement.getResourceList();
+            if (resources != null) {
+                final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+                for (PsiResourceVariable resource : resources.getResourceVariables()) {
+                    final PsiStatement statement = factory.createStatementFromText(resource.getText() + ";", parent);
+                    parent.addBefore(statement, tryStatement);
+                }
+            }
+
+            final PsiElement first = tryBlock.getFirstBodyElement();
+            final PsiElement last = tryBlock.getLastBodyElement();
+            if (first != null && last != null) {
+                parent.addRangeAfter(first, last, tryStatement);
+            }
+
+            tryStatement.delete();
+        }
+    }
+
+    private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.removeFinallyBlockQuickfix();
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
+            if (tryStatement == null) {
+                return;
+            }
+            final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+            if (finallyBlock == null) {
+                return;
+            }
+            deleteUntilFinally(finallyBlock);
+        }
+
+        private static void deleteUntilFinally(PsiElement element) {
+            if (element instanceof PsiJavaToken) {
+                final PsiJavaToken keyword = (PsiJavaToken) element;
+                final IElementType tokenType = keyword.getTokenType();
+                if (tokenType.equals(JavaTokenType.FINALLY_KEYWORD)) {
+                    keyword.delete();
+                    return;
+                }
+            }
+            deleteUntilFinally(element.getPrevSibling());
+            if (!(element instanceof PsiWhiteSpace)) {
+                element.delete();
+            }
+        }
+    }
 
     @Override
-    public void visitTryStatement(
-      @Nonnull PsiTryStatement statement) {
-      super.visitTryStatement(statement);
-     /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
-        return;
-      }   */
-      final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
-      if (finallyBlock == null) {
-        return;
-      }
-      if (finallyBlock.getStatements().length != 0) {
-        return;
-      }
-      final PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
-      final PsiElement[] children = statement.getChildren();
-      for (final PsiElement child : children) {
-        final String childText = child.getText();
-        if (PsiKeyword.FINALLY.equals(childText)) {
-          registerError(child, Integer.valueOf(catchBlocks.length));
-          return;
-        }
-      }
+    public BaseInspectionVisitor buildVisitor() {
+        return new EmptyFinallyBlockVisitor();
     }
-  }
+
+    private static class EmptyFinallyBlockVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTryStatement(
+            @Nonnull PsiTryStatement statement
+        ) {
+            super.visitTryStatement(statement);
+            /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
+                return;
+            }*/
+            final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
+            if (finallyBlock == null) {
+                return;
+            }
+            if (finallyBlock.getStatements().length != 0) {
+                return;
+            }
+            final PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
+            final PsiElement[] children = statement.getChildren();
+            for (final PsiElement child : children) {
+                final String childText = child.getText();
+                if (PsiKeyword.FINALLY.equals(childText)) {
+                    registerError(child, Integer.valueOf(catchBlocks.length));
+                    return;
+                }
+            }
+        }
+    }
 }

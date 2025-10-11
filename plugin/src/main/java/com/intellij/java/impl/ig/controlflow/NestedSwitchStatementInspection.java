@@ -23,47 +23,53 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedSwitchStatementInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nestedSwitchStatementDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nestedSwitchStatementProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NestedSwitchStatementVisitor();
-  }
-
-  private static class NestedSwitchStatementVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
-      super.visitSwitchStatement(statement);
-      final PsiElement containingSwitchStatement =
-        PsiTreeUtil.getParentOfType(statement,
-                                    PsiSwitchStatement.class);
-      if (containingSwitchStatement == null) {
-        return;
-      }
-      final PsiMethod containingMethod =
-        PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-      final PsiMethod containingContainingMethod =
-        PsiTreeUtil.getParentOfType(containingSwitchStatement,
-                                    PsiMethod.class);
-      if (containingMethod == null ||
-          containingContainingMethod == null ||
-          !containingMethod.equals(containingContainingMethod)) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nestedSwitchStatementDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nestedSwitchStatementProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NestedSwitchStatementVisitor();
+    }
+
+    private static class NestedSwitchStatementVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSwitchStatement(
+            @Nonnull PsiSwitchStatement statement
+        ) {
+            super.visitSwitchStatement(statement);
+            final PsiElement containingSwitchStatement =
+                PsiTreeUtil.getParentOfType(
+                    statement,
+                    PsiSwitchStatement.class
+                );
+            if (containingSwitchStatement == null) {
+                return;
+            }
+            final PsiMethod containingMethod =
+                PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
+            final PsiMethod containingContainingMethod =
+                PsiTreeUtil.getParentOfType(
+                    containingSwitchStatement,
+                    PsiMethod.class
+                );
+            if (containingMethod == null ||
+                containingContainingMethod == null ||
+                !containingMethod.equals(containingContainingMethod)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

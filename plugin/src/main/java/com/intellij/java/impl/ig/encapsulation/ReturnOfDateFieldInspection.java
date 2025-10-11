@@ -36,94 +36,96 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class ReturnOfDateFieldInspection extends BaseInspection {
-
-  @SuppressWarnings({"PublicField"})
-  public boolean ignorePrivateMethods = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.returnDateCalendarFieldDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final String type = (String)infos[0];
-    return InspectionGadgetsLocalize.returnDateCalendarFieldProblemDescriptor(type).get();
-  }
-
-  @Nullable
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.returnOfNullIgnorePrivateOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ReturnOfDateFieldFix((String)infos[0]);
-  }
-
-  private static class ReturnOfDateFieldFix extends InspectionGadgetsFix {
-
-    private final String myType;
-
-    public ReturnOfDateFieldFix(String type) {
-      myType = type;
-    }
+    @SuppressWarnings({"PublicField"})
+    public boolean ignorePrivateMethods = false;
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.returnDateCalendarFieldQuickfix(myType).get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.returnDateCalendarFieldDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      if (!(element instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
-      final String type =
-        TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
-      if (type == null) {
-        return;
-      }
-      replaceExpression(referenceExpression, '(' + type + ')' + referenceExpression.getText() + ".clone()");
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final String type = (String) infos[0];
+        return InspectionGadgetsLocalize.returnDateCalendarFieldProblemDescriptor(type).get();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReturnOfDateFieldVisitor();
-  }
-
-  private class ReturnOfDateFieldVisitor extends BaseInspectionVisitor {
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.returnOfNullIgnorePrivateOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
+    }
 
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
-      super.visitReturnStatement(statement);
-      final PsiExpression returnValue = statement.getReturnValue();
-      if (!(returnValue instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiMethod method = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, true, PsiClass.class);
-      if (method == null || (ignorePrivateMethods && method.hasModifierProperty(PsiModifier.PRIVATE))) {
-        return;
-      }
-      final PsiReferenceExpression fieldReference = (PsiReferenceExpression)returnValue;
-      final PsiElement element = fieldReference.resolve();
-      if (!(element instanceof PsiField)) {
-        return;
-      }
-      final String type =
-          TypeUtils.expressionHasTypeOrSubtype(returnValue, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
-      if (type == null) {
-        return;
-      }
-      registerError(returnValue, type);
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ReturnOfDateFieldFix((String) infos[0]);
     }
-  }
+
+    private static class ReturnOfDateFieldFix extends InspectionGadgetsFix {
+        private final String myType;
+
+        public ReturnOfDateFieldFix(String type) {
+            myType = type;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.returnDateCalendarFieldQuickfix(myType);
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            if (!(element instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+            final String type =
+                TypeUtils.expressionHasTypeOrSubtype(
+                    referenceExpression,
+                    CommonClassNames.JAVA_UTIL_DATE,
+                    CommonClassNames.JAVA_UTIL_CALENDAR
+                );
+            if (type == null) {
+                return;
+            }
+            replaceExpression(referenceExpression, '(' + type + ')' + referenceExpression.getText() + ".clone()");
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReturnOfDateFieldVisitor();
+    }
+
+    private class ReturnOfDateFieldVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            super.visitReturnStatement(statement);
+            final PsiExpression returnValue = statement.getReturnValue();
+            if (!(returnValue instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiMethod method = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, true, PsiClass.class);
+            if (method == null || (ignorePrivateMethods && method.hasModifierProperty(PsiModifier.PRIVATE))) {
+                return;
+            }
+            final PsiReferenceExpression fieldReference = (PsiReferenceExpression) returnValue;
+            final PsiElement element = fieldReference.resolve();
+            if (!(element instanceof PsiField)) {
+                return;
+            }
+            final String type =
+                TypeUtils.expressionHasTypeOrSubtype(returnValue, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
+            if (type == null) {
+                return;
+            }
+            registerError(returnValue, type);
+        }
+    }
 }

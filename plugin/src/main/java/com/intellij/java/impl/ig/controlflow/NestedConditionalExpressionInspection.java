@@ -21,34 +21,34 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class NestedConditionalExpressionInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nestedConditionalExpressionDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nestedConditionalExpressionProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NestedConditionalExpressionVisitor();
-  }
-
-  private static class NestedConditionalExpressionVisitor extends BaseInspectionVisitor {
+public class NestedConditionalExpressionInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      if (PsiTreeUtil.getParentOfType(expression, PsiConditionalExpression.class) == null) {
-        return;
-      }
-      registerError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nestedConditionalExpressionDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nestedConditionalExpressionProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NestedConditionalExpressionVisitor();
+    }
+
+    private static class NestedConditionalExpressionVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
+            super.visitConditionalExpression(expression);
+            if (PsiTreeUtil.getParentOfType(expression, PsiConditionalExpression.class) == null) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

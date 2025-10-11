@@ -23,65 +23,66 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ContinueOrBreakFromFinallyBlockInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockDisplayName().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ContinueOrBreakFromFinallyBlockVisitor();
-  }
-
-  private static class ContinueOrBreakFromFinallyBlockVisitor
-    extends BaseInspectionVisitor {
-
+public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitContinueStatement(
-      @Nonnull PsiContinueStatement statement) {
-      super.visitContinueStatement(statement);
-      if (!ControlFlowUtils.isInFinallyBlock(statement)) {
-        return;
-      }
-      final PsiStatement continuedStatement =
-        statement.findContinuedStatement();
-      if (continuedStatement == null) {
-        return;
-      }
-      if (ControlFlowUtils.isInFinallyBlock(continuedStatement)) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockDisplayName();
     }
 
-    @Override
-    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
-      super.visitBreakStatement(statement);
-      if (!ControlFlowUtils.isInFinallyBlock(statement)) {
-        return;
-      }
-      final PsiStatement exitedStatement = statement.findExitedStatement();
-      if (exitedStatement == null) {
-        return;
-      }
-      if (ControlFlowUtils.isInFinallyBlock(exitedStatement)) {
-        return;
-      }
-      registerStatementError(statement);
+    public boolean isEnabledByDefault() {
+        return true;
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ContinueOrBreakFromFinallyBlockVisitor();
+    }
+
+    private static class ContinueOrBreakFromFinallyBlockVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitContinueStatement(
+            @Nonnull PsiContinueStatement statement
+        ) {
+            super.visitContinueStatement(statement);
+            if (!ControlFlowUtils.isInFinallyBlock(statement)) {
+                return;
+            }
+            final PsiStatement continuedStatement =
+                statement.findContinuedStatement();
+            if (continuedStatement == null) {
+                return;
+            }
+            if (ControlFlowUtils.isInFinallyBlock(continuedStatement)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+
+        @Override
+        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+            super.visitBreakStatement(statement);
+            if (!ControlFlowUtils.isInFinallyBlock(statement)) {
+                return;
+            }
+            final PsiStatement exitedStatement = statement.findExitedStatement();
+            if (exitedStatement == null) {
+                return;
+            }
+            if (ControlFlowUtils.isInFinallyBlock(exitedStatement)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }
