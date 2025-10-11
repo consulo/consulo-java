@@ -25,98 +25,101 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreSameClass = false;
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreEquals = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreSameClass = false;
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreEquals = false;
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "AccessingNonPublicFieldOfAnotherObject";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "AccessingNonPublicFieldOfAnotherObject";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromTheSameClass().get(), "ignoreSameClass");
-    panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromEqualsMethod().get(), "ignoreEquals");
-    return panel;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField) infos[0];
-    return new EncapsulateVariableFix(field.getName());
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UseOfAnotherObjectsPrivateFieldVisitor();
-  }
-
-  private class UseOfAnotherObjectsPrivateFieldVisitor
-      extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectDisplayName();
+    }
 
     @Override
-    public void visitReferenceExpression(
-        @Nonnull PsiReferenceExpression expression) {
-      super.visitReferenceExpression(expression);
-      final PsiExpression qualifier = expression.getQualifierExpression();
-      if (qualifier == null || qualifier instanceof PsiThisExpression) {
-        return;
-      }
-      if (ignoreEquals) {
-        final PsiMethod method =
-            PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
-        if (MethodUtils.isEquals(method)) {
-          return;
-        }
-      }
-      final PsiElement referent = expression.resolve();
-      if (!(referent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField) referent;
-      if (ignoreSameClass) {
-        final PsiClass parent =
-            PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-        final PsiClass containingClass = field.getContainingClass();
-        if (parent != null && parent.equals(containingClass)) {
-          return;
-        }
-      }
-      if (!field.hasModifierProperty(PsiModifier.PRIVATE) &&
-          !field.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      if (field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiElement fieldNameElement =
-          expression.getReferenceNameElement();
-      if (fieldNameElement == null) {
-        return;
-      }
-      registerError(fieldNameElement, field);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromTheSameClass().get(), "ignoreSameClass");
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromEqualsMethod().get(), "ignoreEquals");
+        return panel;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return new EncapsulateVariableFix(field.getName());
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new UseOfAnotherObjectsPrivateFieldVisitor();
+    }
+
+    private class UseOfAnotherObjectsPrivateFieldVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReferenceExpression(
+            @Nonnull PsiReferenceExpression expression
+        ) {
+            super.visitReferenceExpression(expression);
+            final PsiExpression qualifier = expression.getQualifierExpression();
+            if (qualifier == null || qualifier instanceof PsiThisExpression) {
+                return;
+            }
+            if (ignoreEquals) {
+                final PsiMethod method =
+                    PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+                if (MethodUtils.isEquals(method)) {
+                    return;
+                }
+            }
+            final PsiElement referent = expression.resolve();
+            if (!(referent instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) referent;
+            if (ignoreSameClass) {
+                final PsiClass parent =
+                    PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+                final PsiClass containingClass = field.getContainingClass();
+                if (parent != null && parent.equals(containingClass)) {
+                    return;
+                }
+            }
+            if (!field.hasModifierProperty(PsiModifier.PRIVATE) &&
+                !field.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
+            }
+            if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiElement fieldNameElement =
+                expression.getReferenceNameElement();
+            if (fieldNameElement == null) {
+                return;
+            }
+            registerError(fieldNameElement, field);
+        }
+    }
 }

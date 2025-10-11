@@ -24,149 +24,154 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PointlessIndexOfComparisonInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.pointlessIndexofComparisonDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    final PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
-    final PsiExpression lhs = expression.getLOperand();
-    final PsiJavaToken sign = expression.getOperationSign();
-    final boolean value;
-    if (lhs instanceof PsiMethodCallExpression) {
-      value = createContainsExpressionValue(sign, false);
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.pointlessIndexofComparisonDisplayName();
     }
-    else {
-      value = createContainsExpressionValue(sign, true);
-    }
-    if (value) {
-      return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysTrueProblemDescriptor().get();
-    }
-    else {
-      return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysFalseProblemDescriptor().get();
-    }
-  }
-
-  static boolean createContainsExpressionValue(
-    @Nonnull PsiJavaToken sign, boolean flipped) {
-    final IElementType tokenType = sign.getTokenType();
-    if (tokenType.equals(JavaTokenType.EQEQ)) {
-      return false;
-    }
-    if (tokenType.equals(JavaTokenType.NE)) {
-      return true;
-    }
-    if (flipped) {
-      if (tokenType.equals(JavaTokenType.GT) ||
-          tokenType.equals(JavaTokenType.GE)) {
-        return false;
-      }
-    }
-    else {
-      if (tokenType.equals(JavaTokenType.LT) ||
-          tokenType.equals(JavaTokenType.LE)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new PointlessIndexOfComparisonVisitor();
-  }
-
-  private static class PointlessIndexOfComparisonVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(
-      PsiBinaryExpression expression) {
-      super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
-      if (rhs == null) {
-        return;
-      }
-      if (!ComparisonUtils.isComparison(expression)) {
-        return;
-      }
-      final PsiExpression lhs = expression.getLOperand();
-      if (lhs instanceof PsiMethodCallExpression) {
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final PsiBinaryExpression expression = (PsiBinaryExpression) infos[0];
+        final PsiExpression lhs = expression.getLOperand();
         final PsiJavaToken sign = expression.getOperationSign();
-        if (isPointLess(lhs, sign, rhs, false)) {
-          registerError(expression, expression);
+        final boolean value;
+        if (lhs instanceof PsiMethodCallExpression) {
+            value = createContainsExpressionValue(sign, false);
         }
-      }
-      else if (rhs instanceof PsiMethodCallExpression) {
-        final PsiJavaToken sign = expression.getOperationSign();
-        if (isPointLess(rhs, sign, lhs, true)) {
-          registerError(expression, expression);
+        else {
+            value = createContainsExpressionValue(sign, true);
         }
-      }
+        if (value) {
+            return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysTrueProblemDescriptor().get();
+        }
+        else {
+            return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysFalseProblemDescriptor().get();
+        }
     }
 
-    private static boolean isPointLess(PsiExpression lhs, PsiJavaToken sign,
-                                       PsiExpression rhs, boolean flipped) {
-      final PsiMethodCallExpression callExpression =
-        (PsiMethodCallExpression)lhs;
-      if (!isIndexOfCall(callExpression)) {
-        return false;
-      }
-      final Object object =
-        ExpressionUtils.computeConstantExpression(rhs);
-      if (!(object instanceof Integer)) {
-        return false;
-      }
-      final Integer integer = (Integer)object;
-      final int constant = integer.intValue();
-      final IElementType tokenType = sign.getTokenType();
-      if (tokenType == null) {
-        return false;
-      }
-      if (flipped) {
-        if (constant < 0 && (tokenType.equals(JavaTokenType.GT) ||
-                             tokenType.equals(JavaTokenType.LE))) {
-          return true;
+    static boolean createContainsExpressionValue(
+        @Nonnull PsiJavaToken sign, boolean flipped
+    ) {
+        final IElementType tokenType = sign.getTokenType();
+        if (tokenType.equals(JavaTokenType.EQEQ)) {
+            return false;
         }
-        else if (constant < -1 &&
-                 (tokenType.equals(JavaTokenType.GE) ||
-                  tokenType.equals(JavaTokenType.LT) ||
-                  tokenType.equals(JavaTokenType.NE) ||
-                  tokenType.equals(JavaTokenType.EQEQ))) {
-          return true;
+        if (tokenType.equals(JavaTokenType.NE)) {
+            return true;
         }
-      }
-      else {
-        if (constant < 0 && (tokenType.equals(JavaTokenType.LT) ||
-                             tokenType.equals(JavaTokenType.GE))) {
-          return true;
+        if (flipped) {
+            if (tokenType.equals(JavaTokenType.GT) ||
+                tokenType.equals(JavaTokenType.GE)) {
+                return false;
+            }
         }
-        else if (constant < -1 &&
-                 (tokenType.equals(JavaTokenType.LE) ||
-                  tokenType.equals(JavaTokenType.GT) ||
-                  tokenType.equals(JavaTokenType.NE) ||
-                  tokenType.equals(JavaTokenType.EQEQ))) {
-          return true;
+        else {
+            if (tokenType.equals(JavaTokenType.LT) ||
+                tokenType.equals(JavaTokenType.LE)) {
+                return false;
+            }
         }
-      }
-      return false;
+        return true;
     }
 
-    private static boolean isIndexOfCall(
-      @Nonnull PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      return HardcodedMethodConstants.INDEX_OF.equals(methodName);
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new PointlessIndexOfComparisonVisitor();
     }
-  }
+
+    private static class PointlessIndexOfComparisonVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitBinaryExpression(
+            PsiBinaryExpression expression
+        ) {
+            super.visitBinaryExpression(expression);
+            final PsiExpression rhs = expression.getROperand();
+            if (rhs == null) {
+                return;
+            }
+            if (!ComparisonUtils.isComparison(expression)) {
+                return;
+            }
+            final PsiExpression lhs = expression.getLOperand();
+            if (lhs instanceof PsiMethodCallExpression) {
+                final PsiJavaToken sign = expression.getOperationSign();
+                if (isPointLess(lhs, sign, rhs, false)) {
+                    registerError(expression, expression);
+                }
+            }
+            else if (rhs instanceof PsiMethodCallExpression) {
+                final PsiJavaToken sign = expression.getOperationSign();
+                if (isPointLess(rhs, sign, lhs, true)) {
+                    registerError(expression, expression);
+                }
+            }
+        }
+
+        private static boolean isPointLess(
+            PsiExpression lhs, PsiJavaToken sign,
+            PsiExpression rhs, boolean flipped
+        ) {
+            final PsiMethodCallExpression callExpression =
+                (PsiMethodCallExpression) lhs;
+            if (!isIndexOfCall(callExpression)) {
+                return false;
+            }
+            final Object object =
+                ExpressionUtils.computeConstantExpression(rhs);
+            if (!(object instanceof Integer)) {
+                return false;
+            }
+            final Integer integer = (Integer) object;
+            final int constant = integer.intValue();
+            final IElementType tokenType = sign.getTokenType();
+            if (tokenType == null) {
+                return false;
+            }
+            if (flipped) {
+                if (constant < 0 && (tokenType.equals(JavaTokenType.GT) ||
+                    tokenType.equals(JavaTokenType.LE))) {
+                    return true;
+                }
+                else if (constant < -1 &&
+                    (tokenType.equals(JavaTokenType.GE) ||
+                        tokenType.equals(JavaTokenType.LT) ||
+                        tokenType.equals(JavaTokenType.NE) ||
+                        tokenType.equals(JavaTokenType.EQEQ))) {
+                    return true;
+                }
+            }
+            else {
+                if (constant < 0 && (tokenType.equals(JavaTokenType.LT) ||
+                    tokenType.equals(JavaTokenType.GE))) {
+                    return true;
+                }
+                else if (constant < -1 &&
+                    (tokenType.equals(JavaTokenType.LE) ||
+                        tokenType.equals(JavaTokenType.GT) ||
+                        tokenType.equals(JavaTokenType.NE) ||
+                        tokenType.equals(JavaTokenType.EQEQ))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static boolean isIndexOfCall(
+            @Nonnull PsiMethodCallExpression expression
+        ) {
+            final PsiReferenceExpression methodExpression =
+                expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            return HardcodedMethodConstants.INDEX_OF.equals(methodName);
+        }
+    }
 }

@@ -21,46 +21,47 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyTryBlockInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.emptyTryBlockDisplayName().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.emptyTryBlockProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new EmptyTryBlockVisitor();
-  }
-
-  private static class EmptyTryBlockVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
-      super.visitTryStatement(statement);
-      /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
-        return;
-      } */
-      final PsiCodeBlock finallyBlock = statement.getTryBlock();
-      if (finallyBlock == null) {
-        return;
-      }
-      if (finallyBlock.getStatements().length != 0) {
-        return;
-      }
-      registerStatementError(statement);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.emptyTryBlockDisplayName();
     }
-  }
+
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.emptyTryBlockProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new EmptyTryBlockVisitor();
+    }
+
+    private static class EmptyTryBlockVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+            super.visitTryStatement(statement);
+            /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
+                return;
+            }*/
+            final PsiCodeBlock finallyBlock = statement.getTryBlock();
+            if (finallyBlock == null) {
+                return;
+            }
+            if (finallyBlock.getStatements().length != 0) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

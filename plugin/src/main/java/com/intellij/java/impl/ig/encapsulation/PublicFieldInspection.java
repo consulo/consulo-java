@@ -28,6 +28,7 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -38,89 +39,88 @@ import java.util.List;
 
 @ExtensionImpl
 public class PublicFieldInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreEnums = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreEnums = false;
+    @SuppressWarnings({"PublicField"})
+    public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-  @SuppressWarnings({"PublicField"})
-  public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.publicFieldDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.publicFieldProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations,
-      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
-    );
-    panel.add(annotationsListControl, BorderLayout.CENTER);
-    final CheckBox checkBox =
-      new CheckBox(InspectionGadgetsLocalize.publicFieldIgnoreEnumTypeFieldsOption().get(), this, "ignoreEnums");
-    panel.add(checkBox, BorderLayout.SOUTH);
-    return panel;
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final List<InspectionGadgetsFix> fixes = new ArrayList();
-    final PsiField field = (PsiField)infos[0];
-    fixes.add(new EncapsulateVariableFix(field.getName()));
-    AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations, fixes);
-    return fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new PublicFieldVisitor();
-  }
-
-  private class PublicFieldVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.publicFieldDisplayName();
+    }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
-        return;
-      }
-      if (AnnotationUtil.isAnnotated(field, ignorableAnnotations)) {
-        return;
-      }
-      if (field.hasModifierProperty(PsiModifier.FINAL)) {
-        if (field.hasModifierProperty(PsiModifier.STATIC)) {
-          return;
-        }
-        final PsiType type = field.getType();
-        if (ClassUtils.isImmutable(type)) {
-          return;
-        }
-        if (ignoreEnums) {
-          if (type instanceof PsiClassType) {
-            final PsiClassType classType = (PsiClassType)type;
-            final PsiClass aClass = classType.resolve();
-            if (aClass != null && aClass.isEnum()) {
-              return;
-            }
-          }
-        }
-      }
-      registerFieldError(field, field);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.publicFieldProblemDescriptor().get();
     }
-  }
+
+    @Override
+    @Nullable
+    public JComponent createOptionsPanel() {
+        final JPanel panel = new JPanel(new BorderLayout());
+        final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+            ignorableAnnotations,
+            InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+        );
+        panel.add(annotationsListControl, BorderLayout.CENTER);
+        final CheckBox checkBox =
+            new CheckBox(InspectionGadgetsLocalize.publicFieldIgnoreEnumTypeFieldsOption().get(), this, "ignoreEnums");
+        panel.add(checkBox, BorderLayout.SOUTH);
+        return panel;
+    }
+
+    @Nonnull
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        final List<InspectionGadgetsFix> fixes = new ArrayList();
+        final PsiField field = (PsiField) infos[0];
+        fixes.add(new EncapsulateVariableFix(field.getName()));
+        AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations, fixes);
+        return fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new PublicFieldVisitor();
+    }
+
+    private class PublicFieldVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
+                return;
+            }
+            if (AnnotationUtil.isAnnotated(field, ignorableAnnotations)) {
+                return;
+            }
+            if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                    return;
+                }
+                final PsiType type = field.getType();
+                if (ClassUtils.isImmutable(type)) {
+                    return;
+                }
+                if (ignoreEnums) {
+                    if (type instanceof PsiClassType) {
+                        final PsiClassType classType = (PsiClassType) type;
+                        final PsiClass aClass = classType.resolve();
+                        if (aClass != null && aClass.isEnum()) {
+                            return;
+                        }
+                    }
+                }
+            }
+            registerFieldError(field, field);
+        }
+    }
 }

@@ -35,191 +35,213 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class ReturnOfCollectionFieldInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean ignorePrivateMethods = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean ignorePrivateMethods = true;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "ReturnOfCollectionOrArrayField";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.returnOfCollectionArrayFieldDisplayName().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.returnOfCollectionArrayFieldOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    final PsiType type = field.getType();
-    return type instanceof PsiArrayType
-      ? InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorArray().get()
-      : InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorCollection().get();
-  }
-
-  @Override
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[1];
-    final String text = referenceExpression.getText();
-    if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_MAP)) {
-      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_MAP)) {
-        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedMap(" + text + ')', CommonClassNames.JAVA_UTIL_SORTED_MAP);
-      }
-      return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableMap(" + text + ')', CommonClassNames.JAVA_UTIL_MAP);
-    }
-    else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_COLLECTION)) {
-      if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SET)) {
-        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_SET)) {
-          return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedSet(" + text + ')', CommonClassNames.JAVA_UTIL_SORTED_SET);
-        }
-        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSet(" + text + ')', CommonClassNames.JAVA_UTIL_SET);
-      }
-      else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_LIST)) {
-        return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableList(" + text + ')', CommonClassNames.JAVA_UTIL_LIST);
-      }
-      return new ReturnOfCollectionFieldFix(CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableCollection(" + text + ')', CommonClassNames.JAVA_UTIL_COLLECTION);
-    }
-    return null;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReturnOfCollectionFieldVisitor();
-  }
-
-  private static class ReturnOfCollectionFieldFix extends InspectionGadgetsFix {
-
-    private final String myReplacementText;
-    private final String myQualifiedClassName;
-
-    ReturnOfCollectionFieldFix(@NonNls String replacementText, String qualifiedClassName) {
-      myReplacementText = replacementText;
-      myQualifiedClassName = qualifiedClassName;
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ReturnOfCollectionOrArrayField";
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.returnOfCollectionFieldQuickfix(myReplacementText).get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.returnOfCollectionArrayFieldDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      if (!(element instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
-      fixContainingMethodReturnType(referenceExpression);
-      replaceExpressionAndShorten(referenceExpression, myReplacementText);
+    @Nullable
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.returnOfCollectionArrayFieldOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
     }
 
-    private void fixContainingMethodReturnType(PsiReferenceExpression referenceExpression) {
-      final PsiMethod method = PsiTreeUtil.getParentOfType(referenceExpression, PsiMethod.class, true);
-      if (method == null) {
-        return;
-      }
-      final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
-      if (returnTypeElement == null) {
-        return;
-      }
-      final PsiType type = returnTypeElement.getType();
-      if (!InheritanceUtil.isInheritor(type, myQualifiedClassName)) {
-        return;
-      }
-      if (!(type instanceof PsiClassType)) {
-        return;
-      }
-      final Project project = referenceExpression.getProject();
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
-      if (aClass == null || myQualifiedClassName.equals(aClass.getQualifiedName())) {
-        return;
-      }
-      final PsiType[] parameters = classType.getParameters();
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-      final String typeText;
-      if (parameters.length > 0) {
-        final StringBuilder builder = new StringBuilder(myQualifiedClassName);
-        builder.append('<');
-        boolean comma = false;
-        for (PsiType parameter : parameters) {
-          if (comma) {
-            builder.append(',');
-          } else {
-            comma = true;
-          }
-          builder.append(parameter.getCanonicalText());
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        final PsiType type = field.getType();
+        return type instanceof PsiArrayType
+            ? InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorArray().get()
+            : InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorCollection().get();
+    }
+
+    @Override
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[1];
+        final String text = referenceExpression.getText();
+        if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_MAP)) {
+            if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_MAP)) {
+                return new ReturnOfCollectionFieldFix(
+                    CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedMap(" + text + ')',
+                    CommonClassNames.JAVA_UTIL_SORTED_MAP
+                );
+            }
+            return new ReturnOfCollectionFieldFix(
+                CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableMap(" + text + ')',
+                CommonClassNames.JAVA_UTIL_MAP
+            );
         }
-        builder.append('>');
-        typeText = builder.toString();
-      } else {
-        typeText = myQualifiedClassName;
-      }
-      final PsiTypeElement newTypeElement = factory.createTypeElementFromText(typeText, referenceExpression);
-      final PsiElement replacement = returnTypeElement.replace(newTypeElement);
-      final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
-      javaCodeStyleManager.shortenClassReferences(replacement);
-      HighlightUtils.highlightElement(replacement);
+        else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_COLLECTION)) {
+            if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SET)) {
+                if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_SET)) {
+                    return new ReturnOfCollectionFieldFix(
+                        CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSortedSet(" + text + ')',
+                        CommonClassNames.JAVA_UTIL_SORTED_SET
+                    );
+                }
+                return new ReturnOfCollectionFieldFix(
+                    CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableSet(" + text + ')',
+                    CommonClassNames.JAVA_UTIL_SET
+                );
+            }
+            else if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_LIST)) {
+                return new ReturnOfCollectionFieldFix(
+                    CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableList(" + text + ')',
+                    CommonClassNames.JAVA_UTIL_LIST
+                );
+            }
+            return new ReturnOfCollectionFieldFix(
+                CommonClassNames.JAVA_UTIL_COLLECTIONS + ".unmodifiableCollection(" + text + ')',
+                CommonClassNames.JAVA_UTIL_COLLECTION
+            );
+        }
+        return null;
     }
-  }
-
-  private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
-      super.visitReturnStatement(statement);
-      final PsiExpression returnValue = statement.getReturnValue();
-      if (returnValue == null) {
-        return;
-      }
-      final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-      if (containingMethod == null) {
-        return;
-      }
-      if (ignorePrivateMethods && containingMethod.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      final PsiClass returnStatementClass = containingMethod.getContainingClass();
-      if (returnStatementClass == null) {
-        return;
-      }
-      if (!(returnValue instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)returnValue;
-      final PsiElement referent = referenceExpression.resolve();
-      if (!(referent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)referent;
-      final PsiClass fieldClass = field.getContainingClass();
-      if (!returnStatementClass.equals(fieldClass)) {
-        return;
-      }
-      if (!CollectionUtils.isArrayOrCollectionField(field)) {
-        return;
-      }
-      registerError(returnValue, field, returnValue);
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReturnOfCollectionFieldVisitor();
     }
-  }
+
+    private static class ReturnOfCollectionFieldFix extends InspectionGadgetsFix {
+
+        private final String myReplacementText;
+        private final String myQualifiedClassName;
+
+        ReturnOfCollectionFieldFix(@NonNls String replacementText, String qualifiedClassName) {
+            myReplacementText = replacementText;
+            myQualifiedClassName = qualifiedClassName;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.returnOfCollectionFieldQuickfix(myReplacementText);
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            if (!(element instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+            fixContainingMethodReturnType(referenceExpression);
+            replaceExpressionAndShorten(referenceExpression, myReplacementText);
+        }
+
+        private void fixContainingMethodReturnType(PsiReferenceExpression referenceExpression) {
+            final PsiMethod method = PsiTreeUtil.getParentOfType(referenceExpression, PsiMethod.class, true);
+            if (method == null) {
+                return;
+            }
+            final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
+            if (returnTypeElement == null) {
+                return;
+            }
+            final PsiType type = returnTypeElement.getType();
+            if (!InheritanceUtil.isInheritor(type, myQualifiedClassName)) {
+                return;
+            }
+            if (!(type instanceof PsiClassType)) {
+                return;
+            }
+            final Project project = referenceExpression.getProject();
+            final PsiClassType classType = (PsiClassType) type;
+            final PsiClass aClass = classType.resolve();
+            if (aClass == null || myQualifiedClassName.equals(aClass.getQualifiedName())) {
+                return;
+            }
+            final PsiType[] parameters = classType.getParameters();
+            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            final String typeText;
+            if (parameters.length > 0) {
+                final StringBuilder builder = new StringBuilder(myQualifiedClassName);
+                builder.append('<');
+                boolean comma = false;
+                for (PsiType parameter : parameters) {
+                    if (comma) {
+                        builder.append(',');
+                    }
+                    else {
+                        comma = true;
+                    }
+                    builder.append(parameter.getCanonicalText());
+                }
+                builder.append('>');
+                typeText = builder.toString();
+            }
+            else {
+                typeText = myQualifiedClassName;
+            }
+            final PsiTypeElement newTypeElement = factory.createTypeElementFromText(typeText, referenceExpression);
+            final PsiElement replacement = returnTypeElement.replace(newTypeElement);
+            final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+            javaCodeStyleManager.shortenClassReferences(replacement);
+            HighlightUtils.highlightElement(replacement);
+        }
+    }
+
+    private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            super.visitReturnStatement(statement);
+            final PsiExpression returnValue = statement.getReturnValue();
+            if (returnValue == null) {
+                return;
+            }
+            final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
+            if (containingMethod == null) {
+                return;
+            }
+            if (ignorePrivateMethods && containingMethod.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            final PsiClass returnStatementClass = containingMethod.getContainingClass();
+            if (returnStatementClass == null) {
+                return;
+            }
+            if (!(returnValue instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) returnValue;
+            final PsiElement referent = referenceExpression.resolve();
+            if (!(referent instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) referent;
+            final PsiClass fieldClass = field.getContainingClass();
+            if (!returnStatementClass.equals(fieldClass)) {
+                return;
+            }
+            if (!CollectionUtils.isArrayOrCollectionField(field)) {
+                return;
+            }
+            registerError(returnValue, field, returnValue);
+        }
+    }
 }

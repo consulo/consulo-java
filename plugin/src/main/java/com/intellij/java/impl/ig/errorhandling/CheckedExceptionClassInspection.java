@@ -22,39 +22,39 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CheckedExceptionClassInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.checkedExceptionClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.checkedExceptionClassProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new CheckedExceptionClassVisitor();
-  }
-
-  private static class CheckedExceptionClassVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_THROWABLE)) {
-        return;
-      }
-      if (InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.checkedExceptionClassDisplayName();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.checkedExceptionClassProblemDescriptor().get();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CheckedExceptionClassVisitor();
+    }
+
+    private static class CheckedExceptionClassVisitor
+        extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_THROWABLE)) {
+                return;
+            }
+            if (InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

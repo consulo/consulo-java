@@ -31,94 +31,94 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class NegatedConditionalInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreNegatedNullComparison = true;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreNegatedNullComparison = true;
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ConditionalExpressionWithNegatedCondition";
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.negatedConditionalDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "ConditionalExpressionWithNegatedCondition";
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.negatedConditionalProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NegatedConditionalVisitor();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.negatedConditionalIgnoreOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreNegatedNullComparison");
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new NegatedConditionalFix();
-  }
-
-  private static class NegatedConditionalFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.negatedConditionalDisplayName();
+    }
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.negatedConditionalInvertQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.negatedConditionalProblemDescriptor().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)element.getParent();
-      assert conditionalExpression != null;
-      final PsiExpression elseBranch = conditionalExpression.getElseExpression();
-      final PsiExpression thenBranch = conditionalExpression.getThenExpression();
-      final PsiExpression condition = conditionalExpression.getCondition();
-      final String negatedCondition = BoolUtils.getNegatedExpressionText(condition);
-      assert elseBranch != null;
-      assert thenBranch != null;
-      final String newStatement = negatedCondition + '?' + elseBranch.getText() + ':' + thenBranch.getText();
-      replaceExpression(conditionalExpression, newStatement);
+    public BaseInspectionVisitor buildVisitor() {
+        return new NegatedConditionalVisitor();
     }
-  }
-
-  private class NegatedConditionalVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitConditionalExpression(PsiConditionalExpression expression) {
-      super.visitConditionalExpression(expression);
-      final PsiExpression thenBranch = expression.getThenExpression();
-      if (thenBranch == null) {
-        return;
-      }
-      final PsiExpression elseBranch = expression.getElseExpression();
-      if (elseBranch == null) {
-        return;
-      }
-      final PsiExpression condition = expression.getCondition();
-      if (!ExpressionUtils.isNegation(condition, m_ignoreNegatedNullComparison, false)) {
-        return;
-      }
-      registerError(condition);
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.negatedConditionalIgnoreOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreNegatedNullComparison");
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new NegatedConditionalFix();
+    }
+
+    private static class NegatedConditionalFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.negatedConditionalInvertQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) element.getParent();
+            assert conditionalExpression != null;
+            final PsiExpression elseBranch = conditionalExpression.getElseExpression();
+            final PsiExpression thenBranch = conditionalExpression.getThenExpression();
+            final PsiExpression condition = conditionalExpression.getCondition();
+            final String negatedCondition = BoolUtils.getNegatedExpressionText(condition);
+            assert elseBranch != null;
+            assert thenBranch != null;
+            final String newStatement = negatedCondition + '?' + elseBranch.getText() + ':' + thenBranch.getText();
+            replaceExpression(conditionalExpression, newStatement);
+        }
+    }
+
+    private class NegatedConditionalVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitConditionalExpression(PsiConditionalExpression expression) {
+            super.visitConditionalExpression(expression);
+            final PsiExpression thenBranch = expression.getThenExpression();
+            if (thenBranch == null) {
+                return;
+            }
+            final PsiExpression elseBranch = expression.getElseExpression();
+            if (elseBranch == null) {
+                return;
+            }
+            final PsiExpression condition = expression.getCondition();
+            if (!ExpressionUtils.isNegation(condition, m_ignoreNegatedNullComparison, false)) {
+                return;
+            }
+            registerError(condition);
+        }
+    }
 }

@@ -23,105 +23,107 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
 import java.util.List;
 
 @ExtensionImpl
 public class BadExceptionCaughtInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public String exceptionsString = "";
 
-  /**
-   * @noinspection PublicField
-   */
-  public String exceptionsString = "";
-
-  /**
-   * @noinspection PublicField
-   */
-  public final ExternalizableStringSet exceptions =
-    new ExternalizableStringSet(
+    /**
+     * @noinspection PublicField
+     */
+    public final ExternalizableStringSet exceptions = new ExternalizableStringSet(
         CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION,
-      "java.lang.IllegalMonitorStateException",
+        "java.lang.IllegalMonitorStateException",
         CommonClassNames.JAVA_LANG_ARRAY_INDEX_OUT_OF_BOUNDS_EXCEPTION
     );
 
-  public BadExceptionCaughtInspection() {
-    if (exceptionsString.length() != 0) {
-      exceptions.clear();
-      final List<String> strings = StringUtil.split(exceptionsString, ",");
-      for (String string : strings) {
-        exceptions.add(string);
-      }
-      exceptionsString = "";
+    public BadExceptionCaughtInspection() {
+        if (exceptionsString.length() != 0) {
+            exceptions.clear();
+            final List<String> strings = StringUtil.split(exceptionsString, ",");
+            for (String string : strings) {
+                exceptions.add(string);
+            }
+            exceptionsString = "";
+        }
     }
-  }
 
-  @Nonnull
-  public String getID() {
-    return "ProhibitedExceptionCaught";
-  }
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ProhibitedExceptionCaught";
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.badExceptionCaughtDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.badExceptionCaughtProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final ListTable table =
-      new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(
-      table,
-      InspectionGadgetsLocalize.chooseExceptionClass().get(),
-        CommonClassNames.JAVA_LANG_THROWABLE
-    );
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new BadExceptionCaughtVisitor();
-  }
-
-  private class BadExceptionCaughtVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.badExceptionCaughtDisplayName();
+    }
 
     @Override
-    public void visitCatchSection(PsiCatchSection section) {
-      super.visitCatchSection(section);
-      final PsiParameter parameter = section.getParameter();
-      if (parameter == null) {
-        return;
-      }
-      final PsiTypeElement typeElement = parameter.getTypeElement();
-      if (typeElement == null) {
-        return;
-      }
-      final PsiTypeElement[] childTypeElements = PsiTreeUtil.getChildrenOfType(typeElement, PsiTypeElement.class);
-      if (childTypeElements != null) {
-        for (PsiTypeElement childTypeElement : childTypeElements) {
-          checkTypeElement(childTypeElement);
-        }
-      }
-      else {
-        checkTypeElement(typeElement);
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.badExceptionCaughtProblemDescriptor().get();
     }
 
-    private void checkTypeElement(PsiTypeElement typeElement) {
-      final PsiType type = typeElement.getType();
-      if (exceptions.contains(type.getCanonicalText())) {
-        registerError(typeElement);
-      }
+    @Override
+    public JComponent createOptionsPanel() {
+        final ListTable table =
+            new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
+        return UiUtils.createAddRemoveTreeClassChooserPanel(
+            table,
+            InspectionGadgetsLocalize.chooseExceptionClass().get(),
+            CommonClassNames.JAVA_LANG_THROWABLE
+        );
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new BadExceptionCaughtVisitor();
+    }
+
+    private class BadExceptionCaughtVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitCatchSection(PsiCatchSection section) {
+            super.visitCatchSection(section);
+            final PsiParameter parameter = section.getParameter();
+            if (parameter == null) {
+                return;
+            }
+            final PsiTypeElement typeElement = parameter.getTypeElement();
+            if (typeElement == null) {
+                return;
+            }
+            final PsiTypeElement[] childTypeElements = PsiTreeUtil.getChildrenOfType(typeElement, PsiTypeElement.class);
+            if (childTypeElements != null) {
+                for (PsiTypeElement childTypeElement : childTypeElements) {
+                    checkTypeElement(childTypeElement);
+                }
+            }
+            else {
+                checkTypeElement(typeElement);
+            }
+        }
+
+        private void checkTypeElement(PsiTypeElement typeElement) {
+            final PsiType type = typeElement.getType();
+            if (exceptions.contains(type.getCanonicalText())) {
+                registerError(typeElement);
+            }
+        }
+    }
 }

@@ -25,88 +25,85 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ErrorRethrownInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    @Pattern(VALID_ID_PATTERN)
+    public String getID() {
+        return "ErrorNotRethrown";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "ErrorNotRethrown";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.errorRethrownDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.errorRethrownProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ErrorRethrownVisitor();
-  }
-
-  private static class ErrorRethrownVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.errorRethrownDisplayName();
+    }
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
-      super.visitTryStatement(statement);
-      final PsiCatchSection[] catchSections =
-        statement.getCatchSections();
-      for (PsiCatchSection catchSection : catchSections) {
-        final PsiParameter parameter = catchSection.getParameter();
-        final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
-        if (parameter != null && catchBlock != null) {
-          checkCatchBlock(parameter, catchBlock);
-        }
-      }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.errorRethrownProblemDescriptor().get();
     }
 
-    private void checkCatchBlock(PsiParameter parameter,
-                                 PsiCodeBlock catchBlock) {
-      final PsiType type = parameter.getType();
-      final PsiClass aClass = PsiUtil.resolveClassInType(type);
-      if (aClass == null) {
-        return;
-      }
-      if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_ERROR)) {
-        return;
-      }
-      if (TypeUtils.typeEquals("java.lang.ThreadDeath", type)) {
-        return;
-      }
-      final PsiTypeElement typeElement = parameter.getTypeElement();
-      final PsiStatement[] statements = catchBlock.getStatements();
-      if (statements.length == 0) {
-        registerError(typeElement);
-        return;
-      }
-      final PsiStatement lastStatement =
-        statements[statements.length - 1];
-      if (!(lastStatement instanceof PsiThrowStatement)) {
-        registerError(typeElement);
-        return;
-      }
-      final PsiThrowStatement throwStatement =
-        (PsiThrowStatement)lastStatement;
-      final PsiExpression exception = throwStatement.getException();
-      if (!(exception instanceof PsiReferenceExpression)) {
-        registerError(typeElement);
-        return;
-      }
-      final PsiElement element = ((PsiReference)exception).resolve();
-      if (parameter.equals(element)) {
-        return;
-      }
-      registerError(typeElement);
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ErrorRethrownVisitor();
     }
-  }
+
+    private static class ErrorRethrownVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+            super.visitTryStatement(statement);
+            final PsiCatchSection[] catchSections = statement.getCatchSections();
+            for (PsiCatchSection catchSection : catchSections) {
+                final PsiParameter parameter = catchSection.getParameter();
+                final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
+                if (parameter != null && catchBlock != null) {
+                    checkCatchBlock(parameter, catchBlock);
+                }
+            }
+        }
+
+        private void checkCatchBlock(PsiParameter parameter, PsiCodeBlock catchBlock) {
+            final PsiType type = parameter.getType();
+            final PsiClass aClass = PsiUtil.resolveClassInType(type);
+            if (aClass == null) {
+                return;
+            }
+            if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_ERROR)) {
+                return;
+            }
+            if (TypeUtils.typeEquals("java.lang.ThreadDeath", type)) {
+                return;
+            }
+            final PsiTypeElement typeElement = parameter.getTypeElement();
+            final PsiStatement[] statements = catchBlock.getStatements();
+            if (statements.length == 0) {
+                registerError(typeElement);
+                return;
+            }
+            final PsiStatement lastStatement =
+                statements[statements.length - 1];
+            if (!(lastStatement instanceof PsiThrowStatement)) {
+                registerError(typeElement);
+                return;
+            }
+            final PsiThrowStatement throwStatement = (PsiThrowStatement) lastStatement;
+            final PsiExpression exception = throwStatement.getException();
+            if (!(exception instanceof PsiReferenceExpression)) {
+                registerError(typeElement);
+                return;
+            }
+            final PsiElement element = ((PsiReference) exception).resolve();
+            if (parameter.equals(element)) {
+                return;
+            }
+            registerError(typeElement);
+        }
+    }
 }

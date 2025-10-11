@@ -26,6 +26,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -33,75 +34,74 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class PackageVisibleInnerClassInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreEnums = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreEnums = false;
+    @SuppressWarnings("PublicField")
+    public boolean ignoreInterfaces = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreInterfaces = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.packageVisibleInnerClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.packageVisibleInnerClassProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreEnumOption().get(), "ignoreEnums");
-    panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
-    return panel;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MoveClassFix();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new PackageVisibleInnerClassVisitor();
-  }
-
-  private class PackageVisibleInnerClassVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.packageVisibleInnerClassDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.hasModifierProperty(PsiModifier.PUBLIC) ||
-          aClass.hasModifierProperty(PsiModifier.PROTECTED) ||
-          aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      if (!ClassUtils.isInnerClass(aClass)) {
-        return;
-      }
-      if (ignoreEnums && aClass.isEnum()) {
-        return;
-      }
-      if (ignoreInterfaces && aClass.isInterface()) {
-        return;
-      }
-      final PsiElement parent = aClass.getParent();
-      // parent must be class to not warn on
-      // the type parameters of classes, anonymous classes and
-      // enum constants for example.
-      if (!(parent instanceof PsiClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.packageVisibleInnerClassProblemDescriptor().get();
     }
-  }
+
+    @Override
+    @Nullable
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreEnumOption().get(), "ignoreEnums");
+        panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
+        return panel;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MoveClassFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new PackageVisibleInnerClassVisitor();
+    }
+
+    private class PackageVisibleInnerClassVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.hasModifierProperty(PsiModifier.PUBLIC) ||
+                aClass.hasModifierProperty(PsiModifier.PROTECTED) ||
+                aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            if (!ClassUtils.isInnerClass(aClass)) {
+                return;
+            }
+            if (ignoreEnums && aClass.isEnum()) {
+                return;
+            }
+            if (ignoreInterfaces && aClass.isInterface()) {
+                return;
+            }
+            final PsiElement parent = aClass.getParent();
+            // parent must be class to not warn on
+            // the type parameters of classes, anonymous classes and
+            // enum constants for example.
+            if (!(parent instanceof PsiClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

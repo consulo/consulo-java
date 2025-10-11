@@ -25,90 +25,91 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class UnnecessaryLabelOnContinueStatementInspection
-  extends BaseInspection {
+public class UnnecessaryLabelOnContinueStatementInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementDisplayName().get();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementProblemDescriptor().get();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessaryLabelOnContinueStatementFix();
-  }
-
-  private static class UnnecessaryLabelOnContinueStatementFix
-    extends InspectionGadgetsFix {
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.unnecessaryLabelRemoveQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementProblemDescriptor().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement continueKeywordElement =
-        descriptor.getPsiElement();
-      final PsiContinueStatement continueStatement =
-        (PsiContinueStatement)continueKeywordElement.getParent();
-      final PsiIdentifier labelIdentifier =
-        continueStatement.getLabelIdentifier();
-      if (labelIdentifier == null) {
-        return;
-      }
-      labelIdentifier.delete();
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessaryLabelOnContinueStatementFix();
     }
-  }
 
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryLabelOnContinueStatementVisitor();
-  }
+    private static class UnnecessaryLabelOnContinueStatementFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.unnecessaryLabelRemoveQuickfix();
+        }
 
-  private static class UnnecessaryLabelOnContinueStatementVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitContinueStatement(
-      @Nonnull PsiContinueStatement statement) {
-      final PsiIdentifier labelIdentifier =
-        statement.getLabelIdentifier();
-      if (labelIdentifier == null) {
-        return;
-      }
-      final String labelText = labelIdentifier.getText();
-      if (labelText == null || labelText.length() == 0) {
-        return;
-      }
-      final PsiStatement exitedStatement =
-        statement.findContinuedStatement();
-      if (exitedStatement == null) {
-        return;
-      }
-      final PsiStatement labelEnabledParent =
-        PsiTreeUtil.getParentOfType(statement,
-                                    PsiForStatement.class, PsiDoWhileStatement.class,
-                                    PsiForeachStatement.class, PsiWhileStatement.class,
-                                    PsiSwitchStatement.class);
-      if (labelEnabledParent == null) {
-        return;
-      }
-      if (!exitedStatement.equals(labelEnabledParent)) {
-        return;
-      }
-      registerStatementError(statement);
+        public void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement continueKeywordElement =
+                descriptor.getPsiElement();
+            final PsiContinueStatement continueStatement =
+                (PsiContinueStatement) continueKeywordElement.getParent();
+            final PsiIdentifier labelIdentifier =
+                continueStatement.getLabelIdentifier();
+            if (labelIdentifier == null) {
+                return;
+            }
+            labelIdentifier.delete();
+        }
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryLabelOnContinueStatementVisitor();
+    }
+
+    private static class UnnecessaryLabelOnContinueStatementVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitContinueStatement(
+            @Nonnull PsiContinueStatement statement
+        ) {
+            final PsiIdentifier labelIdentifier =
+                statement.getLabelIdentifier();
+            if (labelIdentifier == null) {
+                return;
+            }
+            final String labelText = labelIdentifier.getText();
+            if (labelText == null || labelText.length() == 0) {
+                return;
+            }
+            final PsiStatement exitedStatement =
+                statement.findContinuedStatement();
+            if (exitedStatement == null) {
+                return;
+            }
+            final PsiStatement labelEnabledParent =
+                PsiTreeUtil.getParentOfType(statement,
+                    PsiForStatement.class, PsiDoWhileStatement.class,
+                    PsiForeachStatement.class, PsiWhileStatement.class,
+                    PsiSwitchStatement.class
+                );
+            if (labelEnabledParent == null) {
+                return;
+            }
+            if (!exitedStatement.equals(labelEnabledParent)) {
+                return;
+            }
+            registerStatementError(statement);
+        }
+    }
 }

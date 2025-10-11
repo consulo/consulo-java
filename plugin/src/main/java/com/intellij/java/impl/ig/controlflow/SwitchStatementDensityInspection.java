@@ -27,77 +27,76 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class SwitchStatementDensityInspection extends BaseInspection {
+    private static final int DEFAULT_DENSITY_LIMIT = 20;
 
-  private static final int DEFAULT_DENSITY_LIMIT = 20;
+    @SuppressWarnings("PublicField")
+    public int m_limit = DEFAULT_DENSITY_LIMIT;
 
-  @SuppressWarnings("PublicField")
-  public int m_limit = DEFAULT_DENSITY_LIMIT;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.switchStatementDensityDisplayName().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.switchStatementDensityMinOption();
-    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    final Integer intDensity = (Integer)infos[0];
-    return InspectionGadgetsLocalize.switchStatementDensityProblemDescriptor(intDensity).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SwitchStatementDensityVisitor();
-  }
-
-  private class SwitchStatementDensityVisitor extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-      final PsiCodeBlock body = statement.getBody();
-      if (body == null) {
-        return;
-      }
-      final int branchCount = SwitchUtils.calculateBranchCount(statement);
-      if (branchCount == 0) {
-        return;
-      }
-      final double density = calculateDensity(body, branchCount);
-      final int intDensity = (int)(density * 100.0);
-      if (intDensity > m_limit) {
-        return;
-      }
-      registerStatementError(statement, Integer.valueOf(intDensity));
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.switchStatementDensityDisplayName();
     }
-
-    private double calculateDensity(@Nonnull PsiCodeBlock body, int branchCount) {
-      final StatementCountVisitor visitor = new StatementCountVisitor();
-      body.accept(visitor);
-      return (double)branchCount / (double)visitor.getStatementCount();
-    }
-  }
-
-  private static class StatementCountVisitor extends JavaRecursiveElementVisitor {
-
-    private int statementCount = 0;
 
     @Override
-    public void visitStatement(@Nonnull PsiStatement statement) {
-      super.visitStatement(statement);
-      if (statement instanceof PsiSwitchLabelStatement || statement instanceof PsiBreakStatement) {
-        return;
-      }
-      statementCount++;
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.switchStatementDensityMinOption();
+        return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
     }
 
-    public int getStatementCount() {
-      return statementCount;
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final Integer intDensity = (Integer) infos[0];
+        return InspectionGadgetsLocalize.switchStatementDensityProblemDescriptor(intDensity).get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SwitchStatementDensityVisitor();
+    }
+
+    private class SwitchStatementDensityVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+            final PsiCodeBlock body = statement.getBody();
+            if (body == null) {
+                return;
+            }
+            final int branchCount = SwitchUtils.calculateBranchCount(statement);
+            if (branchCount == 0) {
+                return;
+            }
+            final double density = calculateDensity(body, branchCount);
+            final int intDensity = (int) (density * 100.0);
+            if (intDensity > m_limit) {
+                return;
+            }
+            registerStatementError(statement, Integer.valueOf(intDensity));
+        }
+
+        private double calculateDensity(@Nonnull PsiCodeBlock body, int branchCount) {
+            final StatementCountVisitor visitor = new StatementCountVisitor();
+            body.accept(visitor);
+            return (double) branchCount / (double) visitor.getStatementCount();
+        }
+    }
+
+    private static class StatementCountVisitor extends JavaRecursiveElementVisitor {
+
+        private int statementCount = 0;
+
+        @Override
+        public void visitStatement(@Nonnull PsiStatement statement) {
+            super.visitStatement(statement);
+            if (statement instanceof PsiSwitchLabelStatement || statement instanceof PsiBreakStatement) {
+                return;
+            }
+            statementCount++;
+        }
+
+        public int getStatementCount() {
+            return statementCount;
+        }
+    }
 }
