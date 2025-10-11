@@ -17,12 +17,13 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
@@ -35,16 +36,14 @@ public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "teardown.is.public.void.no.arg.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.teardownIsPublicVoidNoArgDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "teardown.is.public.void.no.arg.problem.descriptor");
+    return InspectionGadgetsLocalize.teardownIsPublicVoidNoArgProblemDescriptor().get();
   }
 
   @Override

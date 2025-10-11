@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.controlflow;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -33,6 +32,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -40,123 +40,99 @@ import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
-public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseInspection implements CleanupLocalInspectionTool
-{
-	public boolean myReportOnlyExactlyIdentical;
+public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseInspection implements CleanupLocalInspectionTool {
+    public boolean myReportOnlyExactlyIdentical;
 
-	@Nullable
-	@Override
-	public JComponent createOptionsPanel()
-	{
-		return new SingleCheckboxOptionsPanel("Report only exactly identical branches", this, "myReportOnlyExactlyIdentical");
-	}
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        return new SingleCheckboxOptionsPanel("Report only exactly identical branches", this, "myReportOnlyExactlyIdentical");
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesDisplayName().get();
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		final EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
-		return decision.isExact()
-			? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesProblemDescriptor().get()
-			: InspectionGadgetsBundle.message("conditional.expression.with.similar.branches.problem.descriptor");
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
+        return decision.isExact()
+            ? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesProblemDescriptor().get()
+            : InspectionGadgetsLocalize.conditionalExpressionWithSimilarBranchesProblemDescriptor().get();
+    }
 
-	@Override
-	public InspectionGadgetsFix buildFix(Object... infos)
-	{
-		return new CollapseConditional((PsiConditionalExpression) infos[0]);
-	}
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new CollapseConditional((PsiConditionalExpression) infos[0]);
+    }
 
-	private static class CollapseConditional extends InspectionGadgetsFix
-	{
-		private final SmartPsiElementPointer<PsiConditionalExpression> myConditionalExpression;
+    private static class CollapseConditional extends InspectionGadgetsFix {
+        private final SmartPsiElementPointer<PsiConditionalExpression> myConditionalExpression;
 
-		public CollapseConditional(PsiConditionalExpression expression)
-		{
-			myConditionalExpression = SmartPointerManager.getInstance(expression.getProject()).createSmartPsiElementPointer(expression);
-		}
+        public CollapseConditional(PsiConditionalExpression expression) {
+            myConditionalExpression = SmartPointerManager.getInstance(expression.getProject()).createSmartPsiElementPointer(expression);
+        }
 
-		@Override
-		@Nonnull
-		public String getName()
-		{
-			return getEquivalenceDecision().getExactlyMatches()
-				? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesCollapseQuickfix().get()
-				: InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.push.inside.quickfix");
-		}
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return getEquivalenceDecision().getExactlyMatches()
+                ? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesCollapseQuickfix()
+                : InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesPushInsideQuickfix();
+        }
 
-		@Override
-		@Nonnull
-		public String getFamilyName()
-		{
-			return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.collapse.quickfix.family");
-		}
+        public PsiConditionalExpression getConditionalExpression() {
+            return myConditionalExpression.getElement();
+        }
 
-		public PsiConditionalExpression getConditionalExpression()
-		{
-			return myConditionalExpression.getElement();
-		}
+        private EquivalenceChecker.Decision getEquivalenceDecision() {
+            return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(getConditionalExpression().getThenExpression(), getConditionalExpression().getElseExpression());
+        }
 
-		private EquivalenceChecker.Decision getEquivalenceDecision()
-		{
-			return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(getConditionalExpression().getThenExpression(), getConditionalExpression().getElseExpression());
-		}
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) {
+            final EquivalenceChecker.Decision decision = getEquivalenceDecision();
+            final PsiConditionalExpression conditionalExpression = getConditionalExpression();
+            final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+            assert thenExpression != null;
+            if (decision.getExactlyMatches()) {
+                final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+                final String bodyText = thenExpression.getText();
+                PsiReplacementUtil.replaceExpression(expression, bodyText);
+            }
+            else if (!decision.isExactUnMatches()) {
+                final PsiElement leftDiff = decision.getLeftDiff();
+                final PsiElement rightDiff = decision.getRightDiff();
 
-		@Override
-		public void doFix(Project project, ProblemDescriptor descriptor)
-		{
-			final EquivalenceChecker.Decision decision = getEquivalenceDecision();
-			final PsiConditionalExpression conditionalExpression = getConditionalExpression();
-			final PsiExpression thenExpression = conditionalExpression.getThenExpression();
-			assert thenExpression != null;
-			if(decision.getExactlyMatches())
-			{
-				final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
-				final String bodyText = thenExpression.getText();
-				PsiReplacementUtil.replaceExpression(expression, bodyText);
-			}
-			else if(!decision.isExactUnMatches())
-			{
-				final PsiElement leftDiff = decision.getLeftDiff();
-				final PsiElement rightDiff = decision.getRightDiff();
+                final String expression = "(" + conditionalExpression.getCondition().getText() + " ? " + leftDiff.getText() + " : " + rightDiff.getText() + ")";
+                final PsiExpression newConditionalExpression = JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression, conditionalExpression);
 
-				final String expression = "(" + conditionalExpression.getCondition().getText() + " ? " + leftDiff.getText() + " : " + rightDiff.getText() + ")";
-				final PsiExpression newConditionalExpression = JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression, conditionalExpression);
+                final PsiElement replacedConditionalExpression = leftDiff.replace(newConditionalExpression);
+                ParenthesesUtils.removeParentheses((PsiExpression) replacedConditionalExpression, false);
+                conditionalExpression.replace(thenExpression);
+            }
+        }
+    }
 
-				final PsiElement replacedConditionalExpression = leftDiff.replace(newConditionalExpression);
-				ParenthesesUtils.removeParentheses((PsiExpression) replacedConditionalExpression, false);
-				conditionalExpression.replace(thenExpression);
-			}
-		}
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new ConditionalExpressionWithIdenticalBranchesVisitor();
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new ConditionalExpressionWithIdenticalBranchesVisitor();
-	}
+    private class ConditionalExpressionWithIdenticalBranchesVisitor extends BaseInspectionVisitor {
 
-	private class ConditionalExpressionWithIdenticalBranchesVisitor extends BaseInspectionVisitor
-	{
-
-		@Override
-		public void visitConditionalExpression(PsiConditionalExpression expression)
-		{
-			super.visitConditionalExpression(expression);
-			final PsiExpression thenExpression = expression.getThenExpression();
-			final PsiExpression elseExpression = expression.getElseExpression();
-			final EquivalenceChecker.Decision decision = EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(thenExpression, elseExpression);
-			if(thenExpression != null && (myReportOnlyExactlyIdentical ? decision.getExactlyMatches() : !decision.isExactUnMatches()))
-			{
-				registerError(expression, expression, decision);
-			}
-		}
-	}
+        @Override
+        public void visitConditionalExpression(PsiConditionalExpression expression) {
+            super.visitConditionalExpression(expression);
+            final PsiExpression thenExpression = expression.getThenExpression();
+            final PsiExpression elseExpression = expression.getElseExpression();
+            final EquivalenceChecker.Decision decision = EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(thenExpression, elseExpression);
+            if (thenExpression != null && (myReportOnlyExactlyIdentical ? decision.getExactlyMatches() : !decision.isExactUnMatches())) {
+                registerError(expression, expression, decision);
+            }
+        }
+    }
 }

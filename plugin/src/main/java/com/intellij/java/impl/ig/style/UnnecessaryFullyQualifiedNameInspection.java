@@ -20,7 +20,6 @@ import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -62,7 +61,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.ignore.option"),
+    return new SingleCheckboxOptionsPanel(InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameIgnoreOption().get(),
                                           this, "m_ignoreJavadoc");
   }
 

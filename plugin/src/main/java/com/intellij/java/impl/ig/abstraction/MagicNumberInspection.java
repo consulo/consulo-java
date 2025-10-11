@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.abstraction;
 import com.intellij.java.impl.ig.fixes.IntroduceConstantFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -62,10 +61,10 @@ public class MagicNumberInspection extends BaseInspection {
     @Override
     public JComponent createOptionsPanel() {
         final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-        panel.addCheckbox(InspectionGadgetsBundle.message("magic.number.ignore.option"), "ignoreInHashCode");
-        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.test.code"), "ignoreInTestCode");
-        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.annotations"), "ignoreInAnnotations");
-        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.as.initial.capacity"), "ignoreInitialCapacity");
+        panel.addCheckbox(InspectionGadgetsLocalize.magicNumberIgnoreOption().get(), "ignoreInHashCode");
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreInTestCode().get(), "ignoreInTestCode");
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreInAnnotations().get(), "ignoreInAnnotations");
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreAsInitialCapacity().get(), "ignoreInitialCapacity");
         return panel;
     }
 

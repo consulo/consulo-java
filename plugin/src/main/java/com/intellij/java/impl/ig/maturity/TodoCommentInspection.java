@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiComment;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TodoCommentInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message("todo.comment.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.todoCommentDisplayName();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("todo.comment.problem.descriptor");
+    return InspectionGadgetsLocalize.todoCommentProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

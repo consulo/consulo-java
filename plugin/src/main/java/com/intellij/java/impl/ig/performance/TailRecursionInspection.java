@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,6 +28,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -39,8 +39,8 @@ import jakarta.annotation.Nullable;
 public class TailRecursionInspection extends BaseInspection {
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.tailRecursionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.tailRecursionDisplayName();
   }
 
   @Override
@@ -73,8 +73,8 @@ public class TailRecursionInspection extends BaseInspection {
   private static class RemoveTailRecursionFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.tailRecursionReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.tailRecursionReplaceQuickfix();
     }
 
     @Override

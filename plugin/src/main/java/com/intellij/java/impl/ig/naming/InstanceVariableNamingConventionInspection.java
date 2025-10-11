@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -33,8 +33,8 @@ public class InstanceVariableNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 32;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceVariableNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.instanceVariableNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -49,16 +49,12 @@ public class InstanceVariableNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "instance.variable.name.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.instanceVariableNameConventionProblemDescriptorShort().get();
     }
     else if (fieldName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "instance.variable.name.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.instanceVariableNameConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "instance.variable.name.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.instanceVariableNameConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   protected String getDefaultRegex() {

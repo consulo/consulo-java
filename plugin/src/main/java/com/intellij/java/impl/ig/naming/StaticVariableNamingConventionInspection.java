@@ -19,7 +19,6 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
@@ -45,8 +44,8 @@ public class StaticVariableNamingConventionInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticVariableNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.staticVariableNamingConventionDisplayName();
   }
 
   @Override
@@ -64,16 +63,12 @@ public class StaticVariableNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "static.variable.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.staticVariableNamingConventionProblemDescriptorShort().get();
     }
     else if (fieldName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "static.variable.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.staticVariableNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "static.variable.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.staticVariableNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   @Override

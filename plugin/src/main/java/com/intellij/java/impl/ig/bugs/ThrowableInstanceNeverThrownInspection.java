@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
@@ -27,18 +26,17 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message("throwable.instance.never.thrown.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.throwableInstanceNeverThrownDisplayName();
   }
 
   @Override

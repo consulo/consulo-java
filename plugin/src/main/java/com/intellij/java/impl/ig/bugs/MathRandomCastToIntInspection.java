@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -42,7 +41,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        return InspectionGadgetsBundle.message("math.random.cast.to.int.problem.descriptor");
+        return InspectionGadgetsLocalize.mathRandomCastToIntProblemDescriptor().get();
     }
 
     @Override

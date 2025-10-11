@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,18 +26,17 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringConcatenationInFormatCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.stringConcatenationInFormatCallDisplayName();
   }
 
   @Nonnull
@@ -62,12 +60,12 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
+    public LocalizeValue getName() {
       if (myPlural) {
-        return InspectionGadgetsBundle.message("string.concatenation.in.format.call.plural.quickfix");
+        return InspectionGadgetsLocalize.stringConcatenationInFormatCallPluralQuickfix();
       }
       else {
-        return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix().get();
+        return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix();
       }
     }
 

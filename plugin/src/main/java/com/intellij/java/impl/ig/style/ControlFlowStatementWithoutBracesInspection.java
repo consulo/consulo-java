@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -33,15 +34,14 @@ import org.jetbrains.annotations.NonNls;
 public class ControlFlowStatementWithoutBracesInspection extends BaseInspection {
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "control.flow.statement.without.braces.problem.descriptor");
+    return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesProblemDescriptor().get();
   }
 
   @Override
@@ -52,8 +52,8 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
   private static class ControlFlowStatementFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesAddQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesAddQuickfix();
     }
 
     @Override

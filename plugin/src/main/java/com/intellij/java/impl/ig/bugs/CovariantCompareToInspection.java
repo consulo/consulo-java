@@ -18,13 +18,14 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -33,14 +34,14 @@ public class CovariantCompareToInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message("covariant.compareto.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.covariantComparetoDisplayName();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("covariant.compareto.problem.descriptor");
+    return InspectionGadgetsLocalize.covariantComparetoProblemDescriptor().get();
   }
 
   @Override

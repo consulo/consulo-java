@@ -15,56 +15,59 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledCompareToInspection extends BaseInspection {
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "misspelled.compareto.display.name");
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "misspelled.compareto.problem.descriptor");
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameFix(HardcodedMethodConstants.COMPARE_TO);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new MisspelledCompareToVisitor();
-  }
-
-  private static class MisspelledCompareToVisitor
-    extends BaseInspectionVisitor {
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.misspelledComparetoDisplayName();
+    }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      //note: no call to super
-      @NonNls final String methodName = method.getName();
-      if (!"compareto".equals(methodName)) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 1) {
-        return;
-      }
-      registerMethodError(method);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.misspelledComparetoProblemDescriptor().get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameFix(HardcodedMethodConstants.COMPARE_TO);
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MisspelledCompareToVisitor();
+    }
+
+    private static class MisspelledCompareToVisitor
+        extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            //note: no call to super
+            @NonNls final String methodName = method.getName();
+            if (!"compareto".equals(methodName)) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 1) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,6 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
@@ -39,14 +39,14 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.usageOfObsoleteAssertDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.usageOfObsoleteAssertDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("use.of.obsolete.assert.problem.descriptor");
+    return InspectionGadgetsLocalize.useOfObsoleteAssertProblemDescriptor().get();
   }
 
   @Override
@@ -225,8 +225,8 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.useOfObsoleteAssertQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.useOfObsoleteAssertQuickfix();
     }
   }
 }

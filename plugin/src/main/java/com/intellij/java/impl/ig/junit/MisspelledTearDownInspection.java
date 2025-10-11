@@ -15,34 +15,31 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MisspelledTearDownInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "misspelled.tear.down.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.misspelledTearDownDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "misspelled.tear.down.problem.descriptor");
+    return InspectionGadgetsLocalize.misspelledTearDownProblemDescriptor().get();
   }
 
   @Override
@@ -65,7 +62,7 @@ public class MisspelledTearDownInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
-      @NonNls final String methodName = method.getName();
+      final String methodName = method.getName();
       if (!"teardown".equals(methodName)) {
         return;
       }

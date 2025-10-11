@@ -17,12 +17,12 @@ package com.intellij.java.impl.ig.finalization;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -45,16 +45,14 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "finalize.doesnt.call.super.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.finalizeDoesntCallSuperDisplayName();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "finalize.doesnt.call.super.problem.descriptor");
+    return InspectionGadgetsLocalize.finalizeDoesntCallSuperProblemDescriptor().get();
   }
 
   @Override
@@ -66,9 +64,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "finalize.doesnt.call.super.ignore.option"),
-                             "ignoreObjectSubclasses");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.finalizeDoesntCallSuperIgnoreOption().get(), "ignoreObjectSubclasses");
     optionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreTrivialFinalizersOption().get(), "ignoreTrivialFinalizers");
     return optionsPanel;
   }

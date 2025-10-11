@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiCatchSection;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -38,9 +39,8 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "parameter.naming.convention.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.parameterNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -55,17 +55,13 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   public String buildErrorString(Object... infos) {
     final String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "parameter.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.parameterNamingConventionProblemDescriptorShort().get();
     }
     else if (parametername.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "parameter.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.parameterNamingConventionProblemDescriptorLong().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "parameter.naming.convention.problem.descriptor.regex.mismatch",
-        getRegex());
+      return InspectionGadgetsLocalize.parameterNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
     }
   }
 

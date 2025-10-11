@@ -15,17 +15,17 @@
  */
 package com.siyeh;
 
+import consulo.application.CommonBundle;
+import org.jetbrains.annotations.PropertyKey;
+
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.PropertyKey;
-import consulo.application.CommonBundle;
-
 /**
  * @author max
  */
+@Deprecated
 public class InspectionGadgetsBundle {
   private static Reference<ResourceBundle> ourBundle;
 

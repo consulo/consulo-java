@@ -19,7 +19,6 @@ import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
@@ -58,8 +57,7 @@ public class FeatureEnvyInspection extends BaseInspection {
   @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "feature.envy.ignore.test.cases.option"), this,
+        InspectionGadgetsLocalize.featureEnvyIgnoreTestCasesOption().get(), this,
       "ignoreTestCases");
   }
 

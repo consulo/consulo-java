@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ConvertSwitchToIfIntention;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -60,11 +59,11 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     final PsiSwitchBlock block = (PsiSwitchBlock) infos[1];
     if (block instanceof PsiSwitchExpression) {
       return branchCount == 0
-        ? InspectionGadgetsBundle.message("switch.expression.with.single.default.message")
-        : InspectionGadgetsBundle.message("switch.expression.with.too.few.branches.problem.descriptor", branchCount);
+        ? InspectionGadgetsLocalize.switchExpressionWithSingleDefaultMessage().get()
+        : InspectionGadgetsLocalize.switchExpressionWithTooFewBranchesProblemDescriptor(branchCount).get();
     }
     return branchCount == 0
-      ? InspectionGadgetsBundle.message("switch.statement.with.single.default.message")
+      ? InspectionGadgetsLocalize.switchStatementWithSingleDefaultMessage().get()
       : InspectionGadgetsLocalize.switchStatementWithTooFewBranchesProblemDescriptor(branchCount).get();
   }
 

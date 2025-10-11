@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.junit;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,18 +26,17 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.assertequalsCalledOnArraysDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.assertequalsCalledOnArraysDisplayName();
   }
 
   @Nonnull
@@ -56,8 +54,8 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsBundle.message("assertequals.called.on.arrays.quickfix");
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.assertequalsCalledOnArraysQuickfix();
     }
 
     @Override

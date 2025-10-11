@@ -19,7 +19,6 @@ import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -28,6 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -37,125 +37,124 @@ import javax.swing.*;
 @ExtensionImpl
 public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreByteAndShortArrayParameters = false;
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreByteAndShortArrayParameters = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreOverridingMethods = false;
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodCanBeVariableArityMethodDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.methodCanBeVariableArityMethodProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(
-      InspectionGadgetsLocalize.methodCanBeVariableArityMethodIgnoreByteShortOption().get(),
-      "ignoreByteAndShortArrayParameters"
-    );
-    panel.addCheckbox(
-      InspectionGadgetsBundle.message("method.can.be.variable.arity.method.ignore.overriding.methods"),
-      "ignoreOverridingMethods"
-    );
-    return panel;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new MethodCanBeVariableArityMethodFix();
-  }
-
-  private static class MethodCanBeVariableArityMethodFix extends InspectionGadgetsFix {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreOverridingMethods = false;
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.convertToVariableArityMethodQuickfix().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.methodCanBeVariableArityMethodDisplayName();
+    }
+
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.methodCanBeVariableArityMethodProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiMethod)) {
-        return;
-      }
-      final PsiMethod method = (PsiMethod)parent;
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() == 0) {
-        return;
-      }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiParameter lastParameter = parameters[parameters.length - 1];
-      final PsiType type = lastParameter.getType();
-      if (!(type instanceof PsiArrayType)) {
-        return;
-      }
-      final PsiArrayType arrayType = (PsiArrayType)type;
-      final PsiType componentType = arrayType.getComponentType();
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-      final PsiTypeElement newTypeElement = factory.createTypeElementFromText(componentType.getCanonicalText() + "...", method);
-      final PsiTypeElement typeElement = lastParameter.getTypeElement();
-      if (typeElement != null) {
-        typeElement.replace(newTypeElement);
-      }
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        panel.addCheckbox(
+            InspectionGadgetsLocalize.methodCanBeVariableArityMethodIgnoreByteShortOption().get(),
+            "ignoreByteAndShortArrayParameters"
+        );
+        panel.addCheckbox(
+            InspectionGadgetsLocalize.methodCanBeVariableArityMethodIgnoreOverridingMethods().get(),
+            "ignoreOverridingMethods"
+        );
+        return panel;
     }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MethodCanBeVariableArityMethodVisitor();
-  }
-
-  private class MethodCanBeVariableArityMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(PsiMethod method) {
-      if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
-        return;
-      }
-      super.visitMethod(method);
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() == 0) {
-        return;
-      }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiParameter lastParameter = parameters[parameters.length - 1];
-      final PsiType type = lastParameter.getType();
-      if (!(type instanceof PsiArrayType)) {
-        return;
-      }
-      if (type instanceof PsiEllipsisType) {
-        return;
-      }
-      final PsiArrayType arrayType = (PsiArrayType)type;
-      final PsiType componentType = arrayType.getComponentType();
-      if (componentType instanceof PsiArrayType) {
-        // don't report when it is multidimensional array
-        return;
-      }
-      if (ignoreByteAndShortArrayParameters) {
-        if (PsiType.BYTE.equals(componentType) || PsiType.SHORT.equals(componentType)) {
-          return;
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new MethodCanBeVariableArityMethodFix();
+    }
+
+    private static class MethodCanBeVariableArityMethodFix extends InspectionGadgetsFix {
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.convertToVariableArityMethodQuickfix();
         }
-      }
-      if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
-        return;
-      }
-      if (ignoreOverridingMethods && SuperMethodsSearch.search(method, null, true, false).findFirst() != null) {
-        return;
-      }
-      registerMethodError(method);
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiMethod)) {
+                return;
+            }
+            final PsiMethod method = (PsiMethod) parent;
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() == 0) {
+                return;
+            }
+            final PsiParameter[] parameters = parameterList.getParameters();
+            final PsiParameter lastParameter = parameters[parameters.length - 1];
+            final PsiType type = lastParameter.getType();
+            if (!(type instanceof PsiArrayType)) {
+                return;
+            }
+            final PsiArrayType arrayType = (PsiArrayType) type;
+            final PsiType componentType = arrayType.getComponentType();
+            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            final PsiTypeElement newTypeElement = factory.createTypeElementFromText(componentType.getCanonicalText() + "...", method);
+            final PsiTypeElement typeElement = lastParameter.getTypeElement();
+            if (typeElement != null) {
+                typeElement.replace(newTypeElement);
+            }
+        }
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MethodCanBeVariableArityMethodVisitor();
+    }
+
+    private class MethodCanBeVariableArityMethodVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(PsiMethod method) {
+            if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
+                return;
+            }
+            super.visitMethod(method);
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() == 0) {
+                return;
+            }
+            final PsiParameter[] parameters = parameterList.getParameters();
+            final PsiParameter lastParameter = parameters[parameters.length - 1];
+            final PsiType type = lastParameter.getType();
+            if (!(type instanceof PsiArrayType)) {
+                return;
+            }
+            if (type instanceof PsiEllipsisType) {
+                return;
+            }
+            final PsiArrayType arrayType = (PsiArrayType) type;
+            final PsiType componentType = arrayType.getComponentType();
+            if (componentType instanceof PsiArrayType) {
+                // don't report when it is multidimensional array
+                return;
+            }
+            if (ignoreByteAndShortArrayParameters) {
+                if (PsiType.BYTE.equals(componentType) || PsiType.SHORT.equals(componentType)) {
+                    return;
+                }
+            }
+            if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
+                return;
+            }
+            if (ignoreOverridingMethods && SuperMethodsSearch.search(method, null, true, false).findFirst() != null) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

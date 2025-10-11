@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.resources;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
@@ -79,8 +78,8 @@ public class JDBCResourceInspection extends ResourceInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.jdbcResourceOpenedNotClosedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.jdbcResourceOpenedNotClosedDisplayName();
   }
 
   @Override
@@ -90,8 +89,7 @@ public class JDBCResourceInspection extends ResourceInspection {
     final PsiType type = expression.getType();
     assert type != null;
     final String text = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "jdbc.resource.opened.not.closed.problem.descriptor", text);
+    return InspectionGadgetsLocalize.jdbcResourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
   @Override

@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;

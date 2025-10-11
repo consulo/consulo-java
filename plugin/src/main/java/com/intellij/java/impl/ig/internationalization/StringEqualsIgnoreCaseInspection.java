@@ -20,7 +20,6 @@ import com.intellij.java.impl.ig.DelegatingFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -52,8 +51,7 @@ public class StringEqualsIgnoreCaseInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        return InspectionGadgetsBundle.message(
-            "string.equalsignorecase.call.problem.descriptor");
+        return InspectionGadgetsLocalize.stringEqualsignorecaseCallProblemDescriptor().get();
     }
 
     @Override

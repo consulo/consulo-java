@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -52,14 +51,14 @@ public class ConfusingElseInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message("confusing.else.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.confusingElseDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("confusing.else.problem.descriptor");
+    return InspectionGadgetsLocalize.confusingElseProblemDescriptor().get();
   }
 
   @Override
@@ -82,8 +81,8 @@ public class ConfusingElseInspection extends BaseInspection {
   private static class ConfusingElseFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsBundle.message("confusing.else.unwrap.quickfix");
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.confusingElseUnwrapQuickfix();
     }
 
     @Override

@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.bitwise;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -77,8 +76,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
     @Override
     public JComponent createOptionsPanel() {
         return new SingleCheckboxOptionsPanel(
-            InspectionGadgetsBundle.message(
-                "pointless.bitwise.expression.ignore.option"),
+            InspectionGadgetsLocalize.pointlessBitwiseExpressionIgnoreOption().get(),
             this, "m_ignoreExpressionsContainingConstants"
         );
     }

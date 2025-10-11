@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.errorhandling;
 import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -89,7 +88,7 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     public JComponent createOptionsPanel() {
         final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.tooBroadCatchOption().get(), "onlyWarnOnRootExceptions");
-        panel.addCheckbox(InspectionGadgetsBundle.message("ignore.exceptions.declared.in.tests.option"), "ignoreInTestCode");
+        panel.addCheckbox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredInTestsOption().get(), "ignoreInTestCode");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredOnLibraryOverrideOption().get(), "ignoreLibraryOverrides");
         panel.addCheckbox(InspectionGadgetsLocalize.overlyBroadThrowsClauseIgnoreThrownOption().get(), "ignoreThrown");
         return panel;

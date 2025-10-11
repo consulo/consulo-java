@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.style;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,6 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -34,14 +34,13 @@ import jakarta.annotation.Nonnull;
 public class CStyleArrayDeclarationInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cStyleArrayDeclarationDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.cStyleArrayDeclarationDisplayName();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "c.style.array.declaration.problem.descriptor");
+    return InspectionGadgetsLocalize.cStyleArrayDeclarationProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -52,8 +51,8 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.cStyleArrayDeclarationReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.cStyleArrayDeclarationReplaceQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

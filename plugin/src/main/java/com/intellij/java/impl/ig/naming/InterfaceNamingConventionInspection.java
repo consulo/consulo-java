@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -32,8 +31,8 @@ public class InterfaceNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.interfaceNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.interfaceNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -48,16 +47,12 @@ public class InterfaceNamingConventionInspection extends ConventionInspection {
   public String buildErrorString(Object... infos) {
     final String interfaceName = (String)infos[0];
     if (interfaceName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "interface.name.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.interfaceNameConventionProblemDescriptorShort().get();
     }
     else if (interfaceName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "interface.name.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.interfaceNameConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "interface.name.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.interfaceNameConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   protected String getDefaultRegex() {

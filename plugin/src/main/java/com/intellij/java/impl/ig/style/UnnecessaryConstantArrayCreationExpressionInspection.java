@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -25,6 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -35,8 +35,8 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionDisplayName();
   }
 
   @Override
@@ -55,9 +55,8 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.constant.array.creation.expression.quickfix");
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionQuickfix();
     }
 
     @Override

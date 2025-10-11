@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,47 +31,51 @@ public class ClassNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MIN_LENGTH = 8;
   private static final int DEFAULT_MAX_LENGTH = 64;
 
+  @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classNamingConventionDisplayName();
   }
 
+  @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new RenameFix();
   }
 
+  @Override
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
     return true;
   }
 
+  @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "class.name.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.classNameConventionProblemDescriptorShort().get();
     }
     else if (className.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "class.name.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.classNameConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "class.name.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.classNameConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
+  @Override
   protected String getDefaultRegex() {
     return "[A-Z][A-Za-z\\d]*";
   }
 
+  @Override
   protected int getDefaultMinLength() {
     return DEFAULT_MIN_LENGTH;
   }
 
+  @Override
   protected int getDefaultMaxLength() {
     return DEFAULT_MAX_LENGTH;
   }
 
+  @Override
   public BaseInspectionVisitor buildVisitor() {
     return new NamingConventionsVisitor();
   }

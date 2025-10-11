@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -91,7 +90,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
                 return;
             }
             final XmlFile xmlFile = (XmlFile) element;
-            new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.delete.command"), xmlFile) {
+            new WriteCommandAction.Simple(project, InspectionGadgetsLocalize.packageDotHtmlDeleteCommand().get(), xmlFile) {
                 @Override
                 protected void run() throws Throwable {
                     element.delete();
@@ -134,7 +133,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             if (file != null) {
                 return;
             }
-            new WriteCommandAction.Simple(project, InspectionGadgetsBundle.message("package.dot.html.convert.command"), file) {
+            new WriteCommandAction.Simple(project, InspectionGadgetsLocalize.packageDotHtmlConvertCommand().get(), file) {
                 @Override
                 protected void run() throws Throwable {
                     final PsiJavaFile file = (PsiJavaFile) directory.createFile("package-info.java");

@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.ide.impl.idea.util.ui.RegExFormatter;
 import consulo.ide.impl.idea.util.ui.RegExInputVerifier;
@@ -71,9 +70,9 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 
 	@Nonnull
 	@Override
-	public String getDisplayName()
+	public LocalizeValue getDisplayName()
 	{
-		return InspectionGadgetsLocalize.packageNamingConventionDisplayName().get();
+		return InspectionGadgetsLocalize.packageNamingConventionDisplayName();
 	}
 
 	@Override
@@ -132,9 +131,9 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		final GridBagLayout layout = new GridBagLayout();
 		final JPanel panel = new JPanel(layout);
 
-		final JLabel patternLabel = new JLabel(InspectionGadgetsBundle.message("convention.pattern.option"));
-		final JLabel minLengthLabel = new JLabel(InspectionGadgetsBundle.message("convention.min.length.option"));
-		final JLabel maxLengthLabel = new JLabel(InspectionGadgetsBundle.message("convention.max.length.option"));
+		final JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
+		final JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
+		final JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
 
 		final NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setParseIntegerOnly(true);

@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.ui.ex.awt.event.DocumentAdapter;
+import com.intellij.java.impl.ig.ui.BlankFiller;
+import com.siyeh.HardcodedMethodConstants;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.ide.impl.idea.util.ui.RegExFormatter;
 import consulo.ide.impl.idea.util.ui.RegExInputVerifier;
 import consulo.ui.ex.awt.UIUtil;
-import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.intellij.java.impl.ig.ui.BlankFiller;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.util.xml.serializer.InvalidDataException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -110,12 +110,9 @@ public abstract class ConventionInspection extends BaseInspection {
     final GridBagLayout layout = new GridBagLayout();
     final JPanel panel = new JPanel(layout);
 
-    final JLabel patternLabel = new JLabel(
-      InspectionGadgetsBundle.message("convention.pattern.option"));
-    final JLabel minLengthLabel = new JLabel(
-      InspectionGadgetsBundle.message("convention.min.length.option"));
-    final JLabel maxLengthLabel = new JLabel(
-      InspectionGadgetsBundle.message("convention.max.length.option"));
+    final JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
+    final JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
+    final JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
 
     final NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     numberFormat.setParseIntegerOnly(true);

@@ -17,11 +17,11 @@ package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -32,8 +32,8 @@ public class EnumeratedClassNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.enumeratedClassNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.enumeratedClassNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -48,16 +48,12 @@ public class EnumeratedClassNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "enumerated.class.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.enumeratedClassNamingConventionProblemDescriptorShort().get();
     }
     else if (className.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "enumerated.class.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.enumeratedClassNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "enumerated.class.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.enumeratedClassNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   protected String getDefaultRegex() {

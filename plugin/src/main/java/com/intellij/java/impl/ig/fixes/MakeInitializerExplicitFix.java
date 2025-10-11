@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;

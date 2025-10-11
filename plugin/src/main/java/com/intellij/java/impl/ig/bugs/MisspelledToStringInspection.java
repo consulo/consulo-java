@@ -15,32 +15,30 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledToStringInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "misspelled.tostring.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.misspelledTostringDisplayName();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "misspelled.tostring.problem.descriptor");
+    return InspectionGadgetsLocalize.misspelledTostringProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

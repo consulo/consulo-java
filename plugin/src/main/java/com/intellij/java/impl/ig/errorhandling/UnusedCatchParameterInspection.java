@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTryStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -62,7 +61,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
             "m_ignoreCatchBlocksWithComments"
         );
         optionsPanel.addCheckbox(
-            InspectionGadgetsBundle.message("unused.catch.parameter.ignore.empty.option"),
+            InspectionGadgetsLocalize.unusedCatchParameterIgnoreEmptyOption().get(),
             "m_ignoreTestCases"
         );
         return optionsPanel;

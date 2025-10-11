@@ -19,7 +19,6 @@ import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
@@ -115,7 +114,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
         panel.add(tablePanel, constraints);
 
         final CheckBox checkBox1 =
-            new CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.in.tests.option"), this,
+            new CheckBox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredInTestsOption().get(), this,
                 "ignoreTestCases"
             );
         constraints.gridy = 1;

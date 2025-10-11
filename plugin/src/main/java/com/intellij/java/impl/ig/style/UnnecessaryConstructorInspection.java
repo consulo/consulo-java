@@ -24,7 +24,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

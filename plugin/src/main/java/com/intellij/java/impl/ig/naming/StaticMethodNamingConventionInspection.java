@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -33,8 +33,8 @@ public class StaticMethodNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 32;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.staticMethodNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.staticMethodNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -49,16 +49,12 @@ public class StaticMethodNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "static.method.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.staticMethodNamingConventionProblemDescriptorShort().get();
     }
     else if (methodName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "static.method.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.staticMethodNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "static.method.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.staticMethodNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   protected String getDefaultRegex() {

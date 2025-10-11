@@ -20,12 +20,12 @@ import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -36,8 +36,8 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.instanceMethodNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.instanceMethodNamingConventionDisplayName();
   }
 
   @Override
@@ -55,12 +55,12 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   public String buildErrorString(Object... infos) {
     final String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message("instance.method.name.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.instanceMethodNameConventionProblemDescriptorShort().get();
     }
     else if (methodName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message("instance.method.name.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.instanceMethodNameConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message("instance.method.name.convention.problem.descriptor.regex.mismatch", getRegex());
+    return InspectionGadgetsLocalize.instanceMethodNameConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   @Override

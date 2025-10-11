@@ -5,13 +5,14 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.psiutils.CommentTracker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -23,12 +24,12 @@ import jakarta.annotation.Nullable;
 public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements SyntheticIntentionAction {
   private final String myName;
   private final String myNewValue;
-  private final String myMessage;
+  private final LocalizeValue myMessage;
 
   public ChangeAnnotationParameterQuickFix(@Nonnull PsiAnnotation annotation,
                                            @Nonnull String name,
                                            @Nullable String newValue,
-                                           @Nonnull String message) {
+                                           @Nonnull LocalizeValue message) {
     super(annotation);
     myName = name;
     myNewValue = newValue;
@@ -38,14 +39,8 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
   public ChangeAnnotationParameterQuickFix(@Nonnull PsiAnnotation annotation, @Nonnull String name, @Nullable String newValue) {
     this(annotation, name, newValue,
          newValue == null
-           ? InspectionGadgetsBundle.message("remove.annotation.parameter.0.fix.name", name)
-           : InspectionGadgetsBundle.message("set.annotation.parameter.0.1.fix.name", name, newValue));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return myMessage;
+           ? InspectionGadgetsLocalize.removeAnnotationParameter0FixName(name)
+           : InspectionGadgetsLocalize.setAnnotationParameter01FixName(name, newValue));
   }
 
   @Override
@@ -71,7 +66,7 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myMessage;
   }
 }

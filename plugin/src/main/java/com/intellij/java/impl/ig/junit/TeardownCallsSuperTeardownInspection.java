@@ -17,15 +17,16 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -42,16 +43,14 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "teardown.calls.super.teardown.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.teardownCallsSuperTeardownDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "teardown.calls.super.teardown.problem.descriptor");
+    return InspectionGadgetsLocalize.teardownCallsSuperTeardownProblemDescriptor().get();
   }
 
   @Override
@@ -62,9 +61,8 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
   private static class AddSuperTearDownCall extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsBundle.message(
-        "teardown.calls.super.teardown.add.quickfix");
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.teardownCallsSuperTeardownAddQuickfix();
     }
 
     @Override

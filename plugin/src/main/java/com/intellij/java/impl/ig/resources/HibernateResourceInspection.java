@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.resources;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
@@ -43,8 +42,8 @@ public class HibernateResourceInspection extends ResourceInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedDisplayName();
   }
 
   @Override
@@ -54,9 +53,7 @@ public class HibernateResourceInspection extends ResourceInspection {
     final PsiType type = expression.getType();
     assert type != null;
     final String text = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "hibernate.resource.opened.not.closed.problem.descriptor",
-      text);
+    return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
   @Override

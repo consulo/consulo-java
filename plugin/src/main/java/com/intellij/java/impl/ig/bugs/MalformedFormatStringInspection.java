@@ -19,7 +19,6 @@ import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
@@ -46,12 +45,12 @@ public class MalformedFormatStringInspection extends BaseInspection {
         final Validator[] validators = (Validator[]) value;
         final int argumentCount = ((Integer) infos[1]).intValue();
         if (validators.length < argumentCount) {
-            return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.many.arguments");
+            return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorTooManyArguments().get();
         }
         if (validators.length > argumentCount) {
-            return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.too.few.arguments");
+            return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorTooFewArguments().get();
         }
-        return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.arguments.do.not.match.type");
+        return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorArgumentsDoNotMatchType().get();
     }
 
     @Override

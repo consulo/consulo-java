@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -28,6 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -36,12 +36,10 @@ import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class StringConcatenationInMessageFormatCallInspection extends BaseInspection {
-
-  @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallDisplayName();
   }
 
   @Nonnull
@@ -66,8 +64,8 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix", variableName);
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix();
     }
 
     @Override

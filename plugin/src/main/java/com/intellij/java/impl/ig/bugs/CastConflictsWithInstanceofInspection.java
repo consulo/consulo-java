@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.impl.ig.psiutils.InstanceOfUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,6 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -35,16 +35,14 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.castConflictsWithInstanceofDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.castConflictsWithInstanceofDisplayName();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[0];
-    return InspectionGadgetsBundle.message(
-      "cast.conflicts.with.instanceof.problem.descriptor",  referenceExpression.getText());
+    return InspectionGadgetsLocalize.castConflictsWithInstanceofProblemDescriptor().get();
   }
 
   @Nonnull
@@ -212,8 +210,8 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myCastType, myInstanceofType).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myCastType, myInstanceofType);
     }
 
     @Override
@@ -233,8 +231,8 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix2(myInstanceofType, myCastType).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix2(myInstanceofType, myCastType);
     }
 
     @Override

@@ -17,13 +17,13 @@ package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -48,8 +48,8 @@ public class LocalVariableNamingConventionInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.localVariableNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.localVariableNamingConventionDisplayName();
   }
 
   @Override
@@ -57,17 +57,13 @@ public class LocalVariableNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String varName = (String)infos[0];
     if (varName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "local.variable.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.localVariableNamingConventionProblemDescriptorShort().get();
     }
     else if (varName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "local.variable.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.localVariableNamingConventionProblemDescriptorLong().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "local.variable.naming.convention.problem.descriptor.regex.mismatch",
-        getRegex());
+      return InspectionGadgetsLocalize.localVariableNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
     }
   }
 

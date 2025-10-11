@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
@@ -45,8 +44,8 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.constantNamingConventionDisplayName();
   }
 
   @Override
@@ -64,12 +63,12 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   public String buildErrorString(Object... infos) {
     final String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message("constant.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.constantNamingConventionProblemDescriptorShort().get();
     }
     else if (fieldName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message("constant.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.constantNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message("constant.naming.convention.problem.descriptor.regex.mismatch", getRegex());
+    return InspectionGadgetsLocalize.constantNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   @Override

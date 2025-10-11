@@ -19,7 +19,6 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,6 +26,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -34,74 +34,74 @@ import javax.swing.*;
 @ExtensionImpl
 public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreIfMethodIsOverride = true;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "MethodNamesDifferingOnlyByCase";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseProblemDescriptor(infos[0]).get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("method.names.differ.only.by.case.ignore.override.option"),
-                                          this, "ignoreIfMethodIsOverride");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new MethodNamesDifferOnlyByCaseVisitor();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameFix();
-  }
-
-  private class MethodNamesDifferOnlyByCaseVisitor extends BaseInspectionVisitor {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreIfMethodIsOverride = true;
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (method.isConstructor()) {
-        return;
-      }
-      final PsiIdentifier nameIdentifier = method.getNameIdentifier();
-      if (nameIdentifier == null) {
-        return;
-      }
-      final String methodName = method.getName();
-      if (ignoreIfMethodIsOverride && MethodUtils.hasSuper(method)) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final PsiMethod[] methods = aClass.getAllMethods();
-      for (PsiMethod testMethod : methods) {
-        final String testMethodName = testMethod.getName();
-        if (!methodName.equals(testMethodName) && methodName.equalsIgnoreCase(testMethodName)) {
-          registerError(nameIdentifier, testMethodName);
-        }
-      }
+    @Nonnull
+    public String getID() {
+        return "MethodNamesDifferingOnlyByCase";
     }
-  }
+
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseProblemDescriptor(infos[0]).get();
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        return new SingleCheckboxOptionsPanel(InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseIgnoreOverrideOption().get(),
+            this, "ignoreIfMethodIsOverride");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new MethodNamesDifferOnlyByCaseVisitor();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameFix();
+    }
+
+    private class MethodNamesDifferOnlyByCaseVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (method.isConstructor()) {
+                return;
+            }
+            final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+            if (nameIdentifier == null) {
+                return;
+            }
+            final String methodName = method.getName();
+            if (ignoreIfMethodIsOverride && MethodUtils.hasSuper(method)) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final PsiMethod[] methods = aClass.getAllMethods();
+            for (PsiMethod testMethod : methods) {
+                final String testMethodName = testMethod.getName();
+                if (!methodName.equals(testMethodName) && methodName.equalsIgnoreCase(testMethodName)) {
+                    registerError(nameIdentifier, testMethodName);
+                }
+            }
+        }
+    }
 }

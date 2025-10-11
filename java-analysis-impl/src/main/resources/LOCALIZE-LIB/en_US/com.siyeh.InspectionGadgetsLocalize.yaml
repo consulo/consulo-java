@@ -104,6 +104,12 @@ annotation.naming.convention.display.name:
     text: Annotation naming convention
 annotation.naming.convention.element.description:
     text: Annotation interface
+annotation.naming.convention.problem.descriptor.long:
+    text: 'Annotation name <code>#ref</code> is too long #loc'
+annotation.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Annotation name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+annotation.naming.convention.problem.descriptor.short:
+    text: 'Annotation name <code>#ref</code> is too short #loc'
 annotation.problem.descriptor:
     text: 'Annotation <code>#ref</code> #loc'
 anonymous.class.field.hides.containing.method.variable.problem.descriptor:
@@ -136,6 +142,18 @@ anonymous.inner.may.be.named.static.inner.class.quickfix:
     text: Convert to named 'static' inner class
 any.method.may.close.resource.argument:
     text: Any method may close resource argument
+archaic.system.property.accessors.display.name:
+    text: Use of archaic system property accessors
+archaic.system.property.accessors.problem.descriptor.Boolean:
+    text: 'Call to <code>Boolean.#ref()</code> accesses system properties, perhaps confusingly #loc'
+archaic.system.property.accessors.problem.descriptor.Integer:
+    text: 'Call to <code>Integer.#ref()</code> accesses system properties, perhaps confusingly #loc'
+archaic.system.property.accessors.problem.descriptor.Long:
+    text: 'Call to <code>Long.#ref()</code> accesses system properties, perhaps confusingly #loc'
+archaic.system.property.accessors.replace.parse.quickfix:
+    text: Replace with parse method
+archaic.system.property.accessors.replace.standard.quickfix:
+    text: Replace with standard property access
 array.allocation.zero.length.display.name:
     text: Zero-length array allocation
 array.allocation.zero.length.problem.descriptor:
@@ -202,10 +220,14 @@ assertequals.called.on.arrays.display.name:
     text: '''assertEquals()'' called on array'
 assertequals.called.on.arrays.problem.descriptor:
     text: '<code>#ref()</code> called on array #loc'
+assertequals.called.on.arrays.quickfix:
+    text: Replace with 'assertArrayEquals()'
 assertequals.may.be.assertsame.display.name:
     text: '''assertEquals()'' may be ''assertSame()'''
 assertequals.may.be.assertsame.problem.descriptor:
     text: '<code>#ref()</code> may be ''assertSame()'' #loc'
+assertequals.may.be.assertsame.quickfix:
+    text: Replace with 'assertSame()'
 assertion.can.be.if.name:
     text: Assertion can be replaced with 'if' statement
 asserts.without.messages.display.name:
@@ -384,6 +406,8 @@ boolean.variable.always.inverted.display.name:
     text: Boolean variable is always inverted
 boolean.variable.always.inverted.problem.descriptor:
     text: 'Boolean variable <code>#ref</code> is always inverted #loc'
+boolean.variable.always.inverted.quickfix:
+    text: Invert ''{0}''
 boxing.boxed.value.display.name:
     text: Boxing of already boxed value
 boxing.boxed.value.problem.descriptor:
@@ -402,6 +426,8 @@ busy.wait.problem.descriptor:
     text: 'Call to <code>Thread.#ref()</code> in a loop, probably busy-waiting #loc'
 c.style.array.declaration.display.name:
     text: C-style array declaration
+c.style.array.declaration.problem.descriptor:
+    text: 'C-style array declaration <code>#ref</code> #loc'
 c.style.array.declaration.replace.quickfix:
     text: Replace with Java-style array declaration
 cached.number.constructor.call.display.name:
@@ -508,6 +534,8 @@ change.modifier.quickfix:
     text: Make ''{0}''
 channel.opened.not.closed.display.name:
     text: '''Channel'' opened but not safely closed'
+channel.opened.not.closed.problem.descriptor:
+    text: '''''{0}'''' should be opened in front of a ''''try'''' block and closed in the corresponding ''''finally'''' block #loc'
 char.used.in.arithmetic.context.cast.quickfix:
     text: Insert cast to {0}
 char.used.in.arithmetic.context.display.name:
@@ -586,6 +614,12 @@ class.may.be.interface.problem.descriptor:
     text: 'Abstract class <code>#ref</code> may be interface #loc'
 class.name:
     text: Class Name
+class.name.convention.problem.descriptor.long:
+    text: 'Class name <code>#ref</code> is too long #loc'
+class.name.convention.problem.descriptor.regex.mismatch:
+    text: 'Class name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+class.name.convention.problem.descriptor.short:
+    text: 'Class name <code>#ref</code> is too short #loc'
 class.name.differs.from.file.name.display.name:
     text: Class name differs from file name
 class.name.differs.from.file.name.problem.descriptor:
@@ -608,6 +642,8 @@ class.new.instance.problem.descriptor:
     text: 'Call to <code>#ref()</code> may throw undeclared checked exceptions #loc'
 class.new.instance.quickfix:
     text: Replace with 'Class.getConstructor().newInstance()' call
+class.only.used.from.test.code.problem.descriptor:
+    text: 'class <code>#ref</code> only used from test code #loc'
 class.only.used.in.one.module.display.name:
     text: Class only used from one other module
 class.only.used.in.one.module.problem.descriptor:
@@ -719,7 +755,7 @@ cloneable.class.without.clone.quickfix:
 collection.added.to.self.display.name:
     text: Collection added to itself
 collection.added.to.self.problem.descriptor:
-    text: '''''{0}()'''' called on collection <code>#ref</code> with itself as argument #loc'
+    text: 'Collection <code>#ref</code> is added to self #loc'
 collection.contains.url.display.name:
     text: Map or Set may contain 'java.net.URL' objects
 collection.contains.url.problem.decriptor:
@@ -746,6 +782,10 @@ comparable.implemented.but.equals.not.overridden.display.name:
     text: '''Comparable'' implemented but ''equals()'' not overridden'
 comparable.implemented.but.equals.not.overridden.problem.descriptor:
     text: 'Class <code>#ref</code> implements ''java.lang.Comparable'' but does not override ''equals()'' #loc'
+comparator.method.parameter.not.used.display.name:
+    text: '''Comparator.compare()'' method does not use parameter'
+comparator.method.parameter.not.used.problem.descriptor:
+    text: '''compare()'' parameter <code>#ref</code> is not used #loc'
 comparator.not.serializable.display.name:
     text: '''Comparator'' class not declared ''Serializable'''
 comparator.not.serializable.problem.descriptor:
@@ -792,8 +832,18 @@ conditional.expression.with.identical.branches.display.name:
     text: Conditional expression with identical branches
 conditional.expression.with.identical.branches.problem.descriptor:
     text: 'Conditional expression <code>#ref</code> with identical branches #loc'
+conditional.expression.with.identical.branches.push.inside.quickfix:
+    text: Push conditional inside expression
+conditional.expression.with.similar.branches.problem.descriptor:
+    text: 'Conditional expression <code>#ref</code> with similar branches #loc'
+confusing.else.display.name:
+    text: Confusing 'else' branch
 confusing.else.option:
     text: Report when there are no more statements after the 'if' statement
+confusing.else.problem.descriptor:
+    text: '<code>#ref</code> branch may be unwrapped, as the ''if'' branch never completes #loc'
+confusing.else.unwrap.quickfix:
+    text: Remove redundant 'else'
 confusing.floating.point.literal.change.quickfix:
     text: Change to canonical form
 confusing.floating.point.literal.display.name:
@@ -856,6 +906,12 @@ constant.naming.convention.element.description:
     text: Constant
 constant.naming.convention.immutables.option:
     text: Only check 'static final' fields with immutable types
+constant.naming.convention.problem.descriptor.long:
+    text: 'Constant name <code>#ref</code> is too long #loc'
+constant.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Constant <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+constant.naming.convention.problem.descriptor.short:
+    text: 'Constant name <code>#ref</code> is too short #loc'
 constant.on.lhs.of.comparison.display.name:
     text: Constant on left side of comparison
 constant.on.lhs.of.comparison.problem.descriptor:
@@ -893,13 +949,23 @@ control.flow.statement.without.braces.display.name:
 control.flow.statement.without.braces.message:
     text: Add braces to ''{0}'' statement
 control.flow.statement.without.braces.problem.descriptor:
-    text: '<code>{0}</code> without braces #loc'
+    text: '<code>#ref</code> without braces #loc'
+convention.max.length.option:
+    text: 'Max length:'
+convention.min.length.option:
+    text: 'Min length:'
+convention.pattern.option:
+    text: 'Pattern:'
 convert.junit3.test.class.quickfix:
     text: Convert JUnit 3 class ''{0}'' to JUnit 4
 convert.octal.literal.to.decimal.literal.quickfix:
     text: Convert octal literal to decimal literal
 convert.to.variable.arity.method.quickfix:
     text: Convert to varargs method
+covariant.compareto.display.name:
+    text: Covariant 'compareTo()'
+covariant.compareto.problem.descriptor:
+    text: '<code>#ref()</code> should take ''Object'' as its argument #loc'
 covariant.equals.display.name:
     text: Covariant 'equals()'
 covariant.equals.problem.descriptor:
@@ -1038,6 +1104,8 @@ dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor:
     text: '<code>#ref()</code> can be replaced with compiled ''java.util.regex.Pattern'' construct #loc'
 dynamic.regex.replaceable.by.compiled.pattern.quickfix:
     text: Replace with call to method of compiled 'Pattern' constant
+element.only.used.from.test.code.display.name:
+    text: Symbol only used from test code
 empty.anonymous.class.problem.descriptor:
     text: 'Anonymous class is empty #loc'
 empty.catch.block.comments.option:
@@ -1046,6 +1114,8 @@ empty.catch.block.display.name:
     text: Empty 'catch' block
 empty.catch.block.ignore.ignore.option:
     text: Ignore when 'catch' parameter is named 'ignore' or 'ignored'
+empty.catch.block.ignore.option:
+    text: Ignore empty 'catch' blocks in tests
 empty.catch.block.problem.descriptor:
     text: 'Empty <code>#ref</code> block #loc'
 empty.class.display.name:
@@ -1096,12 +1166,24 @@ enumerated.class.naming.convention.display.name:
     text: Enumerated class naming convention
 enumerated.class.naming.convention.element.description:
     text: Enum class
+enumerated.class.naming.convention.problem.descriptor.long:
+    text: 'Enumerated class name <code>#ref</code> is too long #loc'
+enumerated.class.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Enumerated class name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+enumerated.class.naming.convention.problem.descriptor.short:
+    text: 'Enumerated class name <code>#ref</code> is too short #loc'
 enumerated.class.problem.descriptor:
     text: 'Enumerated class <code>#ref</code> #loc'
 enumerated.constant.naming.convention.display.name:
     text: Enumerated constant naming convention
 enumerated.constant.naming.convention.element.description:
     text: Enum constant
+enumerated.constant.naming.convention.problem.descriptor.long:
+    text: 'Enumerated constant name <code>#ref</code> is too long #loc'
+enumerated.constant.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Enumerated constant <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+enumerated.constant.naming.convention.problem.descriptor.short:
+    text: 'Enumerated constant name <code>#ref</code> is too short #loc'
 enumeration.can.be.iteration.display.name:
     text: Enumeration can be iteration
 enumeration.can.be.iteration.problem.descriptor:
@@ -1240,6 +1322,8 @@ fallthru.in.switch.statement.quickfix:
     text: Add 'break'
 feature.envy.display.name:
     text: Feature envy
+feature.envy.ignore.test.cases.option:
+    text: Ignore feature envy in tests
 feature.envy.problem.descriptor:
     text: 'Class ''''{0}'''' accessed repeatedly in method <code>#ref()</code> #loc'
 field.accessed.synchronized.and.unsynchronized.display.name:
@@ -1280,6 +1364,14 @@ field.name.hides.in.superclass.problem.descriptor:
     text: 'Field <code>#ref</code> hides field in superclass #loc'
 field.not.found.in.class.problem.descriptor:
     text: No field named ''{0}'' found in class ''{1}''
+field.only.used.from.test.code.problem.descriptor:
+    text: 'field <code>#ref</code> only accessed from test code #loc'
+field.repeatedly.accessed.in.method.display.name:
+    text: Field repeatedly accessed in method
+field.repeatedly.accessed.in.method.ignore.option:
+    text: Ignore 'final' fields
+field.repeatedly.accessed.in.method.problem.descriptor:
+    text: 'Field ''''{0}'''' accessed repeatedly in method <code>#ref()</code> #loc'
 final.class.display.name:
     text: Class is closed to inheritance
 final.class.problem.descriptor:
@@ -1308,6 +1400,12 @@ finalize.declaration.display.name:
     text: '''finalize()'' should not be overridden'
 finalize.declaration.problem.descriptor:
     text: '''finalize()'' should not be overridden #loc'
+finalize.doesnt.call.super.display.name:
+    text: '''finalize()'' does not call ''super.finalize()'''
+finalize.doesnt.call.super.ignore.option:
+    text: Ignore for direct subclasses of 'java.lang.Object'
+finalize.doesnt.call.super.problem.descriptor:
+    text: '<code>#ref()</code> #loc does not call ''super.finalize()'''
 finalize.not.declared.protected.display.name:
     text: '''finalize()'' should be protected, not public'
 finalize.not.declared.protected.problem.descriptor:
@@ -1394,6 +1492,8 @@ hardcoded.line.separator.problem.descriptor:
     text: 'Hardcoded line separator <code>#ref</code> #loc'
 hibernate.resource.opened.not.closed.display.name:
     text: Hibernate resource opened but not safely closed
+hibernate.resource.opened.not.closed.problem.descriptor:
+    text: '''''{0}'''' should be opened in front of a ''''try'''' block and closed in the corresponding ''''finally'''' block #loc'
 html.tag.can.be.javadoc.tag.display.name:
     text: '''<code>…</code>'' can be replaced with ''{@code …}'''
 html.tag.can.be.javadoc.tag.problem.descriptor:
@@ -1446,6 +1546,8 @@ ignore.accesses.from.the.same.class:
     text: Ignore accesses from the same class
 ignore.anonymous.inner.classes:
     text: Ignore anonymous inner classes
+ignore.as.initial.capacity:
+    text: Ignore initial capacity argument when constructing StringBuilders and Collections
 ignore.boolean.methods.in.an.interface.option:
     text: Ignore boolean methods in an @&interface
 ignore.branches.of.switch.statements:
@@ -1462,6 +1564,8 @@ ignore.cloneable.option:
     text: Ignore 'java.lang.Cloneable'
 ignore.equals.hashcode.and.tostring:
     text: Ignore 'equals()', 'hashCode()' and 'toString()' methods
+ignore.exceptions.declared.in.tests.option:
+    text: Ignore exceptions declared in &tests
 ignore.exceptions.declared.on.library.override.option:
     text: Ignore exceptions declared on methods overriding a &library method
 ignore.for.equals.methods.option:
@@ -1470,8 +1574,14 @@ ignore.guard.clauses.option:
     text: Ignore &guard clauses
 ignore.if.annotated.by:
     text: 'Ignore if annotated by:'
+ignore.in.annotations:
+    text: Ignore in annotations
 ignore.in.module.statements.option:
     text: Ignore in Java 9 module statements
+ignore.in.test.code:
+    text: Ignore in &test code
+ignore.in.tostring:
+    text: Ignore inside toString() methods
 ignore.instanceof.on.library.classes:
     text: Ignore instanceof on library classes
 ignore.iterator.loop.variables:
@@ -1646,6 +1756,12 @@ inspection.suppression.annotation.problem.descriptor:
     text: 'Inspection suppression annotation <code>#ref</code> #loc'
 instance.Variable.may.not.be.initialized.problem.descriptor.junit:
     text: 'Instance field <code>#ref</code> may not be initialized during object construction or ''setUp()'' call #loc'
+instance.method.name.convention.problem.descriptor.long:
+    text: 'Instance method name <code>#ref</code> is too long #loc'
+instance.method.name.convention.problem.descriptor.regex.mismatch:
+    text: 'Instance method name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+instance.method.name.convention.problem.descriptor.short:
+    text: 'Instance method name <code>#ref</code> is too short #loc'
 instance.method.naming.convention.display.name:
     text: Instance method naming convention
 instance.method.naming.convention.element.description:
@@ -1654,6 +1770,12 @@ instance.variable.may.not.be.initialized.display.name:
     text: Instance field may not be initialized
 instance.variable.may.not.be.initialized.problem.descriptor:
     text: 'Instance field <code>#ref</code> may not be initialized during object construction #loc'
+instance.variable.name.convention.problem.descriptor.long:
+    text: 'Instance field name <code>#ref</code> is too long #loc'
+instance.variable.name.convention.problem.descriptor.regex.mismatch:
+    text: 'Instance field <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+instance.variable.name.convention.problem.descriptor.short:
+    text: 'Instance field name <code>#ref</code> is too short #loc'
 instance.variable.naming.convention.display.name:
     text: Instance field naming convention
 instance.variable.naming.convention.element.description:
@@ -1726,6 +1848,12 @@ interface.may.be.annotated.functional.display.name:
     text: Interface may be annotated as '@FunctionalInterface'
 interface.may.be.annotated.functional.problem.descriptor:
     text: Interface <code>#ref</code> may be annotated with @FunctionalInterface
+interface.name.convention.problem.descriptor.long:
+    text: 'Interface name <code>#ref</code> is too long #loc'
+interface.name.convention.problem.descriptor.regex.mismatch:
+    text: 'Interface name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+interface.name.convention.problem.descriptor.short:
+    text: 'Interface name <code>#ref</code> is too short #loc'
 interface.naming.convention.display.name:
     text: Interface naming convention
 interface.naming.convention.element.description:
@@ -1766,6 +1894,10 @@ java.lang.import.display.name:
     text: Unnecessary import from the 'java.lang' package
 java.lang.import.problem.descriptor:
     text: 'Unnecessary import from the ''java.lang'' package #loc'
+java.lang.reflect.display.name:
+    text: Use of 'java.lang.reflect'
+java.lang.reflect.problem.descriptor:
+    text: 'Use of type <code>#ref</code> from ''java.lang.reflect'' #loc'
 jdbc.execute.with.non.constant.string.display.name:
     text: Call to 'Statement.execute()' with non-constant string
 jdbc.execute.with.non.constant.string.problem.descriptor:
@@ -1776,12 +1908,20 @@ jdbc.prepare.statement.with.non.constant.string.problem.descriptor:
     text: 'Call to <code>Connection.#ref()</code> with non-constant argument #loc'
 jdbc.resource.opened.not.closed.display.name:
     text: JDBC resource opened but not safely closed
+jdbc.resource.opened.not.closed.problem.descriptor:
+    text: 'JDBC ''''{0}'''' should be opened in front of a ''''try'''' block and closed in the corresponding ''''finally'''' block #loc'
 jndi.resource.opened.not.closed.display.name:
     text: JNDI resource opened but not safely closed
 junit.abstract.test.class.naming.convention.display.name:
     text: JUnit abstract test class naming convention
 junit.abstract.test.class.naming.convention.element.description:
     text: Abstract JUnit test class
+junit.abstract.test.class.naming.convention.problem.descriptor.long:
+    text: 'Abstract JUnit test class name <code>#ref</code> is too long #loc'
+junit.abstract.test.class.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Abstract JUnit test class name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+junit.abstract.test.class.naming.convention.problem.descriptor.short:
+    text: 'Abstract JUnit test class name <code>#ref</code> is too short #loc'
 junit.datapoint.display.name:
     text: Malformed @DataPoint field
 junit.datapoint.problem.descriptor:
@@ -1796,6 +1936,12 @@ junit.test.class.naming.convention.display.name:
     text: JUnit test class naming convention
 junit.test.class.naming.convention.element.description:
     text: Test class
+junit.test.class.naming.convention.problem.descriptor.long:
+    text: 'JUnit test class name <code>#ref</code> is too long #loc'
+junit.test.class.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'JUnit test class name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+junit.test.class.naming.convention.problem.descriptor.short:
+    text: 'JUnit test class name <code>#ref</code> is too short #loc'
 junit3.method.naming.convention.display.name:
     text: JUnit 3 test method naming convention
 junit3.method.naming.convention.element.description:
@@ -1932,6 +2078,12 @@ local.variable.naming.convention.ignore.catch.option:
     text: Ignore 'catch' block parameters
 local.variable.naming.convention.ignore.option:
     text: Ignore for-loop parameters
+local.variable.naming.convention.problem.descriptor.long:
+    text: 'Local variable name <code>#ref</code> is too long #loc'
+local.variable.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Local variable name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+local.variable.naming.convention.problem.descriptor.short:
+    text: 'Local variable name <code>#ref</code> is too short #loc'
 local.variable.of.concrete.class.display.name:
     text: Local variable of concrete class
 local.variable.of.concrete.class.option:
@@ -1998,6 +2150,8 @@ magic.character.problem.descriptor:
     text: 'Magic character <code>#ref</code> in an internationalized context #loc'
 magic.number.display.name:
     text: Magic number
+magic.number.ignore.option:
+    text: Ignore constants in 'hashCode()' methods
 magic.number.problem.descriptor:
     text: 'Magic number <code>#ref</code> #loc'
 make.class.cloneable.quickfix:
@@ -2029,15 +2183,15 @@ make.static.quickfix:
 malformed.format.string.display.name:
     text: Malformed format string
 malformed.format.string.problem.descriptor.arguments.do.not.match.type:
-    text: 'Argument type ''''{0}'''' does not match the type of the format specifier ''''{1}'''' #loc'
+    text: 'Format string <code>#ref</code> does not match the type of its arguments #loc'
 malformed.format.string.problem.descriptor.illegal:
     text: 'Illegal format string specifier: {0} #loc'
 malformed.format.string.problem.descriptor.malformed:
     text: 'Format string <code>#ref</code> is malformed #loc'
 malformed.format.string.problem.descriptor.too.few.arguments:
-    text: 'Too few arguments for format string (found: {0}, expected: {1}) #loc'
+    text: 'Too few arguments for format string <code>#ref</code> #loc'
 malformed.format.string.problem.descriptor.too.many.arguments:
-    text: 'Too many arguments for format string (found: {0}, expected: {1}) #loc'
+    text: 'Too many arguments for format string <code>#ref</code> #loc'
 malformed.regular.expression.display.name:
     text: Malformed regular expression
 malformed.regular.expression.problem.descriptor1:
@@ -2075,7 +2229,7 @@ marker.interface.problem.descriptor:
 math.random.cast.to.int.display.name:
     text: '''Math.random()'' cast to ''int'''
 math.random.cast.to.int.problem.descriptor:
-    text: '<code>#ref</code> cast to ''''{0}'''' is always rounded down to ''''0'''' #loc'
+    text: '<code>#ref</code> cast to ''int'' is always rounded down to ''0'' #loc'
 math.random.cast.to.int.quickfix:
     text: Add parentheses to perform multiplication before cast
 meta.annotation.without.runtime.retention:
@@ -2094,6 +2248,8 @@ method.can.be.variable.arity.method.ignore.multidimensional.arrays.option:
     text: Ignore multidimensional array parameters
 method.can.be.variable.arity.method.ignore.multiple.arrays.option:
     text: Ignore methods with multiple array parameters
+method.can.be.variable.arity.method.ignore.overriding.methods:
+    text: Ignore methods overriding a super method
 method.can.be.variable.arity.method.problem.descriptor:
     text: '<code>#ref()</code> can be converted to varargs method #loc'
 method.complexity.limit.option:
@@ -2126,6 +2282,8 @@ method.missing.return.statement.display.name:
     text: Method contains logic but is missing a 'return' statement
 method.missing.return.statement.problem.descriptor:
     text: Method <code>#ref</code> contains logic but is missing a 'return' statement
+method.name.pattern:
+    text: Method name pattern
 method.name.regex:
     text: Method Name Regex
 method.name.same.as.class.name.display.name:
@@ -2138,6 +2296,8 @@ method.name.same.as.parent.name.problem.descriptor:
     text: 'Method name <code>#ref</code> is the same as its parent class name #loc'
 method.names.differ.only.by.case.display.name:
     text: Method names differing only by case
+method.names.differ.only.by.case.ignore.override.option:
+    text: Ignore if method is override of super method
 method.names.differ.only.by.case.problem.descriptor:
     text: 'Method name <code>#ref</code> and method name ''''{0}'''' differ only by case #loc'
 method.only.used.from.inner.class.display.name:
@@ -2150,6 +2310,8 @@ method.only.used.from.inner.class.problem.descriptor.anonymous.extending:
     text: 'Method <code>#ref()</code>#loc is only used from an anonymous class extending ''''{0}'''' #loc'
 method.only.used.from.inner.class.problem.descriptor.anonymous.implementing:
     text: 'Method <code>#ref()</code>#loc is only used from an anonymous class implementing ''''{0}'''' #loc'
+method.only.used.from.test.code.problem.descriptor:
+    text: 'method <code>#ref()</code> only called from test code #loc'
 method.overloads.display.name:
     text: Possibly unintended overload of method from superclass
 method.overloads.problem.descriptor:
@@ -2212,6 +2374,12 @@ misordered.assert.equals.arguments.flip.quickfix:
     text: Flip compared arguments
 misordered.assert.equals.arguments.problem.descriptor:
     text: 'Arguments to <code>#ref()</code> in wrong order #loc'
+misordered.assert.equals.parameters.display.name:
+    text: Misordered 'assertEquals()' arguments
+misordered.assert.equals.parameters.flip.quickfix:
+    text: Flip compared arguments
+misordered.assert.equals.parameters.problem.descriptor:
+    text: 'Arguments to <code>#ref()</code> in wrong order #loc'
 missing.deprecated.annotation.add.quickfix:
     text: Add '@Deprecated' annotation
 missing.deprecated.annotation.display.name:
@@ -2242,10 +2410,30 @@ missorted.modifiers.require.option:
     text: Require annotations to be sorted before keywords
 missorted.modifiers.sort.quickfix:
     text: Sort modifiers
+misspelled.compareto.display.name:
+    text: '''compareto()'' instead of ''compareTo()'''
+misspelled.compareto.problem.descriptor:
+    text: '<code>#ref()</code> method should probably be ''compareTo()'' #loc'
 misspelled.equals.display.name:
     text: '''equal()'' instead of ''equals()'''
 misspelled.equals.problem.descriptor:
     text: '<code>#ref()</code> method should probably be ''equals()'' #loc'
+misspelled.hashcode.display.name:
+    text: '''hashcode()'' instead of ''hashCode()'''
+misspelled.hashcode.problem.descriptor:
+    text: '<code>#ref()</code> should probably be ''hashCode()'' #loc'
+misspelled.set.up.display.name:
+    text: '''setup()'' instead of ''setUp()'''
+misspelled.set.up.problem.descriptor:
+    text: '<code>#ref()</code> probably be ''setUp()'' #loc'
+misspelled.tear.down.display.name:
+    text: '''teardown()'' instead of ''tearDown()'''
+misspelled.tear.down.problem.descriptor:
+    text: '<code>#ref()</code> method should probably be ''tearDown()'' #loc'
+misspelled.tostring.display.name:
+    text: '''tostring()'' instead of ''toString()'''
+misspelled.tostring.problem.descriptor:
+    text: '<code>#ref()</code> method should probably be ''toString()'' #loc'
 module.with.too.few.classes.display.name:
     text: Module with too few classes
 module.with.too.few.classes.min.option:
@@ -2634,6 +2822,8 @@ orred.not.equal.expression.display.name:
     text: Identical reference in '!=' expression on both sides of '||' expression
 orred.not.equal.expression.problem.descriptor:
     text: '<code>#ref</code> is always true #loc'
+orred.not.equal.expression.quickfix:
+    text: Change '||' to '\&\&'
 overloaded.methods.with.same.number.parameters.display.name:
     text: Overloaded methods with same number of parameters
 overloaded.methods.with.same.number.parameters.option:
@@ -2706,6 +2896,10 @@ overridden.method.call.in.constructor.display.name:
     text: Overridden method called during object construction
 overridden.method.call.in.constructor.problem.descriptor:
     text: 'Call to overridden method <code>#ref()</code> during object construction #loc'
+package.dot.html.convert.command:
+    text: package.html to package-info.java conversion
+package.dot.html.delete.command:
+    text: package.html deletion
 package.dot.html.may.be.package.info.convert.quickfix:
     text: Convert to 'package-info.java'
 package.dot.html.may.be.package.info.delete.quickfix:
@@ -2792,6 +2986,12 @@ parameter.naming.convention.display.name:
     text: Method parameter naming convention
 parameter.naming.convention.element.description:
     text: Parameter
+parameter.naming.convention.problem.descriptor.long:
+    text: 'Parameter name <code>#ref</code> is too long #loc'
+parameter.naming.convention.problem.descriptor.regex.mismatch:
+    text: 'Parameter name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+parameter.naming.convention.problem.descriptor.short:
+    text: 'Parameter name <code>#ref</code> is too short #loc'
 parameter.of.concrete.class.option:
     text: Ignore parameters whose type is abstract class
 parameter.type.prevents.overriding.display.name:
@@ -2820,6 +3020,8 @@ pointless.arithmetic.expression.display.name:
     text: Pointless arithmetic expression
 pointless.bitwise.expression.display.name:
     text: Pointless bitwise expression
+pointless.bitwise.expression.ignore.option:
+    text: Ignore named constants in determining pointless expressions
 pointless.bitwise.expression.simplify.quickfix:
     text: Simplify
 pointless.boolean.expression.display.name:
@@ -3224,6 +3426,16 @@ set.replaceable.by.enum.set.display.name:
     text: '''Set'' can be replaced with ''EnumSet'''
 set.replaceable.by.enum.set.problem.descriptor:
     text: '<code>#ref</code> can be replaced with ''EnumSet'' #loc'
+setup.calls.super.setup.add.quickfix:
+    text: Add call to 'super.setUp()'
+setup.calls.super.setup.display.name:
+    text: '''setUp()'' does not call ''super.setUp()'''
+setup.calls.super.setup.problem.descriptor:
+    text: '<code>#ref()</code> does not call ''super.setUp()'' #loc'
+setup.is.public.void.no.arg.display.name:
+    text: '''setUp()'' with incorrect signature'
+setup.is.public.void.no.arg.problem.descriptor:
+    text: <code>#ref()</code> has incorrect signature
 shared.thread.local.random.display.name:
     text: '''ThreadLocalRandom'' instance might be shared'
 shared.thread.local.random.problem.descriptor:
@@ -3243,7 +3455,7 @@ signal.without.corresponding.await.problem.descriptor:
 simplifiable.annotation.display.name:
     text: Simplifiable annotation
 simplifiable.annotation.problem.descriptor:
-    text: 'Unnecessary <code>#ref</code> in annotation #loc'
+    text: 'Annotation <code>#ref</code> may be replaced with ''''{0}'''' #loc'
 simplifiable.annotation.quickfix:
     text: Simplify annotation
 simplifiable.annotation.whitespace.problem.descriptor:
@@ -3360,8 +3572,14 @@ static.method.naming.convention.display.name:
     text: '''static'' method naming convention'
 static.method.naming.convention.element.description:
     text: '''static'' method'
+static.method.naming.convention.problem.descriptor.long:
+    text: '''static'' method name <code>#ref</code> is too long #loc'
+static.method.naming.convention.problem.descriptor.regex.mismatch:
+    text: '''static'' method name <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+static.method.naming.convention.problem.descriptor.short:
+    text: '''static'' method name <code>#ref</code> is too short #loc'
 static.method.only.used.in.one.anonymous.class.problem.descriptor:
-    text: 'Static {0, choice, 1#method|2#field} <code>#ref{0, choice, 1#()|2#}</code> is only used from an anonymous class derived from ''''{1}'''' #loc'
+    text: 'Static method <code>#ref()</code> is only used from an anonymous class derived from ''''{0}'''' #loc'
 static.method.only.used.in.one.class.display.name:
     text: '''static'' method only used from one other class'
 static.method.only.used.in.one.class.ignore.anonymous.option:
@@ -3404,6 +3622,12 @@ static.variable.naming.convention.element.description:
     text: '''static'' field'
 static.variable.naming.convention.mutable.option:
     text: Check 'static final' fields with a mutable type
+static.variable.naming.convention.problem.descriptor.long:
+    text: '''static'' field name <code>#ref</code> is too long #loc'
+static.variable.naming.convention.problem.descriptor.regex.mismatch:
+    text: '''static'' field <code>#ref</code> doesn''''t match regex ''''{0}'''' #loc'
+static.variable.naming.convention.problem.descriptor.short:
+    text: '''static'' field name <code>#ref</code> is too short #loc'
 static.variable.of.concrete.class.display.name:
     text: Static field of concrete class
 static.variable.of.concrete.class.option:
@@ -3438,6 +3662,10 @@ string.buffer.to.string.in.concatenation.remove.quickfix:
     text: Remove 'toString()'
 string.builder.replaceable.by.string.quickfix:
     text: Replace 'StringBuilder' with 'String'
+string.compareto.call.display.name:
+    text: Call to 'String.compareTo()'
+string.compareto.call.problem.descriptor:
+    text: '<code>String.#ref()</code> called using internationalized strings #loc'
 string.comparison.display.name:
     text: String comparison using '==', instead of 'equals()'
 string.comparison.problem.descriptor:
@@ -3450,12 +3678,24 @@ string.concatenation.argument.to.log.call.quickfix:
     text: Replace concatenation with parameterized log message
 string.concatenation.display.name:
     text: String concatenation
+string.concatenation.ignore.assert.option:
+    text: Ignore for assert statement arguments
+string.concatenation.ignore.constant.initializers.option:
+    text: Ignore for initializers of constants
+string.concatenation.ignore.exceptions.option:
+    text: Ignore for throwable arguments
+string.concatenation.ignore.system.err.option:
+    text: Ignore for 'System.err.print' arguments
+string.concatenation.ignore.system.out.option:
+    text: Ignore for 'System.out.print' arguments
 string.concatenation.in.format.call.display.name:
     text: String concatenation as argument to 'format()' call
+string.concatenation.in.format.call.plural.quickfix:
+    text: Replace concatenation with separate arguments
 string.concatenation.in.format.call.problem.descriptor:
     text: '<code>#ref()</code> call has a String concatenation argument #loc'
 string.concatenation.in.format.call.quickfix:
-    text: Replace concatenation with separate argument
+    text: Replace concatenation with parameterized log message
 string.concatenation.in.loops.display.name:
     text: String concatenation in loop
 string.concatenation.in.loops.only.option:
@@ -3712,6 +3952,14 @@ tail.recursion.problem.descriptor:
     text: 'Tail recursive call <code>#ref()</code> #loc'
 tail.recursion.replace.quickfix:
     text: Replace tail recursion with iteration
+teardown.calls.super.teardown.display.name:
+    text: '''tearDown()'' does not call ''super.tearDown()'''
+teardown.calls.super.teardown.problem.descriptor:
+    text: '<code>#ref()</code> does not call ''super.tearDown()'' #loc'
+teardown.is.public.void.no.arg.display.name:
+    text: '''tearDown()'' with incorrect signature'
+teardown.is.public.void.no.arg.problem.descriptor:
+    text: '<code>#ref()</code> has incorrect signature #loc'
 test.case.in.product.code.display.name:
     text: JUnit TestCase in product source
 test.case.in.product.code.problem.descriptor:
@@ -3826,6 +4074,8 @@ throwable.printed.to.system.out.display.name:
     text: '''Throwable'' printed to ''System.out'''
 throwable.printed.to.system.out.problem.descriptor:
     text: '''Throwable'' argument <code>#ref</code> to ''''System.{0}.{1}()'''' call'
+throwable.result.of.method.call.ignored.display.name:
+    text: Throwable result of method call ignored
 throwable.result.of.method.call.ignored.problem.descriptor:
     text: 'Result of <code>#ref()</code> not thrown #loc'
 thrown.exceptions.per.method.display.name:
@@ -3852,6 +4102,10 @@ to.array.call.with.zero.length.array.argument.problem.descriptor:
     text: 'Call to <code>#ref()</code> with zero-length array argument ''''{0}'''' #loc'
 to.array.call.with.zero.length.array.argument.quickfix:
     text: Replace argument with correctly sized array
+todo.comment.display.name:
+    text: TODO comment
+todo.comment.problem.descriptor:
+    text: 'TODO comment <code>#ref</code> #loc'
 too.broad.catch.display.name:
     text: Overly broad 'catch' block
 too.broad.catch.option:
@@ -3968,6 +4222,10 @@ type.parameter.naming.convention.display.name:
     text: Type parameter naming convention
 type.parameter.naming.convention.element.description:
     text: Type parameter
+type.parameter.naming.convention.problem.descriptor.long:
+    text: 'Type parameter name <code>#ref</code> is too long #loc'
+type.parameter.naming.convention.problem.descriptor.short:
+    text: 'Type parameter name <code>#ref</code> is too short #loc'
 unary.plus.display.name:
     text: Unary plus
 unary.plus.problem.descriptor:
@@ -4049,7 +4307,7 @@ unnecessary.constant.array.creation.expression.family.quickfix:
 unnecessary.constant.array.creation.expression.problem.descriptor:
     text: '<code>#ref</code> can be replaced with array initializer expression #loc'
 unnecessary.constant.array.creation.expression.quickfix:
-    text: Remove ''new {0}''
+    text: Replace with array initializer expression
 unnecessary.constructor.annotation.option:
     text: Ignore constructors with an annotation
 unnecessary.constructor.display.name:
@@ -4092,6 +4350,8 @@ unnecessary.final.report.parameters.option:
     text: Report parameters
 unnecessary.fully.qualified.name.display.name:
     text: Unnecessary fully qualified name
+unnecessary.fully.qualified.name.ignore.option:
+    text: Ignore fully qualified names in javadoc
 unnecessary.fully.qualified.name.problem.descriptor1:
     text: 'Qualifier <code>#ref</code> is unnecessary, and can be replaced with an import #loc'
 unnecessary.fully.qualified.name.problem.descriptor2:
@@ -4296,6 +4556,8 @@ unused.catch.parameter.display.name:
     text: Unused 'catch' parameter
 unused.catch.parameter.ignore.catch.option:
     text: Ignore when 'catch' block contains a comment
+unused.catch.parameter.ignore.empty.option:
+    text: Ignore unused 'catch' parameters in tests
 unused.catch.parameter.problem.descriptor:
     text: 'Unused ''catch'' parameter <code>#ref</code> #loc'
 unused.import.display.name:
@@ -4353,7 +4615,7 @@ use.of.concrete.jdbc.driver.class.display.name:
 use.of.concrete.jdbc.driver.class.problem.descriptor:
     text: 'Use of concrete JDBC driver class <code>#ref</code> is non-portable #loc'
 use.of.obsolete.assert.problem.descriptor:
-    text: 'Call to <code>#ref()</code> from ''''{0}'''' should be replaced with call to method from ''''org.junit.Assert'''' #loc'
+    text: 'Call to <code>#ref()</code> from ''org.junit.framework.Assert'' should be replaced with call to method from ''org.junit.Assert'' #loc'
 use.of.obsolete.assert.quickfix:
     text: Replace with 'org.junit.Assert' method call
 use.of.obsolete.date.time.api.display.name:
@@ -4440,6 +4702,8 @@ wait.not.in.loop.problem.descriptor:
     text: 'Call to <code>#ref()</code> is not in loop #loc'
 wait.not.in.synchronized.context.display.name:
     text: '''wait()'' while not synchronized'
+wait.not.in.synchronized.context.problem.descriptor:
+    text: 'Call to <code>#ref</code> while not synchronized on ''''{0}'''' #loc'
 wait.notify.not.in.synchronized.context.display.name:
     text: '''wait()'' or ''notify()'' is not in synchronized context'
 wait.notify.while.not.synchronized.on.problem.descriptor:
@@ -4478,3 +4742,5 @@ while.loop.spins.on.field.ignore.non.empty.loops.option:
     text: Only warn if the loop is empty
 while.loop.spins.on.field.problem.descriptor:
     text: '<code>#ref</code> loop spins on field #loc'
+teardown.calls.super.teardown.add.quickfix:
+    text: "Add call to 'super.tearDown()'"

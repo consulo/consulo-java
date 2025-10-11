@@ -22,13 +22,13 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -40,8 +40,8 @@ public class JUnitTestClassNamingConventionInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.junitTestClassNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.junitTestClassNamingConventionDisplayName();
   }
 
   @Override
@@ -59,16 +59,12 @@ public class JUnitTestClassNamingConventionInspection
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "junit.test.class.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.junitTestClassNamingConventionProblemDescriptorShort().get();
     }
     else if (className.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "junit.test.class.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.junitTestClassNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "junit.test.class.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.junitTestClassNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   @Override

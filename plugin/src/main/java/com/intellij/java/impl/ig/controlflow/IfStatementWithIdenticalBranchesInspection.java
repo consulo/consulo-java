@@ -39,7 +39,6 @@ import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

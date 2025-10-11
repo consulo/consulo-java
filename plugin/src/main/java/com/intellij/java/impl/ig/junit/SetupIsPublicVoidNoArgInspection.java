@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.ig.junit;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
@@ -36,16 +37,14 @@ public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "setup.is.public.void.no.arg.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.setupIsPublicVoidNoArgDisplayName();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "setup.is.public.void.no.arg.problem.descriptor");
+    return InspectionGadgetsLocalize.setupIsPublicVoidNoArgProblemDescriptor().get();
   }
 
   @Override

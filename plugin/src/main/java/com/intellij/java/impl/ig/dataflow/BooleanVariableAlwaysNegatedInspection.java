@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.dataflow;
 import com.intellij.java.impl.refactoring.invertBoolean.InvertBooleanDialog;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,6 +28,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -39,8 +39,8 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedDisplayName();
   }
 
   @Nonnull
@@ -69,9 +69,8 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsBundle.message(
-        "boolean.variable.always.inverted.quickfix", name);
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedQuickfix(name);
     }
 
     @Override

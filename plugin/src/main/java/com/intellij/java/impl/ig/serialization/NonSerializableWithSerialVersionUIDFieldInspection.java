@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -30,6 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -45,8 +45,8 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidDisplayName();
   }
 
   @Override
@@ -54,8 +54,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType()) {
-      return InspectionGadgetsBundle.message(
-        "non.serializable.@interface.with.serialversionuid.problem.descriptor");
+      return InspectionGadgetsLocalize.nonSerializableInterfaceWithSerialversionuidProblemDescriptor().get();
     }
     else if (aClass.isInterface()) {
       return InspectionGadgetsLocalize.nonSerializableInterfaceWithSerialversionuidProblemDescriptor().get();
@@ -83,8 +82,8 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   private static class RemoveSerialVersionUIDFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidRemoveQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidRemoveQuickfix();
     }
 
     @Override

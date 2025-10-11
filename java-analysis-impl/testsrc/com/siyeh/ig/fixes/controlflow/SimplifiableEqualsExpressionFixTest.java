@@ -15,20 +15,24 @@
  */
 package com.siyeh.ig.fixes.controlflow;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.SimplifiableEqualsExpressionInspection;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class SimplifiableEqualsExpressionFixTest extends IGQuickFixesTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myFixture.enableInspections(new SimplifiableEqualsExpressionInspection());
-    myRelativePath = "controlflow/simplifiable_equals_expression";
-  }
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        myFixture.enableInspections(new SimplifiableEqualsExpressionInspection());
+        myRelativePath = "controlflow/simplifiable_equals_expression";
+    }
 
-  public void testNormal() { doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equals").get()); }
-  public void testNegated() { doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equalsIgnoreCase").get()); }
+    public void testNormal() {
+        doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equals").get());
+    }
+
+    public void testNegated() {
+        doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equalsIgnoreCase").get());
+    }
 }

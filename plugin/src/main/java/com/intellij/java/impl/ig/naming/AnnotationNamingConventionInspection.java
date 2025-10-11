@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import com.siyeh.localize.InspectionGadgetsLocalize;
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnnotationNamingConventionInspection extends ConventionInspection {
@@ -32,8 +31,8 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.annotationNamingConventionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.annotationNamingConventionDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -48,16 +47,12 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
   public String buildErrorString(Object... infos) {
     final String annotationName = (String)infos[0];
     if (annotationName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "annotation.naming.convention.problem.descriptor.short");
+      return InspectionGadgetsLocalize.annotationNamingConventionProblemDescriptorShort().get();
     }
     else if (annotationName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "annotation.naming.convention.problem.descriptor.long");
+      return InspectionGadgetsLocalize.annotationNamingConventionProblemDescriptorLong().get();
     }
-    return InspectionGadgetsBundle.message(
-      "annotation.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
+    return InspectionGadgetsLocalize.annotationNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
   }
 
   protected String getDefaultRegex() {

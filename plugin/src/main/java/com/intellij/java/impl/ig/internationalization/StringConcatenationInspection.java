@@ -21,7 +21,6 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -140,19 +139,19 @@ public class StringConcatenationInspection extends BaseInspection {
     @Nullable
     public JComponent createOptionsPanel() {
         final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("string.concatenation.ignore.assert.option"), "ignoreAsserts");
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("string.concatenation.ignore.system.out.option"), "ignoreSystemOuts");
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("string.concatenation.ignore.system.err.option"), "ignoreSystemErrs");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.stringConcatenationIgnoreAssertOption().get(), "ignoreAsserts");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.stringConcatenationIgnoreSystemOutOption().get(), "ignoreSystemOuts");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.stringConcatenationIgnoreSystemErrOption().get(), "ignoreSystemErrs");
         optionsPanel.addCheckbox(
-            InspectionGadgetsBundle.message("string.concatenation.ignore.exceptions.option"),
+            InspectionGadgetsLocalize.stringConcatenationIgnoreExceptionsOption().get(),
             "ignoreThrowableArguments"
         );
         optionsPanel.addCheckbox(
-            InspectionGadgetsBundle.message("string.concatenation.ignore.constant.initializers.option"),
+            InspectionGadgetsLocalize.stringConcatenationIgnoreConstantInitializersOption().get(),
             "ignoreConstantInitializers"
         );
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.test.code"), "ignoreInTestCode");
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.tostring"), "ignoreInToString");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreInTestCode().get(), "ignoreInTestCode");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreInTostring().get(), "ignoreInToString");
         return optionsPanel;
     }
 

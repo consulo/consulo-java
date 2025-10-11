@@ -18,82 +18,85 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class TypeParameterNamingConventionInspection
-  extends ConventionInspection {
+public class TypeParameterNamingConventionInspection extends ConventionInspection {
 
-  private static final int DEFAULT_MIN_LENGTH = 1;
-  private static final int DEFAULT_MAX_LENGTH = 1;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.typeParameterNamingConventionDisplayName().get();
-  }
-
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameFix();
-  }
-
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final String parameterName = (String)infos[0];
-    if (parameterName.length() < getMinLength()) {
-      return InspectionGadgetsBundle.message(
-        "type.parameter.naming.convention.problem.descriptor.short");
-    }
-    else if (parameterName.length() > getMaxLength()) {
-      return InspectionGadgetsBundle.message(
-        "type.parameter.naming.convention.problem.descriptor.long");
-    }
-    return InspectionGadgetsBundle.message(
-      "enumerated.class.naming.convention.problem.descriptor.regex.mismatch",
-      getRegex());
-  }
-
-  protected String getDefaultRegex() {
-    return "[A-Z][A-Za-z\\d]*";
-  }
-
-  protected int getDefaultMinLength() {
-    return DEFAULT_MIN_LENGTH;
-  }
-
-  protected int getDefaultMaxLength() {
-    return DEFAULT_MAX_LENGTH;
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NamingConventionsVisitor();
-  }
-
-  private class NamingConventionsVisitor extends BaseInspectionVisitor {
+    private static final int DEFAULT_MIN_LENGTH = 1;
+    private static final int DEFAULT_MAX_LENGTH = 1;
 
     @Override
-    public void visitTypeParameter(PsiTypeParameter parameter) {
-      super.visitTypeParameter(parameter);
-      final String name = parameter.getName();
-      if (name == null) {
-        return;
-      }
-      if (isValid(name)) {
-        return;
-      }
-      final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
-      if (nameIdentifier == null) {
-        return;
-      }
-      registerError(nameIdentifier, name);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.typeParameterNamingConventionDisplayName();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final String parameterName = (String) infos[0];
+        if (parameterName.length() < getMinLength()) {
+            return InspectionGadgetsLocalize.typeParameterNamingConventionProblemDescriptorShort().get();
+        }
+        else if (parameterName.length() > getMaxLength()) {
+            return InspectionGadgetsLocalize.typeParameterNamingConventionProblemDescriptorLong().get();
+        }
+        return InspectionGadgetsLocalize.enumeratedClassNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
+    }
+
+    @Override
+    protected String getDefaultRegex() {
+        return "[A-Z][A-Za-z\\d]*";
+    }
+
+    @Override
+    protected int getDefaultMinLength() {
+        return DEFAULT_MIN_LENGTH;
+    }
+
+    @Override
+    protected int getDefaultMaxLength() {
+        return DEFAULT_MAX_LENGTH;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NamingConventionsVisitor();
+    }
+
+    private class NamingConventionsVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitTypeParameter(PsiTypeParameter parameter) {
+            super.visitTypeParameter(parameter);
+            final String name = parameter.getName();
+            if (name == null) {
+                return;
+            }
+            if (isValid(name)) {
+                return;
+            }
+            final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
+            if (nameIdentifier == null) {
+                return;
+            }
+            registerError(nameIdentifier, name);
+        }
+    }
 }

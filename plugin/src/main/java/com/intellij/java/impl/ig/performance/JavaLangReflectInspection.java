@@ -19,52 +19,50 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class JavaLangReflectInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "java.lang.reflect.display.name");
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "java.lang.reflect.problem.descriptor");
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new JavaLangReflectVisitor();
-  }
-
-  private static class JavaLangReflectVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
-      super.visitVariable(variable);
-      final PsiType type = variable.getType();
-      final PsiType componentType = type.getDeepComponentType();
-      if (!(componentType instanceof PsiClassType)) {
-        return;
-      }
-      final String className = ((PsiClassType)componentType).getClassName();
-      @NonNls final String javaLangReflect = "java.lang.reflect.";
-      if (!className.startsWith(javaLangReflect)) {
-        return;
-      }
-      final PsiTypeElement typeElement = variable.getTypeElement();
-      if (typeElement == null) {
-        return;
-      }
-      registerError(typeElement);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.javaLangReflectDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.javaLangReflectProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new JavaLangReflectVisitor();
+    }
+
+    private static class JavaLangReflectVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitVariable(@Nonnull PsiVariable variable) {
+            super.visitVariable(variable);
+            final PsiType type = variable.getType();
+            final PsiType componentType = type.getDeepComponentType();
+            if (!(componentType instanceof PsiClassType)) {
+                return;
+            }
+            final String className = ((PsiClassType) componentType).getClassName();
+            @NonNls final String javaLangReflect = "java.lang.reflect.";
+            if (!className.startsWith(javaLangReflect)) {
+                return;
+            }
+            final PsiTypeElement typeElement = variable.getTypeElement();
+            if (typeElement == null) {
+                return;
+            }
+            registerError(typeElement);
+        }
+    }
 }

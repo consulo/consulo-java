@@ -15,28 +15,27 @@
  */
 package com.siyeh.ig.fixes.migration;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.migration.UnnecessaryBoxingInspection;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class UnnecessaryBoxingFixTest extends IGQuickFixesTestCase {
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myFixture.enableInspections(new UnnecessaryBoxingInspection());
-  }
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        myFixture.enableInspections(new UnnecessaryBoxingInspection());
+    }
 
-  public void testCast() {
-    doFixTest();
-  }
+    public void testCast() {
+        doFixTest();
+    }
 
-  private void doFixTest() {
-    doTest(getTestName(false), InspectionGadgetsLocalize.unnecessaryBoxingRemoveQuickfix().get());
-  }
+    private void doFixTest() {
+        doTest(getTestName(false), InspectionGadgetsLocalize.unnecessaryBoxingRemoveQuickfix().get());
+    }
 
-  @Override
-  protected String getRelativePath() {
-    return "migration/unnecessary_boxing";
-  }
+    @Override
+    protected String getRelativePath() {
+        return "migration/unnecessary_boxing";
+    }
 }

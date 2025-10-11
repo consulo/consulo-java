@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -73,7 +72,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
     public JComponent createOptionsPanel() {
         final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.emptyCatchBlockCommentsOption().get(), "m_includeComments");
-        optionsPanel.addCheckbox(InspectionGadgetsBundle.message("empty.catch.block.ignore.option"), "m_ignoreTestCases");
+        optionsPanel.addCheckbox(InspectionGadgetsLocalize.emptyCatchBlockIgnoreOption().get(), "m_ignoreTestCases");
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.emptyCatchBlockIgnoreIgnoreOption().get(), "m_ignoreIgnoreParameter");
         return optionsPanel;
     }

@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
@@ -56,17 +55,12 @@ public class JUnitAbstractTestClassNamingConventionInspection extends Convention
     public String buildErrorString(Object... infos) {
         final String className = (String) infos[0];
         if (className.length() < getMinLength()) {
-            return InspectionGadgetsBundle.message(
-                "junit.abstract.test.class.naming.convention.problem.descriptor.short");
+            return InspectionGadgetsLocalize.junitAbstractTestClassNamingConventionProblemDescriptorShort().get();
         }
         else if (className.length() > getMaxLength()) {
-            return InspectionGadgetsBundle.message(
-                "junit.abstract.test.class.naming.convention.problem.descriptor.long");
+            return InspectionGadgetsLocalize.junitAbstractTestClassNamingConventionProblemDescriptorLong().get();
         }
-        return InspectionGadgetsBundle.message(
-            "junit.abstract.test.class.naming.convention.problem.descriptor.regex.mismatch",
-            getRegex()
-        );
+        return InspectionGadgetsLocalize.junitAbstractTestClassNamingConventionProblemDescriptorRegexMismatch(getRegex()).get();
     }
 
     @Override

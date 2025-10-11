@@ -20,13 +20,14 @@ import com.intellij.java.impl.ig.DelegatingFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -43,16 +44,14 @@ public class StringCompareToInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.compareto.call.display.name");
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.stringComparetoCallDisplayName();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.compareto.call.problem.descriptor");
+    return InspectionGadgetsLocalize.stringComparetoCallProblemDescriptor().get();
   }
 
   @Override

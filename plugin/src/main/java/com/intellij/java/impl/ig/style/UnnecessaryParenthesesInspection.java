@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -64,7 +63,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
       "ignoreParenthesesOnConditionals"
     );
     optionsPanel.addCheckbox(
-      InspectionGadgetsBundle.message("ignore.parentheses.around.single.no.formal.type.lambda.parameter"),
+        InspectionGadgetsLocalize.ignoreParenthesesAroundSingleNoFormalTypeLambdaParameter().get(),
       "ignoreParenthesesOnLambdaParameter"
     );
     return optionsPanel;

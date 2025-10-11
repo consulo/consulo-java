@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;

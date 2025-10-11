@@ -27,7 +27,6 @@ import com.intellij.java.language.psi.PsiModifierList;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.FinalUtils;
 import jakarta.annotation.Nullable;

@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.visibility;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
