@@ -35,71 +35,69 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class NonSerializableFieldInSerializableClassInspection extends SerializableInspection {
-
-  @SuppressWarnings({"PublicField"})
-  public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassProblemDescriptor().get();
-  }
-
-  @Override
-  protected JComponent[] createAdditionalOptions() {
-    LocalizeValue message = InspectionGadgetsLocalize.ignoreIfAnnotatedBy();
-    return new JComponent[]{SpecialAnnotationsUtil.createSpecialAnnotationsListControl(ignorableAnnotations, message.get())};
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations);
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonSerializableFieldInSerializableClassVisitor();
-  }
-
-  private class NonSerializableFieldInSerializableClassVisitor extends BaseInspectionVisitor {
+    @SuppressWarnings({"PublicField"})
+    public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (field.hasModifierProperty(PsiModifier.TRANSIENT) || field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiClass aClass = field.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      if (SerializationUtils.isProbablySerializable(field.getType())) {
-        return;
-      }
-      final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
-      if (hasWriteObject) {
-        return;
-      }
-      if (isIgnoredSubclass(aClass)) {
-        return;
-      }
-      if (AnnotationUtil.isAnnotated(field, ignorableAnnotations)) {
-        return;
-      }
-      registerFieldError(field, field);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassDisplayName();
     }
-  }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassProblemDescriptor().get();
+    }
+
+    @Override
+    protected JComponent[] createAdditionalOptions() {
+        LocalizeValue message = InspectionGadgetsLocalize.ignoreIfAnnotatedBy();
+        return new JComponent[]{SpecialAnnotationsUtil.createSpecialAnnotationsListControl(ignorableAnnotations, message.get())};
+    }
+
+    @Nonnull
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations);
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonSerializableFieldInSerializableClassVisitor();
+    }
+
+    private class NonSerializableFieldInSerializableClassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (field.hasModifierProperty(PsiModifier.TRANSIENT) || field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiClass aClass = field.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            if (SerializationUtils.isProbablySerializable(field.getType())) {
+                return;
+            }
+            final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
+            if (hasWriteObject) {
+                return;
+            }
+            if (isIgnoredSubclass(aClass)) {
+                return;
+            }
+            if (AnnotationUtil.isAnnotated(field, ignorableAnnotations)) {
+                return;
+            }
+            registerFieldError(field, field);
+        }
+    }
 }

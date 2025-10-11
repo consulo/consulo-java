@@ -23,57 +23,54 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class RuntimeExecInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "CallToRuntimeExec";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.runtimeExecCallDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.runtimeExecCallProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new RuntimeExecVisitor();
-  }
-
-  private static class RuntimeExecVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      @NonNls final String exec = "exec";
-      if (!exec.equals(methodName)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String className = aClass.getQualifiedName();
-      if (!"java.lang.Runtime".equals(className)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Nonnull
+    public String getID() {
+        return "CallToRuntimeExec";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.runtimeExecCallDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.runtimeExecCallProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new RuntimeExecVisitor();
+    }
+
+    private static class RuntimeExecVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            final String exec = "exec";
+            if (!exec.equals(methodName)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String className = aClass.getQualifiedName();
+            if (!"java.lang.Runtime".equals(className)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

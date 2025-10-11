@@ -25,59 +25,56 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ReadObjectAndWriteObjectPrivateInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "NonPrivateSerializationMethod";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.readwriteobjectPrivateDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.readwriteobjectPrivateProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReadObjectWriteObjectPrivateVisitor();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new ChangeModifierFix(PsiModifier.PRIVATE);
-  }
-
-  private static class ReadObjectWriteObjectPrivateVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // no call to super, so it doesn't drill down
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      if (!SerializationUtils.isReadObject(method) &&
-          !SerializationUtils.isWriteObject(method)) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerMethodError(method);
+public class ReadObjectAndWriteObjectPrivateInspection extends BaseInspection {
+    @Nonnull
+    public String getID() {
+        return "NonPrivateSerializationMethod";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.readwriteobjectPrivateDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.readwriteobjectPrivateProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReadObjectWriteObjectPrivateVisitor();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new ChangeModifierFix(PsiModifier.PRIVATE);
+    }
+
+    private static class ReadObjectWriteObjectPrivateVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // no call to super, so it doesn't drill down
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            if (!SerializationUtils.isReadObject(method) && !SerializationUtils.isWriteObject(method)) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

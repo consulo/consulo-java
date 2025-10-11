@@ -25,13 +25,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -41,94 +41,91 @@ import java.util.Set;
 
 @ExtensionImpl
 public class QuestionableNameInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public String nameString = "aa,abc,bad,bar,bar2,baz,baz1,baz2," +
+        "baz3,bb,blah,bogus,bool,cc,dd,defau1t,dummy,dummy2,ee,fa1se," +
+        "ff,foo,foo1,foo2,foo3,foobar,four,fred,fred1,fred2,gg,hh,hello," +
+        "hello1,hello2,hello3,ii,nu11,one,silly,silly2,string,two,that," +
+        "then,three,whi1e,var";
 
-  /**
-   * @noinspection PublicField
-   */
-  @NonNls public String nameString = "aa,abc,bad,bar,bar2,baz,baz1,baz2," +
-                                     "baz3,bb,blah,bogus,bool,cc,dd,defau1t,dummy,dummy2,ee,fa1se," +
-                                     "ff,foo,foo1,foo2,foo3,foobar,four,fred,fred1,fred2,gg,hh,hello," +
-                                     "hello1,hello2,hello3,ii,nu11,one,silly,silly2,string,two,that," +
-                                     "then,three,whi1e,var";
+    List<String> nameList = new ArrayList<String>(32);
 
-  List<String> nameList = new ArrayList<String>(32);
+    public QuestionableNameInspection() {
+        parseString(nameString, nameList);
+    }
 
-  public QuestionableNameInspection() {
-    parseString(nameString, nameList);
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.questionableNameDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.questionableNameProblemDescriptor().get();
-  }
-
-  @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
-    super.readSettings(element);
-    parseString(nameString, nameList);
-  }
-
-  @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
-    nameString = formatString(nameList);
-    super.writeSettings(element);
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final ListTable table =
-      new ListTable(new ListWrappingTableModel(nameList, InspectionGadgetsLocalize.questionableNameColumnTitle().get()));
-    return UiUtils.createAddRemovePanel(table);
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameFix();
-  }
-
-  @Override
-  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new QuestionableNameVisitor();
-  }
-
-  private class QuestionableNameVisitor extends BaseInspectionVisitor {
-
-    private final Set<String> nameSet = new HashSet(nameList);
-
+    @Nonnull
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
-      final String name = variable.getName();
-      if (nameSet.contains(name)) {
-        registerVariableError(variable);
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.questionableNameDisplayName();
     }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      final String name = method.getName();
-      if (nameSet.contains(name)) {
-        registerMethodError(method);
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.questionableNameProblemDescriptor().get();
     }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      final String name = aClass.getName();
-      if (nameSet.contains(name)) {
-        registerClassError(aClass);
-      }
+    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+        super.readSettings(element);
+        parseString(nameString, nameList);
     }
-  }
+
+    @Override
+    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+        nameString = formatString(nameList);
+        super.writeSettings(element);
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        final ListTable table = new ListTable(new ListWrappingTableModel(nameList, InspectionGadgetsLocalize.questionableNameColumnTitle().get()));
+        return UiUtils.createAddRemovePanel(table);
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameFix();
+    }
+
+    @Override
+    protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new QuestionableNameVisitor();
+    }
+
+    private class QuestionableNameVisitor extends BaseInspectionVisitor {
+        private final Set<String> nameSet = new HashSet(nameList);
+
+        @Override
+        public void visitVariable(@Nonnull PsiVariable variable) {
+            final String name = variable.getName();
+            if (nameSet.contains(name)) {
+                registerVariableError(variable);
+            }
+        }
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            final String name = method.getName();
+            if (nameSet.contains(name)) {
+                registerMethodError(method);
+            }
+        }
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            final String name = aClass.getName();
+            if (nameSet.contains(name)) {
+                registerClassError(aClass);
+            }
+        }
+    }
 }

@@ -24,51 +24,51 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalCloneInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonFinalCloneDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonFinalCloneProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonFinalCloneVisitor();
-  }
-
-  private static class NonFinalCloneVisitor extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      super.visitMethod(method);
-      final String name = method.getName();
-      if (!HardcodedMethodConstants.CLONE.equals(name)) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.FINAL)
-          || method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return;
-      }
-      final PsiClass containingClass = method.getContainingClass();
-      if (containingClass == null) {
-        return;
-      }
-      if (containingClass.hasModifierProperty(PsiModifier.FINAL)
-          || containingClass.isInterface()) {
-        return;
-      }
-      registerMethodError(method);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonFinalCloneDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonFinalCloneProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonFinalCloneVisitor();
+    }
+
+    private static class NonFinalCloneVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            super.visitMethod(method);
+            final String name = method.getName();
+            if (!HardcodedMethodConstants.CLONE.equals(name)) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.FINAL)
+                || method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                return;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+                return;
+            }
+            if (containingClass.hasModifierProperty(PsiModifier.FINAL)
+                || containingClass.isInterface()) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

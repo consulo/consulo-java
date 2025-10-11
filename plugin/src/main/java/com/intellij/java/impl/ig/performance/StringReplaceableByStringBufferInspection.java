@@ -31,68 +31,60 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class StringReplaceableByStringBufferInspection extends BaseInspection {
-
-  @SuppressWarnings({"PublicField"})
-  public boolean onlyWarnOnLoop = true;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "NonConstantStringShouldBeStringBuffer";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringReplaceableByStringBufferDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringReplaceableByStringBufferProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.stringReplaceableByStringBufferInLoopOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "onlyWarnOnLoop");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringReplaceableByStringBufferVisitor();
-  }
-
-  private class StringReplaceableByStringBufferVisitor
-    extends BaseInspectionVisitor {
+    @SuppressWarnings({"PublicField"})
+    public boolean onlyWarnOnLoop = true;
 
     @Override
-    public void visitLocalVariable(
-      @Nonnull PsiLocalVariable variable) {
-      super.visitLocalVariable(variable);
-      final PsiCodeBlock codeBlock =
-        PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
-      if (codeBlock == null) {
-        return;
-      }
-      final PsiType type = variable.getType();
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
-        return;
-      }
-      if (!variableIsAppendedTo(variable, codeBlock)) {
-        return;
-      }
-      registerVariableError(variable);
+    @Nonnull
+    public String getID() {
+        return "NonConstantStringShouldBeStringBuffer";
     }
 
-    public boolean variableIsAppendedTo(PsiVariable variable,
-                                        PsiElement context) {
-      final StringVariableIsAppendedToVisitor visitor =
-        new StringVariableIsAppendedToVisitor(variable,
-                                              onlyWarnOnLoop);
-      context.accept(visitor);
-      return visitor.isAppendedTo();
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringReplaceableByStringBufferDisplayName();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringReplaceableByStringBufferProblemDescriptor().get();
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.stringReplaceableByStringBufferInLoopOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "onlyWarnOnLoop");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringReplaceableByStringBufferVisitor();
+    }
+
+    private class StringReplaceableByStringBufferVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+            super.visitLocalVariable(variable);
+            final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+            if (codeBlock == null) {
+                return;
+            }
+            final PsiType type = variable.getType();
+            if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
+                return;
+            }
+            if (!variableIsAppendedTo(variable, codeBlock)) {
+                return;
+            }
+            registerVariableError(variable);
+        }
+
+        public boolean variableIsAppendedTo(PsiVariable variable, PsiElement context) {
+            final StringVariableIsAppendedToVisitor visitor = new StringVariableIsAppendedToVisitor(variable, onlyWarnOnLoop);
+            context.accept(visitor);
+            return visitor.isAppendedTo();
+        }
+    }
 }

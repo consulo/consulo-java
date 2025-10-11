@@ -24,45 +24,43 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PublicStaticArrayFieldInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.publicStaticArrayFieldDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.publicStaticArrayFieldProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new PublicStaticArrayFieldVisitor();
-  }
-
-  private static class PublicStaticArrayFieldVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitField(@Nonnull PsiField field) {
-      super.visitField(field);
-      if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
-        return;
-      }
-      if (!field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiType type = field.getType();
-      if (!(type instanceof PsiArrayType)) {
-        return;
-      }
-      if (CollectionUtils.isConstantEmptyArray(field)) {
-        return;
-      }
-      registerFieldError(field);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.publicStaticArrayFieldDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.publicStaticArrayFieldProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new PublicStaticArrayFieldVisitor();
+    }
+
+    private static class PublicStaticArrayFieldVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            super.visitField(field);
+            if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
+                return;
+            }
+            if (!field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiType type = field.getType();
+            if (!(type instanceof PsiArrayType)) {
+                return;
+            }
+            if (CollectionUtils.isConstantEmptyArray(field)) {
+                return;
+            }
+            registerFieldError(field);
+        }
+    }
 }

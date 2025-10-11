@@ -21,57 +21,53 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class StringBufferMustHaveInitialCapacityInspection
-  extends BaseInspection {
+public class StringBufferMustHaveInitialCapacityInspection extends BaseInspection {
+    @Override
+    @Nonnull
+    public String getID() {
+        return "StringBufferWithoutInitialCapacity";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "StringBufferWithoutInitialCapacity";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringBufferInitialCapacityVisitor();
-  }
-
-  private static class StringBufferInitialCapacityVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityDisplayName();
+    }
 
     @Override
-    public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
-      super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
-
-      if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type) &&
-          !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList == null) {
-        return;
-      }
-      final PsiExpression[] args = argumentList.getExpressions();
-      if (args.length != 0) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringBufferInitialCapacityVisitor();
+    }
+
+    private static class StringBufferInitialCapacityVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            super.visitNewExpression(expression);
+            final PsiType type = expression.getType();
+
+            if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type)
+                && !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList == null) {
+                return;
+            }
+            final PsiExpression[] args = argumentList.getExpressions();
+            if (args.length != 0) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

@@ -32,58 +32,49 @@ import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
-public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspection
-{
+public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspection {
+    @SuppressWarnings({"PublicField"})
+    public int limit = 3;
 
-	@SuppressWarnings({"PublicField"})
-	public int limit = 3;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.packageWithTooFewClassesDisplayName();
+    }
 
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.packageWithTooFewClassesDisplayName().get();
-	}
+    @Override
+    @Nullable
+    public CommonProblemDescriptor[] checkElement(
+        RefEntity refEntity,
+        AnalysisScope analysisScope,
+        InspectionManager inspectionManager,
+        GlobalInspectionContext globalInspectionContext,
+        Object state
+    ) {
+        if (!(refEntity instanceof RefPackage)) {
+            return null;
+        }
+        final List<RefEntity> children = refEntity.getChildren();
+        if (children == null) {
+            return null;
+        }
+        int numClasses = 0;
+        for (RefEntity child : children) {
+            if (child instanceof RefClass) {
+                numClasses++;
+            }
+        }
+        if (numClasses >= limit || numClasses == 0) {
+            return null;
+        }
+        final LocalizeValue errorString =
+            InspectionGadgetsLocalize.packageWithTooFewClassesProblemDescriptor(refEntity.getQualifiedName(), numClasses, limit);
+        return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
+    }
 
-	@Override
-	@Nullable
-	public CommonProblemDescriptor[] checkElement(
-			RefEntity refEntity,
-			AnalysisScope analysisScope,
-			InspectionManager inspectionManager,
-			GlobalInspectionContext globalInspectionContext,
-			Object state)
-	{
-		if(!(refEntity instanceof RefPackage))
-		{
-			return null;
-		}
-		final List<RefEntity> children = refEntity.getChildren();
-		if(children == null)
-		{
-			return null;
-		}
-		int numClasses = 0;
-		for(RefEntity child : children)
-		{
-			if(child instanceof RefClass)
-			{
-				numClasses++;
-			}
-		}
-		if(numClasses >= limit || numClasses == 0)
-		{
-			return null;
-		}
-		final LocalizeValue errorString =
-			InspectionGadgetsLocalize.packageWithTooFewClassesProblemDescriptor(refEntity.getQualifiedName(), numClasses, limit);
-		return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
-	}
-
-	@Override
-	public JComponent createOptionsPanel()
-	{
-		LocalizeValue message = InspectionGadgetsLocalize.packageWithTooFewClassesMinOption();
-		return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
-	}
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.packageWithTooFewClassesMinOption();
+        return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
+    }
 }

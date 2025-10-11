@@ -23,66 +23,60 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SystemSetSecurityManagerInspection extends BaseInspection {
+    @Nonnull
+    public String getID() {
+        return "CallToSystemSetSecurityManager";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "CallToSystemSetSecurityManager";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.systemSetSecurityManagerDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.systemSetSecurityManagerProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SystemSetSecurityManagerVisitor();
-  }
-
-  private static class SystemSetSecurityManagerVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!isSetSecurityManager(expression)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.systemSetSecurityManagerDisplayName();
     }
 
-    private static boolean isSetSecurityManager(
-      PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      @NonNls final String methodName =
-        methodExpression.getReferenceName();
-      if (!"setSecurityManager".equals(methodName)) {
-        return false;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return false;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return false;
-      }
-      final String className = aClass.getQualifiedName();
-      if (className == null) {
-        return false;
-      }
-      return "java.lang.System".equals(className);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.systemSetSecurityManagerProblemDescriptor().get();
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SystemSetSecurityManagerVisitor();
+    }
+
+    private static class SystemSetSecurityManagerVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!isSetSecurityManager(expression)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+
+        private static boolean isSetSecurityManager(PsiMethodCallExpression expression) {
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!"setSecurityManager".equals(methodName)) {
+                return false;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return false;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return false;
+            }
+            final String className = aClass.getQualifiedName();
+            if (className == null) {
+                return false;
+            }
+            return "java.lang.System".equals(className);
+        }
+    }
 }
