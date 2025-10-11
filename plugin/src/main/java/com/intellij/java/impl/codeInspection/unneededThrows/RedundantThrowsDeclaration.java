@@ -29,6 +29,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -39,108 +40,129 @@ import java.util.Set;
 
 /**
  * @author anna
- * @since 15-Nov-2005
+ * @since 2005-11-15
  */
 @ExtensionImpl
-public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
-{
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
-  }
+public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool {
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.redundantThrowsDeclaration().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.redundantThrowsDeclaration();
+    }
 
-  @Override
-  @Nonnull
-  @NonNls
-  public String getShortName() {
-    return "RedundantThrowsDeclaration";
-  }
+    @Override
+    @Nonnull
+    @NonNls
+    public String getShortName() {
+        return "RedundantThrowsDeclaration";
+    }
 
-  @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
-    final Set<ProblemDescriptor> problems = new HashSet<>();
-    file.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
-        final ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
-        if (descriptor != null) {
-          problems.add(descriptor);
+    @Override
+    @Nullable
+    public ProblemDescriptor[] checkFile(
+        @Nonnull PsiFile file,
+        @Nonnull final InspectionManager manager,
+        final boolean isOnTheFly,
+        Object state
+    ) {
+        final Set<ProblemDescriptor> problems = new HashSet<>();
+        file.accept(new JavaRecursiveElementWalkingVisitor() {
+            @Override
+            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+                final ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
+                if (descriptor != null) {
+                    problems.add(descriptor);
+                }
+            }
+
+        });
+        return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
+    }
+
+    private static ProblemDescriptor checkExceptionsNeverThrown(
+        PsiJavaCodeReferenceElement referenceElement,
+        InspectionManager inspectionManager,
+        boolean onTheFly
+    ) {
+        if (!(referenceElement.getParent() instanceof PsiReferenceList)) {
+            return null;
         }
-      }
+        PsiReferenceList referenceList = (PsiReferenceList) referenceElement.getParent();
+        if (!(referenceList.getParent() instanceof PsiMethod)) {
+            return null;
+        }
+        PsiMethod method = (PsiMethod) referenceList.getParent();
+        if (referenceList != method.getThrowsList()) {
+            return null;
+        }
+        PsiClass containingClass = method.getContainingClass();
+        if (containingClass == null) {
+            return null;
+        }
 
-    });
-    return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
+        PsiManager manager = referenceElement.getManager();
+        PsiClassType exceptionType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(referenceElement);
+        if (ExceptionUtil.isUncheckedExceptionOrSuperclass(exceptionType)) {
+            return null;
+        }
 
-  private static ProblemDescriptor checkExceptionsNeverThrown(
-    PsiJavaCodeReferenceElement referenceElement,
-    InspectionManager inspectionManager,
-    boolean onTheFly
-  ) {
-    if (!(referenceElement.getParent() instanceof PsiReferenceList)) {
-      return null;
+        PsiCodeBlock body = method.getBody();
+        if (body == null) {
+            return null;
+        }
+
+        PsiModifierList modifierList = method.getModifierList();
+        if (!modifierList.hasModifierProperty(PsiModifier.PRIVATE)
+            && !modifierList.hasModifierProperty(PsiModifier.STATIC)
+            && !modifierList.hasModifierProperty(PsiModifier.FINAL)
+            && !method.isConstructor()
+            && !(containingClass instanceof PsiAnonymousClass)
+            && !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+            return null;
+        }
+
+        Collection<PsiClassType> types = ExceptionUtil.collectUnhandledExceptions(body, method);
+        Collection<PsiClassType> unhandled = new HashSet<>(types);
+        if (method.isConstructor()) {
+            // there may be field initializer throwing exception
+            // that exception must be caught in the constructor
+            PsiField[] fields = containingClass.getFields();
+            for (final PsiField field : fields) {
+                if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                    continue;
+                }
+                PsiExpression initializer = field.getInitializer();
+                if (initializer == null) {
+                    continue;
+                }
+                unhandled.addAll(ExceptionUtil.collectUnhandledExceptions(initializer, field));
+            }
+        }
+
+        for (PsiClassType unhandledException : unhandled) {
+            if (unhandledException.isAssignableFrom(exceptionType) || exceptionType.isAssignableFrom(unhandledException)) {
+                return null;
+            }
+        }
+
+        if (JavaHighlightUtil.isSerializationRelatedMethod(method, containingClass)) {
+            return null;
+        }
+
+        String description = JavaErrorBundle.message("exception.is.never.thrown", JavaHighlightUtil.formatType(exceptionType));
+        LocalQuickFix quickFixes = new DeleteThrowsFix(method, exceptionType);
+        return inspectionManager.createProblemDescriptor(
+            referenceElement,
+            description,
+            quickFixes,
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+            onTheFly
+        );
     }
-    PsiReferenceList referenceList = (PsiReferenceList)referenceElement.getParent();
-    if (!(referenceList.getParent() instanceof PsiMethod)) {
-      return null;
-    }
-    PsiMethod method = (PsiMethod)referenceList.getParent();
-    if (referenceList != method.getThrowsList()) {
-      return null;
-    }
-    PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null) {
-      return null;
-    }
-
-    PsiManager manager = referenceElement.getManager();
-    PsiClassType exceptionType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(referenceElement);
-    if (ExceptionUtil.isUncheckedExceptionOrSuperclass(exceptionType)) return null;
-
-    PsiCodeBlock body = method.getBody();
-    if (body == null) return null;
-
-    PsiModifierList modifierList = method.getModifierList();
-    if (!modifierList.hasModifierProperty(PsiModifier.PRIVATE)
-        && !modifierList.hasModifierProperty(PsiModifier.STATIC)
-        && !modifierList.hasModifierProperty(PsiModifier.FINAL)
-        && !method.isConstructor()
-        && !(containingClass instanceof PsiAnonymousClass)
-        && !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
-      return null;
-    }
-
-    Collection<PsiClassType> types = ExceptionUtil.collectUnhandledExceptions(body, method);
-    Collection<PsiClassType> unhandled = new HashSet<>(types);
-    if (method.isConstructor()) {
-      // there may be field initializer throwing exception
-      // that exception must be caught in the constructor
-      PsiField[] fields = containingClass.getFields();
-      for (final PsiField field : fields) {
-        if (field.hasModifierProperty(PsiModifier.STATIC)) continue;
-        PsiExpression initializer = field.getInitializer();
-        if (initializer == null) continue;
-        unhandled.addAll(ExceptionUtil.collectUnhandledExceptions(initializer, field));
-      }
-    }
-
-    for (PsiClassType unhandledException : unhandled) {
-      if (unhandledException.isAssignableFrom(exceptionType) || exceptionType.isAssignableFrom(unhandledException)) {
-        return null;
-      }
-    }
-
-    if (JavaHighlightUtil.isSerializationRelatedMethod(method, containingClass)) return null;
-
-    String description = JavaErrorBundle.message("exception.is.never.thrown", JavaHighlightUtil.formatType(exceptionType));
-    LocalQuickFix quickFixes = new DeleteThrowsFix(method, exceptionType);
-    return inspectionManager.createProblemDescriptor(referenceElement, description, quickFixes, ProblemHighlightType.LIKE_UNUSED_SYMBOL, onTheFly);
-  }
 }

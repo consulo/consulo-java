@@ -23,103 +23,100 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Set;
 
 @ExtensionImpl
 public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspection {
+    private static final Set<String> loggingMethodNames = ContainerUtilRt.newHashSet("trace", "debug", "info", "warn", "error");
 
-  @NonNls
-  private static final Set<String> loggingMethodNames = ContainerUtilRt.newHashSet("trace", "debug", "info", "warn", "error");
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountDisplayName();
+    }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountDisplayName().get();
-  }
-
-  @Nonnull
-  @Override
-  protected String buildErrorString(Object... infos) {
-    final int argumentCount = (Integer)infos[0];
-    final int placeholderCount = (Integer)infos[1];
-    return argumentCount > placeholderCount
-      ? InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountMoreProblemDescriptor(argumentCount, placeholderCount).get()
-      : InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountFewerProblemDescriptor(argumentCount, placeholderCount).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new PlaceholderCountMatchesArgumentCountVisitor();
-  }
-
-  private static class PlaceholderCountMatchesArgumentCountVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    protected String buildErrorString(Object... infos) {
+        final int argumentCount = (Integer) infos[0];
+        final int placeholderCount = (Integer) infos[1];
+        return argumentCount > placeholderCount
+            ? InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountMoreProblemDescriptor(argumentCount, placeholderCount).get()
+            : InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountFewerProblemDescriptor(argumentCount, placeholderCount).get();
+    }
 
     @Override
-    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String name = methodExpression.getReferenceName();
-      if (!loggingMethodNames.contains(name)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length == 0) {
-        return;
-      }
-      final PsiExpression firstArgument = arguments[0];
-      final int placeholderCount;
-      final int argumentCount;
-      if (InheritanceUtil.isInheritor(firstArgument.getType(), "org.slf4j.Marker")) {
-        if (arguments.length < 2) {
-          return;
-        }
-        final PsiExpression secondArgument = arguments[1];
-        if (!ExpressionUtils.hasStringType(secondArgument)) {
-          return;
-        }
-        final String value = (String)ExpressionUtils.computeConstantExpression(secondArgument);
-        if (value == null) {
-          return;
-        }
-        placeholderCount = countPlaceholders(value);
-        argumentCount = hasThrowableType(arguments[arguments.length - 1]) ? arguments.length - 3 : arguments.length - 2;
-      }
-      else if (ExpressionUtils.hasStringType(firstArgument)) {
-        final String value = (String)ExpressionUtils.computeConstantExpression(firstArgument);
-        if (value == null) {
-          return;
-        }
-        placeholderCount = countPlaceholders(value);
-        argumentCount = hasThrowableType(arguments[arguments.length - 1]) ? arguments.length - 2 : arguments.length - 1;
-      } else {
-        return;
-      }
-      if (placeholderCount == argumentCount) {
-        return;
-      }
-      registerMethodCallError(expression, argumentCount, placeholderCount);
+    public BaseInspectionVisitor buildVisitor() {
+        return new PlaceholderCountMatchesArgumentCountVisitor();
     }
 
-    private static boolean hasThrowableType(PsiExpression lastArgument) {
-      return InheritanceUtil.isInheritor(lastArgument.getType(), CommonClassNames.JAVA_LANG_THROWABLE);
-    }
+    private static class PlaceholderCountMatchesArgumentCountVisitor extends BaseInspectionVisitor {
 
-    public static int countPlaceholders(String value) {
-      int count = 0;
-      int index = value.indexOf("{}");
-      while (index >= 0) {
-        if (index <= 0 || value.charAt(index - 1) != '\\') {
-          count++;
+        @Override
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String name = methodExpression.getReferenceName();
+            if (!loggingMethodNames.contains(name)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length == 0) {
+                return;
+            }
+            final PsiExpression firstArgument = arguments[0];
+            final int placeholderCount;
+            final int argumentCount;
+            if (InheritanceUtil.isInheritor(firstArgument.getType(), "org.slf4j.Marker")) {
+                if (arguments.length < 2) {
+                    return;
+                }
+                final PsiExpression secondArgument = arguments[1];
+                if (!ExpressionUtils.hasStringType(secondArgument)) {
+                    return;
+                }
+                final String value = (String) ExpressionUtils.computeConstantExpression(secondArgument);
+                if (value == null) {
+                    return;
+                }
+                placeholderCount = countPlaceholders(value);
+                argumentCount = hasThrowableType(arguments[arguments.length - 1]) ? arguments.length - 3 : arguments.length - 2;
+            }
+            else if (ExpressionUtils.hasStringType(firstArgument)) {
+                final String value = (String) ExpressionUtils.computeConstantExpression(firstArgument);
+                if (value == null) {
+                    return;
+                }
+                placeholderCount = countPlaceholders(value);
+                argumentCount = hasThrowableType(arguments[arguments.length - 1]) ? arguments.length - 2 : arguments.length - 1;
+            }
+            else {
+                return;
+            }
+            if (placeholderCount == argumentCount) {
+                return;
+            }
+            registerMethodCallError(expression, argumentCount, placeholderCount);
         }
-        index = value.indexOf("{}", index + 1);
-      }
-      return count;
+
+        private static boolean hasThrowableType(PsiExpression lastArgument) {
+            return InheritanceUtil.isInheritor(lastArgument.getType(), CommonClassNames.JAVA_LANG_THROWABLE);
+        }
+
+        public static int countPlaceholders(String value) {
+            int count = 0;
+            int index = value.indexOf("{}");
+            while (index >= 0) {
+                if (index <= 0 || value.charAt(index - 1) != '\\') {
+                    count++;
+                }
+                index = value.indexOf("{}", index + 1);
+            }
+            return count;
+        }
     }
-  }
 }

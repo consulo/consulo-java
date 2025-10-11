@@ -23,47 +23,44 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowablePrintStackTraceInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "CallToPrintStackTrace";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.printstacktraceCallDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.printstacktraceCallProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ThrowablePrintStackTraceVisitor();
-  }
-
-  private static class ThrowablePrintStackTraceVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final String methodName = MethodCallUtils.getMethodName(expression);
-      if (!HardcodedMethodConstants.PRINT_STACK_TRACE.equals(
-        methodName)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      if (argumentList.getExpressions().length != 0) {
-        return;
-      }
-      registerMethodCallError(expression);
+    @Nonnull
+    public String getID() {
+        return "CallToPrintStackTrace";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.printstacktraceCallDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.printstacktraceCallProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ThrowablePrintStackTraceVisitor();
+    }
+
+    private static class ThrowablePrintStackTraceVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final String methodName = MethodCallUtils.getMethodName(expression);
+            if (!HardcodedMethodConstants.PRINT_STACK_TRACE.equals(methodName)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            if (argumentList.getExpressions().length != 0) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

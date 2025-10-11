@@ -96,14 +96,14 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
     @Override
     @Nonnull
-    public String getGroupDisplayName() {
-        return "";
+    public LocalizeValue getGroupDisplayName() {
+        return LocalizeValue.empty();
     }
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionLocalize.uncheckedWarning().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.uncheckedWarning();
     }
 
     @Nonnull

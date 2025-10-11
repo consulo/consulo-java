@@ -21,59 +21,60 @@ import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ParametersPerMethodInspection extends MethodMetricInspection {
-
-  @Nonnull
-  public String getID() {
-    return "MethodWithTooManyParameters";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.parametersPerMethodDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final Integer parameterCount = (Integer)infos[0];
-    return InspectionGadgetsLocalize.parametersPerMethodProblemDescriptor(parameterCount).get();
-  }
-
-  protected int getDefaultLimit() {
-    return 5;
-  }
-
-  protected String getConfigurationLabel() {
-    return InspectionGadgetsLocalize.parameterLimitOption().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ParametersPerMethodVisitor();
-  }
-
-  private class ParametersPerMethodVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // note: no call to super
-      if (method.getNameIdentifier() == null) {
-        return;
-      }
-      if (method.isConstructor()) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      final int parametersCount = parameterList.getParametersCount();
-      if (parametersCount <= getLimit()) {
-        return;
-      }
-      if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
-        return;
-      }
-      registerMethodError(method, Integer.valueOf(parametersCount));
+    @Nonnull
+    public String getID() {
+        return "MethodWithTooManyParameters";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.parametersPerMethodDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final Integer parameterCount = (Integer) infos[0];
+        return InspectionGadgetsLocalize.parametersPerMethodProblemDescriptor(parameterCount).get();
+    }
+
+    protected int getDefaultLimit() {
+        return 5;
+    }
+
+    protected String getConfigurationLabel() {
+        return InspectionGadgetsLocalize.parameterLimitOption().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ParametersPerMethodVisitor();
+    }
+
+    private class ParametersPerMethodVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // note: no call to super
+            if (method.getNameIdentifier() == null) {
+                return;
+            }
+            if (method.isConstructor()) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            final int parametersCount = parameterList.getParametersCount();
+            if (parametersCount <= getLimit()) {
+                return;
+            }
+            if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
+                return;
+            }
+            registerMethodError(method, Integer.valueOf(parametersCount));
+        }
+    }
 }

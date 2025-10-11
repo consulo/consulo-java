@@ -28,8 +28,8 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ClassReferencesSubclassInspection extends BaseInspection {
-
     @Nonnull
+    @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classReferencesSubclassDisplayName();
     }
@@ -64,21 +64,24 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
         @Override
         public void visitInstanceOfExpression(
-            @Nonnull PsiInstanceOfExpression expression) {
+            @Nonnull PsiInstanceOfExpression expression
+        ) {
             final PsiTypeElement typeElement = expression.getCheckType();
             checkTypeElement(typeElement);
         }
 
         @Override
         public void visitTypeCastExpression(
-            @Nonnull PsiTypeCastExpression expression) {
+            @Nonnull PsiTypeCastExpression expression
+        ) {
             final PsiTypeElement typeElement = expression.getCastType();
             checkTypeElement(typeElement);
         }
 
         @Override
         public void visitClassObjectAccessExpression(
-            @Nonnull PsiClassObjectAccessExpression expression) {
+            @Nonnull PsiClassObjectAccessExpression expression
+        ) {
             final PsiTypeElement typeElement = expression.getOperand();
             checkTypeElement(typeElement);
         }
@@ -105,8 +108,10 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
             registerError(typeElement, parentClass, Boolean.FALSE);
         }
 
-        private static boolean isSubclass(@Nullable PsiClass childClass,
-                                          @Nullable PsiClass parent) {
+        private static boolean isSubclass(
+            @Nullable PsiClass childClass,
+            @Nullable PsiClass parent
+        ) {
             if (childClass == null) {
                 return false;
             }

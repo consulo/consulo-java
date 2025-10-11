@@ -26,56 +26,58 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuppressionAnnotationInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.inspectionSuppressionAnnotationDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.inspectionSuppressionAnnotationProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SuppressionAnnotationVisitor();
-  }
-
-  private static class SuppressionAnnotationVisitor
-    extends BaseInspectionVisitor {
+    @Nonnull
     @Override
-    public void visitComment(PsiComment comment) {
-      super.visitComment(comment);
-      final String commentText = comment.getText();
-      final IElementType tokenType = comment.getTokenType();
-      if (!tokenType.equals(JavaTokenType.END_OF_LINE_COMMENT)
-          && !tokenType.equals(JavaTokenType.C_STYLE_COMMENT)) {
-        return;
-      }
-      @NonNls final String strippedComment = commentText.substring(2).trim();
-      if (strippedComment.startsWith(SuppressionUtil.SUPPRESS_INSPECTIONS_TAG_NAME)) {
-        registerError(comment);
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.inspectionSuppressionAnnotationDisplayName();
     }
 
+    @Nonnull
     @Override
-    public void visitAnnotation(PsiAnnotation annotation) {
-      super.visitAnnotation(annotation);
-      final PsiJavaCodeReferenceElement reference =
-        annotation.getNameReferenceElement();
-      if (reference == null) {
-        return;
-      }
-      @NonNls final String text = reference.getText();
-      if ("SuppressWarnings".equals(text) ||
-          BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
-        registerError(annotation);
-      }
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.inspectionSuppressionAnnotationProblemDescriptor().get();
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SuppressionAnnotationVisitor();
+    }
+
+    private static class SuppressionAnnotationVisitor
+        extends BaseInspectionVisitor {
+        @Override
+        public void visitComment(PsiComment comment) {
+            super.visitComment(comment);
+            final String commentText = comment.getText();
+            final IElementType tokenType = comment.getTokenType();
+            if (!tokenType.equals(JavaTokenType.END_OF_LINE_COMMENT)
+                && !tokenType.equals(JavaTokenType.C_STYLE_COMMENT)) {
+                return;
+            }
+            @NonNls final String strippedComment = commentText.substring(2).trim();
+            if (strippedComment.startsWith(SuppressionUtil.SUPPRESS_INSPECTIONS_TAG_NAME)) {
+                registerError(comment);
+            }
+        }
+
+        @Override
+        public void visitAnnotation(PsiAnnotation annotation) {
+            super.visitAnnotation(annotation);
+            final PsiJavaCodeReferenceElement reference =
+                annotation.getNameReferenceElement();
+            if (reference == null) {
+                return;
+            }
+            @NonNls final String text = reference.getText();
+            if ("SuppressWarnings".equals(text) ||
+                BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
+                registerError(annotation);
+            }
+        }
+    }
 }

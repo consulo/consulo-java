@@ -26,54 +26,52 @@ import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
-import org.jetbrains.annotations.Nls;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionTool {
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
+    }
 
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.localizeTODO("Non-final field in @Immutable class");
+    }
 
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return "Non-final field in @Immutable class";
-  }
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "NonFinalFieldInImmutable";
+    }
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "NonFinalFieldInImmutable";
-  }
-
-
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
-    return new JavaElementVisitor() {
-      @Override
-      public void visitField(PsiField field) {
-        super.visitField(field);
-        if (field.hasModifierProperty(PsiModifier.FINAL)) {
-          return;
-        }
-        final PsiClass containingClass = field.getContainingClass();
-        if (containingClass != null) {
-          if (!JCiPUtil.isImmutable(containingClass)) {
-            return;
-          }
-          holder.registerProblem(field, "Non-final field #ref in @Immutable class  #loc");
-        }
-      }
-    };
-  }
+    @Override
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        return new JavaElementVisitor() {
+            @Override
+            public void visitField(PsiField field) {
+                super.visitField(field);
+                if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                    return;
+                }
+                final PsiClass containingClass = field.getContainingClass();
+                if (containingClass != null) {
+                    if (!JCiPUtil.isImmutable(containingClass)) {
+                        return;
+                    }
+                    holder.registerProblem(field, "Non-final field #ref in @Immutable class  #loc");
+                }
+            }
+        };
+    }
 }

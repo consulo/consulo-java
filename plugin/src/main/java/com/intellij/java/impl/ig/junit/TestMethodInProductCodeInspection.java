@@ -22,51 +22,43 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class TestMethodInProductCodeInspection extends BaseInspection
-{
+public class TestMethodInProductCodeInspection extends BaseInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.testMethodInProductCodeDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.testMethodInProductCodeDisplayName().get();
-	}
+    @Override
+    @Nonnull
+    public String getID() {
+        return "JUnitTestMethodInProductSource";
+    }
 
-	@Override
-	@Nonnull
-	public String getID()
-	{
-		return "JUnitTestMethodInProductSource";
-	}
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.testMethodInProductCodeProblemDescriptor().get();
+    }
 
-	@Override
-	@Nonnull
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsLocalize.testMethodInProductCodeProblemDescriptor().get();
-	}
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new TestCaseInProductCodeVisitor();
+    }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new TestCaseInProductCodeVisitor();
-	}
+    private static class TestCaseInProductCodeVisitor extends BaseInspectionVisitor {
 
-	private static class TestCaseInProductCodeVisitor extends BaseInspectionVisitor
-	{
-
-		@Override
-		public void visitMethod(PsiMethod method)
-		{
-			final PsiClass containingClass = method.getContainingClass();
-			if(TestUtils.isInTestSourceContent(containingClass) || !TestUtils.isAnnotatedTestMethod(method))
-			{
-				return;
-			}
-			registerMethodError(method);
-		}
-	}
+        @Override
+        public void visitMethod(PsiMethod method) {
+            final PsiClass containingClass = method.getContainingClass();
+            if (TestUtils.isInTestSourceContent(containingClass) || !TestUtils.isAnnotatedTestMethod(method)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }
