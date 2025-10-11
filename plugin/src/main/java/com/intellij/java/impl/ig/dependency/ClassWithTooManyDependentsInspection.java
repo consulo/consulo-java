@@ -40,8 +40,8 @@ public abstract class ClassWithTooManyDependentsInspection extends BaseGlobalIns
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classWithTooManyDependentsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classWithTooManyDependentsDisplayName();
   }
 
   @Nullable

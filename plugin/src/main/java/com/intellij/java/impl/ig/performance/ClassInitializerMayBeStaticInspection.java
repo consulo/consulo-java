@@ -26,12 +26,11 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.Application;
 import consulo.component.extension.ExtensionPoint;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author max
@@ -55,10 +54,9 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
     }
 
     @Override
-    @Nls
     @Nonnull
-    public String getDisplayName() {
-        return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName();
     }
 
     @Override

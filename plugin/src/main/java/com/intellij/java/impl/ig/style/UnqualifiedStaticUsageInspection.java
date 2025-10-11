@@ -26,6 +26,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -47,8 +48,8 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
   public boolean m_ignoreStaticAccessFromStaticContext = false;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unqualifiedStaticUsageDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.unqualifiedStaticUsageDisplayName();
   }
 
   @Nonnull
@@ -99,10 +100,10 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
+    public LocalizeValue getName() {
       return m_fixField
-        ? InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyFieldQuickfix().get()
-        : InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyMethodQuickfix().get();
+        ? InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyFieldQuickfix()
+        : InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyMethodQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

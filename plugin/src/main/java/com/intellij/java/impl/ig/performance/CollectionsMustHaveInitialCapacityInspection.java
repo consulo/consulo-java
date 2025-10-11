@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizer;
 import consulo.util.xml.serializer.WriteExternalException;
@@ -78,8 +79,8 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.collectionsMustHaveInitialCapacityDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.collectionsMustHaveInitialCapacityDisplayName();
   }
 
   @Override

@@ -25,6 +25,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -37,8 +38,8 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
   @Override
   @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallDisplayName();
   }
 
   @Override
@@ -65,8 +66,8 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallQuickfix(replacementText).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallQuickfix(replacementText);
     }
 
     @NonNls

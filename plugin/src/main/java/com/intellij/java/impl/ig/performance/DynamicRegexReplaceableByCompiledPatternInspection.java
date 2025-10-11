@@ -29,9 +29,9 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
@@ -51,10 +51,9 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
   }
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternDisplayName();
   }
 
   @Override
@@ -76,8 +75,8 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
   private static class DynamicRegexReplaceableByCompiledPatternFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternQuickfix();
     }
 
     @Override

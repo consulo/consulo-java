@@ -27,6 +27,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -35,8 +36,8 @@ import org.jetbrains.annotations.NonNls;
 public class ComparisonToNaNInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.comparisonToNanDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.comparisonToNanDisplayName();
   }
 
   @Nonnull
@@ -58,8 +59,8 @@ public class ComparisonToNaNInspection extends BaseInspection {
   private static class ComparisonToNaNFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.comparisonToNanReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.comparisonToNanReplaceQuickfix();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

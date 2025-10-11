@@ -29,6 +29,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -52,8 +53,8 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.callToSimpleGetterInClassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.callToSimpleGetterInClassDisplayName();
   }
 
   @Override
@@ -81,8 +82,8 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
 
   private static class InlineCallFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.callToSimpleGetterInClassInlineQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.callToSimpleGetterInClassInlineQuickfix();
     }
 
     @Override

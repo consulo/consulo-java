@@ -1,16 +1,17 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import consulo.language.editor.internal.intention.EmptyIntentionAction;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.impl.codeInspection.defUse.DefUseInspection;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.internal.intention.EmptyIntentionAction;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -38,15 +39,15 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
       @Override
       @Nls
       @Nonnull
-      public String getDisplayName() {
-        return "My";
+      public LocalizeValue getDisplayName() {
+        return LocalizeValue.of("My");
       }
 
       @Override
       @NonNls
       @Nonnull
       public String getShortName() {
-        return getDisplayName();
+        return "My";
       }
 
       @Override

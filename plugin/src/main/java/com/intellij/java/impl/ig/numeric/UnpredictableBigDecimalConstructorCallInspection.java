@@ -24,6 +24,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -37,8 +38,8 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
   public boolean ignoreComplexLiterals = false;
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallDisplayName();
   }
 
   @Nonnull
@@ -89,8 +90,8 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallQuickfix(argumentText).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallQuickfix(argumentText);
     }
 
     @Override

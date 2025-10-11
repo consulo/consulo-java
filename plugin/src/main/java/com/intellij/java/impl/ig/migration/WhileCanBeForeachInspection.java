@@ -41,6 +41,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
@@ -58,8 +59,8 @@ public class WhileCanBeForeachInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.whileCanBeForeachDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.whileCanBeForeachDisplayName();
   }
 
   @Override
@@ -81,8 +82,8 @@ public class WhileCanBeForeachInspection extends BaseInspection {
   private static class WhileCanBeForeachFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.foreachReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.foreachReplaceQuickfix();
     }
 
     @Override

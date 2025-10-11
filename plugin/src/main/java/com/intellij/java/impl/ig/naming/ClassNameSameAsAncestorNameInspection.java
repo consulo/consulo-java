@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -31,8 +32,8 @@ import java.util.Set;
 public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classNameSameAsAncestorNameDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classNameSameAsAncestorNameDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

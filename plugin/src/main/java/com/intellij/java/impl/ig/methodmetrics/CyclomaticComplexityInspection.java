@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.methodmetrics;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 public abstract class CyclomaticComplexityInspection extends MethodMetricInspection {
@@ -28,8 +29,8 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cyclomaticComplexityDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.cyclomaticComplexityDisplayName();
   }
 
   protected int getDefaultLimit() {

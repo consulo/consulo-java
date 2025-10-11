@@ -24,6 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -38,8 +39,8 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.arraysAsListWithZeroOrOneArgumentDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.arraysAsListWithZeroOrOneArgumentDisplayName();
   }
 
   @Nonnull
@@ -68,10 +69,10 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
 
     @Nonnull
     @Override
-    public String getName() {
+    public LocalizeValue getName() {
       return myEmpty
-        ? InspectionGadgetsLocalize.arraysAsListWithZeroArgumentsQuickfix().get()
-        : InspectionGadgetsLocalize.arraysAsListWithOneArgumentQuickfix().get();
+        ? InspectionGadgetsLocalize.arraysAsListWithZeroArgumentsQuickfix()
+        : InspectionGadgetsLocalize.arraysAsListWithOneArgumentQuickfix();
     }
 
     @Override

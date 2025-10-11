@@ -38,6 +38,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -67,8 +68,8 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.enumerationCanBeIterationDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.enumerationCanBeIterationDisplayName();
   }
 
   @Override
@@ -87,8 +88,8 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.enumerationCanBeIterationQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.enumerationCanBeIterationQuickfix();
     }
 
     @Override

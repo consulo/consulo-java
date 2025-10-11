@@ -29,6 +29,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiPackage;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -39,14 +40,14 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return "";
+  public LocalizeValue getGroupDisplayName() {
+    return LocalizeValue.of();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.accessStaticViaInstance().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.accessStaticViaInstance();
   }
 
   @Override

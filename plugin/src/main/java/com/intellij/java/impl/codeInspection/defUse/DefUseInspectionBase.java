@@ -26,6 +26,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.JBUI;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -227,14 +228,14 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionUnusedAssignmentDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionUnusedAssignmentDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesProbableBugs().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesProbableBugs();
   }
 
   @Override

@@ -32,6 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
@@ -55,8 +56,8 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameDisplayName();
   }
 
   @Override
@@ -89,10 +90,10 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getName() {
+    public LocalizeValue getName() {
       return inSameFile
-        ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameRemoveQuickfix().get()
-        : InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameReplaceQuickfix().get();
+        ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameRemoveQuickfix()
+        : InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameReplaceQuickfix();
     }
 
     @Override

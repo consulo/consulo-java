@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.serialization;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -25,8 +26,8 @@ public class SerializableInnerClassWithNonSerializableOuterClassInspection
   extends SerializableInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableInnerClassWithNonSerializableOuterClassDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.serializableInnerClassWithNonSerializableOuterClassDisplayName();
   }
 
   @Nonnull

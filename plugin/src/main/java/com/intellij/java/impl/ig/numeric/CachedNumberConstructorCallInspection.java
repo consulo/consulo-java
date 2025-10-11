@@ -25,6 +25,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -46,8 +47,8 @@ public class CachedNumberConstructorCallInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cachedNumberConstructorCallDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.cachedNumberConstructorCallDisplayName();
   }
 
   @Override
@@ -81,8 +82,8 @@ public class CachedNumberConstructorCallInspection
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.cachedNumberConstructorCallQuickfix(className).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.cachedNumberConstructorCallQuickfix(className);
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

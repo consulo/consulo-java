@@ -48,6 +48,7 @@ import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -58,317 +59,266 @@ import javax.swing.*;
 import java.awt.*;
 
 @ExtensionImpl
-public class CanBeFinalInspection extends GlobalJavaInspectionTool implements OldStyleInspection
-{
-	private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
+public class CanBeFinalInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
+    private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
 
-	public boolean REPORT_CLASSES = false;
-	public boolean REPORT_METHODS = false;
-	public boolean REPORT_FIELDS = true;
-	@NonNls
-	public static final String SHORT_NAME = "CanBeFinal";
+    public boolean REPORT_CLASSES = false;
+    public boolean REPORT_METHODS = false;
+    public boolean REPORT_FIELDS = true;
+    @NonNls
+    public static final String SHORT_NAME = "CanBeFinal";
 
-	private class OptionsPanel extends JPanel
-	{
-		private final JCheckBox myReportClassesCheckbox;
-		private final JCheckBox myReportMethodsCheckbox;
-		private final JCheckBox myReportFieldsCheckbox;
+    private class OptionsPanel extends JPanel {
+        private final JCheckBox myReportClassesCheckbox;
+        private final JCheckBox myReportMethodsCheckbox;
+        private final JCheckBox myReportFieldsCheckbox;
 
-		private OptionsPanel()
-		{
-			super(new GridBagLayout());
+        private OptionsPanel() {
+            super(new GridBagLayout());
 
-			GridBagConstraints gc = new GridBagConstraints();
-			gc.weighty = 0;
-			gc.weightx = 1;
-			gc.fill = GridBagConstraints.HORIZONTAL;
-			gc.anchor = GridBagConstraints.NORTHWEST;
+            GridBagConstraints gc = new GridBagConstraints();
+            gc.weighty = 0;
+            gc.weightx = 1;
+            gc.fill = GridBagConstraints.HORIZONTAL;
+            gc.anchor = GridBagConstraints.NORTHWEST;
 
 
-			myReportClassesCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption().get());
-			myReportClassesCheckbox.setSelected(REPORT_CLASSES);
-			myReportClassesCheckbox.getModel().addChangeListener(e -> REPORT_CLASSES = myReportClassesCheckbox.isSelected());
-			gc.gridy = 0;
-			add(myReportClassesCheckbox, gc);
+            myReportClassesCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption().get());
+            myReportClassesCheckbox.setSelected(REPORT_CLASSES);
+            myReportClassesCheckbox.getModel().addChangeListener(e -> REPORT_CLASSES = myReportClassesCheckbox.isSelected());
+            gc.gridy = 0;
+            add(myReportClassesCheckbox, gc);
 
-			myReportMethodsCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption1().get());
-			myReportMethodsCheckbox.setSelected(REPORT_METHODS);
-			myReportMethodsCheckbox.getModel().addChangeListener(e -> REPORT_METHODS = myReportMethodsCheckbox.isSelected());
-			gc.gridy++;
-			add(myReportMethodsCheckbox, gc);
+            myReportMethodsCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption1().get());
+            myReportMethodsCheckbox.setSelected(REPORT_METHODS);
+            myReportMethodsCheckbox.getModel().addChangeListener(e -> REPORT_METHODS = myReportMethodsCheckbox.isSelected());
+            gc.gridy++;
+            add(myReportMethodsCheckbox, gc);
 
-			myReportFieldsCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption2().get());
-			myReportFieldsCheckbox.setSelected(REPORT_FIELDS);
-			myReportFieldsCheckbox.getModel().addChangeListener(e -> REPORT_FIELDS = myReportFieldsCheckbox.isSelected());
+            myReportFieldsCheckbox = new JCheckBox(InspectionLocalize.inspectionCanBeFinalOption2().get());
+            myReportFieldsCheckbox.setSelected(REPORT_FIELDS);
+            myReportFieldsCheckbox.getModel().addChangeListener(e -> REPORT_FIELDS = myReportFieldsCheckbox.isSelected());
 
-			gc.weighty = 1;
-			gc.gridy++;
-			add(myReportFieldsCheckbox, gc);
-		}
-	}
+            gc.weighty = 1;
+            gc.gridy++;
+            add(myReportFieldsCheckbox, gc);
+        }
+    }
 
-	public boolean isReportClasses()
-	{
-		return REPORT_CLASSES;
-	}
+    public boolean isReportClasses() {
+        return REPORT_CLASSES;
+    }
 
-	public boolean isReportMethods()
-	{
-		return REPORT_METHODS;
-	}
+    public boolean isReportMethods() {
+        return REPORT_METHODS;
+    }
 
-	public boolean isReportFields()
-	{
-		return REPORT_FIELDS;
-	}
+    public boolean isReportFields() {
+        return REPORT_FIELDS;
+    }
 
-	@Override
-	public JComponent createOptionsPanel()
-	{
-		return new OptionsPanel();
-	}
+    @Override
+    public JComponent createOptionsPanel() {
+        return new OptionsPanel();
+    }
 
-	@Override
-	@Nullable
-	public RefGraphAnnotator getAnnotator(final RefManager refManager)
-	{
-		return new CanBeFinalAnnotator(refManager);
-	}
+    @Override
+    @Nullable
+    public RefGraphAnnotator getAnnotator(final RefManager refManager) {
+        return new CanBeFinalAnnotator(refManager);
+    }
 
-	@Override
-	@Nullable
-	public CommonProblemDescriptor[] checkElement(
-		@Nonnull final RefEntity refEntity,
-		@Nonnull final AnalysisScope scope,
-		@Nonnull final InspectionManager manager,
-		@Nonnull final GlobalInspectionContext globalContext,
-		@Nonnull final ProblemDescriptionsProcessor processor,
-		@Nonnull Object state
-	)
-	{
-		if (refEntity instanceof RefJavaElement refElement)
-		{
-			if (refElement instanceof RefParameter || !refElement.isReferenced() || refElement.isSyntheticJSP() || refElement.isFinal()
-				|| !((RefElementImpl)refElement).checkFlag(CanBeFinalAnnotator.CAN_BE_FINAL_MASK)) {
-				return null;
-			}
+    @Override
+    @Nullable
+    public CommonProblemDescriptor[] checkElement(
+        @Nonnull final RefEntity refEntity,
+        @Nonnull final AnalysisScope scope,
+        @Nonnull final InspectionManager manager,
+        @Nonnull final GlobalInspectionContext globalContext,
+        @Nonnull final ProblemDescriptionsProcessor processor,
+        @Nonnull Object state
+    ) {
+        if (refEntity instanceof RefJavaElement refElement) {
+            if (refElement instanceof RefParameter || !refElement.isReferenced() || refElement.isSyntheticJSP() || refElement.isFinal()
+                || !((RefElementImpl) refElement).checkFlag(CanBeFinalAnnotator.CAN_BE_FINAL_MASK)) {
+                return null;
+            }
 
-			final PsiMember psiMember = (PsiMember) refElement.getElement();
-			if (psiMember == null || !CanBeFinalHandler.allowToBeFinal(psiMember))
-			{
-				return null;
-			}
+            final PsiMember psiMember = (PsiMember) refElement.getElement();
+            if (psiMember == null || !CanBeFinalHandler.allowToBeFinal(psiMember)) {
+                return null;
+            }
 
-			PsiIdentifier psiIdentifier = null;
-			if (refElement instanceof RefClass refClass)
-			{
-				if (refClass.isInterface() || refClass.isAnonymous() || refClass.isAbstract() || !isReportClasses()) {
-					return null;
-				}
-				psiIdentifier = ((PsiClass) psiMember).getNameIdentifier();
-			}
-			else if (refElement instanceof RefMethod)
-			{
-				RefMethod refMethod = (RefMethod) refElement;
-				if (refMethod.getOwnerClass().isFinal())
-				{
-					return null;
-				}
-				if (!isReportMethods())
-				{
-					return null;
-				}
-				psiIdentifier = ((PsiMethod) psiMember).getNameIdentifier();
-			}
-			else if (refElement instanceof RefField)
-			{
-				if (!isReportFields())
-				{
-					return null;
-				}
-				psiIdentifier = ((PsiField) psiMember).getNameIdentifier();
-			}
+            PsiIdentifier psiIdentifier = null;
+            if (refElement instanceof RefClass refClass) {
+                if (refClass.isInterface() || refClass.isAnonymous() || refClass.isAbstract() || !isReportClasses()) {
+                    return null;
+                }
+                psiIdentifier = ((PsiClass) psiMember).getNameIdentifier();
+            }
+            else if (refElement instanceof RefMethod) {
+                RefMethod refMethod = (RefMethod) refElement;
+                if (refMethod.getOwnerClass().isFinal()) {
+                    return null;
+                }
+                if (!isReportMethods()) {
+                    return null;
+                }
+                psiIdentifier = ((PsiMethod) psiMember).getNameIdentifier();
+            }
+            else if (refElement instanceof RefField) {
+                if (!isReportFields()) {
+                    return null;
+                }
+                psiIdentifier = ((PsiField) psiMember).getNameIdentifier();
+            }
 
-			if (psiIdentifier != null)
-			{
-				return new ProblemDescriptor[]{
-					manager.createProblemDescriptor(
-						psiIdentifier,
-						InspectionLocalize.inspectionExportResultsCanBeFinalDescription().get(),
-						new AcceptSuggested(globalContext.getRefManager()),
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-						false
-					)
-				};
-			}
-		}
-		return null;
-	}
+            if (psiIdentifier != null) {
+                return new ProblemDescriptor[]{
+                    manager.createProblemDescriptor(
+                        psiIdentifier,
+                        InspectionLocalize.inspectionExportResultsCanBeFinalDescription().get(),
+                        new AcceptSuggested(globalContext.getRefManager()),
+                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                        false
+                    )
+                };
+            }
+        }
+        return null;
+    }
 
-	@Override
-	protected boolean queryExternalUsagesRequests(
-		final RefManager manager,
-		final GlobalJavaInspectionContext globalContext,
-		final ProblemDescriptionsProcessor problemsProcessor,
-		Object state
-	)
-	{
-		for (RefElement entryPoint : globalContext.getEntryPointsManager(manager).getEntryPoints())
-		{
-			problemsProcessor.ignoreElement(entryPoint);
-		}
+    @Override
+    protected boolean queryExternalUsagesRequests(
+        final RefManager manager,
+        final GlobalJavaInspectionContext globalContext,
+        final ProblemDescriptionsProcessor problemsProcessor,
+        Object state
+    ) {
+        for (RefElement entryPoint : globalContext.getEntryPointsManager(manager).getEntryPoints()) {
+            problemsProcessor.ignoreElement(entryPoint);
+        }
 
-		manager.iterate(new RefJavaVisitor()
-		{
-			@Override
-			public void visitElement(@Nonnull RefEntity refEntity)
-			{
-				if (problemsProcessor.getDescriptions(refEntity) == null)
-				{
-					return;
-				}
-				refEntity.accept(new RefJavaVisitor()
-				{
-					@Override
-					public void visitMethod(@Nonnull final RefMethod refMethod)
-					{
-						if (!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier())
-							&& !(refMethod instanceof RefImplicitConstructor))
-						{
-							globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
-								((RefElementImpl) refMethod).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
-								problemsProcessor.ignoreElement(refMethod);
-								return false;
-							});
-						}
-					}
+        manager.iterate(new RefJavaVisitor() {
+            @Override
+            public void visitElement(@Nonnull RefEntity refEntity) {
+                if (problemsProcessor.getDescriptions(refEntity) == null) {
+                    return;
+                }
+                refEntity.accept(new RefJavaVisitor() {
+                    @Override
+                    public void visitMethod(@Nonnull final RefMethod refMethod) {
+                        if (!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier())
+                            && !(refMethod instanceof RefImplicitConstructor)) {
+                            globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
+                                ((RefElementImpl) refMethod).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
+                                problemsProcessor.ignoreElement(refMethod);
+                                return false;
+                            });
+                        }
+                    }
 
-					@Override
-					public void visitClass(@Nonnull final RefClass refClass)
-					{
-						if (!refClass.isAnonymous())
-						{
-							globalContext.enqueueDerivedClassesProcessor(
-								refClass,
-								inheritor -> {
-									((RefClassImpl) refClass).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
-									problemsProcessor.ignoreElement(refClass);
-									return false;
-								}
-							);
-						}
-					}
+                    @Override
+                    public void visitClass(@Nonnull final RefClass refClass) {
+                        if (!refClass.isAnonymous()) {
+                            globalContext.enqueueDerivedClassesProcessor(
+                                refClass,
+                                inheritor -> {
+                                    ((RefClassImpl) refClass).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
+                                    problemsProcessor.ignoreElement(refClass);
+                                    return false;
+                                }
+                            );
+                        }
+                    }
 
-					@Override
-					public void visitField(@Nonnull final RefField refField)
-					{
-						globalContext.enqueueFieldUsagesProcessor(
-							refField,
-							psiReference -> {
-								PsiElement expression = psiReference.getElement();
-								if (expression instanceof PsiReferenceExpression referenceExpression && PsiUtil.isAccessedForWriting(referenceExpression))
-								{
-									((RefFieldImpl) refField).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
-									problemsProcessor.ignoreElement(refField);
-									return false;
-								}
-								return true;
-							}
-						);
-					}
-				});
-			}
-		});
+                    @Override
+                    public void visitField(@Nonnull final RefField refField) {
+                        globalContext.enqueueFieldUsagesProcessor(
+                            refField,
+                            psiReference -> {
+                                PsiElement expression = psiReference.getElement();
+                                if (expression instanceof PsiReferenceExpression referenceExpression && PsiUtil.isAccessedForWriting(referenceExpression)) {
+                                    ((RefFieldImpl) refField).setFlag(false, CanBeFinalAnnotator.CAN_BE_FINAL_MASK);
+                                    problemsProcessor.ignoreElement(refField);
+                                    return false;
+                                }
+                                return true;
+                            }
+                        );
+                    }
+                });
+            }
+        });
 
-		return false;
-	}
+        return false;
+    }
 
 
-	@Override
-	@Nullable
-	public QuickFix getQuickFix(final String hint)
-	{
-		return new AcceptSuggested(null);
-	}
+    @Override
+    @Nullable
+    public QuickFix getQuickFix(final String hint) {
+        return new AcceptSuggested(null);
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionLocalize.inspectionCanBeFinalDisplayName().get();
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionCanBeFinalDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public String getGroupDisplayName()
-	{
-		return InspectionLocalize.groupNamesDeclarationRedundancy().get();
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
+    }
 
-	@Override
-	@Nonnull
-	public String getShortName()
-	{
-		return SHORT_NAME;
-	}
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return SHORT_NAME;
+    }
 
-	private static class AcceptSuggested implements LocalQuickFix
-	{
-		private final RefManager myManager;
+    private static class AcceptSuggested implements LocalQuickFix {
+        private final RefManager myManager;
 
-		public AcceptSuggested(final RefManager manager)
-		{
-			myManager = manager;
-		}
+        public AcceptSuggested(final RefManager manager) {
+            myManager = manager;
+        }
 
-		@Override
-		@Nonnull
-		public String getName()
-		{
-			return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix().get();
-		}
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
+        }
 
-		@Override
-		@Nonnull
-		public String getFamilyName()
-		{
-			return getName();
-		}
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
+                return;
+            }
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiModifierListOwner psiElement = PsiTreeUtil.getParentOfType(element, PsiModifierListOwner.class);
+            if (psiElement != null) {
+                RefJavaElement refElement = (RefJavaElement) (myManager != null ? myManager.getReference(psiElement) : null);
+                try {
+                    if (psiElement instanceof PsiVariable variable) {
+                        variable.normalizeDeclaration();
+                    }
+                    final PsiModifierList modifierList = psiElement.getModifierList();
+                    LOG.assertTrue(modifierList != null);
+                    modifierList.setModifierProperty(PsiModifier.FINAL, true);
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
 
-		@Override
-		@RequiredWriteAction
-		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
-		{
-			if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement()))
-			{
-				return;
-			}
-			final PsiElement element = descriptor.getPsiElement();
-			final PsiModifierListOwner psiElement = PsiTreeUtil.getParentOfType(element, PsiModifierListOwner.class);
-			if (psiElement != null)
-			{
-				RefJavaElement refElement = (RefJavaElement) (myManager != null ? myManager.getReference(psiElement) : null);
-				try
-				{
-					if (psiElement instanceof PsiVariable variable)
-					{
-						variable.normalizeDeclaration();
-					}
-					final PsiModifierList modifierList = psiElement.getModifierList();
-					LOG.assertTrue(modifierList != null);
-					modifierList.setModifierProperty(PsiModifier.FINAL, true);
-				}
-				catch (IncorrectOperationException e)
-				{
-					LOG.error(e);
-				}
-
-				if (refElement != null)
-				{
-					RefJavaUtil.getInstance().setIsFinal(refElement, true);
-				}
-			}
-		}
-	}
+                if (refElement != null) {
+                    RefJavaUtil.getInstance().setIsFinal(refElement, true);
+                }
+            }
+        }
+    }
 
 }

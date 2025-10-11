@@ -41,8 +41,8 @@ public abstract class ClassWithTooManyTransitiveDependentsInspection
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classWithTooManyTransitiveDependentsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classWithTooManyTransitiveDependentsDisplayName();
   }
 
   @Nullable

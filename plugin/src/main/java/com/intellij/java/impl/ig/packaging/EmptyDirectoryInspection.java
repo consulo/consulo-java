@@ -55,8 +55,8 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   @Nls
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.emptyDirectoryDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.emptyDirectoryDisplayName();
   }
 
   @Override
@@ -151,14 +151,8 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
     @Nonnull
     @Override
-    public String getName() {
-      return InspectionGadgetsLocalize.emptyDirectoriesDeleteQuickfix(name).get();
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return getName();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.emptyDirectoriesDeleteQuickfix(name);
     }
 
     @Override

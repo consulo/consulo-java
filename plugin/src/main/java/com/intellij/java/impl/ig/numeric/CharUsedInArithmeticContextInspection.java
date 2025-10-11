@@ -30,6 +30,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -42,8 +43,8 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.charUsedInArithmeticContextDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.charUsedInArithmeticContextDisplayName();
   }
 
   @Override
@@ -83,8 +84,8 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
   private static class CharUsedInArithmeticContentFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.charUsedInArithmeticContextQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.charUsedInArithmeticContextQuickfix();
     }
 
     @Override
@@ -112,8 +113,8 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.charUsedInArithmeticContextCastQuickfix(typeText).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.charUsedInArithmeticContextCastQuickfix(typeText);
     }
 
     @Override

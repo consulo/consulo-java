@@ -51,6 +51,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -125,14 +126,14 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return InspectionLocalize.inspectionVisibilityDisplayName().get();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionVisibilityDisplayName();
     }
 
     @Override
     @Nonnull
-    public String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
@@ -598,14 +599,8 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
         @Override
         @Nonnull
-        public String getName() {
-            return InspectionLocalize.inspectionVisibilityAcceptQuickfix().get();
-        }
-
-        @Override
-        @Nonnull
-        public String getFamilyName() {
-            return getName();
+        public LocalizeValue getName() {
+            return InspectionLocalize.inspectionVisibilityAcceptQuickfix();
         }
 
         @Override

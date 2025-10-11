@@ -27,6 +27,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -35,10 +36,9 @@ import org.jetbrains.annotations.Nls;
 public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.equalsCalledOnEnumConstantDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.equalsCalledOnEnumConstantDisplayName();
   }
 
   @Override
@@ -61,8 +61,8 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.equalsCalledOnEnumConstantQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.equalsCalledOnEnumConstantQuickfix();
     }
 
     @Override

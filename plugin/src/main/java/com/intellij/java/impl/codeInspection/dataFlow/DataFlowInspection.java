@@ -42,6 +42,7 @@ import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
@@ -57,248 +58,205 @@ import static consulo.util.lang.xml.XmlStringUtil.wrapInHtml;
 import static javax.swing.SwingConstants.TOP;
 
 @ExtensionImpl
-public class DataFlowInspection extends DataFlowInspectionBase
-{
-	private static final Logger LOG = Logger.getInstance(DataFlowInspection.class);
+public class DataFlowInspection extends DataFlowInspectionBase {
+    private static final Logger LOG = Logger.getInstance(DataFlowInspection.class);
 
-	@Nonnull
-	@Override
-	public InspectionToolState<? extends DataFlowInspectionStateBase> createStateProvider()
-	{
-		return new DataFlowInspectionState();
-	}
+    @Nonnull
+    @Override
+    public InspectionToolState<? extends DataFlowInspectionStateBase> createStateProvider() {
+        return new DataFlowInspectionState();
+    }
 
-	@Override
-	protected LocalQuickFix[] createConditionalAssignmentFixes(boolean evaluatesToTrue, PsiAssignmentExpression assignment, final boolean onTheFly)
-	{
-		IElementType op = assignment.getOperationTokenType();
-		boolean toRemove = op == JavaTokenType.ANDEQ && !evaluatesToTrue || op == JavaTokenType.OREQ && evaluatesToTrue;
-		if (toRemove && !onTheFly)
-		{
-			return LocalQuickFix.EMPTY_ARRAY;
-		}
-		return new LocalQuickFix[]{toRemove ? new RemoveAssignmentFix() : createSimplifyToAssignmentFix()};
-	}
+    @Override
+    protected LocalQuickFix[] createConditionalAssignmentFixes(boolean evaluatesToTrue, PsiAssignmentExpression assignment, final boolean onTheFly) {
+        IElementType op = assignment.getOperationTokenType();
+        boolean toRemove = op == JavaTokenType.ANDEQ && !evaluatesToTrue || op == JavaTokenType.OREQ && evaluatesToTrue;
+        if (toRemove && !onTheFly) {
+            return LocalQuickFix.EMPTY_ARRAY;
+        }
+        return new LocalQuickFix[]{toRemove ? new RemoveAssignmentFix() : createSimplifyToAssignmentFix()};
+    }
 
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return JavaInspectionsLocalize.inspectionDataFlowDisplayName().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return JavaInspectionsLocalize.inspectionDataFlowDisplayName();
+    }
 
-	@Override
-	public boolean isEnabledByDefault()
-	{
-		return true;
-	}
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-	@Override
-	protected LocalQuickFix createReplaceWithTrivialLambdaFix(Object value)
-	{
-		return new ReplaceWithTrivialLambdaFix(value);
-	}
+    @Override
+    protected LocalQuickFix createReplaceWithTrivialLambdaFix(Object value) {
+        return new ReplaceWithTrivialLambdaFix(value);
+    }
 
-	@Override
-	protected LocalQuickFix createMutabilityViolationFix(PsiElement violation, boolean onTheFly)
-	{
-		return WrapWithMutableCollectionFix.createFix(violation, onTheFly);
-	}
+    @Override
+    protected LocalQuickFix createMutabilityViolationFix(PsiElement violation, boolean onTheFly) {
+        return WrapWithMutableCollectionFix.createFix(violation, onTheFly);
+    }
 
-	@Nullable
-	@Override
-	protected LocalQuickFix createExplainFix(PsiExpression anchor, TrackingRunner.DfaProblemType problemType, DataFlowInspectionStateBase state)
-	{
-		return new FindDfaProblemCauseFix(state.TREAT_UNKNOWN_MEMBERS_AS_NULLABLE, state.IGNORE_ASSERT_STATEMENTS, anchor, problemType);
-	}
+    @Nullable
+    @Override
+    protected LocalQuickFix createExplainFix(PsiExpression anchor, TrackingRunner.DfaProblemType problemType, DataFlowInspectionStateBase state) {
+        return new FindDfaProblemCauseFix(state.TREAT_UNKNOWN_MEMBERS_AS_NULLABLE, state.IGNORE_ASSERT_STATEMENTS, anchor, problemType);
+    }
 
-	@Nullable
-	@Override
-	protected LocalQuickFix createUnwrapSwitchLabelFix()
-	{
-		return new UnwrapSwitchLabelFix();
-	}
+    @Nullable
+    @Override
+    protected LocalQuickFix createUnwrapSwitchLabelFix() {
+        return new UnwrapSwitchLabelFix();
+    }
 
-	@Override
-	protected LocalQuickFix createIntroduceVariableFix()
-	{
-		return new IntroduceVariableFix(true);
-	}
+    @Override
+    protected LocalQuickFix createIntroduceVariableFix() {
+        return new IntroduceVariableFix(true);
+    }
 
-	@Override
-	protected LocalQuickFixOnPsiElement createSimplifyBooleanFix(PsiElement element, boolean value)
-	{
-		if (!(element instanceof PsiExpression))
-		{
-			return null;
-		}
-		if (PsiTreeUtil.findChildOfType(element, PsiAssignmentExpression.class) != null)
-		{
-			return null;
-		}
+    @Override
+    protected LocalQuickFixOnPsiElement createSimplifyBooleanFix(PsiElement element, boolean value) {
+        if (!(element instanceof PsiExpression)) {
+            return null;
+        }
+        if (PsiTreeUtil.findChildOfType(element, PsiAssignmentExpression.class) != null) {
+            return null;
+        }
 
-		final PsiExpression expression = (PsiExpression) element;
-		while (element.getParent() instanceof PsiExpression)
-		{
-			element = element.getParent();
-		}
-		final SimplifyBooleanExpressionFix fix = new SimplifyBooleanExpressionFix(expression, value);
-		// simplify intention already active
-		if (!fix.isAvailable() || SimplifyBooleanExpressionFix.canBeSimplified((PsiExpression) element))
-		{
-			return null;
-		}
-		return fix;
-	}
+        final PsiExpression expression = (PsiExpression) element;
+        while (element.getParent() instanceof PsiExpression) {
+            element = element.getParent();
+        }
+        final SimplifyBooleanExpressionFix fix = new SimplifyBooleanExpressionFix(expression, value);
+        // simplify intention already active
+        if (!fix.isAvailable() || SimplifyBooleanExpressionFix.canBeSimplified((PsiExpression) element)) {
+            return null;
+        }
+        return fix;
+    }
 
-	@RequiredReadAction
-	private static boolean isVolatileFieldReference(PsiExpression qualifier)
-	{
-		PsiElement target = qualifier instanceof PsiReferenceExpression referenceExpression ? referenceExpression.resolve() : null;
-		return target instanceof PsiField field && field.hasModifierProperty(PsiModifier.VOLATILE);
-	}
+    @RequiredReadAction
+    private static boolean isVolatileFieldReference(PsiExpression qualifier) {
+        PsiElement target = qualifier instanceof PsiReferenceExpression referenceExpression ? referenceExpression.resolve() : null;
+        return target instanceof PsiField field && field.hasModifierProperty(PsiModifier.VOLATILE);
+    }
 
-	@Nonnull
-	@Override
-	protected List<LocalQuickFix> createMethodReferenceNPEFixes(PsiMethodReferenceExpression methodRef, boolean onTheFly)
-	{
-		List<LocalQuickFix> fixes = new ArrayList<>();
-		ContainerUtil.addIfNotNull(fixes, StreamFilterNotNullFix.makeFix(methodRef));
-		if (onTheFly)
-		{
-			fixes.add(new ReplaceWithTernaryOperatorFix.ReplaceMethodRefWithTernaryOperatorFix());
-		}
-		return fixes;
-	}
+    @Nonnull
+    @Override
+    protected List<LocalQuickFix> createMethodReferenceNPEFixes(PsiMethodReferenceExpression methodRef, boolean onTheFly) {
+        List<LocalQuickFix> fixes = new ArrayList<>();
+        ContainerUtil.addIfNotNull(fixes, StreamFilterNotNullFix.makeFix(methodRef));
+        if (onTheFly) {
+            fixes.add(new ReplaceWithTernaryOperatorFix.ReplaceMethodRefWithTernaryOperatorFix());
+        }
+        return fixes;
+    }
 
-	@Override
-	protected LocalQuickFix createRemoveAssignmentFix(PsiAssignmentExpression assignment)
-	{
-		if (assignment == null || assignment.getRExpression() == null || !(assignment.getParent() instanceof PsiExpressionStatement))
-		{
-			return null;
-		}
-		return new DeleteSideEffectsAwareFix((PsiStatement) assignment.getParent(), assignment.getRExpression(), true);
-	}
+    @Override
+    protected LocalQuickFix createRemoveAssignmentFix(PsiAssignmentExpression assignment) {
+        if (assignment == null || assignment.getRExpression() == null || !(assignment.getParent() instanceof PsiExpressionStatement)) {
+            return null;
+        }
+        return new DeleteSideEffectsAwareFix((PsiStatement) assignment.getParent(), assignment.getRExpression(), true);
+    }
 
-	@Override
-	@Nonnull
-	protected List<LocalQuickFix> createCastFixes(PsiTypeCastExpression castExpression,
-												  PsiType realType,
-												  boolean onTheFly,
-												  boolean alwaysFails)
-	{
-		List<LocalQuickFix> fixes = new ArrayList<>();
-		PsiExpression operand = castExpression.getOperand();
-		PsiTypeElement typeElement = castExpression.getCastType();
-		if (typeElement != null && operand != null)
-		{
-			if (!alwaysFails && !SideEffectChecker.mayHaveSideEffects(operand))
-			{
-				String suffix = " instanceof " + typeElement.getText();
-				fixes.add(new AddAssertStatementFix(ParenthesesUtils.getText(operand, PsiPrecedenceUtil.RELATIONAL_PRECEDENCE) + suffix));
-				if (onTheFly && SurroundWithIfFix.isAvailable(operand))
-				{
-					fixes.add(new SurroundWithIfFix(operand, suffix));
-				}
-			}
-			if (realType != null)
-			{
-				PsiType operandType = operand.getType();
-				if (operandType != null)
-				{
-					PsiType type = typeElement.getType();
-					PsiType[] types = {realType};
-					if (realType instanceof PsiIntersectionType intersectionType)
-					{
-						types = intersectionType.getConjuncts();
-					}
-					for (PsiType psiType : types)
-					{
-						if (!psiType.isAssignableFrom(operandType))
-						{
-							psiType = DfaPsiUtil.tryGenerify(operand, psiType);
-							fixes.add(new ReplaceTypeInCastFix(type, psiType));
-						}
-					}
-				}
-			}
-		}
-		return fixes;
-	}
+    @Override
+    @Nonnull
+    protected List<LocalQuickFix> createCastFixes(PsiTypeCastExpression castExpression,
+                                                  PsiType realType,
+                                                  boolean onTheFly,
+                                                  boolean alwaysFails) {
+        List<LocalQuickFix> fixes = new ArrayList<>();
+        PsiExpression operand = castExpression.getOperand();
+        PsiTypeElement typeElement = castExpression.getCastType();
+        if (typeElement != null && operand != null) {
+            if (!alwaysFails && !SideEffectChecker.mayHaveSideEffects(operand)) {
+                String suffix = " instanceof " + typeElement.getText();
+                fixes.add(new AddAssertStatementFix(ParenthesesUtils.getText(operand, PsiPrecedenceUtil.RELATIONAL_PRECEDENCE) + suffix));
+                if (onTheFly && SurroundWithIfFix.isAvailable(operand)) {
+                    fixes.add(new SurroundWithIfFix(operand, suffix));
+                }
+            }
+            if (realType != null) {
+                PsiType operandType = operand.getType();
+                if (operandType != null) {
+                    PsiType type = typeElement.getType();
+                    PsiType[] types = {realType};
+                    if (realType instanceof PsiIntersectionType intersectionType) {
+                        types = intersectionType.getConjuncts();
+                    }
+                    for (PsiType psiType : types) {
+                        if (!psiType.isAssignableFrom(operandType)) {
+                            psiType = DfaPsiUtil.tryGenerify(operand, psiType);
+                            fixes.add(new ReplaceTypeInCastFix(type, psiType));
+                        }
+                    }
+                }
+            }
+        }
+        return fixes;
+    }
 
-	@Override
-	@Nonnull
-	protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly, DataFlowInspectionStateBase state)
-	{
-		qualifier = PsiUtil.deparenthesizeExpression(qualifier);
+    @Override
+    @Nonnull
+    protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly, DataFlowInspectionStateBase state) {
+        qualifier = PsiUtil.deparenthesizeExpression(qualifier);
 
-		final List<LocalQuickFix> fixes = new SmartList<>();
-		if (qualifier == null || expression == null)
-		{
-			return fixes;
-		}
+        final List<LocalQuickFix> fixes = new SmartList<>();
+        if (qualifier == null || expression == null) {
+            return fixes;
+        }
 
-		try
-		{
-			ContainerUtil.addIfNotNull(fixes, StreamFilterNotNullFix.makeFix(qualifier));
-			ContainerUtil.addIfNotNull(fixes, ReplaceComputeWithComputeIfPresentFix.makeFix(qualifier));
-			if (isVolatileFieldReference(qualifier))
-			{
-				ContainerUtil.addIfNotNull(fixes, createIntroduceVariableFix());
-			}
-			else if (!ExpressionUtils.isNullLiteral(qualifier) && !SideEffectChecker.mayHaveSideEffects(qualifier))
-			{
-				String suffix = " != null";
-				if (PsiUtil.getLanguageLevel(qualifier).isAtLeast(LanguageLevel.JDK_1_4) &&
-						RefactoringUtil.getParentStatement(expression, false) != null)
-				{
-					String replacement = ParenthesesUtils.getText(qualifier, ParenthesesUtils.EQUALITY_PRECEDENCE) + suffix;
-					fixes.add(new AddAssertStatementFix(replacement));
-				}
+        try {
+            ContainerUtil.addIfNotNull(fixes, StreamFilterNotNullFix.makeFix(qualifier));
+            ContainerUtil.addIfNotNull(fixes, ReplaceComputeWithComputeIfPresentFix.makeFix(qualifier));
+            if (isVolatileFieldReference(qualifier)) {
+                ContainerUtil.addIfNotNull(fixes, createIntroduceVariableFix());
+            }
+            else if (!ExpressionUtils.isNullLiteral(qualifier) && !SideEffectChecker.mayHaveSideEffects(qualifier)) {
+                String suffix = " != null";
+                if (PsiUtil.getLanguageLevel(qualifier).isAtLeast(LanguageLevel.JDK_1_4) &&
+                    RefactoringUtil.getParentStatement(expression, false) != null) {
+                    String replacement = ParenthesesUtils.getText(qualifier, ParenthesesUtils.EQUALITY_PRECEDENCE) + suffix;
+                    fixes.add(new AddAssertStatementFix(replacement));
+                }
 
-				if (onTheFly && SurroundWithIfFix.isAvailable(qualifier))
-				{
-					fixes.add(new SurroundWithIfFix(qualifier, suffix));
-				}
+                if (onTheFly && SurroundWithIfFix.isAvailable(qualifier)) {
+                    fixes.add(new SurroundWithIfFix(qualifier, suffix));
+                }
 
-				if (onTheFly && ReplaceWithTernaryOperatorFix.isAvailable(qualifier, expression))
-				{
-					fixes.add(new ReplaceWithTernaryOperatorFix(qualifier));
-				}
-			}
+                if (onTheFly && ReplaceWithTernaryOperatorFix.isAvailable(qualifier, expression)) {
+                    fixes.add(new ReplaceWithTernaryOperatorFix(qualifier));
+                }
+            }
 
-			if (!ExpressionUtils.isNullLiteral(qualifier) && PsiUtil.isLanguageLevel7OrHigher(qualifier))
-			{
-				fixes.add(new SurroundWithRequireNonNullFix(qualifier));
-			}
+            if (!ExpressionUtils.isNullLiteral(qualifier) && PsiUtil.isLanguageLevel7OrHigher(qualifier)) {
+                fixes.add(new SurroundWithRequireNonNullFix(qualifier));
+            }
 
-			if (onTheFly && !ExpressionUtils.isNullLiteral(qualifier))
-			{
-				ContainerUtil.addIfNotNull(fixes, createExplainFix(qualifier, new TrackingRunner.NullableDfaProblemType(), state));
-			}
+            if (onTheFly && !ExpressionUtils.isNullLiteral(qualifier)) {
+                ContainerUtil.addIfNotNull(fixes, createExplainFix(qualifier, new TrackingRunner.NullableDfaProblemType(), state));
+            }
 
-			ContainerUtil.addIfNotNull(fixes, DfaOptionalSupport.registerReplaceOptionalOfWithOfNullableFix(qualifier));
-		}
-		catch (IncorrectOperationException e)
-		{
-			LOG.error(e);
-		}
-		return fixes;
-	}
+            ContainerUtil.addIfNotNull(fixes, DfaOptionalSupport.registerReplaceOptionalOfWithOfNullableFix(qualifier));
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+        return fixes;
+    }
 
-	@Override
-	protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter)
-	{
-		return new NullableStuffInspection.NavigateToNullLiteralArguments(parameter);
-	}
+    @Override
+    protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter) {
+        return new NullableStuffInspection.NavigateToNullLiteralArguments(parameter);
+    }
 
-	private static JCheckBox createCheckBoxWithHTML(String text, boolean selected, Consumer<? super JCheckBox> consumer)
-	{
-		JCheckBox box = new JCheckBox(wrapInHtml(text));
-		box.setVerticalTextPosition(TOP);
-		box.setSelected(selected);
-		box.getModel().addItemListener(event -> consumer.accept(box));
-		return box;
-	}
+    private static JCheckBox createCheckBoxWithHTML(String text, boolean selected, Consumer<? super JCheckBox> consumer) {
+        JCheckBox box = new JCheckBox(wrapInHtml(text));
+        box.setVerticalTextPosition(TOP);
+        box.setSelected(selected);
+        box.getModel().addItemListener(event -> consumer.accept(box));
+        return box;
+    }
 }

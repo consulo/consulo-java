@@ -34,8 +34,8 @@ public abstract class CyclicPackageDependencyInspection extends BaseGlobalInspec
 
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cyclicPackageDependencyDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.cyclicPackageDependencyDisplayName();
   }
 
   @Nullable

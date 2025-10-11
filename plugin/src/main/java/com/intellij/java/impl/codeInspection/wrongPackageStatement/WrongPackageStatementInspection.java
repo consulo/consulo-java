@@ -29,6 +29,7 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -112,8 +113,8 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.wrongPackageStatement().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.wrongPackageStatement();
   }
 
   @Override

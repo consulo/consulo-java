@@ -52,7 +52,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
 
   @Override
   @Nonnull
-  public final LocalizeValue getGroupDisplayName() {
+  public LocalizeValue getGroupDisplayName() {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 

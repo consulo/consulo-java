@@ -45,16 +45,16 @@ import consulo.language.psi.search.LowLevelSearchUtil;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -93,14 +93,14 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionDuplicatesDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionDuplicatesDisplayName();
   }
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesInternationalizationIssues().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesInternationalizationIssues();
   }
 
   @Override
@@ -350,8 +350,8 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.introduceConstantAcrossTheProject().get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.introduceConstantAcrossTheProject();
     }
 
     @Override
@@ -388,16 +388,10 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
         handler.invoke(project, expressionArray);
       });
     }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
-    }
   }
 
   private static class ReplaceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-    private final String myText;
+    private final LocalizeValue myText;
     private final SmartPsiElementPointer<PsiField> myConst;
 
     public ReplaceFix(PsiField constant, PsiLiteralExpression originalExpression) {
@@ -406,13 +400,13 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
         constant,
         PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME | PsiFormatUtilBase.SHOW_NAME,
         PsiSubstitutor.EMPTY)
-      ).get();
+      );
       myConst = SmartPointerManager.getInstance(constant.getProject()).createSmartPsiElementPointer(constant);
     }
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
       return myText;
     }
 
@@ -440,10 +434,9 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
       }
     }
 
-    @Override
     @Nonnull
-    public String getFamilyName() {
-      return InspectionLocalize.inspectionDuplicatesReplaceFamilyQuickfix().get();
+    public LocalizeValue getFamilyName() {
+      return InspectionLocalize.inspectionDuplicatesReplaceFamilyQuickfix();
     }
   }
 }

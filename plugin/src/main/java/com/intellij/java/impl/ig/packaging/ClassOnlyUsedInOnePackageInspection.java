@@ -29,102 +29,84 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 import java.util.Set;
 
-public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInspection
-{
-	@Nls
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.classOnlyUsedInOnePackageDisplayName().get();
-	}
+public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.classOnlyUsedInOnePackageDisplayName();
+    }
 
-	@Nullable
-	@Override
-	public CommonProblemDescriptor[] checkElement(
-		RefEntity refEntity,
-		AnalysisScope scope,
-		InspectionManager manager,
-		GlobalInspectionContext globalContext,
-		Object state
-	)
-	{
-		if (!(refEntity instanceof RefClass))
-		{
-			return null;
-		}
-		final RefClass refClass = (RefClass) refEntity;
-		final RefEntity owner = refClass.getOwner();
-		if (!(owner instanceof RefPackage))
-		{
-			return null;
-		}
-		final Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
-		RefPackage otherPackage = null;
-		for (RefClass dependency : dependencies)
-		{
-			final RefPackage refPackage = RefJavaUtil.getPackage(dependency);
-			if (owner == refPackage)
-			{
-				return null;
-			}
-			if (otherPackage != refPackage)
-			{
-				if (otherPackage == null)
-				{
-					otherPackage = refPackage;
-				}
-				else
-				{
-					return null;
-				}
-			}
-		}
-		final Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
-		for (RefClass dependent : dependents)
-		{
-			final RefPackage refPackage = RefJavaUtil.getPackage(dependent);
-			if (owner == refPackage)
-			{
-				return null;
-			}
-			if (otherPackage != refPackage)
-			{
-				if(otherPackage == null)
-				{
-					otherPackage = refPackage;
-				}
-				else
-				{
-					return null;
-				}
-			}
-		}
-		if (otherPackage == null)
-		{
-			return null;
-		}
-		final PsiClass aClass = refClass.getElement();
-		final PsiIdentifier identifier = aClass.getNameIdentifier();
-		if (identifier == null)
-		{
-			return null;
-		}
-		final String packageName = otherPackage.getName();
-		return new CommonProblemDescriptor[]{
-			manager.createProblemDescriptor(
-				identifier,
-				InspectionGadgetsLocalize.classOnlyUsedInOnePackageProblemDescriptor(packageName).get(),
-				true,
-				ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-				false
-			)
-		};
-	}
+    @Nullable
+    @Override
+    public CommonProblemDescriptor[] checkElement(
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        Object state
+    ) {
+        if (!(refEntity instanceof RefClass)) {
+            return null;
+        }
+        final RefClass refClass = (RefClass) refEntity;
+        final RefEntity owner = refClass.getOwner();
+        if (!(owner instanceof RefPackage)) {
+            return null;
+        }
+        final Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
+        RefPackage otherPackage = null;
+        for (RefClass dependency : dependencies) {
+            final RefPackage refPackage = RefJavaUtil.getPackage(dependency);
+            if (owner == refPackage) {
+                return null;
+            }
+            if (otherPackage != refPackage) {
+                if (otherPackage == null) {
+                    otherPackage = refPackage;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        final Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
+        for (RefClass dependent : dependents) {
+            final RefPackage refPackage = RefJavaUtil.getPackage(dependent);
+            if (owner == refPackage) {
+                return null;
+            }
+            if (otherPackage != refPackage) {
+                if (otherPackage == null) {
+                    otherPackage = refPackage;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        if (otherPackage == null) {
+            return null;
+        }
+        final PsiClass aClass = refClass.getElement();
+        final PsiIdentifier identifier = aClass.getNameIdentifier();
+        if (identifier == null) {
+            return null;
+        }
+        final String packageName = otherPackage.getName();
+        return new CommonProblemDescriptor[]{
+            manager.createProblemDescriptor(
+                identifier,
+                InspectionGadgetsLocalize.classOnlyUsedInOnePackageProblemDescriptor(packageName).get(),
+                true,
+                ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                false
+            )
+        };
+    }
 }

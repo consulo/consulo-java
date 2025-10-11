@@ -28,7 +28,7 @@ import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.content.scope.ScopeDescriptor;
 import consulo.content.scope.SearchScope;
 import consulo.ide.localize.IdeLocalize;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -49,7 +49,7 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
 
   @Override
   public String getDisplayName() {
-    return JavaBundle.message("java.scope.class.hierarchy");
+    return JavaLocalize.javaScopeClassHierarchy().get();
   }
 
   @Nullable

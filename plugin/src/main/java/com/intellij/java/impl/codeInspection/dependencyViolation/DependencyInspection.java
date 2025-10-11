@@ -33,12 +33,12 @@ import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,9 +50,7 @@ import java.util.ArrayList;
  */
 @ExtensionImpl
 public class DependencyInspection extends BaseLocalInspectionTool {
-
-  public static final String GROUP_DISPLAY_NAME = "";
-  @NonNls public static final String SHORT_NAME = "Dependency";
+  public static final String SHORT_NAME = "Dependency";
 
   @Override
   public boolean isEnabledByDefault() {
@@ -61,14 +59,14 @@ public class DependencyInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return DependencyInspection.GROUP_DISPLAY_NAME;
+  public LocalizeValue getGroupDisplayName() {
+    return LocalizeValue.empty();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.illegalPackageDependencies().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.illegalPackageDependencies();
   }
 
   @Override
@@ -135,11 +133,10 @@ public class DependencyInspection extends BaseLocalInspectionTool {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText()).get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText());
     }
 
-    @Override
     @Nonnull
     public String getFamilyName() {
       return InspectionLocalize.editDependencyRulesFamily().get();

@@ -61,8 +61,8 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.castThatLosesPrecisionDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.castThatLosesPrecisionDisplayName();
   }
 
   @Override

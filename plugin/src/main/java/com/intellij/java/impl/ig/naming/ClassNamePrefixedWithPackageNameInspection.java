@@ -23,6 +23,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.StringTokenizer;
@@ -32,8 +33,8 @@ public class ClassNamePrefixedWithPackageNameInspection
   extends BaseInspection {
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameDisplayName();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

@@ -27,6 +27,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -47,14 +48,14 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return "General";
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.inspectionGeneralToolsGroupName();
   }
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.defaultFileTemplateDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.defaultFileTemplateDisplayName();
   }
 
   @Override
@@ -91,8 +92,8 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 
     @Override
     @Nonnull
-    public String getFamilyName() {
-      return InspectionLocalize.defaultFileTemplateEditTemplate().get();
+    public LocalizeValue getName() {
+      return InspectionLocalize.defaultFileTemplateEditTemplate();
     }
 
     @Override

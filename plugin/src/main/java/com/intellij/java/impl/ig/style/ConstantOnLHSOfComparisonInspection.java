@@ -27,6 +27,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -41,8 +42,8 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.constantOnLhsOfComparisonDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.constantOnLhsOfComparisonDisplayName();
   }
 
   @Override
@@ -64,8 +65,8 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   private static class SwapComparisonFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.flipComparisonQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.flipComparisonQuickfix();
     }
 
     @Override

@@ -24,18 +24,17 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
 
   @Override
-  @Nls
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralDisplayName();
   }
 
   @Override
@@ -96,8 +95,8 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralQuickfix(replacementString).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralQuickfix(replacementString);
     }
 
     @Override

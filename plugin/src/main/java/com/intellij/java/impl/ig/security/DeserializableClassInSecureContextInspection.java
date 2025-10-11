@@ -41,8 +41,8 @@ public class DeserializableClassInSecureContextInspection extends BaseInspection
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.deserializableClassInSecureContextDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.deserializableClassInSecureContextDisplayName();
   }
 
   @Override

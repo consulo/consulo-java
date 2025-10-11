@@ -39,8 +39,8 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getDisplayName() {
-    return InspectionLocalize.inspectionDuplicateThrowsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionLocalize.inspectionDuplicateThrowsDisplayName();
   }
 
   @Override
@@ -50,8 +50,8 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public String getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+  public LocalizeValue getGroupDisplayName() {
+    return InspectionLocalize.groupNamesDeclarationRedundancy();
   }
 
   @Override

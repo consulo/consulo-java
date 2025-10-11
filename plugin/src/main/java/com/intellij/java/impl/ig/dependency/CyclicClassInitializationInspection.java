@@ -34,8 +34,8 @@ import java.util.Set;
 public abstract class CyclicClassInitializationInspection extends BaseGlobalInspection {
   @Nonnull
   @Override
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.cyclicClassInitializationDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.cyclicClassInitializationDisplayName();
   }
 
   @Nullable

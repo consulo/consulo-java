@@ -23,6 +23,7 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -34,8 +35,8 @@ public class ChainedEqualityInspection extends BaseInspection {
   }
 
   @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.chainedEqualityComparisonsDisplayName().get();
+  public LocalizeValue getDisplayName() {
+    return InspectionGadgetsLocalize.chainedEqualityComparisonsDisplayName();
   }
 
   @Nonnull

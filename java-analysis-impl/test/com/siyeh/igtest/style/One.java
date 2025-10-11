@@ -2,6 +2,7 @@ package com.siyeh.igtest.style;
 
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 public class One extends BaseInspection {
@@ -10,8 +11,8 @@ public class One extends BaseInspection {
         return null;
     }
 
-    public String getGroupDisplayName() {
-        return null;
+    public LocalizeValue getGroupDisplayName() {
+        return LocalizeValue.empty();
     }
 
     @Nonnull
@@ -19,8 +20,8 @@ public class One extends BaseInspection {
         return null;
     }
 
-    public String getDisplayName() {
-        return null;
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.of();
     }
 
     private static class Inner {
