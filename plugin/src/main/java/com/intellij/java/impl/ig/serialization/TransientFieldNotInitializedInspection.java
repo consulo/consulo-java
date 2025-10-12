@@ -22,79 +22,75 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TransientFieldNotInitializedInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.transientFieldNotInitializedDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.transientFieldNotInitializedProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReadObjectInitializationVisitor();
-  }
-
-  private static class ReadObjectInitializationVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitField(PsiField field) {
-      super.visitField(field);
-      if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
-        return;
-      }
-      final PsiClass containingClass = field.getContainingClass();
-      if (!SerializationUtils.isSerializable(containingClass)) {
-        return;
-      }
-      final PsiExpression initializer = field.getInitializer();
-      if (initializer == null &&
-          !isInitializedInInitializer(field, containingClass) &&
-          !isInitializedInConstructors(field, containingClass)) {
-        return;
-      }
-      if (SerializationUtils.hasReadObject(containingClass)) {
-        return;
-      }
-      registerFieldError(field);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.transientFieldNotInitializedDisplayName();
     }
 
-    private static boolean isInitializedInConstructors(
-      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      if (constructors.length == 0) {
-        return false;
-      }
-      for (final PsiMethod constructor : constructors) {
-        if (!InitializationUtils.methodAssignsVariableOrFails(
-          constructor, field)) {
-          return false;
-        }
-      }
-      return true;
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.transientFieldNotInitializedProblemDescriptor().get();
     }
 
-    private static boolean isInitializedInInitializer(
-      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
-      final PsiClassInitializer[] initializers = aClass.getInitializers();
-      for (final PsiClassInitializer initializer : initializers) {
-        if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
-          continue;
-        }
-        final PsiCodeBlock body = initializer.getBody();
-        if (InitializationUtils.blockAssignsVariableOrFails(body,
-                                                            field)) {
-          return true;
-        }
-      }
-      return false;
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReadObjectInitializationVisitor();
     }
-  }
+
+    private static class ReadObjectInitializationVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(PsiField field) {
+            super.visitField(field);
+            if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
+                return;
+            }
+            final PsiClass containingClass = field.getContainingClass();
+            if (!SerializationUtils.isSerializable(containingClass)) {
+                return;
+            }
+            final PsiExpression initializer = field.getInitializer();
+            if (initializer == null &&
+                !isInitializedInInitializer(field, containingClass) &&
+                !isInitializedInConstructors(field, containingClass)) {
+                return;
+            }
+            if (SerializationUtils.hasReadObject(containingClass)) {
+                return;
+            }
+            registerFieldError(field);
+        }
+
+        private static boolean isInitializedInConstructors(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
+            final PsiMethod[] constructors = aClass.getConstructors();
+            if (constructors.length == 0) {
+                return false;
+            }
+            for (final PsiMethod constructor : constructors) {
+                if (!InitializationUtils.methodAssignsVariableOrFails(
+                    constructor, field)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static boolean isInitializedInInitializer(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
+            final PsiClassInitializer[] initializers = aClass.getInitializers();
+            for (final PsiClassInitializer initializer : initializers) {
+                if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
+                    continue;
+                }
+                final PsiCodeBlock body = initializer.getBody();
+                if (InitializationUtils.blockAssignsVariableOrFails(body, field)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

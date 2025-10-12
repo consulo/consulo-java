@@ -24,68 +24,64 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
-public class SerialPersistentFieldsWithWrongSignatureInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerialPersistentFieldsWithWrongSignatureVisitor();
-  }
-
-  private static class SerialPersistentFieldsWithWrongSignatureVisitor
-    extends BaseInspectionVisitor {
-
+public class SerialPersistentFieldsWithWrongSignatureInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      PsiField badSerialPersistentFields = null;
-      final PsiField[] fields = aClass.getFields();
-      for (final PsiField field : fields) {
-        if (isSerialPersistentFields(field)) {
-          if (!field.hasModifierProperty(PsiModifier.PRIVATE) ||
-              !field.hasModifierProperty(PsiModifier.STATIC) ||
-              !field.hasModifierProperty(PsiModifier.FINAL)) {
-            badSerialPersistentFields = field;
-            break;
-          }
-          else {
-            final PsiType type = field.getType();
-            if (!type.equalsToText("java.io.ObjectStreamField" +
-                                   "[]")) {
-              badSerialPersistentFields = field;
-              break;
-            }
-          }
-        }
-      }
-      if (badSerialPersistentFields == null) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerFieldError(badSerialPersistentFields);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureDisplayName();
     }
 
-    private static boolean isSerialPersistentFields(PsiField field) {
-      @NonNls final String fieldName = field.getName();
-      return "serialPersistentFields".equals(fieldName);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureProblemDescriptor().get();
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerialPersistentFieldsWithWrongSignatureVisitor();
+    }
+
+    private static class SerialPersistentFieldsWithWrongSignatureVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            PsiField badSerialPersistentFields = null;
+            final PsiField[] fields = aClass.getFields();
+            for (final PsiField field : fields) {
+                if (isSerialPersistentFields(field)) {
+                    if (!field.hasModifierProperty(PsiModifier.PRIVATE) ||
+                        !field.hasModifierProperty(PsiModifier.STATIC) ||
+                        !field.hasModifierProperty(PsiModifier.FINAL)) {
+                        badSerialPersistentFields = field;
+                        break;
+                    }
+                    else {
+                        final PsiType type = field.getType();
+                        if (!type.equalsToText("java.io.ObjectStreamField[]")) {
+                            badSerialPersistentFields = field;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (badSerialPersistentFields == null) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerFieldError(badSerialPersistentFields);
+        }
+
+        private static boolean isSerialPersistentFields(PsiField field) {
+            final String fieldName = field.getName();
+            return "serialPersistentFields".equals(fieldName);
+        }
+    }
 }

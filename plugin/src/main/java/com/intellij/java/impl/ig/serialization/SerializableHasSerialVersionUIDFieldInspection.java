@@ -23,68 +23,67 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class SerializableHasSerialVersionUIDFieldInspection extends SerializableInspection {
+    @Pattern("[a-zA-Z_0-9.-]+")
+    @Override
+    @Nonnull
+    public String getID() {
+        return "serial";
+    }
 
-  @Pattern("[a-zA-Z_0-9.-]+")
-  @Override
-  @Nonnull
-  public String getID() {
-    return "serial";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new AddSerialVersionUIDFix();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerializableHasSerialVersionUIDFieldVisitor();
-  }
-
-  private class SerializableHasSerialVersionUIDFieldVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter || aClass instanceof PsiEnumConstantInitializer) {
-        return;
-      }
-      if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
-        return;
-      }
-      final PsiField serialVersionUIDField = aClass.findFieldByName(HardcodedMethodConstants.SERIAL_VERSION_UID, false);
-      if (serialVersionUIDField != null) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      if (SerializationUtils.hasWriteReplace(aClass)) {
-        return;
-      }
-      if (isIgnoredSubclass(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidProblemDescriptor().get();
     }
-  }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new AddSerialVersionUIDFix();
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerializableHasSerialVersionUIDFieldVisitor();
+    }
+
+    private class SerializableHasSerialVersionUIDFieldVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter || aClass instanceof PsiEnumConstantInitializer) {
+                return;
+            }
+            if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
+                return;
+            }
+            final PsiField serialVersionUIDField = aClass.findFieldByName(HardcodedMethodConstants.SERIAL_VERSION_UID, false);
+            if (serialVersionUIDField != null) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            if (SerializationUtils.hasWriteReplace(aClass)) {
+                return;
+            }
+            if (isIgnoredSubclass(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

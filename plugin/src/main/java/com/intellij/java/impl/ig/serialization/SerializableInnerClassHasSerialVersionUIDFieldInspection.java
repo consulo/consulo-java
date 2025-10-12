@@ -20,32 +20,32 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class SerializableInnerClassHasSerialVersionUIDFieldInspection
-  extends SerializableInspection {
+public class SerializableInnerClassHasSerialVersionUIDFieldInspection extends SerializableInspection {
+    @Nonnull
+    public String getID() {
+        return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
+    }
 
-  @Nonnull
-  public String getID() {
-    return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldDisplayName();
+    }
 
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldDisplayName().get();
-  }
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldProblemDescriptor().get();
+    }
 
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldProblemDescriptor().get();
-  }
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new AddSerialVersionUIDFix();
+    }
 
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new AddSerialVersionUIDFix();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerializableInnerClassHasSerialVersionUIDFieldVisitor(this);
-  }
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerializableInnerClassHasSerialVersionUIDFieldVisitor(this);
+    }
 }

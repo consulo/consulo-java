@@ -23,72 +23,63 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class SerializableHasSerializationMethodsInspection
-  extends SerializableInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableHasSerializationMethodsDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final boolean hasReadObject = (Boolean)infos[0];
-    final boolean hasWriteObject = (Boolean)infos[1];
-    if (!hasReadObject && !hasWriteObject) {
-      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor().get();
+public class SerializableHasSerializationMethodsInspection extends SerializableInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serializableHasSerializationMethodsDisplayName();
     }
-    else if (hasReadObject) {
-      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor1().get();
-    }
-    else {
-      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor2().get();
-    }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerializableHasSerializationMethodsVisitor();
-  }
-
-  private class SerializableHasSerializationMethodsVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType() ||
-          aClass.isEnum()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter ||
-          aClass instanceof PsiEnumConstantInitializer) {
-        return;
-      }
-      if (ignoreAnonymousInnerClasses &&
-          aClass instanceof PsiAnonymousClass) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      final boolean hasReadObject =
-        SerializationUtils.hasReadObject(aClass);
-      final boolean hasWriteObject =
-        SerializationUtils.hasWriteObject(aClass);
-      if (hasWriteObject && hasReadObject) {
-        return;
-      }
-      if (isIgnoredSubclass(aClass)) {
-        return;
-      }
-      registerClassError(aClass, Boolean.valueOf(hasReadObject),
-                         Boolean.valueOf(hasWriteObject));
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final boolean hasReadObject = (Boolean) infos[0];
+        final boolean hasWriteObject = (Boolean) infos[1];
+        if (!hasReadObject && !hasWriteObject) {
+            return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor().get();
+        }
+        else if (hasReadObject) {
+            return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor1().get();
+        }
+        else {
+            return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor2().get();
+        }
     }
-  }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerializableHasSerializationMethodsVisitor();
+    }
+
+    private class SerializableHasSerializationMethodsVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter || aClass instanceof PsiEnumConstantInitializer) {
+                return;
+            }
+            if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            final boolean hasReadObject = SerializationUtils.hasReadObject(aClass);
+            final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
+            if (hasWriteObject && hasReadObject) {
+                return;
+            }
+            if (isIgnoredSubclass(aClass)) {
+                return;
+            }
+            registerClassError(aClass, Boolean.valueOf(hasReadObject), Boolean.valueOf(hasWriteObject));
+        }
+    }
 }

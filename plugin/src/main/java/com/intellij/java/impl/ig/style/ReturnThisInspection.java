@@ -21,48 +21,48 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReturnThisInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "ReturnOfThis";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.returnThisDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.returnThisProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReturnThisVisitor();
-  }
-
-  private static class ReturnThisVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
-      super.visitThisExpression(thisValue);
-      if (thisValue.getQualifier() != null) {
-        return;
-      }
-      PsiElement parent = thisValue.getParent();
-      while (parent instanceof PsiParenthesizedExpression ||
-              parent instanceof PsiConditionalExpression ||
-              parent instanceof PsiTypeCastExpression) {
-        parent = parent.getParent();
-      }
-      if (!(parent instanceof PsiReturnStatement)) {
-        return;
-      }
-      registerError(thisValue);
+    @Nonnull
+    public String getID() {
+        return "ReturnOfThis";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.returnThisDisplayName();
+    }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.returnThisProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReturnThisVisitor();
+    }
+
+    private static class ReturnThisVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
+            super.visitThisExpression(thisValue);
+            if (thisValue.getQualifier() != null) {
+                return;
+            }
+            PsiElement parent = thisValue.getParent();
+            while (parent instanceof PsiParenthesizedExpression ||
+                parent instanceof PsiConditionalExpression ||
+                parent instanceof PsiTypeCastExpression) {
+                parent = parent.getParent();
+            }
+            if (!(parent instanceof PsiReturnStatement)) {
+                return;
+            }
+            registerError(thisValue);
+        }
+    }
 }

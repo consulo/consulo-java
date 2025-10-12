@@ -23,64 +23,64 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnqualifiedFieldAccessInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unqualifiedFieldAccessDisplayName().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnqualifiedFieldAccessVisitor();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.unqualifiedFieldAccessProblemDescriptor().get();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new AddThisQualifierFix();
-  }
-
-  private static class UnqualifiedFieldAccessVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unqualifiedFieldAccessDisplayName();
+    }
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
-      super.visitReferenceExpression(expression);
-      final PsiExpression qualifierExpression = expression.getQualifierExpression();
-      if (qualifierExpression != null) {
-        return;
-      }
-      final PsiReferenceParameterList parameterList = expression.getParameterList();
-      if (parameterList == null) {
-        return;
-      }
-      if (parameterList.getTypeArguments().length > 0) {
-        // optimization: reference with type arguments are
-        // definitely not references to fields.
-        return;
-      }
-      final PsiElement element = expression.resolve();
-      if (!(element instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)element;
-      if (field.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiClass containingClass = field.getContainingClass();
-      if (containingClass instanceof PsiAnonymousClass) {
-        return;
-      }
-      registerError(expression);
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnqualifiedFieldAccessVisitor();
     }
-  }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.unqualifiedFieldAccessProblemDescriptor().get();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new AddThisQualifierFix();
+    }
+
+    private static class UnqualifiedFieldAccessVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+            super.visitReferenceExpression(expression);
+            final PsiExpression qualifierExpression = expression.getQualifierExpression();
+            if (qualifierExpression != null) {
+                return;
+            }
+            final PsiReferenceParameterList parameterList = expression.getParameterList();
+            if (parameterList == null) {
+                return;
+            }
+            if (parameterList.getTypeArguments().length > 0) {
+                // optimization: reference with type arguments are
+                // definitely not references to fields.
+                return;
+            }
+            final PsiElement element = expression.resolve();
+            if (!(element instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) element;
+            if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass instanceof PsiAnonymousClass) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }
