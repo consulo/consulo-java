@@ -25,58 +25,54 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class ReadResolveAndWriteReplaceProtectedInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.readresolveWritereplaceProtectedDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.readresolveWritereplaceProtectedProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ReadResolveWriteReplaceProtectedVisitor();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new ChangeModifierFix(PsiModifier.PROTECTED);
-  }
-
-  private static class ReadResolveWriteReplaceProtectedVisitor
-    extends BaseInspectionVisitor {
-
+public class ReadResolveAndWriteReplaceProtectedInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      // no call to super, so it doesn't drill down
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (method.hasModifierProperty(PsiModifier.PROTECTED)) {
-        return;
-      }
-      if (aClass.hasModifierProperty(PsiModifier.FINAL) &&
-          method.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      if (!SerializationUtils.isReadResolve(method) &&
-          !SerializationUtils.isWriteReplace(method)) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerMethodError(method);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.readresolveWritereplaceProtectedDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.readresolveWritereplaceProtectedProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ReadResolveWriteReplaceProtectedVisitor();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new ChangeModifierFix(PsiModifier.PROTECTED);
+    }
+
+    private static class ReadResolveWriteReplaceProtectedVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            // no call to super, so it doesn't drill down
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (method.hasModifierProperty(PsiModifier.PROTECTED)) {
+                return;
+            }
+            if (aClass.hasModifierProperty(PsiModifier.FINAL) && method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            if (!SerializationUtils.isReadResolve(method) && !SerializationUtils.isWriteReplace(method)) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerMethodError(method);
+        }
+    }
 }

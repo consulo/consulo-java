@@ -26,6 +26,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -34,78 +35,77 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class RedundantFieldInitializationInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean onlyWarnOnNull = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean onlyWarnOnNull = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.redundantFieldInitializationDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.redundantFieldInitializationProblemDescriptor().get();
-  }
-
-  @Nullable
-  @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel("Only warn on initialization to null", this, "onlyWarnOnNull");
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new RedundantFieldInitializationFix();
-  }
-
-  private static class RedundantFieldInitializationFix extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.redundantFieldInitializationDisplayName();
+    }
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.redundantFieldInitializationRemoveQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.redundantFieldInitializationProblemDescriptor().get();
+    }
+
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        return new SingleCheckboxOptionsPanel("Only warn on initialization to null", this, "onlyWarnOnNull");
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      descriptor.getPsiElement().delete();
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new RedundantFieldInitializationFix();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new RedundantFieldInitializationVisitor();
-  }
+    private static class RedundantFieldInitializationFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.redundantFieldInitializationRemoveQuickfix();
+        }
 
-  private class RedundantFieldInitializationVisitor extends BaseInspectionVisitor {
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            descriptor.getPsiElement().delete();
+        }
+    }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
-      super.visitField(field);
-      if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
-        return;
-      }
-      final PsiExpression initializer = field.getInitializer();
-      if (initializer == null) {
-        return;
-      }
-      final String text = initializer.getText();
-      final PsiType type = field.getType();
-      if (PsiType.BOOLEAN.equals(type)) {
-        if (onlyWarnOnNull || !PsiKeyword.FALSE.equals(text)) {
-          return;
-        }
-      } else if (type instanceof PsiPrimitiveType) {
-        if (onlyWarnOnNull || !ExpressionUtils.isZero(initializer)) {
-          return;
-        }
-      } else if (!PsiType.NULL.equals(initializer.getType())) {
-        return;
-      }
-      registerError(initializer, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+    public BaseInspectionVisitor buildVisitor() {
+        return new RedundantFieldInitializationVisitor();
     }
-  }
+
+    private class RedundantFieldInitializationVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            super.visitField(field);
+            if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
+                return;
+            }
+            final PsiExpression initializer = field.getInitializer();
+            if (initializer == null) {
+                return;
+            }
+            final String text = initializer.getText();
+            final PsiType type = field.getType();
+            if (PsiType.BOOLEAN.equals(type)) {
+                if (onlyWarnOnNull || !PsiKeyword.FALSE.equals(text)) {
+                    return;
+                }
+            }
+            else if (type instanceof PsiPrimitiveType) {
+                if (onlyWarnOnNull || !ExpressionUtils.isZero(initializer)) {
+                    return;
+                }
+            }
+            else if (!PsiType.NULL.equals(initializer.getType())) {
+                return;
+            }
+            registerError(initializer, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+        }
+    }
 }

@@ -28,108 +28,106 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryEnumModifierInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryEnumModifierDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiElement parent = (PsiElement)infos[1];
-    return parent instanceof PsiMethod
-      ? InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor().get()
-      : InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor1().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryEnumModifierVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessaryEnumModifierFix((PsiElement)infos[0]);
-  }
-
-  private static class UnnecessaryEnumModifierFix extends InspectionGadgetsFix {
-
-    private final String m_name;
-
-    private UnnecessaryEnumModifierFix(PsiElement modifier) {
-      m_name = InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifier.getText()).get();
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryEnumModifierDisplayName();
     }
 
     @Override
     @Nonnull
-    public String getName() {
-      return m_name;
+    public String buildErrorString(Object... infos) {
+        final PsiElement parent = (PsiElement) infos[1];
+        return parent instanceof PsiMethod
+            ? InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor().get()
+            : InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor1().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiModifierList modifierList;
-      if (element instanceof PsiModifierList) {
-        modifierList = (PsiModifierList)element;
-      }
-      else {
-        modifierList = (PsiModifierList)element.getParent();
-      }
-      assert modifierList != null;
-      if (modifierList.getParent() instanceof PsiClass) {
-        modifierList.setModifierProperty(PsiModifier.STATIC, false);
-      }
-      else {
-        modifierList.setModifierProperty(PsiModifier.PRIVATE, false);
-      }
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryEnumModifierVisitor();
     }
-  }
-
-  private static class UnnecessaryEnumModifierVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (!aClass.isEnum() || !ClassUtils.isInnerClass(aClass) || !aClass.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
-      final PsiModifierList modifiers = aClass.getModifierList();
-      if (modifiers == null) {
-        return;
-      }
-      final PsiElement[] children = modifiers.getChildren();
-      for (final PsiElement child : children) {
-        final String text = child.getText();
-        if (PsiModifier.STATIC.equals(text)) {
-          registerError(child, child, aClass);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessaryEnumModifierFix((PsiElement) infos[0]);
+    }
+
+    private static class UnnecessaryEnumModifierFix extends InspectionGadgetsFix {
+        private final LocalizeValue myName;
+
+        private UnnecessaryEnumModifierFix(PsiElement modifier) {
+            myName = InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifier.getText());
         }
-      }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return myName;
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiModifierList modifierList;
+            if (element instanceof PsiModifierList) {
+                modifierList = (PsiModifierList) element;
+            }
+            else {
+                modifierList = (PsiModifierList) element.getParent();
+            }
+            assert modifierList != null;
+            if (modifierList.getParent() instanceof PsiClass) {
+                modifierList.setModifierProperty(PsiModifier.STATIC, false);
+            }
+            else {
+                modifierList.setModifierProperty(PsiModifier.PRIVATE, false);
+            }
+        }
     }
 
-    @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!method.isConstructor() || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null || !aClass.isEnum()) {
-        return;
-      }
-      final PsiModifierList modifiers = method.getModifierList();
-      final PsiElement[] children = modifiers.getChildren();
-      for (final PsiElement child : children) {
-        final String text = child.getText();
-        if (PsiModifier.PRIVATE.equals(text)) {
-          registerError(child, child, method);
+    private static class UnnecessaryEnumModifierVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (!aClass.isEnum() || !ClassUtils.isInnerClass(aClass) || !aClass.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+            final PsiModifierList modifiers = aClass.getModifierList();
+            if (modifiers == null) {
+                return;
+            }
+            final PsiElement[] children = modifiers.getChildren();
+            for (final PsiElement child : children) {
+                final String text = child.getText();
+                if (PsiModifier.STATIC.equals(text)) {
+                    registerError(child, child, aClass);
+                }
+            }
         }
-      }
+
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!method.isConstructor() || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null || !aClass.isEnum()) {
+                return;
+            }
+            final PsiModifierList modifiers = method.getModifierList();
+            final PsiElement[] children = modifiers.getChildren();
+            for (final PsiElement child : children) {
+                final String text = child.getText();
+                if (PsiModifier.PRIVATE.equals(text)) {
+                    registerError(child, child, method);
+                }
+            }
+        }
     }
-  }
 }

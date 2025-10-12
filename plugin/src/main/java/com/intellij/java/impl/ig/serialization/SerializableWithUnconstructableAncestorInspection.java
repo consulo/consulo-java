@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -31,70 +32,69 @@ import java.util.Set;
 
 @ExtensionImpl
 public class SerializableWithUnconstructableAncestorInspection extends BaseInspection {
+    @Override
+    @Nonnull
+    public String getID() {
+        return "SerializableClassWithUnconstructableAncestor";
+    }
 
-  @Override
-  @Nonnull
-  public String getID() {
-    return "SerializableClassWithUnconstructableAncestor";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiClass ancestor = (PsiClass)infos[0];
-    return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorProblemDescriptor(ancestor.getName()).get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerializableWithUnconstructableAncestorVisitor();
-  }
-
-  private static class SerializableWithUnconstructableAncestorVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass) || SerializationUtils.hasWriteReplace(aClass)) {
-        return;
-      }
-      PsiClass ancestor = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>(8);
-      while (ancestor != null && SerializationUtils.isSerializable(ancestor)) {
-        if (SerializationUtils.hasWriteReplace(ancestor)) {
-          return;
-        }
-        ancestor = ancestor.getSuperClass();
-        if (!visitedClasses.add(ancestor)) {
-          return;
-        }
-      }
-      if (ancestor == null || classHasNoArgConstructor(ancestor)) {
-        return;
-      }
-      registerClassError(aClass, ancestor);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiClass ancestor = (PsiClass) infos[0];
+        return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorProblemDescriptor(ancestor.getName()).get();
     }
 
-    private static boolean classHasNoArgConstructor(PsiClass aClass) {
-      boolean hasConstructor = false;
-      boolean hasNoArgConstructor = false;
-      for (final PsiMethod constructor : aClass.getConstructors()) {
-        hasConstructor = true;
-        final PsiParameterList parameterList = constructor.getParameterList();
-        if (parameterList.getParametersCount() == 0 &&
-            (constructor.hasModifierProperty(PsiModifier.PUBLIC) || constructor.hasModifierProperty(PsiModifier.PROTECTED))) {
-          hasNoArgConstructor = true;
-        }
-      }
-      return hasNoArgConstructor || !hasConstructor;
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerializableWithUnconstructableAncestorVisitor();
     }
-  }
+
+    private static class SerializableWithUnconstructableAncestorVisitor extends BaseInspectionVisitor {
+
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass) || SerializationUtils.hasWriteReplace(aClass)) {
+                return;
+            }
+            PsiClass ancestor = aClass.getSuperClass();
+            final Set<PsiClass> visitedClasses = new HashSet<PsiClass>(8);
+            while (ancestor != null && SerializationUtils.isSerializable(ancestor)) {
+                if (SerializationUtils.hasWriteReplace(ancestor)) {
+                    return;
+                }
+                ancestor = ancestor.getSuperClass();
+                if (!visitedClasses.add(ancestor)) {
+                    return;
+                }
+            }
+            if (ancestor == null || classHasNoArgConstructor(ancestor)) {
+                return;
+            }
+            registerClassError(aClass, ancestor);
+        }
+
+        private static boolean classHasNoArgConstructor(PsiClass aClass) {
+            boolean hasConstructor = false;
+            boolean hasNoArgConstructor = false;
+            for (final PsiMethod constructor : aClass.getConstructors()) {
+                hasConstructor = true;
+                final PsiParameterList parameterList = constructor.getParameterList();
+                if (parameterList.getParametersCount() == 0 &&
+                    (constructor.hasModifierProperty(PsiModifier.PUBLIC) || constructor.hasModifierProperty(PsiModifier.PROTECTED))) {
+                    hasNoArgConstructor = true;
+                }
+            }
+            return hasNoArgConstructor || !hasConstructor;
+        }
+    }
 }

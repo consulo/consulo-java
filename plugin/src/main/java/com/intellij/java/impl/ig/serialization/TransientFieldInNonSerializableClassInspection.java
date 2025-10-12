@@ -27,60 +27,55 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class TransientFieldInNonSerializableClassInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.transientFieldInNonSerializableClassDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
-    return InspectionGadgetsLocalize.transientFieldInNonSerializableClassProblemDescriptor(field.getName()).get();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new TransientFieldInNonSerializableClassFix();
-  }
-
-
-  private static class TransientFieldInNonSerializableClassFix
-    extends InspectionGadgetsFix {
+public class TransientFieldInNonSerializableClassInspection extends BaseInspection {
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.transientFieldInNonSerializableClassDisplayName();
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.transientFieldInNonSerializableClassRemoveQuickfix().get();
+    public String buildErrorString(Object... infos) {
+        final PsiField field = (PsiField) infos[0];
+        return InspectionGadgetsLocalize.transientFieldInNonSerializableClassProblemDescriptor(field.getName()).get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement transientModifier = descriptor.getPsiElement();
-      deleteElement(transientModifier);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new TransientFieldInNonSerializableClassFix();
     }
-  }
 
-  public BaseInspectionVisitor buildVisitor() {
-    return new TransientFieldInNonSerializableClassVisitor();
-  }
+  private static class TransientFieldInNonSerializableClassFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.transientFieldInNonSerializableClassRemoveQuickfix();
+        }
 
-  private static class TransientFieldInNonSerializableClassVisitor
-    extends BaseInspectionVisitor {
-
-    @Override
-    public void visitField(@Nonnull PsiField field) {
-      if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
-        return;
-      }
-      final PsiClass aClass = field.getContainingClass();
-      if (SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerModifierError(PsiModifier.TRANSIENT, field, field);
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement transientModifier = descriptor.getPsiElement();
+            deleteElement(transientModifier);
+        }
     }
-  }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new TransientFieldInNonSerializableClassVisitor();
+    }
+
+    private static class TransientFieldInNonSerializableClassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitField(@Nonnull PsiField field) {
+            if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
+                return;
+            }
+            final PsiClass aClass = field.getContainingClass();
+            if (SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerModifierError(PsiModifier.TRANSIENT, field, field);
+        }
+    }
 }

@@ -26,136 +26,127 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.typeParameterExtendsObjectDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "TypeParameterExplicitlyExtendsObject";
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    final Integer type = (Integer)infos[0];
-    return type == 1
-      ? InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor1().get()
-      : InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor2().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ExtendsObjectFix();
-  }
-
-  private static class ExtendsObjectFix extends InspectionGadgetsFix {
-
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.typeParameterExtendsObjectDisplayName();
     }
 
     @Override
-    public void doFix(@Nonnull Project project,
-                      ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement identifier = descriptor.getPsiElement();
-      final PsiElement parent = identifier.getParent();
-      if (parent instanceof PsiTypeParameter) {
-        final PsiTypeParameter typeParameter =
-          (PsiTypeParameter)parent;
-        final PsiReferenceList extendsList =
-          typeParameter.getExtendsList();
-        final PsiJavaCodeReferenceElement[] referenceElements =
-          extendsList.getReferenceElements();
-        for (PsiJavaCodeReferenceElement referenceElement :
-          referenceElements) {
-          deleteElement(referenceElement);
+    @Nonnull
+    public String getID() {
+        return "TypeParameterExplicitlyExtendsObject";
+    }
+
+    @Override
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        final Integer type = (Integer) infos[0];
+        return type == 1
+            ? InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor1().get()
+            : InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor2().get();
+    }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new ExtendsObjectFix();
+    }
+
+    private static class ExtendsObjectFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix();
         }
-      }
-      else {
-        final PsiTypeElement typeElement = (PsiTypeElement)parent;
-        PsiElement child = typeElement.getLastChild();
-        while (child != null) {
-          if (child instanceof PsiJavaToken) {
-            final PsiJavaToken javaToken = (PsiJavaToken)child;
-            final IElementType tokenType = javaToken.getTokenType();
-            if (tokenType == JavaTokenType.QUEST) {
-              return;
+
+        @Override
+        public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement identifier = descriptor.getPsiElement();
+            final PsiElement parent = identifier.getParent();
+            if (parent instanceof PsiTypeParameter) {
+                final PsiTypeParameter typeParameter = (PsiTypeParameter) parent;
+                final PsiReferenceList extendsList = typeParameter.getExtendsList();
+                final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+                for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
+                    deleteElement(referenceElement);
+                }
             }
-          }
-          child.delete();
-          child = typeElement.getLastChild();
+            else {
+                final PsiTypeElement typeElement = (PsiTypeElement) parent;
+                PsiElement child = typeElement.getLastChild();
+                while (child != null) {
+                    if (child instanceof PsiJavaToken) {
+                        final PsiJavaToken javaToken = (PsiJavaToken) child;
+                        final IElementType tokenType = javaToken.getTokenType();
+                        if (tokenType == JavaTokenType.QUEST) {
+                            return;
+                        }
+                    }
+                    child.delete();
+                    child = typeElement.getLastChild();
+                }
+            }
         }
-      }
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ExtendsObjectVisitor();
-  }
-
-  private static class ExtendsObjectVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitTypeParameter(PsiTypeParameter parameter) {
-      super.visitTypeParameter(parameter);
-      final PsiClassType[] extendsListTypes =
-        parameter.getExtendsListTypes();
-      if (extendsListTypes.length != 1) {
-        return;
-      }
-      final PsiClassType extendsType = extendsListTypes[0];
-      if (!extendsType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
-        return;
-      }
-      final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
-      if (nameIdentifier == null) {
-        return;
-      }
-      registerError(nameIdentifier, Integer.valueOf(1));
     }
 
-
-    @Override
-    public void visitTypeElement(PsiTypeElement typeElement) {
-      super.visitTypeElement(typeElement);
-      final PsiElement lastChild = typeElement.getLastChild();
-      if (!(lastChild instanceof PsiTypeElement)) {
-        return;
-      }
-      final PsiType type = typeElement.getType();
-      if (!(type instanceof PsiWildcardType)) {
-        return;
-      }
-      final PsiWildcardType wildcardType = (PsiWildcardType)type;
-      if (!wildcardType.isExtends()) {
-        return;
-      }
-      final PsiType extendsBound = wildcardType.getBound();
-      if (!TypeUtils.isJavaLangObject(extendsBound)) {
-        return;
-      }
-      final PsiElement firstChild = typeElement.getFirstChild();
-      if (firstChild == null) {
-        return;
-      }
-      registerError(firstChild, Integer.valueOf(2));
+    public BaseInspectionVisitor buildVisitor() {
+        return new ExtendsObjectVisitor();
     }
-  }
+
+    private static class ExtendsObjectVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitTypeParameter(PsiTypeParameter parameter) {
+            super.visitTypeParameter(parameter);
+            final PsiClassType[] extendsListTypes = parameter.getExtendsListTypes();
+            if (extendsListTypes.length != 1) {
+                return;
+            }
+            final PsiClassType extendsType = extendsListTypes[0];
+            if (!extendsType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
+                return;
+            }
+            final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
+            if (nameIdentifier == null) {
+                return;
+            }
+            registerError(nameIdentifier, Integer.valueOf(1));
+        }
+
+        @Override
+        public void visitTypeElement(PsiTypeElement typeElement) {
+            super.visitTypeElement(typeElement);
+            final PsiElement lastChild = typeElement.getLastChild();
+            if (!(lastChild instanceof PsiTypeElement)) {
+                return;
+            }
+            final PsiType type = typeElement.getType();
+            if (!(type instanceof PsiWildcardType)) {
+                return;
+            }
+            final PsiWildcardType wildcardType = (PsiWildcardType) type;
+            if (!wildcardType.isExtends()) {
+                return;
+            }
+            final PsiType extendsBound = wildcardType.getBound();
+            if (!TypeUtils.isJavaLangObject(extendsBound)) {
+                return;
+            }
+            final PsiElement firstChild = typeElement.getFirstChild();
+            if (firstChild == null) {
+                return;
+            }
+            registerError(firstChild, Integer.valueOf(2));
+        }
+    }
 }

@@ -39,107 +39,97 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class UnnecessaryBlockStatementInspection extends BaseInspection {
+    @SuppressWarnings({"PublicField"})
+    public boolean ignoreSwitchBranches = false;
 
-  @SuppressWarnings({"PublicField"})
-  public boolean ignoreSwitchBranches = false;
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "UnnecessaryCodeBlock";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessaryCodeBlockDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.unnecessaryBlockStatementProblemDescriptor().get();
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.ignoreBranchesOfSwitchStatements();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchBranches");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessaryBlockStatementVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessaryBlockFix();
-  }
-
-  private static class UnnecessaryBlockFix extends InspectionGadgetsFix {
+    @Override
+    @Nonnull
+    public String getID() {
+        return "UnnecessaryCodeBlock";
+    }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.unnecessaryCodeBlockUnwrapQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessaryCodeBlockDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement leftBrace = descriptor.getPsiElement();
-      final PsiElement parent = leftBrace.getParent();
-      if (!(parent instanceof PsiCodeBlock)) {
-        return;
-      }
-      final PsiCodeBlock block = (PsiCodeBlock)parent;
-      final PsiBlockStatement blockStatement =
-        (PsiBlockStatement)block.getParent();
-      final PsiElement[] children = block.getChildren();
-      if (children.length > 2) {
-        final PsiElement element = blockStatement.getParent();
-        element.addRangeBefore(children[1],
-                               children[children.length - 2], blockStatement);
-      }
-      blockStatement.delete();
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.unnecessaryBlockStatementProblemDescriptor().get();
     }
-  }
-
-  private class UnnecessaryBlockStatementVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitBlockStatement(
-      PsiBlockStatement blockStatement) {
-      super.visitBlockStatement(blockStatement);
-      if (ignoreSwitchBranches) {
-        final PsiElement prevStatement =
-          PsiTreeUtil.skipSiblingsBackward(blockStatement,
-                                           PsiWhiteSpace.class);
-        if (prevStatement instanceof PsiSwitchLabelStatement) {
-          return;
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.ignoreBranchesOfSwitchStatements();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchBranches");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessaryBlockStatementVisitor();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessaryBlockFix();
+    }
+
+    private static class UnnecessaryBlockFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.unnecessaryCodeBlockUnwrapQuickfix();
         }
-      }
-      final PsiElement parent = blockStatement.getParent();
-      if (!(parent instanceof PsiCodeBlock)) {
-        return;
-      }
-      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-      final PsiJavaToken brace = codeBlock.getLBrace();
-      if (brace == null) {
-        return;
-      }
-      final PsiCodeBlock parentBlock = (PsiCodeBlock)parent;
-      if (parentBlock.getStatements().length > 1 &&
-          VariableSearchUtils.containsConflictingDeclarations(
-            codeBlock, parentBlock)) {
-        return;
-      }
-      registerError(brace);
-      final PsiJavaToken rbrace = codeBlock.getRBrace();
-      if (rbrace != null) {
-        registerError(rbrace);
-      }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement leftBrace = descriptor.getPsiElement();
+            final PsiElement parent = leftBrace.getParent();
+            if (!(parent instanceof PsiCodeBlock)) {
+                return;
+            }
+            final PsiCodeBlock block = (PsiCodeBlock) parent;
+            final PsiBlockStatement blockStatement = (PsiBlockStatement) block.getParent();
+            final PsiElement[] children = block.getChildren();
+            if (children.length > 2) {
+                final PsiElement element = blockStatement.getParent();
+                element.addRangeBefore(children[1], children[children.length - 2], blockStatement);
+            }
+            blockStatement.delete();
+        }
     }
-  }
+
+    private class UnnecessaryBlockStatementVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitBlockStatement(PsiBlockStatement blockStatement) {
+            super.visitBlockStatement(blockStatement);
+            if (ignoreSwitchBranches) {
+                final PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(blockStatement, PsiWhiteSpace.class);
+                if (prevStatement instanceof PsiSwitchLabelStatement) {
+                    return;
+                }
+            }
+            final PsiElement parent = blockStatement.getParent();
+            if (!(parent instanceof PsiCodeBlock)) {
+                return;
+            }
+            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            final PsiJavaToken brace = codeBlock.getLBrace();
+            if (brace == null) {
+                return;
+            }
+            final PsiCodeBlock parentBlock = (PsiCodeBlock) parent;
+            if (parentBlock.getStatements().length > 1 &&
+                VariableSearchUtils.containsConflictingDeclarations(codeBlock, parentBlock)) {
+                return;
+            }
+            registerError(brace);
+            final PsiJavaToken rbrace = codeBlock.getRBrace();
+            if (rbrace != null) {
+                registerError(rbrace);
+            }
+        }
+    }
 }

@@ -26,117 +26,111 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class UnnecessarySuperQualifierInspection extends BaseInspection {
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.unnecessarySuperQualifierDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.unnecessarySuperQualifierProblemDescriptor().get();
-  }
-
-  @Override
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new UnnecessarySuperQualifierFix();
-  }
-
-  private static class UnnecessarySuperQualifierFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.unnecessarySuperQualifierQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.unnecessarySuperQualifierDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      element.delete();
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.unnecessarySuperQualifierProblemDescriptor().get();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new UnnecessarySuperQualifierVisitor();
-  }
-
-  private static class UnnecessarySuperQualifierVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitSuperExpression(PsiSuperExpression expression) {
-      super.visitSuperExpression(expression);
-      final PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
-      if (qualifier != null) {
-        return;
-      }
-      final PsiElement parent = expression.getParent();
-      if (!(parent instanceof PsiReferenceExpression)) {
-        return;
-      }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)parent;
-      final PsiElement grandParent = referenceExpression.getParent();
-      if (grandParent instanceof PsiMethodCallExpression methodCallExpression) {
-        if (!hasUnnecessarySuperQualifier(methodCallExpression)) {
-          return;
-        }
-      }
-      else {
-        if (!hasUnnecessarySuperQualifier(referenceExpression)) {
-          return;
-        }
-      }
-      registerError(expression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new UnnecessarySuperQualifierFix();
     }
 
-    private static boolean hasUnnecessarySuperQualifier(PsiReferenceExpression referenceExpression) {
-      final PsiClass parentClass = PsiTreeUtil.getParentOfType(referenceExpression, PsiClass.class);
-      if (parentClass == null) {
-        return false;
-      }
-      final PsiElement target = referenceExpression.resolve();
-      if (!(target instanceof PsiField)) {
-        return false;
-      }
-      final PsiField superField = (PsiField)target;
-      final PsiReferenceExpression copy = (PsiReferenceExpression)
-        referenceExpression.copy();
-      final PsiElement qualifier = copy.getQualifier();
-      if (qualifier == null) {
-        return false;
-      }
-      qualifier.delete(); // remove super
-      return superField == copy.resolve();
+    private static class UnnecessarySuperQualifierFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.unnecessarySuperQualifierQuickfix();
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor)
+            throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            element.delete();
+        }
     }
 
-    private static boolean hasUnnecessarySuperQualifier(
-      PsiMethodCallExpression methodCallExpression) {
-      final PsiMethod superMethod =
-        methodCallExpression.resolveMethod();
-      if (superMethod == null) {
-        return false;
-      }
-      // check that super.m() and m() resolve to the same method
-      final PsiMethodCallExpression copy =
-        (PsiMethodCallExpression)methodCallExpression.copy();
-      final PsiReferenceExpression methodExpression =
-        copy.getMethodExpression();
-      final PsiElement qualifier = methodExpression.getQualifier();
-      if (qualifier == null) {
-        return false;
-      }
-      qualifier.delete(); //remove super
-      return superMethod == copy.resolveMethod();
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new UnnecessarySuperQualifierVisitor();
     }
-  }
+
+    private static class UnnecessarySuperQualifierVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitSuperExpression(PsiSuperExpression expression) {
+            super.visitSuperExpression(expression);
+            final PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
+            if (qualifier != null) {
+                return;
+            }
+            final PsiElement parent = expression.getParent();
+            if (!(parent instanceof PsiReferenceExpression)) {
+                return;
+            }
+            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) parent;
+            final PsiElement grandParent = referenceExpression.getParent();
+            if (grandParent instanceof PsiMethodCallExpression methodCallExpression) {
+                if (!hasUnnecessarySuperQualifier(methodCallExpression)) {
+                    return;
+                }
+            }
+            else {
+                if (!hasUnnecessarySuperQualifier(referenceExpression)) {
+                    return;
+                }
+            }
+            registerError(expression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+        }
+
+        private static boolean hasUnnecessarySuperQualifier(PsiReferenceExpression referenceExpression) {
+            final PsiClass parentClass = PsiTreeUtil.getParentOfType(referenceExpression, PsiClass.class);
+            if (parentClass == null) {
+                return false;
+            }
+            final PsiElement target = referenceExpression.resolve();
+            if (!(target instanceof PsiField)) {
+                return false;
+            }
+            final PsiField superField = (PsiField) target;
+            final PsiReferenceExpression copy = (PsiReferenceExpression) referenceExpression.copy();
+            final PsiElement qualifier = copy.getQualifier();
+            if (qualifier == null) {
+                return false;
+            }
+            qualifier.delete(); // remove super
+            return superField == copy.resolve();
+        }
+
+        private static boolean hasUnnecessarySuperQualifier(PsiMethodCallExpression methodCallExpression) {
+            final PsiMethod superMethod = methodCallExpression.resolveMethod();
+            if (superMethod == null) {
+                return false;
+            }
+            // check that super.m() and m() resolve to the same method
+            final PsiMethodCallExpression copy = (PsiMethodCallExpression) methodCallExpression.copy();
+            final PsiReferenceExpression methodExpression = copy.getMethodExpression();
+            final PsiElement qualifier = methodExpression.getQualifier();
+            if (qualifier == null) {
+                return false;
+            }
+            qualifier.delete(); //remove super
+            return superMethod == copy.resolveMethod();
+        }
+    }
 }

@@ -26,97 +26,94 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "SerialVersionUIDWithWrongSignature";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    if ((Boolean)infos[0]) {
-      return null;
+    @Override
+    @Nonnull
+    public String getID() {
+        return "SerialVersionUIDWithWrongSignature";
     }
-    return new SerialVersionUIDNotStaticFinalFix();
-  }
-
-  private static class SerialVersionUIDNotStaticFinalFix
-    extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongDisplayName();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)parent;
-      final PsiModifierList modifierList = field.getModifierList();
-      if (modifierList == null) {
-        return;
-      }
-      modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
-      modifierList.setModifierProperty(PsiModifier.STATIC, true);
-      modifierList.setModifierProperty(PsiModifier.FINAL, true);
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongProblemDescriptor().get();
     }
-  }
-
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerialVersionUIDNotStaticFinalVisitor();
-  }
-
-  private static class SerialVersionUIDNotStaticFinalVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      final PsiField field =
-        aClass.findFieldByName(
-          HardcodedMethodConstants.SERIAL_VERSION_UID, false);
-      if (field == null) {
-        return;
-      }
-      final PsiType type = field.getType();
-      final boolean wrongType = !PsiType.LONG.equals(type);
-      if (field.hasModifierProperty(PsiModifier.STATIC) &&
-          field.hasModifierProperty(PsiModifier.PRIVATE) &&
-          field.hasModifierProperty(PsiModifier.FINAL) &&
-          !wrongType) {
-        return;
-      }
-      if (!SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerFieldError(field, Boolean.valueOf(wrongType));
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        if ((Boolean) infos[0]) {
+            return null;
+        }
+        return new SerialVersionUIDNotStaticFinalFix();
     }
-  }
+
+    private static class SerialVersionUIDNotStaticFinalFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongQuickfix();
+        }
+
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiField)) {
+                return;
+            }
+            final PsiField field = (PsiField) parent;
+            final PsiModifierList modifierList = field.getModifierList();
+            if (modifierList == null) {
+                return;
+            }
+            modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
+            modifierList.setModifierProperty(PsiModifier.STATIC, true);
+            modifierList.setModifierProperty(PsiModifier.FINAL, true);
+        }
+    }
+
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerialVersionUIDNotStaticFinalVisitor();
+    }
+
+    private static class SerialVersionUIDNotStaticFinalVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            final PsiField field =
+                aClass.findFieldByName(
+                    HardcodedMethodConstants.SERIAL_VERSION_UID, false);
+            if (field == null) {
+                return;
+            }
+            final PsiType type = field.getType();
+            final boolean wrongType = !PsiType.LONG.equals(type);
+            if (field.hasModifierProperty(PsiModifier.STATIC) &&
+                field.hasModifierProperty(PsiModifier.PRIVATE) &&
+                field.hasModifierProperty(PsiModifier.FINAL) &&
+                !wrongType) {
+                return;
+            }
+            if (!SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerFieldError(field, Boolean.valueOf(wrongType));
+        }
+    }
 }
