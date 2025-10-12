@@ -25,6 +25,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.FileModificationService;
@@ -37,6 +38,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
@@ -56,8 +58,8 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
 
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("initialize.final.field.in.constructor.name");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.initializeFinalFieldInConstructorName();
   }
 
   @Override

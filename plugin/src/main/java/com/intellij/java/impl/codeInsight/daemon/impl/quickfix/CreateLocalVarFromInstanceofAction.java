@@ -29,6 +29,7 @@ import consulo.codeEditor.action.EditorAction;
 import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.FileModificationService;
@@ -67,7 +68,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     private static final Logger LOG = Logger.getInstance(CreateLocalVarFromInstanceofAction.class);
 
     public CreateLocalVarFromInstanceofAction() {
-        setText(JavaQuickFixBundle.message("create.local.from.instanceof.usage.family"));
+        setText(JavaQuickFixLocalize.createLocalFromInstanceofUsageFamily());
     }
 
     @Override
@@ -87,7 +88,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
         }
         PsiType type = checkType.getType();
         String castTo = type.getPresentableText();
-        setText(JavaQuickFixBundle.message("create.local.from.instanceof.usage.text", castTo, operand.getText()));
+        setText(JavaQuickFixLocalize.createLocalFromInstanceofUsageText(castTo, operand.getText()));
 
         PsiStatement statement = PsiTreeUtil.getParentOfType(instanceOfExpression, PsiStatement.class);
         boolean insideIf = statement instanceof PsiIfStatement

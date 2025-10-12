@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -65,22 +65,22 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     @Override
     @Nonnull
     public LocalizeValue getText() {
-        String message;
         switch (myFixType) {
-            case MAKE_FINAL:
-                message = "make.final.text";
-                break;
-            case MAKE_ARRAY:
-                message = "make.final.transform.to.one.element.array";
-                break;
+            case MAKE_FINAL: {
+                Collection<PsiVariable> vars = getVariablesToFix();
+                String varNames = vars.size() == 1 ? "'" + myVariable.getName() + "'" : "variables";
+                return JavaQuickFixLocalize.makeFinalText(varNames);
+            }
+            case MAKE_ARRAY: {
+                Collection<PsiVariable> vars = getVariablesToFix();
+                String varNames = vars.size() == 1 ? "'" + myVariable.getName() + "'" : "variables";
+                return JavaQuickFixLocalize.makeFinalTransformToOneElementArray(varNames);
+            }
             case COPY_TO_FINAL:
-                return JavaQuickFixBundle.message("make.final.copy.to.temp", myVariable.getName());
+                return JavaQuickFixLocalize.makeFinalCopyToTemp(myVariable.getName());
             default:
-                return "";
+                return LocalizeValue.of();
         }
-        Collection<PsiVariable> vars = getVariablesToFix();
-        String varNames = vars.size() == 1 ? "'" + myVariable.getName() + "'" : "variables";
-        return JavaQuickFixBundle.message(message, varNames);
     }
 
     @Override

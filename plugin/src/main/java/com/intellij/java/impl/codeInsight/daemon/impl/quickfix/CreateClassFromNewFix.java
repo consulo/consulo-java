@@ -69,8 +69,8 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
                     public void run() {
                         psiClass[0] = CreateFromUsageUtils.createClass(referenceElement, CreateClassKind.CLASS, null);
                     }
-                }, getText(), getText());
-                new WriteCommandAction(newExpression.getProject(), getText(), getText()) {
+                }, getText().get(), getText());
+                new WriteCommandAction(newExpression.getProject(), getText().get(), getText().get()) {
                     @Override
                     protected void run(Result result) throws Throwable {
                         setupClassFromNewExpression(psiClass[0], newExpression);
@@ -119,7 +119,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    new WriteCommandAction(project, getText(), getText()) {
+                    new WriteCommandAction(project, getText().get(), getText().get()) {
                         @Override
                         protected void run(Result result) throws Throwable {
                             try {

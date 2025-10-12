@@ -39,7 +39,7 @@ import jakarta.annotation.Nonnull;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction {
   public AddAnnotationIntention() {
-    setText(CodeInsightLocalize.intentionAddAnnotationFamily().get());
+    setText(CodeInsightLocalize.intentionAddAnnotationFamily());
   }
 
   @Nonnull

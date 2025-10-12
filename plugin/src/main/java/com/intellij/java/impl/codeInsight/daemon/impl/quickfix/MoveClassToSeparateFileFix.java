@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.FileModificationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.SyntheticIntentionAction;
-import consulo.logging.Logger;
+import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.codeEditor.Editor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
-import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
@@ -45,8 +45,8 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.moveClassToSeparateFileText(myClass.getName());
   }
 
   @Override

@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.application.WriteAction;
 import consulo.application.presentation.TypePresentationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;

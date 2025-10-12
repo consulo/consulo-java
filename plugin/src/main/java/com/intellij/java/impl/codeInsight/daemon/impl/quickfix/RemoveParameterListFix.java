@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
@@ -36,8 +37,8 @@ public class RemoveParameterListFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return "Remove parameter list";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Remove parameter list");
   }
 
   @Override

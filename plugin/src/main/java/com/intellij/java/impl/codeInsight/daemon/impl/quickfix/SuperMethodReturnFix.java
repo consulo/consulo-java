@@ -25,66 +25,67 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class SuperMethodReturnFix implements SyntheticIntentionAction {
 
-  private final PsiType mySuperMethodType;
-  private final PsiMethod mySuperMethod;
+    private final PsiType mySuperMethodType;
+    private final PsiMethod mySuperMethod;
 
-  public SuperMethodReturnFix(PsiMethod superMethod, PsiType superMethodType) {
-    mySuperMethodType = superMethodType;
-    mySuperMethod = superMethod;
-  }
+    public SuperMethodReturnFix(PsiMethod superMethod, PsiType superMethodType) {
+        mySuperMethodType = superMethodType;
+        mySuperMethod = superMethod;
+    }
 
-  @Override
-  @Nonnull
-  public String getText() {
-    String name = PsiFormatUtil.formatMethod(
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        String name = PsiFormatUtil.formatMethod(
             mySuperMethod,
             PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
             0
-    );
-    return JavaQuickFixBundle.message("fix.super.method.return.type.text",
-                                  name,
-                                  JavaHighlightUtil.formatType(mySuperMethodType));
-  }
+        );
+        return JavaQuickFixLocalize.fixSuperMethodReturnTypeText(name, JavaHighlightUtil.formatType(mySuperMethodType));
+    }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return
             mySuperMethod != null
-            && mySuperMethod.isValid()
-            && mySuperMethod.getManager().isInProject(mySuperMethod)
-            && mySuperMethodType != null
-            && mySuperMethodType.isValid();
-  }
+                && mySuperMethod.isValid()
+                && mySuperMethod.getManager().isInProject(mySuperMethod)
+                && mySuperMethodType != null
+                && mySuperMethodType.isValid();
+    }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!FileModificationService.getInstance().prepareFileForWrite(mySuperMethod.getContainingFile())) return;
-    ChangeSignatureProcessor processor = new ChangeSignatureProcessor(
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!FileModificationService.getInstance().prepareFileForWrite(mySuperMethod.getContainingFile())) {
+            return;
+        }
+        ChangeSignatureProcessor processor = new ChangeSignatureProcessor(
             project,
             mySuperMethod,
             false, null,
             mySuperMethod.getName(),
             mySuperMethodType,
             ParameterInfoImpl.fromMethod(mySuperMethod));
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
-      processor.run();
-    } else {
-      processor.run();
+        if (ApplicationManager.getApplication().isUnitTestMode()) {
+            processor.run();
+        }
+        else {
+            processor.run();
+        }
     }
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

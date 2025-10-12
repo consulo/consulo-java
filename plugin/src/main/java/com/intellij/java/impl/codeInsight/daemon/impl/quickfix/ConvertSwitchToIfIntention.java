@@ -23,6 +23,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
@@ -41,8 +42,8 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
 
     @Nonnull
     @Override
-    public String getText() {
-        return CommonQuickFixLocalize.fixReplaceXWithY(PsiKeyword.SWITCH, PsiKeyword.IF).get();
+    public LocalizeValue getText() {
+        return CommonQuickFixLocalize.fixReplaceXWithY(PsiKeyword.SWITCH, PsiKeyword.IF);
     }
 
     @Override

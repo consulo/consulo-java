@@ -55,8 +55,8 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.ambiguousMethodCallQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.ambiguousMethodCallQuickfix();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

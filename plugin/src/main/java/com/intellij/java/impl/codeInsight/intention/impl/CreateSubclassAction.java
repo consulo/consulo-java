@@ -298,7 +298,7 @@ public class CreateSubclassAction implements IntentionAction {
                 startClassOffset.dispose();
               }
             }
-          }, getTitle(psiClass).get());
+          }, getTitle(psiClass));
         }
       }
     } catch (IncorrectOperationException e) {

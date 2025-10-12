@@ -18,7 +18,6 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.HighPriorityAction;

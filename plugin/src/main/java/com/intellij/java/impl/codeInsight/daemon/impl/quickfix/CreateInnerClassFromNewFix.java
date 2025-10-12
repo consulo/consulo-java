@@ -17,9 +17,10 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
@@ -35,8 +36,8 @@ public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
   }
 
   @Override
-  public String getText(String varName) {
-    return JavaQuickFixBundle.message("create.inner.class.from.usage.text", StringUtil.capitalize(CreateClassKind.CLASS.getDescription()), varName);
+  public LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createInnerClassFromUsageText(StringUtil.capitalize(CreateClassKind.CLASS.getDescription()), varName);
   }
 
   @Override

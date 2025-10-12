@@ -20,12 +20,14 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
@@ -42,8 +44,8 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("remove.redundant.else.fix");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.removeRedundantElseFix();
   }
 
   @Override

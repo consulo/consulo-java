@@ -22,16 +22,16 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,96 +40,93 @@ import java.util.List;
  * @author ven
  */
 public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPriorityAction {
-  private final boolean myCreateGetter;
-  private final boolean myCreateSetter;
-  private final PsiField myField;
-  private final String myPropertyName;
+    private final boolean myCreateGetter;
+    private final boolean myCreateSetter;
+    private final PsiField myField;
+    private final String myPropertyName;
 
-  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
-    myCreateGetter = createGetter;
-    myCreateSetter = createSetter;
-    myField = field;
-    myPropertyName = PropertyUtil.suggestPropertyName(field);
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    @NonNls final String what;
-    if (myCreateGetter && myCreateSetter) {
-      what = "create.getter.and.setter.for.field";
-    }
-    else if (myCreateGetter) {
-      what = "create.getter.for.field";
-    }
-    else if (myCreateSetter) {
-      what = "create.setter.for.field";
-    }
-    else {
-      what = "";
-      assert false;
-    }
-    return JavaQuickFixBundle.message(what, myField.getName());
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!myField.isValid()) {
-      return false;
+    public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
+        myCreateGetter = createGetter;
+        myCreateSetter = createSetter;
+        myField = field;
+        myPropertyName = PropertyUtil.suggestPropertyName(field);
     }
 
-    final PsiClass aClass = myField.getContainingClass();
-    if (aClass == null) {
-      return false;
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        if (myCreateGetter && myCreateSetter) {
+            return JavaQuickFixLocalize.createGetterAndSetterForField(myField.getName());
+        }
+        else if (myCreateGetter) {
+            return JavaQuickFixLocalize.createGetterForField(myField.getName());
+        }
+        else if (myCreateSetter) {
+            return JavaQuickFixLocalize.createSetterForField(myField.getName());
+        }
+        else {
+            return LocalizeValue.of();
+        }
     }
 
-    if (myCreateGetter) {
-      if (isStaticFinal(myField) || PropertyUtil.findPropertyGetter(aClass, myPropertyName, isStatic(myField), false) != null) {
-        return false;
-      }
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!myField.isValid()) {
+            return false;
+        }
+
+        final PsiClass aClass = myField.getContainingClass();
+        if (aClass == null) {
+            return false;
+        }
+
+        if (myCreateGetter) {
+            if (isStaticFinal(myField) || PropertyUtil.findPropertyGetter(aClass, myPropertyName, isStatic(myField), false) != null) {
+                return false;
+            }
+        }
+
+        if (myCreateSetter) {
+            if (isFinal(myField) || PropertyUtil.findPropertySetter(aClass, myPropertyName, isStatic(myField), false) != null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    if (myCreateSetter) {
-      if (isFinal(myField) || PropertyUtil.findPropertySetter(aClass, myPropertyName, isStatic(myField), false) != null) {
-        return false;
-      }
+    private static boolean isFinal(@Nonnull PsiField field) {
+        return field.hasModifierProperty(PsiModifier.FINAL);
     }
 
-    return true;
-  }
-
-  private static boolean isFinal(@Nonnull PsiField field) {
-    return field.hasModifierProperty(PsiModifier.FINAL);
-  }
-
-  private static boolean isStatic(@Nonnull PsiField field) {
-    return field.hasModifierProperty(PsiModifier.STATIC);
-  }
-
-  private static boolean isStaticFinal(@Nonnull PsiField field) {
-    return isStatic(field) && isFinal(field);
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().preparePsiElementForWrite(myField)) {
-      return;
+    private static boolean isStatic(@Nonnull PsiField field) {
+        return field.hasModifierProperty(PsiModifier.STATIC);
     }
-    PsiClass aClass = myField.getContainingClass();
-    final List<PsiMethod> methods = new ArrayList<PsiMethod>();
-    if (myCreateGetter) {
-      Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, true));
-    }
-    if (myCreateSetter) {
-      Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, false));
-    }
-    for (PsiMethod method : methods) {
-      aClass.add(method);
-    }
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    private static boolean isStaticFinal(@Nonnull PsiField field) {
+        return isStatic(field) && isFinal(field);
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        if (!FileModificationService.getInstance().preparePsiElementForWrite(myField)) {
+            return;
+        }
+        PsiClass aClass = myField.getContainingClass();
+        final List<PsiMethod> methods = new ArrayList<PsiMethod>();
+        if (myCreateGetter) {
+            Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, true));
+        }
+        if (myCreateSetter) {
+            Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, false));
+        }
+        for (PsiMethod method : methods) {
+            aClass.add(method);
+        }
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }

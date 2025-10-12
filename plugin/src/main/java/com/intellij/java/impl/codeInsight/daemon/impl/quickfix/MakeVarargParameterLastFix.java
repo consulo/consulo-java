@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
@@ -38,8 +40,8 @@ public class MakeVarargParameterLastFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("make.vararg.parameter.last.text", myParameter.getName());
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.makeVarargParameterLastText(myParameter.getName());
   }
 
   @Override

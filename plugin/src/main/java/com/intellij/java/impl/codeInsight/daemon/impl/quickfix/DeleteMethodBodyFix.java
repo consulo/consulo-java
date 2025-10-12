@@ -15,10 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import consulo.language.psi.PsiFile;
@@ -38,8 +40,8 @@ public class DeleteMethodBodyFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("delete.body.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.deleteBodyText();
   }
 
   @Override

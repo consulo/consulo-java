@@ -29,7 +29,6 @@ import consulo.codeEditor.Editor;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.disposer.Disposer;
 import consulo.ide.ServiceManager;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;

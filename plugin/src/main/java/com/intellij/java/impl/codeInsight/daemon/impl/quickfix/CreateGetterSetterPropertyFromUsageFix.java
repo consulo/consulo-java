@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.localize.LocalizeValue;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class CreateGetterSetterPropertyFromUsageFix extends CreatePropertyFromUs
   protected boolean isAvailableImpl(int offset) {
     boolean available = super.isAvailableImpl(offset);
     if (available) {
-      setText("Create Property");
+      setText(LocalizeValue.localizeTODO("Create Property"));
     }
     return available;
   }

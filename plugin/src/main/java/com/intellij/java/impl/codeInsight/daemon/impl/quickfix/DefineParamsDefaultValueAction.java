@@ -93,7 +93,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
     if (containingClass == null || (containingClass.isInterface() && !PsiUtil.isLanguageLevel8OrHigher(method))) {
       return false;
     }
-    setText("Generate overloaded " + (method.isConstructor() ? "constructor" : "method") + " with default parameter values");
+    setText(LocalizeValue.localizeTODO("Generate overloaded " + (method.isConstructor() ? "constructor" : "method") + " with default parameter values"));
     return true;
   }
 

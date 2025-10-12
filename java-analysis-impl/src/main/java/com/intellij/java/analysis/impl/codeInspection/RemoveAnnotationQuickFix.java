@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
  * @author yole
  */
 public class RemoveAnnotationQuickFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.i18n.AnnotateNonNlsQuickfix");
+  private static final Logger LOG = Logger.getInstance(RemoveAnnotationQuickFix.class);
   private final PsiAnnotation myAnnotation;
   private final PsiModifierListOwner myListOwner;
 

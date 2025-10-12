@@ -38,7 +38,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.CreateCastExpressionFromInstanceofAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFromInstanceofAction {
   public CreateCastExpressionFromInstanceofAction() {
-    setText(CodeInsightLocalize.castExpression().get());
+    setText(CodeInsightLocalize.castExpression());
   }
 
   @Override
@@ -51,7 +51,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
     if (checkType == null) return false;
     PsiType type = checkType.getType();
     String castTo = type.getPresentableText();
-    setText(CodeInsightLocalize.castTo0(castTo).get());
+    setText(CodeInsightLocalize.castTo0(castTo));
     return true;
   }
 

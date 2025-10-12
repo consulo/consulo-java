@@ -18,12 +18,13 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -33,66 +34,72 @@ import jakarta.annotation.Nonnull;
  */
 
 public class NegationBroadScopeFix implements SyntheticIntentionAction {
-  private final PsiPrefixExpression myPrefixExpression;
+    private final PsiPrefixExpression myPrefixExpression;
 
-  public NegationBroadScopeFix(PsiPrefixExpression prefixExpression) {
-    myPrefixExpression = prefixExpression;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    String text = myPrefixExpression.getOperand().getText();
-    text += " ";
-    PsiElement parent = myPrefixExpression.getParent();
-    String operation = parent instanceof PsiInstanceOfExpression
-                       ? PsiKeyword.INSTANCEOF
-                       : ((PsiBinaryExpression)parent).getOperationSign().getText();
-    text += operation + " ";
-
-    String rop;
-    if (parent instanceof PsiInstanceOfExpression) {
-      final PsiTypeElement type = ((PsiInstanceOfExpression)parent).getCheckType();
-      rop = type == null ? "" : type.getText();
-    }
-    else {
-      final PsiExpression rOperand = ((PsiBinaryExpression)parent).getROperand();
-      rop = rOperand == null ? "" : rOperand.getText();
+    public NegationBroadScopeFix(PsiPrefixExpression prefixExpression) {
+        myPrefixExpression = prefixExpression;
     }
 
-    text += rop;
-    return JavaQuickFixBundle.message("negation.broader.scope.text", text);
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        String text = myPrefixExpression.getOperand().getText();
+        text += " ";
+        PsiElement parent = myPrefixExpression.getParent();
+        String operation = parent instanceof PsiInstanceOfExpression
+            ? PsiKeyword.INSTANCEOF
+            : ((PsiBinaryExpression) parent).getOperationSign().getText();
+        text += operation + " ";
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (myPrefixExpression == null || !myPrefixExpression.isValid()) return false;
+        String rop;
+        if (parent instanceof PsiInstanceOfExpression) {
+            final PsiTypeElement type = ((PsiInstanceOfExpression) parent).getCheckType();
+            rop = type == null ? "" : type.getText();
+        }
+        else {
+            final PsiExpression rOperand = ((PsiBinaryExpression) parent).getROperand();
+            rop = rOperand == null ? "" : rOperand.getText();
+        }
 
-    PsiElement parent = myPrefixExpression.getParent();
-    if (parent instanceof PsiInstanceOfExpression && ((PsiInstanceOfExpression)parent).getOperand() == myPrefixExpression) {
-      return true;
+        text += rop;
+        return JavaQuickFixLocalize.negationBroaderScopeText(text);
     }
-    if (!(parent instanceof PsiBinaryExpression)) return false;
-    PsiBinaryExpression binaryExpression = (PsiBinaryExpression)parent;
-    return binaryExpression.getLOperand() == myPrefixExpression && TypeConversionUtil.isBooleanType(binaryExpression.getType());
-  }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) return;
-    PsiExpression operand = myPrefixExpression.getOperand();
-    PsiElement unnegated = myPrefixExpression.replace(operand);
-    PsiElement parent = unnegated.getParent();
-    PsiElementFactory factory = JavaPsiFacade.getInstance(file.getProject()).getElementFactory();
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (myPrefixExpression == null || !myPrefixExpression.isValid()) {
+            return false;
+        }
 
-    PsiPrefixExpression negated = (PsiPrefixExpression)factory.createExpressionFromText("!(xxx)", parent);
-    PsiParenthesizedExpression parentheses = (PsiParenthesizedExpression)negated.getOperand();
-    parentheses.getExpression().replace(parent.copy());
-    parent.replace(negated);
-  }
+        PsiElement parent = myPrefixExpression.getParent();
+        if (parent instanceof PsiInstanceOfExpression && ((PsiInstanceOfExpression) parent).getOperand() == myPrefixExpression) {
+            return true;
+        }
+        if (!(parent instanceof PsiBinaryExpression)) {
+            return false;
+        }
+        PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parent;
+        return binaryExpression.getLOperand() == myPrefixExpression && TypeConversionUtil.isBooleanType(binaryExpression.getType());
+    }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) {
+            return;
+        }
+        PsiExpression operand = myPrefixExpression.getOperand();
+        PsiElement unnegated = myPrefixExpression.replace(operand);
+        PsiElement parent = unnegated.getParent();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(file.getProject()).getElementFactory();
+
+        PsiPrefixExpression negated = (PsiPrefixExpression) factory.createExpressionFromText("!(xxx)", parent);
+        PsiParenthesizedExpression parentheses = (PsiParenthesizedExpression) negated.getOperand();
+        parentheses.getExpression().replace(parent.copy());
+        parent.replace(negated);
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }

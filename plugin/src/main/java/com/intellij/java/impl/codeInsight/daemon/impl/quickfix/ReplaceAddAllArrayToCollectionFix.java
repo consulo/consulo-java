@@ -35,6 +35,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
@@ -50,8 +51,8 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
 
   @Override
   @Nonnull
-  public String getText() {
-    return "Replace " + myMethodCall.getText() + " with " + getCollectionsMethodCall();
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Replace " + myMethodCall.getText() + " with " + getCollectionsMethodCall());
   }
 
   @Override

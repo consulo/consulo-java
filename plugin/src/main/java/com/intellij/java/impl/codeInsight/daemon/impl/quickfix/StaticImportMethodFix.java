@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;

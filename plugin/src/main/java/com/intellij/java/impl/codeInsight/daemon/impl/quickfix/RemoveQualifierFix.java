@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
@@ -44,8 +46,8 @@ public class RemoveQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("remove.qualifier.action.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.removeQualifierActionText();
   }
 
   @Override

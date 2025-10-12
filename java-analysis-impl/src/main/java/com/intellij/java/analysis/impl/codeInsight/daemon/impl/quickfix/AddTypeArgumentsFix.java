@@ -19,7 +19,6 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;

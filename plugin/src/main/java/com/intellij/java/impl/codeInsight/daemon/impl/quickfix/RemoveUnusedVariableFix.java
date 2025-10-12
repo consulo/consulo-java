@@ -23,9 +23,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -33,125 +31,136 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
-  private static final Logger LOG = Logger.getInstance(RemoveUnusedVariableFix.class);
-  private final PsiVariable myVariable;
+    private static final Logger LOG = Logger.getInstance(RemoveUnusedVariableFix.class);
+    private final PsiVariable myVariable;
 
-  public RemoveUnusedVariableFix(PsiVariable variable) {
-    myVariable = variable;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message(myVariable instanceof PsiField ? "remove.unused.field" : "remove.unused.variable",
-                                  myVariable.getName());
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return
-      myVariable != null
-      && myVariable.isValid()
-      && myVariable.getManager().isInProject(myVariable)
-      ;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!FileModificationService.getInstance().prepareFileForWrite(myVariable.getContainingFile())) return;
-    removeVariableAndReferencingStatements(editor);
-  }
-
-  private void removeVariableAndReferencingStatements(Editor editor) {
-    final List<PsiElement> references = new ArrayList<PsiElement>();
-    final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
-    final boolean[] canCopeWithSideEffects = {true};
-    try {
-      PsiElement context = myVariable instanceof PsiField ? ((PsiField)myVariable).getContainingClass() : PsiUtil.getVariableCodeBlock(myVariable, null);
-      if (context != null) {
-        RemoveUnusedVariableUtil.collectReferences(context, myVariable, references);
-      }
-      // do not forget to delete variable declaration
-      references.add(myVariable);
-      // check for side effects
-      for (PsiElement element : references) {
-        Boolean result = RemoveUnusedVariableUtil.processUsage(element, myVariable, sideEffects, RemoveUnusedVariableUtil.CANCEL);
-        if (result == null) return;
-        canCopeWithSideEffects[0] &= result;
-      }
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
+    public RemoveUnusedVariableFix(PsiVariable variable) {
+        myVariable = variable;
     }
 
-    final int deleteMode = showSideEffectsWarning(sideEffects, myVariable, editor, canCopeWithSideEffects[0]);
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        if (myVariable instanceof PsiField) {
+            return JavaQuickFixLocalize.removeUnusedField(myVariable.getName());
+        }
+        else {
+            return JavaQuickFixLocalize.removeUnusedVariable(myVariable.getName());
+        }
+    }
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return
+            myVariable != null
+                && myVariable.isValid()
+                && myVariable.getManager().isInProject(myVariable)
+            ;
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!FileModificationService.getInstance().prepareFileForWrite(myVariable.getContainingFile())) {
+            return;
+        }
+        removeVariableAndReferencingStatements(editor);
+    }
+
+    private void removeVariableAndReferencingStatements(Editor editor) {
+        final List<PsiElement> references = new ArrayList<PsiElement>();
+        final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
+        final boolean[] canCopeWithSideEffects = {true};
         try {
-          RemoveUnusedVariableUtil.deleteReferences(myVariable, references, deleteMode);
+            PsiElement context = myVariable instanceof PsiField ? ((PsiField) myVariable).getContainingClass() : PsiUtil.getVariableCodeBlock(myVariable, null);
+            if (context != null) {
+                RemoveUnusedVariableUtil.collectReferences(context, myVariable, references);
+            }
+            // do not forget to delete variable declaration
+            references.add(myVariable);
+            // check for side effects
+            for (PsiElement element : references) {
+                Boolean result = RemoveUnusedVariableUtil.processUsage(element, myVariable, sideEffects, RemoveUnusedVariableUtil.CANCEL);
+                if (result == null) {
+                    return;
+                }
+                canCopeWithSideEffects[0] &= result;
+            }
         }
         catch (IncorrectOperationException e) {
-          LOG.error(e);
+            LOG.error(e);
         }
-      }
-    });
-  }
 
-  public static int showSideEffectsWarning(List<PsiElement> sideEffects,
-                                           PsiVariable variable,
-                                           Editor editor,
-                                           boolean canCopeWithSideEffects,
-                                           @NonNls String beforeText,
-                                           @NonNls String afterText) {
-    if (sideEffects.isEmpty()) return RemoveUnusedVariableUtil.DELETE_ALL;
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
-      return canCopeWithSideEffects
-             ? RemoveUnusedVariableUtil.MAKE_STATEMENT
-             : RemoveUnusedVariableUtil.DELETE_ALL;
+        final int deleteMode = showSideEffectsWarning(sideEffects, myVariable, editor, canCopeWithSideEffects[0]);
+
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    RemoveUnusedVariableUtil.deleteReferences(myVariable, references, deleteMode);
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            }
+        });
     }
-    Project project = editor.getProject();
-    HighlightManager highlightManager = HighlightManager.getInstance(project);
-    PsiElement[] elements = PsiUtilCore.toPsiElementArray(sideEffects);
-    highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
 
-    SideEffectWarningDialog dialog = new SideEffectWarningDialog(project, false, variable, beforeText, afterText, canCopeWithSideEffects);
-    dialog.show();
-    return dialog.getExitCode();
-  }
+    public static int showSideEffectsWarning(List<PsiElement> sideEffects,
+                                             PsiVariable variable,
+                                             Editor editor,
+                                             boolean canCopeWithSideEffects,
+                                             @NonNls String beforeText,
+                                             @NonNls String afterText) {
+        if (sideEffects.isEmpty()) {
+            return RemoveUnusedVariableUtil.DELETE_ALL;
+        }
+        if (ApplicationManager.getApplication().isUnitTestMode()) {
+            return canCopeWithSideEffects
+                ? RemoveUnusedVariableUtil.MAKE_STATEMENT
+                : RemoveUnusedVariableUtil.DELETE_ALL;
+        }
+        Project project = editor.getProject();
+        HighlightManager highlightManager = HighlightManager.getInstance(project);
+        PsiElement[] elements = PsiUtilCore.toPsiElementArray(sideEffects);
+        highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
 
-  private static int showSideEffectsWarning(List<PsiElement> sideEffects,
-                                            PsiVariable variable,
-                                            Editor editor,
-                                            boolean canCopeWithSideEffects) {
-    String text;
-    if (sideEffects.isEmpty()) {
-      text = "";
+        SideEffectWarningDialog dialog = new SideEffectWarningDialog(project, false, variable, beforeText, afterText, canCopeWithSideEffects);
+        dialog.show();
+        return dialog.getExitCode();
     }
-    else {
-      final PsiElement sideEffect = sideEffects.get(0);
-      if (sideEffect instanceof PsiExpression) {
-        text = PsiExpressionTrimRenderer.render((PsiExpression)sideEffect);
-      }
-      else {
-        text = sideEffect.getText();
-      }
-    }
-    return showSideEffectsWarning(sideEffects, variable, editor, canCopeWithSideEffects, text, text);
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    private static int showSideEffectsWarning(List<PsiElement> sideEffects,
+                                              PsiVariable variable,
+                                              Editor editor,
+                                              boolean canCopeWithSideEffects) {
+        String text;
+        if (sideEffects.isEmpty()) {
+            text = "";
+        }
+        else {
+            final PsiElement sideEffect = sideEffects.get(0);
+            if (sideEffect instanceof PsiExpression) {
+                text = PsiExpressionTrimRenderer.render((PsiExpression) sideEffect);
+            }
+            else {
+                text = sideEffect.getText();
+            }
+        }
+        return showSideEffectsWarning(sideEffects, variable, editor, canCopeWithSideEffects, text, text);
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

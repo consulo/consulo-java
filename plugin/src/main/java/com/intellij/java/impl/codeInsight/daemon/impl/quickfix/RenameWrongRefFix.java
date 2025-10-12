@@ -29,6 +29,7 @@ import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -41,6 +42,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -64,8 +66,8 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("rename.wrong.reference.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.renameWrongReferenceText();
   }
 
   @Override

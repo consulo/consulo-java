@@ -311,7 +311,7 @@ public class PostHighlightingVisitor {
                 ? QuickFixFactory.getInstance().createRenameToIgnoredFix(variable)
                 : QuickFixFactory.getInstance().createRemoveUnusedVariableFix(variable);
             return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
-                .registerFix(fix, null, null, null, myDeadCodeKey)
+                .registerFix(fix, null, LocalizeValue.of(), null, myDeadCodeKey)
                 .create();
         }
 
@@ -319,7 +319,7 @@ public class PostHighlightingVisitor {
         if (!referenced && !UnusedSymbolUtil.isImplicitRead(myProject, variable, progress)) {
             LocalizeValue message = JavaErrorLocalize.localVariableIsNotUsedForReading(identifier.getText());
             return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
-                .registerFix(QuickFixFactory.getInstance().createRemoveUnusedVariableFix(variable), null, null, null, myDeadCodeKey)
+                .registerFix(QuickFixFactory.getInstance().createRemoveUnusedVariableFix(variable), null, LocalizeValue.of(), null, myDeadCodeKey)
                 .create();
         }
 
@@ -328,7 +328,7 @@ public class PostHighlightingVisitor {
             if (!referenced && !UnusedSymbolUtil.isImplicitWrite(myProject, variable, progress)) {
                 LocalizeValue message = JavaErrorLocalize.localVariableIsNotAssigned(identifier.getText());
                 return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
-                    .registerFix(new EmptyIntentionAction(UnusedSymbolLocalInspectionBase.DISPLAY_NAME), null, null, null, myDeadCodeKey)
+                    .registerFix(new EmptyIntentionAction(UnusedSymbolLocalInspectionBase.DISPLAY_NAME), null, LocalizeValue.of(), null, myDeadCodeKey)
                     .create();
             }
         }
@@ -377,7 +377,7 @@ public class PostHighlightingVisitor {
                 LocalizeValue message = JavaErrorLocalize.privateFieldIsNotAssigned(identifier.getText());
                 HighlightInfo.Builder hlBuilder = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
 
-                hlBuilder.registerFix(quickFixFactory.createCreateGetterOrSetterFix(false, true, field), null, null, null, myDeadCodeKey);
+                hlBuilder.registerFix(quickFixFactory.createCreateGetterOrSetterFix(false, true, field), null, LocalizeValue.of(), null, myDeadCodeKey);
                 if (!field.isFinal()) {
                     hlBuilder.registerFix(
                         quickFixFactory.createCreateConstructorParameterFromFieldFix(field),
@@ -402,7 +402,7 @@ public class PostHighlightingVisitor {
             if (UnusedSymbolUtil.isImplicitWrite(myProject, field, progress)) {
                 LocalizeValue message = JavaErrorLocalize.privateFieldIsNotUsedForReading(identifier.getText());
                 return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
-                    .registerFix(QuickFixFactory.getInstance().createSafeDeleteFix(field), null, null, null, myDeadCodeKey)
+                    .registerFix(QuickFixFactory.getInstance().createSafeDeleteFix(field), null, LocalizeValue.of(), null, myDeadCodeKey)
                     .create();
             }
             return formatUnusedSymbolHighlightInfo(
@@ -427,10 +427,10 @@ public class PostHighlightingVisitor {
     ) {
         QuickFixFactory fixFactory = QuickFixFactory.getInstance();
         return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
-            .registerFix(fixFactory.createRemoveUnusedVariableFix(field), null, null, null, myDeadCodeKey)
-            .registerFix(fixFactory.createCreateGetterOrSetterFix(true, false, field), null, null, null, myDeadCodeKey)
-            .registerFix(fixFactory.createCreateGetterOrSetterFix(false, true, field), null, null, null, myDeadCodeKey)
-            .registerFix(fixFactory.createCreateGetterOrSetterFix(true, true, field), null, null, null, myDeadCodeKey);
+            .registerFix(fixFactory.createRemoveUnusedVariableFix(field), null, LocalizeValue.of(), null, myDeadCodeKey)
+            .registerFix(fixFactory.createCreateGetterOrSetterFix(true, false, field), null, LocalizeValue.of(), null, myDeadCodeKey)
+            .registerFix(fixFactory.createCreateGetterOrSetterFix(false, true, field), null, LocalizeValue.of(), null, myDeadCodeKey)
+            .registerFix(fixFactory.createCreateGetterOrSetterFix(true, true, field), null, LocalizeValue.of(), null, myDeadCodeKey);
     }
 
     private final Map<PsiMethod, Boolean> isOverriddenOrOverrides = ConcurrentFactoryMap.createMap(method -> {
@@ -477,7 +477,7 @@ public class PostHighlightingVisitor {
             HighlightInfo.Builder hlBuilder = checkUnusedParameter(parameter, identifier, progress);
             if (hlBuilder != null) {
                 return hlBuilder
-                    .registerFix(QuickFixFactory.getInstance().createRenameToIgnoredFix(parameter), null, null, null, myDeadCodeKey)
+                    .registerFix(QuickFixFactory.getInstance().createRenameToIgnoredFix(parameter), null, LocalizeValue.of(), null, myDeadCodeKey)
                     .create();
             }
         }
@@ -521,7 +521,7 @@ public class PostHighlightingVisitor {
         LocalizeValue symbolName = HighlightMessageUtil.getSymbolName(method, PsiSubstitutor.EMPTY);
         LocalizeValue message = key.apply(symbolName);
         HighlightInfo.Builder hlBuilder = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
-        hlBuilder.registerFix(QuickFixFactory.getInstance().createSafeDeleteFix(method), null, null, null, myDeadCodeKey);
+        hlBuilder.registerFix(QuickFixFactory.getInstance().createSafeDeleteFix(method), null, LocalizeValue.of(), null, myDeadCodeKey);
         SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(
             method,
             annoName -> {
@@ -578,7 +578,7 @@ public class PostHighlightingVisitor {
         LocalizeValue message = pattern.apply(symbolName);
         HighlightInfo.Builder hlBuilder = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, highlightInfoType);
         QuickFixFactory fixFactory = QuickFixFactory.getInstance();
-        hlBuilder.registerFix(fixFactory.createSafeDeleteFix(aClass), null, null, null, highlightDisplayKey);
+        hlBuilder.registerFix(fixFactory.createSafeDeleteFix(aClass), null, LocalizeValue.of(), null, highlightDisplayKey);
         SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(
             (PsiModifierListOwner)aClass,
             annoName -> {
@@ -640,8 +640,8 @@ public class PostHighlightingVisitor {
         HighlightInfo info = HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.UNUSED_IMPORT)
             .range(importStatement)
             .descriptionAndTooltip(InspectionLocalize.unusedImportStatement())
-            .registerFix(QuickFixFactory.getInstance().createOptimizeImportsFix(false), null, null, null, unusedImportKey)
-            .registerFix(QuickFixFactory.getInstance().createEnableOptimizeImportsOnTheFlyFix(), null, null, null, unusedImportKey)
+            .registerFix(QuickFixFactory.getInstance().createOptimizeImportsFix(false), null, LocalizeValue.of(), null, unusedImportKey)
+            .registerFix(QuickFixFactory.getInstance().createEnableOptimizeImportsOnTheFlyFix(), null, LocalizeValue.of(), null, unusedImportKey)
             .create();
 
         myHasRedundantImports = true;
