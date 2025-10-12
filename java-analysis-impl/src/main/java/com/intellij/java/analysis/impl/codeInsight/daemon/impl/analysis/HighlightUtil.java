@@ -2532,7 +2532,7 @@ public class HighlightUtil extends HighlightUtilBase {
                 if (!missingConstants.isEmpty()) {
                     hlBuilder.registerFix(factory.createAddMissingEnumBranchesFix(switchBlock, missingConstants));
                 }
-                hlBuilder.registerFix(factory.createAddSwitchDefaultFix(switchBlock, null));
+                hlBuilder.registerFix(factory.createAddSwitchDefaultFix(switchBlock, LocalizeValue.empty()));
                 results.add(hlBuilder.create());
             }
         }

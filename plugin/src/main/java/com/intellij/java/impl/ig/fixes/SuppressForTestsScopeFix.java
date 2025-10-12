@@ -28,6 +28,7 @@ import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
@@ -39,65 +40,64 @@ import jakarta.annotation.Nullable;
  * @author Bas Leijdekkers
  */
 public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
+    private final AbstractBaseJavaLocalInspectionTool myInspection;
 
-  private final AbstractBaseJavaLocalInspectionTool myInspection;
-
-  private SuppressForTestsScopeFix(AbstractBaseJavaLocalInspectionTool inspection) {
-    myInspection = inspection;
-  }
-
-  @Nullable
-  public static SuppressForTestsScopeFix build(AbstractBaseJavaLocalInspectionTool inspection, PsiElement context) {
-    if (!TestUtils.isInTestSourceContent(context)) {
-      return null;
+    private SuppressForTestsScopeFix(AbstractBaseJavaLocalInspectionTool inspection) {
+        myInspection = inspection;
     }
-    return new SuppressForTestsScopeFix(inspection);
-  }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return InspectionGadgetsLocalize.suppressForTestsScopeQuickfix().get();
-  }
+    @Nullable
+    public static SuppressForTestsScopeFix build(AbstractBaseJavaLocalInspectionTool inspection, PsiElement context) {
+        if (!TestUtils.isInTestSourceContent(context)) {
+            return null;
+        }
+        return new SuppressForTestsScopeFix(inspection);
+    }
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return InspectionGadgetsLocalize.suppressForTestsScopeQuickfix();
+    }
 
-  @Override
-  protected void doFix(final Project project, ProblemDescriptor descriptor) {
-    addRemoveTestsScope(project, true);
-    final VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
-    ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
-      @Override
-      public void undo() {
-        addRemoveTestsScope(project, false);
-      }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 
-      @Override
-      public void redo() {
+    @Override
+    protected void doFix(final Project project, ProblemDescriptor descriptor) {
         addRemoveTestsScope(project, true);
-      }
-    });
-  }
+        final VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
+        ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
+            @Override
+            public void undo() {
+                addRemoveTestsScope(project, false);
+            }
 
-  private void addRemoveTestsScope(Project project, boolean add) {
-    final InspectionProfile profile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
-    final String shortName = myInspection.getShortName();
-    final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
-    if (tool == null) {
-      return;
+            @Override
+            public void redo() {
+                addRemoveTestsScope(project, true);
+            }
+        });
     }
-    if (add) {
-      final NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
-      final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
-      final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
-      profile.addScope(tool, namedScope, level, false, project);
+
+    private void addRemoveTestsScope(Project project, boolean add) {
+        final InspectionProfile profile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
+        final String shortName = myInspection.getShortName();
+        final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
+        if (tool == null) {
+            return;
+        }
+        if (add) {
+            final NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
+            final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
+            final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
+            profile.addScope(tool, namedScope, level, false, project);
+        }
+        else {
+            profile.removeScope(shortName, "Tests", project);
+        }
+        profile.scopesChanged();
     }
-    else {
-      profile.removeScope(shortName, "Tests", project);
-    }
-    profile.scopesChanged();
-  }
 }

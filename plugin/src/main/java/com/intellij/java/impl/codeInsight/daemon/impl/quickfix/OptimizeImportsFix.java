@@ -18,45 +18,50 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
 
 public class OptimizeImportsFix implements SyntheticIntentionAction {
-  private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
+    private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
 
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("optimize.imports.fix");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return file.getManager().isInProject(file) && file instanceof PsiJavaFile;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) return;
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-
-    try {
-      JavaCodeStyleManager.getInstance(project).optimizeImports(file);
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.optimizeImportsFix();
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return file.getManager().isInProject(file) && file instanceof PsiJavaFile;
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!(file instanceof PsiJavaFile)) {
+            return;
+        }
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
+        }
+
+        try {
+            JavaCodeStyleManager.getInstance(project).optimizeImports(file);
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }
