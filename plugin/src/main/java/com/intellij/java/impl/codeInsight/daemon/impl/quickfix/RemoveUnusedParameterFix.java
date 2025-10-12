@@ -15,94 +15,93 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+    private final String myName;
 
-  private final String myName;
-
-  public RemoveUnusedParameterFix(PsiParameter parameter) {
-    super(parameter);
-    myName = parameter.getName();
-  }
-
-  @Nonnull
-  @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("remove.unused.parameter.text", myName);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("remove.unused.parameter.family");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
-    final PsiParameter myParameter = (PsiParameter)startElement;
-    return
-      myParameter.isValid()
-      && myParameter.getDeclarationScope() instanceof PsiMethod
-      && myParameter.getManager().isInProject(myParameter);
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
-    final PsiParameter myParameter = (PsiParameter)startElement;
-    if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
-    removeReferences(myParameter);
-  }
-
-  private static void removeReferences(PsiParameter parameter) {
-    PsiMethod method = (PsiMethod) parameter.getDeclarationScope();
-    ChangeSignatureProcessor processor = new ChangeSignatureProcessor(parameter.getProject(),
-                                                                      method,
-                                                                      false, null,
-                                                                      method.getName(),
-                                                                      method.getReturnType(),
-                                                                      getNewParametersInfo(method, parameter));
-    processor.run();
-  }
-
-  public static ParameterInfoImpl[] getNewParametersInfo(PsiMethod method, PsiParameter parameterToRemove) {
-    List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
-    PsiParameter[] parameters = method.getParameterList().getParameters();
-    for (int i = 0; i < parameters.length; i++) {
-      PsiParameter parameter = parameters[i];
-      if (!Comparing.equal(parameter, parameterToRemove)) {
-        result.add(new ParameterInfoImpl(i, parameter.getName(), parameter.getType()));
-      }
+    public RemoveUnusedParameterFix(PsiParameter parameter) {
+        super(parameter);
+        myName = parameter.getName();
     }
-    return result.toArray(new ParameterInfoImpl[result.size()]);
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.removeUnusedParameterText(myName);
+    }
+
+    @Override
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiParameter myParameter = (PsiParameter) startElement;
+        return myParameter.isValid()
+            && myParameter.getDeclarationScope() instanceof PsiMethod
+            && myParameter.getManager().isInProject(myParameter);
+    }
+
+    @Override
+    public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiParameter myParameter = (PsiParameter) startElement;
+        if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) {
+            return;
+        }
+        removeReferences(myParameter);
+    }
+
+    private static void removeReferences(PsiParameter parameter) {
+        PsiMethod method = (PsiMethod) parameter.getDeclarationScope();
+        ChangeSignatureProcessor processor = new ChangeSignatureProcessor(parameter.getProject(),
+            method,
+            false, null,
+            method.getName(),
+            method.getReturnType(),
+            getNewParametersInfo(method, parameter)
+        );
+        processor.run();
+    }
+
+    public static ParameterInfoImpl[] getNewParametersInfo(PsiMethod method, PsiParameter parameterToRemove) {
+        List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
+        PsiParameter[] parameters = method.getParameterList().getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            PsiParameter parameter = parameters[i];
+            if (!Comparing.equal(parameter, parameterToRemove)) {
+                result.add(new ParameterInfoImpl(i, parameter.getName(), parameter.getType()));
+            }
+        }
+        return result.toArray(new ParameterInfoImpl[result.size()]);
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

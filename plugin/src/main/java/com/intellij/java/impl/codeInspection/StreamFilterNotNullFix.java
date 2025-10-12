@@ -22,13 +22,14 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.StreamApiUtil;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
@@ -37,92 +38,93 @@ import jakarta.annotation.Nullable;
 import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaInspectionsBundle.message("inspection.data.flow.filter.notnull.quickfix");
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return JavaInspectionsLocalize.inspectionDataFlowFilterNotnullQuickfix();
+    }
 
-  @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
-    if (function == null) {
-      return;
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
+        if (function == null) {
+            return;
+        }
+        PsiMethodCallExpression call = PsiTreeUtil.getParentOfType(function, PsiMethodCallExpression.class);
+        if (call == null) {
+            return;
+        }
+        PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
+        if (qualifier == null) {
+            return;
+        }
+        String name = suggestVariableName(function, qualifier);
+        // We create first lambda, then convert to method reference as user code style might be set to prefer lambdas
+        PsiExpression replacement = JavaPsiFacade.getElementFactory(project)
+            .createExpressionFromText(qualifier.getText() + ".filter(" + name + "->" + name + "!=null)", qualifier);
+        PsiMethodCallExpression result = (PsiMethodCallExpression) qualifier.replace(replacement);
+        LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
     }
-    PsiMethodCallExpression call = PsiTreeUtil.getParentOfType(function, PsiMethodCallExpression.class);
-    if (call == null) {
-      return;
-    }
-    PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
-    if (qualifier == null) {
-      return;
-    }
-    String name = suggestVariableName(function, qualifier);
-    // We create first lambda, then convert to method reference as user code style might be set to prefer lambdas
-    PsiExpression replacement = JavaPsiFacade.getElementFactory(project).createExpressionFromText(qualifier.getText() + ".filter(" + name + "->" + name + "!=null)", qualifier);
-    PsiMethodCallExpression result = (PsiMethodCallExpression) qualifier.replace(replacement);
-    LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
-  }
 
-  @Nonnull
-  private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier) {
-    String name = null;
-    if (function instanceof PsiLambdaExpression) {
-      PsiParameter parameter = ArrayUtil.getFirstElement(((PsiLambdaExpression) function).getParameterList().getParameters());
-      if (parameter != null) {
-        name = parameter.getName();
-      }
+    @Nonnull
+    private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier) {
+        String name = null;
+        if (function instanceof PsiLambdaExpression) {
+            PsiParameter parameter = ArrayUtil.getFirstElement(((PsiLambdaExpression) function).getParameterList().getParameters());
+            if (parameter != null) {
+                name = parameter.getName();
+            }
+        }
+        PsiType type = StreamApiUtil.getStreamElementType(qualifier.getType());
+        JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(function.getProject());
+        SuggestedNameInfo info = javaCodeStyleManager.suggestVariableName(VariableKind.PARAMETER, name, null, type, true);
+        name = ArrayUtil.getFirstElement(info.names);
+        return javaCodeStyleManager.suggestUniqueVariableName(name == null ? "obj" : name, qualifier, false);
     }
-    PsiType type = StreamApiUtil.getStreamElementType(qualifier.getType());
-    JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(function.getProject());
-    SuggestedNameInfo info = javaCodeStyleManager.suggestVariableName(VariableKind.PARAMETER, name, null, type, true);
-    name = ArrayUtil.getFirstElement(info.names);
-    return javaCodeStyleManager.suggestUniqueVariableName(name == null ? "obj" : name, qualifier, false);
-  }
 
-  @Nullable
-  private static PsiFunctionalExpression findFunction(PsiElement reference) {
-    if (reference instanceof PsiFunctionalExpression) {
-      return (PsiFunctionalExpression) reference;
-    }
-    if (reference instanceof PsiIdentifier) {
-      // in "str.trim()" go from "trim" to "str"
-      reference = reference.getParent();
-      if (reference instanceof PsiReferenceExpression) {
-        reference = PsiUtil.skipParenthesizedExprDown(((PsiReferenceExpression) reference).getQualifierExpression());
-      }
-    }
-    if (reference instanceof PsiReferenceExpression) {
-      PsiParameter parameter = tryCast(((PsiReferenceExpression) reference).resolve(), PsiParameter.class);
-      if (parameter == null) {
+    @Nullable
+    private static PsiFunctionalExpression findFunction(PsiElement reference) {
+        if (reference instanceof PsiFunctionalExpression) {
+            return (PsiFunctionalExpression) reference;
+        }
+        if (reference instanceof PsiIdentifier) {
+            // in "str.trim()" go from "trim" to "str"
+            reference = reference.getParent();
+            if (reference instanceof PsiReferenceExpression) {
+                reference = PsiUtil.skipParenthesizedExprDown(((PsiReferenceExpression) reference).getQualifierExpression());
+            }
+        }
+        if (reference instanceof PsiReferenceExpression) {
+            PsiParameter parameter = tryCast(((PsiReferenceExpression) reference).resolve(), PsiParameter.class);
+            if (parameter == null) {
+                return null;
+            }
+            PsiParameterList parameterList = tryCast(parameter.getParent(), PsiParameterList.class);
+            if (parameterList == null || parameterList.getParametersCount() != 1) {
+                return null;
+            }
+            return tryCast(parameterList.getParent(), PsiLambdaExpression.class);
+        }
         return null;
-      }
-      PsiParameterList parameterList = tryCast(parameter.getParent(), PsiParameterList.class);
-      if (parameterList == null || parameterList.getParametersCount() != 1) {
-        return null;
-      }
-      return tryCast(parameterList.getParent(), PsiLambdaExpression.class);
     }
-    return null;
-  }
 
-  public static StreamFilterNotNullFix makeFix(PsiElement reference) {
-    PsiFunctionalExpression fn = findFunction(reference);
-    if (fn == null) {
-      return null;
+    public static StreamFilterNotNullFix makeFix(PsiElement reference) {
+        PsiFunctionalExpression fn = findFunction(reference);
+        if (fn == null) {
+            return null;
+        }
+        PsiExpressionList args = tryCast(PsiUtil.skipParenthesizedExprUp(fn.getParent()), PsiExpressionList.class);
+        if (args == null || args.getExpressions().length != 1) {
+            return null;
+        }
+        PsiMethodCallExpression call = tryCast(args.getParent(), PsiMethodCallExpression.class);
+        if (call == null) {
+            return null;
+        }
+        PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
+        if (qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), CommonClassNames.JAVA_UTIL_STREAM_STREAM)) {
+            return null;
+        }
+        return new StreamFilterNotNullFix();
     }
-    PsiExpressionList args = tryCast(PsiUtil.skipParenthesizedExprUp(fn.getParent()), PsiExpressionList.class);
-    if (args == null || args.getExpressions().length != 1) {
-      return null;
-    }
-    PsiMethodCallExpression call = tryCast(args.getParent(), PsiMethodCallExpression.class);
-    if (call == null) {
-      return null;
-    }
-    PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
-    if (qualifier == null || !InheritanceUtil.isInheritor(qualifier.getType(), CommonClassNames.JAVA_UTIL_STREAM_STREAM)) {
-      return null;
-    }
-    return new StreamFilterNotNullFix();
-  }
 }

@@ -12,13 +12,13 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
 
 public class WrapWithMutableCollectionFix implements LocalQuickFix {
     private final String myVariableName;
@@ -31,18 +31,10 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
         myOnTheFly = onTheFly;
     }
 
-    @Nls(capitalization = Nls.Capitalization.Sentence)
     @Nonnull
     @Override
-    public String getName() {
-        return "Wrap '" + myVariableName + "' with '" + StringUtil.getShortName(myCollectionName) + "'";
-    }
-
-    @Nls(capitalization = Nls.Capitalization.Sentence)
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return "Wrap with mutable collection";
+    public LocalizeValue getName() {
+        return LocalizeValue.localizeTODO("Wrap '" + myVariableName + "' with '" + StringUtil.getShortName(myCollectionName) + "'");
     }
 
     @Override

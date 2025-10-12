@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.util.PropertyMemberType;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -38,122 +38,128 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
  * @author peter
-*/
+ */
 public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance(CreateFieldOrPropertyFix.class);
+    private static final Logger LOG = Logger.getInstance(CreateFieldOrPropertyFix.class);
 
-  private final PsiClass myClass;
-  private final String myName;
-  private final PsiType myType;
-  private final PropertyMemberType myMemberType;
-  private final PsiAnnotation[] myAnnotations;
+    private final PsiClass myClass;
+    private final String myName;
+    private final PsiType myType;
+    private final PropertyMemberType myMemberType;
+    private final PsiAnnotation[] myAnnotations;
 
-  public CreateFieldOrPropertyFix(final PsiClass aClass, final String name, final PsiType type, final PropertyMemberType memberType, final PsiAnnotation[] annotations) {
-    myClass = aClass;
-    myName = name;
-    myType = type;
-    myMemberType = memberType;
-    myAnnotations = annotations;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message(myMemberType == PropertyMemberType.FIELD ? "create.field.text":"create.property.text", myName);
-  }
-
-  @Override
-  @Nonnull
-  public String getName() {
-    return getText();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
-    applyFixInner(project);
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return true;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    applyFixInner(project);
-  }
-
-  private void applyFixInner(final Project project) {
-    final PsiFile file = myClass.getContainingFile();
-    final Editor editor = CodeInsightUtil.positionCursor(project, myClass.getContainingFile(), myClass.getLBrace());
-    if (editor != null) {
-      new WriteCommandAction(project, file) {
-        @Override
-        protected void run(Result result) throws Throwable {
-          generateMembers(project, editor, file);
-        }
-
-        @Override
-        protected boolean isGlobalUndoAction() {
-          return true; // todo check
-        }
-      }.execute();
+    public CreateFieldOrPropertyFix(
+        final PsiClass aClass,
+        final String name,
+        final PsiType type,
+        final PropertyMemberType memberType,
+        final PsiAnnotation[] annotations
+    ) {
+        myClass = aClass;
+        myName = name;
+        myType = type;
+        myMemberType = memberType;
+        myAnnotations = annotations;
     }
-  }
 
-  private void generateMembers(final Project project, final Editor editor, final PsiFile file) {
-    try {
-      List<? extends GenerationInfo> prototypes = new GenerateFieldOrPropertyHandler(myName, myType, myMemberType, myAnnotations).generateMemberPrototypes(myClass, ClassMember.EMPTY_ARRAY);
-      prototypes = GenerateMembersUtil.insertMembersAtOffset(myClass.getContainingFile(), editor.getCaretModel().getOffset(), prototypes);
-      if (prototypes.isEmpty()) return;
-      final PsiElement scope = prototypes.get(0).getPsiMember().getContext();
-      assert scope != null;
-      final Expression expression = new EmptyExpression() {
-        @Override
-        public consulo.language.editor.template.Result calculateResult(final ExpressionContext context) {
-          return new TextResult(myType.getCanonicalText());
-        }
-      };
-      final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
-      boolean first = true;
-      @NonNls final String TYPE_NAME_VAR = "TYPE_NAME_VAR";
-      for (GenerationInfo prototype : prototypes) {
-        final PsiTypeElement typeElement = PropertyUtil.getPropertyTypeElement(prototype.getPsiMember());
-        if (first) {
-          first = false;
-          builder.replaceElement(typeElement, TYPE_NAME_VAR, expression, true);
-        }
-        else {
-          builder.replaceElement(typeElement, TYPE_NAME_VAR, TYPE_NAME_VAR, false);
-        }
-      }
-      PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
-      editor.getCaretModel().moveToOffset(scope.getTextRange().getStartOffset());
-      TemplateManager.getInstance(project).startTemplate(editor, builder.buildInlineTemplate());
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        return myMemberType == PropertyMemberType.FIELD
+            ? JavaQuickFixLocalize.createFieldText(myName)
+            : JavaQuickFixLocalize.createPropertyText(myName);
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return getText();
     }
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Override
+    public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+        applyFixInner(project);
+    }
 
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return true;
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        applyFixInner(project);
+    }
+
+    private void applyFixInner(final Project project) {
+        final PsiFile file = myClass.getContainingFile();
+        final Editor editor = CodeInsightUtil.positionCursor(project, myClass.getContainingFile(), myClass.getLBrace());
+        if (editor != null) {
+            new WriteCommandAction(project, file) {
+                @Override
+                protected void run(Result result) throws Throwable {
+                    generateMembers(project, editor, file);
+                }
+
+                @Override
+                protected boolean isGlobalUndoAction() {
+                    return true; // todo check
+                }
+            }.execute();
+        }
+    }
+
+    private void generateMembers(final Project project, final Editor editor, final PsiFile file) {
+        try {
+            List<? extends GenerationInfo> prototypes = new GenerateFieldOrPropertyHandler(myName, myType, myMemberType, myAnnotations)
+                .generateMemberPrototypes(myClass, ClassMember.EMPTY_ARRAY);
+            prototypes =
+                GenerateMembersUtil.insertMembersAtOffset(myClass.getContainingFile(), editor.getCaretModel().getOffset(), prototypes);
+            if (prototypes.isEmpty()) {
+                return;
+            }
+            final PsiElement scope = prototypes.get(0).getPsiMember().getContext();
+            assert scope != null;
+            final Expression expression = new EmptyExpression() {
+                @Override
+                public consulo.language.editor.template.Result calculateResult(final ExpressionContext context) {
+                    return new TextResult(myType.getCanonicalText());
+                }
+            };
+            final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
+            boolean first = true;
+            @NonNls final String TYPE_NAME_VAR = "TYPE_NAME_VAR";
+            for (GenerationInfo prototype : prototypes) {
+                final PsiTypeElement typeElement = PropertyUtil.getPropertyTypeElement(prototype.getPsiMember());
+                if (first) {
+                    first = false;
+                    builder.replaceElement(typeElement, TYPE_NAME_VAR, expression, true);
+                }
+                else {
+                    builder.replaceElement(typeElement, TYPE_NAME_VAR, TYPE_NAME_VAR, false);
+                }
+            }
+            PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
+            editor.getCaretModel().moveToOffset(scope.getTextRange().getStartOffset());
+            TemplateManager.getInstance(project).startTemplate(editor, builder.buildInlineTemplate());
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

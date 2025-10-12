@@ -15,34 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import jakarta.annotation.Nonnull;
 
 public class AddDefaultConstructorFix extends AddMethodFix {
-  public AddDefaultConstructorFix(PsiClass aClass) {
-    this(aClass, PsiUtil.getMaximumModifierForMember(aClass, false));
-  }
-
-  public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant final String modifier) {
-    super(generateConstructor(aClass.getName(), modifier), aClass);
-    setText(JavaQuickFixBundle.message("add.default.constructor.text", VisibilityUtil.toPresentableText(modifier), aClass.getName()));
-  }
-
-  private static String generateConstructor(final String className, @PsiModifier.ModifierConstant final String modifier) {
-    if (modifier.equals(PsiModifier.PACKAGE_LOCAL)) {
-      return className + "() {}";
+    public AddDefaultConstructorFix(PsiClass aClass) {
+        this(aClass, PsiUtil.getMaximumModifierForMember(aClass, false));
     }
-    return modifier + " " + className + "() {}";
-  }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.default.constructor.family");
-  }
+    public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant final String modifier) {
+        super(generateConstructor(aClass.getName(), modifier), aClass);
+        setText(JavaQuickFixLocalize.addDefaultConstructorText(VisibilityUtil.toPresentableText(modifier), aClass.getName()));
+    }
+
+    private static String generateConstructor(final String className, @PsiModifier.ModifierConstant final String modifier) {
+        if (modifier.equals(PsiModifier.PACKAGE_LOCAL)) {
+            return className + "() {}";
+        }
+        return modifier + " " + className + "() {}";
+    }
 }

@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -31,114 +31,116 @@ import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnFix");
+    private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnFix");
 
-  private final PsiType myParameterType;
-  private final int myIndex;
-  private final boolean myFixWholeHierarchy;
-  private final String myName;
+    private final PsiType myParameterType;
+    private final int myIndex;
+    private final boolean myFixWholeHierarchy;
+    private final String myName;
 
-  public MethodParameterFix(PsiMethod method, PsiType type, int index, boolean fixWholeHierarchy) {
-    super(method);
-    myParameterType = type;
-    myIndex = index;
-    myFixWholeHierarchy = fixWholeHierarchy;
-    myName = method.getName();
-  }
-
-  @Nonnull
-  @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("fix.parameter.type.text",
-                                  myName,
-                                  myParameterType.getCanonicalText() );
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.parameter.type.family");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
-    final PsiMethod myMethod = (PsiMethod)startElement;
-    return myMethod.isValid()
-        && myMethod.getManager().isInProject(myMethod)
-        && myParameterType != null
-        && !TypeConversionUtil.isNullType(myParameterType)
-        && myMethod.getReturnType() != null
-        && !Comparing.equal(myParameterType, myMethod.getReturnType());
-  }
-
-  @Override
-  public void invoke(@Nonnull final Project project,
-                     @Nonnull final PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
-    final PsiMethod myMethod = (PsiMethod)startElement;
-    if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
-    try {
-      PsiMethod method = myMethod;
-      if (myFixWholeHierarchy) {
-        method = myMethod.findDeepestSuperMethod();
-        if (method == null) method = myMethod;
-      }
-
-      final PsiMethod finalMethod = method;
-      ChangeSignatureProcessor processor = new ChangeSignatureProcessor(project,
-                                                                        finalMethod,
-                                                                        false, null,
-                                                                        finalMethod.getName(),
-                                                                        finalMethod.getReturnType(),
-                                                                        getNewParametersInfo(finalMethod));
-
-      processor.run();
-
-
-      LanguageUndoUtil.markPsiFileForUndo(file);
+    public MethodParameterFix(PsiMethod method, PsiType type, int index, boolean fixWholeHierarchy) {
+        super(method);
+        myParameterType = type;
+        myIndex = index;
+        myFixWholeHierarchy = fixWholeHierarchy;
+        myName = method.getName();
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
 
-  private ParameterInfoImpl[] getNewParametersInfo(PsiMethod method) throws IncorrectOperationException {
-    List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
-    PsiParameter[] parameters = method.getParameterList().getParameters();
-    PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
-    JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(method.getProject());
-    SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.PARAMETER, null, null, myParameterType);
-    PsiParameter newParameter = factory.createParameter(nameInfo.names[0], myParameterType);
-    if (method.getContainingClass().isInterface()) {
-      PsiUtil.setModifierProperty(newParameter, PsiModifier.FINAL, false);
-      }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.fixParameterTypeText(myName, myParameterType.getCanonicalText());
+    }
 
-    for (int i = 0; i < parameters.length; i++) {
-      PsiParameter parameter = parameters[i];
-      if (i == myIndex) {
-        newParameter.setName(parameter.getName());
-        parameter = newParameter;
-      }
-      result.add(new ParameterInfoImpl(i, parameter.getName(), parameter.getType()));
+    @Override
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiMethod myMethod = (PsiMethod) startElement;
+        return myMethod.isValid()
+            && myMethod.getManager().isInProject(myMethod)
+            && myParameterType != null
+            && !TypeConversionUtil.isNullType(myParameterType)
+            && myMethod.getReturnType() != null
+            && !Comparing.equal(myParameterType, myMethod.getReturnType());
     }
-    if (parameters.length == myIndex) {
-      result.add(new ParameterInfoImpl(-1, newParameter.getName(), newParameter.getType()));
+
+    @Override
+    public void invoke(
+        @Nonnull final Project project,
+        @Nonnull final PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiMethod myMethod = (PsiMethod) startElement;
+        if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
+            return;
+        }
+        try {
+            PsiMethod method = myMethod;
+            if (myFixWholeHierarchy) {
+                method = myMethod.findDeepestSuperMethod();
+                if (method == null) {
+                    method = myMethod;
+                }
+            }
+
+            final PsiMethod finalMethod = method;
+            ChangeSignatureProcessor processor = new ChangeSignatureProcessor(project,
+                finalMethod,
+                false, null,
+                finalMethod.getName(),
+                finalMethod.getReturnType(),
+                getNewParametersInfo(finalMethod)
+            );
+
+            processor.run();
+
+
+            LanguageUndoUtil.markPsiFileForUndo(file);
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
     }
-    return result.toArray(new ParameterInfoImpl[result.size()]);
-  }
+
+    private ParameterInfoImpl[] getNewParametersInfo(PsiMethod method) throws IncorrectOperationException {
+        List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
+        PsiParameter[] parameters = method.getParameterList().getParameters();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
+        JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(method.getProject());
+        SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.PARAMETER, null, null, myParameterType);
+        PsiParameter newParameter = factory.createParameter(nameInfo.names[0], myParameterType);
+        if (method.getContainingClass().isInterface()) {
+            PsiUtil.setModifierProperty(newParameter, PsiModifier.FINAL, false);
+        }
+
+        for (int i = 0; i < parameters.length; i++) {
+            PsiParameter parameter = parameters[i];
+            if (i == myIndex) {
+                newParameter.setName(parameter.getName());
+                parameter = newParameter;
+            }
+            result.add(new ParameterInfoImpl(i, parameter.getName(), parameter.getType()));
+        }
+        if (parameters.length == myIndex) {
+            result.add(new ParameterInfoImpl(-1, newParameter.getName(), newParameter.getType()));
+        }
+        return result.toArray(new ParameterInfoImpl[result.size()]);
+    }
 }

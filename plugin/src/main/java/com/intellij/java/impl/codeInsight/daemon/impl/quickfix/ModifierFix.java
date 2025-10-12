@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -55,7 +54,8 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private final String myModifier;
     private final boolean myShouldHave;
     private final boolean myShowContainingClass;
-    private final String myName;
+    @Nonnull
+    private final LocalizeValue myName;
     private final SmartPsiElementPointer<PsiVariable> myVariable;
 
     @RequiredReadAction
@@ -92,12 +92,12 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @Nonnull
     @Override
-    public String getText() {
+    public LocalizeValue getText() {
         return myName;
     }
 
     @RequiredReadAction
-    private String format(PsiVariable variable, PsiModifierList modifierList) {
+    private LocalizeValue format(PsiVariable variable, PsiModifierList modifierList) {
         String name;
         PsiElement parent = variable == null ? modifierList == null ? null : modifierList.getParent() : variable;
         if (parent instanceof PsiClass psiClass) {
@@ -126,14 +126,8 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         String modifierText = VisibilityUtil.toPresentableText(myModifier);
 
         return myShouldHave
-            ? JavaQuickFixLocalize.addModifierFix(name, modifierText).get()
-            : JavaQuickFixLocalize.removeModifierFix(name, modifierText).get();
-    }
-
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-        return JavaQuickFixLocalize.fixModifiersFamily().get();
+            ? JavaQuickFixLocalize.addModifierFix(name, modifierText)
+            : JavaQuickFixLocalize.removeModifierFix(name, modifierText);
     }
 
     @Override

@@ -23,62 +23,61 @@ import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiEl
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  private final String myMethodName;
-  private final boolean myIsSetter;
+    private final String myMethodName;
+    private final boolean myIsSetter;
 
-  public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
-    super(element);
-    myMethodName = getter.getName();
-    myIsSetter = isSetter;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
-    PsiReferenceExpression place = (PsiReferenceExpression)startElement;
-    if (!FileModificationService.getInstance().preparePsiElementForWrite(place)) return;
-    String qualifier = null;
-    final PsiExpression qualifierExpression = place.getQualifierExpression();
-    if (qualifierExpression != null) {
-      qualifier = qualifierExpression.getText();
+    public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
+        super(element);
+        myMethodName = getter.getName();
+        myIsSetter = isSetter;
     }
-    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-    PsiMethodCallExpression callExpression;
-    final String call = (qualifier != null ? qualifier + "." : "") + myMethodName;
-    if (!myIsSetter) {
-      callExpression = (PsiMethodCallExpression)elementFactory.createExpressionFromText(call + "()", null);
-      callExpression = (PsiMethodCallExpression)CodeStyleManager.getInstance(project).reformat(callExpression);
-      place.replace(callExpression);
-    } else {
-      PsiElement parent = PsiTreeUtil.skipParentsOfType(place, PsiParenthesizedExpression.class);
-      if (parent instanceof PsiAssignmentExpression) {
-        final PsiExpression rExpression = ((PsiAssignmentExpression)parent).getRExpression();
-        final String argList = rExpression != null ? rExpression.getText() : "";
-        callExpression = (PsiMethodCallExpression)elementFactory.createExpressionFromText(call + "(" +   argList + ")", null);
-        callExpression = (PsiMethodCallExpression)CodeStyleManager.getInstance(project).reformat(callExpression);
-        parent.replace(callExpression);
-      }
+
+    @Override
+    public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        PsiReferenceExpression place = (PsiReferenceExpression) startElement;
+        if (!FileModificationService.getInstance().preparePsiElementForWrite(place)) {
+            return;
+        }
+        String qualifier = null;
+        final PsiExpression qualifierExpression = place.getQualifierExpression();
+        if (qualifierExpression != null) {
+            qualifier = qualifierExpression.getText();
+        }
+        PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+        PsiMethodCallExpression callExpression;
+        final String call = (qualifier != null ? qualifier + "." : "") + myMethodName;
+        if (!myIsSetter) {
+            callExpression = (PsiMethodCallExpression) elementFactory.createExpressionFromText(call + "()", null);
+            callExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(project).reformat(callExpression);
+            place.replace(callExpression);
+        }
+        else {
+            PsiElement parent = PsiTreeUtil.skipParentsOfType(place, PsiParenthesizedExpression.class);
+            if (parent instanceof PsiAssignmentExpression) {
+                final PsiExpression rExpression = ((PsiAssignmentExpression) parent).getRExpression();
+                final String argList = rExpression != null ? rExpression.getText() : "";
+                callExpression = (PsiMethodCallExpression) elementFactory.createExpressionFromText(call + "(" + argList + ")", null);
+                callExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(project).reformat(callExpression);
+                parent.replace(callExpression);
+            }
+        }
     }
-  }
 
-  @Nonnull
-  @Override
-  public String getText() {
-    return myIsSetter ? "Replace with setter" : "Replace with getter";
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Replace with getter/setter";
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return LocalizeValue.localizeTODO(myIsSetter ? "Replace with setter" : "Replace with getter");
+    }
 }

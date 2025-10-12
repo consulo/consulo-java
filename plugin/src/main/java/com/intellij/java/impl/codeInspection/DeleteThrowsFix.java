@@ -15,47 +15,42 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.project.Project;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
  */
 public class DeleteThrowsFix implements LocalQuickFix {
-  private final MethodThrowsFix myQuickFix;
+    private final MethodThrowsFix myQuickFix;
 
-  public DeleteThrowsFix(PsiMethod method, PsiClassType exceptionClass) {
-    myQuickFix = new MethodThrowsFix(method, exceptionClass, false, false);
-  }
-
-  @Override
-  @Nonnull
-  public String getName() {
-    return myQuickFix.getText();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.throws.list.family");
-  }
-
-  @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiElement element = descriptor.getPsiElement();
-    if (element == null) return;
-    final PsiFile psiFile = element.getContainingFile();
-    if (myQuickFix.isAvailable(project, null, psiFile)) {
-      myQuickFix.invoke(project, null, psiFile);
+    public DeleteThrowsFix(PsiMethod method, PsiClassType exceptionClass) {
+        myQuickFix = new MethodThrowsFix(method, exceptionClass, false, false);
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return myQuickFix.getText();
+    }
+
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiElement element = descriptor.getPsiElement();
+        if (element == null) {
+            return;
+        }
+        final PsiFile psiFile = element.getContainingFile();
+        if (myQuickFix.isAvailable(project, null, psiFile)) {
+            myQuickFix.invoke(project, null, psiFile);
+        }
+    }
 }

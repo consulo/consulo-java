@@ -36,17 +36,17 @@ import jakarta.annotation.Nonnull;
  * @see GlobalInspectionTool
  */
 public abstract class BaseJavaLocalInspectionTool<State> extends AbstractBaseJavaLocalInspectionTool<State> implements CustomSuppressableInspectionTool {
-  @Override
-  public SuppressIntentionAction[] getSuppressActions(final PsiElement element) {
-    return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));
-  }
+    @Override
+    public SuppressIntentionAction[] getSuppressActions(final PsiElement element) {
+        return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));
+    }
 
-  @Override
-  public boolean isSuppressedFor(@Nonnull PsiElement element) {
-    return isSuppressedFor(element, this);
-  }
+    @Override
+    public boolean isSuppressedFor(@Nonnull PsiElement element) {
+        return isSuppressedFor(element, this);
+    }
 
-  public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
-    return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
-  }
+    public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
+        return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
+    }
 }

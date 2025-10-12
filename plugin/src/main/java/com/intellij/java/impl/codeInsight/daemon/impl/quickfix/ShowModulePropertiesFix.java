@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.IntentionAndQuickFixAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.IdeActions;
@@ -32,43 +33,37 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implements SyntheticIntentionAction {
-  private final String myModuleName;
+    private final String myModuleName;
 
-  public ShowModulePropertiesFix(@Nonnull PsiElement context) {
-    this(ModuleUtilCore.findModuleForPsiElement(context));
-  }
+    public ShowModulePropertiesFix(@Nonnull PsiElement context) {
+        this(ModuleUtilCore.findModuleForPsiElement(context));
+    }
 
-  public ShowModulePropertiesFix(@Nullable Module module) {
-    myModuleName = module == null ? null : module.getName();
-  }
+    public ShowModulePropertiesFix(@Nullable Module module) {
+        myModuleName = module == null ? null : module.getName();
+    }
 
-  @Nonnull
-  @Override
-  public String getName() {
-    AnAction action = ActionManager.getInstance().getAction(IdeActions.MODULE_SETTINGS);
-    return action.getTemplatePresentation().getText();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        AnAction action = ActionManager.getInstance().getAction(IdeActions.MODULE_SETTINGS);
+        return action.getTemplatePresentation().getTextValue();
+    }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
+    @Override
+    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+        return myModuleName != null;
+    }
 
-  @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
-    return myModuleName != null;
-  }
+    @Override
+    public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
+        ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+            projectStructureSelector.select(myModuleName, null, true);
+        });
+    }
 
-  @Override
-  public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
-    ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
-      projectStructureSelector.select(myModuleName, null, true);
-    });
-  }
-
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

@@ -20,72 +20,75 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiReferenceList;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class MoveBoundClassToFrontFix extends ExtendsListFix {
-  private static final Logger LOG = Logger.getInstance(MoveBoundClassToFrontFix.class);
-  private final String myName;
+    private static final Logger LOG = Logger.getInstance(MoveBoundClassToFrontFix.class);
+    @Nonnull
+    private final LocalizeValue myName;
 
-  public MoveBoundClassToFrontFix(PsiClass aClass, PsiClassType classToExtendFrom) {
-    super(aClass, classToExtendFrom, true);
-    myName = JavaQuickFixBundle.message("move.bound.class.to.front.fix.text",
-                                    HighlightUtil.formatClass(myClassToExtendFrom),
-                                    HighlightUtil.formatClass(aClass));
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return myName;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("move.class.in.extend.list.family");
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
-    final PsiClass myClass = (PsiClass)startElement;
-    if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
-    PsiReferenceList extendsList = myClass.getExtendsList();
-    if (extendsList == null) return;
-    try {
-      modifyList(extendsList, false, -1);
-      modifyList(extendsList, true, 0);
+    public MoveBoundClassToFrontFix(PsiClass aClass, PsiClassType classToExtendFrom) {
+        super(aClass, classToExtendFrom, true);
+        myName = JavaQuickFixLocalize.moveBoundClassToFrontFixText(
+            HighlightUtil.formatClass(myClassToExtendFrom),
+            HighlightUtil.formatClass(aClass)
+        );
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-    LanguageUndoUtil.markPsiFileForUndo(file);
-  }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
-    final PsiClass myClass = (PsiClass)startElement;
-    return
-      myClass.isValid()
-      && myClass.getManager().isInProject(myClass)
-      && myClassToExtendFrom != null
-      && myClassToExtendFrom.isValid()
-    ;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return myName;
+    }
+
+    @Override
+    public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiClass myClass = (PsiClass) startElement;
+        if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) {
+            return;
+        }
+        PsiReferenceList extendsList = myClass.getExtendsList();
+        if (extendsList == null) {
+            return;
+        }
+        try {
+            modifyList(extendsList, false, -1);
+            modifyList(extendsList, true, 0);
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+        LanguageUndoUtil.markPsiFileForUndo(file);
+    }
+
+    @Override
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiClass myClass = (PsiClass) startElement;
+        return
+            myClass.isValid()
+                && myClass.getManager().isInProject(myClass)
+                && myClassToExtendFrom != null
+                && myClassToExtendFrom.isValid();
+    }
 }

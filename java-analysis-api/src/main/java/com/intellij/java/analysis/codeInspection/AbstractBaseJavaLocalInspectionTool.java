@@ -37,151 +37,155 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalInspectionTool implements OldStyleInspection {
-  /**
-   * Override this to report problems at method level.
-   *
-   * @param method     to check.
-   * @param manager    InspectionManager to ask for ProblemDescriptors from.
-   * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
-   * @param state
-   * @return <code>null</code> if no problems found or not applicable at method level.
-   */
-  @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
-    return null;
-  }
+    /**
+     * Override this to report problems at method level.
+     *
+     * @param method     to check.
+     * @param manager    InspectionManager to ask for ProblemDescriptors from.
+     * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+     * @param state
+     * @return <code>null</code> if no problems found or not applicable at method level.
+     */
+    @Nullable
+    public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+        return null;
+    }
 
-  /**
-   * Override this to report problems at class level.
-   *
-   * @param aClass     to check.
-   * @param manager    InspectionManager to ask for ProblemDescriptors from.
-   * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
-   * @param state
-   * @return <code>null</code> if no problems found or not applicable at class level.
-   */
-  @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
-    return null;
-  }
+    /**
+     * Override this to report problems at class level.
+     *
+     * @param aClass     to check.
+     * @param manager    InspectionManager to ask for ProblemDescriptors from.
+     * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+     * @param state
+     * @return <code>null</code> if no problems found or not applicable at class level.
+     */
+    @Nullable
+    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+        return null;
+    }
 
-  /**
-   * Override this to report problems at field level.
-   *
-   * @param field      to check.
-   * @param manager    InspectionManager to ask for ProblemDescriptors from.
-   * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
-   * @param state
-   * @return <code>null</code> if no problems found or not applicable at field level.
-   */
-  @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
-    return null;
-  }
+    /**
+     * Override this to report problems at field level.
+     *
+     * @param field      to check.
+     * @param manager    InspectionManager to ask for ProblemDescriptors from.
+     * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+     * @param state
+     * @return <code>null</code> if no problems found or not applicable at field level.
+     */
+    @Nullable
+    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+        return null;
+    }
 
-  @Override
-  @Nullable
-  public final ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
-    return null;
-  }
+    @Override
+    @Nullable
+    public final ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+        return null;
+    }
 
-  /**
-   * Override this to report problems at file level.
-   *
-   * @param file       to check.
-   * @param manager    InspectionManager to ask for ProblemDescriptors from.
-   * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
-   * @return <code>null</code> if no problems found or not applicable at file level.
-   */
-  @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
-    return null;
-  }
+    /**
+     * Override this to report problems at file level.
+     *
+     * @param file       to check.
+     * @param manager    InspectionManager to ask for ProblemDescriptors from.
+     * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+     * @return <code>null</code> if no problems found or not applicable at file level.
+     */
+    @Nullable
+    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+        return null;
+    }
 
-  @Nonnull
-  @Override
-  @SuppressWarnings("unchecked")
-  public InspectionToolState<? extends State> createStateProvider() {
-    return (InspectionToolState<? extends State>)super.createStateProvider();
-  }
+    @Nonnull
+    @Override
+    @SuppressWarnings("unchecked")
+    public InspectionToolState<? extends State> createStateProvider() {
+        return (InspectionToolState<? extends State>) super.createStateProvider();
+    }
 
-  @Nonnull
-  @Override
-  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
-    return super.buildVisitor(holder, isOnTheFly);
-  }
+    @Nonnull
+    @Override
+    public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+        return super.buildVisitor(holder, isOnTheFly);
+    }
 
-  @Nonnull
-  @Override
-  @SuppressWarnings("unchecked")
-  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder,
-                                        boolean isOnTheFly,
-                                        @Nonnull LocalInspectionToolSession session,
-                                        @Nonnull Object state) {
-    return buildVisitorImpl(holder, isOnTheFly, session, (State)state);
-  }
+    @Nonnull
+    @Override
+    @SuppressWarnings("unchecked")
+    public final PsiElementVisitor buildVisitor(
+        @Nonnull ProblemsHolder holder,
+        boolean isOnTheFly,
+        @Nonnull LocalInspectionToolSession session,
+        @Nonnull Object state
+    ) {
+        return buildVisitorImpl(holder, isOnTheFly, session, (State) state);
+    }
 
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            final boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            State state) {
-    return new JavaElementVisitor() {
-      @Override
-      public void visitMethod(PsiMethod method) {
-        addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly, state));
-      }
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        final boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        State state
+    ) {
+        return new JavaElementVisitor() {
+            @Override
+            public void visitMethod(PsiMethod method) {
+                addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly, state));
+            }
 
-      @Override
-      public void visitClass(PsiClass aClass) {
-        addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly, state));
-      }
+            @Override
+            public void visitClass(PsiClass aClass) {
+                addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly, state));
+            }
 
-      @Override
-      public void visitField(PsiField field) {
-        addDescriptors(checkField(field, holder.getManager(), isOnTheFly, state));
-      }
+            @Override
+            public void visitField(PsiField field) {
+                addDescriptors(checkField(field, holder.getManager(), isOnTheFly, state));
+            }
 
-      @Override
-      public void visitFile(PsiFile file) {
-        addDescriptors(checkFile(file, holder.getManager(), isOnTheFly, state));
-      }
+            @Override
+            public void visitFile(PsiFile file) {
+                addDescriptors(checkFile(file, holder.getManager(), isOnTheFly, state));
+            }
 
-      private void addDescriptors(final ProblemDescriptor[] descriptors) {
-        if (descriptors != null) {
-          for (ProblemDescriptor descriptor : descriptors) {
-            holder.registerProblem(descriptor);
-          }
-        }
-      }
-    };
-  }
+            private void addDescriptors(final ProblemDescriptor[] descriptors) {
+                if (descriptors != null) {
+                    for (ProblemDescriptor descriptor : descriptors) {
+                        holder.registerProblem(descriptor);
+                    }
+                }
+            }
+        };
+    }
 
-  @Override
-  public PsiNamedElement getProblemElement(final PsiElement psiElement) {
-    return PsiTreeUtil.getNonStrictParentOfType(psiElement, PsiFile.class, PsiClass.class, PsiMethod.class, PsiField.class);
-  }
+    @Override
+    public PsiNamedElement getProblemElement(final PsiElement psiElement) {
+        return PsiTreeUtil.getNonStrictParentOfType(psiElement, PsiFile.class, PsiClass.class, PsiMethod.class, PsiField.class);
+    }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return false;
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return false;
+    }
 
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 
-  @Nonnull
-  @Override
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.inspectionGeneralToolsGroupName();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.inspectionGeneralToolsGroupName();
+    }
 
-  @Nonnull
-  @Override
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.WARNING;
-  }
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 }

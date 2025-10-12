@@ -19,9 +19,10 @@ import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
 import consulo.codeEditor.Editor;
 import consulo.content.library.Library;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.project.Project;
@@ -32,40 +33,39 @@ import jakarta.annotation.Nullable;
  * @author nik
  */
 class AddLibraryToDependenciesFix extends AddOrderEntryFix {
-  private final Library myLibrary;
-  private final Module myCurrentModule;
-  private final String myQualifiedClassName;
+    private final Library myLibrary;
+    private final Module myCurrentModule;
+    private final String myQualifiedClassName;
 
-  public AddLibraryToDependenciesFix(@Nonnull Module currentModule, @Nonnull Library library, @Nonnull PsiReference reference, @Nullable String qualifiedClassName) {
-    super(reference);
-    myLibrary = library;
-    myCurrentModule = currentModule;
-    myQualifiedClassName = qualifiedClassName;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("orderEntry.fix.add.library.to.classpath", LibraryUtil.getPresentableName(myLibrary));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("orderEntry.fix.family.add.library.to.classpath");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return !project.isDisposed() && !myCurrentModule.isDisposed() && !((Library) myLibrary).isDisposed();
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
-    DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
-    JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);
-    if (myQualifiedClassName != null && editor != null) {
-      importClass(myCurrentModule, editor, myReference, myQualifiedClassName);
+    public AddLibraryToDependenciesFix(
+        @Nonnull Module currentModule,
+        @Nonnull Library library,
+        @Nonnull PsiReference reference,
+        @Nullable String qualifiedClassName
+    ) {
+        super(reference);
+        myLibrary = library;
+        myCurrentModule = currentModule;
+        myQualifiedClassName = qualifiedClassName;
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.orderentryFixAddLibraryToClasspath(LibraryUtil.getPresentableName(myLibrary));
+    }
+
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return !project.isDisposed() && !myCurrentModule.isDisposed() && !((Library) myLibrary).isDisposed();
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
+        DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
+        JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);
+        if (myQualifiedClassName != null && editor != null) {
+            importClass(myCurrentModule, editor, myReference, myQualifiedClassName);
+        }
+    }
 }

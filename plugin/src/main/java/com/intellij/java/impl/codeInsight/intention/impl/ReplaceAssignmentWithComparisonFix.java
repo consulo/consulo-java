@@ -25,39 +25,39 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr) {
-    super(expr);
-  }
+    public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr) {
+        super(expr);
+    }
 
-  @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
-    PsiBinaryExpression comparisonExpr = (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
-    PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) startElement;
-    comparisonExpr.getLOperand().replace(assignmentExpression.getLExpression());
-    PsiExpression rOperand = comparisonExpr.getROperand();
-    assert rOperand != null;
-    PsiExpression rExpression = assignmentExpression.getRExpression();
-    assert rExpression != null;
-    rOperand.replace(rExpression);
-    CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
-  }
+    @Override
+    public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        PsiBinaryExpression comparisonExpr =
+            (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
+        PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) startElement;
+        comparisonExpr.getLOperand().replace(assignmentExpression.getLExpression());
+        PsiExpression rOperand = comparisonExpr.getROperand();
+        assert rOperand != null;
+        PsiExpression rExpression = assignmentExpression.getRExpression();
+        assert rExpression != null;
+        rOperand.replace(rExpression);
+        CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
+    }
 
-  @Nonnull
-  @Override
-  public String getText() {
-    return getFamilyName();
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix().get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix();
+    }
 }
