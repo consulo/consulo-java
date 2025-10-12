@@ -761,7 +761,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         return new SyntheticIntentionAction() {
             @Nonnull
             @Override
-            public String getText() {
+            public LocalizeValue getText() {
                 return fix.getText();
             }
 
@@ -855,7 +855,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     public LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text) {
-        return new DeleteElementFix(element, text.get());
+        return new DeleteElementFix(element, text);
     }
 
     @Nonnull
@@ -1042,7 +1042,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     @Override
-    public IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nullable String message) {
+    public IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull LocalizeValue message) {
         return new CreateDefaultBranchFix(switchBlock, message);
     }
 
