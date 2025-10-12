@@ -17,13 +17,11 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.language.psi.PsiReference;
 
-abstract class AddOrderEntryFix extends OrderEntryFix
-{
-	@SuppressWarnings("StatefulEp")
-	protected final PsiReference myReference;
+abstract class AddOrderEntryFix extends OrderEntryFix {
+    @SuppressWarnings("StatefulEp")
+    protected final PsiReference myReference;
 
-	protected AddOrderEntryFix(PsiReference reference)
-	{
-		myReference = reference;
-	}
+    protected AddOrderEntryFix(PsiReference reference) {
+        myReference = reference;
+    }
 }

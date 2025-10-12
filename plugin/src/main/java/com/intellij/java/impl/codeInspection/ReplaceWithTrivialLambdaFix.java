@@ -15,58 +15,49 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;
-import consulo.project.Project;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 
 /**
  * @author Tagir Valeev
  */
 public class ReplaceWithTrivialLambdaFix implements LocalQuickFix {
-  private final String myValue;
+    private final String myValue;
 
-  public ReplaceWithTrivialLambdaFix(Object value) {
-    myValue = String.valueOf(value);
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getName() {
-    return JavaInspectionsBundle.message("inspection.replace.with.trivial.lambda.fix.name", myValue);
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaInspectionsBundle.message("inspection.replace.with.trivial.lambda.fix.family.name");
-  }
-
-  @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiMethodReferenceExpression methodRef = ObjectUtil.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
-    if (methodRef == null) {
-      return;
+    public ReplaceWithTrivialLambdaFix(Object value) {
+        myValue = String.valueOf(value);
     }
-    PsiLambdaExpression lambdaExpression = LambdaRefactoringUtil.convertMethodReferenceToLambda(methodRef, true, true);
-    if (lambdaExpression == null) {
-      return;
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return JavaInspectionsLocalize.inspectionReplaceWithTrivialLambdaFixName(myValue);
     }
-    PsiElement body = lambdaExpression.getBody();
-    if (body == null) {
-      return;
+
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiMethodReferenceExpression methodRef = ObjectUtil.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
+        if (methodRef == null) {
+            return;
+        }
+        PsiLambdaExpression lambdaExpression = LambdaRefactoringUtil.convertMethodReferenceToLambda(methodRef, true, true);
+        if (lambdaExpression == null) {
+            return;
+        }
+        PsiElement body = lambdaExpression.getBody();
+        if (body == null) {
+            return;
+        }
+        body.replace(JavaPsiFacade.getElementFactory(project).createExpressionFromText(myValue, lambdaExpression));
     }
-    body.replace(JavaPsiFacade.getElementFactory(project).createExpressionFromText(myValue, lambdaExpression));
-  }
 }

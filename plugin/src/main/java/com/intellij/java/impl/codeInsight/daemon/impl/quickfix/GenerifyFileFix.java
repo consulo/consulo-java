@@ -19,7 +19,7 @@ import com.intellij.java.impl.refactoring.actions.TypeCookAction;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -28,66 +28,64 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
-  private String myFileName;
+    private String myFileName;
 
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("generify.text", myFileName);
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.generifyText(myFileName);
+    }
 
-  @Nonnull
-  @Override
-  public String getName() {
-    return getText();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return getText();
+    }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("generify.family");
-  }
-
-  @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-    final PsiElement element = descriptor.getPsiElement();
-    if (element == null) return;
-    final PsiFile file = element.getContainingFile();
-    if (isAvailable(project, null, file)) {
-      myFileName = file.getName();
-      new WriteCommandAction(project) {
-        @Override
-        protected void run(Result result) throws Throwable {
-          invoke(project, FileEditorManager.getInstance(project).getSelectedTextEditor(), file);
+    @Override
+    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+        final PsiElement element = descriptor.getPsiElement();
+        if (element == null) {
+            return;
         }
-      }.execute();
+        final PsiFile file = element.getContainingFile();
+        if (isAvailable(project, null, file)) {
+            myFileName = file.getName();
+            new WriteCommandAction(project) {
+                @Override
+                protected void run(Result result) throws Throwable {
+                    invoke(project, FileEditorManager.getInstance(project).getSelectedTextEditor(), file);
+                }
+            }.execute();
+        }
     }
-  }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (file != null && file.isValid()) {
-      myFileName = file.getName();
-      return PsiManager.getInstance(project).isInProject(file);
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (file != null && file.isValid()) {
+            myFileName = file.getName();
+            return PsiManager.getInstance(project).isInProject(file);
+        }
+        else {
+            return false;
+        }
     }
-    else {
-      return false;
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
+        }
+        new TypeCookAction().getHandler().invoke(project, editor, file, null);
     }
-  }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    new TypeCookAction().getHandler().invoke(project, editor, file, null);
-  }
-
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 }

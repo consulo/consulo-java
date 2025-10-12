@@ -31,43 +31,47 @@ import jakarta.annotation.Nonnull;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
 public class JavacQuirksInspectionVisitor extends JavaElementVisitor {
-  private static final ElementPattern QUALIFIER_REFERENCE =
-    psiElement().withParent(PsiJavaCodeReferenceElement.class).withSuperParent(2, PsiJavaCodeReferenceElement.class);
+    private static final ElementPattern QUALIFIER_REFERENCE =
+        psiElement().withParent(PsiJavaCodeReferenceElement.class).withSuperParent(2, PsiJavaCodeReferenceElement.class);
 
-  private final ProblemsHolder myHolder;
+    private final ProblemsHolder myHolder;
 
-  public JavacQuirksInspectionVisitor(ProblemsHolder holder) {
-    myHolder = holder;
-  }
-
-  @Override
-  @RequiredReadAction
-  public void visitAnnotationArrayInitializer(@Nonnull final PsiArrayInitializerMemberValue initializer) {
-    if (PsiUtil.isLanguageLevel7OrHigher(initializer)) return;
-    final PsiElement lastElement = PsiTreeUtil.skipSiblingsBackward(initializer.getLastChild(), PsiWhiteSpace.class, PsiComment.class);
-    if (lastElement != null && PsiUtil.isJavaToken(lastElement, JavaTokenType.COMMA)) {
-      final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaProblem();
-      final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaFix();
-      myHolder.registerProblem(lastElement, message.get(), new RemoveElementQuickFix(fixName.get()));
+    public JavacQuirksInspectionVisitor(ProblemsHolder holder) {
+        myHolder = holder;
     }
-  }
 
-  @Override
-  public void visitTypeCastExpression(@Nonnull final PsiTypeCastExpression expression) {
-    if (PsiUtil.isLanguageLevel7OrHigher(expression)) return;
-    final PsiTypeElement type = expression.getCastType();
-    if (type != null) {
-      type.accept(new JavaRecursiveElementWalkingVisitor() {
-        @Override
-        public void visitReferenceParameterList(final PsiReferenceParameterList list) {
-          super.visitReferenceParameterList(list);
-          if (list.getFirstChild() != null && QUALIFIER_REFERENCE.accepts(list)) {
-            final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsProblem();
-            final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsFix();
-            myHolder.registerProblem(list, message.get(), new RemoveElementQuickFix(fixName.get()));
-          }
+    @Override
+    @RequiredReadAction
+    public void visitAnnotationArrayInitializer(@Nonnull final PsiArrayInitializerMemberValue initializer) {
+        if (PsiUtil.isLanguageLevel7OrHigher(initializer)) {
+            return;
         }
-      });
+        final PsiElement lastElement = PsiTreeUtil.skipSiblingsBackward(initializer.getLastChild(), PsiWhiteSpace.class, PsiComment.class);
+        if (lastElement != null && PsiUtil.isJavaToken(lastElement, JavaTokenType.COMMA)) {
+            final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaProblem();
+            final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaFix();
+            myHolder.registerProblem(lastElement, message.get(), new RemoveElementQuickFix(fixName));
+        }
     }
-  }
+
+    @Override
+    public void visitTypeCastExpression(@Nonnull final PsiTypeCastExpression expression) {
+        if (PsiUtil.isLanguageLevel7OrHigher(expression)) {
+            return;
+        }
+        final PsiTypeElement type = expression.getCastType();
+        if (type != null) {
+            type.accept(new JavaRecursiveElementWalkingVisitor() {
+                @Override
+                public void visitReferenceParameterList(final PsiReferenceParameterList list) {
+                    super.visitReferenceParameterList(list);
+                    if (list.getFirstChild() != null && QUALIFIER_REFERENCE.accepts(list)) {
+                        final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsProblem();
+                        final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsFix();
+                        myHolder.registerProblem(list, message.get(), new RemoveElementQuickFix(fixName));
+                    }
+                }
+            });
+        }
+    }
 }

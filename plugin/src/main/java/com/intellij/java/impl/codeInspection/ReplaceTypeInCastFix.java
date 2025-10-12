@@ -8,41 +8,36 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 
 public class ReplaceTypeInCastFix implements LocalQuickFix {
-  private final String myExistingTypeText;
-  private final String myWantedTypeText;
-  private final String myWantedTypeCanonicalText;
+    private final String myExistingTypeText;
+    private final String myWantedTypeText;
+    private final String myWantedTypeCanonicalText;
 
-  public ReplaceTypeInCastFix(PsiType existingType, PsiType wantedType) {
-    myExistingTypeText = existingType.getPresentableText();
-    myWantedTypeText = wantedType.getPresentableText();
-    myWantedTypeCanonicalText = wantedType.getCanonicalText();
-  }
-
-  @Override
-  @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myExistingTypeText, myWantedTypeText).get();
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Replace cast type";
-  }
-
-  @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiTypeElement typeElement = ObjectUtil.tryCast(descriptor.getStartElement(), PsiTypeElement.class);
-    if (typeElement == null) {
-      return;
+    public ReplaceTypeInCastFix(PsiType existingType, PsiType wantedType) {
+        myExistingTypeText = existingType.getPresentableText();
+        myWantedTypeText = wantedType.getPresentableText();
+        myWantedTypeCanonicalText = wantedType.getCanonicalText();
     }
-    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    PsiTypeElement replacement = factory.createTypeElement(factory.createTypeFromText(myWantedTypeCanonicalText, typeElement));
-    typeElement.replace(replacement);
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myExistingTypeText, myWantedTypeText);
+    }
+
+    @Override
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiTypeElement typeElement = ObjectUtil.tryCast(descriptor.getStartElement(), PsiTypeElement.class);
+        if (typeElement == null) {
+            return;
+        }
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiTypeElement replacement = factory.createTypeElement(factory.createTypeFromText(myWantedTypeCanonicalText, typeElement));
+        typeElement.replace(replacement);
+    }
 }

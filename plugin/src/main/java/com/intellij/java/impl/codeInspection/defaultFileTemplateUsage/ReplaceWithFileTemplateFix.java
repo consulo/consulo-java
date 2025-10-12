@@ -17,21 +17,16 @@ package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
  */
 public abstract class ReplaceWithFileTemplateFix implements LocalQuickFix {
-  @Override
-  @Nonnull
-  public String getName() {
-    return InspectionLocalize.defaultFileTemplateReplaceWithActualFileTemplate().get();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getName();
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getName() {
+        return InspectionLocalize.defaultFileTemplateReplaceWithActualFileTemplate();
+    }
 }

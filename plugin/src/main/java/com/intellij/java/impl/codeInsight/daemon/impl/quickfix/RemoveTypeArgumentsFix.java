@@ -15,66 +15,65 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
- * User: anna
- * Date: 1/18/12
+ * @author anna
+ * @since 2012-01-18
  */
 public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
-  private static final Logger LOGGER = Logger.getInstance(RemoveTypeArgumentsFix.class);
+    private static final Logger LOGGER = Logger.getInstance(RemoveTypeArgumentsFix.class);
 
-  public RemoveTypeArgumentsFix(@Nullable PsiElement element) {
-    super(element);
-  }
-
-  @Nonnull
-  @Override
-  public String getText() {
-    return "Remove type arguments";
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
-    return startElement instanceof PsiVariable && startElement.isValid() && ((PsiVariable)startElement).getTypeElement() != null;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
-    final PsiVariable psiVariable = (PsiVariable)startElement;
-    final PsiTypeElement typeElement = psiVariable.getTypeElement();
-    LOGGER.assertTrue(typeElement != null);
-    final PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
-    if (referenceElement != null) {
-      final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
-      if (parameterList != null) {
-        parameterList.delete();
-      }
+    public RemoveTypeArgumentsFix(@Nullable PsiElement element) {
+        super(element);
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getText() {
+        return LocalizeValue.localizeTODO("Remove type arguments");
+    }
+
+    @Override
+    public boolean isAvailable(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        return startElement instanceof PsiVariable && startElement.isValid() && ((PsiVariable) startElement).getTypeElement() != null;
+    }
+
+    @Override
+    public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
+        @Nullable Editor editor,
+        @Nonnull PsiElement startElement,
+        @Nonnull PsiElement endElement
+    ) {
+        final PsiVariable psiVariable = (PsiVariable) startElement;
+        final PsiTypeElement typeElement = psiVariable.getTypeElement();
+        LOGGER.assertTrue(typeElement != null);
+        final PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
+        if (referenceElement != null) {
+            final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+            if (parameterList != null) {
+                parameterList.delete();
+            }
+        }
+    }
 }

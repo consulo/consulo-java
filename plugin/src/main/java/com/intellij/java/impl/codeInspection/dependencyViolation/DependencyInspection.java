@@ -45,109 +45,119 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * User: anna
- * Date: Feb 6, 2005
+ * @author anna
+ * @since 2005-02-06
  */
 @ExtensionImpl
 public class DependencyInspection extends BaseLocalInspectionTool {
-  public static final String SHORT_NAME = "Dependency";
+    public static final String SHORT_NAME = "Dependency";
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return LocalizeValue.empty();
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return LocalizeValue.empty();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.illegalPackageDependencies();
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.illegalPackageDependencies();
+    }
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return DependencyInspection.SHORT_NAME;
-  }
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return DependencyInspection.SHORT_NAME;
+    }
 
-  @Override
-  public JComponent createOptionsPanel() {
-    final JButton editDependencies = new JButton(InspectionLocalize.inspectionDependencyConfigureButtonText().get());
-    editDependencies.addActionListener(e-> {
-        Project project = DataManager.getInstance().getDataContext(editDependencies).getData(Project.KEY);
-        if (project == null) project = ProjectManager.getInstance().getDefaultProject();
-        ShowSettingsUtil.getInstance().editConfigurable(editDependencies, new DependencyConfigurable(project));
-      });
-
-    JPanel depPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    depPanel.add(editDependencies);
-    return depPanel;
-  }
-
-  @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
-    if (file == null) return null;
-    if (file.getViewProvider().getPsi(JavaLanguage.INSTANCE) == null) return null;
-    final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
-    if (!validationManager.hasRules()) return null;
-    if (validationManager.getApplicableRules(file).length == 0) return null;
-    final ArrayList<ProblemDescriptor> problems =  new ArrayList<>();
-    ForwardDependenciesBuilder builder = new ForwardDependenciesBuilder(file.getProject(), new AnalysisScope(file));
-        DependenciesBuilder.analyzeFileDependencies(file, (place, dependency) -> {
-          PsiFile dependencyFile = dependency.getContainingFile();
-          if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
-            final DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
-            for (DependencyRule dependencyRule : rule) {
-              StringBuilder message = new StringBuilder();
-              message.append(InspectionLocalize.inspectionDependencyViolatorProblemDescriptor(dependencyRule.getDisplayText()));
-              problems.add(manager.createProblemDescriptor(
-                place,
-                message.toString(),
-                isOnTheFly,
-                new LocalQuickFix[]{new EditDependencyRulesAction(dependencyRule)},
-                ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-              ));
+    @Override
+    public JComponent createOptionsPanel() {
+        final JButton editDependencies = new JButton(InspectionLocalize.inspectionDependencyConfigureButtonText().get());
+        editDependencies.addActionListener(e -> {
+            Project project = DataManager.getInstance().getDataContext(editDependencies).getData(Project.KEY);
+            if (project == null) {
+                project = ProjectManager.getInstance().getDefaultProject();
             }
-          }
+            ShowSettingsUtil.getInstance().editConfigurable(editDependencies, new DependencyConfigurable(project));
         });
-    return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
 
-  @Override
-  @Nonnull
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.ERROR;
-  }
+        JPanel depPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        depPanel.add(editDependencies);
+        return depPanel;
+    }
 
-  private static class EditDependencyRulesAction implements LocalQuickFix {
-    private final DependencyRule myRule;
-    public EditDependencyRulesAction(DependencyRule rule) {
-      myRule = rule;
+    @Override
+    @Nullable
+    public ProblemDescriptor[] checkFile(
+        @Nonnull final PsiFile file,
+        @Nonnull final InspectionManager manager,
+        final boolean isOnTheFly,
+        Object state
+    ) {
+        if (file == null) {
+            return null;
+        }
+        if (file.getViewProvider().getPsi(JavaLanguage.INSTANCE) == null) {
+            return null;
+        }
+        final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
+        if (!validationManager.hasRules()) {
+            return null;
+        }
+        if (validationManager.getApplicableRules(file).length == 0) {
+            return null;
+        }
+        final ArrayList<ProblemDescriptor> problems = new ArrayList<>();
+        ForwardDependenciesBuilder builder = new ForwardDependenciesBuilder(file.getProject(), new AnalysisScope(file));
+        DependenciesBuilder.analyzeFileDependencies(file, (place, dependency) -> {
+            PsiFile dependencyFile = dependency.getContainingFile();
+            if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
+                final DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
+                for (DependencyRule dependencyRule : rule) {
+                    StringBuilder message = new StringBuilder();
+                    message.append(InspectionLocalize.inspectionDependencyViolatorProblemDescriptor(dependencyRule.getDisplayText()));
+                    problems.add(manager.createProblemDescriptor(
+                        place,
+                        message.toString(),
+                        isOnTheFly,
+                        new LocalQuickFix[]{new EditDependencyRulesAction(dependencyRule)},
+                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+                    ));
+                }
+            }
+        });
+        return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
     @Override
     @Nonnull
-    public LocalizeValue getName() {
-      return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText());
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.ERROR;
     }
 
-    @Nonnull
-    public String getFamilyName() {
-      return InspectionLocalize.editDependencyRulesFamily().get();
-    }
+    private static class EditDependencyRulesAction implements LocalQuickFix {
+        private final DependencyRule myRule;
 
-    @RequiredUIAccess
-    @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));
-    }
+        public EditDependencyRulesAction(DependencyRule rule) {
+            myRule = rule;
+        }
 
-  }
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText());
+        }
+
+        @RequiredUIAccess
+        @Override
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));
+        }
+    }
 
 }

@@ -38,6 +38,7 @@ import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ModuleFileIndex;
 import consulo.module.content.ModuleRootManager;
@@ -68,17 +69,14 @@ import java.util.stream.Stream;
  * @author cdr
  */
 public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQuickFix {
-    protected OrderEntryFix() {
-    }
-
     @Override
     public boolean startInWriteAction() {
         return true;
     }
 
-    @Override
     @Nonnull
-    public String getName() {
+    @Override
+    public LocalizeValue getName() {
         return getText();
     }
 

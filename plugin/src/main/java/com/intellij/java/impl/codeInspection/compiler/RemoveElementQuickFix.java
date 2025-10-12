@@ -17,35 +17,30 @@ package com.intellij.java.impl.codeInspection.compiler;
 
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
-import org.jetbrains.annotations.Nls;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class RemoveElementQuickFix implements LocalQuickFix {
-  private final String myName;
+    @Nonnull
+    private final LocalizeValue myName;
 
-  public RemoveElementQuickFix(@Nonnull @Nls final String name) {
-    myName = name;
-  }
-
-  @Nonnull
-  @Override
-  public String getName() {
-    return myName;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return myName;
-  }
-
-  @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-    final PsiElement element = descriptor.getPsiElement();
-    if (element != null) {
-      element.delete();
+    public RemoveElementQuickFix(@Nonnull LocalizeValue name) {
+        myName = name;
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return myName;
+    }
+
+    @Override
+    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+        final PsiElement element = descriptor.getPsiElement();
+        if (element != null) {
+            element.delete();
+        }
+    }
 }

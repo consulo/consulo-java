@@ -26,63 +26,58 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 
 /**
  * @author ven
  */
 public class AddAssertStatementFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
-  private final String myText;
+    private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
+    private final String myText;
 
-  public AddAssertStatementFix(@Nonnull String text) {
-    myText = text;
-  }
-
-  @Override
-  @Nonnull
-  public String getName() {
-    return InspectionLocalize.inspectionAssertQuickfix(myText).get();
-  }
-
-  @Override
-  @RequiredWriteAction
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    PsiElement element = descriptor.getPsiElement();
-    PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);
-    LOG.assertTrue(anchorElement != null);
-    final PsiElement tempParent = anchorElement.getParent();
-    if (tempParent instanceof PsiForStatement forStatement && !PsiTreeUtil.isAncestor(forStatement.getBody(), anchorElement, false)) {
-      anchorElement = tempParent;
-    }
-    PsiElement prev = PsiTreeUtil.skipWhitespacesBackward(anchorElement);
-    if (prev instanceof PsiComment && JavaSuppressionUtil.getSuppressedInspectionIdsIn(prev) != null) {
-      anchorElement = prev;
+    public AddAssertStatementFix(@Nonnull String text) {
+        myText = text;
     }
 
-    try {
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-      @NonNls String text = "assert " + myText + ";";
-      PsiAssertStatement assertStatement = (PsiAssertStatement) factory.createStatementFromText(text, null);
-
-      final PsiElement parent = anchorElement.getParent();
-      if (parent instanceof PsiCodeBlock) {
-        parent.addBefore(assertStatement, anchorElement);
-      } else {
-        RefactoringUtil.putStatementInLoopBody(assertStatement, parent, anchorElement);
-      }
-    } catch (IncorrectOperationException e) {
-      LOG.error(e);
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return InspectionLocalize.inspectionAssertQuickfix(myText);
     }
-  }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return InspectionLocalize.inspectionQuickfixAssertFamily().get();
-  }
+    @Override
+    @RequiredWriteAction
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiElement element = descriptor.getPsiElement();
+        PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);
+        LOG.assertTrue(anchorElement != null);
+        final PsiElement tempParent = anchorElement.getParent();
+        if (tempParent instanceof PsiForStatement forStatement && !PsiTreeUtil.isAncestor(forStatement.getBody(), anchorElement, false)) {
+            anchorElement = tempParent;
+        }
+        PsiElement prev = PsiTreeUtil.skipWhitespacesBackward(anchorElement);
+        if (prev instanceof PsiComment && JavaSuppressionUtil.getSuppressedInspectionIdsIn(prev) != null) {
+            anchorElement = prev;
+        }
+
+        try {
+            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+            String text = "assert " + myText + ";";
+            PsiAssertStatement assertStatement = (PsiAssertStatement) factory.createStatementFromText(text, null);
+
+            final PsiElement parent = anchorElement.getParent();
+            if (parent instanceof PsiCodeBlock) {
+                parent.addBefore(assertStatement, anchorElement);
+            }
+            else {
+                RefactoringUtil.putStatementInLoopBody(assertStatement, parent, anchorElement);
+            }
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
 }

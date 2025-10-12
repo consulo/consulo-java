@@ -20,18 +20,18 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import jakarta.annotation.Nonnull;
 
 /**
- * User: anna
- * Date: Dec 27, 2004
+ * @author anna
+ * @since 2004-12-27
  */
 public abstract class BaseLocalInspectionTool extends BaseJavaLocalInspectionTool {
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-  @Nonnull
-  @Override
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.WARNING;
-  }
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 }
