@@ -21,11 +21,12 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
 import consulo.fileEditor.history.IdeDocumentHistory;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
@@ -42,10 +43,9 @@ public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix impleme
   }
 
   @Override
-  public String getText(String varName) {
-    return JavaQuickFixBundle.message("create.class.from.usage.text", StringUtil.capitalize(myKind.getDescription()), varName);
+  public LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createClassFromUsageText(StringUtil.capitalize(myKind.getDescription()), varName);
   }
-
 
   @Override
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {

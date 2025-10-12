@@ -1754,6 +1754,8 @@ inspection.suppression.annotation.display.name:
     text: Inspection suppression annotation
 inspection.suppression.annotation.problem.descriptor:
     text: 'Inspection suppression annotation <code>#ref</code> #loc'
+inspection.surround.if.quickfix:
+    text: Surround with ''if ({0}{1})''
 instance.Variable.may.not.be.initialized.problem.descriptor.junit:
     text: 'Instance field <code>#ref</code> may not be initialized during object construction or ''setUp()'' call #loc'
 instance.method.name.convention.problem.descriptor.long:
@@ -2063,7 +2065,7 @@ literal.as.arg.to.string.equals.problem.descriptor:
 load.library.with.non.constant.string.display.name:
     text: Call to 'System.loadLibrary()' with non-constant string
 load.library.with.non.constant.string.problem.descriptor:
-    text: 'Call to <code>{0}.#ref()</code> with non-constant argument #loc'
+    text: 'Call to <code>System.#ref()</code> with non-constant argument #loc'
 local.variable.hides.member.variable.display.name:
     text: Local variable hides field
 local.variable.hides.member.variable.ignore.option:
@@ -3952,6 +3954,8 @@ tail.recursion.problem.descriptor:
     text: 'Tail recursive call <code>#ref()</code> #loc'
 tail.recursion.replace.quickfix:
     text: Replace tail recursion with iteration
+teardown.calls.super.teardown.add.quickfix:
+    text: Add call to 'super.tearDown()'
 teardown.calls.super.teardown.display.name:
     text: '''tearDown()'' does not call ''super.tearDown()'''
 teardown.calls.super.teardown.problem.descriptor:
@@ -4742,5 +4746,3 @@ while.loop.spins.on.field.ignore.non.empty.loops.option:
     text: Only warn if the loop is empty
 while.loop.spins.on.field.problem.descriptor:
     text: '<code>#ref</code> loop spins on field #loc'
-teardown.calls.super.teardown.add.quickfix:
-    text: "Add call to 'super.tearDown()'"

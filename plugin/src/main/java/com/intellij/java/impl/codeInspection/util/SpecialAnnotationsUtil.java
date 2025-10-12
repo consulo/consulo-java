@@ -140,15 +140,15 @@ public class SpecialAnnotationsUtil {
   }
 
   public static IntentionAction createAddToSpecialAnnotationsListIntentionAction(
-    final String text,
-    final String family,
+    @Nonnull LocalizeValue text,
+    @Nonnull LocalizeValue family,
     final List<String> targetList,
     final String qualifiedName
   ) {
     return new SyntheticIntentionAction() {
       @Override
       @Nonnull
-      public String getText() {
+      public LocalizeValue getText() {
         return text;
       }
 

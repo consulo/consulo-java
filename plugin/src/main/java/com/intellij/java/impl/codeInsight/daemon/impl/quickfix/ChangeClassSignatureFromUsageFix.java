@@ -19,14 +19,14 @@ import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignat
 import com.intellij.java.impl.refactoring.changeClassSignature.TypeParameterInfo;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 /**
@@ -40,7 +40,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
                                           @Nonnull PsiReferenceParameterList parameterList) {
     myClass = aClass;
     myParameterList = parameterList;
-    setText(JavaQuickFixBundle.message("change.class.signature.family"));
+    setText(JavaQuickFixLocalize.changeClassSignatureFamily());
   }
 
   @Override
@@ -58,7 +58,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
       return false;
     }
 
-    setText(JavaQuickFixBundle.message("change.class.signature.text", myClass.getName(), myParameterList.getText()));
+    setText(JavaQuickFixLocalize.changeClassSignatureText(myClass.getName(), myParameterList.getText()));
 
     return true;
   }

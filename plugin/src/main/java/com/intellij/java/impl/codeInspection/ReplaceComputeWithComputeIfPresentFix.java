@@ -6,11 +6,13 @@ import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
@@ -24,8 +26,8 @@ public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, Hig
 
     @Override
     @Nonnull
-    public String getFamilyName() {
-        return JavaInspectionsBundle.message("inspection.data.flow.use.computeifpresent.quickfix");
+    public LocalizeValue getName() {
+        return JavaInspectionsLocalize.inspectionDataFlowUseComputeifpresentQuickfix();
     }
 
     @Override

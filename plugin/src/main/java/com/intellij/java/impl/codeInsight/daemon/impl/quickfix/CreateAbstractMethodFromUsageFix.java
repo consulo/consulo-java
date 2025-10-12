@@ -15,57 +15,50 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
-public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
-{
-	public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall)
-	{
-		super(methodCall);
-	}
+import java.util.ArrayList;
+import java.util.List;
 
-	@Override
-	protected String getDisplayString(String name)
-	{
-		return JavaQuickFixBundle.message("create.abstract.method.from.usage.text", name);
-	}
+public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix {
+    public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
+        super(methodCall);
+    }
 
-	@Nonnull
-	@Override
-	protected List<PsiClass> getTargetClasses(PsiElement element)
-	{
-		List<PsiClass> result = new ArrayList<PsiClass>();
-		PsiReferenceExpression expr = getMethodCall().getMethodExpression();
-		for(PsiClass each : super.getTargetClasses(element))
-		{
-			if(PsiUtil.isAbstractClass(each) && !each.isInterface() && !shouldCreateStaticMember(expr, each))
-			{
-				result.add(each);
-			}
-		}
-		return result;
-	}
+    @Override
+    protected LocalizeValue getDisplayString(String name) {
+        return JavaQuickFixLocalize.createAbstractMethodFromUsageText(name);
+    }
 
-	@Override
-	protected String getVisibility(PsiClass parentClass, @Nonnull PsiClass targetClass)
-	{
-		String result = super.getVisibility(parentClass, targetClass);
-		return PsiModifier.PUBLIC.equals(result) ? result : PsiModifier.PROTECTED;
-	}
+    @Nonnull
+    @Override
+    protected List<PsiClass> getTargetClasses(PsiElement element) {
+        List<PsiClass> result = new ArrayList<PsiClass>();
+        PsiReferenceExpression expr = getMethodCall().getMethodExpression();
+        for (PsiClass each : super.getTargetClasses(element)) {
+            if (PsiUtil.isAbstractClass(each) && !each.isInterface() && !shouldCreateStaticMember(expr, each)) {
+                result.add(each);
+            }
+        }
+        return result;
+    }
 
-	@Override
-	protected boolean shouldBeAbstract(PsiReferenceExpression expression, PsiClass targetClass)
-	{
-		return true;
-	}
+    @Override
+    protected String getVisibility(PsiClass parentClass, @Nonnull PsiClass targetClass) {
+        String result = super.getVisibility(parentClass, targetClass);
+        return PsiModifier.PUBLIC.equals(result) ? result : PsiModifier.PROTECTED;
+    }
+
+    @Override
+    protected boolean shouldBeAbstract(PsiReferenceExpression expression, PsiClass targetClass) {
+        return true;
+    }
 }

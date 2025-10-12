@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.WriteAction;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
@@ -184,7 +185,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
       return false;
     }
 
-    setText(JavaQuickFixBundle.message("add.exception.to.throws.text", unhandled.size()));
+    setText(JavaQuickFixLocalize.addExceptionToThrowsText(unhandled.size()));
     return true;
   }
 

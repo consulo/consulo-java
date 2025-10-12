@@ -45,7 +45,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -237,10 +236,9 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     @Override
-    @Nls
     @Nonnull
-    public String getGroupDisplayName() {
-        return InspectionLocalize.groupNamesDeclarationRedundancy().get();
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
@@ -272,12 +270,11 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             myFiles = files;
         }
 
-        @Override
         @Nonnull
-        public String getFamilyName() {
+        public LocalizeValue getName() {
             return myFiles == null
-                ? JavaAnalysisLocalize.detachLibraryQuickfixName().get()
-                : JavaAnalysisLocalize.detachLibraryRootsQuickfixName().get();
+                ? JavaAnalysisLocalize.detachLibraryQuickfixName()
+                : JavaAnalysisLocalize.detachLibraryRootsQuickfixName();
         }
 
         @Override

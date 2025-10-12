@@ -12,7 +12,7 @@ import consulo.document.Document;
 import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
 import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.ide.setting.ShowSettingsUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.hint.QuestionAction;
@@ -85,7 +85,7 @@ public class AddImportAction implements QuestionAction {
     CodeInsightUtil.sortIdenticalShortNamedMembers(myTargetClasses, myReference);
 
     final BaseListPopupStep<PsiClass> step =
-        new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses) {
+        new BaseListPopupStep<PsiClass>(JavaQuickFixLocalize.classToImportChooserTitle().get(), myTargetClasses) {
           @Override
           public boolean isAutoSelectionEnabled() {
             return false;
@@ -207,7 +207,7 @@ public class AddImportAction implements QuestionAction {
       }
 
       StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
-      WriteCommandAction.runWriteCommandAction(myProject, JavaQuickFixBundle.message("add.import"), null,
+      WriteCommandAction.runWriteCommandAction(myProject, JavaQuickFixLocalize.addImport().get(), null,
           () -> _addImport(ref, targetClass),
           ref.getElement().getContainingFile());
     });

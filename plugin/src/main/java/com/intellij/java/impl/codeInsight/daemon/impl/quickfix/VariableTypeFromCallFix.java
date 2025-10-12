@@ -11,7 +11,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
@@ -19,10 +19,11 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,11 +39,8 @@ public class VariableTypeFromCallFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("fix.variable.type.text",
-                                      UsageViewUtil.getType(myVar),
-                                      myVar.getName(),
-                                      myExpressionType.getCanonicalText());
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.fixVariableTypeText(UsageViewUtil.getType(myVar), myVar.getName(), myExpressionType.getCanonicalText());
   }
 
   @Override

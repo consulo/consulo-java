@@ -26,12 +26,13 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
@@ -48,7 +49,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
 
   public CreateParameterFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
-    setText(JavaQuickFixBundle.message("create.parameter.from.usage.family"));
+    setText(JavaQuickFixLocalize.createParameterFromUsageFamily());
   }
 
   @Override
@@ -67,8 +68,8 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
   }
 
   @Override
-  public String getText(String varName) {
-    return JavaQuickFixBundle.message("create.parameter.from.usage.text", varName);
+  public LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createParameterFromUsageText(varName);
   }
 
   @Override

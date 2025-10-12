@@ -27,6 +27,7 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.concurrent.AsyncResult;
 import jakarta.annotation.Nonnull;
@@ -35,43 +36,37 @@ import jakarta.annotation.Nullable;
 /**
  * @author Bas Leijdekkers
  */
-public class IntroduceVariableFix extends InspectionGadgetsFix
-{
+public class IntroduceVariableFix extends InspectionGadgetsFix {
 
-	private final boolean myMayChangeSemantics;
+    private final boolean myMayChangeSemantics;
 
-	public IntroduceVariableFix(boolean mayChangeSemantics)
-	{
-		myMayChangeSemantics = mayChangeSemantics;
-	}
+    public IntroduceVariableFix(boolean mayChangeSemantics) {
+        myMayChangeSemantics = mayChangeSemantics;
+    }
 
-	@Nonnull
-	@Override
-	public String getName()
-	{
-		return myMayChangeSemantics
-			? InspectionGadgetsLocalize.introduceVariableMayChangeSemanticsQuickfix().get()
-			: InspectionGadgetsLocalize.introduceVariableQuickfix().get();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return myMayChangeSemantics
+            ? InspectionGadgetsLocalize.introduceVariableMayChangeSemanticsQuickfix()
+            : InspectionGadgetsLocalize.introduceVariableQuickfix();
+    }
 
-	@Nullable
-	public PsiExpression getExpressionToExtract(PsiElement element)
-	{
-		return PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false);
-	}
+    @Nullable
+    public PsiExpression getExpressionToExtract(PsiElement element) {
+        return PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false);
+    }
 
-	@Override
-	protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException
-	{
-		final PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
-		if(expression == null)
-		{
-			return;
-		}
-		final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
-		final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
-		dataContextContainer.doWhenDone(dataContext -> {
-			handler.invoke(project, new PsiElement[]{expression}, dataContext);
-		});
-	}
+    @Override
+    protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        final PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
+        if (expression == null) {
+            return;
+        }
+        final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
+        final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+        dataContextContainer.doWhenDone(dataContext -> {
+            handler.invoke(project, new PsiElement[]{expression}, dataContext);
+        });
+    }
 }

@@ -86,8 +86,8 @@ public class SynchronizedMethodInspection extends BaseInspection {
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.synchronizedMethodMoveQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.synchronizedMethodMoveQuickfix();
     }
 
     @Override

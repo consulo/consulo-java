@@ -33,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -84,8 +85,8 @@ public class IterateOverIterableIntention implements IntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Iterate";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Iterate");
   }
   
   @Nullable

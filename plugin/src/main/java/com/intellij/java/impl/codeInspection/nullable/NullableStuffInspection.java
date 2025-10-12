@@ -29,6 +29,7 @@ import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.*;
 import consulo.util.collection.ArrayUtil;
@@ -55,15 +56,8 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
 
         @Nonnull
         @Override
-        public String getText() {
-            return getFamilyName();
-        }
-
-        @Nls
-        @Nonnull
-        @Override
-        public String getFamilyName() {
-            return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName().get();
+        public LocalizeValue getText() {
+            return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName();
         }
 
         @Override

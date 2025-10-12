@@ -21,6 +21,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -61,8 +62,8 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Surround annotation parameter value with quotes";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Surround annotation parameter value with quotes");
   }
 
   @Override

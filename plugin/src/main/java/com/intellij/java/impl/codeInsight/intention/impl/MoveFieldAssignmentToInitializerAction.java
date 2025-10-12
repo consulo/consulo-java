@@ -34,6 +34,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
@@ -50,8 +51,8 @@ import java.util.List;
 public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction {
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionMoveFieldAssignmentToDeclaration().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionMoveFieldAssignmentToDeclaration();
   }
 
   @Override

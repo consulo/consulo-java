@@ -22,7 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.history.IdeDocumentHistory;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -48,112 +48,124 @@ import java.util.List;
  * To change this template use Options | File Templates.
  */
 public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsageBaseFix {
-  private static final Logger LOG = Logger.getInstance(CreateConstructorFromThisOrSuperFix.class);
+    private static final Logger LOG = Logger.getInstance(CreateConstructorFromThisOrSuperFix.class);
 
-  protected PsiMethodCallExpression myMethodCall;
+    protected PsiMethodCallExpression myMethodCall;
 
-  public CreateConstructorFromThisOrSuperFix(PsiMethodCallExpression methodCall) {
-    myMethodCall = methodCall;
-  }
-
-  @NonNls
-  protected abstract String getSyntheticMethodName ();
-
-  @Override
-  protected boolean isAvailableImpl(int offset) {
-    PsiReferenceExpression ref = myMethodCall.getMethodExpression();
-    if (!ref.getText().equals(getSyntheticMethodName())) return false;
-
-    PsiMethod method = PsiTreeUtil.getParentOfType(myMethodCall, PsiMethod.class);
-    if (method == null || !method.isConstructor()) return false;
-    if (CreateMethodFromUsageFix.hasErrorsInArgumentList(myMethodCall)) return false;
-    List<PsiClass> targetClasses = getTargetClasses(myMethodCall);
-    if (targetClasses.isEmpty()) return false;
-
-    if (CreateFromUsageUtils.shouldShowTag(offset, ref.getReferenceNameElement(), myMethodCall)) {
-      setText(JavaQuickFixBundle.message("create.constructor.text", targetClasses.get(0).getName()));
-      return true;
+    public CreateConstructorFromThisOrSuperFix(PsiMethodCallExpression methodCall) {
+        myMethodCall = methodCall;
     }
 
-    return false;
-  }
+    @NonNls
+    protected abstract String getSyntheticMethodName();
 
-  @Override
-  protected void invokeImpl(PsiClass targetClass) {
-    final PsiFile callSite = myMethodCall.getContainingFile();
-    final Project project = myMethodCall.getProject();
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-
-    IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
-
-    try {
-      PsiMethod constructor = elementFactory.createConstructor();
-      constructor = (PsiMethod)targetClass.add(constructor);
-
-      final TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
-      CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, myMethodCall.getArgumentList(),
-                                                  getTargetSubstitutor(myMethodCall));
-
-      final PsiFile psiFile = myMethodCall.getContainingFile();
-
-      templateBuilder.setEndVariableAfter(constructor.getBody().getLBrace());
-      final RangeMarker rangeMarker = psiFile.getViewProvider().getDocument().createRangeMarker(myMethodCall.getTextRange());
-
-      constructor = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(constructor);
-
-      targetClass = constructor.getContainingClass();
-      myMethodCall = CodeInsightUtil.findElementInRange(psiFile, rangeMarker.getStartOffset(), rangeMarker.getEndOffset(), myMethodCall.getClass());
-      rangeMarker.dispose();
-
-      Template template = templateBuilder.buildTemplate();
-      final Editor editor = positionCursor(project, targetClass.getContainingFile(), targetClass);
-      if (editor == null) return;
-      final TextRange textRange = constructor.getTextRange();
-      final PsiFile file = targetClass.getContainingFile();
-      editor.getDocument().deleteString(textRange.getStartOffset(), textRange.getEndOffset());
-      editor.getCaretModel().moveToOffset(textRange.getStartOffset());
-
-
-      startTemplate(editor, template, project, new TemplateEditingAdapter() {
-        @Override
-        public void templateFinished(Template template, boolean brokenOff) {
-          ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-                final int offset = editor.getCaretModel().getOffset();
-                PsiMethod constructor = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethod.class, false);
-                CreateFromUsageUtils.setupMethodBody(constructor);
-                CreateFromUsageUtils.setupEditor(constructor, editor);
-
-                LanguageUndoUtil.markPsiFileForUndo(callSite);
-              }
-              catch (IncorrectOperationException e) {
-                LOG.error(e);
-              }
-            }
-          });
+    @Override
+    protected boolean isAvailableImpl(int offset) {
+        PsiReferenceExpression ref = myMethodCall.getMethodExpression();
+        if (!ref.getText().equals(getSyntheticMethodName())) {
+            return false;
         }
-      });
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
 
-  @Override
-  protected boolean isValidElement(PsiElement element) {
-    PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
-    PsiMethod method = (PsiMethod) methodCall.getMethodExpression().resolve();
-    PsiExpressionList argumentList = methodCall.getArgumentList();
-    List<PsiClass> classes = getTargetClasses(element);
-    return classes.size() > 0 && !CreateFromUsageUtils.shouldCreateConstructor(classes.get(0), argumentList, method);
-  }
+        PsiMethod method = PsiTreeUtil.getParentOfType(myMethodCall, PsiMethod.class);
+        if (method == null || !method.isConstructor()) {
+            return false;
+        }
+        if (CreateMethodFromUsageFix.hasErrorsInArgumentList(myMethodCall)) {
+            return false;
+        }
+        List<PsiClass> targetClasses = getTargetClasses(myMethodCall);
+        if (targetClasses.isEmpty()) {
+            return false;
+        }
 
-  @Override
-  protected PsiElement getElement() {
-    if (!myMethodCall.isValid() || !myMethodCall.getManager().isInProject(myMethodCall)) return null;
-    return myMethodCall;
-  }
+        if (CreateFromUsageUtils.shouldShowTag(offset, ref.getReferenceNameElement(), myMethodCall)) {
+            setText(JavaQuickFixLocalize.createConstructorText(targetClasses.get(0).getName()));
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    protected void invokeImpl(PsiClass targetClass) {
+        final PsiFile callSite = myMethodCall.getContainingFile();
+        final Project project = myMethodCall.getProject();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+
+        IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
+
+        try {
+            PsiMethod constructor = elementFactory.createConstructor();
+            constructor = (PsiMethod) targetClass.add(constructor);
+
+            final TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
+            CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, myMethodCall.getArgumentList(),
+                getTargetSubstitutor(myMethodCall));
+
+            final PsiFile psiFile = myMethodCall.getContainingFile();
+
+            templateBuilder.setEndVariableAfter(constructor.getBody().getLBrace());
+            final RangeMarker rangeMarker = psiFile.getViewProvider().getDocument().createRangeMarker(myMethodCall.getTextRange());
+
+            constructor = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(constructor);
+
+            targetClass = constructor.getContainingClass();
+            myMethodCall = CodeInsightUtil.findElementInRange(psiFile, rangeMarker.getStartOffset(), rangeMarker.getEndOffset(), myMethodCall.getClass());
+            rangeMarker.dispose();
+
+            Template template = templateBuilder.buildTemplate();
+            final Editor editor = positionCursor(project, targetClass.getContainingFile(), targetClass);
+            if (editor == null) {
+                return;
+            }
+            final TextRange textRange = constructor.getTextRange();
+            final PsiFile file = targetClass.getContainingFile();
+            editor.getDocument().deleteString(textRange.getStartOffset(), textRange.getEndOffset());
+            editor.getCaretModel().moveToOffset(textRange.getStartOffset());
+
+
+            startTemplate(editor, template, project, new TemplateEditingAdapter() {
+                @Override
+                public void templateFinished(Template template, boolean brokenOff) {
+                    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+                                final int offset = editor.getCaretModel().getOffset();
+                                PsiMethod constructor = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethod.class, false);
+                                CreateFromUsageUtils.setupMethodBody(constructor);
+                                CreateFromUsageUtils.setupEditor(constructor, editor);
+
+                                LanguageUndoUtil.markPsiFileForUndo(callSite);
+                            }
+                            catch (IncorrectOperationException e) {
+                                LOG.error(e);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
+
+    @Override
+    protected boolean isValidElement(PsiElement element) {
+        PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
+        PsiMethod method = (PsiMethod) methodCall.getMethodExpression().resolve();
+        PsiExpressionList argumentList = methodCall.getArgumentList();
+        List<PsiClass> classes = getTargetClasses(element);
+        return classes.size() > 0 && !CreateFromUsageUtils.shouldCreateConstructor(classes.get(0), argumentList, method);
+    }
+
+    @Override
+    protected PsiElement getElement() {
+        if (!myMethodCall.isValid() || !myMethodCall.getManager().isInProject(myMethodCall)) {
+            return null;
+        }
+        return myMethodCall;
+    }
 }

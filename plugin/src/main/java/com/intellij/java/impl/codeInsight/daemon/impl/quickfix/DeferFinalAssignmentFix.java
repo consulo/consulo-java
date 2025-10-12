@@ -23,22 +23,23 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +56,8 @@ public class DeferFinalAssignmentFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("defer.final.assignment.with.temp.text", variable.getName());
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.deferFinalAssignmentWithTempText(variable.getName());
   }
 
   @Override

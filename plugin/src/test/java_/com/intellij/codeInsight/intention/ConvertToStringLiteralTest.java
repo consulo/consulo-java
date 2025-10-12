@@ -19,24 +19,24 @@ package com.intellij.codeInsight.intention;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 
 
 public abstract class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {
-  private String myIntention;
+    private String myIntention;
 
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    myIntention = JavaQuickFixBundle.message("convert.to.string.text");
-  }
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        myIntention = JavaQuickFixLocalize.convertToStringText().get();
+    }
 
-  public void testSimple() throws Exception {
-    CodeInsightTestUtil.doIntentionTest(myFixture, myIntention, "Simple.java", "Simple_after.java");
-  }
+    public void testSimple() throws Exception {
+        CodeInsightTestUtil.doIntentionTest(myFixture, myIntention, "Simple.java", "Simple_after.java");
+    }
 
-  @Override
-  protected String getTestDataPath() {
-    return JavaTestUtil.getJavaTestDataPath() + "/codeInsight/convertToStringLiteral/";
-  }
+    @Override
+    protected String getTestDataPath() {
+        return JavaTestUtil.getJavaTestDataPath() + "/codeInsight/convertToStringLiteral/";
+    }
 }

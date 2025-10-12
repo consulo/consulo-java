@@ -37,10 +37,10 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -48,12 +48,12 @@ import java.util.*;
 @IntentionMetaData(ignoreId = "java.ReplaceImplementsWithStaticImportAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ReplaceImplementsWithStaticImportAction.class);
-  @NonNls private static final String FIND_CONSTANT_FIELD_USAGES = "Find constant field usages...";
+  private static final String FIND_CONSTANT_FIELD_USAGES = "Find constant field usages...";
 
   @Override
   @Nonnull
-  public String getText() {
-    return "Replace Implements with Static Import";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Replace Implements with Static Import");
   }
 
   @Override
@@ -119,7 +119,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
       LOG.assertTrue(target instanceof PsiClass);
 
       final PsiClass targetClass = (PsiClass)target;
-      new WriteCommandAction(project, getText()) {
+      new WriteCommandAction(project, getText().get()) {
         @Override
         protected void run(Result result) throws Throwable {
           for (PsiField constField : targetClass.getAllFields()) {

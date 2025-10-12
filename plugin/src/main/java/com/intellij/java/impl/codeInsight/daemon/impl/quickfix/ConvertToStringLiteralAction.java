@@ -21,15 +21,15 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -37,8 +37,8 @@ import jakarta.annotation.Nonnull;
 public class ConvertToStringLiteralAction implements IntentionAction {
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("convert.to.string.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.convertToStringText();
   }
 
   @Override

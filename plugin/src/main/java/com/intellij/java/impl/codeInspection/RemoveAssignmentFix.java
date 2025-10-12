@@ -19,17 +19,19 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class RemoveAssignmentFix extends RemoveInitializerFix {
   @Nonnull
   @Override
-  public String getName() {
-    return JavaInspectionsBundle.message("inspection.unused.assignment.remove.assignment.quickfix");
+  public LocalizeValue getName() {
+    return JavaInspectionsLocalize.inspectionUnusedAssignmentRemoveAssignmentQuickfix();
   }
 
   @Override

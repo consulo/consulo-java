@@ -15,17 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTryStatement;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.language.psi.*;
 import jakarta.annotation.Nonnull;
 
 public class DeleteCatchFix implements SyntheticIntentionAction {
@@ -37,8 +41,8 @@ public class DeleteCatchFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myCatchParameter.getType()));
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.deleteCatchText(JavaHighlightUtil.formatType(myCatchParameter.getType()));
   }
 
   @Override

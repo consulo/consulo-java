@@ -34,7 +34,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
@@ -65,8 +64,8 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
       extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetQuickfix();
     }
 
     @Override

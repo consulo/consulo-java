@@ -18,9 +18,9 @@ package consulo.java.analysis.impl;
 
 import consulo.annotation.DeprecationInfo;
 import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.component.util.localize.AbstractBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import org.jetbrains.annotations.PropertyKey;
-import consulo.component.util.localize.AbstractBundle;
 
 /**
  * @author VISTALL
@@ -29,22 +29,18 @@ import consulo.component.util.localize.AbstractBundle;
 @Deprecated
 @DeprecationInfo("Use JavaQuickFixLocalize")
 @MigratedExtensionsTo(JavaQuickFixLocalize.class)
-public class JavaQuickFixBundle extends AbstractBundle
-{
-	private static final JavaQuickFixBundle ourInstance = new JavaQuickFixBundle();
+public class JavaQuickFixBundle extends AbstractBundle {
+    private static final JavaQuickFixBundle ourInstance = new JavaQuickFixBundle();
 
-	private JavaQuickFixBundle()
-	{
-		super("messages.JavaQuickFixBundle");
-	}
+    private JavaQuickFixBundle() {
+        super("messages.JavaQuickFixBundle");
+    }
 
-	public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key)
-	{
-		return ourInstance.getMessage(key);
-	}
+    public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key) {
+        return ourInstance.getMessage(key);
+    }
 
-	public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key, Object... params)
-	{
-		return ourInstance.getMessage(key, params);
-	}
+    public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key, Object... params) {
+        return ourInstance.getMessage(key, params);
+    }
 }

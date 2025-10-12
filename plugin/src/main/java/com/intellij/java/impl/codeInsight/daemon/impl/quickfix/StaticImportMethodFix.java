@@ -24,9 +24,11 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -43,8 +45,8 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
 
   @Nonnull
   @Override
-  protected String getBaseText() {
-    return JavaQuickFixBundle.message("static.import.method.text");
+  protected LocalizeValue getBaseText() {
+    return JavaQuickFixLocalize.staticImportMethodText();
   }
 
   @Nonnull

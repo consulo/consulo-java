@@ -19,12 +19,14 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -41,8 +43,8 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("replace.with.list.access.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.replaceWithListAccessText();
   }
 
   @Override

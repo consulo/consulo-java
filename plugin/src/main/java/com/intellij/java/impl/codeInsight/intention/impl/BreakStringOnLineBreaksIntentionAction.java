@@ -27,6 +27,7 @@ import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
@@ -103,7 +104,7 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
 
   @Nonnull
   @Override
-  public String getText() {
-    return CodeInsightLocalize.intentionBreakStringOnLineBreaksText().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionBreakStringOnLineBreaksText();
   }
 }

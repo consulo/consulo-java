@@ -18,12 +18,13 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -32,74 +33,80 @@ import jakarta.annotation.Nullable;
  * @author ven
  */
 public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
-  private final PsiArrayInitializerExpression myInitializer;
+    private final PsiArrayInitializerExpression myInitializer;
 
-  public AddNewArrayExpressionFix(PsiArrayInitializerExpression initializer) {
-    myInitializer = initializer;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    PsiType type = getType(myInitializer);
-    return JavaQuickFixBundle.message("add.new.array.text", type.getPresentableText());
-  }
-
-  @Nullable
-  @Override
-  public PsiElement getElementToMakeWritable(@Nonnull PsiFile currentFile) {
-    return myInitializer;
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!myInitializer.isValid() || !myInitializer.getManager().isInProject(myInitializer)) return false;
-    return getType(myInitializer) != null;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    doFix(myInitializer);
-  }
-
-  public static void doFix(@Nonnull PsiArrayInitializerExpression initializer) {
-    PsiType type = getType(initializer);
-    if (type == null) {
-      return;
+    public AddNewArrayExpressionFix(PsiArrayInitializerExpression initializer) {
+        myInitializer = initializer;
     }
 
-    doFix(type, initializer);
-  }
-
-  private static void doFix(@Nonnull PsiType type, PsiArrayInitializerExpression initializer) {
-    Project project = initializer.getProject();
-    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    String text = "new " + type.getPresentableText() + "[]{}";
-    PsiNewExpression newExpr = (PsiNewExpression)factory.createExpressionFromText(text, null);
-    newExpr.getArrayInitializer().replace(initializer);
-    newExpr = (PsiNewExpression)CodeStyleManager.getInstance(project).reformat(newExpr);
-    initializer.replace(newExpr);
-  }
-
-  @RequiredReadAction
-  private static PsiType getType(PsiArrayInitializerExpression initializer) {
-    final PsiExpression[] initializers = initializer.getInitializers();
-    final PsiElement parent = initializer.getParent();
-    if (!(parent instanceof PsiAssignmentExpression)) {
-      if (initializers.length <= 0) return null;
-      return initializers[0].getType();
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        PsiType type = getType(myInitializer);
+        return JavaQuickFixLocalize.addNewArrayText(type.getPresentableText());
     }
-    final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
-    final PsiType type = assignmentExpression.getType();
-    if (!(type instanceof PsiArrayType)) {
-      if (initializers.length <= 0) return null;
-      return initializers[0].getType();
-    }
-    return ((PsiArrayType)type).getComponentType();
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Nullable
+    @Override
+    public PsiElement getElementToMakeWritable(@Nonnull PsiFile currentFile) {
+        return myInitializer;
+    }
+
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!myInitializer.isValid() || !myInitializer.getManager().isInProject(myInitializer)) {
+            return false;
+        }
+        return getType(myInitializer) != null;
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        doFix(myInitializer);
+    }
+
+    public static void doFix(@Nonnull PsiArrayInitializerExpression initializer) {
+        PsiType type = getType(initializer);
+        if (type == null) {
+            return;
+        }
+
+        doFix(type, initializer);
+    }
+
+    private static void doFix(@Nonnull PsiType type, PsiArrayInitializerExpression initializer) {
+        Project project = initializer.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+        String text = "new " + type.getPresentableText() + "[]{}";
+        PsiNewExpression newExpr = (PsiNewExpression) factory.createExpressionFromText(text, null);
+        newExpr.getArrayInitializer().replace(initializer);
+        newExpr = (PsiNewExpression) CodeStyleManager.getInstance(project).reformat(newExpr);
+        initializer.replace(newExpr);
+    }
+
+    @RequiredReadAction
+    private static PsiType getType(PsiArrayInitializerExpression initializer) {
+        final PsiExpression[] initializers = initializer.getInitializers();
+        final PsiElement parent = initializer.getParent();
+        if (!(parent instanceof PsiAssignmentExpression)) {
+            if (initializers.length <= 0) {
+                return null;
+            }
+            return initializers[0].getType();
+        }
+        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+        final PsiType type = assignmentExpression.getType();
+        if (!(type instanceof PsiArrayType)) {
+            if (initializers.length <= 0) {
+                return null;
+            }
+            return initializers[0].getType();
+        }
+        return ((PsiArrayType) type).getComponentType();
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }

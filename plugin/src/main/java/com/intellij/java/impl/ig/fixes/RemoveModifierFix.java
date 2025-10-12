@@ -20,6 +20,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +33,8 @@ public class RemoveModifierFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.removeModifierQuickfix(modifierText).get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.removeModifierQuickfix(modifierText);
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

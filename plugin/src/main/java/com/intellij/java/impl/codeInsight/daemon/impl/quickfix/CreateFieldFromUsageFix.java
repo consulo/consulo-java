@@ -17,16 +17,19 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.template.event.TemplateEditingAdapter;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -36,12 +39,12 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
 
   public CreateFieldFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
-    setText(JavaQuickFixBundle.message("create.field.from.usage.family"));
+    setText(JavaQuickFixLocalize.createFieldFromUsageFamily());
   }
 
   @Override
-  protected String getText(String varName) {
-    return JavaQuickFixBundle.message("create.field.from.usage.text", varName);
+  protected LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createFieldFromUsageText(varName);
   }
 
   protected boolean createConstantField() {

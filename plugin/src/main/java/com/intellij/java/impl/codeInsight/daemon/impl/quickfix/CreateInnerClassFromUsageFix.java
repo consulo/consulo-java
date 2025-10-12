@@ -22,20 +22,21 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +54,8 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
   }
 
   @Override
-  public String getText(String varName) {
-    return JavaQuickFixBundle.message("create.inner.class.from.usage.text", StringUtil.capitalize(myKind.getDescription()), varName);
+  public LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createInnerClassFromUsageText(StringUtil.capitalize(myKind.getDescription()), varName);
   }
 
   @Override
@@ -141,12 +142,12 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
             });
 
           }
-        }, getText(), null);
+        }, getText().get(), null);
       }
     };
 
     JBPopup popup = builder.
-        setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
+        setTitle(JavaQuickFixLocalize.targetClassChooserTitle().get()).
         setItemChoosenCallback(runnable).
         createPopup();
 

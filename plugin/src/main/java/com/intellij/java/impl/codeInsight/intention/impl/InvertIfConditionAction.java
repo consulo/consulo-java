@@ -41,6 +41,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
@@ -77,8 +78,8 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionInvertIfCondition().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionInvertIfCondition();
   }
 
   @Override

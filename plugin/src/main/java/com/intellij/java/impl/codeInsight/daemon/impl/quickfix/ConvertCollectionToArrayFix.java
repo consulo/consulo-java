@@ -18,14 +18,14 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author Pavel.Dolgov
@@ -41,11 +41,10 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
     myNewArrayText = componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("collection.to.array.text", myNewArrayText);
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.collectionToArrayText(myNewArrayText);
   }
 
   @Override

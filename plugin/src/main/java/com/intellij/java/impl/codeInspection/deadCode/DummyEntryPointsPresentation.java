@@ -58,7 +58,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
 
   private class MoveEntriesToSuspicious extends QuickFixAction {
     private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper) {
-      super(InspectionLocalize.inspectionDeadCodeRemoveFromEntryPointQuickfix().get(), null, null, toolWrapper);
+      super(InspectionLocalize.inspectionDeadCodeRemoveFromEntryPointQuickfix(), null, null, toolWrapper);
     }
 
     @Override

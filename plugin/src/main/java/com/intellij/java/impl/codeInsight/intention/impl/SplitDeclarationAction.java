@@ -43,7 +43,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.SplitDeclarationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
   public SplitDeclarationAction() {
-    setText(CodeInsightLocalize.intentionSplitDeclarationFamily().get());
+    setText(CodeInsightLocalize.intentionSplitDeclarationFamily());
   }
 
   @Override
@@ -62,7 +62,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
 
     PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
     if (field != null && PsiTreeUtil.getParentOfType(element, PsiDocComment.class) == null && isAvailableOnField(field)) {
-      setText(CodeInsightLocalize.intentionSplitDeclarationText().get());
+      setText(CodeInsightLocalize.intentionSplitDeclarationText());
       return true;
     }
     return false;
@@ -128,7 +128,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
           parent = parent.getNextSibling();
         }
       }
-      setText(CodeInsightLocalize.intentionSplitDeclarationAssignmentText().get());
+      setText(CodeInsightLocalize.intentionSplitDeclarationAssignmentText());
       return true;
     }
     else {
@@ -136,7 +136,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
         return false;
       }
 
-      setText(CodeInsightLocalize.intentionSplitDeclarationText().get());
+      setText(CodeInsightLocalize.intentionSplitDeclarationText());
       return true;
     }
   }

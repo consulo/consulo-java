@@ -55,8 +55,8 @@ public class ConfusingFloatingPointLiteralInspection
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.confusingFloatingPointLiteralChangeQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.confusingFloatingPointLiteralChangeQuickfix();
     }
 
     @Override

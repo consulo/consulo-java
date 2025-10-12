@@ -56,7 +56,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   private static final LocalizeValue ACTION_NAME = LocalizeValue.localizeTODO("Make Inferred Annotations Explicit");
 
   public MakeInferredAnnotationExplicit() {
-    setText(ACTION_NAME.get());
+    setText(ACTION_NAME);
   }
 
   @Override
@@ -74,7 +74,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
           final String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
           return "@" + name + annotation.getParameterList().getText();
         }, " ");
-        setText("Insert '" + annos + "'");
+        setText(LocalizeValue.localizeTODO("Insert '" + annos + "'"));
         return true;
       }
     }

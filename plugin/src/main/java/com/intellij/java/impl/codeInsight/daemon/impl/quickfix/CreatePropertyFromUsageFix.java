@@ -27,7 +27,7 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.history.IdeDocumentHistory;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -38,6 +38,7 @@ import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -61,7 +62,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
 
   public CreatePropertyFromUsageFix(PsiMethodCallExpression methodCall) {
     myMethodCall = methodCall;
-    setText(JavaQuickFixBundle.message("create.property.from.usage.family"));
+    setText(JavaQuickFixLocalize.createPropertyFromUsageFamily());
   }
 
   protected final PsiMethodCallExpression myMethodCall;
@@ -81,14 +82,14 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
     String propertyName = PropertyUtil.getPropertyName(methodName);
     if (propertyName == null || propertyName.length() == 0) return false;
 
-    String getterOrSetter = null;
+    LocalizeValue getterOrSetter = LocalizeValue.of();
     if (methodName.startsWith(GET_PREFIX) || methodName.startsWith(IS_PREFIX)) {
       if (myMethodCall.getArgumentList().getExpressions().length != 0) return false;
-      getterOrSetter = JavaQuickFixBundle.message("create.getter");
+      getterOrSetter = JavaQuickFixLocalize.createGetter();
     }
     else if (methodName.startsWith(SET_PREFIX)) {
       if (myMethodCall.getArgumentList().getExpressions().length != 1) return false;
-      getterOrSetter = JavaQuickFixBundle.message("create.setter");
+      getterOrSetter = JavaQuickFixLocalize.createSetter();
     }
     else {
       LOG.error("Internal error in create property intention");

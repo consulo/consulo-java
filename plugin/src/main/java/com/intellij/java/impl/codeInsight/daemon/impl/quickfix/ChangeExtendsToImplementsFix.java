@@ -19,29 +19,27 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiKeyword;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
  * changes 'class a extends b' to 'class a implements b' or vice versa
  */
 public class ChangeExtendsToImplementsFix extends ExtendsListFix {
-  private final String myName;
+  private final LocalizeValue myName;
 
   public ChangeExtendsToImplementsFix(PsiClass aClass, PsiClassType classToExtendFrom) {
     super(aClass, classToExtendFrom, true);
-    myName = JavaQuickFixBundle.message("exchange.extends.implements.keyword",
-                                    aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.IMPLEMENTS : PsiKeyword.EXTENDS,
-                                    aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.EXTENDS : PsiKeyword.IMPLEMENTS,
-                                    myClassToExtendFrom.getName());
+    myName = JavaQuickFixLocalize.exchangeExtendsImplementsKeyword(aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.IMPLEMENTS : PsiKeyword.EXTENDS, aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.EXTENDS : PsiKeyword.IMPLEMENTS, myClassToExtendFrom.getName());
   }
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     return myName;
   }
 }

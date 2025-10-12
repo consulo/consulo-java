@@ -42,6 +42,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.image.Image;
@@ -61,7 +62,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   private static final Logger LOG = Logger.getInstance(DefineParamsDefaultValueAction.class);
 
   public DefineParamsDefaultValueAction() {
-    setText("Generate overloaded method with default parameter values");
+    setText(LocalizeValue.localizeTODO("Generate overloaded method with default parameter values"));
   }
 
   @Override

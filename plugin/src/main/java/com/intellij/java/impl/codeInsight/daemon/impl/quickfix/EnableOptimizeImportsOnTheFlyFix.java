@@ -18,11 +18,13 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -30,8 +32,8 @@ import jakarta.annotation.Nonnull;
 public class EnableOptimizeImportsOnTheFlyFix implements SyntheticIntentionAction, LowPriorityAction{
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("enable.optimize.imports.on.the.fly");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.enableOptimizeImportsOnTheFly();
   }
 
   @Override

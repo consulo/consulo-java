@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
@@ -30,10 +30,11 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -51,12 +52,12 @@ public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     PsiLocalVariable variable = myOutOfScopeVariable;
 
     String varText = variable == null ? "" : PsiFormatUtil.formatVariable(variable, PsiFormatUtilBase.SHOW_NAME |
                                                                                     PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
-    return JavaQuickFixBundle.message("bring.variable.to.scope.text", varText);
+    return JavaQuickFixLocalize.bringVariableToScopeText(varText);
   }
 
   @Override

@@ -58,7 +58,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   private static final PsiMethodPattern GET_COLOR_METHOD = PsiJavaPatterns.psiMethod().definedInClass(JAVA_AWT_COLOR).withName("getColor");
 
   public ColorChooserIntentionAction() {
-    setText(CodeInsightLocalize.intentionColorChooserDialog().get());
+    setText(CodeInsightLocalize.intentionColorChooserDialog());
   }
 
   @Override
@@ -109,7 +109,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
 
     final Color temp = oldColor;
 
-    ColorChooser.chooseColor(editorComponent, getText(), temp, color ->
+    ColorChooser.chooseColor(editorComponent, getText().get(), temp, color ->
     {
       if (color == null) {
         return;
@@ -195,7 +195,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   private void replaceColor(JComponent editorComponent, PsiNewExpression expression, Color oldColor) {
-    ColorChooser.chooseColor(editorComponent, getText(), oldColor, true, color ->
+    ColorChooser.chooseColor(editorComponent, getText().get(), oldColor, true, color ->
     {
       if (color == null) {
         return;

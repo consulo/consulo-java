@@ -52,8 +52,8 @@ public class BigDecimalEqualsInspection extends BaseInspection {
 
   private static class BigDecimalEqualsFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.bigDecimalEqualsReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.bigDecimalEqualsReplaceQuickfix();
     }
 
     @Override

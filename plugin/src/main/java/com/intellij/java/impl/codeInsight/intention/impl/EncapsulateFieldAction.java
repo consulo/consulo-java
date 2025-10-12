@@ -26,6 +26,7 @@ import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -39,8 +40,8 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return CodeInsightLocalize.intentionEncapsulateFieldText().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionEncapsulateFieldText();
   }
 
   @Override

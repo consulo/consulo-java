@@ -66,8 +66,8 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
 
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.ambiguousFieldAccessQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.ambiguousFieldAccessQuickfix();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

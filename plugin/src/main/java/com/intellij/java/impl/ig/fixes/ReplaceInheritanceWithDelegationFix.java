@@ -26,6 +26,7 @@ import consulo.dataContext.DataManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -33,8 +34,8 @@ public class ReplaceInheritanceWithDelegationFix extends InspectionGadgetsFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.replaceInheritanceWithDelegationQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.replaceInheritanceWithDelegationQuickfix();
   }
 
   @Override

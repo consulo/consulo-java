@@ -21,12 +21,14 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiTypeElement;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -41,8 +43,8 @@ public class DeleteMultiCatchFix implements SyntheticIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myTypeElement.getType()));
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.deleteCatchText(JavaHighlightUtil.formatType(myTypeElement.getType()));
   }
 
   @Override

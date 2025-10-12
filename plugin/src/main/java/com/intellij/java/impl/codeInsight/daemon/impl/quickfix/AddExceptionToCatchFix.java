@@ -25,7 +25,7 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.history.IdeDocumentHistory;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -50,7 +50,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   private static final Logger LOG = Logger.getInstance(AddExceptionToCatchFix.class);
 
   public AddExceptionToCatchFix() {
-    setText(JavaQuickFixBundle.message("add.catch.clause.family"));
+    setText(JavaQuickFixLocalize.addCatchClauseFamily());
   }
 
   @Override
@@ -162,7 +162,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
 
     if (element == null) return false;
 
-    setText(JavaQuickFixBundle.message("add.catch.clause.text"));
+    setText(JavaQuickFixLocalize.addCatchClauseText());
     return true;
   }
 

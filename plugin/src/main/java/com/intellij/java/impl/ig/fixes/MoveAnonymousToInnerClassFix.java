@@ -25,23 +25,24 @@ import consulo.dataContext.DataManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
 
-  private final String name;
+  private final LocalizeValue name;
 
-  public MoveAnonymousToInnerClassFix(String name) {
+  public MoveAnonymousToInnerClassFix(@Nonnull LocalizeValue name) {
     this.name = name;
   }
 
   public MoveAnonymousToInnerClassFix() {
-    name = InspectionGadgetsLocalize.moveAnonymousToInnerQuickfix().get();
+    name = InspectionGadgetsLocalize.moveAnonymousToInnerQuickfix();
   }
 
   @Nonnull
-  public String getName() {
+  public LocalizeValue getName() {
     return name;
   }
 

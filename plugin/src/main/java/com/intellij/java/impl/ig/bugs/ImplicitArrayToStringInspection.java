@@ -86,15 +86,15 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         }
 
         @Nonnull
-        public String getName() {
-            @NonNls final String expressionText;
+        public LocalizeValue getName() {
+            String expressionText;
             if (deepString) {
                 expressionText = "java.util.Arrays.deepToString()";
             }
             else {
                 expressionText = "java.util.Arrays.toString()";
             }
-            return InspectionGadgetsLocalize.implicitArrayToStringQuickfix(expressionText).get();
+            return InspectionGadgetsLocalize.implicitArrayToStringQuickfix(expressionText);
         }
 
         @Override

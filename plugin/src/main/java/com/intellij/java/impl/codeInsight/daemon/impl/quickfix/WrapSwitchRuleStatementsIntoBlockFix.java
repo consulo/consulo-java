@@ -10,6 +10,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
@@ -37,9 +38,9 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction im
     }
     PsiStatement sibling = PsiTreeUtil.getNextSiblingOfType(myRuleStatement, PsiStatement.class);
     if (sibling == null || sibling instanceof PsiSwitchLabelStatementBase) {
-      setText("Create block");
+      setText(LocalizeValue.localizeTODO("Create block"));
     } else {
-      setText("Wrap with block");
+      setText(LocalizeValue.localizeTODO("Wrap with block"));
     }
     return true;
   }

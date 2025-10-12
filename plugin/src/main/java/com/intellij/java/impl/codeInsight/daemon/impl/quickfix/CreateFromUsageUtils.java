@@ -47,6 +47,7 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.fileTemplate.FileTemplateUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.WeighingComparable;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
@@ -64,6 +65,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
 import consulo.language.util.proximity.ProximityLocation;
 import consulo.language.util.proximity.PsiProximityComparator;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
@@ -328,7 +330,7 @@ public class CreateFromUsageUtils {
     final PsiDirectory targetDirectory;
     if (!ApplicationManager.getApplication().isUnitTestMode()) {
       Project project = manager.getProject();
-      String title = JavaQuickFixBundle.message("create.class.title", StringUtil.capitalize(classKind.getDescription()));
+      LocalizeValue title = JavaQuickFixLocalize.createClassTitle(StringUtil.capitalize(classKind.getDescription()));
 
       CreateClassDialog dialog = new CreateClassDialog(project, title, name, aPackage.getQualifiedName(), classKind, false, module){
         @Override

@@ -26,6 +26,7 @@ import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Pair;
@@ -42,10 +43,10 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     return variableName == null || newTypeName == null
-      ? CodeInsightLocalize.intentionMakeTypeGenericFamily().get()
-      : CodeInsightLocalize.intentionMakeTypeGenericText(variableName, newTypeName).get();
+      ? CodeInsightLocalize.intentionMakeTypeGenericFamily()
+      : CodeInsightLocalize.intentionMakeTypeGenericText(variableName, newTypeName);
   }
 
   @Override

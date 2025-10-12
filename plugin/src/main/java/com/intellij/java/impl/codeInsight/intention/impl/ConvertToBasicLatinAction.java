@@ -35,6 +35,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
@@ -74,8 +75,8 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return CodeInsightLocalize.intentionConvertToBasicLatin().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionConvertToBasicLatin();
   }
 
   @Override

@@ -42,7 +42,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   private static final Logger LOG = Logger.getInstance(CreateFieldFromParameterActionBase.class);
 
   protected CreateFieldFromParameterActionBase() {
-    setText(CodeInsightLocalize.intentionCreateFieldFromParameterFamily().get());
+    setText(CodeInsightLocalize.intentionCreateFieldFromParameterFamily());
   }
 
   @Override
@@ -51,7 +51,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
     if (parameter == null || !isAvailable(parameter)) {
       return false;
     }
-    setText(CodeInsightLocalize.intentionCreateFieldFromParameterText(parameter.getName()).get());
+    setText(CodeInsightLocalize.intentionCreateFieldFromParameterText(parameter.getName()));
 
     return true;
   }

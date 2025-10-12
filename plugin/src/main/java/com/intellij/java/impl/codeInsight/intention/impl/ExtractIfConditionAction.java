@@ -74,7 +74,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     if (operand == null) {
       return false;
     }
-    setText(CodeInsightLocalize.intentionExtractIfConditionText(PsiExpressionTrimRenderer.render(operand)).get());
+    setText(CodeInsightLocalize.intentionExtractIfConditionText(PsiExpressionTrimRenderer.render(operand)));
     return true;
   }
 

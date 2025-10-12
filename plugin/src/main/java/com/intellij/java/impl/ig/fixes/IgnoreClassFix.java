@@ -10,9 +10,8 @@ import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Set;
 
 /**
@@ -21,9 +20,9 @@ import java.util.Set;
 public class IgnoreClassFix extends InspectionGadgetsFix {
   final Set<String> myIgnoredClasses;
   final String myQualifiedName;
-  private final String myFixName;
+  private final LocalizeValue myFixName;
 
-  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, LocalizeValue fixName) {
+  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, @Nonnull LocalizeValue fixName) {
     myIgnoredClasses = ignoredClasses;
     myQualifiedName = qualifiedName;
     myFixName = fixName;

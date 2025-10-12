@@ -27,6 +27,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -42,8 +43,8 @@ public class AddVariableInitializerFix implements SyntheticIntentionAction {
   @Override
   @Nonnull
   @RequiredReadAction
-  public String getText() {
-    return CodeInsightLocalize.quickfixAddVariableText(myVariable.getName()).get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.quickfixAddVariableText(myVariable.getName());
   }
 
   @Override

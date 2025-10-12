@@ -28,13 +28,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.extractParameterAsLocalVariableQuickfix().get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.extractParameterAsLocalVariableQuickfix();
   }
 
   @Override

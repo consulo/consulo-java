@@ -59,7 +59,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   private static final Object LOCK = new Object();
 
   public BindFieldsFromParametersAction() {
-    setText(CodeInsightLocalize.intentionBindFieldsFromParametersFamily().get());
+    setText(CodeInsightLocalize.intentionBindFieldsFromParametersFamily());
   }
 
   @Override
@@ -84,7 +84,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
         LOG.assertTrue(psiParameter != null);
       }
 
-      setText(CodeInsightLocalize.intentionBindFieldsFromParametersText(method.isConstructor() ? "Constructor" : "Method").get());
+      setText(CodeInsightLocalize.intentionBindFieldsFromParametersText(method.isConstructor() ? "Constructor" : "Method"));
     }
     return isAvailable(psiParameter);
   }

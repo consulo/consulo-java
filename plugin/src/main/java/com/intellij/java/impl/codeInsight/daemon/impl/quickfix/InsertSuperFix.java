@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -26,9 +26,9 @@ import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAction {
@@ -42,8 +42,8 @@ public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAct
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("insert.super.constructor.call.text");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.insertSuperConstructorCallText("super();");
   }
 
   @Override

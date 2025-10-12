@@ -58,6 +58,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.platform.Platform;
 import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
@@ -82,11 +83,8 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   private final Set<RefEntity> myIgnoreElements = new HashSet<>();
   private WeakUnreferencedFilter myFilter;
   private DeadHTMLComposer myComposer;
-  @NonNls
   private static final String DELETE = "delete";
-  @NonNls
   private static final String COMMENT = "comment";
-  @NonNls
   private static final String[] HINTS = {
     COMMENT,
     DELETE
@@ -202,7 +200,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   class PermanentDeleteAction extends QuickFixAction {
     PermanentDeleteAction(@Nonnull InspectionToolWrapper toolWrapper) {
       super(
-        InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix().get(),
+        InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix(),
         AllIcons.Actions.Cancel,
         KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
         toolWrapper
@@ -251,7 +249,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   class MoveToEntries extends QuickFixAction {
     MoveToEntries(@Nonnull InspectionToolWrapper toolWrapper) {
       super(
-        InspectionLocalize.inspectionDeadCodeEntryPointQuickfix().get(),
+        InspectionLocalize.inspectionDeadCodeEntryPointQuickfix(),
         null,
         KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
         toolWrapper
@@ -274,7 +272,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   class CommentOutBin extends QuickFixAction {
     CommentOutBin(@Nonnull InspectionToolWrapper toolWrapper) {
       super(
-        InspectionLocalize.inspectionDeadCodeCommentQuickfix().get(),
+        InspectionLocalize.inspectionDeadCodeCommentQuickfix(),
         null,
         KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, Platform.current().os().isMac() ? InputEvent.META_MASK : InputEvent.CTRL_MASK),
         toolWrapper
@@ -318,8 +316,8 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
     @Override
     @Nonnull
-    public String getText() {
-      return InspectionLocalize.inspectionDeadCodeCommentQuickfix().get();
+    public LocalizeValue getText() {
+      return InspectionLocalize.inspectionDeadCodeCommentQuickfix();
     }
 
     @Override
@@ -559,8 +557,8 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
     @Override
     @Nonnull
-    public String getText() {
-      return InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix().get();
+    public LocalizeValue getText() {
+      return InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix();
     }
 
     @Override

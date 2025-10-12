@@ -26,6 +26,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -40,8 +41,8 @@ import java.util.Collection;
 public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
   @Override
   @Nonnull
-  public String getText() {
-    return CodeInsightLocalize.intentionMoveInitializerToConstructor().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionMoveInitializerToConstructor();
   }
 
   @Nonnull

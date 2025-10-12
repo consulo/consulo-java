@@ -42,7 +42,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   private String myReplaceVariableName = "";
 
   public ReplaceCastWithVariableAction() {
-    setText(CodeInsightLocalize.intentionReplaceCastWithVarFamily().get());
+    setText(CodeInsightLocalize.intentionReplaceCastWithVarFamily());
   }
 
   @RequiredReadAction
@@ -72,7 +72,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     }
 
     myReplaceVariableName = replacement.getName();
-    setText(CodeInsightLocalize.intentionReplaceCastWithVarText(typeCastExpression.getText(), myReplaceVariableName).get());
+    setText(CodeInsightLocalize.intentionReplaceCastWithVarText(typeCastExpression.getText(), myReplaceVariableName));
 
     return true;
   }

@@ -18,11 +18,13 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
@@ -37,11 +39,10 @@ public class InsertMethodCallFix implements SyntheticIntentionAction, LowPriorit
     myMethodName = method.getName();
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("insert.sam.method.call.fix.name", myMethodName);
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.insertSamMethodCallFixName(myMethodName);
   }
 
   @Override

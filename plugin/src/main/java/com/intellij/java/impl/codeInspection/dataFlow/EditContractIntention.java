@@ -22,6 +22,7 @@ import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
@@ -47,7 +48,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     "<small>See intention action description for more details</small></html>";
 
   public EditContractIntention() {
-    setText("Edit method contract");
+    setText(LocalizeValue.localizeTODO("Edit method contract"));
   }
 
   @Nullable
@@ -65,7 +66,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     final PsiMethod method = getTargetMethod(editor, file);
     if (method != null) {
       boolean hasContract = JavaMethodContractUtil.findContractAnnotation(method) != null;
-      setText(hasContract ? "Edit method contract of '" + method.getName() + "'" : "Add method contract to '" + method.getName() + "'");
+      setText(LocalizeValue.localizeTODO(hasContract ? "Edit method contract of '" + method.getName() + "'" : "Add method contract to '" + method.getName() + "'"));
       return true;
     }
     return false;

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Alexey Kudravtsev
@@ -38,8 +38,8 @@ public class MakeMethodConstructorFix implements IntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("convert.method.to.constructor");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.convertMethodToConstructor();
   }
 
   @Override

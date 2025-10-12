@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.CodeInsightUtilCore;
@@ -33,6 +33,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
@@ -48,8 +49,8 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
   private static final Logger LOG = Logger.getInstance(CreateLocalFromUsageFix.class);
 
   @Override
-  public String getText(String varName) {
-    return JavaQuickFixBundle.message("create.local.from.usage.text", varName);
+  public LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createLocalFromUsageText(varName);
   }
 
   @Override

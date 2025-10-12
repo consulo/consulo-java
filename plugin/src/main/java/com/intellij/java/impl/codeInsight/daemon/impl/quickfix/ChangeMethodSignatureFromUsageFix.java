@@ -27,7 +27,7 @@ import consulo.find.FindManager;
 import consulo.find.FindUsagesHandler;
 import consulo.ide.impl.idea.find.findUsages.FindUsagesManager;
 import consulo.ide.impl.idea.find.impl.FindManagerImpl;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.impl.codeInsight.JavaTargetElementUtilEx;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -37,6 +37,7 @@ import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
@@ -58,7 +59,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
   private final boolean myChangeAllUsages;
   private final int myMinUsagesNumberToShowDialog;
   ParameterInfoImpl[] myNewParametersInfo;
-  private String myShortName;
+  private LocalizeValue myShortName = LocalizeValue.empty();
   private static final Logger LOG = Logger.getInstance(ChangeMethodSignatureFromUsageFix.class);
 
   public ChangeMethodSignatureFromUsageFix(@Nonnull PsiMethod targetMethod,
@@ -76,18 +77,15 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
   @Override
   @Nonnull
-  public String getText() {
-    final String shortText = myShortName;
-    if (shortText != null) {
+  public LocalizeValue getText() {
+    final LocalizeValue shortText = myShortName;
+    if (shortText != LocalizeValue.of()) {
       return shortText;
     }
-    return JavaQuickFixBundle.message("change.method.signature.from.usage.text",
-        JavaHighlightUtil.formatMethod(myTargetMethod),
-        myTargetMethod.getName(),
-        formatTypesList(myNewParametersInfo, myContext));
+    return JavaQuickFixLocalize.changeMethodSignatureFromUsageText(JavaHighlightUtil.formatMethod(myTargetMethod), myTargetMethod.getName(), formatTypesList(myNewParametersInfo, myContext));
   }
 
-  private String getShortText(final StringBuilder buf,
+  private LocalizeValue getShortText(final StringBuilder buf,
                               final HashSet<? extends ParameterInfoImpl> newParams,
                               final HashSet<? extends ParameterInfoImpl> removedParams,
                               final HashSet<? extends ParameterInfoImpl> changedParams) {
@@ -95,21 +93,18 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
     if (myTargetMethod.getContainingClass().findMethodsByName(targetMethodName, true).length == 1) {
       if (newParams.size() == 1) {
         final ParameterInfoImpl p = newParams.iterator().next();
-        return JavaQuickFixBundle
-            .message("add.parameter.from.usage.text", p.getTypeText(), ArrayUtil.find(myNewParametersInfo, p) + 1, targetMethodName);
+        return JavaQuickFixLocalize.addParameterFromUsageText(p.getTypeText(), ArrayUtil.find(myNewParametersInfo, p) + 1, targetMethodName);
       }
       if (removedParams.size() == 1) {
         final ParameterInfoImpl p = removedParams.iterator().next();
-        return JavaQuickFixBundle.message("remove.parameter.from.usage.text", p.getOldIndex() + 1, targetMethodName);
+        return JavaQuickFixLocalize.removeParameterFromUsageText(p.getOldIndex() + 1, targetMethodName);
       }
       if (changedParams.size() == 1) {
         final ParameterInfoImpl p = changedParams.iterator().next();
-        return JavaQuickFixBundle.message("change.parameter.from.usage.text", p.getOldIndex() + 1, targetMethodName,
-            Objects.requireNonNull(myTargetMethod.getParameterList().getParameter(p.getOldIndex())).getType().getPresentableText(),
-            p.getTypeText());
+        return JavaQuickFixLocalize.changeParameterFromUsageText(p.getOldIndex() + 1, targetMethodName, Objects.requireNonNull(myTargetMethod.getParameterList().getParameter(p.getOldIndex())).getType().getPresentableText(), p.getTypeText());
       }
     }
-    return "<html> Change signature of " + targetMethodName + "(" + buf + ")</html>";
+    return LocalizeValue.localizeTODO("<html> Change signature of " + targetMethodName + "(" + buf + ")</html>");
   }
 
   @Nullable
@@ -221,7 +216,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
       handler.processElementUsages(method, processor, options);
     };
-    String progressTitle = JavaQuickFixBundle.message("searching.for.usages.progress.title");
+    LocalizeValue progressTitle = JavaQuickFixLocalize.searchingForUsagesProgressTitle();
     if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, progressTitle, true, project)) {
       return null;
     }

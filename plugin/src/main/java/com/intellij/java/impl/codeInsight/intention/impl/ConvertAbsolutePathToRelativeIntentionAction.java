@@ -27,6 +27,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -82,8 +83,8 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute"));
   }
 
   @Override

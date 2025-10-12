@@ -102,8 +102,8 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
         @Nonnull
         @Override
-        public String getName() {
-            return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseQuickfix(getTargetName()).get();
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseQuickfix(getTargetName());
         }
 
         @Override
@@ -258,8 +258,8 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
         @Override
         @Nonnull
-        public String getName() {
-            return InspectionGadgetsLocalize.removeJunit4TestAnnotationQuickfix().get();
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.removeJunit4TestAnnotationQuickfix();
         }
 
         @Override

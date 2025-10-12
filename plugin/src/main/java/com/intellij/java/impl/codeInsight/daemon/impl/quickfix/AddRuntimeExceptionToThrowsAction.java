@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -27,9 +27,10 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 
 /**
@@ -39,67 +40,85 @@ import java.util.Collections;
 @IntentionMetaData(ignoreId = "java.AddRuntimeExceptionToThrowsAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
 
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("add.runtime.exception.to.throws.text");
-  }
-
-  @Override
-  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-
-    PsiDocumentManager.getInstance(project).commitAllDocuments();
-
-    PsiClassType aClass = getRuntimeExceptionAtCaret(editor, file);
-    PsiMethod method = PsiTreeUtil.getParentOfType(elementAtCaret(editor, file), PsiMethod.class);
-
-    AddExceptionToThrowsFix.addExceptionsToThrowsList(project, method, Collections.singleton(aClass));
-  }
-
-
-  private static boolean isMethodThrows(PsiMethod method, PsiClassType exception) {
-    PsiClassType[] throwsTypes = method.getThrowsList().getReferencedTypes();
-    for (PsiClassType throwsType : throwsTypes) {
-      if (throwsType.isAssignableFrom(exception)) {
-        return true;
-      }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
     }
-    return false;
-  }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) return false;
-    PsiClassType exception = getRuntimeExceptionAtCaret(editor, file);
-    if (exception == null) return false;
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.addRuntimeExceptionToThrowsText();
+    }
 
-    PsiMethod method = PsiTreeUtil.getParentOfType(elementAtCaret(editor, file), PsiMethod.class);
-    if (method == null || !method.getThrowsList().isPhysical()) return false;
+    @Override
+    public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
+        if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+            return;
+        }
 
-    return !isMethodThrows(method, exception);
-  }
+        PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-  private static PsiClassType getRuntimeExceptionAtCaret(Editor editor, PsiFile file) {
-    PsiElement element = elementAtCaret(editor, file);
-    if (element == null) return null;
-    PsiThrowStatement expression = PsiTreeUtil.getParentOfType(element, PsiThrowStatement.class);
-    if (expression == null) return null;
-    PsiExpression exception = expression.getException();
-    if (exception == null) return null;
-    PsiType type = exception.getType();
-    if (!(type instanceof PsiClassType)) return null;
-    if (!ExceptionUtil.isUncheckedException((PsiClassType)type)) return null;
-    return (PsiClassType)type;
-  }
+        PsiClassType aClass = getRuntimeExceptionAtCaret(editor, file);
+        PsiMethod method = PsiTreeUtil.getParentOfType(elementAtCaret(editor, file), PsiMethod.class);
 
-  private static PsiElement elementAtCaret(final Editor editor, final PsiFile file) {
-    int offset = editor.getCaretModel().getOffset();
-    return file.findElementAt(offset);
-  }
+        AddExceptionToThrowsFix.addExceptionsToThrowsList(project, method, Collections.singleton(aClass));
+    }
+
+
+    private static boolean isMethodThrows(PsiMethod method, PsiClassType exception) {
+        PsiClassType[] throwsTypes = method.getThrowsList().getReferencedTypes();
+        for (PsiClassType throwsType : throwsTypes) {
+            if (throwsType.isAssignableFrom(exception)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!(file instanceof PsiJavaFile)) {
+            return false;
+        }
+        PsiClassType exception = getRuntimeExceptionAtCaret(editor, file);
+        if (exception == null) {
+            return false;
+        }
+
+        PsiMethod method = PsiTreeUtil.getParentOfType(elementAtCaret(editor, file), PsiMethod.class);
+        if (method == null || !method.getThrowsList().isPhysical()) {
+            return false;
+        }
+
+        return !isMethodThrows(method, exception);
+    }
+
+    private static PsiClassType getRuntimeExceptionAtCaret(Editor editor, PsiFile file) {
+        PsiElement element = elementAtCaret(editor, file);
+        if (element == null) {
+            return null;
+        }
+        PsiThrowStatement expression = PsiTreeUtil.getParentOfType(element, PsiThrowStatement.class);
+        if (expression == null) {
+            return null;
+        }
+        PsiExpression exception = expression.getException();
+        if (exception == null) {
+            return null;
+        }
+        PsiType type = exception.getType();
+        if (!(type instanceof PsiClassType)) {
+            return null;
+        }
+        if (!ExceptionUtil.isUncheckedException((PsiClassType) type)) {
+            return null;
+        }
+        return (PsiClassType) type;
+    }
+
+    private static PsiElement elementAtCaret(final Editor editor, final PsiFile file) {
+        int offset = editor.getCaretModel().getOffset();
+        return file.findElementAt(offset);
+    }
 }

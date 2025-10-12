@@ -190,13 +190,13 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                         (baseClass.isAbstract() ? "" : " and make it abstract")
                 );
             }
-            registrar.register(new RunRefactoringAction(new ExtractInterfaceHandler(), "Extract interface"));
-            registrar.register(new RunRefactoringAction(new ExtractSuperclassHandler(), "Extract superclass"));
+            registrar.register(new RunRefactoringAction(new ExtractInterfaceHandler(), LocalizeValue.localizeTODO("Extract interface")));
+            registrar.register(new RunRefactoringAction(new ExtractSuperclassHandler(), LocalizeValue.localizeTODO("Extract superclass")));
         }
 
 
         if (canBePulledUp) {
-            registrar.register(new RunRefactoringAction(new JavaPullUpHandler(), "Pull members up"));
+            registrar.register(new RunRefactoringAction(new JavaPullUpHandler(), LocalizeValue.localizeTODO("Pull members up")));
         }
         registrar.register(new PullAsAbstractUpFix(methodWithOverrides, name));
     }

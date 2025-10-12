@@ -84,8 +84,8 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
         extends InspectionGadgetsFix {
 
         @Nonnull
-        public String getName() {
-            return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

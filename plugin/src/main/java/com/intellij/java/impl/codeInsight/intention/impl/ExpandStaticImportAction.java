@@ -32,6 +32,7 @@ import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
@@ -52,7 +53,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final String REPLACE_ALL_AND_DELETE_IMPORT = "Replace all and delete the import";
 
   public ExpandStaticImportAction() {
-    setText("Expand Static Import");
+    setText(LocalizeValue.localizeTODO("Expand Static Import"));
   }
 
   @Override
@@ -67,7 +68,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
     if (resolveScope instanceof PsiImportStaticStatement) {
       final PsiClass targetClass = ((PsiImportStaticStatement)resolveScope).resolveTargetClass();
       if (targetClass == null) return false;
-      setText("Expand static import to " + targetClass.getName() + "." + referenceElement.getReferenceName());
+      setText(LocalizeValue.localizeTODO("Expand static import to " + targetClass.getName() + "." + referenceElement.getReferenceName()));
       return true;
     }
     return false;
@@ -94,7 +95,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
                                         new String[]{REPLACE_THIS_OCCURRENCE, REPLACE_ALL_AND_DELETE_IMPORT}) {
             @Override
             public PopupStep onChosen(final String selectedValue, boolean finalChoice) {
-              new WriteCommandAction(project, ExpandStaticImportAction.this.getText()) {
+              new WriteCommandAction(project, ExpandStaticImportAction.this.getText().get()) {
                 @Override
                 protected void run(Result result) throws Throwable {
                   if (selectedValue == REPLACE_THIS_OCCURRENCE) {

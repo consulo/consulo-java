@@ -27,6 +27,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -43,8 +44,8 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
 
   @Nonnull
   @Override
-  protected String getBaseText() {
-    return "Import static constant";
+  protected LocalizeValue getBaseText() {
+    return LocalizeValue.localizeTODO("Import static constant");
   }
 
   @Nonnull

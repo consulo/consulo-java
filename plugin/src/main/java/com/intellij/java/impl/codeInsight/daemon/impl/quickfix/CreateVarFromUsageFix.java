@@ -25,9 +25,10 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 public abstract class CreateVarFromUsageFix extends CreateFromUsageBaseFix {
   protected final PsiReferenceExpression myReferenceExpression;
@@ -74,5 +75,5 @@ public abstract class CreateVarFromUsageFix extends CreateFromUsageBaseFix {
     return false;
   }
 
-  protected abstract String getText(String varName);
+  protected abstract LocalizeValue getText(String varName);
 }

@@ -38,6 +38,7 @@ import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,7 +47,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ImplementAbstractMethodAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ImplementAbstractMethodAction extends BaseIntentionAction {
   public ImplementAbstractMethodAction() {
-    setText(CodeInsightLocalize.intentionImplementAbstractMethodFamily().get());
+    setText(CodeInsightLocalize.intentionImplementAbstractMethodFamily());
   }
 
   @Override
@@ -94,10 +95,10 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     return psiElement instanceof PsiIdentifier && psiElement.getParent() instanceof PsiMethod;
   }
 
-  protected String getIntentionName(final PsiMethod method) {
+  protected LocalizeValue getIntentionName(final PsiMethod method) {
     return method.hasModifierProperty(PsiModifier.ABSTRACT)
-      ? CodeInsightLocalize.intentionImplementAbstractMethodText(method.getName()).get()
-      : CodeInsightLocalize.intentionOverrideMethodText(method.getName()).get();
+      ? CodeInsightLocalize.intentionImplementAbstractMethodText(method.getName())
+      : CodeInsightLocalize.intentionOverrideMethodText(method.getName());
   }
 
   static class MyElementProcessor implements PsiElementProcessor {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import consulo.application.AllIcons;
@@ -33,16 +34,16 @@ import consulo.ui.image.Image;
  */
 public class RunRefactoringAction extends BaseRefactoringIntentionAction implements SyntheticIntentionAction {
   private final RefactoringActionHandler myHandler;
-  private final String myCommandName;
+  private final LocalizeValue myCommandName;
 
-  public RunRefactoringAction(RefactoringActionHandler handler, String commandName) {
+  public RunRefactoringAction(RefactoringActionHandler handler, @Nonnull LocalizeValue commandName) {
     myHandler = handler;
     myCommandName = commandName;
   }
 
   @Nonnull
   @Override
-  public String getText() {
+  public LocalizeValue getText() {
     return myCommandName;
   }
 

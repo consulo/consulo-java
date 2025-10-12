@@ -29,7 +29,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -63,8 +62,8 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
     extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorQuickfix();
     }
 
     @Override

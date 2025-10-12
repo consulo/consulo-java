@@ -29,6 +29,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -66,7 +67,7 @@ public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionActio
 
   @Nonnull
   @Override
-  public String getText() {
-    return CodeInsightLocalize.intentionRemoveLiteralUnderscores().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionRemoveLiteralUnderscores();
   }
 }

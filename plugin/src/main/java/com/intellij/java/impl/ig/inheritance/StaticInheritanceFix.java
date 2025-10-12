@@ -55,9 +55,9 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
+  public LocalizeValue getName() {
     LocalizeValue scope = myReplaceInWholeProject ? InspectionGadgetsLocalize.theWholeProject() : InspectionGadgetsLocalize.thisClass();
-    return InspectionGadgetsLocalize.staticInheritanceReplaceQuickfix(scope).get();
+    return InspectionGadgetsLocalize.staticInheritanceReplaceQuickfix(scope);
   }
 
   public void doFix(final Project project, final ProblemDescriptor descriptor) throws IncorrectOperationException {

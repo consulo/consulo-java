@@ -20,7 +20,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -30,6 +30,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -56,14 +57,14 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
   @Nonnull
   @Override
   @RequiredReadAction
-  public String getText() {
+  public LocalizeValue getText() {
     final List<PsiVariable> candidates = getOrFindCandidates();
     if (candidates.isEmpty()) {
-      return JavaQuickFixBundle.message("add.method.qualifier.fix.family");
+      return JavaQuickFixLocalize.addMethodQualifierFixFamily();
     }
-    String text = JavaQuickFixBundle.message("add.method.qualifier.fix.text", candidates.size() > 1 ? "" : candidates.get(0).getName());
+    LocalizeValue text = JavaQuickFixLocalize.addMethodQualifierFixText(candidates.size() > 1 ? "" : candidates.get(0).getName());
     if (candidates.size() > 1) {
-      text += "...";
+      text = text.map((localizeManager, s) -> s + "...");
     }
     return text;
   }
@@ -136,7 +137,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   private void chooseAndQualify(final Editor editor) {
     final BaseListPopupStep<PsiVariable> step =
-      new BaseListPopupStep<PsiVariable>(JavaQuickFixBundle.message("add.qualifier"), myCandidates) {
+      new BaseListPopupStep<PsiVariable>(JavaQuickFixLocalize.addQualifier().get(), myCandidates) {
         @Override
         public PopupStep onChosen(final PsiVariable selectedValue, final boolean finalChoice) {
           if (selectedValue != null && finalChoice) {

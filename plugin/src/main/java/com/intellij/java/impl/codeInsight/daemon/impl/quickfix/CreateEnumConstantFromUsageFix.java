@@ -20,7 +20,7 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeUtil;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.template.EmptyExpression;
@@ -28,6 +28,7 @@ import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -40,12 +41,12 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
 
   public CreateEnumConstantFromUsageFix(final PsiReferenceExpression referenceElement) {
     super(referenceElement);
-    setText(JavaQuickFixBundle.message("create.constant.from.usage.family"));
+    setText(JavaQuickFixLocalize.createConstantFromUsageFamily());
   }
 
   @Override
-  protected String getText(String varName) {
-    return JavaQuickFixBundle.message("create.enum.constant.from.usage.text", myReferenceExpression.getReferenceName());
+  protected LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createEnumConstantFromUsageText(myReferenceExpression.getReferenceName());
   }
 
   @Override

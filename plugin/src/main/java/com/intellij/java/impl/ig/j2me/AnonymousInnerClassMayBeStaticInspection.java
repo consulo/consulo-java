@@ -42,7 +42,7 @@ public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
 
     protected InspectionGadgetsFix buildFix(Object... infos) {
         return new MoveAnonymousToInnerClassFix(
-            InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassQuickfix().get()
+            InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassQuickfix()
         );
     }
 

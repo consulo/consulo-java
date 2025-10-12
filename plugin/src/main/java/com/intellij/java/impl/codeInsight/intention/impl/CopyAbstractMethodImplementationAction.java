@@ -20,6 +20,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 /**
@@ -29,12 +30,12 @@ import consulo.project.Project;
 @IntentionMetaData(ignoreId = "java.CopyAbstractMethodImplementationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CopyAbstractMethodImplementationAction extends ImplementAbstractMethodAction {
   public CopyAbstractMethodImplementationAction() {
-    setText("Copy Abstract Method Implementation");
+    setText(LocalizeValue.localizeTODO("Copy Abstract Method Implementation"));
   }
 
   @Override
-  protected String getIntentionName(final PsiMethod method) {
-    return CodeInsightLocalize.copyAbstractMethodIntentionName(method.getName()).get();
+  protected LocalizeValue getIntentionName(final PsiMethod method) {
+    return CodeInsightLocalize.copyAbstractMethodIntentionName(method.getName());
   }
 
   @Override

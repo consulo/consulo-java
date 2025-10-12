@@ -93,8 +93,8 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
   private class ForCanBeForeachFix extends InspectionGadgetsFix {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.foreachReplaceQuickfix().get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.foreachReplaceQuickfix();
     }
 
     @Override

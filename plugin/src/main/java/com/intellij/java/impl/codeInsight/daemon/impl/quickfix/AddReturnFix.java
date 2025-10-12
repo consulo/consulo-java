@@ -18,94 +18,99 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddReturnFix implements SyntheticIntentionAction {
-  private static final Logger LOG = Logger.getInstance(AddReturnFix.class);
-  private final PsiMethod myMethod;
+    private static final Logger LOG = Logger.getInstance(AddReturnFix.class);
+    private final PsiMethod myMethod;
 
-  public AddReturnFix(PsiMethod method) {
-    myMethod = method;
-  }
-
-  @Override
-  @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("add.return.statement.text");
-  }
-
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return myMethod != null
-        && myMethod.isValid()
-        && myMethod.getManager().isInProject(myMethod)
-        && myMethod.getBody() != null
-        && myMethod.getBody().getRBrace() != null
-        ;
-  }
-
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
-
-    try {
-      String value = suggestReturnValue();
-      PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
-      PsiReturnStatement returnStatement = (PsiReturnStatement) factory.createStatementFromText("return " + value+";", myMethod);
-      PsiCodeBlock body = myMethod.getBody();
-      returnStatement = (PsiReturnStatement) body.addBefore(returnStatement, body.getRBrace());
-
-      MethodReturnTypeFix.selectReturnValueInEditor(returnStatement, editor);
+    public AddReturnFix(PsiMethod method) {
+        myMethod = method;
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
 
-  private String suggestReturnValue() {
-    PsiType type = myMethod.getReturnType();
-    // first try to find suitable local variable
-    PsiVariable[] variables = getDeclaredVariables(myMethod);
-    for (PsiVariable variable : variables) {
-      PsiType varType = variable.getType();
-      if (varType.equals(type)) {
-        return variable.getName();
-      }
+    @Override
+    @Nonnull
+    public LocalizeValue getText() {
+        return JavaQuickFixLocalize.addReturnStatementText();
     }
-    return PsiTypesUtil.getDefaultValueOfType(type);
-  }
 
-  private static PsiVariable[] getDeclaredVariables(PsiMethod method) {
-    List<PsiVariable> variables = new ArrayList<PsiVariable>();
-    PsiStatement[] statements = method.getBody().getStatements();
-    for (PsiStatement statement : statements) {
-      if (statement instanceof PsiDeclarationStatement) {
-        PsiElement[] declaredElements = ((PsiDeclarationStatement)statement).getDeclaredElements();
-        for (PsiElement declaredElement : declaredElements) {
-          if (declaredElement instanceof PsiLocalVariable) variables.add((PsiVariable)declaredElement);
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return myMethod != null
+            && myMethod.isValid()
+            && myMethod.getManager().isInProject(myMethod)
+            && myMethod.getBody() != null
+            && myMethod.getBody().getRBrace() != null
+            ;
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+        if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
+            return;
         }
-      }
-    }
-    PsiParameter[] parameters = method.getParameterList().getParameters();
-    ContainerUtil.addAll(variables, parameters);
-    return variables.toArray(new PsiVariable[variables.size()]);
-  }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+        try {
+            String value = suggestReturnValue();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
+            PsiReturnStatement returnStatement = (PsiReturnStatement) factory.createStatementFromText("return " + value + ";", myMethod);
+            PsiCodeBlock body = myMethod.getBody();
+            returnStatement = (PsiReturnStatement) body.addBefore(returnStatement, body.getRBrace());
+
+            MethodReturnTypeFix.selectReturnValueInEditor(returnStatement, editor);
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
+
+    private String suggestReturnValue() {
+        PsiType type = myMethod.getReturnType();
+        // first try to find suitable local variable
+        PsiVariable[] variables = getDeclaredVariables(myMethod);
+        for (PsiVariable variable : variables) {
+            PsiType varType = variable.getType();
+            if (varType.equals(type)) {
+                return variable.getName();
+            }
+        }
+        return PsiTypesUtil.getDefaultValueOfType(type);
+    }
+
+    private static PsiVariable[] getDeclaredVariables(PsiMethod method) {
+        List<PsiVariable> variables = new ArrayList<PsiVariable>();
+        PsiStatement[] statements = method.getBody().getStatements();
+        for (PsiStatement statement : statements) {
+            if (statement instanceof PsiDeclarationStatement) {
+                PsiElement[] declaredElements = ((PsiDeclarationStatement) statement).getDeclaredElements();
+                for (PsiElement declaredElement : declaredElements) {
+                    if (declaredElement instanceof PsiLocalVariable) {
+                        variables.add((PsiVariable) declaredElement);
+                    }
+                }
+            }
+        }
+        PsiParameter[] parameters = method.getParameterList().getParameters();
+        ContainerUtil.addAll(variables, parameters);
+        return variables.toArray(new PsiVariable[variables.size()]);
+    }
+
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 
 }

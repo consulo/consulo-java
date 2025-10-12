@@ -47,7 +47,7 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AssignFieldFromParameterAction.class);
 
   public AssignFieldFromParameterAction() {
-    setText(CodeInsightLocalize.intentionAssignFieldFromParameterFamily().get());
+    setText(CodeInsightLocalize.intentionAssignFieldFromParameterFamily());
   }
 
   @Override
@@ -61,7 +61,7 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     final PsiField field = findFieldToAssign(project, myParameter);
     if (field == null) return false;
     if (!field.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
-    setText(CodeInsightLocalize.intentionAssignFieldFromParameterText(field.getName()).get());
+    setText(CodeInsightLocalize.intentionAssignFieldFromParameterText(field.getName()));
 
     return true;
   }

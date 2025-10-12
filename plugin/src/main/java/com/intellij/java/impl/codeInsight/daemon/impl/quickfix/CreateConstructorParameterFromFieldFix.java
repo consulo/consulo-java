@@ -31,7 +31,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -40,13 +40,13 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -68,11 +68,11 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
 
   @Override
   @Nonnull
-  public String getText() {
+  public LocalizeValue getText() {
     if (getFieldsToFix().size() > 1 && myClass.getConstructors().length <= 1) {
-      return "Add constructor parameters";
+      return LocalizeValue.localizeTODO("Add constructor parameters");
     }
-    return JavaQuickFixBundle.message("add.constructor.parameter.name");
+    return JavaQuickFixLocalize.addConstructorParameterName();
   }
 
   @Override

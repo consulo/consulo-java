@@ -26,7 +26,7 @@ import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -40,6 +40,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
@@ -150,12 +151,12 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
           public void run() {
             doInvoke(project, aClass);
           }
-        }, getText(), null);
+        }, getText().get(), null);
       }
     };
 
     JBPopup popup = builder.
-                             setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
+                             setTitle(JavaQuickFixLocalize.targetClassChooserTitle().get()).
                              setItemChoosenCallback(runnable).
                              createPopup();
 
@@ -438,7 +439,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
                                    final Template template,
                                    @Nonnull final Project project,
                                    final TemplateEditingListener listener,
-                                   final String commandName) {
+                                   final LocalizeValue commandName) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
@@ -450,7 +451,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
           public void run() {
             TemplateManager.getInstance(project).startTemplate(editor, template, listener);
           }
-        }, commandName, commandName);
+        }, commandName.get(), commandName.get());
       }
     };
     if (ApplicationManager.getApplication().isUnitTestMode()) {

@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -75,7 +75,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
       return false;
     }
     final PsiMethod[] existedConstructors = containingClass.getConstructors();
-    setText(JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.text", existedConstructors.length));
+    setText(JavaQuickFixLocalize.addExceptionFromFieldInitializerToConstructorThrowsText(existedConstructors.length));
     return true;
   }
 

@@ -81,8 +81,8 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
     }
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.doubleCheckedLockingQuickfix(field.getName()).get();
+    public LocalizeValue getName() {
+      return InspectionGadgetsLocalize.doubleCheckedLockingQuickfix(field.getName());
     }
 
     @Override

@@ -26,6 +26,7 @@ import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -42,8 +43,8 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Remove redundant types";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Remove redundant types");
   }
 
   @Override

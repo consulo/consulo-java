@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
@@ -33,6 +34,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -42,8 +44,8 @@ import jakarta.annotation.Nonnull;
 public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
   @Nonnull
-  public String getText() {
-    return JavaQuickFixBundle.message("simplify.boolean.expression.family");
+  public LocalizeValue getText() {
+    return JavaQuickFixLocalize.simplifyBooleanExpressionFamily();
   }
 
   @Override

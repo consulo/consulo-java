@@ -26,6 +26,7 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
@@ -41,11 +42,10 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Synthet
     myStatement = statement;
   }
 
-  @Nls
   @Nonnull
   @Override
-  public String getText() {
-    return "Replace 'for each' loop with iterator 'for' loop";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Replace 'for each' loop with iterator 'for' loop");
   }
 
   @Override

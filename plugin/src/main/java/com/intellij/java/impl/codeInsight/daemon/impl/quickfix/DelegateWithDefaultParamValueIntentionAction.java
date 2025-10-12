@@ -37,6 +37,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
@@ -172,7 +173,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
 
   @Nonnull
   @Override
-  public String getText() {
-    return "Generate delegated method with default parameter value";
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Generate delegated method with default parameter value");
   }
 }

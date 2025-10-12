@@ -22,11 +22,11 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
   public CreateConstructorFromThisFix(PsiMethodCallExpression methodCall) {
     super(methodCall);
 
-    setText(JavaQuickFixBundle.message("create.constructor.from.this.call.family"));
+    setText(JavaQuickFixLocalize.createConstructorFromThisCallFamily());
   }
 
   @Override

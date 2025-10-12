@@ -34,6 +34,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.SmartList;
@@ -172,7 +173,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   @Override
-  public String getText() {
-    return CodeInsightLocalize.intentionSurroundResourceWithArmBlock().get();
+  public LocalizeValue getText() {
+    return CodeInsightLocalize.intentionSurroundResourceWithArmBlock();
   }
 }

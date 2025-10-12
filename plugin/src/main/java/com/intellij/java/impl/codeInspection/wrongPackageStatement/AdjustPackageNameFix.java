@@ -15,24 +15,19 @@
  */
 package com.intellij.java.impl.codeInspection.wrongPackageStatement;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import com.intellij.java.language.psi.*;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.java.language.psi.PsiPackageStatement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 public class AdjustPackageNameFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(AdjustPackageNameFix.class);
@@ -44,14 +39,13 @@ public class AdjustPackageNameFix implements LocalQuickFix {
 
   @Override
   @Nonnull
-  public String getName() {
-    return JavaQuickFixBundle.message("adjust.package.text", myName);
+  public LocalizeValue getName() {
+    return JavaQuickFixLocalize.adjustPackageText(myName);
   }
 
-  @Override
   @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("adjust.package.family");
+  public LocalizeValue getFamilyName() {
+    return JavaQuickFixLocalize.adjustPackageFamily();
   }
 
   @Override

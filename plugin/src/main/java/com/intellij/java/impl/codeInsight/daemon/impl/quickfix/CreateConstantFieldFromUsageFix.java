@@ -20,7 +20,8 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
+import consulo.localize.LocalizeValue;
 
 public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
   @Override
@@ -37,11 +38,11 @@ public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
 
   public CreateConstantFieldFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
-    setText(JavaQuickFixBundle.message("create.constant.from.usage.family"));
+    setText(JavaQuickFixLocalize.createConstantFromUsageFamily());
   }
 
   @Override
-  protected String getText(String varName) {
-    return JavaQuickFixBundle.message("create.constant.from.usage.text", varName);
+  protected LocalizeValue getText(String varName) {
+    return JavaQuickFixLocalize.createConstantFromUsageText(varName);
   }
 }

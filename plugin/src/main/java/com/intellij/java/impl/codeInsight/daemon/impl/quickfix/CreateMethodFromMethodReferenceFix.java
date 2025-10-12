@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
@@ -45,7 +45,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
     myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
         .createSmartPsiElementPointer(methodRef);
 
-    setText(JavaQuickFixBundle.message("create.method.from.usage.family"));
+    setText(JavaQuickFixLocalize.createMethodFromUsageFamily());
   }
 
   @Override
@@ -66,8 +66,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
     }
     if (call.isConstructor() && name.equals("new") || PsiNameHelper.getInstance(call.getProject()).isIdentifier
         (name)) {
-      setText(call.isConstructor() ? JavaQuickFixBundle.message("create.constructor.from.new.text") : JavaQuickFixBundle
-          .message("create.method.from.usage.text", name));
+      setText(call.isConstructor() ? JavaQuickFixLocalize.createConstructorFromNewText() : JavaQuickFixLocalize.createMethodFromUsageText(name));
       return true;
     }
     return false;

@@ -28,6 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -41,8 +42,8 @@ public class UnimplementInterfaceAction implements IntentionAction {
 
   @Override
   @Nonnull
-  public String getText() {
-    return "Unimplement " + myName;
+  public LocalizeValue getText() {
+    return LocalizeValue.localizeTODO("Unimplement " + myName);
   }
 
   @Override

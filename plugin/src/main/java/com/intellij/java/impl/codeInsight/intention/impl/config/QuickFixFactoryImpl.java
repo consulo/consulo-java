@@ -815,8 +815,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     ) {
         final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
         return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(
-            JavaQuickFixLocalize.fixUnusedSymbolInjectionText(element, qualifiedName).get(),
-            JavaQuickFixLocalize.fixUnusedSymbolInjectionFamily().get(),
+            JavaQuickFixLocalize.fixUnusedSymbolInjectionText(element, qualifiedName),
+            JavaQuickFixLocalize.fixUnusedSymbolInjectionFamily(),
             entryPointsManager.ADDITIONAL_ANNOTATIONS,
             qualifiedName
         );

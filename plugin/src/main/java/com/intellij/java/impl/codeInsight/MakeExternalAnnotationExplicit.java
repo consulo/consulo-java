@@ -33,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.DumbService;
 import consulo.project.Project;
@@ -49,7 +50,7 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.MakeExternalAnnotationExplicit", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
   public MakeExternalAnnotationExplicit() {
-    setText("Make External Annotations Explicit");
+    setText(LocalizeValue.localizeTODO("Make External Annotations Explicit"));
   }
 
   @Override
@@ -66,7 +67,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
           final String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
           return "@" + name + annotation.getParameterList().getText();
         }, " ");
-        setText("Insert '" + annos + "'");
+        setText(LocalizeValue.localizeTODO("Insert '" + annos + "'"));
         return true;
       }
     }

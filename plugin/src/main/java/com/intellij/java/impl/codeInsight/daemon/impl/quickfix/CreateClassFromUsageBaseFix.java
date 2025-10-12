@@ -24,6 +24,7 @@ import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -43,7 +44,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     myRefElement = SmartPointerManager.getInstance(refElement.getProject()).createSmartPsiElementPointer(refElement);
   }
 
-  protected abstract String getText(String varName);
+  protected abstract LocalizeValue getText(String varName);
 
   private boolean isAvailableInContext(final @Nonnull PsiJavaCodeReferenceElement element) {
     PsiElement parent = element.getParent();

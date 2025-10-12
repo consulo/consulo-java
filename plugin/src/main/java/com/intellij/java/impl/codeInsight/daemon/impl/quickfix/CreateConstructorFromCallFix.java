@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -163,7 +163,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
     }
 
     if (CreateFromUsageUtils.shouldShowTag(offset, element, myConstructorCall)) {
-      setText(JavaQuickFixBundle.message("create.constructor.from.new.text"));
+      setText(JavaQuickFixLocalize.createConstructorFromNewText());
       return true;
     }
 

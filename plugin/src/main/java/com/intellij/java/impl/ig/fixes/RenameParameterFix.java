@@ -21,6 +21,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
@@ -34,8 +35,8 @@ public class RenameParameterFix extends InspectionGadgetsFix {
   }
 
   @Nonnull
-  public String getName() {
-    return InspectionGadgetsLocalize.renametoQuickfix(m_targetName).get();
+  public LocalizeValue getName() {
+    return InspectionGadgetsLocalize.renametoQuickfix(m_targetName);
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor) {

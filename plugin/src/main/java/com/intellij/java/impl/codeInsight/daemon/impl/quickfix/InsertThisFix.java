@@ -15,36 +15,31 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Arrays;
-
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
-public class InsertThisFix extends InsertConstructorCallFix
-{
+import java.util.Arrays;
 
-	public InsertThisFix(@Nonnull PsiMethod constructor)
-	{
-		super(constructor, "this();");
-	}
+public class InsertThisFix extends InsertConstructorCallFix {
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return super.isAvailable(project, editor, file) && hasConstructorToDelegate();
-	}
+    public InsertThisFix(@Nonnull PsiMethod constructor) {
+        super(constructor, "this();");
+    }
 
-	private boolean hasConstructorToDelegate()
-	{
-		PsiClass containingClass = myConstructor.getContainingClass();
-		if(containingClass == null)
-		{
-			return false;
-		}
-		return Arrays.stream(containingClass.getConstructors()).anyMatch(constructor -> constructor != myConstructor);
-	}
+    @Override
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return super.isAvailable(project, editor, file) && hasConstructorToDelegate();
+    }
+
+    private boolean hasConstructorToDelegate() {
+        PsiClass containingClass = myConstructor.getContainingClass();
+        if (containingClass == null) {
+            return false;
+        }
+        return Arrays.stream(containingClass.getConstructors()).anyMatch(constructor -> constructor != myConstructor);
+    }
 }
