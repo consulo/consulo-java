@@ -46,7 +46,7 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     private final PsiMethod myMethodPrototype;
     @Nonnull
-    private LocalizeValue myText;
+    private LocalizeValue myText = LocalizeValue.empty();
     private final List<String> myExceptions = new ArrayList<String>();
 
     public AddMethodFix(@Nonnull PsiMethod methodPrototype, @Nonnull PsiClass implClass) {
@@ -102,7 +102,7 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
             && myMethodPrototype.isValid()
             && myClass.isValid()
             && myClass.getManager().isInProject(myClass)
-            && myText != null
+            && myText != LocalizeValue.empty()
             && MethodSignatureUtil.findMethodBySignature(myClass, myMethodPrototype, false) == null;
     }
 
