@@ -25,135 +25,129 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class RedundantStringFormatCallInspection extends BaseInspection {
-
-  @Override
-  @Nls
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.redundantStringFormatCallDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.redundantStringFormatCallProblemDescriptor().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RedundantStringFormatCallFix();
-  }
-
-  private static class RedundantStringFormatCallFix
-    extends InspectionGadgetsFix {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.redundantStringFormatCallDisplayName();
+    }
 
     @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.redundantStringFormatCallQuickfix().get();
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.redundantStringFormatCallProblemDescriptor().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      final PsiElement grandParent = parent.getParent();
-      if (!(grandParent instanceof PsiMethodCallExpression)) {
-        return;
-      }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
-      final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      final PsiExpression lastArgument = arguments[arguments.length - 1];
-      methodCallExpression.replace(lastArgument);
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RedundantStringFormatCallFix();
     }
-  }
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new RedundantStringFormatCallVisitor();
-  }
+    private static class RedundantStringFormatCallFix extends InspectionGadgetsFix {
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.redundantStringFormatCallQuickfix();
+        }
 
-  private static class RedundantStringFormatCallVisitor extends BaseInspectionVisitor {
+        @Override
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement element = descriptor.getPsiElement();
+            final PsiElement parent = element.getParent();
+            final PsiElement grandParent = parent.getParent();
+            if (!(grandParent instanceof PsiMethodCallExpression)) {
+                return;
+            }
+            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            final PsiExpression lastArgument = arguments[arguments.length - 1];
+            methodCallExpression.replace(lastArgument);
+        }
+    }
 
     @Override
-    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
-      if (!"format".equals(methodName)) {
-        return;
-      }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      if (arguments.length > 2 || arguments.length == 0) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
-        return;
-      }
-      final PsiExpression firstArgument = arguments[0];
-      final PsiType firstType = firstArgument.getType();
-      if (firstType == null || containsPercentN(firstArgument)) {
-        return;
-      }
-      if (firstType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && arguments.length == 1) {
-        registerMethodCallError(expression);
-      }
-      else if (firstType.equalsToText("java.util.Locale")) {
-        if (arguments.length != 2) {
-          return;
-        }
-        final PsiExpression secondArgument = arguments[1];
-        final PsiType secondType = secondArgument.getType();
-        if (secondType == null) {
-          return;
-        }
-        if (secondType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
-          registerMethodCallError(expression);
-        }
-      }
+    public BaseInspectionVisitor buildVisitor() {
+        return new RedundantStringFormatCallVisitor();
     }
 
-    private static boolean containsPercentN(PsiExpression expression) {
-      if (expression == null) {
-        return false;
-      }
-      if (expression instanceof PsiLiteralExpression) {
-        final PsiLiteralExpression literalExpression = (PsiLiteralExpression)expression;
-        @NonNls final String expressionText = literalExpression.getText();
-        return expressionText.contains("%n");
-      }
-      if (expression instanceof PsiPolyadicExpression) {
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
-        final IElementType tokenType = polyadicExpression.getOperationTokenType();
-        if (!tokenType.equals(JavaTokenType.PLUS)) {
-          return false;
+    private static class RedundantStringFormatCallVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!"format".equals(methodName)) {
+                return;
+            }
+            final PsiExpressionList argumentList = expression.getArgumentList();
+            final PsiExpression[] arguments = argumentList.getExpressions();
+            if (arguments.length > 2 || arguments.length == 0) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String className = aClass.getQualifiedName();
+            if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+                return;
+            }
+            final PsiExpression firstArgument = arguments[0];
+            final PsiType firstType = firstArgument.getType();
+            if (firstType == null || containsPercentN(firstArgument)) {
+                return;
+            }
+            if (firstType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && arguments.length == 1) {
+                registerMethodCallError(expression);
+            }
+            else if (firstType.equalsToText("java.util.Locale")) {
+                if (arguments.length != 2) {
+                    return;
+                }
+                final PsiExpression secondArgument = arguments[1];
+                final PsiType secondType = secondArgument.getType();
+                if (secondType == null) {
+                    return;
+                }
+                if (secondType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+                    registerMethodCallError(expression);
+                }
+            }
         }
-        final PsiExpression[] operands = polyadicExpression.getOperands();
-        for (PsiExpression operand : operands) {
-          if (containsPercentN(operand)) {
-            return true;
-          }
+
+        private static boolean containsPercentN(PsiExpression expression) {
+            if (expression == null) {
+                return false;
+            }
+            if (expression instanceof PsiLiteralExpression) {
+                final PsiLiteralExpression literalExpression = (PsiLiteralExpression) expression;
+                final String expressionText = literalExpression.getText();
+                return expressionText.contains("%n");
+            }
+            if (expression instanceof PsiPolyadicExpression) {
+                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                final IElementType tokenType = polyadicExpression.getOperationTokenType();
+                if (!tokenType.equals(JavaTokenType.PLUS)) {
+                    return false;
+                }
+                final PsiExpression[] operands = polyadicExpression.getOperands();
+                for (PsiExpression operand : operands) {
+                    if (containsPercentN(operand)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
-      }
-      return false;
     }
-  }
 }

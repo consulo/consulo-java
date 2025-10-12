@@ -24,88 +24,82 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class NonSerializableWithSerializationMethodsInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "NonSerializableClassWithSerializationMethods";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectDisplayName().get();
-  }
-
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    if (infos[2] instanceof PsiAnonymousClass) {
-      return null;
+public class NonSerializableWithSerializationMethodsInspection extends BaseInspection {
+    @Override
+    @Nonnull
+    public String getID() {
+        return "NonSerializableClassWithSerializationMethods";
     }
-    return new MakeSerializableFix();
-  }
 
-  @Override
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final boolean hasReadObject = (Boolean)infos[0];
-    final boolean hasWriteObject = (Boolean)infos[1];
-    final PsiClass aClass = (PsiClass)infos[2];
-    if (aClass instanceof PsiAnonymousClass) {
-      if (hasReadObject && hasWriteObject) {
-        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorBoth().get();
-      }
-      else if (hasWriteObject) {
-        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorWrite().get();
-      }
-      else {
-        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorRead().get();
-      }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectDisplayName();
     }
-    else {
-      if (hasReadObject && hasWriteObject) {
-        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorBoth().get();
-      }
-      else if (hasWriteObject) {
-        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorWrite().get();
-      }
-      else {
-        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorRead().get();
-      }
-    }
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonserializableDefinesSerializationMethodsVisitor();
-  }
-
-  private static class NonserializableDefinesSerializationMethodsVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      final boolean hasReadObject =
-        SerializationUtils.hasReadObject(aClass);
-      final boolean hasWriteObject =
-        SerializationUtils.hasWriteObject(aClass);
-      if (!hasWriteObject && !hasReadObject) {
-        return;
-      }
-      if (SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      registerClassError(aClass, Boolean.valueOf(hasReadObject),
-                         Boolean.valueOf(hasWriteObject), aClass);
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        if (infos[2] instanceof PsiAnonymousClass) {
+            return null;
+        }
+        return new MakeSerializableFix();
     }
-  }
+
+    @Override
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final boolean hasReadObject = (Boolean) infos[0];
+        final boolean hasWriteObject = (Boolean) infos[1];
+        final PsiClass aClass = (PsiClass) infos[2];
+        if (aClass instanceof PsiAnonymousClass) {
+            if (hasReadObject && hasWriteObject) {
+                return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorBoth().get();
+            }
+            else if (hasWriteObject) {
+                return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorWrite().get();
+            }
+            else {
+                return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorRead().get();
+            }
+        }
+        else {
+            if (hasReadObject && hasWriteObject) {
+                return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorBoth().get();
+            }
+            else if (hasWriteObject) {
+                return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorWrite().get();
+            }
+            else {
+                return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorRead().get();
+            }
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonserializableDefinesSerializationMethodsVisitor();
+    }
+
+    private static class NonserializableDefinesSerializationMethodsVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            final boolean hasReadObject = SerializationUtils.hasReadObject(aClass);
+            final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
+            if (!hasWriteObject && !hasReadObject) {
+                return;
+            }
+            if (SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            registerClassError(aClass, Boolean.valueOf(hasReadObject), Boolean.valueOf(hasWriteObject), aClass);
+        }
+    }
 }

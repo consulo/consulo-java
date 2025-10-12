@@ -23,100 +23,97 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class NonReproducibleMathCallInspection extends BaseInspection {
+    @SuppressWarnings("StaticCollection")
+    private static final Set<String> nonReproducibleMethods = new HashSet<>(20);
 
-  @SuppressWarnings("StaticCollection")
-  @NonNls private static final Set<String> nonReproducibleMethods =
-    new HashSet<>(20);
+    static {
+        nonReproducibleMethods.add("acos");
+        nonReproducibleMethods.add("asin");
+        nonReproducibleMethods.add("atan");
+        nonReproducibleMethods.add("atan2");
+        nonReproducibleMethods.add("cbrt");
+        nonReproducibleMethods.add("cos");
+        nonReproducibleMethods.add("cosh");
+        nonReproducibleMethods.add("exp");
+        nonReproducibleMethods.add("expm1");
+        nonReproducibleMethods.add("hypot");
+        nonReproducibleMethods.add("log");
+        nonReproducibleMethods.add("log10");
+        nonReproducibleMethods.add("log1p");
+        nonReproducibleMethods.add("pow");
+        nonReproducibleMethods.add("sin");
+        nonReproducibleMethods.add("sinh");
+        nonReproducibleMethods.add("tan");
+        nonReproducibleMethods.add("tanh");
+    }
 
-  static {
-    nonReproducibleMethods.add("acos");
-    nonReproducibleMethods.add("asin");
-    nonReproducibleMethods.add("atan");
-    nonReproducibleMethods.add("atan2");
-    nonReproducibleMethods.add("cbrt");
-    nonReproducibleMethods.add("cos");
-    nonReproducibleMethods.add("cosh");
-    nonReproducibleMethods.add("exp");
-    nonReproducibleMethods.add("expm1");
-    nonReproducibleMethods.add("hypot");
-    nonReproducibleMethods.add("log");
-    nonReproducibleMethods.add("log10");
-    nonReproducibleMethods.add("log1p");
-    nonReproducibleMethods.add("pow");
-    nonReproducibleMethods.add("sin");
-    nonReproducibleMethods.add("sinh");
-    nonReproducibleMethods.add("tan");
-    nonReproducibleMethods.add("tanh");
-  }
-
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonReproducibleMathCallDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonReproducibleMathCallProblemDescriptor().get();
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new MakeStrictFix();
-  }
-
-  private static class MakeStrictFix extends InspectionGadgetsFix {
 
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.nonReproducibleMathCallReplaceQuickfix().get();
-    }
-
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiIdentifier nameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression reference = (PsiReferenceExpression)nameIdentifier.getParent();
-      assert reference != null;
-      final String name = reference.getReferenceName();
-      replaceExpression(reference, "StrictMath." + name);
-    }
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new BigDecimalEqualsVisitor();
-  }
-
-  private static class BigDecimalEqualsVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      if (!nonReproducibleMethods.contains(methodName)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiClass referencedClass = method.getContainingClass();
-      if (referencedClass == null) {
-        return;
-      }
-      final String className = referencedClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_MATH.equals(className)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonReproducibleMathCallDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonReproducibleMathCallProblemDescriptor().get();
+    }
+
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new MakeStrictFix();
+    }
+
+    private static class MakeStrictFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.nonReproducibleMathCallReplaceQuickfix();
+        }
+
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiIdentifier nameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
+            final PsiReferenceExpression reference = (PsiReferenceExpression) nameIdentifier.getParent();
+            assert reference != null;
+            final String name = reference.getReferenceName();
+            replaceExpression(reference, "StrictMath." + name);
+        }
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new BigDecimalEqualsVisitor();
+    }
+
+    private static class BigDecimalEqualsVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!nonReproducibleMethods.contains(methodName)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiClass referencedClass = method.getContainingClass();
+            if (referencedClass == null) {
+                return;
+            }
+            final String className = referencedClass.getQualifiedName();
+            if (!CommonClassNames.JAVA_LANG_MATH.equals(className)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+    }
 }

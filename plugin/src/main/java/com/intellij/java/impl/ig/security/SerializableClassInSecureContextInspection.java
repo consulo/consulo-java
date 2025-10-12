@@ -35,65 +35,63 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class SerializableClassInSecureContextInspection extends BaseInspection {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreThrowable = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreThrowable = false;
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.serializableClassInSecureContextDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.serializableClassInSecureContextProblemDescriptor().get();
-  }
-
-  @Nullable
-  @Override
-  public JComponent createOptionsPanel() {
-    LocalizeValue message = InspectionGadgetsLocalize.ignoreClassesExtendingThrowableOption();
-    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreThrowable");
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new SerializableClassInSecureContextVisitor();
-  }
-
-  private class SerializableClassInSecureContextVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.serializableClassInSecureContextDisplayName();
+    }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
-        return;
-      }
-      if (aClass instanceof PsiTypeParameter || !SerializationUtils.isSerializable(aClass)) {
-        return;
-      }
-      final PsiMethod[] methods = aClass.findMethodsByName("writeObject", true);
-      for (final PsiMethod method : methods) {
-        if (!SerializationUtils.isWriteObject(method)) {
-          continue;
-        }
-        if (ControlFlowUtils.methodAlwaysThrowsException((PsiMethod)method.getNavigationElement())) {
-          return;
-        }
-        else {
-          break;
-        }
-      }
-      if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_LANG_THROWABLE)) {
-        return;
-      }
-      registerClassError(aClass);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.serializableClassInSecureContextProblemDescriptor().get();
     }
-  }
 
-  @Override
-  public String getAlternativeID() {
-    return "serial";
-  }
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        LocalizeValue message = InspectionGadgetsLocalize.ignoreClassesExtendingThrowableOption();
+        return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreThrowable");
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new SerializableClassInSecureContextVisitor();
+    }
+
+    private class SerializableClassInSecureContextVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
+                return;
+            }
+            if (aClass instanceof PsiTypeParameter || !SerializationUtils.isSerializable(aClass)) {
+                return;
+            }
+            final PsiMethod[] methods = aClass.findMethodsByName("writeObject", true);
+            for (final PsiMethod method : methods) {
+                if (!SerializationUtils.isWriteObject(method)) {
+                    continue;
+                }
+                if (ControlFlowUtils.methodAlwaysThrowsException((PsiMethod) method.getNavigationElement())) {
+                    return;
+                }
+                else {
+                    break;
+                }
+            }
+            if (ignoreThrowable && InheritanceUtil.isInheritor(aClass, false, CommonClassNames.JAVA_LANG_THROWABLE)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
+
+    @Override
+    public String getAlternativeID() {
+        return "serial";
+    }
 }

@@ -22,79 +22,76 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class OctalLiteralInspection extends BaseInspection {
-  @Pattern(VALID_ID_PATTERN)
-  @Override
-  @Nonnull
-  public String getID() {
-    return "OctalInteger";
-  }
+    @Pattern(VALID_ID_PATTERN)
+    @Override
+    @Nonnull
+    public String getID() {
+        return "OctalInteger";
+    }
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.octalLiteralDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.octalLiteralProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  @Override
-  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    return new InspectionGadgetsFix[]{
-      new ConvertOctalLiteralToDecimalFix(),
-      new RemoveLeadingZeroFix()
-    };
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new OctalLiteralVisitor();
-  }
-
-  private static class OctalLiteralVisitor extends BaseInspectionVisitor {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.octalLiteralDisplayName();
+    }
 
     @Override
-    public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression literal) {
-      super.visitLiteralExpression(literal);
-      final PsiType type = literal.getType();
-      if (type == null) {
-        return;
-      }
-      if (!(type.equals(PsiType.INT)
-            || type.equals(PsiType.LONG))) {
-        return;
-      }
-      @NonNls final String text = literal.getText();
-      if (text.length() == 1) {
-        return;
-      }
-      if (text.charAt(0) != '0') {
-        return;
-      }
-      final char c1 = text.charAt(1);
-      if (c1 != '_' && (c1 < '0' || c1 > '7')) {
-        return;
-      }
-      if (literal.getValue() == null) {
-        return;
-      }
-      registerError(literal);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.octalLiteralProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+        return new InspectionGadgetsFix[]{
+            new ConvertOctalLiteralToDecimalFix(),
+            new RemoveLeadingZeroFix()
+        };
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new OctalLiteralVisitor();
+    }
+
+    private static class OctalLiteralVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitLiteralExpression(@Nonnull PsiLiteralExpression literal) {
+            super.visitLiteralExpression(literal);
+            final PsiType type = literal.getType();
+            if (type == null) {
+                return;
+            }
+            if (!(type.equals(PsiType.INT) || type.equals(PsiType.LONG))) {
+                return;
+            }
+            final String text = literal.getText();
+            if (text.length() == 1) {
+                return;
+            }
+            if (text.charAt(0) != '0') {
+                return;
+            }
+            final char c1 = text.charAt(1);
+            if (c1 != '_' && (c1 < '0' || c1 > '7')) {
+                return;
+            }
+            if (literal.getValue() == null) {
+                return;
+            }
+            registerError(literal);
+        }
+    }
 }

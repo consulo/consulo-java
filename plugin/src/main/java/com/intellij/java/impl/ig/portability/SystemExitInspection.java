@@ -20,74 +20,71 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SystemExitInspection extends BaseInspection {
-
-  @Nonnull
-  public String getID() {
-    return "CallToSystemExit";
-  }
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.systemExitCallDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final String className = (String)infos[0];
-    return InspectionGadgetsLocalize.systemExitCallProblemDescriptor(className).get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new SystemExitVisitor();
-  }
-
-  private static class SystemExitVisitor extends BaseInspectionVisitor {
-
-    @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      @NonNls final String exit = "exit";
-      @NonNls final String halt = "halt";
-      if (!exit.equals(methodName) && !halt.equals(methodName)) {
-        return;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 1) {
-        return;
-      }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiType parameterType = parameters[0].getType();
-      if (!parameterType.equals(PsiType.INT)) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String className = aClass.getQualifiedName();
-      if (className == null) {
-        return;
-      }
-      if ("java.lang.System".equals(className)) {
-        registerMethodCallError(expression, "System");
-      }
-      else if ("java.lang.Runtime".equals(className)) {
-        registerMethodCallError(expression, "Runtime");
-      }
+    @Nonnull
+    public String getID() {
+        return "CallToSystemExit";
     }
-  }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.systemExitCallDisplayName();
+    }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final String className = (String) infos[0];
+        return InspectionGadgetsLocalize.systemExitCallProblemDescriptor(className).get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new SystemExitVisitor();
+    }
+
+    private static class SystemExitVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            final String exit = "exit";
+            final String halt = "halt";
+            if (!exit.equals(methodName) && !halt.equals(methodName)) {
+                return;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 1) {
+                return;
+            }
+            final PsiParameter[] parameters = parameterList.getParameters();
+            final PsiType parameterType = parameters[0].getType();
+            if (!parameterType.equals(PsiType.INT)) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String className = aClass.getQualifiedName();
+            if (className == null) {
+                return;
+            }
+            if ("java.lang.System".equals(className)) {
+                registerMethodCallError(expression, "System");
+            }
+            else if ("java.lang.Runtime".equals(className)) {
+                registerMethodCallError(expression, "Runtime");
+            }
+        }
+    }
 }

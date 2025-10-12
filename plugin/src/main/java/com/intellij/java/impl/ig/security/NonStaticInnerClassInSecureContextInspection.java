@@ -21,39 +21,37 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class NonStaticInnerClassInSecureContextInspection
-  extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.nonStaticInnerClassInSecureContextDisplayName().get();
-  }
-
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.nonStaticInnerClassInSecureContextProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new NonStaticInnerClassInSecureContextVisitor();
-  }
-
-  private static class NonStaticInnerClassInSecureContextVisitor
-    extends BaseInspectionVisitor {
-
+public class NonStaticInnerClassInSecureContextInspection extends BaseInspection {
+    @Nonnull
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
-      // no call to super, so it doesn't drill down
-      if (aClass.isInterface() || aClass.isAnnotationType()) {
-        return;
-      }
-      if (!PsiUtil.isInnerClass(aClass)) {
-        return;
-      }
-      registerClassError(aClass);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.nonStaticInnerClassInSecureContextDisplayName();
     }
-  }
+
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.nonStaticInnerClassInSecureContextProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new NonStaticInnerClassInSecureContextVisitor();
+    }
+
+    private static class NonStaticInnerClassInSecureContextVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitClass(@Nonnull PsiClass aClass) {
+            // no call to super, so it doesn't drill down
+            if (aClass.isInterface() || aClass.isAnnotationType()) {
+                return;
+            }
+            if (!PsiUtil.isInnerClass(aClass)) {
+                return;
+            }
+            registerClassError(aClass);
+        }
+    }
 }

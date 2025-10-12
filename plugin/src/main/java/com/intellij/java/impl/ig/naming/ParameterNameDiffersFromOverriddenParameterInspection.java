@@ -30,109 +30,99 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
 @ExtensionImpl
-public class ParameterNameDiffersFromOverriddenParameterInspection
-  extends BaseInspection {
+public class ParameterNameDiffersFromOverriddenParameterInspection extends BaseInspection {
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreSingleCharacterNames = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreSingleCharacterNames = false;
+    /**
+     * @noinspection PublicField
+     */
+    public boolean m_ignoreOverridesOfLibraryMethods = false;
 
-  /**
-   * @noinspection PublicField
-   */
-  public boolean m_ignoreOverridesOfLibraryMethods = false;
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterProblemDescriptor(infos[0]).get();
-  }
-
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(
-      InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreCharacterOption().get(),
-      "m_ignoreSingleCharacterNames"
-    );
-    optionsPanel.addCheckbox(
-      InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreLibraryOption().get(),
-      "m_ignoreOverridesOfLibraryMethods"
-    );
-    return optionsPanel;
-  }
-
-  @Nullable
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new RenameParameterFix((String)infos[0]);
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new ParameterNameDiffersFromOverriddenParameterVisitor();
-  }
-
-  private class ParameterNameDiffersFromOverriddenParameterVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() == 0) {
-        return;
-      }
-      final Query<MethodSignatureBackedByPsiMethod> query =
-        SuperMethodsSearch.search(
-          method, method.getContainingClass(), true, false);
-      final MethodSignatureBackedByPsiMethod methodSignature =
-        query.findFirst();
-      if (methodSignature == null) {
-        return;
-      }
-      final PsiMethod superMethod = methodSignature.getMethod();
-      final PsiParameter[] parameters = parameterList.getParameters();
-      checkParameters(superMethod, parameters);
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterDisplayName();
     }
 
-    private void checkParameters(PsiMethod superMethod,
-                                 PsiParameter[] parameters) {
-      if (m_ignoreOverridesOfLibraryMethods) {
-        final PsiClass containingClass =
-          superMethod.getContainingClass();
-        if (containingClass != null &&
-            LibraryUtil.classIsInLibrary(containingClass)) {
-          return;
-        }
-      }
-      final PsiParameterList superParameterList =
-        superMethod.getParameterList();
-      final PsiParameter[] superParameters =
-        superParameterList.getParameters();
-      for (int i = 0; i < parameters.length; i++) {
-        final PsiParameter parameter = parameters[i];
-        final String parameterName = parameter.getName();
-        final String superParameterName = superParameters[i].getName();
-        if (superParameterName == null) {
-          continue;
-        }
-        if (superParameterName.equals(parameterName)) {
-          continue;
-        }
-        if (m_ignoreSingleCharacterNames &&
-            superParameterName.length() == 1) {
-          continue;
-        }
-        registerVariableError(parameter, superParameterName);
-      }
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterProblemDescriptor(infos[0]).get();
     }
-  }
+
+    public JComponent createOptionsPanel() {
+        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        optionsPanel.addCheckbox(
+            InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreCharacterOption().get(),
+            "m_ignoreSingleCharacterNames"
+        );
+        optionsPanel.addCheckbox(
+            InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreLibraryOption().get(),
+            "m_ignoreOverridesOfLibraryMethods"
+        );
+        return optionsPanel;
+    }
+
+    @Nullable
+    protected InspectionGadgetsFix buildFix(Object... infos) {
+        return new RenameParameterFix((String) infos[0]);
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new ParameterNameDiffersFromOverriddenParameterVisitor();
+    }
+
+    private class ParameterNameDiffersFromOverriddenParameterVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() == 0) {
+                return;
+            }
+            final Query<MethodSignatureBackedByPsiMethod> query =
+                SuperMethodsSearch.search(method, method.getContainingClass(), true, false);
+            final MethodSignatureBackedByPsiMethod methodSignature = query.findFirst();
+            if (methodSignature == null) {
+                return;
+            }
+            final PsiMethod superMethod = methodSignature.getMethod();
+            final PsiParameter[] parameters = parameterList.getParameters();
+            checkParameters(superMethod, parameters);
+        }
+
+        private void checkParameters(PsiMethod superMethod, PsiParameter[] parameters) {
+            if (m_ignoreOverridesOfLibraryMethods) {
+                final PsiClass containingClass = superMethod.getContainingClass();
+                if (containingClass != null && LibraryUtil.classIsInLibrary(containingClass)) {
+                    return;
+                }
+            }
+            final PsiParameterList superParameterList = superMethod.getParameterList();
+            final PsiParameter[] superParameters = superParameterList.getParameters();
+            for (int i = 0; i < parameters.length; i++) {
+                final PsiParameter parameter = parameters[i];
+                final String parameterName = parameter.getName();
+                final String superParameterName = superParameters[i].getName();
+                if (superParameterName == null) {
+                    continue;
+                }
+                if (superParameterName.equals(parameterName)) {
+                    continue;
+                }
+                if (m_ignoreSingleCharacterNames && superParameterName.length() == 1) {
+                    continue;
+                }
+                registerVariableError(parameter, superParameterName);
+            }
+        }
+    }
 }

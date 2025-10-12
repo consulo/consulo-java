@@ -25,6 +25,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -32,53 +33,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PackageInMultipleModulesInspection extends BaseGlobalInspection
-{
+public abstract class PackageInMultipleModulesInspection extends BaseGlobalInspection {
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.packageInMultipleModulesDisplayName();
+    }
 
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return InspectionGadgetsLocalize.packageInMultipleModulesDisplayName().get();
-	}
+    @Override
+    @Nullable
+    public CommonProblemDescriptor[] checkElement(
+        RefEntity refEntity,
+        AnalysisScope analysisScope,
+        InspectionManager inspectionManager,
+        GlobalInspectionContext globalInspectionContext,
+        Object state
+    ) {
+        if (!(refEntity instanceof RefPackage)) {
+            return null;
+        }
+        final List<RefEntity> children = refEntity.getChildren();
+        if (children == null) {
+            return null;
+        }
+        final Set<RefModule> modules = new HashSet<RefModule>();
+        for (RefEntity child : children) {
+            if (!(child instanceof RefClass)) {
+                continue;
+            }
+            final RefClass refClass = (RefClass) child;
+            final RefModule module = refClass.getModule();
+            modules.add(module);
+        }
+        if (modules.size() <= 1) {
+            return null;
+        }
+        final String errorString = InspectionGadgetsLocalize.packageInMultipleModulesProblemDescriptor(refEntity.getQualifiedName()).get();
 
-	@Override
-	@Nullable
-	public CommonProblemDescriptor[] checkElement(
-			RefEntity refEntity, AnalysisScope analysisScope,
-			InspectionManager inspectionManager,
-			GlobalInspectionContext globalInspectionContext,
-			Object state)
-	{
-		if(!(refEntity instanceof RefPackage))
-		{
-			return null;
-		}
-		final List<RefEntity> children = refEntity.getChildren();
-		if(children == null)
-		{
-			return null;
-		}
-		final Set<RefModule> modules = new HashSet<RefModule>();
-		for(RefEntity child : children)
-		{
-			if(!(child instanceof RefClass))
-			{
-				continue;
-			}
-			final RefClass refClass = (RefClass) child;
-			final RefModule module = refClass.getModule();
-			modules.add(module);
-		}
-		if(modules.size() <= 1)
-		{
-			return null;
-		}
-		final String errorString =
-			InspectionGadgetsLocalize.packageInMultipleModulesProblemDescriptor(refEntity.getQualifiedName()).get();
-
-		return new CommonProblemDescriptor[]{
-				inspectionManager.createProblemDescriptor(errorString)
-		};
-	}
+        return new CommonProblemDescriptor[]{
+            inspectionManager.createProblemDescriptor(errorString)
+        };
+    }
 }

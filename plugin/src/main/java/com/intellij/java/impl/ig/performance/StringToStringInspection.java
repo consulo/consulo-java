@@ -24,92 +24,92 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringToStringInspection extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getID() {
-    return "RedundantStringToString";
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringToStringDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringToStringProblemDescriptor().get();
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringToStringVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new StringToStringFix();
-  }
-
-  private static class StringToStringFix extends InspectionGadgetsFix {
-
+    @Override
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
+    public String getID() {
+        return "RedundantStringToString";
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)descriptor.getPsiElement();
-      final PsiReferenceExpression expression = call.getMethodExpression();
-      final PsiExpression qualifier = expression.getQualifierExpression();
-      if (qualifier == null) {
-        return;
-      }
-      final String qualifierText = qualifier.getText();
-      replaceExpression(call, qualifierText);
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringToStringDisplayName();
     }
-  }
 
-  private static class StringToStringVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
-        return;
-      }
-
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String className = aClass.getQualifiedName();
-      if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
-        return;
-      }
-      registerError(expression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringToStringProblemDescriptor().get();
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringToStringVisitor();
+    }
+
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new StringToStringFix();
+    }
+
+    private static class StringToStringFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiMethodCallExpression call = (PsiMethodCallExpression) descriptor.getPsiElement();
+            final PsiReferenceExpression expression = call.getMethodExpression();
+            final PsiExpression qualifier = expression.getQualifierExpression();
+            if (qualifier == null) {
+                return;
+            }
+            final String qualifierText = qualifier.getText();
+            replaceExpression(call, qualifierText);
+        }
+    }
+
+    private static class StringToStringVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String methodName = methodExpression.getReferenceName();
+            if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
+                return;
+            }
+
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String className = aClass.getQualifiedName();
+            if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
+                return;
+            }
+            registerError(expression);
+        }
+    }
 }

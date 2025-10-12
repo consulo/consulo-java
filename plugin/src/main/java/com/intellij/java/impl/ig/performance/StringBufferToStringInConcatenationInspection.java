@@ -26,99 +26,89 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class StringBufferToStringInConcatenationInspection
-  extends BaseInspection {
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.stringBufferToStringInConcatenationDisplayName().get();
-  }
-
-  @Override
-  @Nonnull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.stringBufferToStringInConcatenationProblemDescriptor().get();
-  }
-
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new StringBufferToStringVisitor();
-  }
-
-  @Override
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new StringBufferToStringFix();
-  }
-
-  private static class StringBufferToStringFix extends InspectionGadgetsFix {
-
+public class StringBufferToStringInConcatenationInspection extends BaseInspection {
     @Nonnull
-    public String getName() {
-      return InspectionGadgetsLocalize.stringBufferToStringInConcatenationRemoveQuickfix().get();
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.stringBufferToStringInConcatenationDisplayName();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement methodNameToken = descriptor.getPsiElement();
-      final PsiElement methodCallExpression = methodNameToken.getParent();
-      assert methodCallExpression != null;
-      final PsiMethodCallExpression methodCall =
-        (PsiMethodCallExpression)methodCallExpression.getParent();
-      assert methodCall != null;
-      final PsiReferenceExpression expression =
-        methodCall.getMethodExpression();
-      final PsiExpression qualifier = expression.getQualifierExpression();
-      assert qualifier != null;
-      final String newExpression = qualifier.getText();
-      replaceExpression(methodCall, newExpression);
+    @Nonnull
+    protected String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.stringBufferToStringInConcatenationProblemDescriptor().get();
     }
-  }
-
-  private static class StringBufferToStringVisitor
-    extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
-      super.visitMethodCallExpression(expression);
-      if (!ExpressionUtils.isStringConcatenationOperand(expression)) {
-        return;
-      }
-      if (!isStringBufferToString(expression)) {
-        return;
-      }
-      registerMethodCallError(expression);
+    public BaseInspectionVisitor buildVisitor() {
+        return new StringBufferToStringVisitor();
     }
 
-    private static boolean isStringBufferToString(
-      PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final String referenceName = methodExpression.getReferenceName();
-      if (!HardcodedMethodConstants.TO_STRING.equals(referenceName)) {
-        return false;
-      }
-      final PsiMethod method = expression.resolveMethod();
-      if (method == null) {
-        return false;
-      }
-      final PsiParameterList parameterList = method.getParameterList();
-      if (parameterList.getParametersCount() != 0) {
-        return false;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return false;
-      }
-      final String className = aClass.getQualifiedName();
-      return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
-          || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
+    @Override
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new StringBufferToStringFix();
     }
-  }
+
+    private static class StringBufferToStringFix extends InspectionGadgetsFix {
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.stringBufferToStringInConcatenationRemoveQuickfix();
+        }
+
+        @Override
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            final PsiElement methodNameToken = descriptor.getPsiElement();
+            final PsiElement methodCallExpression = methodNameToken.getParent();
+            assert methodCallExpression != null;
+            final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodCallExpression.getParent();
+            assert methodCall != null;
+            final PsiReferenceExpression expression = methodCall.getMethodExpression();
+            final PsiExpression qualifier = expression.getQualifierExpression();
+            assert qualifier != null;
+            final String newExpression = qualifier.getText();
+            replaceExpression(methodCall, newExpression);
+        }
+    }
+
+    private static class StringBufferToStringVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            super.visitMethodCallExpression(expression);
+            if (!ExpressionUtils.isStringConcatenationOperand(expression)) {
+                return;
+            }
+            if (!isStringBufferToString(expression)) {
+                return;
+            }
+            registerMethodCallError(expression);
+        }
+
+        private static boolean isStringBufferToString(PsiMethodCallExpression expression) {
+            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            final String referenceName = methodExpression.getReferenceName();
+            if (!HardcodedMethodConstants.TO_STRING.equals(referenceName)) {
+                return false;
+            }
+            final PsiMethod method = expression.resolveMethod();
+            if (method == null) {
+                return false;
+            }
+            final PsiParameterList parameterList = method.getParameterList();
+            if (parameterList.getParametersCount() != 0) {
+                return false;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return false;
+            }
+            final String className = aClass.getQualifiedName();
+            return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
+                || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
+        }
+    }
 }

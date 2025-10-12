@@ -21,48 +21,46 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverloadedVarargsMethodInspection extends BaseInspection {
-
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionGadgetsLocalize.overloadedVarargMethodDisplayName().get();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    final PsiMethod element = (PsiMethod)infos[0];
-    return element.isConstructor()
-      ? InspectionGadgetsLocalize.overloadedVarargConstructorProblemDescriptor().get()
-      : InspectionGadgetsLocalize.overloadedVarargMethodProblemDescriptor().get();
-  }
-
-  public BaseInspectionVisitor buildVisitor() {
-    return new OverloadedVarargMethodVisitor();
-  }
-
-  private static class OverloadedVarargMethodVisitor
-    extends BaseInspectionVisitor {
-
+    @Nonnull
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
-      if (!method.isVarArgs()) {
-        return;
-      }
-      final PsiClass aClass = method.getContainingClass();
-      if (aClass == null) {
-        return;
-      }
-      final String methodName = method.getName();
-      final PsiMethod[] sameNameMethods =
-        aClass.findMethodsByName(methodName, false);
-      for (PsiMethod sameNameMethod : sameNameMethods) {
-        if (!sameNameMethod.equals(method)) {
-          registerMethodError(method, method);
-        }
-      }
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.overloadedVarargMethodDisplayName();
     }
-  }
+
+    @Nonnull
+    public String buildErrorString(Object... infos) {
+        final PsiMethod element = (PsiMethod) infos[0];
+        return element.isConstructor()
+            ? InspectionGadgetsLocalize.overloadedVarargConstructorProblemDescriptor().get()
+            : InspectionGadgetsLocalize.overloadedVarargMethodProblemDescriptor().get();
+    }
+
+    public BaseInspectionVisitor buildVisitor() {
+        return new OverloadedVarargMethodVisitor();
+    }
+
+    private static class OverloadedVarargMethodVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethod(@Nonnull PsiMethod method) {
+            if (!method.isVarArgs()) {
+                return;
+            }
+            final PsiClass aClass = method.getContainingClass();
+            if (aClass == null) {
+                return;
+            }
+            final String methodName = method.getName();
+            final PsiMethod[] sameNameMethods = aClass.findMethodsByName(methodName, false);
+            for (PsiMethod sameNameMethod : sameNameMethods) {
+                if (!sameNameMethod.equals(method)) {
+                    registerMethodError(method, method);
+                }
+            }
+        }
+    }
 }
