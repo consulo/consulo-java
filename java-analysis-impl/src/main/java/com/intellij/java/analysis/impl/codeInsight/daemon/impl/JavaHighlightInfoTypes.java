@@ -20,18 +20,15 @@ import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.language.editor.inspection.HighlightInfoTypeSeverityByKey;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
-
+import consulo.language.editor.rawHighlight.HighlightInfoTypeImpl;
 import jakarta.annotation.Nonnull;
 
 public interface JavaHighlightInfoTypes {
-  HighlightInfoType UNUSED_IMPORT = new HighlightInfoType.HighlightInfoTypeSeverityByKey(HighlightDisplayKey.findOrRegister(UnusedImportLocalInspection.SHORT_NAME,
-    InspectionLocalize.unusedImport().get()
-  ), CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
-
-  HighlightInfoType JAVA_KEYWORD = new HighlightInfoType.HighlightInfoTypeImpl(HighlightSeverity.INFORMATION, JavaHighlightingColors.KEYWORD);
+  HighlightInfoType JAVA_KEYWORD = new HighlightInfoTypeImpl(HighlightSeverity.INFORMATION, JavaHighlightingColors.KEYWORD);
 
   HighlightInfoType PACKAGE_NAME = createSymbolTypeInfo(JavaHighlightingColors.PACKAGE_NAME_ATTRIBUTES);
   HighlightInfoType CLASS_NAME = createSymbolTypeInfo(JavaHighlightingColors.CLASS_NAME_ATTRIBUTES);
@@ -52,16 +49,16 @@ public interface JavaHighlightInfoTypes {
   HighlightInfoType ANONYMOUS_CLASS_NAME = createSymbolTypeInfo(JavaHighlightingColors.ANONYMOUS_CLASS_NAME_ATTRIBUTES);
   HighlightInfoType INTERFACE_NAME = createSymbolTypeInfo(JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES);
   HighlightInfoType ENUM_NAME = createSymbolTypeInfo(JavaHighlightingColors.ENUM_NAME_ATTRIBUTES);
-  HighlightInfoType TYPE_PARAMETER_NAME = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES);
+  HighlightInfoType TYPE_PARAMETER_NAME = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES);
   HighlightInfoType ABSTRACT_CLASS_NAME = createSymbolTypeInfo(JavaHighlightingColors.ABSTRACT_CLASS_NAME_ATTRIBUTES);
-  HighlightInfoType ANNOTATION_NAME = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES);
-  HighlightInfoType ANNOTATION_ATTRIBUTE_NAME = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.ANNOTATION_ATTRIBUTE_NAME_ATTRIBUTES);
-  HighlightInfoType REASSIGNED_LOCAL_VARIABLE = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES);
-  HighlightInfoType REASSIGNED_PARAMETER = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.REASSIGNED_PARAMETER_ATTRIBUTES);
-  HighlightInfoType IMPLICIT_ANONYMOUS_CLASS_PARAMETER = new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors
+  HighlightInfoType ANNOTATION_NAME = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES);
+  HighlightInfoType ANNOTATION_ATTRIBUTE_NAME = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.ANNOTATION_ATTRIBUTE_NAME_ATTRIBUTES);
+  HighlightInfoType REASSIGNED_LOCAL_VARIABLE = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES);
+  HighlightInfoType REASSIGNED_PARAMETER = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors.REASSIGNED_PARAMETER_ATTRIBUTES);
+  HighlightInfoType IMPLICIT_ANONYMOUS_CLASS_PARAMETER = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors
       .IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES);
 
   static HighlightInfoType createSymbolTypeInfo(@Nonnull TextAttributesKey attributesKey) {
-    return new HighlightInfoType.HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, attributesKey, false);
+    return new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, attributesKey, false);
   }
 }

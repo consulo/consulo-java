@@ -20,6 +20,7 @@ open module consulo.java {
 
     requires com.intellij.xml;
 
+
     // TODO remove in future
     requires consulo.ide.impl;
 

@@ -802,7 +802,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
             (HighlightInfo)highlightInfo,
             new SafeDeleteFix(parameter),
             options,
-            HighlightDisplayKey.getDisplayNameByKey(myUnusedSymbolKey)
+            unusedParametersInspection.getDisplayName()
         );
     }
 

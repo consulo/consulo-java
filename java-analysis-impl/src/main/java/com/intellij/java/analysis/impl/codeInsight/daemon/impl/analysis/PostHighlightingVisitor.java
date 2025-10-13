@@ -18,7 +18,6 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.GlobalUsageHelper;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaHighlightInfoTypes;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.UnusedSymbolUtil;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionState;
@@ -36,6 +35,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.util.ConcurrentFactoryMap;
+import consulo.codeEditor.CodeInsightColors;
 import consulo.component.ProcessCanceledException;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
@@ -47,16 +47,15 @@ import consulo.language.editor.FileStatusMap;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.annotation.HighlightSeverity;
 import consulo.language.editor.highlight.HighlightingLevelManager;
+import consulo.language.editor.inspection.HighlightInfoTypeSeverityByKey;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.language.editor.intention.EmptyIntentionAction;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.rawHighlight.*;
 import consulo.language.editor.util.CollectHighlightsUtil;
 import consulo.language.file.FileViewProvider;
 import consulo.language.pom.PomNamedTarget;
@@ -70,6 +69,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -91,6 +91,8 @@ public class PostHighlightingVisitor {
     private final UnusedDeclarationInspectionBase myDeadCodeInspection;
     private final UnusedDeclarationInspectionState myDeadCodeState;
 
+    private final HighlightInfoType myUnusedImportHighlightType;
+
     private void optimizeImportsOnTheFlyLater(@Nonnull ProgressIndicator progress) {
         if ((myHasRedundantImports || myHasMissortedImports) && !progress.isCanceled()) {
             // schedule optimise action at the time of session disposal, which is after all applyInformation() calls
@@ -107,14 +109,14 @@ public class PostHighlightingVisitor {
                 });
             };
             try {
-                Disposer.register((Disposable)progress, invokeFixLater);
+                Disposer.register((Disposable) progress, invokeFixLater);
             }
             catch (Exception ignored) {
                 // suppress "parent already has been disposed" exception here
             }
             if (progress.isCanceled()) {
                 Disposer.dispose(invokeFixLater);
-                Disposer.dispose((Disposable)progress);
+                Disposer.dispose((Disposable) progress);
                 progress.checkCanceled();
             }
         }
@@ -138,22 +140,24 @@ public class PostHighlightingVisitor {
 
         InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
 
-        myDeadCodeKey = HighlightDisplayKey.find(UnusedDeclarationInspectionBase.SHORT_NAME);
+        InspectionToolWrapper tool = Objects.requireNonNull(profile.getToolById(UnusedDeclarationInspectionBase.SHORT_NAME, myFile));
 
-        myDeadCodeInspection =
-            (UnusedDeclarationInspectionBase)profile.getUnwrappedTool(UnusedDeclarationInspectionBase.SHORT_NAME, myFile);
+        myDeadCodeKey = tool.getHighlightDisplayKey();
+
+        myDeadCodeInspection = (UnusedDeclarationInspectionBase) tool.getTool();
+
         myDeadCodeState = profile.getToolState(UnusedDeclarationInspectionBase.SHORT_NAME, myFile);
 
-        LOG.assertTrue(myDeadCodeInspection != null);
+        myUnusedSymbolInspection = myDeadCodeInspection.getSharedLocalInspectionTool();
 
-        myUnusedSymbolInspection = myDeadCodeInspection != null ? myDeadCodeInspection.getSharedLocalInspectionTool() : null;
+        myDeadCodeInfoType = new HighlightInfoTypeImpl(
+            profile.getErrorLevel(myDeadCodeKey, myFile).getSeverity(),
+            HighlightInfoType.RAW_UNUSED_SYMBOL.getAttributesKey()
+        );
 
-        myDeadCodeInfoType = myDeadCodeKey == null
-            ? HighlightInfoType.UNUSED_SYMBOL
-            : new HighlightInfoType.HighlightInfoTypeImpl(
-                profile.getErrorLevel(myDeadCodeKey, myFile).getSeverity(),
-                HighlightInfoType.UNUSED_SYMBOL.getAttributesKey()
-            );
+        InspectionToolWrapper unusedImportTool = Objects.requireNonNull(profile.getToolById(UnusedImportLocalInspection.SHORT_NAME, myFile));
+
+        myUnusedImportHighlightType = new HighlightInfoTypeSeverityByKey(unusedImportTool.getHighlightDisplayKey(), CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
     }
 
     @RequiredReadAction
@@ -192,7 +196,7 @@ public class PostHighlightingVisitor {
 
         HighlightDisplayKey unusedImportKey = HighlightDisplayKey.find(UnusedImportLocalInspection.SHORT_NAME);
         if (isUnusedImportEnabled(unusedImportKey)) {
-            PsiImportList importList = ((PsiJavaFile)myFile).getImportList();
+            PsiImportList importList = ((PsiJavaFile) myFile).getImportList();
             if (importList != null) {
                 PsiImportStatementBase[] imports = importList.getAllImportStatements();
                 for (PsiImportStatementBase statement : imports) {
@@ -580,7 +584,7 @@ public class PostHighlightingVisitor {
         QuickFixFactory fixFactory = QuickFixFactory.getInstance();
         hlBuilder.registerFix(fixFactory.createSafeDeleteFix(aClass), null, LocalizeValue.of(), null, highlightDisplayKey);
         SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(
-            (PsiModifierListOwner)aClass,
+            (PsiModifierListOwner) aClass,
             annoName -> {
                 hlBuilder.registerFix(fixFactory.createAddToDependencyInjectionAnnotationsFix(project, annoName, element));
                 return true;
@@ -604,7 +608,7 @@ public class PostHighlightingVisitor {
         boolean isRedundant = myRefCountHolder.isRedundant(importStatement);
         if (!isRedundant && !(importStatement instanceof PsiImportStaticStatement)) {
             //check import from same package
-            String packageName = ((PsiClassOwner)importStatement.getContainingFile()).getPackageName();
+            String packageName = ((PsiClassOwner) importStatement.getContainingFile()).getPackageName();
             PsiJavaCodeReferenceElement reference = importStatement.getImportReference();
             PsiElement resolved = reference == null ? null : reference.resolve();
             if (resolved instanceof PsiPackage psiPackage) {
@@ -613,7 +617,7 @@ public class PostHighlightingVisitor {
             else if (resolved instanceof PsiClass psiClass && !importStatement.isOnDemand()) {
                 String qName = psiClass.getQualifiedName();
                 if (qName != null) {
-                    String name = ((PomNamedTarget)resolved).getName();
+                    String name = ((PomNamedTarget) resolved).getName();
                     isRedundant = qName.equals(packageName + '.' + name);
                 }
             }
@@ -637,7 +641,7 @@ public class PostHighlightingVisitor {
         @Nonnull PsiImportStatementBase importStatement,
         @Nonnull HighlightDisplayKey unusedImportKey
     ) {
-        HighlightInfo info = HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.UNUSED_IMPORT)
+        HighlightInfo info = HighlightInfo.newHighlightInfo(myUnusedImportHighlightType)
             .range(importStatement)
             .descriptionAndTooltip(InspectionLocalize.unusedImportStatement())
             .registerFix(QuickFixFactory.getInstance().createOptimizeImportsFix(false), null, LocalizeValue.of(), null, unusedImportKey)
