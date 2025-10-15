@@ -25,34 +25,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class GenerateGetterAndSetterHandler extends GenerateGetterSetterHandlerBase {
-  private final GenerateGetterHandler myGenerateGetterHandler = new GenerateGetterHandler();
-  private final GenerateSetterHandler myGenerateSetterHandler = new GenerateSetterHandler();
+    private final GenerateGetterHandler myGenerateGetterHandler = new GenerateGetterHandler();
+    private final GenerateSetterHandler myGenerateSetterHandler = new GenerateSetterHandler();
 
-  public GenerateGetterAndSetterHandler() {
-    super(CodeInsightLocalize.generateGetterSetterTitle().get());
-  }
-
-  @Override
-  public GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException {
-    ArrayList<GenerationInfo> array = new ArrayList<>();
-    GenerationInfo[] getters = myGenerateGetterHandler.generateMemberPrototypes(aClass, original);
-    GenerationInfo[] setters = myGenerateSetterHandler.generateMemberPrototypes(aClass, original);
-
-    if (getters.length + setters.length > 0) {
-      Collections.addAll(array, getters);
-      Collections.addAll(array, setters);
+    public GenerateGetterAndSetterHandler() {
+        super(CodeInsightLocalize.generateGetterSetterTitle());
     }
 
-    return array.toArray(new GenerationInfo[array.size()]);
-  }
+    @Override
+    public GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException {
+        ArrayList<GenerationInfo> array = new ArrayList<>();
+        GenerationInfo[] getters = myGenerateGetterHandler.generateMemberPrototypes(aClass, original);
+        GenerationInfo[] setters = myGenerateSetterHandler.generateMemberPrototypes(aClass, original);
 
-  @Override
-  protected String getNothingFoundMessage() {
-    return "No fields have been found to generate getters/setters for";
-  }
+        if (getters.length + setters.length > 0) {
+            Collections.addAll(array, getters);
+            Collections.addAll(array, setters);
+        }
 
-  @Override
-  protected String getNothingAcceptedMessage() {
-    return "No fields without getter/setter were found";
-  }
+        return array.toArray(new GenerationInfo[array.size()]);
+    }
+
+    @Override
+    protected String getNothingFoundMessage() {
+        return "No fields have been found to generate getters/setters for";
+    }
+
+    @Override
+    protected String getNothingAcceptedMessage() {
+        return "No fields without getter/setter were found";
+    }
 }
