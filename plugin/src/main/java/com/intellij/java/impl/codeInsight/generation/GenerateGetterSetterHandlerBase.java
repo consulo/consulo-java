@@ -29,6 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
@@ -40,15 +41,13 @@ import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHandlerBase {
     private static final Logger LOG = Logger.getInstance(GenerateGetterSetterHandlerBase.class);
 
-    public GenerateGetterSetterHandlerBase(String chooserTitle) {
+    public GenerateGetterSetterHandlerBase(@Nonnull LocalizeValue chooserTitle) {
         super(chooserTitle);
     }
 
@@ -63,8 +62,9 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
     }
 
     @Override
+    @RequiredUIAccess
     protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor) {
-        final ClassMember[] allMembers = getAllOriginalMembers(aClass);
+        ClassMember[] allMembers = getAllOriginalMembers(aClass);
         if (allMembers == null) {
             HintManager.getInstance().showErrorHint(editor, getNothingFoundMessage());
             return null;
@@ -76,49 +76,54 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
         return chooseMembers(allMembers, false, false, project, editor);
     }
 
-    protected static JComponent getHeaderPanel(final Project project, final TemplatesManager templatesManager, final String templatesTitle) {
-        final JPanel panel = new JPanel(new BorderLayout());
-        final JLabel templateChooserLabel = new JLabel(templatesTitle);
+    protected static JComponent getHeaderPanel(
+        final Project project,
+        final TemplatesManager templatesManager,
+        final String templatesTitle
+    ) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel templateChooserLabel = new JLabel(templatesTitle);
         panel.add(templateChooserLabel, BorderLayout.WEST);
-        final ComboBox comboBox = new ComboBox();
+        ComboBox<TemplateResource> comboBox = new ComboBox<>();
         templateChooserLabel.setLabelFor(comboBox);
-        comboBox.setRenderer(new ListCellRendererWrapper<TemplateResource>() {
+        comboBox.setRenderer(new ListCellRendererWrapper<>() {
             @Override
             public void customize(JList list, TemplateResource value, int index, boolean selected, boolean hasFocus) {
                 setText(value.getName());
             }
         });
-        final ComponentWithBrowseButton<ComboBox> comboBoxWithBrowseButton = new ComponentWithBrowseButton<ComboBox>(comboBox, e -> {
-            final TemplatesPanel ui = new TemplatesPanel(project, templatesManager) {
-                @Override
-                protected boolean onMultipleFields() {
-                    return false;
-                }
+        ComponentWithBrowseButton<ComboBox> comboBoxWithBrowseButton = new ComponentWithBrowseButton<ComboBox>(
+            comboBox,
+            e -> {
+                TemplatesPanel ui = new TemplatesPanel(project, templatesManager) {
+                    @Override
+                    protected boolean onMultipleFields() {
+                        return false;
+                    }
 
-                @Override
-                public LocalizeValue getDisplayName() {
-                    return LocalizeValue.localizeTODO(StringUtil.capitalizeWords(UIUtil.removeMnemonic(StringUtil.trimEnd(templatesTitle, ":")), true));
-                }
-            };
-            ui.selectNodeInTree(templatesManager.getDefaultTemplate());
-            ShowSettingsUtil.getInstance().editConfigurable(panel, ui).doWhenDone(() -> setComboboxModel(templatesManager, comboBox));
-        });
-
-        setComboboxModel(templatesManager, comboBox);
-        comboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(@Nonnull final ActionEvent M) {
-                templatesManager.setDefaultTemplate((TemplateResource) comboBox.getSelectedItem());
+                    @Override
+                    public LocalizeValue getDisplayName() {
+                        return LocalizeValue.localizeTODO(StringUtil.capitalizeWords(
+                            UIUtil.removeMnemonic(StringUtil.trimEnd(templatesTitle, ":")),
+                            true
+                        ));
+                    }
+                };
+                ui.selectNodeInTree(templatesManager.getDefaultTemplate());
+                ShowSettingsUtil.getInstance().editConfigurable(panel, ui).doWhenDone(() -> setComboBoxModel(templatesManager, comboBox));
             }
-        });
+        );
+
+        setComboBoxModel(templatesManager, comboBox);
+        comboBox.addActionListener(M -> templatesManager.setDefaultTemplate((TemplateResource) comboBox.getSelectedItem()));
 
         panel.add(comboBoxWithBrowseButton, BorderLayout.CENTER);
         return panel;
     }
 
-    private static void setComboboxModel(TemplatesManager templatesManager, ComboBox comboBox) {
-        final Collection<TemplateResource> templates = templatesManager.getAllTemplates();
-        comboBox.setModel(new DefaultComboBoxModel(templates.toArray(new TemplateResource[templates.size()])));
+    private static void setComboBoxModel(TemplatesManager templatesManager, ComboBox<TemplateResource> comboBox) {
+        Collection<TemplateResource> templates = templatesManager.getAllTemplates();
+        comboBox.setModel(new DefaultComboBoxModel<>(templates.toArray(new TemplateResource[templates.size()])));
         comboBox.setSelectedItem(templatesManager.getDefaultTemplate());
     }
 
@@ -128,31 +133,32 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
     protected abstract String getNothingAcceptedMessage();
 
     public boolean canBeAppliedTo(PsiClass targetClass) {
-        final ClassMember[] allMembers = getAllOriginalMembers(targetClass);
+        ClassMember[] allMembers = getAllOriginalMembers(targetClass);
         return allMembers != null && allMembers.length != 0;
     }
 
     @Override
     @Nullable
-    protected ClassMember[] getAllOriginalMembers(final PsiClass aClass) {
-        final List<EncapsulatableClassMember> list = GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass);
+    protected ClassMember[] getAllOriginalMembers(PsiClass aClass) {
+        List<EncapsulatableClassMember> list = GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass);
         if (list.isEmpty()) {
             return null;
         }
-        final List<EncapsulatableClassMember> members = ContainerUtil.findAll(list, member -> {
-            try {
-                return generateMemberPrototypes(aClass, member).length > 0;
+        List<EncapsulatableClassMember> members = ContainerUtil.findAll(
+            list,
+            member -> {
+                try {
+                    return generateMemberPrototypes(aClass, member).length > 0;
+                }
+                catch (GenerateCodeException e) {
+                    return true;
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                    return false;
+                }
             }
-            catch (GenerateCodeException e) {
-                return true;
-            }
-            catch (IncorrectOperationException e) {
-                LOG.error(e);
-                return false;
-            }
-        });
+        );
         return members.toArray(new ClassMember[members.size()]);
     }
-
-
 }
