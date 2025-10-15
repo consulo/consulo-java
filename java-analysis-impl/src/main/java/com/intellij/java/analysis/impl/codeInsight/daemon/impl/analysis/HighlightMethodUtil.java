@@ -2335,7 +2335,7 @@ public class HighlightMethodUtil {
                     2
                 ),
                 null,
-                null,
+                LocalizeValue.of(),
                 fixRange,
                 null
             );
@@ -2349,7 +2349,7 @@ public class HighlightMethodUtil {
                     2
                 ),
                 null,
-                null,
+                LocalizeValue.of(),
                 fixRange,
                 null
             );
