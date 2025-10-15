@@ -18,7 +18,6 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
@@ -846,9 +845,9 @@ public class HighlightControlFlowUtil {
             if (isToBeEffectivelyFinal && isEffectivelyFinal(variable, innerClass, context)) {
                 return null;
             }
-            String description = isToBeEffectivelyFinal
-                ? JavaErrorBundle.message("variable.must.be.final.or.effectively.final", context.getText())
-                : JavaErrorLocalize.variableMustBeFinal(context.getText()).get();
+            LocalizeValue description = isToBeEffectivelyFinal
+                ? JavaErrorLocalize.variableMustBeFinalOrEffectivelyFinal(context.getText())
+                : JavaErrorLocalize.variableMustBeFinal(context.getText());
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(context)
                 .descriptionAndTooltip(description)
