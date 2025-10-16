@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
 import com.siyeh.ig.psiutils.BoolUtils;
-import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.intellij.java.analysis.codeInspection.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.annotation.access.RequiredReadAction;
