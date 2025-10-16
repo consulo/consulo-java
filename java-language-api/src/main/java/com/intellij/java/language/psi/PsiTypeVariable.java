@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.psi;
-
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeVisitor;
+package com.intellij.java.language.psi;
 
 import jakarta.annotation.Nonnull;
 
@@ -25,20 +21,21 @@ import jakarta.annotation.Nonnull;
  * Used in Generify refactoring
  */
 public abstract class PsiTypeVariable extends PsiType {
-  protected PsiTypeVariable() {
-    super(PsiAnnotation.EMPTY_ARRAY);
-  }
-
-  public abstract int getIndex();
-  public abstract boolean isValidInContext (PsiType type);
-
-  @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
-    if (visitor instanceof PsiTypeVisitorEx) {
-      return ((PsiTypeVisitorEx<A>)visitor).visitTypeVariable(this);
+    protected PsiTypeVariable() {
+        super(PsiAnnotation.EMPTY_ARRAY);
     }
-    else {
-      return visitor.visitType(this);
+
+    public abstract int getIndex();
+
+    public abstract boolean isValidInContext(PsiType type);
+
+    @Override
+    public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+        if (visitor instanceof PsiTypeVisitorEx) {
+            return ((PsiTypeVisitorEx<A>) visitor).visitTypeVariable(this);
+        }
+        else {
+            return visitor.visitType(this);
+        }
     }
-  }
 }

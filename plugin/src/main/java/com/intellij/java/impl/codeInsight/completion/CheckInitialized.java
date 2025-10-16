@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.ExpressionUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.completion.CompletionUtilCore;

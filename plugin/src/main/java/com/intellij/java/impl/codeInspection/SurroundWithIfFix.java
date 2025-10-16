@@ -20,7 +20,7 @@ import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfSurr
 import com.intellij.java.impl.ipp.trivialif.MergeIfAndIntention;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;

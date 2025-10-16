@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import com.intellij.java.impl.ig.psiutils.SwitchUtils;
+import com.intellij.java.analysis.impl.codeInspection.SwitchUtils;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.siyeh.ig.BaseInspection;

@@ -19,7 +19,7 @@ import com.intellij.java.impl.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.fileEditor.SelectInEditorManager;

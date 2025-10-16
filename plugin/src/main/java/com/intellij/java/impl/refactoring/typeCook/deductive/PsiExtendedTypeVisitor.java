@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.typeCook.deductive;
 
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.impl.psi.PsiTypeVisitorEx;
+import com.intellij.java.language.psi.PsiTypeVisitorEx;
 
 /**
  * @author db

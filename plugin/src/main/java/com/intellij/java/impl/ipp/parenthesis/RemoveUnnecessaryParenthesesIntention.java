@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.parenthesis;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;

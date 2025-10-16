@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive;
 
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;

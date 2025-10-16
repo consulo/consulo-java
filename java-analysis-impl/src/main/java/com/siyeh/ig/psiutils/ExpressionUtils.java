@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;

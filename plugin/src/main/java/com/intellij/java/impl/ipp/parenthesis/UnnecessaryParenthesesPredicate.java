@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import consulo.language.psi.*;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class UnnecessaryParenthesesPredicate implements PsiElementPredicate

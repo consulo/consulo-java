@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
-import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.util.matcher.PrefixMatcher;

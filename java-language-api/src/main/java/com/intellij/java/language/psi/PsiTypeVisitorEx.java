@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.psi;
+package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.PsiTypeVisitor;
 

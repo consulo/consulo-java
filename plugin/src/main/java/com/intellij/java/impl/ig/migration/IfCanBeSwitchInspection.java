@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import com.intellij.java.impl.ig.psiutils.SwitchUtils;
+import com.intellij.java.analysis.impl.codeInspection.SwitchUtils;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
-import com.siyeh.ig.psiutils.EquivalenceChecker;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;

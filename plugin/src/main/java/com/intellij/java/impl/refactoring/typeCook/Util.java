@@ -16,8 +16,8 @@
 package com.intellij.java.impl.refactoring.typeCook;
 
 import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
-import com.intellij.java.language.impl.psi.Bottom;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.Bottom;
+import com.intellij.java.language.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiElement;

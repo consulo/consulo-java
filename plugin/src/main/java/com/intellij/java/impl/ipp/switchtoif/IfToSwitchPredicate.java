@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ipp.switchtoif;
 
+import com.intellij.java.analysis.impl.codeInspection.SwitchUtils;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIfStatement;
@@ -40,6 +41,6 @@ class IfToSwitchPredicate implements PsiElementPredicate {
     if (ErrorUtil.containsError(statement)) {
       return false;
     }
-    return SwitchUtils.getSwitchExpression(statement) != null;
+    return SwitchUtils.getSwitchExpression(statement, 3) != null;
   }
 }

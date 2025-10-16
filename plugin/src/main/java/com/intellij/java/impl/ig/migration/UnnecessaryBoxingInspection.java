@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.migration;
 
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

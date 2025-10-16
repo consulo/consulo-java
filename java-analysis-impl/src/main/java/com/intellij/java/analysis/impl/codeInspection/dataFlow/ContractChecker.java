@@ -11,7 +11,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationTyp
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;

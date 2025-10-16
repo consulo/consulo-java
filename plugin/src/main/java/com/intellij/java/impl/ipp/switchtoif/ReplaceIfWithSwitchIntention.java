@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.ipp.switchtoif;
 
+import com.intellij.java.analysis.impl.codeInspection.SwitchUtils;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.language.psi.*;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
@@ -78,7 +79,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
             }
         }
         final PsiIfStatement statementToReplace = ifStatement;
-        final PsiExpression switchExpression = SwitchUtils.getSwitchExpression(ifStatement);
+        final PsiExpression switchExpression = SwitchUtils.getSwitchExpression(ifStatement, 3);
         if (switchExpression == null) {
             return;
         }

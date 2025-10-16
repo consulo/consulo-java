@@ -246,6 +246,8 @@ group.names.junit.issues:
     text: JUnit issues
 group.names.language.level.specific.issues.and.migration.aids:
     text: Language level migration aids
+group.names.language.level.specific.issues.and.migration.aids14:
+    text: Java 14
 group.names.language.level.specific.issues.and.migration.aids5:
     text: Java 5
 group.names.language.level.specific.issues.and.migration.aids7:
@@ -1170,6 +1172,14 @@ inspection.replace.with.bulk.message:
     text: Iteration can be replaced with bulk ''{0}'' call
 inspection.replace.with.bulk.wrap.arrays:
     text: Use Arrays.asList() to wrap arrays
+inspection.replace.with.enhanced.switch.statement.fix.name:
+    text: Replace with enhanced 'switch' statement
+inspection.replace.with.switch.expression.fix.family.name:
+    text: Migrate to enhanced switch
+inspection.replace.with.switch.expression.fix.name:
+    text: Replace with 'switch' expression
+inspection.replace.with.switch.rule.expression.fix.family.name:
+    text: Migrate to enhanced switch with rules
 inspection.replace.with.trivial.lambda.fix.family.name:
     text: Replace with trivial lambda
 inspection.replace.with.trivial.lambda.fix.name:
@@ -1246,6 +1256,16 @@ inspection.suspicious.collections.method.calls.problem.descriptor:
     text: '''''{0}'''' may not contain objects of type ''''{1}'''''
 inspection.suspicious.collections.method.calls.problem.descriptor1:
     text: Suspicious call to ''{0}''
+inspection.switch.expression.migration.expression.max.statements:
+    text: Maximum number of statements in one branch to convert to switch expression
+inspection.switch.expression.migration.inspection.switch.description:
+    text: Switch statement can be replaced with enhanced 'switch'
+inspection.switch.expression.migration.inspection.switch.expression.description:
+    text: Switch expression can be replaced with enhanced 'switch' with rules
+inspection.switch.expression.migration.option.expression.max.statements:
+    text: Do not report switches having more than {0} {0, choice, 1#statement|2#statements} in a single branch
+inspection.switch.expression.migration.warn.only.on.expression:
+    text: Show warning only if conversion to expression is possible
 inspection.test.only.problems.display.name:
     text: Test-only class or method call in production code
 inspection.test.only.problems.test.only.class.reference:

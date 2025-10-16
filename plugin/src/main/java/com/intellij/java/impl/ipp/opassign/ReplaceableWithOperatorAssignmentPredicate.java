@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;

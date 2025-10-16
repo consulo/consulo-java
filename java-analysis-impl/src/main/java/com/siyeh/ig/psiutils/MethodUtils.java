@@ -15,6 +15,9 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;

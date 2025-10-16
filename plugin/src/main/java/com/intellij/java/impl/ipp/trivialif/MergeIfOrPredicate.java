@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;

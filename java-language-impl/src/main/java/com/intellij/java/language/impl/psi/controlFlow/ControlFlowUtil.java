@@ -2,8 +2,8 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.ExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.impl.psi.DummyHolder;
 import consulo.language.psi.PsiDirectory;
@@ -17,9 +17,9 @@ import consulo.util.collection.SmartList;
 import consulo.util.collection.primitive.ints.*;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.siyeh.ig.psiutils;
+package com.intellij.java.analysis.codeInspection;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;

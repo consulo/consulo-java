@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.language.ast.IElementType;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 

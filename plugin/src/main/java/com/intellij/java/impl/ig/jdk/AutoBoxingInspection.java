@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;

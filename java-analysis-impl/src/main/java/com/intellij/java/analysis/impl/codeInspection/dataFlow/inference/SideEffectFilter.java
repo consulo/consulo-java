@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodCon
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 

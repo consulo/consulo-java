@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.psi;
+package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
+import jakarta.annotation.Nonnull;
 
 /**
  * Used in Generify refactoring

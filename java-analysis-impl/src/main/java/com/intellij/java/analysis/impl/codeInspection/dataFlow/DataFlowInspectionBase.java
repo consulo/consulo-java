@@ -3,6 +3,8 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.analysis.impl.codeInspection.SetInspectionOptionFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind.NullabilityProblem;
@@ -15,14 +17,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.nullable.NullableStuffInspectionBase;
 import com.intellij.java.language.codeInsight.*;
-import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
 import com.siyeh.ig.bugs.EqualsWithItselfInspection;
 import com.siyeh.ig.fixes.EqualsToEqualityFix;

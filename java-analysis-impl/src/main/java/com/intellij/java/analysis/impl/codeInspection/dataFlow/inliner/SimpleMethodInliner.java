@@ -1,15 +1,15 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.ExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ref.Ref;

@@ -469,6 +469,10 @@ jdk.22.language.level.description:
     text: 22 - Unnamed variables and patterns
 jdk.22.preview.language.level.description:
     text: 22 (Preview) - Statements before super(), string templates (2nd preview) etc.
+jdk.23.language.level.description:
+    text: 23 - Markdown documentation comments
+jdk.23.preview.language.level.description:
+    text: 23 (Preview) - Primitive types in patterns, implicitly declared classes, etc.
 jdk.X.language.level.description:
     text: X - Experimental features
 jdk.unsupported.preview.language.level.description:

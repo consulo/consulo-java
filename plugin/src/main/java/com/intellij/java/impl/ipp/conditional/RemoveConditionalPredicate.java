@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 

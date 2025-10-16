@@ -21,8 +21,8 @@ import com.intellij.java.impl.refactoring.typeCook.deductive.PsiExtendedTypeVisi
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.Constraint;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.ReductionSystem;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.Subtype;
-import com.intellij.java.language.impl.psi.Bottom;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.Bottom;
+import com.intellij.java.language.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;

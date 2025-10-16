@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.codeInsight.BlockUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
-import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import com.siyeh.ig.psiutils.StatementExtractor;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;

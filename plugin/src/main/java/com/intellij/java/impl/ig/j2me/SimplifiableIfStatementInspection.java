@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

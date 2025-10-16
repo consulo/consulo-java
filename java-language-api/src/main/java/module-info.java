@@ -49,5 +49,7 @@ open module consulo.java.language.api {
   exports consulo.java.language.psi;
   exports consulo.java.language.localize;
 
+  requires one.util.streamex;
+
   exports com.intellij.java.language.internal to consulo.java;
 }

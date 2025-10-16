@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.language.psi.*;
 import consulo.application.progress.ProgressManager;

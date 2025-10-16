@@ -20,7 +20,7 @@ import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 
 class StringVariableIsAppendedToVisitor extends JavaRecursiveElementVisitor {
 

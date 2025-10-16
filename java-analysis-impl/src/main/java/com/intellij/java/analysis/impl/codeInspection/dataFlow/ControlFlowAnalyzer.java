@@ -2,6 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
+import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.UnusedSymbolUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ControlFlow.ControlFlowOffset;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Trap.InsideFinally;

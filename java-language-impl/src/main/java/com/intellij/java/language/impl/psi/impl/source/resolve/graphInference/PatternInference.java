@@ -2,12 +2,12 @@
 package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference;
 
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import com.intellij.java.language.impl.psi.impl.source.JavaVarTypeUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.PatternCandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.JavaVarTypeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;

@@ -15,11 +15,13 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
+import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import consulo.language.editor.inspection.*;
@@ -31,12 +33,32 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Set;
+
 public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalInspectionTool implements OldStyleInspection {
+    /**
+     * @return set of the features required for a given inspection. The inspection will not be launched on the files where
+     * the corresponding features are not available.
+     */
+    @Nonnull
+    public Set<JavaFeature> requiredFeatures() {
+        return Set.of();
+    }
+
+    @Override
+    public boolean isAvailableForFile(@Nonnull PsiFile file) {
+        for (JavaFeature feature : requiredFeatures()) {
+            if (!PsiUtil.isAvailable(feature, file)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Override this to report problems at method level.
      *

@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.psi.impl.source;
+package com.intellij.java.language.psi.util;
 
-import com.intellij.java.language.impl.psi.PsiTypeVisitorEx;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.RecursionManager;
 import consulo.language.psi.PsiManager;
 import consulo.util.collection.ArrayUtil;

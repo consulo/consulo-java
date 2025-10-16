@@ -16,28 +16,16 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.NavigatablePsiElement;
-import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
 import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java local variable.
  */
 public interface PsiLocalVariable extends PsiVariable, NavigatablePsiElement {
-  /**
-   * Adds initializer to the variable declaration statement or, if <code>initializer</code>
-   * parameter is null, removes initializer from variable.
-   *
-   * @param initializer the initializer to add.
-   * @throws IncorrectOperationException if the modifications fails for some reason.
-   * @since 5.0.2
-   */
-  void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Nonnull
-  PsiTypeElement getTypeElement();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Nonnull
+    PsiTypeElement getTypeElement();
 }

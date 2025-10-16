@@ -61,5 +61,10 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
+            <version>0.7.1</version>
+        </dependency>
     </dependencies>
 </project>

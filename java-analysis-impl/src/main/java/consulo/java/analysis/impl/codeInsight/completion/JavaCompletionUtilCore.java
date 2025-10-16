@@ -21,7 +21,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.function.PairFunction;
-import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nullable;
 

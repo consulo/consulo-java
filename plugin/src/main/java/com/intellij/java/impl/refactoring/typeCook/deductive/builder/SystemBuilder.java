@@ -21,7 +21,7 @@ import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFact
 import com.intellij.java.impl.refactoring.typeCook.deductive.util.VictimCollector;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

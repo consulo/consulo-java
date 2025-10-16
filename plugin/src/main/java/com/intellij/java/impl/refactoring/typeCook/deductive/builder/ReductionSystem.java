@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive.builder;
 
-import com.intellij.java.language.impl.psi.Bottom;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.Bottom;
+import com.intellij.java.language.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.language.psi.*;
