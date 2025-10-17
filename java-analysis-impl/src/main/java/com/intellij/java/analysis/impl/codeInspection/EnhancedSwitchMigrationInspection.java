@@ -133,21 +133,21 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                     List<LocalQuickFix> fixes = new ArrayList<>();
                     fixes.add(new ReplaceWithSwitchExpressionFix(replacer.getType()));
                     if (!state.myWarnOnlyOnExpressionConversion && replacer.getType() == ReplacementType.Statement) {
-                        //TODO
-//                        fixes.add(LocalQuickFix.from(new UpdateInspectionOptionFix(
-//                            EnhancedSwitchMigrationInspection.this, "myWarnOnlyOnExpressionConversion",
-//                            JavaBundle.message("inspection.switch.expression.migration.warn.only.on.expression"),
-//                            true)));
+                        fixes.add(new UpdateInspectionOptionFix<EnhancedSwitchMigrationInspection, EnhancedSwitchMigrationInspectionState>(
+                            EnhancedSwitchMigrationInspection.this,
+                            JavaInspectionsLocalize.inspectionSwitchExpressionMigrationWarnOnlyOnExpression(),
+                            state -> state.myWarnOnlyOnExpressionConversion = true));
                     }
                     if (replacer.getType() == ReplacementType.Expression &&
                         replacer.getMaxNumberStatementsInBranch() != null &&
                         replacer.getMaxNumberStatementsInBranch() > 1) {
                         int newMaxValue = replacer.getMaxNumberStatementsInBranch() - 1;
-                        //TODO
-//                        fixes.add(LocalQuickFix.from(new UpdateInspectionOptionFix(
-//                            EnhancedSwitchMigrationInspection.this, "myMaxNumberStatementsForBranch",
-//                            JavaBundle.message("inspection.switch.expression.migration.option.expression.max.statements", newMaxValue),
-//                            newMaxValue)));
+
+                        fixes.add(new UpdateInspectionOptionFix<EnhancedSwitchMigrationInspection, EnhancedSwitchMigrationInspectionState>(
+                            EnhancedSwitchMigrationInspection.this,
+                            JavaInspectionsLocalize.inspectionSwitchExpressionMigrationOptionExpressionMaxStatements(newMaxValue),
+                            state -> state.myMaxNumberStatementsForBranch = newMaxValue)
+                        );
                     }
                     holder.registerProblem(switchKeyword, JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchDescription().get(),
                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
