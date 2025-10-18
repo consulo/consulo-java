@@ -50,6 +50,7 @@ import consulo.ui.ex.awt.DialogBuilder;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.EmptyRunnable;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
@@ -380,7 +381,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
             methodParameterInjection = createFrom(project, originalCopy, contextMethod, false);
         }
 
-        ShowSettingsUtil.getInstance().editConfigurable(project, new MethodParameterInjectionConfigurable(methodParameterInjection, null, project)).doWhenDone(() -> {
+        ShowSettingsUtil.getInstance().editConfigurable(project, new MethodParameterInjectionConfigurable(methodParameterInjection, EmptyRunnable.getInstance(), project)).doWhenDone(() -> {
             final BaseInjection newInjection = new BaseInjection(methodParameterInjection.getSupportId()).copyFrom(methodParameterInjection);
             if (originalInjection != null) {
                 newInjection.mergeOriginalPlacesFrom(originalInjection, true);
