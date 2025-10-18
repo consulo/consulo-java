@@ -33,6 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
@@ -141,8 +142,8 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
 
   @Nonnull
   @Override
-  public String getName() {
-    return "Icon preview";
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Icon preview");
   }
 
   @Nonnull

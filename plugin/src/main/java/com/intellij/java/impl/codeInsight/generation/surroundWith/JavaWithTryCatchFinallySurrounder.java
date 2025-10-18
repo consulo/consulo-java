@@ -17,11 +17,12 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.localize.LocalizeValue;
 
 class JavaWithTryCatchFinallySurrounder extends JavaWithTryCatchSurrounder{
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithTryCatchFinallyTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithTryCatchFinallyTemplate();
   }
 
   public JavaWithTryCatchFinallySurrounder() {

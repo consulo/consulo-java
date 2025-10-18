@@ -43,6 +43,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionActionDelegate;
 import consulo.language.editor.intention.IntentionManager;
 import consulo.language.psi.*;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RelativePoint;
@@ -114,8 +115,8 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 
   @Nonnull
   @Override
-  public String getName() {
-    return "External annotations";
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("External annotations");
   }
 
   @Nullable

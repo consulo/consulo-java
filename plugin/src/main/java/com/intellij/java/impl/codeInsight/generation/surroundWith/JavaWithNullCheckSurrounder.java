@@ -26,6 +26,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -66,7 +67,7 @@ class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{
   }
 
   @Override
-  public String getTemplateDescription() {
-    return "if (expr != null) {...}";
+  public LocalizeValue getTemplateDescription() {
+    return LocalizeValue.localizeTODO("if (expr != null) {...}");
   }
 }

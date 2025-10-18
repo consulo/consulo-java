@@ -29,6 +29,7 @@ import consulo.language.editor.gutter.LineMarkerInfo;
 import consulo.language.editor.gutter.LineMarkerProviderDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
 import consulo.util.lang.Comparing;
@@ -85,8 +86,8 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 
   @Nonnull
   @Override
-  public String getName() {
-    return "Recursive call";
+  public LocalizeValue getName() {
+    return LocalizeValue.localizeTODO("Recursive call");
   }
 
   @Nullable

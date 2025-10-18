@@ -282,6 +282,8 @@ settings.inlay.java.turn.on.showInferred.annotations:
     text: Turn on Inferred Annotations
 settings.inlay.java.usages:
     text: Usages
+switch.stmt.template.description:
+    text: switch (expr) '{'...'}'
 title.annotation:
     text: Annotation
 title.class:

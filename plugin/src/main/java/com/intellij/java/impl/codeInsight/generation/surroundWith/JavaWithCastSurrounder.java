@@ -29,6 +29,7 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.*;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -105,7 +106,7 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
   }
 
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithCastTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithCastTemplate();
   }
 }

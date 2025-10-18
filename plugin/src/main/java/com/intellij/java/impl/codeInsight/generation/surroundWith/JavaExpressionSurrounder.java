@@ -21,21 +21,17 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.codeEditor.Editor;
-import consulo.component.extension.ExtensionPointName;
 import consulo.document.util.TextRange;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaExpressionSurrounder implements Surrounder {
-    public static ExtensionPointName<JavaExpressionSurrounder> EP_NAME = ExtensionPointName.create(JavaExpressionSurrounder.class);
-
-    private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.surroundWith.SurroundExpressionHandler");
+    private static final Logger LOG = Logger.getInstance(JavaExpressionSurrounder.class);
 
     @Override
     public boolean isApplicable(@Nonnull PsiElement[] elements) {

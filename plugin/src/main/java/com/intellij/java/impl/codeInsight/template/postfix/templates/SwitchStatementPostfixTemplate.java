@@ -11,7 +11,7 @@ import consulo.application.dumb.DumbAware;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionSelector;
@@ -21,6 +21,7 @@ import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
@@ -128,9 +129,10 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                 return TextRange.from(editor.getCaretModel().getOffset(), 0);
             }
 
+            @Nonnull
             @Override
-            public String getTemplateDescription() {
-                return JavaBundle.message("switch.stmt.template.description");
+            public LocalizeValue getTemplateDescription() {
+                return JavaLocalize.switchStmtTemplateDescription();
             }
         };
     }

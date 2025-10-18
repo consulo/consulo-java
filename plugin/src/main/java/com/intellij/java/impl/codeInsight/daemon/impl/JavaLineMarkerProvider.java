@@ -67,7 +67,7 @@ import java.util.function.Supplier;
 @ExtensionImpl
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     public static final Option LAMBDA_OPTION =
-        new Option("java.lambda", JavaLocalize.titleLambda().get(), PlatformIconGroup.gutterImplementingfunctionalinterface()) {
+        new Option("java.lambda", JavaLocalize.titleLambda(), PlatformIconGroup.gutterImplementingfunctionalinterface()) {
             @Override
             public boolean isEnabledByDefault() {
                 return false;
@@ -75,21 +75,21 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         };
 
     private final Option myOverriddenOption =
-        new Option("java.overridden", JavaLocalize.gutterOverriddenMethod().get(), PlatformIconGroup.gutterOverridenmethod());
+        new Option("java.overridden", JavaLocalize.gutterOverriddenMethod(), PlatformIconGroup.gutterOverridenmethod());
     private final Option myImplementedOption =
-        new Option("java.implemented", JavaLocalize.gutterImplementedMethod().get(), PlatformIconGroup.gutterImplementedmethod());
+        new Option("java.implemented", JavaLocalize.gutterImplementedMethod(), PlatformIconGroup.gutterImplementedmethod());
     private final Option myOverridingOption =
-        new Option("java.overriding", JavaLocalize.gutterOverridingMethod().get(), PlatformIconGroup.gutterOverridingmethod());
+        new Option("java.overriding", JavaLocalize.gutterOverridingMethod(), PlatformIconGroup.gutterOverridingmethod());
     private final Option myImplementingOption =
-        new Option("java.implementing", JavaLocalize.gutterImplementingMethod().get(), PlatformIconGroup.gutterImplementingmethod());
+        new Option("java.implementing", JavaLocalize.gutterImplementingMethod(), PlatformIconGroup.gutterImplementingmethod());
     private final Option mySiblingsOption =
         new Option(
             "java.sibling.inherited",
-            JavaLocalize.gutterSiblingInheritedMethod().get(),
+            JavaLocalize.gutterSiblingInheritedMethod(),
             PlatformIconGroup.gutterSiblinginheritedmethod()
         );
     private final Option myServiceOption =
-        new Option("java.service", JavaLocalize.gutterService().get(), JavaPsiImplIconGroup.gutterJava9service());
+        new Option("java.service", JavaLocalize.gutterService(), JavaPsiImplIconGroup.gutterJava9service());
 
     protected final Application myApplication;
     protected final DaemonCodeAnalyzerSettings myDaemonSettings;
@@ -433,8 +433,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     }
 
     @Override
-    public String getName() {
-        return "Java line markers";
+    public LocalizeValue getName() {
+        return LocalizeValue.localizeTODO("Java line markers");
     }
 
     @Override

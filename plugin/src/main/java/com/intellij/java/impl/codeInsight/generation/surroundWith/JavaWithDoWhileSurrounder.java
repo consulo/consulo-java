@@ -26,13 +26,14 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 class JavaWithDoWhileSurrounder extends JavaStatementsSurrounder{
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithDowhileTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithDowhileTemplate();
   }
 
   @Override

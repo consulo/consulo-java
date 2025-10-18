@@ -27,14 +27,15 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 class JavaWithTryFinallySurrounder extends JavaStatementsSurrounder{
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithTryFinallyTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithTryFinallyTemplate();
   }
 
   @Override

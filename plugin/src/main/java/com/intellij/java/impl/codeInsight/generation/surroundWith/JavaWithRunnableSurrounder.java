@@ -30,6 +30,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
@@ -40,8 +41,8 @@ import java.util.Collection;
 
 public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithRunnableTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithRunnableTemplate();
   }
 
   @Override

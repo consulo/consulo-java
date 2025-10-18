@@ -27,6 +27,7 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 class JavaWithParenthesesSurrounder extends JavaExpressionSurrounder{
@@ -50,7 +51,7 @@ class JavaWithParenthesesSurrounder extends JavaExpressionSurrounder{
   }
 
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithParenthesisTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithParenthesisTemplate();
   }
 }

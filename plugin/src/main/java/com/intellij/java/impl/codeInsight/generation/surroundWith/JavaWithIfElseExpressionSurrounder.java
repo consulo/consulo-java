@@ -25,6 +25,7 @@ import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
@@ -55,7 +56,7 @@ public class JavaWithIfElseExpressionSurrounder extends JavaWithIfExpressionSurr
   }
 
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithIfelseExpressionTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithIfelseExpressionTemplate();
   }
 }

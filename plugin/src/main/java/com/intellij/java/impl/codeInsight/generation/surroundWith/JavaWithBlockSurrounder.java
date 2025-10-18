@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiElementFactory;
 import consulo.codeEditor.Editor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.language.psi.*;
@@ -29,8 +30,8 @@ import consulo.language.util.IncorrectOperationException;
 
 class JavaWithBlockSurrounder extends JavaStatementsSurrounder{
   @Override
-  public String getTemplateDescription() {
-    return "{ }";
+  public LocalizeValue getTemplateDescription() {
+    return LocalizeValue.localizeTODO("{ }");
   }
 
   @Override

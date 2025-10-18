@@ -25,6 +25,7 @@ import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 class JavaWithNotInstanceofSurrounder extends JavaExpressionSurrounder {
@@ -56,7 +57,7 @@ class JavaWithNotInstanceofSurrounder extends JavaExpressionSurrounder {
   }
 
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithNotInstanceofTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithNotInstanceofTemplate();
   }
 }

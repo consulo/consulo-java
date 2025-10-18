@@ -37,6 +37,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
@@ -50,8 +51,8 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
     @Override
-    public String getTemplateDescription() {
-        return CodeInsightLocalize.surroundWithRuntimeTypeTemplate().get();
+    public LocalizeValue getTemplateDescription() {
+        return CodeInsightLocalize.surroundWithRuntimeTypeTemplate();
     }
 
     @Override

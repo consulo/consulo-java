@@ -26,6 +26,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
@@ -37,8 +38,8 @@ public class JavaWithTryCatchSurrounder extends JavaStatementsSurrounder {
   protected boolean myGenerateFinally = false;
 
   @Override
-  public String getTemplateDescription() {
-    return CodeInsightLocalize.surroundWithTryCatchTemplate().get();
+  public LocalizeValue getTemplateDescription() {
+    return CodeInsightLocalize.surroundWithTryCatchTemplate();
   }
 
   @Override
