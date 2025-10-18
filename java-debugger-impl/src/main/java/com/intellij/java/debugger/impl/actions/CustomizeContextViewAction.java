@@ -71,7 +71,7 @@ public class CustomizeContextViewAction extends DumbAwareAction {
             @RequiredUIAccess
             protected void createConfigurableTabs() {
                 for (Configurable configurable : getConfigurables()) {
-                    JComponent component = configurable.createComponent();
+                    JComponent component = configurable.createComponent(disposable);
                     assert component != null;
                     component.setBorder(new EmptyBorder(8, 8, 8, 8));
                     myTabbedPane.addTab(configurable.getDisplayName().get(), component);
