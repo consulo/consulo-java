@@ -37,6 +37,7 @@ import consulo.execution.debug.frame.XValueModifier;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
@@ -255,7 +256,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
     }
 
     @Override
-    protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
+    protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
 
         final NodeRenderer renderer = getRenderer(context.getDebugProcess());
@@ -286,7 +287,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
         setValueLabel(label);
 
-        return ""; // we have overridden getLabel
+        return LocalizeValue.empty(); // we have overridden getLabel
     }
 
     private String calcIdLabel() {
@@ -302,8 +303,8 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
     }
 
     @Override
-    public String getLabel() {
-        return calcValueName() + getDeclaredTypeLabel() + " = " + getValueLabel();
+    public LocalizeValue getLabel() {
+        return LocalizeValue.of(calcValueName() + getDeclaredTypeLabel() + " = " + getValueLabel());
     }
 
     public ValueDescriptorImpl getFullValueDescriptor() {

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.image.impl;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
@@ -29,13 +28,13 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringBasedRenderer;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.image.Image;
-import jakarta.inject.Inject;
-
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 /**
  * Created by Egor on 04.10.2014.
@@ -75,7 +74,7 @@ class IconObjectRenderer extends ToStringBasedRenderer implements FullValueEvalu
   @Override
   public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
                                                    final ValueDescriptorImpl valueDescriptor) {
-    return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.icon"), evaluationContext) {
+    return new ImageObjectRenderer.IconPopupEvaluator(JavaDebuggerLocalize.messageNodeShowIcon(), evaluationContext) {
       @Override
       protected Image getData() {
         return ImageObjectRenderer.getIcon(getEvaluationContext(), valueDescriptor.getValue(), "iconToBytes");

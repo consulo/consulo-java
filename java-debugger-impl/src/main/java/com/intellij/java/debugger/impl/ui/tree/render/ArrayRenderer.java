@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
@@ -36,6 +35,7 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -56,13 +56,13 @@ import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -70,7 +70,6 @@ import java.util.Collections;
 public class ArrayRenderer extends NodeRendererImpl {
     private static final Logger LOG = Logger.getInstance(ArrayRenderer.class);
 
-    @NonNls
     public static final String UNIQUE_ID = "ArrayRenderer";
 
     public int myStartIndex = 0;
@@ -89,9 +88,7 @@ public class ArrayRenderer extends NodeRendererImpl {
     }
 
     @Override
-    public
-    @NonNls
-    String getName() {
+    public String getName() {
         return "Array";
     }
 
@@ -156,15 +153,15 @@ public class ArrayRenderer extends NodeRendererImpl {
 
             if (added == 0) {
                 if (myStartIndex == 0 && arrayLength - 1 <= myEndIndex) {
-                    builder.setMessage(DebuggerBundle.message("message.node.all.elements.null"), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(JavaDebuggerLocalize.messageNodeAllElementsNull().get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
                 }
                 else {
-                    builder.setMessage(DebuggerBundle.message("message.node.all.array.elements.null", myStartIndex, myEndIndex), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(JavaDebuggerLocalize.messageNodeAllArrayElementsNull(myStartIndex, myEndIndex).get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
                 }
             }
             else {
                 if (hiddenNulls) {
-                    builder.setMessage(DebuggerBundle.message("message.node.elements.null.hidden"), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(JavaDebuggerLocalize.messageNodeElementsNullHidden().get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
                 }
                 if (!myForced && idx < end) {
                     builder.tooManyChildren(end - idx);
@@ -236,7 +233,7 @@ public class ArrayRenderer extends NodeRendererImpl {
             NodeManagerImpl nodeManager = (NodeManagerImpl) builder.getNodeManager();
             NodeDescriptorFactory descriptorFactory = builder.getDescriptorManager();
 
-            builder.setMessage(DebuggerBundle.message("message.node.filtered") + " " + myExpression.getExpression(), AllIcons.General.Filter, SimpleTextAttributes.REGULAR_ATTRIBUTES,
+            builder.setMessage(JavaDebuggerLocalize.messageNodeFiltered().get() + " " + myExpression.getExpression(), AllIcons.General.Filter, SimpleTextAttributes.REGULAR_ATTRIBUTES,
                 FILTER_HYPERLINK);
 
             if (myEntriesLimit <= 0) {
@@ -298,7 +295,7 @@ public class ArrayRenderer extends NodeRendererImpl {
             }
         }
 
-        public static final XDebuggerTreeNodeHyperlink FILTER_HYPERLINK = new XDebuggerTreeNodeHyperlink(" clear") {
+        public static final XDebuggerTreeNodeHyperlink FILTER_HYPERLINK = new XDebuggerTreeNodeHyperlink(LocalizeValue.localizeTODO(" clear")) {
             @Override
             public void onClick(MouseEvent e) {
                 DataContext context = DataManager.getInstance().getDataContext(e.getComponent());

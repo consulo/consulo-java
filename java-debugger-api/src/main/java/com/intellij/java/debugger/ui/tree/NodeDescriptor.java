@@ -15,15 +15,15 @@
  */
 package com.intellij.java.debugger.ui.tree;
 
+import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.UserDataHolder;
 
-public interface NodeDescriptor extends UserDataHolder
-{
-	String getName();
+public interface NodeDescriptor extends UserDataHolder {
+    String getName();
 
-	String getLabel();
+    LocalizeValue getLabel();
 
-	void displayAs(NodeDescriptor descriptor);
+    void displayAs(NodeDescriptor descriptor);
 
-	void setAncestor(NodeDescriptor oldDescriptor);
+    void setAncestor(NodeDescriptor oldDescriptor);
 }

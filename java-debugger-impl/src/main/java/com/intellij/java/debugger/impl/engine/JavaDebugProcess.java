@@ -147,7 +147,7 @@ public class JavaDebugProcess extends XDebugProcess {
             }
 
             @Override
-            public DebuggerTreeNodeImpl createMessageNode(String message) {
+            public DebuggerTreeNodeImpl createMessageNode(LocalizeValue message) {
                 return new DebuggerTreeNodeImpl(null, new MessageDescriptor(message));
             }
         };
@@ -506,10 +506,11 @@ public class JavaDebugProcess extends XDebugProcess {
         return myNodeManager;
     }
 
+    @Nonnull
     @Override
-    public String getCurrentStateMessage() {
-        String description = myJavaSession.getStateDescription();
-        return description != null ? description : super.getCurrentStateMessage();
+    public LocalizeValue getCurrentStateMessage() {
+        LocalizeValue description = myJavaSession.getStateDescription();
+        return description != LocalizeValue.empty() ? description : super.getCurrentStateMessage();
     }
 
     @Nullable

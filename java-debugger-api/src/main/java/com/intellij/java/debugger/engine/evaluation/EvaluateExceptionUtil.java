@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.engine.evaluation;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.DeprecationInfo;
 import consulo.internal.com.sun.jdi.*;
@@ -27,27 +26,27 @@ import jakarta.annotation.Nonnull;
  */
 public class EvaluateExceptionUtil {
     public static final EvaluateException INCONSISTEND_DEBUG_INFO =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.inconsistent.debug.info"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorInconsistentDebugInfo());
     public static final EvaluateException BOOLEAN_EXPECTED =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.boolean.value.expected.in.condition"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorBooleanValueExpectedInCondition());
     public static final EvaluateException PROCESS_EXITED =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.process.exited"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorProcessExited());
     public static final EvaluateException NULL_STACK_FRAME =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.stack.frame.unavailable"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorStackFrameUnavailable());
     public static final EvaluateException NESTED_EVALUATION_ERROR =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.nested.evaluation"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorNestedEvaluation());
     public static final EvaluateException INVALID_DEBUG_INFO =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.sources.out.of.sync"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorSourcesOutOfSync());
     public static final EvaluateException CANNOT_FIND_SOURCE_CLASS =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.cannot.find.stackframe.source"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorCannotFindStackframeSource());
     public static final EvaluateException OBJECT_WAS_COLLECTED =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.object.collected"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorObjectCollected());
     public static final EvaluateException ARRAY_WAS_COLLECTED =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.array.collected"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorArrayCollected());
     public static final EvaluateException THREAD_WAS_RESUMED =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.thread.resumed"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorThreadResumed());
     public static final EvaluateException DEBUG_INFO_UNAVAILABLE =
-        createEvaluateException(DebuggerBundle.message("evaluation.error.debug.info.unavailable"));
+        createEvaluateException(JavaDebuggerLocalize.evaluationErrorDebugInfoUnavailable());
 
     private EvaluateExceptionUtil() {
     }

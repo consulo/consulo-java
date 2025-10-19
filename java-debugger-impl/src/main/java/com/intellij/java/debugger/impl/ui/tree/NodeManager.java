@@ -17,9 +17,10 @@ package com.intellij.java.debugger.impl.ui.tree;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.localize.LocalizeValue;
 
 public interface NodeManager {
-  DebuggerTreeNode createMessageNode(String s);
+  DebuggerTreeNode createMessageNode(LocalizeValue s);
 
   DebuggerTreeNode createNode(NodeDescriptor nodeDescriptor, EvaluationContext evaluationContext);
 }

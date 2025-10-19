@@ -15,12 +15,13 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import consulo.execution.debug.ui.XDebuggerUIConstants;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.execution.debug.localize.XDebuggerLocalize;
+import consulo.localize.LocalizeValue;
 
 public class MessageDescriptor extends NodeDescriptorImpl {
   public static final int ERROR = 0;
@@ -28,29 +29,29 @@ public class MessageDescriptor extends NodeDescriptorImpl {
   public static final int INFORMATION = 2;
   public static final int SPECIAL = 3;
   private int myKind;
-  private String myMessage;
+  private LocalizeValue myMessage;
 
-  public static MessageDescriptor DEBUG_INFO_UNAVAILABLE = new MessageDescriptor(DebuggerBundle.message("message.node.debug.info.not.available"));
+  public static MessageDescriptor DEBUG_INFO_UNAVAILABLE = new MessageDescriptor(JavaDebuggerLocalize.messageNodeDebugInfoNotAvailable());
   public static MessageDescriptor LOCAL_VARIABLES_INFO_UNAVAILABLE = new MessageDescriptor(
-    DebuggerBundle.message("message.node.local.variables.debug.info.not.available")
+      JavaDebuggerLocalize.messageNodeLocalVariablesDebugInfoNotAvailable()
   );
   public static MessageDescriptor ALL_ELEMENTS_IN_VISIBLE_RANGE_ARE_NULL = new MessageDescriptor(
-    DebuggerBundle.message("message.node.all.array.elements.null"));
+      JavaDebuggerLocalize.messageNodeAllArrayElementsNull("", ""));
   public static MessageDescriptor ALL_ELEMENTS_IN_RANGE_ARE_NULL = new MessageDescriptor(
-    DebuggerBundle.message("message.node.all.elements.null"));
-  public static MessageDescriptor ARRAY_IS_EMPTY = new MessageDescriptor(DebuggerBundle.message("message.node.empty.array"));
-  public static MessageDescriptor CLASS_HAS_NO_FIELDS = new MessageDescriptor(DebuggerBundle.message("message.node.class.has.no.fields"));
-  public static MessageDescriptor OBJECT_COLLECTED = new MessageDescriptor(DebuggerBundle.message("message.node.object.collected"));
-  public static MessageDescriptor EVALUATING = new MessageDescriptor(XDebuggerUIConstants.COLLECTING_DATA_MESSAGE);
-  public static MessageDescriptor THREAD_IS_RUNNING = new MessageDescriptor(DebuggerBundle.message("message.node.thread.running"));
-  public static MessageDescriptor THREAD_IS_EMPTY = new MessageDescriptor(DebuggerBundle.message("message.node.thread.has.no.frames"));
-  public static MessageDescriptor EVALUATION_NOT_POSSIBLE = new MessageDescriptor(DebuggerBundle.message("message.node.evaluation.not.possible", WARNING));
+      JavaDebuggerLocalize.messageNodeAllElementsNull());
+  public static MessageDescriptor ARRAY_IS_EMPTY = new MessageDescriptor(JavaDebuggerLocalize.messageNodeEmptyArray());
+  public static MessageDescriptor CLASS_HAS_NO_FIELDS = new MessageDescriptor(JavaDebuggerLocalize.messageNodeClassHasNoFields());
+  public static MessageDescriptor OBJECT_COLLECTED = new MessageDescriptor(JavaDebuggerLocalize.messageNodeObjectCollected());
+  public static MessageDescriptor EVALUATING = new MessageDescriptor(XDebuggerLocalize.xdebuggerBuildingTreeNodeMessage());
+  public static MessageDescriptor THREAD_IS_RUNNING = new MessageDescriptor(JavaDebuggerLocalize.messageNodeThreadRunning());
+  public static MessageDescriptor THREAD_IS_EMPTY = new MessageDescriptor(JavaDebuggerLocalize.messageNodeThreadHasNoFrames());
+  public static MessageDescriptor EVALUATION_NOT_POSSIBLE = new MessageDescriptor(JavaDebuggerLocalize.messageNodeEvaluationNotPossible(), WARNING);
 
-  public MessageDescriptor(String message) {
+  public MessageDescriptor(LocalizeValue message) {
     this(message, INFORMATION);
   }
 
-  public MessageDescriptor(String message, int kind) {
+  public MessageDescriptor(LocalizeValue message, int kind) {
     myKind = kind;
     myMessage = message;
   }
@@ -59,18 +60,22 @@ public class MessageDescriptor extends NodeDescriptorImpl {
     return myKind;
   }
 
-  public String getLabel() {
+  @Override
+  public LocalizeValue getLabel() {
     return myMessage;
   }
 
+  @Override
   public boolean isExpandable() {
     return false;
   }
 
+  @Override
   public void setContext(EvaluationContextImpl context) {
   }
 
-  protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
+  @Override
+  protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
     DebuggerManagerThreadImpl.assertIsManagerThread();
     return myMessage;
   }

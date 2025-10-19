@@ -26,32 +26,20 @@ public abstract class DebuggerStateManager {
     @Nonnull
     public abstract DebuggerContextImpl getContext();
 
-    public void setState(
+    public abstract void setState(
         @Nonnull DebuggerContextImpl context,
         DebuggerSession.State state,
         DebuggerSession.Event event,
         @Nonnull LocalizeValue description
-    ) {
-        setState(context, state, event, description.get());
-    }
+    );
 
     public void setState(
         @Nonnull DebuggerContextImpl context,
         DebuggerSession.State state,
         DebuggerSession.Event event
     ) {
-        setState(context, state, event, (String)null);
+        setState(context, state, event, LocalizeValue.empty());
     }
-
-    @Deprecated
-    @DeprecationInfo("Use variant with LocalizeValue")
-    public abstract void setState(
-        @Nonnull DebuggerContextImpl context,
-        DebuggerSession.State state,
-        DebuggerSession.Event event,
-        String description
-    );
-
     //we allow add listeners inside DebuggerContextListener.changeEvent
     public void addListener(DebuggerContextListener listener) {
         myEventDispatcher.addListener(listener);

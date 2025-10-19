@@ -23,11 +23,11 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction;
-import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.HeadlessValueEvaluationCallback;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.frame.XValuePlace;
+import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -45,7 +45,8 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
     return null;
   }
 
-  String getLinkText();
+  @Nonnull
+  LocalizeValue getLinkText();
 
   default boolean isOnDemand(EvaluationContext evaluationContext, ValueDescriptor valueDescriptor) {
     return isOnDemandForced(evaluationContext);
@@ -55,7 +56,7 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
     return !isOnDemand(evaluationContext, valueDescriptor) || isCalculated(valueDescriptor);
   }
 
-  static XFullValueEvaluator createFullValueEvaluator(String text) {
+  static XFullValueEvaluator createFullValueEvaluator(@Nonnull LocalizeValue text) {
     return new XFullValueEvaluator(text) {
       @Override
       public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback) {

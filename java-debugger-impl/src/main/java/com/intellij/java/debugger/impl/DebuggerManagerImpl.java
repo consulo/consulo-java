@@ -45,6 +45,7 @@ import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.process.ExecutionException;
@@ -513,7 +514,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
             @Nonnull DebuggerContextImpl context,
             DebuggerSession.State state,
             DebuggerSession.Event event,
-            String description
+            LocalizeValue description
         ) {
             UIAccess.assertIsUIThread();
             myDebuggerSession = context.getDebuggerSession();

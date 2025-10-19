@@ -20,11 +20,11 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
@@ -57,7 +57,7 @@ public class ThisEvaluator implements Evaluator {
       objRef = thisRef;
     }
     if(objRef == null) {
-      throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.this.not.avalilable"));
+      throw EvaluateExceptionUtil.createEvaluateException(JavaDebuggerLocalize.evaluationErrorThisNotAvalilable());
     }
     return objRef;
   }

@@ -84,7 +84,7 @@ public class ThreadsDebuggerTree extends DebuggerTree {
             context.getDebugProcess().getManagerThread().schedule(command);
         }
         else {
-            showMessage(session != null ? session.getStateDescription() : JavaDebuggerLocalize.statusDebugStopped().get());
+            showMessage(session != null ? session.getStateDescription() : JavaDebuggerLocalize.statusDebugStopped());
         }
     }
 

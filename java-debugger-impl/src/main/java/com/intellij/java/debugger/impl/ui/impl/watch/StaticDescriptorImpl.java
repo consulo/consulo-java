@@ -20,8 +20,8 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.StaticDescriptor;
@@ -29,44 +29,50 @@ import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.localize.LocalizeValue;
 
-public class StaticDescriptorImpl extends NodeDescriptorImpl implements StaticDescriptor{
+public class StaticDescriptorImpl extends NodeDescriptorImpl implements StaticDescriptor {
 
-  private final ReferenceType myType;
-  private final boolean myHasStaticFields;
+    private final ReferenceType myType;
+    private final boolean myHasStaticFields;
 
-  public StaticDescriptorImpl(ReferenceType refType) {
-    myType = refType;
+    public StaticDescriptorImpl(ReferenceType refType) {
+        myType = refType;
 
-    boolean hasStaticFields = false;
-    for (Field field : myType.allFields()) {
-      if (field.isStatic()) {
-        hasStaticFields = true;
-        break;
-      }
+        boolean hasStaticFields = false;
+        for (Field field : myType.allFields()) {
+            if (field.isStatic()) {
+                hasStaticFields = true;
+                break;
+            }
+        }
+        myHasStaticFields = hasStaticFields;
     }
-    myHasStaticFields = hasStaticFields;
-  }
 
-  public ReferenceType getType() {
-    return myType;
-  }
+    @Override
+    public ReferenceType getType() {
+        return myType;
+    }
 
-  public String getName() {
-    //noinspection HardCodedStringLiteral
-    return "static";
-  }
+    @Override
+    public String getName() {
+        //noinspection HardCodedStringLiteral
+        return "static";
+    }
 
-  public boolean isExpandable() {
-    return myHasStaticFields;
-  }
+    @Override
+    public boolean isExpandable() {
+        return myHasStaticFields;
+    }
 
-  public void setContext(EvaluationContextImpl context) {
-  }
+    @Override
+    public void setContext(EvaluationContextImpl context) {
+    }
 
-  protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    final ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
-    return getName() + " = " + classRenderer.renderTypeName(myType.name());
-  }
+    @Override
+    protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        final ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
+        return LocalizeValue.of(getName() + " = " + classRenderer.renderTypeName(myType.name()));
+    }
 }

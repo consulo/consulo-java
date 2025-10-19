@@ -26,12 +26,14 @@ import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.CustomPopupFullValueEvaluator;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringBasedRenderer;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.images.ui.EmbeddedImageViewFactory;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.Component;
 import consulo.ui.Label;
@@ -64,7 +66,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
     @Override
     public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
                                                      final ValueDescriptorImpl valueDescriptor) {
-        return new IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext) {
+        return new IconPopupEvaluator(JavaDebuggerLocalize.messageNodeShowImage(), evaluationContext) {
             @Override
             protected Image getData() {
                 return getIcon(getEvaluationContext(), valueDescriptor.getValue(), "imageToBytes");
@@ -129,7 +131,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
     }
 
     static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image> {
-        public IconPopupEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+        public IconPopupEvaluator(@Nonnull LocalizeValue linkText, @Nonnull EvaluationContextImpl evaluationContext) {
             super(linkText, evaluationContext);
         }
 

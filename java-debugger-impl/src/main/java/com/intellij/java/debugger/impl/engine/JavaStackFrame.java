@@ -59,6 +59,7 @@ import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
@@ -206,7 +207,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
                 return;
             }
             if (!debuggerContext.isEvaluationPossible()) {
-                node.setErrorMessage(MessageDescriptor.EVALUATION_NOT_POSSIBLE.getLabel());
+                node.setErrorMessage(MessageDescriptor.EVALUATION_NOT_POSSIBLE.getLabel().get());
                 //myChildren.add(myNodeManager.createNode(MessageDescriptor.EVALUATION_NOT_POSSIBLE, evaluationContext));
             }
 
@@ -412,15 +413,15 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
     }
 
-    public static XNamedValue createMessageNode(String text, Image icon) {
+    public static XNamedValue createMessageNode(LocalizeValue text, Image icon) {
         return new DummyMessageValueNode(text, icon);
     }
 
     static class DummyMessageValueNode extends XNamedValue {
-        private final String myMessage;
+        private final LocalizeValue myMessage;
         private final Image myIcon;
 
-        public DummyMessageValueNode(String message, Image icon) {
+        public DummyMessageValueNode(LocalizeValue message, Image icon) {
             super("");
             myMessage = message;
             myIcon = icon;
@@ -437,14 +438,14 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 
                 @Override
                 public void renderValue(@Nonnull XValueTextRenderer renderer) {
-                    renderer.renderValue(myMessage);
+                    renderer.renderValue(myMessage.get());
                 }
             }, false);
         }
 
         @Override
         public String toString() {
-            return myMessage;
+            return myMessage.get();
         }
     }
 

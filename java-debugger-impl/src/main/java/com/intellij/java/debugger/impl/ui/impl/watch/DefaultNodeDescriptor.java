@@ -21,6 +21,7 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 
 
@@ -41,8 +42,8 @@ public final class DefaultNodeDescriptor extends NodeDescriptorImpl{
   public void setContext(EvaluationContextImpl context) {
   }
 
-  protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
+  protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
     LOG.assertTrue(false);
-    return null;
+    return LocalizeValue.of();
   }
 }

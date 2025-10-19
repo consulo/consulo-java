@@ -34,6 +34,7 @@ import consulo.execution.debug.frame.XValueMarkers;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.editor.FileColorManager;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -164,11 +165,11 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
     }
 
     @Override
-    protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException {
+    protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException {
         DebuggerManagerThreadImpl.assertIsManagerThread();
 
         if (myLocation == null) {
-            return "";
+            return LocalizeValue.empty();
         }
         ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
         final StringBuilder label = new StringBuilder();
@@ -230,7 +231,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
             catch (AbsentInformationException ignored) {
             }
         }
-        return label.toString();
+        return LocalizeValue.of(label.toString());
     }
 
     public final boolean stackFramesEqual(StackFrameDescriptorImpl d) {

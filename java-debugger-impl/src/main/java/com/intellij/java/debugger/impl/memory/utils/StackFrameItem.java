@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.memory.utils;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
@@ -26,6 +25,7 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.psi.CommonClassNames;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.frame.*;
@@ -34,6 +34,7 @@ import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.internal.com.sun.jdi.*;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.ColoredTextContainer;
@@ -52,12 +53,12 @@ import java.util.Map;
 
 public class StackFrameItem {
   private static final Logger LOG = Logger.getInstance(StackFrameItem.class);
-  private static final List<XNamedValue> VARS_CAPTURE_DISABLED = Collections.singletonList(JavaStackFrame.createMessageNode(DebuggerBundle.message("message.node.local.variables.capture.disabled"),
+  private static final List<XNamedValue> VARS_CAPTURE_DISABLED = Collections.singletonList(JavaStackFrame.createMessageNode(JavaDebuggerLocalize.messageNodeLocalVariablesCaptureDisabled(),
       null));
-  private static final List<XNamedValue> VARS_NOT_CAPTURED = Collections.singletonList(JavaStackFrame.createMessageNode(DebuggerBundle.message("message.node.local.variables.not.captured"),
+  private static final List<XNamedValue> VARS_NOT_CAPTURED = Collections.singletonList(JavaStackFrame.createMessageNode(JavaDebuggerLocalize.messageNodeLocalVariablesNotCaptured(),
       XDebuggerUIConstants.INFORMATION_MESSAGE_ICON));
 
-  public static final XDebuggerTreeNodeHyperlink CAPTURE_SETTINGS_OPENER = new XDebuggerTreeNodeHyperlink(" settings") {
+  public static final XDebuggerTreeNodeHyperlink CAPTURE_SETTINGS_OPENER = new XDebuggerTreeNodeHyperlink(LocalizeValue.localizeTODO(" settings")) {
     @Override
     public void onClick(MouseEvent event) {
       ShowSettingsUtil.getInstance().showSettingsDialog(null, CaptureConfigurable.class);
@@ -263,7 +264,7 @@ public class StackFrameItem {
     @Override
     public void computeChildren(@Nonnull XCompositeNode node) {
       if (myVariables == VARS_CAPTURE_DISABLED) {
-        node.setMessage(DebuggerBundle.message("message.node.local.variables.capture.disabled"), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, CAPTURE_SETTINGS_OPENER);
+        node.setMessage(JavaDebuggerLocalize.messageNodeLocalVariablesCaptureDisabled().get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, CAPTURE_SETTINGS_OPENER);
       } else if (myVariables != null) {
         XValueChildrenList children = new XValueChildrenList();
         myVariables.forEach(children::add);

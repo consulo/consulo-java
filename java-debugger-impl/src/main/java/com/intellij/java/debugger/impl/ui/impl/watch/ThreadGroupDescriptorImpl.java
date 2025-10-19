@@ -15,15 +15,16 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.tree.ThreadGroupDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.localize.LocalizeValue;
 
 public class ThreadGroupDescriptorImpl extends NodeDescriptorImpl implements ThreadGroupDescriptor{
   private final ThreadGroupReferenceProxyImpl myThreadGroup;
@@ -35,6 +36,7 @@ public class ThreadGroupDescriptorImpl extends NodeDescriptorImpl implements Thr
     myThreadGroup = threadGroup;
   }
 
+  @Override
   public ThreadGroupReferenceProxyImpl getThreadGroupReference() {
     return myThreadGroup;
   }
@@ -43,26 +45,30 @@ public class ThreadGroupDescriptorImpl extends NodeDescriptorImpl implements Thr
     return myIsCurrent;
   }
 
+  @Override
   public String getName() {
     return myName;
   }
 
-  protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
+  @Override
+  protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
     DebuggerManagerThreadImpl.assertIsManagerThread();
     ThreadGroupReferenceProxyImpl group = getThreadGroupReference();
     try {
       myName = group.name();
-      return DebuggerBundle.message("label.thread.group.node", myName, group.uniqueID());
+      return JavaDebuggerLocalize.labelThreadGroupNode(myName, group.uniqueID());
     }
     catch (ObjectCollectedException e) {
-      return myName != null ? DebuggerBundle.message("label.thread.group.node.group.collected", myName) : "";
+      return myName != null ? JavaDebuggerLocalize.labelThreadGroupNodeGroupCollected(myName) : LocalizeValue.empty();
     }
   }
 
+  @Override
   public boolean isExpandable() {
     return myIsExpandable;
   }
 
+  @Override
   public void setContext(EvaluationContextImpl context) {
     ThreadReferenceProxyImpl threadProxy = context != null? context.getSuspendContext().getThread() : null;
     myIsCurrent = threadProxy != null && isDescendantGroup(threadProxy.threadGroupProxy());

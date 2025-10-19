@@ -15,24 +15,25 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import java.util.Comparator;
-import java.util.Map;
-
-import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.nodes.NodeComparator;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
-import consulo.project.Project;
-import java.util.HashMap;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nullable;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * * finds correspondence between new descriptor and one created on the previous steps
@@ -40,118 +41,98 @@ import consulo.internal.com.sun.jdi.ReferenceType;
  * * call saveState function to start new step
  */
 
-public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeManager
-{
-	private static final Comparator<DebuggerTreeNode> ourNodeComparator = new NodeComparator();
+public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeManager {
+    private static final Comparator<DebuggerTreeNode> ourNodeComparator = new NodeComparator();
 
-	private final DebuggerTree myDebuggerTree;
-	private String myHistoryKey = null;
-	private final Map<String, DescriptorTree> myHistories = new HashMap<String, DescriptorTree>();
+    private final DebuggerTree myDebuggerTree;
+    private String myHistoryKey = null;
+    private final Map<String, DescriptorTree> myHistories = new HashMap<String, DescriptorTree>();
 
-	public NodeManagerImpl(Project project, DebuggerTree tree)
-	{
-		super(project);
-		myDebuggerTree = tree;
-	}
+    public NodeManagerImpl(Project project, DebuggerTree tree) {
+        super(project);
+        myDebuggerTree = tree;
+    }
 
-	public static Comparator<DebuggerTreeNode> getNodeComparator()
-	{
-		return ourNodeComparator;
-	}
+    public static Comparator<DebuggerTreeNode> getNodeComparator() {
+        return ourNodeComparator;
+    }
 
-	@Override
-	public DebuggerTreeNodeImpl createNode(NodeDescriptor descriptor, EvaluationContext evaluationContext)
-	{
-		((NodeDescriptorImpl) descriptor).setContext((EvaluationContextImpl) evaluationContext);
-		return DebuggerTreeNodeImpl.createNode(getTree(), (NodeDescriptorImpl) descriptor, (EvaluationContextImpl) evaluationContext);
-	}
+    @Override
+    public DebuggerTreeNodeImpl createNode(NodeDescriptor descriptor, EvaluationContext evaluationContext) {
+        ((NodeDescriptorImpl) descriptor).setContext((EvaluationContextImpl) evaluationContext);
+        return DebuggerTreeNodeImpl.createNode(getTree(), (NodeDescriptorImpl) descriptor, (EvaluationContextImpl) evaluationContext);
+    }
 
-	public DebuggerTreeNodeImpl getDefaultNode()
-	{
-		return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), new DefaultNodeDescriptor());
-	}
+    public DebuggerTreeNodeImpl getDefaultNode() {
+        return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), new DefaultNodeDescriptor());
+    }
 
-	public DebuggerTreeNodeImpl createMessageNode(MessageDescriptor descriptor)
-	{
-		return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), descriptor);
-	}
+    public DebuggerTreeNodeImpl createMessageNode(MessageDescriptor descriptor) {
+        return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), descriptor);
+    }
 
-	@Override
-	public DebuggerTreeNodeImpl createMessageNode(String message)
-	{
-		return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), new MessageDescriptor(message));
-	}
+    @Override
+    public DebuggerTreeNodeImpl createMessageNode(LocalizeValue message) {
+        return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), new MessageDescriptor(message));
+    }
 
-	public void setHistoryByContext(final DebuggerContextImpl context)
-	{
-		setHistoryByContext(context.getFrameProxy());
-	}
+    public void setHistoryByContext(final DebuggerContextImpl context) {
+        setHistoryByContext(context.getFrameProxy());
+    }
 
-	public void setHistoryByContext(StackFrameProxyImpl frameProxy)
-	{
-		if(myHistoryKey != null)
-		{
-			myHistories.put(myHistoryKey, getCurrentHistoryTree());
-		}
+    public void setHistoryByContext(StackFrameProxyImpl frameProxy) {
+        if (myHistoryKey != null) {
+            myHistories.put(myHistoryKey, getCurrentHistoryTree());
+        }
 
-		final String historyKey = getContextKey(frameProxy);
-		final DescriptorTree descriptorTree;
-		if(historyKey != null)
-		{
-			final DescriptorTree historyTree = myHistories.get(historyKey);
-			descriptorTree = (historyTree != null) ? historyTree : new DescriptorTree(true);
-		}
-		else
-		{
-			descriptorTree = new DescriptorTree(true);
-		}
+        final String historyKey = getContextKey(frameProxy);
+        final DescriptorTree descriptorTree;
+        if (historyKey != null) {
+            final DescriptorTree historyTree = myHistories.get(historyKey);
+            descriptorTree = (historyTree != null) ? historyTree : new DescriptorTree(true);
+        }
+        else {
+            descriptorTree = new DescriptorTree(true);
+        }
 
-		deriveHistoryTree(descriptorTree, frameProxy);
-		myHistoryKey = historyKey;
-	}
+        deriveHistoryTree(descriptorTree, frameProxy);
+        myHistoryKey = historyKey;
+    }
 
 
-	@Nullable
-	public String getContextKey(final StackFrameProxyImpl frame)
-	{
-		return getContextKeyForFrame(frame);
-	}
+    @Nullable
+    public String getContextKey(final StackFrameProxyImpl frame) {
+        return getContextKeyForFrame(frame);
+    }
 
-	@Nullable
-	public static String getContextKeyForFrame(final StackFrameProxyImpl frame)
-	{
-		if(frame == null)
-		{
-			return null;
-		}
-		try
-		{
-			final Location location = frame.location();
-			final Method method = location.method();
-			final ReferenceType referenceType = location.declaringType();
-			final StringBuilder builder = new StringBuilder();
-			return builder.append(referenceType.signature()).append("#").append(method.name()).append(method.signature()).toString();
-		}
-		catch(EvaluateException e)
-		{
-			return null;
-		}
-	}
+    @Nullable
+    public static String getContextKeyForFrame(final StackFrameProxyImpl frame) {
+        if (frame == null) {
+            return null;
+        }
+        try {
+            final Location location = frame.location();
+            final Method method = location.method();
+            final ReferenceType referenceType = location.declaringType();
+            final StringBuilder builder = new StringBuilder();
+            return builder.append(referenceType.signature()).append("#").append(method.name()).append(method.signature()).toString();
+        }
+        catch (EvaluateException e) {
+            return null;
+        }
+    }
 
-	@Override
-	public void dispose()
-	{
-		clearHistory();
-		super.dispose();
-	}
+    @Override
+    public void dispose() {
+        clearHistory();
+        super.dispose();
+    }
 
-	public void clearHistory()
-	{
-		myHistories.clear();
-	}
+    public void clearHistory() {
+        myHistories.clear();
+    }
 
-	private DebuggerTree getTree()
-	{
-		return myDebuggerTree;
-	}
+    private DebuggerTree getTree() {
+        return myDebuggerTree;
+    }
 }

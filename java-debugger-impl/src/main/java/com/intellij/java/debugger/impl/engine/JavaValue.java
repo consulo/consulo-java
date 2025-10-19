@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
@@ -34,6 +33,7 @@ import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -52,6 +52,7 @@ import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
@@ -136,7 +137,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     @Override
     public void computePresentation(@Nonnull final XValueNode node, @Nonnull XValuePlace place) {
         if (isOnDemand() && !isCalculated()) {
-            node.setFullValueEvaluator(OnDemandRenderer.createFullValueEvaluator(DebuggerBundle.message("message.node.evaluate")));
+            node.setFullValueEvaluator(OnDemandRenderer.createFullValueEvaluator(JavaDebuggerLocalize.messageNodeEvaluate()));
             node.setPresentation(ExecutionDebugIconGroup.nodeWatch(), new XRegularValuePresentation("", null, ""), false);
             return;
         }
@@ -148,7 +149,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
             @Override
             protected void commandCancelled() {
-                node.setPresentation(null, new XErrorValuePresentation(DebuggerBundle.message("error.context.has.changed")), false);
+                node.setPresentation(null, new XErrorValuePresentation(JavaDebuggerLocalize.errorContextHasChanged()), false);
             }
 
             @Override
@@ -180,12 +181,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                                 @Override
                                 public void evaluate(@Nonnull final XFullValueEvaluationCallback callback) {
                                     final ValueDescriptorImpl fullValueDescriptor = myValueDescriptor.getFullValueDescriptor();
-                                    fullValueDescriptor.updateRepresentation(myEvaluationContext, new DescriptorLabelListener() {
-                                        @Override
-                                        public void labelChanged() {
-                                            callback.evaluated(fullValueDescriptor.getValueText());
-                                        }
-                                    });
+                                    fullValueDescriptor.updateRepresentation(myEvaluationContext, () -> callback.evaluated(fullValueDescriptor.getValueText()));
                                 }
                             });
                         }
@@ -211,7 +207,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     public abstract static class JavaFullValueEvaluator extends XFullValueEvaluator {
         protected final EvaluationContextImpl myEvaluationContext;
 
-        public JavaFullValueEvaluator(@Nonnull String linkText, EvaluationContextImpl evaluationContext) {
+        public JavaFullValueEvaluator(@Nonnull LocalizeValue linkText, EvaluationContextImpl evaluationContext) {
             super(linkText);
             myEvaluationContext = evaluationContext;
         }
@@ -239,7 +235,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
                 @Override
                 protected void commandCancelled() {
-                    callback.errorOccurred(DebuggerBundle.message("error.context.has.changed"));
+                    callback.errorOccurred(JavaDebuggerLocalize.errorContextHasChanged());
                 }
 
                 @Override
@@ -435,7 +431,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                         }
 
                         @Override
-                        public void setMessage(@Nonnull String message,
+                        public void setMessage(@Nonnull LocalizeValue message,
                                                @Nullable Image icon,
                                                @Nonnull SimpleTextAttributes attributes,
                                                @Nullable XDebuggerTreeNodeHyperlink link) {
@@ -459,12 +455,12 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                         }
 
                         @Override
-                        public void setErrorMessage(@Nonnull String errorMessage) {
+                        public void setErrorMessage(@Nonnull LocalizeValue errorMessage) {
                             node.setErrorMessage(errorMessage);
                         }
 
                         @Override
-                        public void setErrorMessage(@Nonnull String errorMessage, @Nullable XDebuggerTreeNodeHyperlink link) {
+                        public void setErrorMessage(@Nonnull LocalizeValue errorMessage, @Nullable XDebuggerTreeNodeHyperlink link) {
                             node.setErrorMessage(errorMessage, link);
                         }
 
@@ -494,7 +490,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
             @Override
             protected void commandCancelled() {
-                node.setErrorMessage(DebuggerBundle.message("error.context.has.changed"));
+                node.setErrorMessage(JavaDebuggerLocalize.errorContextHasChanged());
             }
         });
         return true;
@@ -671,7 +667,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                 myEvaluationContext.getManagerThread().schedule(new DebuggerCommandImpl() {
                     @Override
                     protected void commandCancelled() {
-                        callback.errorOccurred(DebuggerBundle.message("error.context.has.changed"));
+                        callback.errorOccurred(JavaDebuggerLocalize.errorContextHasChanged());
                     }
 
                     @Override
@@ -691,7 +687,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                             callback.evaluated(create(inspectDescriptor, evaluationContext, myNodeManager));
                         }
                         else {
-                            callback.errorOccurred("Context is not available");
+                            callback.errorOccurred(LocalizeValue.localizeTODO("Context is not available"));
                         }
                     }
                 });

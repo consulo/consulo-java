@@ -183,7 +183,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
          */
         @Override
         @RequiredUIAccess
-        public void setState(@Nonnull DebuggerContextImpl context, State state, Event event, String description) {
+        public void setState(@Nonnull DebuggerContextImpl context, State state, Event event, @Nonnull LocalizeValue description) {
             UIAccess.assertIsUIThread();
             DebuggerSession session = context.getDebuggerSession();
             LOG.assertTrue(session == DebuggerSession.this || session == null);
@@ -271,9 +271,9 @@ public class DebuggerSession implements AbstractDebuggerSession {
 
     private static class DebuggerSessionState {
         final State myState;
-        final String myDescription;
+        final LocalizeValue myDescription;
 
-        public DebuggerSessionState(State state, String description) {
+        public DebuggerSessionState(State state, LocalizeValue description) {
             myState = state;
             myDescription = description;
         }
@@ -283,31 +283,31 @@ public class DebuggerSession implements AbstractDebuggerSession {
         return myState.myState;
     }
 
-    public String getStateDescription() {
+    public LocalizeValue getStateDescription() {
         if (myState.myDescription != null) {
             return myState.myDescription;
         }
 
         switch (myState.myState) {
             case STOPPED:
-                return JavaDebuggerLocalize.statusDebugStopped().get();
+                return JavaDebuggerLocalize.statusDebugStopped();
             case RUNNING:
-                return JavaDebuggerLocalize.statusAppRunning().get();
+                return JavaDebuggerLocalize.statusAppRunning();
             case WAITING_ATTACH:
                 RemoteConnection connection = getProcess().getConnection();
                 String addressDisplayName = DebuggerUtils.getAddressDisplayName(connection);
                 LocalizeValue transportName = DebuggerUtils.getTransportName(connection);
                 return connection.isServerMode()
-                    ? JavaDebuggerLocalize.statusListening(addressDisplayName, transportName).get()
-                    : JavaDebuggerLocalize.statusConnecting(addressDisplayName, transportName).get();
+                    ? JavaDebuggerLocalize.statusListening(addressDisplayName, transportName)
+                    : JavaDebuggerLocalize.statusConnecting(addressDisplayName, transportName);
             case PAUSED:
-                return JavaDebuggerLocalize.statusPaused().get();
+                return JavaDebuggerLocalize.statusPaused();
             case WAIT_EVALUATION:
-                return JavaDebuggerLocalize.statusWaitingEvaluationResult().get();
+                return JavaDebuggerLocalize.statusWaitingEvaluationResult();
             case DISPOSED:
-                return JavaDebuggerLocalize.statusDebugStopped().get();
+                return JavaDebuggerLocalize.statusDebugStopped();
         }
-        return null;
+        return LocalizeValue.of();
     }
 
     /* Stepping */
@@ -568,7 +568,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                         ).notify(getProject());
                     }
                 }
-                if (((SuspendManagerImpl)myDebugProcess.getSuspendManager()).getPausedContexts().size() > 1) {
+                if (((SuspendManagerImpl) myDebugProcess.getSuspendManager()).getPausedContexts().size() > 1) {
                     return;
                 }
                 else {
@@ -764,14 +764,15 @@ public class DebuggerSession implements AbstractDebuggerSession {
             DebuggerInvocationUtil.invokeLater(
                 getProject(),
                 () -> {
-                    String message = "";
+                    LocalizeValue message = LocalizeValue.empty();
                     if (state instanceof RemoteState) {
                         message = JavaDebuggerLocalize.statusConnectFailed(
                             DebuggerUtils.getAddressDisplayName(remoteConnection),
                             DebuggerUtils.getTransportName(remoteConnection)
-                        ).get();
+                        );
                     }
-                    message += exception.getMessage();
+                    message = LocalizeValue.join(message, LocalizeValue.of(exception.getMessage()));
+
                     getContextManager().setState(SESSION_EMPTY_CONTEXT, State.STOPPED, Event.DETACHED, message);
                 }
             );
@@ -801,7 +802,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
                         SESSION_EMPTY_CONTEXT,
                         State.STOPPED,
                         Event.DETACHED,
-                        JavaDebuggerLocalize.statusDisconnected(addressDisplayName, transportName).get()
+                        JavaDebuggerLocalize.statusDisconnected(addressDisplayName, transportName)
                     );
                 }
             );
@@ -820,7 +821,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
             if (steppingThread != null && steppingThread.getThreadReference() == thread) {
                 clearSteppingThrough();
             }
-            DebugProcessImpl debugProcess = (DebugProcessImpl)proc;
+            DebugProcessImpl debugProcess = (DebugProcessImpl) proc;
             if (debugProcess.getRequestsManager().getFilterThread() == thread) {
                 DebuggerManagerEx.getInstanceEx(proc.getProject()).getBreakpointManager().applyThreadFilter(debugProcess, null);
             }
@@ -841,12 +842,13 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
     }
 
-    private static String getDescription(DebuggerContextImpl debuggerContext) {
+    @Nonnull
+    private static LocalizeValue getDescription(DebuggerContextImpl debuggerContext) {
         SuspendContextImpl suspendContext = debuggerContext.getSuspendContext();
         if (suspendContext != null && debuggerContext.getThreadProxy() != suspendContext.getThread()) {
-            return JavaDebuggerLocalize.statusPausedInAnotherThread().get();
+            return JavaDebuggerLocalize.statusPausedInAnotherThread();
         }
-        return null;
+        return LocalizeValue.empty();
     }
 
     private class MyEvaluationListener implements EvaluationListener {

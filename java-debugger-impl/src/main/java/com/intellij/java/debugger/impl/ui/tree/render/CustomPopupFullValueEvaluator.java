@@ -21,6 +21,7 @@ import consulo.application.Application;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.debug.ui.DebuggerUIUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import consulo.ui.ex.RelativePoint;
@@ -34,7 +35,7 @@ import java.awt.*;
  * @author egor
  */
 public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator {
-    public CustomPopupFullValueEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+    public CustomPopupFullValueEvaluator(@Nonnull LocalizeValue linkText, @Nonnull EvaluationContextImpl evaluationContext) {
         super(linkText, evaluationContext);
         setShowValuePopup(false);
     }

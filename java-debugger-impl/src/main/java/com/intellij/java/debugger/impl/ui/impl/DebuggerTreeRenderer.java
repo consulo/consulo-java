@@ -31,6 +31,7 @@ import consulo.execution.debug.ui.ValueMarkup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.Gray;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.SimpleColoredText;
@@ -187,11 +188,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     private static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorScheme, boolean multiline, boolean appendValue) {
         SimpleColoredText descriptorText = new SimpleColoredText();
 
-        String text;
+        LocalizeValue text;
         String nodeName;
 
         if (descriptor == null) {
-            text = "";
+            text = LocalizeValue.empty();
             nodeName = null;
         }
         else {
@@ -211,7 +212,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
             }
         }
 
-        String[] strings = breakString(text, nodeName);
+        String[] strings = breakString(text.get(), nodeName);
 
         if (strings[0] != null) {
             if (descriptor instanceof MessageDescriptor && ((MessageDescriptor) descriptor).getKind() == MessageDescriptor.SPECIAL) {

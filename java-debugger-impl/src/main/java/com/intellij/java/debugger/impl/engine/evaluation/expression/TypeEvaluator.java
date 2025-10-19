@@ -20,36 +20,37 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.impl.engine.JVMName;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.JVMName;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class TypeEvaluator implements Evaluator {
-  private final JVMName myTypeName;
+    private final JVMName myTypeName;
 
-  public TypeEvaluator(JVMName typeName) {
-    myTypeName = typeName;
-  }
-
-  public Modifier getModifier() {
-    return null;
-  }
-
-  /**
-   * @return ReferenceType in the target VM, with the given fully qualified name
-   */
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    DebugProcessImpl debugProcess = context.getDebugProcess();
-    String typeName = myTypeName.getName(debugProcess);
-    final ReferenceType type = debugProcess.findClass(context, typeName, context.getClassLoader());
-    if (type == null) {
-      throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("error.class.not.loaded", typeName));
+    public TypeEvaluator(JVMName typeName) {
+        myTypeName = typeName;
     }
-    return type;
-  }
+
+    @Override
+    public Modifier getModifier() {
+        return null;
+    }
+
+    /**
+     * @return ReferenceType in the target VM, with the given fully qualified name
+     */
+    public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
+        DebugProcessImpl debugProcess = context.getDebugProcess();
+        String typeName = myTypeName.getName(debugProcess);
+        final ReferenceType type = debugProcess.findClass(context, typeName, context.getClassLoader());
+        if (type == null) {
+            throw EvaluateExceptionUtil.createEvaluateException(JavaDebuggerLocalize.errorClassNotLoaded(typeName));
+        }
+        return type;
+    }
 }

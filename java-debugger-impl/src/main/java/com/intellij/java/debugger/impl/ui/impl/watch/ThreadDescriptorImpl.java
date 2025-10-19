@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
@@ -27,9 +26,11 @@ import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.tree.ThreadDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 
 public class ThreadDescriptorImpl extends NodeDescriptorImpl implements ThreadDescriptor {
@@ -53,7 +54,7 @@ public class ThreadDescriptorImpl extends NodeDescriptorImpl implements ThreadDe
     }
 
     @Override
-    protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
+    protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) throws EvaluateException {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         ThreadReferenceProxyImpl thread = getThreadReference();
         try {
@@ -63,12 +64,12 @@ public class ThreadDescriptorImpl extends NodeDescriptorImpl implements ThreadDe
             final String threadStatusText = DebuggerUtilsEx.getThreadStatusText(getThreadReference().status());
             //noinspection HardCodedStringLiteral
             if (grname != null && !"SYSTEM".equalsIgnoreCase(grname)) {
-                return DebuggerBundle.message("label.thread.node.in.group", myName, thread.uniqueID(), threadStatusText, grname);
+                return JavaDebuggerLocalize.labelThreadNodeInGroup(myName, thread.uniqueID(), threadStatusText, grname);
             }
-            return DebuggerBundle.message("label.thread.node", myName, thread.uniqueID(), threadStatusText);
+            return JavaDebuggerLocalize.labelThreadNode(myName, thread.uniqueID(), threadStatusText);
         }
         catch (ObjectCollectedException e) {
-            return myName != null ? DebuggerBundle.message("label.thread.node.thread.collected", myName) : "";
+            return myName != null ? JavaDebuggerLocalize.labelThreadNodeThreadCollected(myName) : LocalizeValue.empty();
         }
     }
 

@@ -15,13 +15,13 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.filters.ExceptionFilter;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
@@ -54,7 +54,7 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
   @Override
   public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
                                                    final ValueDescriptorImpl valueDescriptor) {
-    return new JavaValue.JavaFullValueEvaluator(DebuggerBundle.message("message.node.navigate"), evaluationContext) {
+    return new JavaValue.JavaFullValueEvaluator(JavaDebuggerLocalize.messageNodeNavigate(), evaluationContext) {
       @Override
       public void evaluate(@Nonnull XFullValueEvaluationCallback callback) {
         Value value = valueDescriptor.getValue();

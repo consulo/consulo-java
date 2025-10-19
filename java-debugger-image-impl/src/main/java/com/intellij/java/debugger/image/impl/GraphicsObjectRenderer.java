@@ -15,13 +15,13 @@
  */
 package com.intellij.java.debugger.image.impl;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringBasedRenderer;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.internal.com.sun.jdi.*;
@@ -69,7 +69,7 @@ public class GraphicsObjectRenderer extends ToStringBasedRenderer implements Ful
       if (!(type instanceof ReferenceType) || !DebuggerUtils.instanceOf(type, "java.awt.Image")) {
         return null;
       }
-      return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext) {
+      return new ImageObjectRenderer.IconPopupEvaluator(JavaDebuggerLocalize.messageNodeShowImage(), evaluationContext) {
         @Override
         protected Image getData() {
           return ImageObjectRenderer.getIcon(getEvaluationContext(), bufImgValue, "imageToBytes");

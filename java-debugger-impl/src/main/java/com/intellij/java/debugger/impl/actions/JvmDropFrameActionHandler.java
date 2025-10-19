@@ -76,11 +76,11 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                         }
 
                         @Override
-                        public void errorOccurred(@Nonnull String errorMessage) {
+                        public void errorOccurred(@Nonnull LocalizeValue errorMessage) {
                             showError(
                                 project,
-                                JavaDebuggerLocalize.errorExecutingFinally(errorMessage).get(),
-                                XDebuggerLocalize.xdebuggerResetFrameTitle().get()
+                                JavaDebuggerLocalize.errorExecutingFinally(errorMessage),
+                                XDebuggerLocalize.xdebuggerResetFrameTitle()
                             );
                         }
                     }
@@ -209,9 +209,9 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
         }
     }
 
-    public static void showError(Project project, String message, String title) {
+    public static void showError(Project project, LocalizeValue message, LocalizeValue title) {
         project.getApplication().invokeLater(
-            () -> Messages.showMessageDialog(project, message, title, UIUtil.getErrorIcon()),
+            () -> Messages.showMessageDialog(project, message.get(), title.get(), UIUtil.getErrorIcon()),
             ModalityState.any()
         );
     }
