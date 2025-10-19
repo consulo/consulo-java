@@ -37,10 +37,11 @@ import consulo.ui.Component;
 import consulo.ui.Label;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
-import jakarta.inject.Inject;
-
+import consulo.ui.image.ImageEffects;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+
 import javax.swing.*;
 import java.util.Collections;
 import java.util.List;
@@ -50,90 +51,91 @@ import java.util.List;
  */
 @ExtensionImpl
 class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider {
-  private static final Logger LOG = Logger.getInstance(ImageObjectRenderer.class);
+    private static final Logger LOG = Logger.getInstance(ImageObjectRenderer.class);
 
-  @Inject
-  public ImageObjectRenderer(final NodeRendererSettings rendererSettings) {
-    super(rendererSettings, "Image", null, null);
-    setClassName("java.awt.Image");
-    setEnabled(true);
-  }
-
-  @Nullable
-  @Override
-  public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
-                                                   final ValueDescriptorImpl valueDescriptor) {
-    return new IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext) {
-      @Override
-      protected Image getData() {
-        return getIcon(getEvaluationContext(), valueDescriptor.getValue(), "imageToBytes");
-      }
-    };
-  }
-
-  static Component createIconViewer(@Nullable Image uiImage) {
-    if (uiImage == null) {
-      return Label.create("No data");
+    @Inject
+    public ImageObjectRenderer(final NodeRendererSettings rendererSettings) {
+        super(rendererSettings, "Image", null, null);
+        setClassName("java.awt.Image");
+        setEnabled(true);
     }
 
-    return Application.get().getInstance(EmbeddedImageViewFactory.class).createViewer(uiImage);
-  }
-
-  @Nullable
-  static Image getIcon(EvaluationContext evaluationContext, Value obj, String methodName) {
-    try {
-      Value bytes = getImageBytes(evaluationContext, obj, methodName);
-      byte[] data = readBytes(bytes);
-      if (data != null) {
-        return Image.fromBytes(data, 16, 16);
-      }
-    }
-    catch (Exception e) {
-      LOG.info("Exception while getting image data", e);
-    }
-    return null;
-  }
-
-  private static Value getImageBytes(EvaluationContext evaluationContext, Value obj, String methodName) throws EvaluateException {
-    DebugProcess process = evaluationContext.getDebugProcess();
-    EvaluationContext copyContext = evaluationContext.createEvaluationContext(obj);
-    ClassType helperClass = ClassLoadingUtils.getHelperClass(JavaRtClassNames.IMAGE_SERIALIZER, copyContext, process);
-
-    if (helperClass != null) {
-      List<Method> methods = helperClass.methodsByName(methodName);
-      if (!methods.isEmpty()) {
-        return process.invokeMethod(copyContext, helperClass, methods.get(0), Collections.singletonList(obj));
-      }
-    }
-    return null;
-  }
-
-  private static byte[] readBytes(Value bytes) {
-    if (bytes instanceof ArrayReference) {
-      List<Value> values = ((ArrayReference)bytes).getValues();
-      byte[] res = new byte[values.size()];
-      int idx = 0;
-      for (Value value : values) {
-        if (value instanceof ByteValue) {
-          res[idx++] = ((ByteValue)value).value();
-        }
-        else {
-          return null;
-        }
-      }
-      return res;
-    }
-    return null;
-  }
-
-  static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image> {
-    public IconPopupEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext) {
-      super(linkText, evaluationContext);
-    }
-
+    @Nullable
     @Override
-    protected JComponent createComponent(Image data) {
-      return (JComponent)TargetAWT.to(createIconViewer(data));
+    public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
+                                                     final ValueDescriptorImpl valueDescriptor) {
+        return new IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext) {
+            @Override
+            protected Image getData() {
+                return getIcon(getEvaluationContext(), valueDescriptor.getValue(), "imageToBytes");
+            }
+        };
     }
-  }
+
+    static Component createIconViewer(@Nullable Image uiImage) {
+        if (uiImage == null) {
+            return Label.create("No data");
+        }
+
+        return Application.get().getInstance(EmbeddedImageViewFactory.class).createViewer(uiImage);
+    }
+
+    @Nullable
+    static Image getIcon(EvaluationContext evaluationContext, Value obj, String methodName) {
+        try {
+            Value bytes = getImageBytes(evaluationContext, obj, methodName);
+            byte[] data = readBytes(bytes);
+            if (data != null) {
+                Image imageFromBytes = Image.fromBytes(Image.ImageType.PNG, data);
+                return ImageEffects.resize(imageFromBytes, Image.DEFAULT_ICON_SIZE, Image.DEFAULT_ICON_SIZE);
+            }
+        }
+        catch (Exception e) {
+            LOG.info("Exception while getting image data", e);
+        }
+        return null;
+    }
+
+    private static Value getImageBytes(EvaluationContext evaluationContext, Value obj, String methodName) throws EvaluateException {
+        DebugProcess process = evaluationContext.getDebugProcess();
+        EvaluationContext copyContext = evaluationContext.createEvaluationContext(obj);
+        ClassType helperClass = ClassLoadingUtils.getHelperClass(JavaRtClassNames.IMAGE_SERIALIZER, copyContext, process);
+
+        if (helperClass != null) {
+            List<Method> methods = helperClass.methodsByName(methodName);
+            if (!methods.isEmpty()) {
+                return process.invokeMethod(copyContext, helperClass, methods.get(0), Collections.singletonList(obj));
+            }
+        }
+        return null;
+    }
+
+    private static byte[] readBytes(Value bytes) {
+        if (bytes instanceof ArrayReference) {
+            List<Value> values = ((ArrayReference) bytes).getValues();
+            byte[] res = new byte[values.size()];
+            int idx = 0;
+            for (Value value : values) {
+                if (value instanceof ByteValue) {
+                    res[idx++] = ((ByteValue) value).value();
+                }
+                else {
+                    return null;
+                }
+            }
+            return res;
+        }
+        return null;
+    }
+
+    static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image> {
+        public IconPopupEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+            super(linkText, evaluationContext);
+        }
+
+        @Override
+        protected JComponent createComponent(Image data) {
+            return (JComponent) TargetAWT.to(createIconViewer(data));
+        }
+    }
 }
