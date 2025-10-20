@@ -1,5 +1,6 @@
 /.consulo
 !/.consulo/codeStyleSettings.xml
+!/.consulo/copyright
 !/.consulo/runConfigurations
 /out
 /target
