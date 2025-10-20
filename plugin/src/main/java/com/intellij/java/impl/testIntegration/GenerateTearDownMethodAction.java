@@ -17,14 +17,17 @@ package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
+@ActionImpl(id = "GenerateTearDownMethod")
 public class GenerateTearDownMethodAction extends BaseGenerateTestSupportMethodAction {
-  public GenerateTearDownMethodAction() {
-    super(TestIntegrationUtils.MethodKind.TEAR_DOWN);
-  }
+    public GenerateTearDownMethodAction() {
+        super(TestIntegrationUtils.MethodKind.TEAR_DOWN, JavaLocalize.actionGenerateteardownmethodText());
+    }
 
-  @Override
-  protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
-    return super.isValidFor(targetClass, framework) && framework.findTearDownMethod(targetClass) == null;
-  }
+    @Override
+    protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
+        return super.isValidFor(targetClass, framework) && framework.findTearDownMethod(targetClass) == null;
+    }
 }

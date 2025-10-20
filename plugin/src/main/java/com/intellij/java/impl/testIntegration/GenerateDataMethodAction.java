@@ -18,18 +18,20 @@ package com.intellij.java.impl.testIntegration;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
+@ActionImpl(id = "GenerateDataMethod")
 public class GenerateDataMethodAction extends BaseGenerateTestSupportMethodAction {
-  public GenerateDataMethodAction() {
-    super(TestIntegrationUtils.MethodKind.DATA);
-  }
-
-  @Override
-  protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
-    if (framework instanceof JavaTestFramework && super.isValidFor(targetClass, framework)) {
-       return ((JavaTestFramework)framework).isParameterized(targetClass) && ((JavaTestFramework)framework).findParametersMethod(
-         targetClass) == null;
+    public GenerateDataMethodAction() {
+        super(TestIntegrationUtils.MethodKind.DATA, JavaLocalize.actionGeneratedatamethodText());
     }
-    return false;
-  }
+
+    @Override
+    protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
+        if (framework instanceof JavaTestFramework javaTestFramework && super.isValidFor(targetClass, framework)) {
+            return javaTestFramework.isParameterized(targetClass) && javaTestFramework.findParametersMethod(targetClass) == null;
+        }
+        return false;
+    }
 }

@@ -39,27 +39,6 @@
 	</permissions>
 
 	<actions>
-		<group id="JavaGenerateGroup1">
-			<action id="GenerateTestMethod" class="com.intellij.java.impl.testIntegration.GenerateTestMethodAction"/>
-			<action id="GenerateSetUpMethod" class="com.intellij.java.impl.testIntegration.GenerateSetUpMethodAction"/>
-			<action id="GenerateTearDownMethod" class="com.intellij.java.impl.testIntegration.GenerateTearDownMethodAction"/>
-			<action id="GenerateDataMethod" class="com.intellij.java.impl.testIntegration.GenerateDataMethodAction"/>
-			<separator/>
-			<action id="GenerateConstructor" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateConstructorAction"/>
-			<action id="GenerateGetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateGetterAction"/>
-			<action id="GenerateSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSetterAction"/>
-			<action id="GenerateGetterAndSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateGetterAndSetterAction"/>
-			<action id="GenerateEquals" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateEqualsAction"/>
-			<action id="Actions.ActionsPlugin.GenerateToString" class="com.intellij.java.impl.generate.GenerateToStringAction" text="to_String()" description="Generate toString() method"/>
-			<action id="GenerateCreateUI" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateCreateUIAction"/>
-			<add-to-group group-id="GenerateGroup" anchor="first"/>
-		</group>
-
-		<group id="JavaGenerateGroup2">
-			<action id="GenerateSuperMethodCall" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSuperMethodCallAction"/>
-			<add-to-group group-id="GenerateGroup" anchor="last"/>
-		</group>
-
 		<group id="RefactoringMenu1">
 			<action id="ChangeTypeSignature"
 					class="com.intellij.java.impl.refactoring.typeMigration.actions.ChangeTypeSignatureAction"

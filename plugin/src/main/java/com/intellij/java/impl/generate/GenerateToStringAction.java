@@ -16,17 +16,16 @@
 package com.intellij.java.impl.generate;
 
 import com.intellij.java.impl.codeInsight.generation.actions.BaseGenerateAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
 /**
- * This action handles the generation of a <code>toString()</code> method that dumps the fields
- * of the class.
+ * This action handles the generation of a <code>toString()</code> method that dumps the fields of the class.
  */
-public class GenerateToStringAction extends BaseGenerateAction
-{
-
-	public GenerateToStringAction()
-	{
-		super(new GenerateToStringActionHandlerImpl());
-	}
-
+@ActionImpl(id = "Actions.ActionsPlugin.GenerateToString")
+public class GenerateToStringAction extends BaseGenerateAction {
+    public GenerateToStringAction() {
+        super(new GenerateToStringActionHandlerImpl(), JavaLocalize.actionGenerateToStringText());
+        getTemplatePresentation().setDescriptionValue(JavaLocalize.actionGenerateToStringDescription());
+    }
 }

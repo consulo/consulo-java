@@ -18,19 +18,23 @@ package com.intellij.java.impl.codeInsight.generation.actions;
 import com.intellij.java.impl.codeInsight.generation.GenerateConstructorHandler;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
 /**
- * Action group which contains Generate... actions
- * Available in the Java code editor context only
+ * Action group which contains Generate... actions.
+ * Available in the Java code editor context only.
+ *
  * @author Alexey Kudravtsev
- */ 
+ */
+@ActionImpl(id = "GenerateConstructor")
 public class GenerateConstructorAction extends BaseGenerateAction {
-  public GenerateConstructorAction() {
-    super(new GenerateConstructorHandler());
-  }
+    public GenerateConstructorAction() {
+        super(new GenerateConstructorHandler(), JavaLocalize.actionGenerateconstructorText());
+    }
 
-  @Override
-  protected boolean isValidForClass(final PsiClass targetClass) {
-    return super.isValidForClass(targetClass) && !(targetClass instanceof PsiAnonymousClass);
-  }
+    @Override
+    protected boolean isValidForClass(PsiClass targetClass) {
+        return super.isValidForClass(targetClass) && !(targetClass instanceof PsiAnonymousClass);
+    }
 }

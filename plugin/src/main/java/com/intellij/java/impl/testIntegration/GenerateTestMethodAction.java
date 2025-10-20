@@ -15,8 +15,12 @@
  */
 package com.intellij.java.impl.testIntegration;
 
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
+
+@ActionImpl(id = "GenerateTestMethod")
 public class GenerateTestMethodAction extends BaseGenerateTestSupportMethodAction {
-  public GenerateTestMethodAction() {
-    super(TestIntegrationUtils.MethodKind.TEST);
-  }
+    public GenerateTestMethodAction() {
+        super(TestIntegrationUtils.MethodKind.TEST, JavaLocalize.actionGeneratetestmethodText());
+    }
 }
