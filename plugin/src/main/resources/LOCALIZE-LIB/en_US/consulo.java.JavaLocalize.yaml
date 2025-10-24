@@ -136,6 +136,10 @@ action.WrapReturnValue.description:
     text: Wrap return value of the specified method with object
 action.WrapReturnValue.text:
     text: Wrap Method Re_turn Value...
+action.change.type.signature.description:
+    text: Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references
+action.change.type.signature.text:
+    text: T_ype Migration...
 action.create.new.module.info.description:
     text: Create new module-info.java
 action.create.new.module.info.title:
@@ -144,6 +148,14 @@ action.create.new.package.info.description:
     text: Create new package-info.java
 action.create.new.package.info.title:
     text: package-info.java
+action.generate.super.method.call.description:
+    text: Generate super method call
+action.generate.super.method.call.text:
+    text: Super Method Call
+action.generate.to.string.description:
+    text: Generate toString() method
+action.generate.to.string.text:
+    text: to_String()
 action.go.to.implementation.text:
     text: Go to implementation(s)
 action.go.to.overriding.methods.text:

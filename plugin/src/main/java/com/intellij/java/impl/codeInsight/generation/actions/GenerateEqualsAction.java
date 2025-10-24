@@ -16,24 +16,30 @@
 package com.intellij.java.impl.codeInsight.generation.actions;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHandler;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiFile;
 
 /**
  * @author dsl
  */
+@ActionImpl(id = "GenerateEquals")
 public class GenerateEqualsAction extends BaseGenerateAction {
-  public GenerateEqualsAction() {
-    super(new GenerateEqualsHandler());
-  }
+    public GenerateEqualsAction() {
+        super(new GenerateEqualsHandler(), JavaLocalize.actionGenerateequalsText());
+    }
 
-  @Override
-  protected PsiClass getTargetClass(Editor editor, PsiFile file) {
-    final PsiClass targetClass = super.getTargetClass(editor, file);
-    if (targetClass == null || targetClass instanceof PsiAnonymousClass ||
-        targetClass.isEnum()) return null;
-    return targetClass;
-  }
+    @Override
+    @RequiredReadAction
+    protected PsiClass getTargetClass(Editor editor, PsiFile file) {
+        PsiClass targetClass = super.getTargetClass(editor, file);
+        if (targetClass == null || targetClass instanceof PsiAnonymousClass || targetClass.isEnum()) {
+            return null;
+        }
+        return targetClass;
+    }
 }

@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.generation.actions;
 
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.action.CodeInsightActionHandler;
@@ -25,22 +28,25 @@ import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 
+@ActionImpl(id = "GenerateSuperMethodCall")
 public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
-  @Nonnull
-  @Override
-  protected CodeInsightActionHandler getHandler() {
-    return new GenerateSuperMethodCallHandler();
-  }
+    public GenerateSuperMethodCallAction() {
+        super(JavaLocalize.actionGenerateSuperMethodCallText(), JavaLocalize.actionGenerateSuperMethodCallDescription());
+    }
 
-  @Override
-  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull final PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) {
-      return false;
+    @Nonnull
+    @Override
+    protected CodeInsightActionHandler getHandler() {
+        return new GenerateSuperMethodCallHandler();
     }
-    PsiMethod method = GenerateSuperMethodCallHandler.canInsertSuper(project, editor, file);
-    if (method == null) {
-      return false;
+
+    @Override
+    @RequiredReadAction
+    protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+        if (!(file instanceof PsiJavaFile)) {
+            return false;
+        }
+        PsiMethod method = GenerateSuperMethodCallHandler.canInsertSuper(project, editor, file);
+        return method != null;
     }
-    return true;
-  }
 }

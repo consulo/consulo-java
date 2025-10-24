@@ -16,14 +16,18 @@
 package com.intellij.java.impl.codeInsight.generation.actions;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateGetterAndSetterHandler;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
 /**
  * Action group which contains Generate... actions
  * Available in the Java code editor context only
+ *
  * @author Alexey Kudravtsev
- */ 
+ */
+@ActionImpl(id = "GenerateGetterAndSetter")
 public class GenerateGetterAndSetterAction extends GenerateGetterSetterBaseAction {
-  public GenerateGetterAndSetterAction() {
-    super(new GenerateGetterAndSetterHandler());
-  }
+    public GenerateGetterAndSetterAction() {
+        super(new GenerateGetterAndSetterHandler(), JavaLocalize.actionGenerategetterandsetterText());
+    }
 }

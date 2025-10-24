@@ -15,15 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.generation.actions;
 
-import com.intellij.java.impl.codeInsight.generation.GenerateGetterSetterHandlerBase;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * Action group which contains Generate... actions
  * Available in the Java code editor context only
+ *
  * @author Danila Ponomarenko
  */
 public abstract class GenerateGetterSetterBaseAction extends BaseGenerateAction {
-  public GenerateGetterSetterBaseAction(GenerateGetterSetterHandlerBase handler) {
-    super(handler);
-  }
+    protected GenerateGetterSetterBaseAction(CodeInsightActionHandler handler, @Nonnull LocalizeValue text) {
+        super(handler, text);
+    }
 }

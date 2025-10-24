@@ -17,45 +17,48 @@ package com.intellij.java.impl.codeInsight.generation.actions;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
 /**
  * @author Konstantin Bulenkov
  */
+@ActionImpl(id = "GenerateCreateUI")
 public class GenerateCreateUIAction extends BaseGenerateAction {
-  public GenerateCreateUIAction() {
-    super(new GenerateCreateUIHandler());
-  }
+    public GenerateCreateUIAction() {
+        super(new GenerateCreateUIHandler(), JavaLocalize.actionGeneratecreateuiText());
+    }
 
-  @Override
-  protected boolean isValidForClass(PsiClass targetClass) {
-    final PsiModifierList list = targetClass.getModifierList();
-    return list != null
-           && !list.hasModifierProperty(PsiModifier.ABSTRACT)
-           && !hasCreateUIMethod(targetClass)
-           && isComponentUI(targetClass);
-  }
+    @Override
+    @RequiredReadAction
+    protected boolean isValidForClass(PsiClass targetClass) {
+        return !targetClass.isAbstract()
+            && !hasCreateUIMethod(targetClass)
+            && isComponentUI(targetClass);
+    }
 
-  private static boolean hasCreateUIMethod(PsiClass aClass) {
-    for (PsiMethod method : aClass.findMethodsByName("createUI", false)) {
-      if (method.hasModifierProperty(PsiModifier.STATIC)) {
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
-        if (parameters.length == 1) {
-          final PsiType type = parameters[0].getType();
-          final PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
-          return typeClass != null && "javax.swing.JComponent".equals(typeClass.getQualifiedName());
+    private static boolean hasCreateUIMethod(PsiClass aClass) {
+        for (PsiMethod method : aClass.findMethodsByName("createUI", false)) {
+            if (method.isStatic()) {
+                PsiParameter[] parameters = method.getParameterList().getParameters();
+                if (parameters.length == 1) {
+                    PsiType type = parameters[0].getType();
+                    PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
+                    return typeClass != null && "javax.swing.JComponent".equals(typeClass.getQualifiedName());
+                }
+            }
         }
-      }
+        return false;
     }
-    return false;
-  }
 
-  private static boolean isComponentUI(PsiClass aClass) {
-    while (aClass != null) {
-      if ("javax.swing.plaf.ComponentUI".equals(aClass.getQualifiedName())) {
-        return true;
-      }
-      aClass = aClass.getSuperClass();
+    private static boolean isComponentUI(PsiClass aClass) {
+        while (aClass != null) {
+            if ("javax.swing.plaf.ComponentUI".equals(aClass.getQualifiedName())) {
+                return true;
+            }
+            aClass = aClass.getSuperClass();
+        }
+        return false;
     }
-    return false;
-  }
 }

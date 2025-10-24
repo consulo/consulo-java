@@ -17,14 +17,17 @@ package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 
+@ActionImpl(id = "GenerateSetUpMethod")
 public class GenerateSetUpMethodAction extends BaseGenerateTestSupportMethodAction {
-  public GenerateSetUpMethodAction() {
-    super(TestIntegrationUtils.MethodKind.SET_UP);
-  }
+    public GenerateSetUpMethodAction() {
+        super(TestIntegrationUtils.MethodKind.SET_UP, JavaLocalize.actionGeneratesetupmethodText());
+    }
 
-  @Override
-  protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
-    return super.isValidFor(targetClass, framework) && framework.findSetUpMethod(targetClass) == null;
-  }
+    @Override
+    protected boolean isValidFor(PsiClass targetClass, TestFramework framework) {
+        return super.isValidFor(targetClass, framework) && framework.findSetUpMethod(targetClass) == null;
+    }
 }
