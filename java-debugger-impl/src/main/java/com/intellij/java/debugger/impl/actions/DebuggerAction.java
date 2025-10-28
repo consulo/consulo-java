@@ -28,6 +28,7 @@ import consulo.disposer.Disposable;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.ui.XValueTree;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
@@ -42,6 +43,7 @@ import javax.swing.tree.TreePath;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class DebuggerAction
@@ -49,7 +51,18 @@ import java.util.List;
  * @author Jeka
  */
 public abstract class DebuggerAction extends AnAction {
+    private static final Set<String> POPUP_PLACES = Set.of(
+        DebuggerActions.EVALUATION_DIALOG_POPUP,
+        DebuggerActions.FRAME_PANEL_POPUP,
+        DebuggerActions.WATCH_PANEL_POPUP,
+        DebuggerActions.INSPECT_PANEL_POPUP
+    );
+
     private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
+
+    protected DebuggerAction(@Nonnull LocalizeValue text) {
+        super(text);
+    }
 
     @Nullable
     public static DebuggerTree getTree(DataContext dataContext) {
@@ -117,10 +130,7 @@ public abstract class DebuggerAction extends AnAction {
     }
 
     public static boolean isContextView(AnActionEvent e) {
-        return DebuggerActions.EVALUATION_DIALOG_POPUP.equals(e.getPlace()) ||
-            DebuggerActions.FRAME_PANEL_POPUP.equals(e.getPlace()) ||
-            DebuggerActions.WATCH_PANEL_POPUP.equals(e.getPlace()) ||
-            DebuggerActions.INSPECT_PANEL_POPUP.equals(e.getPlace());
+        return POPUP_PLACES.contains(e.getPlace());
     }
 
     public static Disposable installEditAction(JTree tree, String actionName) {
@@ -148,7 +158,7 @@ public abstract class DebuggerAction extends AnAction {
 
     public static boolean isFirstStart(AnActionEvent event) {
         //noinspection HardCodedStringLiteral
-        String key = "initalized";
+        String key = "initialized";
         if (event.getPresentation().getClientProperty(key) != null) {
             return false;
         }

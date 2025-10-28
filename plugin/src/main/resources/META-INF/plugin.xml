@@ -96,38 +96,6 @@
 			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
 		</action>
 
-		<group id="JavaDebuggerActions">
-			<action id="Debugger.CustomizeContextView" class="com.intellij.java.debugger.impl.actions.CustomizeContextViewAction">
-				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
-				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
-			</action>
-			<action id="Debugger.CustomizeThreadsView" class="com.intellij.java.debugger.impl.actions.CustomizeThreadsViewAction">
-				<add-to-group group-id="XDebugger.Frames.Tree.Popup" anchor="last"/>
-			</action>
-			<action id="Debugger.EditFrameSource" class="com.intellij.java.debugger.impl.actions.EditFrameSourceAction"/>
-			<action id="Debugger.EditNodeSource" class="com.intellij.java.debugger.impl.actions.EditSourceAction"/>
-			<action id="Debugger.EditTypeSource" class="com.intellij.java.debugger.impl.actions.JumpToObjectAction"/>
-			<reference ref="Debugger.PopFrame"/>
-			<action id="Debugger.ViewAsGroup" class="com.intellij.java.debugger.impl.actions.ViewAsGroup">
-				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
-			</action>
-			<action id="Debugger.AdjustArrayRange" class="com.intellij.java.debugger.impl.actions.ArrayAction$AdjustArrayRangeAction">
-				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
-			</action>
-			<!--<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>-->
-			<!--<action id="Debugger.ShowAsHex" class="com.intellij.debugger.actions.ShowAsHexAction" text="Show as Hex"/>-->
-			<action id="Debugger.ResumeThread" class="com.intellij.java.debugger.impl.actions.ResumeThreadAction"/>
-			<action id="Debugger.FreezeThread" class="com.intellij.java.debugger.impl.actions.FreezeThreadAction"/>
-			<action id="Debugger.InterruptThread" class="com.intellij.java.debugger.impl.actions.InterruptThreadAction"/>
-			<action id="Debugger.CreateRenderer" class="com.intellij.java.debugger.impl.actions.CreateRendererAction" text="Create..."/>
-			<action id="Debugger.AutoRenderer" class="com.intellij.java.debugger.impl.actions.AutoRendererAction"/>
-			<action id="Debugger.MuteRenderers" class="com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction" text="Mute Renderers">
-				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
-			</action>
-
-			<add-to-group group-id="DebuggerActions" anchor="first"/>
-		</group>
-
 		<group id="Debugger.Representation">
 			<reference ref="Debugger.CreateRenderer"/>
 			<separator/>

@@ -18,7 +18,9 @@ package com.intellij.java.debugger.impl.actions;
 import java.util.List;
 import java.util.function.Supplier;
 
+import consulo.annotation.component.ActionImpl;
 import consulo.application.Application;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -32,9 +34,7 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.ArrayType;
@@ -46,8 +46,13 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
+@ActionImpl(id = "Debugger.EditTypeSource")
 public class JumpToObjectAction extends DebuggerAction {
     private static final Logger LOG = Logger.getInstance(JumpToObjectAction.class);
+
+    public JumpToObjectAction() {
+        super(XDebuggerLocalize.actionEditTypeSourceText());
+    }
 
     @Override
     @RequiredUIAccess

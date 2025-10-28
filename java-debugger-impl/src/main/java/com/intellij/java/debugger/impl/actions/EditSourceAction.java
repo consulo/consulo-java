@@ -26,7 +26,9 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
-import consulo.application.AccessRule;
+import consulo.annotation.component.ActionImpl;
+import consulo.application.ReadAction;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionManager;
@@ -34,7 +36,12 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.action.Presentation;
 
+@ActionImpl(id = DebuggerActions.EDIT_NODE_SOURCE)
 public class EditSourceAction extends DebuggerAction {
+    public EditSourceAction() {
+        super(XDebuggerLocalize.actionEditNodeSourceText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
@@ -87,8 +94,8 @@ public class EditSourceAction extends DebuggerAction {
         }
 
         NodeDescriptorImpl nodeDescriptor1 = nodeDescriptor;
-        return AccessRule.read(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
-  }
+        return ReadAction.compute(() -> SourcePositionProvider.getSourcePosition(nodeDescriptor1, project, context));
+    }
 
     @Override
     @RequiredUIAccess
@@ -114,7 +121,8 @@ public class EditSourceAction extends DebuggerAction {
         else {
             presentation.setEnabled(false);
         }
-        e.getPresentation()
-            .setTextValue(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue());
+        e.getPresentation().setTextValue(
+            ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue()
+        );
     }
 }

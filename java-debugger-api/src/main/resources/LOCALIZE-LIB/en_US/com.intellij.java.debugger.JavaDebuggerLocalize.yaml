@@ -4,6 +4,8 @@ action.auto.variables.mode:
     text: Auto-Variables Mode
 action.auto.variables.mode.description:
     text: Show only variables used near the execution point
+action.create.renderer.text:
+    text: Create...
 action.disable.text:
     text: Disable
 action.enable.text:
@@ -20,6 +22,8 @@ action.kill.process.text:
     text: Kill Process
 action.maximizeContent.text:
     text: ''
+action.mute.renderers.text:
+    text: Mute Renderers
 action.remove.text:
     text: Remove
 action.remove.watch.text:

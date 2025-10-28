@@ -41,6 +41,10 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 public abstract class ArrayAction extends DebuggerAction {
+    protected ArrayAction(@Nonnull LocalizeValue text) {
+        super(text);
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {
@@ -163,7 +167,7 @@ public abstract class ArrayAction extends DebuggerAction {
         return prefix;
     }
 
-    private static class NamedArrayConfigurable extends ArrayRendererConfigurable implements Configurable {
+    protected static class NamedArrayConfigurable extends ArrayRendererConfigurable implements Configurable {
         private final LocalizeValue myTitle;
 
         public NamedArrayConfigurable(LocalizeValue title, ArrayRenderer renderer) {
@@ -180,41 +184,6 @@ public abstract class ArrayAction extends DebuggerAction {
         @Override
         public String getHelpTopic() {
             return null;
-        }
-    }
-
-    public static class AdjustArrayRangeAction extends ArrayAction {
-        @Nonnull
-        @Override
-        @RequiredUIAccess
-        protected AsyncResult<ArrayRenderer> createNewRenderer(
-            XValueNode node,
-            ArrayRenderer original,
-            @Nonnull DebuggerContextImpl debuggerContext,
-            LocalizeValue title
-        ) {
-            ArrayRenderer clonedRenderer = original.clone();
-            clonedRenderer.setForced(true);
-            AsyncResult<ArrayRenderer> result = AsyncResult.undefined();
-            AsyncResult<Void> showResult = ShowSettingsUtil.getInstance()
-                .editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer));
-            showResult.doWhenDone(() -> result.setDone(clonedRenderer));
-            showResult.doWhenRejected((Runnable)result::setRejected);
-            return result;
-        }
-    }
-
-    public static class FilterArrayAction extends ArrayAction {
-        @Nonnull
-        @Override
-        protected AsyncResult<ArrayRenderer> createNewRenderer(
-            XValueNode node,
-            ArrayRenderer original,
-            @Nonnull DebuggerContextImpl debuggerContext,
-            LocalizeValue title
-        ) {
-            //TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
-            return AsyncResult.rejected();
         }
     }
 }

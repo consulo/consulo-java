@@ -19,6 +19,9 @@ import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.settings.JavaDebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.disposer.Disposable;
@@ -33,51 +36,67 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.DumbAwareAction;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.List;
 
+@ActionImpl(
+    id = "Debugger.CustomizeContextView",
+    parents = {
+        @ActionParentRef(@ActionRef(id = "XDebugger.Variables.Tree.Popup")),
+        @ActionParentRef(@ActionRef(id = "XDebugger.Watches.Tree.Popup"))
+    }
+)
 public class CustomizeContextViewAction extends DumbAwareAction {
+    public CustomizeContextViewAction() {
+        super(XDebuggerLocalize.actionCustomizeContextViewText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         Disposable disposable = Disposable.newDisposable();
-        SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {
-            @Override
-            protected List<Configurable> createConfigurables() {
-                return JavaDebuggerSettings.createDataViewsConfigurable();
-            }
+        SingleConfigurableEditor editor = new SingleConfigurableEditor(
+            project,
+            new TabbedConfigurable(disposable) {
+                @Override
+                protected List<Configurable> createConfigurables() {
+                    return JavaDebuggerSettings.createDataViewsConfigurable();
+                }
 
-            @Override
-            @RequiredUIAccess
-            public void apply() throws ConfigurationException {
-                super.apply();
-                NodeRendererSettings.getInstance().fireRenderersChanged();
-            }
+                @Override
+                @RequiredUIAccess
+                public void apply() throws ConfigurationException {
+                    super.apply();
+                    NodeRendererSettings.getInstance().fireRenderersChanged();
+                }
 
-            @Override
-            public LocalizeValue getDisplayName() {
-                return JavaDebuggerLocalize.titleCustomizeDataViews();
-            }
+                @Nonnull
+                @Override
+                public LocalizeValue getDisplayName() {
+                    return JavaDebuggerLocalize.titleCustomizeDataViews();
+                }
 
-            @Override
-            public String getHelpTopic() {
-                return "reference.debug.customize.data.view";
-            }
+                @Override
+                public String getHelpTopic() {
+                    return "reference.debug.customize.data.view";
+                }
 
-            @Override
-            @RequiredUIAccess
-            protected void createConfigurableTabs() {
-                for (Configurable configurable : getConfigurables()) {
-                    JComponent component = configurable.createComponent(disposable);
-                    assert component != null;
-                    component.setBorder(new EmptyBorder(8, 8, 8, 8));
-                    myTabbedPane.addTab(configurable.getDisplayName().get(), component);
+                @Override
+                @RequiredUIAccess
+                protected void createConfigurableTabs() {
+                    for (Configurable configurable : getConfigurables()) {
+                        JComponent component = configurable.createComponent(disposable);
+                        assert component != null;
+                        component.setBorder(new EmptyBorder(8, 8, 8, 8));
+                        myTabbedPane.addTab(configurable.getDisplayName().get(), component);
+                    }
                 }
             }
-        });
+        );
         Disposer.register(editor.getDisposable(), disposable);
         editor.show();
     }
@@ -85,16 +104,9 @@ public class CustomizeContextViewAction extends DumbAwareAction {
     @Override
     @RequiredUIAccess
     public void update(AnActionEvent e) {
-        e.getPresentation().setTextValue(XDebuggerLocalize.actionCustomizeContextViewText());
-
         Project project = e.getData(Project.KEY);
         XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);
         XDebugSession currentSession = debuggerManager == null ? null : debuggerManager.getCurrentSession();
-        if (currentSession != null) {
-            e.getPresentation().setEnabledAndVisible(currentSession.getDebugProcess() instanceof JavaDebugProcess);
-        }
-        else {
-            e.getPresentation().setEnabledAndVisible(false);
-        }
+        e.getPresentation().setEnabledAndVisible(currentSession != null && currentSession.getDebugProcess() instanceof JavaDebugProcess);
     }
 }

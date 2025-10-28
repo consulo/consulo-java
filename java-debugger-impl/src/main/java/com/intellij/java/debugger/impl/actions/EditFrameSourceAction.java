@@ -15,6 +15,8 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
+import consulo.annotation.component.ActionImpl;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnActionEvent;
@@ -23,12 +25,18 @@ import consulo.ui.ex.action.IdeActions;
 /**
  * @author lex
  */
+@ActionImpl(id = DebuggerActions.EDIT_FRAME_SOURCE)
 public class EditFrameSourceAction extends GotoFrameSourceAction {
+    public EditFrameSourceAction() {
+        super(XDebuggerLocalize.actionEditFrameSourceText());
+    }
+
     @Override
     @RequiredUIAccess
     public void update(AnActionEvent e) {
         super.update(e);
-        e.getPresentation()
-            .setTextValue(ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue());
+        e.getPresentation().setTextValue(
+            ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue()
+        );
     }
 }

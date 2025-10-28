@@ -20,9 +20,10 @@ import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.component.ActionImpl;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -33,7 +34,12 @@ import consulo.ui.ex.action.Presentation;
  * @author lex
  * @since 2003-09-26
  */
+@ActionImpl(id = "Debugger.ResumeThread")
 public class ResumeThreadAction extends DebuggerAction {
+    public ResumeThreadAction() {
+        super(XDebuggerLocalize.actionResumeThreadText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {

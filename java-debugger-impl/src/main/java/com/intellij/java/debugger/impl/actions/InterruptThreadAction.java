@@ -19,9 +19,9 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.component.ActionImpl;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
@@ -33,7 +33,12 @@ import java.util.List;
  * @author lex
  * @since 2003-09-26
  */
+@ActionImpl(id = "Debugger.InterruptThread")
 public class InterruptThreadAction extends DebuggerAction {
+    public InterruptThreadAction() {
+        super(JavaDebuggerLocalize.actionInterruptThreadText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
@@ -83,7 +88,7 @@ public class InterruptThreadAction extends DebuggerAction {
 
             if (visible) {
                 for (DebuggerTreeNodeImpl selectedNode : selectedNodes) {
-                    ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl)selectedNode.getDescriptor();
+                    ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl) selectedNode.getDescriptor();
                     if (threadDescriptor.isFrozen()) {
                         enabled = false;
                         break;
