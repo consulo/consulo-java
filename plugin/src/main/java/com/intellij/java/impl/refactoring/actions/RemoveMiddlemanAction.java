@@ -17,8 +17,10 @@ package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.removemiddleman.RemoveMiddlemanHandler;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -27,22 +29,34 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "RemoveMiddleman")
 public class RemoveMiddlemanAction extends BaseRefactoringAction {
+    public RemoveMiddlemanAction() {
+        super(JavaLocalize.actionRemoveMiddlemanText(), JavaLocalize.actionRemoveMiddlemanDescription());
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
-    return new RemoveMiddlemanHandler();
-  }
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
+        return new RemoveMiddlemanHandler();
+    }
 
-  @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    return element instanceof PsiField;
-  }
+    @Override
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        return element instanceof PsiField;
+    }
 
-  public boolean isAvailableInEditorOnly() {
-    return false;
-  }
+    @Override
+    public boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiField.class, false) != null;
-  }
+    @Override
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiField.class, false) != null;
+    }
 }

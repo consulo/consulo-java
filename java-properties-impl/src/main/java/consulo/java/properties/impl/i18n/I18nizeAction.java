@@ -24,6 +24,7 @@ import consulo.annotation.component.ActionRef;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
+import consulo.java.properties.impl.localize.JavaPropertiesLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -47,6 +48,10 @@ import java.util.Collection;
 @ActionImpl(id = "I18nize", parents = @ActionParentRef(@ActionRef(id = "RefactoringMenu")))
 public class I18nizeAction extends AnAction {
     private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
+
+    public I18nizeAction() {
+        super(JavaPropertiesLocalize.actionI18nizeText(), JavaPropertiesLocalize.actionI18nizeDescription());
+    }
 
     @Override
     @RequiredUIAccess

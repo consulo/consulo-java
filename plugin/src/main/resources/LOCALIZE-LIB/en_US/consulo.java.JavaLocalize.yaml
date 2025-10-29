@@ -1,14 +1,14 @@
-action.AnonymousToInner.description:
+action.anonymous.to.inner.description:
     text: Convert anonymous class into an inner class
-action.AnonymousToInner.text:
+action.anonymous.to.inner.text:
     text: Convert Anon_ymous to Inner...
-action.ConvertToInstanceMethod.description:
+action.convert.to.instance.method.description:
     text: Convert static method to instance method and correct all references
-action.ConvertToInstanceMethod.text:
+action.convert.to.instance.method.text:
     text: C_onvert To Instance Method...
-action.EncapsulateFields.description:
+action.encapsulate.fields.description:
     text: Replace direct access to fields in the selected class with use of accessor methods
-action.EncapsulateFields.text:
+action.encapsulate.fields.text:
     text: _Encapsulate Fields...
 action.ExportThreads.description:
     text: Save all threads information to a text file or clipboard
@@ -46,21 +46,17 @@ action.Hotswap.description:
     text: Reload all changed classes into application being debugged (HotSwap)
 action.Hotswap.text:
     text: Relo_ad Changed Classes
-action.I18nize.description:
-    text: Replace Java string literal or JSP text with internationalized expression
-action.I18nize.text:
-    text: Internationali_ze...
 action.InferNullity.description:
     text: Infer nullity
 action.InferNullity.text:
     text: Infer _Nullity...
-action.InheritanceToDelegation.description:
+action.inheritance.to.delegation.description:
     text: Replace inheritance with delegation
-action.InheritanceToDelegation.text:
+action.inheritance.to.delegation.text:
     text: Replace _Inheritance with Delegation...
-action.IntroduceParameterObject.description:
+action.introduce.parameter.object.description:
     text: Replaces method parameters list with object
-action.IntroduceParameterObject.text:
+action.introduce.parameter.object.text:
     text: Introduce Parameter Ob_ject...
 action.InvertBoolean.description:
     text: Makes the method return or variable contain the opposite value and corrects the references
@@ -74,33 +70,33 @@ action.MakeStatic.description:
     text: Convert method or inner class to static and correct all references
 action.MakeStatic.text:
     text: Make S_tatic...
-action.MethodDuplicates.description:
+action.method.duplicates.description:
     text: Finds code in selected scope that can be transformed into a call of selected method/constant
-action.MethodDuplicates.text:
+action.method.duplicates.text:
     text: Find and Replace _Code Duplicates...
-action.Migrate.description:
+action.migrate.description:
     text: Open migration dialog
-action.Migrate.text:
+action.migrate.text:
     text: _Migrate...
-action.RemoveMiddleman.description:
+action.remove.middleman.description:
     text: Inline delegate to the selected field methods
-action.RemoveMiddleman.text:
+action.remove.middleman.text:
     text: Remove _Middleman...
-action.ReplaceConstructorWithBuilder.description:
+action.replace.constructor.with.builder.description:
     text: Replace current class constructors calls with chained calls to the builder
-action.ReplaceConstructorWithBuilder.text:
+action.replace.constructor.with.builder.text:
     text: Replace Constructor with Builder...
-action.ReplaceConstructorWithFactory.description:
+action.replace.constructor.with.factory.description:
     text: Create a static factory method and use it instead of a constructor
-action.ReplaceConstructorWithFactory.text:
+action.replace.constructor.with.factory.text:
     text: Replace Constructor with F_actory Method...
-action.ReplaceMethodWithMethodObject.description:
+action.replace.method.with.method.object.description:
     text: Turn the method into its own object so that all the parameters become fields on that object
-action.ReplaceMethodWithMethodObject.text:
+action.replace.method.with.method.object.text:
     text: Method Ob_ject...
-action.ReplaceTempWithQuery.description:
+action.replace.temp.with.query.description:
     text: Turn the selected variable into a method
-action.ReplaceTempWithQuery.text:
+action.replace.temp.with.query.text:
     text: Replace Temp with _Query...
 action.ShowPackageCycles.description:
     text: Browse code chosen analysis item used in cycles
@@ -116,17 +112,17 @@ action.SliceForward.text:
     text: Analyze Data Flow _from Here
 action.SliceSliceForward.description:
     text: Search for values escaped from this location
-action.TurnRefsToSuper.description:
+action.turn.refs.to.super.description:
     text: Change usages of a class to those of its superclass or interface
-action.TurnRefsToSuper.text:
+action.turn.refs.to.super.text:
     text: Use Interface _Where Possible...
 action.Unscramble.description:
     text: Open console with the navigatable stacktrace
 action.Unscramble.text:
     text: Analyze _Stacktrace...
-action.WrapReturnValue.description:
+action.wrap.return.value.description:
     text: Wrap return value of the specified method with object
-action.WrapReturnValue.text:
+action.wrap.return.value.text:
     text: Wrap Method Re_turn Value...
 action.change.type.signature.description:
     text: Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references

@@ -18,8 +18,11 @@ package com.intellij.java.impl.refactoring.actions;
 import com.intellij.java.impl.refactoring.anonymousToInner.AnonymousToInnerHandler;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiNewExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -28,28 +31,43 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "AnonymousToInner")
 public class AnonymousToInnerAction extends BaseRefactoringAction {
-  public boolean isAvailableInEditorOnly() {
-    return true;
-  }
-
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return false;
-  }
-
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    final PsiElement targetElement = file.findElementAt(editor.getCaretModel().getOffset());
-    if (PsiTreeUtil.getParentOfType(targetElement, PsiAnonymousClass.class) != null) {
-      return true;
+    public AnonymousToInnerAction() {
+        super(JavaLocalize.actionAnonymousToInnerText(), JavaLocalize.actionAnonymousToInnerDescription());
     }
-    if (PsiTreeUtil.getParentOfType(element, PsiAnonymousClass.class) != null) {
-      return true;
-    }
-    final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
-    return newExpression != null && newExpression.getAnonymousClass() != null;
-  }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new AnonymousToInnerHandler();
-  }
+    @Override
+    public boolean isAvailableInEditorOnly() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return false;
+    }
+
+    @Override
+    @RequiredReadAction
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        PsiElement targetElement = file.findElementAt(editor.getCaretModel().getOffset());
+        if (PsiTreeUtil.getParentOfType(targetElement, PsiAnonymousClass.class) != null) {
+            return true;
+        }
+        if (PsiTreeUtil.getParentOfType(element, PsiAnonymousClass.class) != null) {
+            return true;
+        }
+        PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
+        return newExpression != null && newExpression.getAnonymousClass() != null;
+    }
+
+    @Override
+    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new AnonymousToInnerHandler();
+    }
 }

@@ -28,8 +28,10 @@ import com.intellij.java.impl.refactoring.makeStatic.MakeStaticHandler;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -37,24 +39,37 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "MakeStatic")
 public class MakeStaticAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
-
-  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return (elements.length == 1) && (elements[0] instanceof PsiMethod) && !((PsiMethod) elements[0]).isConstructor();
-  }
-
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    if (element instanceof PsiIdentifier) {
-      element = element.getParent();
+    public MakeStaticAction() {
+        super(JavaLocalize.actionMakestaticText(), JavaLocalize.actionMakestaticDescription());
     }
-    return element instanceof PsiTypeParameterListOwner &&
-        MakeStaticHandler.validateTarget((PsiTypeParameterListOwner) element) == null;
-  }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new MakeStaticHandler();
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return false;
+    }
+
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1 && elements[0] instanceof PsiMethod method && !method.isConstructor();
+    }
+
+    @Override
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        if (element instanceof PsiIdentifier) {
+            element = element.getParent();
+        }
+        return element instanceof PsiTypeParameterListOwner paramListOwner && MakeStaticHandler.validateTarget(paramListOwner) == null;
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new MakeStaticHandler();
+    }
 }

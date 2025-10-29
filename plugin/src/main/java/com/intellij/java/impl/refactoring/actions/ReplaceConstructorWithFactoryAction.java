@@ -19,7 +19,10 @@ import com.intellij.java.impl.refactoring.replaceConstructorWithFactory.ReplaceC
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
@@ -29,18 +32,27 @@ import jakarta.annotation.Nonnull;
 /**
  * @author dsl
  */
+@ActionImpl(id = "ReplaceConstructorWithFactory")
 public class ReplaceConstructorWithFactoryAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
+    public ReplaceConstructorWithFactoryAction() {
+        super(JavaLocalize.actionReplaceConstructorWithFactoryText(), JavaLocalize.actionReplaceConstructorWithFactoryDescription());
+    }
 
-  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return elements.length == 1 &&
-        (elements[0] instanceof PsiMethod && ((PsiMethod) elements[0]).isConstructor() || elements[0] instanceof PsiClass)
-        && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new ReplaceConstructorWithFactoryHandler();
-  }
+    @Override
+    @RequiredReadAction
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1
+            && (elements[0] instanceof PsiMethod method && method.isConstructor() || elements[0] instanceof PsiClass)
+            && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new ReplaceConstructorWithFactoryHandler();
+    }
 }

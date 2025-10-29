@@ -19,8 +19,11 @@ import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsHan
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -28,45 +31,65 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "EncapsulateFields")
 public class EncapsulateFieldsAction extends BaseRefactoringAction {
-  public boolean isAvailableInEditorOnly() {
-    return false;
-  }
-
-  @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    final PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class, false);
-    if (containingClass != null) {
-      final PsiField[] fields = containingClass.getFields();
-      for (PsiField field : fields) {
-        if (isAcceptedField(field)) return true;
-      }
+    public EncapsulateFieldsAction() {
+        super(JavaLocalize.actionEncapsulateFieldsText(), JavaLocalize.actionEncapsulateFieldsDescription());
     }
-    return false;
-  }
 
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    if (elements.length == 1) {
-      return elements[0] instanceof PsiClass && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE) || isAcceptedField(elements[0]);
-    } else if (elements.length > 1) {
-      for (int idx = 0; idx < elements.length; idx++) {
-        if (!isAcceptedField(elements[idx])) {
-          return false;
+    @Override
+    public boolean isAvailableInEditorOnly() {
+        return false;
+    }
+
+    @Override
+    @RequiredReadAction
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class, false);
+        if (containingClass != null) {
+            PsiField[] fields = containingClass.getFields();
+            for (PsiField field : fields) {
+                if (isAcceptedField(field)) {
+                    return true;
+                }
+            }
         }
-      }
-      return true;
+        return false;
     }
-    return false;
-  }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new EncapsulateFieldsHandler();
-  }
+    @Override
+    @RequiredReadAction
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        if (elements.length == 1) {
+            return elements[0] instanceof PsiClass psiClass && psiClass.getLanguage().isKindOf(JavaLanguage.INSTANCE)
+                || isAcceptedField(elements[0]);
+        }
+        else if (elements.length > 1) {
+            for (PsiElement element : elements) {
+                if (!isAcceptedField(element)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
-  private static boolean isAcceptedField(PsiElement element) {
-    return element instanceof PsiField &&
-        element.getLanguage().isKindOf(JavaLanguage.INSTANCE) &&
-        ((PsiField) element).getContainingClass() != null;
-  }
+    @Override
+    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new EncapsulateFieldsHandler();
+    }
+
+    @RequiredReadAction
+    private static boolean isAcceptedField(PsiElement element) {
+        return element instanceof PsiField field
+            && field.getLanguage().isKindOf(JavaLanguage.INSTANCE)
+            && field.getContainingClass() != null;
+    }
 }

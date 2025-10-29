@@ -18,25 +18,37 @@ package com.intellij.java.impl.refactoring.actions;
 import com.intellij.java.impl.refactoring.inheritanceToDelegation.InheritanceToDelegationHandler;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "InheritanceToDelegation")
 public class InheritanceToDelegationAction extends BaseRefactoringAction {
-  public boolean isAvailableInEditorOnly() {
-    return false;
-  }
+    public InheritanceToDelegationAction() {
+        super(JavaLocalize.actionInheritanceToDelegationText(), JavaLocalize.actionInheritanceToDelegationDescription());
+    }
 
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return elements.length == 1 &&
-        elements[0] instanceof PsiClass &&
-        !((PsiClass) elements[0]).isInterface() &&
-        elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
-  }
+    @Override
+    public boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new InheritanceToDelegationHandler();
-  }
+    @Override
+    @RequiredReadAction
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1
+            && elements[0] instanceof PsiClass psiClass
+            && !psiClass.isInterface()
+            && psiClass.getLanguage().isKindOf(JavaLanguage.INSTANCE);
+    }
+
+    @Override
+    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new InheritanceToDelegationHandler();
+    }
 }
