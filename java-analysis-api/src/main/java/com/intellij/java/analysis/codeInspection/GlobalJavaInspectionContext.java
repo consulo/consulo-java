@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 18-Dec-2007
- */
 package com.intellij.java.analysis.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.GlobalInspectionContextExtension;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
@@ -32,67 +28,71 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.PsiReference;
 import consulo.application.util.function.Processor;
 
+/**
+ * @author anna
+ * @since 2007-12-18
+ */
 public abstract class GlobalJavaInspectionContext implements GlobalInspectionContextExtension<GlobalJavaInspectionContext> {
-  public static final Key<GlobalJavaInspectionContext> CONTEXT = Key.create("GlobalJavaInspectionContext");
+    public static final Key<GlobalJavaInspectionContext> CONTEXT = Key.create("GlobalJavaInspectionContext");
 
-  public interface DerivedClassesProcessor extends Processor<PsiClass> {
-  }
+    public interface DerivedClassesProcessor extends Processor<PsiClass> {
+    }
 
-  public interface DerivedMethodsProcessor extends Processor<PsiMethod> {
-  }
+    public interface DerivedMethodsProcessor extends Processor<PsiMethod> {
+    }
 
-  public interface UsagesProcessor extends Processor<PsiReference> {
-  }
+    public interface UsagesProcessor extends Processor<PsiReference> {
+    }
 
-  /**
-   * Requests that usages of the specified class outside the current analysis
-   * scope be passed to the specified processor.
-   *
-   * @param refClass the reference graph node for the class whose usages should be processed.
-   * @param p        the processor to pass the usages to.
-   */
-  public abstract void enqueueClassUsagesProcessor(RefClass refClass, UsagesProcessor p);
+    /**
+     * Requests that usages of the specified class outside the current analysis
+     * scope be passed to the specified processor.
+     *
+     * @param refClass the reference graph node for the class whose usages should be processed.
+     * @param p        the processor to pass the usages to.
+     */
+    public abstract void enqueueClassUsagesProcessor(RefClass refClass, UsagesProcessor p);
 
-  /**
-   * Requests that derived classes of the specified class outside the current analysis
-   * scope be passed to the specified processor.
-   *
-   * @param refClass the reference graph node for the class whose derived classes should be processed.
-   * @param p        the processor to pass the classes to.
-   */
-  public abstract void enqueueDerivedClassesProcessor(RefClass refClass, DerivedClassesProcessor p);
+    /**
+     * Requests that derived classes of the specified class outside the current analysis
+     * scope be passed to the specified processor.
+     *
+     * @param refClass the reference graph node for the class whose derived classes should be processed.
+     * @param p        the processor to pass the classes to.
+     */
+    public abstract void enqueueDerivedClassesProcessor(RefClass refClass, DerivedClassesProcessor p);
 
-  /**
-   * Requests that implementing or overriding methods of the specified method outside
-   * the current analysis scope be passed to the specified processor.
-   *
-   * @param refMethod the reference graph node for the method whose derived methods should be processed.
-   * @param p         the processor to pass the methods to.
-   */
-  public abstract void enqueueDerivedMethodsProcessor(RefMethod refMethod, DerivedMethodsProcessor p);
+    /**
+     * Requests that implementing or overriding methods of the specified method outside
+     * the current analysis scope be passed to the specified processor.
+     *
+     * @param refMethod the reference graph node for the method whose derived methods should be processed.
+     * @param p         the processor to pass the methods to.
+     */
+    public abstract void enqueueDerivedMethodsProcessor(RefMethod refMethod, DerivedMethodsProcessor p);
 
-  /**
-   * Requests that usages of the specified field outside the current analysis
-   * scope be passed to the specified processor.
-   *
-   * @param refField the reference graph node for the field whose usages should be processed.
-   * @param p        the processor to pass the usages to.
-   */
-  public abstract void enqueueFieldUsagesProcessor(RefField refField, UsagesProcessor p);
+    /**
+     * Requests that usages of the specified field outside the current analysis
+     * scope be passed to the specified processor.
+     *
+     * @param refField the reference graph node for the field whose usages should be processed.
+     * @param p        the processor to pass the usages to.
+     */
+    public abstract void enqueueFieldUsagesProcessor(RefField refField, UsagesProcessor p);
 
-  /**
-   * Requests that usages of the specified method outside the current analysis
-   * scope be passed to the specified processor.
-   *
-   * @param refMethod the reference graph node for the method whose usages should be processed.
-   * @param p         the processor to pass the usages to.
-   */
-  public abstract void enqueueMethodUsagesProcessor(RefMethod refMethod, UsagesProcessor p);
+    /**
+     * Requests that usages of the specified method outside the current analysis
+     * scope be passed to the specified processor.
+     *
+     * @param refMethod the reference graph node for the method whose usages should be processed.
+     * @param p         the processor to pass the usages to.
+     */
+    public abstract void enqueueMethodUsagesProcessor(RefMethod refMethod, @RequiredReadAction UsagesProcessor p);
 
-  public abstract EntryPointsManager getEntryPointsManager(RefManager manager);
+    public abstract EntryPointsManager getEntryPointsManager(RefManager manager);
 
-  @Override
-  public Key<GlobalJavaInspectionContext> getID() {
-    return CONTEXT;
-  }
+    @Override
+    public Key<GlobalJavaInspectionContext> getID() {
+        return CONTEXT;
+    }
 }
