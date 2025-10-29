@@ -16,13 +16,13 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
 import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.dumb.DumbAware;
 import consulo.execution.debug.XDebuggerActions;
-import consulo.localize.LocalizeValue;
 import consulo.ui.ex.action.DefaultActionGroup;
 
 /**
@@ -37,7 +37,7 @@ import consulo.ui.ex.action.DefaultActionGroup;
         @ActionRef(type = EditFrameSourceAction.class),
         @ActionRef(type = EditSourceAction.class),
         @ActionRef(type = JumpToObjectAction.class),
-        @ActionRef(id = "Debugger.PopFrame"),
+        @ActionRef(id = DebuggerActions.POP_FRAME),
         @ActionRef(type = ViewAsGroup.class),
         @ActionRef(type = AdjustArrayRangeAction.class),
         @ActionRef(type = ResumeThreadAction.class),
@@ -51,6 +51,6 @@ import consulo.ui.ex.action.DefaultActionGroup;
 )
 public class JavaDebuggerActionsGroup extends DefaultActionGroup implements DumbAware {
     public JavaDebuggerActionsGroup() {
-        super(LocalizeValue.empty(), false);
+        super(JavaDebuggerLocalize.groupJavaDebuggerActionsText(), false);
     }
 }

@@ -535,6 +535,8 @@ frame.panel.frames.not.available:
     text: Frames not available for unsuspended thread
 get.jpda.dialog.title:
     text: JPDA Libraries Missing
+group.java.debugger.actions.text:
+    text: Java
 hotswap.dialog.hang.question:
     text: Would you like to reload changed classes anyway?
 hotswap.dialog.hang.warning:
