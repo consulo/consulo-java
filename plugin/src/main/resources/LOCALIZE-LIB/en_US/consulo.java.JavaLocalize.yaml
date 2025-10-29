@@ -6,14 +6,6 @@ action.ConvertToInstanceMethod.description:
     text: Convert static method to instance method and correct all references
 action.ConvertToInstanceMethod.text:
     text: C_onvert To Instance Method...
-action.Debugger.AdjustArrayRange.text:
-    text: Adjust Range...
-action.Debugger.PopFrame.description:
-    text: Moves execution point back to the method call dropping current method frames from the stack
-action.Debugger.PopFrame.text:
-    text: Drop _Frame
-action.Debugger.ViewAsGroup.text:
-    text: View as
 action.EncapsulateFields.description:
     text: Replace direct access to fields in the selected class with use of accessor methods
 action.EncapsulateFields.text:

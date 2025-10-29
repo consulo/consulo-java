@@ -4,6 +4,8 @@ action.auto.variables.mode:
     text: Auto-Variables Mode
 action.auto.variables.mode.description:
     text: Show only variables used near the execution point
+action.create.renderer.text:
+    text: Create...
 action.disable.text:
     text: Disable
 action.enable.text:
@@ -20,6 +22,8 @@ action.kill.process.text:
     text: Kill Process
 action.maximizeContent.text:
     text: ''
+action.mute.renderers.text:
+    text: Mute Renderers
 action.remove.text:
     text: Remove
 action.remove.watch.text:
@@ -531,6 +535,8 @@ frame.panel.frames.not.available:
     text: Frames not available for unsuspended thread
 get.jpda.dialog.title:
     text: JPDA Libraries Missing
+group.java.debugger.actions.text:
+    text: Java
 hotswap.dialog.hang.question:
     text: Would you like to reload changed classes anyway?
 hotswap.dialog.hang.warning:

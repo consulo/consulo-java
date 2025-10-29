@@ -23,9 +23,11 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
+import consulo.annotation.component.ActionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.execution.debug.frame.XValue;
 import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.execution.debug.ui.XValueTree;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -36,13 +38,14 @@ import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ActionImpl(id = "Debugger.ViewAsGroup")
 public class ViewAsGroup extends ActionGroup implements DumbAware {
     private static final Logger LOG = Logger.getInstance(ViewAsGroup.class);
 
     private volatile AnAction[] myChildren = AnAction.EMPTY_ARRAY;
 
     public ViewAsGroup() {
-        setPopup(true);
+        super(XDebuggerLocalize.actionViewAsGroupText(), true);
     }
 
     private static class RendererAction extends ToggleAction {
@@ -68,6 +71,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
         }
 
         @Override
+        @RequiredUIAccess
         public void setSelected(@Nonnull AnActionEvent e, boolean state) {
             if (!state) {
                 return;
@@ -138,7 +142,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
 
         List<AnAction> children = new ArrayList<>();
         AnAction[] viewAsActions =
-            ((DefaultActionGroup)ActionManager.getInstance().getAction(DebuggerActions.REPRESENTATION_LIST)).getChildren(null);
+            ((DefaultActionGroup) ActionManager.getInstance().getAction(DebuggerActions.REPRESENTATION_LIST)).getChildren(null);
         for (AnAction viewAsAction : viewAsActions) {
             if (viewAsAction instanceof AutoRendererAction) {
                 if (renderers.size() > 1) {

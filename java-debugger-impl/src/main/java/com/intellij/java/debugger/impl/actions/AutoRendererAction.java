@@ -19,11 +19,18 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import consulo.annotation.component.ActionImpl;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 
+@ActionImpl(id = "Debugger.AutoRenderer")
 public class AutoRendererAction extends AnAction {
+    public AutoRendererAction() {
+        super(XDebuggerLocalize.actionAutoRendererText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {

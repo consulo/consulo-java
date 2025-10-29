@@ -20,15 +20,21 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
+import consulo.annotation.component.ActionImpl;
+import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 
 /**
  * @author lex
  */
+@ActionImpl(id = "Debugger.FreezeThread")
 public class FreezeThreadAction extends DebuggerAction {
+    public FreezeThreadAction() {
+        super(XDebuggerLocalize.actionFreezeThreadText());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {
@@ -40,7 +46,7 @@ public class FreezeThreadAction extends DebuggerAction {
         DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 
         for (DebuggerTreeNodeImpl debuggerTreeNode : selectedNode) {
-            ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl)debuggerTreeNode.getDescriptor());
+            ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl) debuggerTreeNode.getDescriptor();
             ThreadReferenceProxyImpl thread = threadDescriptor.getThreadReference();
 
             if (!threadDescriptor.isFrozen()) {

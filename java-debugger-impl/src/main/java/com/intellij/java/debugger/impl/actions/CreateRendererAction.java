@@ -23,6 +23,7 @@ import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.settings.UserRenderersConfigurable;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.component.ActionImpl;
 import consulo.application.Application;
 import consulo.configurable.IdeaConfigurableBase;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
@@ -36,7 +37,12 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
+@ActionImpl(id = "Debugger.CreateRenderer")
 public class CreateRendererAction extends AnAction {
+    public CreateRendererAction() {
+        super(JavaDebuggerLocalize.actionCreateRendererText());
+    }
+
     @Override
     @RequiredUIAccess
     public void update(@Nonnull AnActionEvent e) {
