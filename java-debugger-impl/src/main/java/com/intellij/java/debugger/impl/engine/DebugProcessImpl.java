@@ -1860,7 +1860,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                     () -> Messages.showMessageDialog(
                         myProject,
                         JavaDebuggerLocalize.errorPopStackframe(e.getLocalizedMessage()).get(),
-                        ActionsBundle.message("action." + DebuggerActions.POP_FRAME + ".text"),
+                        XDebuggerLocalize.actionPopFrameText().get(),
                         UIUtil.getErrorIcon()
                     )
                 );
