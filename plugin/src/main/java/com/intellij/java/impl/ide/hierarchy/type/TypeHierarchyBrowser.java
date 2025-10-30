@@ -17,11 +17,9 @@ package com.intellij.java.impl.ide.hierarchy.type;
 
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
-import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserBaseEx;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
@@ -128,17 +126,9 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
         return "";
     }
 
-    public static class BaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction {
-        @Override
-        protected boolean isEnabled(@Nonnull HierarchyBrowserBaseEx browser, @Nonnull PsiElement psiElement) {
-            return super.isEnabled(browser, psiElement)
-                && !CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass)psiElement).getQualifiedName());
-        }
-    }
-
     @Nonnull
     @Override
-    protected TypeHierarchyBrowserBase.BaseOnThisTypeAction createBaseOnThisAction() {
-        return new BaseOnThisTypeAction();
+    protected BaseOnThisTypeAction createBaseOnThisAction() {
+        return new JavaBaseOnThisTypeAction();
     }
 }

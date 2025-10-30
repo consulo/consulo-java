@@ -51,8 +51,8 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
         return null;
     }
 
-    @RequiredReadAction
     @Nullable
+    @RequiredReadAction
     private static PsiMethod getMethodImpl(DataContext dataContext) {
         Project project = dataContext.getData(Project.KEY);
         if (project == null) {

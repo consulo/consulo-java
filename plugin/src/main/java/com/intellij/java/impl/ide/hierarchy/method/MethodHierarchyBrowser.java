@@ -17,6 +17,7 @@ package com.intellij.java.impl.ide.hierarchy.method;
 
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeBuilder;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
@@ -47,10 +48,10 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     @Override
     protected void createTrees(@Nonnull Map<String, JTree> trees) {
         JTree tree = createTree(false);
-        ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
+        ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
         PopupHandler.installPopupHandler(tree, group, ActionPlaces.METHOD_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
 
-        BaseOnThisMethodAction baseOnThisMethodAction = new BaseOnThisMethodAction();
+        BaseOnThisMethodAction baseOnThisMethodAction = new JavaBaseOnThisMethodAction();
         baseOnThisMethodAction
             .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_METHOD_HIERARCHY).getShortcutSet(), tree);
 
@@ -83,7 +84,7 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
             LOG.error("unexpected type: " + typeName);
             return null;
         }
-        return new MethodHierarchyTreeStructure(myProject, (PsiMethod)psiElement);
+        return new MethodHierarchyTreeStructure(myProject, (PsiMethod) psiElement);
     }
 
     @Override
@@ -91,13 +92,10 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
         return JavaHierarchyUtil.getComparator(myProject);
     }
 
+    @RequiredReadAction
     public PsiMethod getBaseMethod() {
         HierarchyTreeBuilder builder = myBuilders.get(myCurrentViewType);
-        MethodHierarchyTreeStructure treeStructure = (MethodHierarchyTreeStructure)builder.getTreeStructure();
+        MethodHierarchyTreeStructure treeStructure = (MethodHierarchyTreeStructure) builder.getTreeStructure();
         return treeStructure.getBaseMethod();
     }
-
-    public static final class BaseOnThisMethodAction extends MethodHierarchyBrowserBase.BaseOnThisMethodAction {
-    }
-
 }

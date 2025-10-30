@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013 Consulo.org
+  ~ Copyright 2025 Consulo.org
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -72,27 +72,6 @@
 			<add-to-group group-id="ProjectViewCompileGroup" anchor="first"/>
 			<add-to-group group-id="StructureViewCompileGroup" anchor="first"/>
 		</group>
-
-		<action id="TypeHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.type.TypeHierarchyBrowser$BaseOnThisTypeAction">
-			<add-to-group group-id="TypeHierarchyPopupMenu" anchor="first"/>
-		</action>
-
-		<group id="JavaMethodHierarchyPopupMenu">
-			<action id="MethodHierarchy.ImplementMethodAction" class="com.intellij.java.impl.ide.hierarchy.method.ImplementMethodAction"
-					use-shortcut-of="ImplementMethods"/>
-			<action id="MethodHierarchy.OverrideMethodAction" class="com.intellij.java.impl.ide.hierarchy.method.OverrideMethodAction"
-					use-shortcut-of="OverrideMethods"/>
-			<separator/>
-			<add-to-group group-id="MethodHierarchyPopupMenu" anchor="first"/>
-		</group>
-
-		<action id="MethodHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.method.MethodHierarchyBrowser$BaseOnThisMethodAction">
-			<add-to-group group-id="MethodHierarchyPopupMenu" anchor="first"/>
-		</action>
-
-		<action id="CallHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.call.CallHierarchyBrowser$BaseOnThisMethodAction">
-			<add-to-group group-id="CallHierarchyPopupMenu" anchor="first"/>
-		</action>
 
 		<group id="Debugger.FramePanelPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>
