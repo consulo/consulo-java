@@ -39,54 +39,10 @@
 	</permissions>
 
 	<actions>
-		<group id="RefactoringMenu1">
-			<action id="ChangeTypeSignature"
-					class="com.intellij.java.impl.refactoring.typeMigration.actions.ChangeTypeSignatureAction"
-					text="T_ype Migration..."
-					description="Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references"/>
-			<action id="MakeStatic" class="com.intellij.java.impl.refactoring.actions.MakeStaticAction"/>
-			<action id="ConvertToInstanceMethod" class="com.intellij.java.impl.refactoring.actions.ConvertToInstanceMethodAction"/>
-			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="ChangeSignature"/>
-		</group>
-
-		<group id="RefactoringMenu2">
-			<action id="MethodDuplicates" class="com.intellij.java.impl.refactoring.actions.MethodDuplicatesAction"/>
-
-			<action id="InvertBoolean" class="com.intellij.java.impl.refactoring.actions.InvertBooleanAction"/>
-			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="Inline"/>
-		</group>
-
-		<action id="ReplaceMethodWithMethodObject" class="com.intellij.java.impl.refactoring.actions.ReplaceMethodWithMethodObjectAction">
-			<add-to-group group-id="IntroduceActionsGroup" anchor="after" relative-to-action="ExtractMethod"/>
-		</action>
-
-		<action id="IntroduceParameterObject" class="com.intellij.java.impl.refactoring.actions.IntroduceParameterObjectAction">
-			<add-to-group group-id="IntroduceActionsGroup" anchor="after" relative-to-action="IntroduceParameter"/>
-		</action>
-
 		<action id="RenameFile" class="com.intellij.java.impl.refactoring.actions.RenameFileAction">
 			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="RenameElement"/>
 			<add-to-group group-id="EditorTabPopupMenuEx" anchor="after" relative-to-action="AddAllToFavorites"/>
 		</action>
-
-		<group id="RefactoringMenu4" require-module-extensions="java" can-use-project-as-default="true">
-			<action id="TurnRefsToSuper" class="com.intellij.java.impl.refactoring.actions.TurnRefsToSuperAction"/>
-			<action id="InheritanceToDelegation" class="com.intellij.java.impl.refactoring.actions.InheritanceToDelegationAction"/>
-			<action id="RemoveMiddleman" class="com.intellij.java.impl.refactoring.actions.RemoveMiddlemanAction"/>
-			<action id="WrapReturnValue" class="com.intellij.java.impl.refactoring.wrapreturnvalue.WrapReturnValueAction"/>
-			<separator/>
-			<action id="AnonymousToInner" class="com.intellij.java.impl.refactoring.actions.AnonymousToInnerAction"/>
-			<action id="EncapsulateFields" class="com.intellij.java.impl.refactoring.actions.EncapsulateFieldsAction"/>
-			<action id="ReplaceTempWithQuery" class="com.intellij.java.impl.refactoring.actions.TempWithQueryAction"/>
-			<action id="ReplaceConstructorWithFactory" class="com.intellij.java.impl.refactoring.actions.ReplaceConstructorWithFactoryAction"/>
-			<action id="ReplaceConstructorWithBuilder" class="com.intellij.java.impl.refactoring.actions.ReplaceConstructorWithBuilderAction"/>
-			<separator/>
-			<action id="Generify" class="com.intellij.java.impl.refactoring.actions.TypeCookAction"/>
-			<action id="Migrate" class="com.intellij.java.impl.refactoring.actions.MigrateAction"/>
-			<separator/>
-
-			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="MemberPushDown"/>
-		</group>
 
 		<action id="Hotswap" class="com.intellij.java.debugger.impl.actions.HotSwapAction">
 			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
@@ -137,7 +93,6 @@
 		<action id="CallHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.call.CallHierarchyBrowser$BaseOnThisMethodAction">
 			<add-to-group group-id="CallHierarchyPopupMenu" anchor="first"/>
 		</action>
-
 
 		<group id="Debugger.FramePanelPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>

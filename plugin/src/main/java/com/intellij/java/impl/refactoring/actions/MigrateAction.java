@@ -16,25 +16,29 @@
 package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.RefactoringManager;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.Presentation;
 
+@ActionImpl(id = "Migrate")
 public class MigrateAction extends AnAction {
-  @RequiredUIAccess
-  @Override
-  public void actionPerformed(AnActionEvent e) {
-    Project project = e.getData(Project.KEY);
-    RefactoringManager.getInstance(project).getMigrateManager().showMigrationDialog();
-  }
+    public MigrateAction() {
+        super(JavaLocalize.actionMigrateText(), JavaLocalize.actionMigrateDescription());
+    }
 
-  @RequiredUIAccess
-  @Override
-  public void update(AnActionEvent e) {
-    Presentation presentation = e.getPresentation();
-    Project project = e.getData(Project.KEY);
-    presentation.setEnabled(project != null);
-  }
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
+        Project project = e.getRequiredData(Project.KEY);
+        RefactoringManager.getInstance(project).getMigrateManager().showMigrationDialog();
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void update(AnActionEvent e) {
+        e.getPresentation().setEnabled(e.hasData(Project.KEY));
+    }
 }

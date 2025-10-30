@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.actions;
 
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
@@ -31,49 +34,54 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 import com.intellij.java.impl.refactoring.typeMigration.ChangeTypeSignatureHandler;
 import consulo.language.editor.TargetElementUtil;
 
-public class ChangeTypeSignatureAction extends BaseRefactoringAction
-{
-	@Override
-	public boolean isAvailableInEditorOnly()
-	{
-		return false;
-	}
+@ActionImpl(id = "ChangeTypeSignature")
+public class ChangeTypeSignatureAction extends BaseRefactoringAction {
+    public ChangeTypeSignatureAction() {
+        super(
+            JavaLocalize.actionChangeTypeSignatureText(),
+            JavaLocalize.actionChangeTypeSignatureDescription()
+        );
+    }
 
-	@Override
-	public boolean isEnabledOnElements(@Nonnull PsiElement[] elements)
-	{
-		if(elements.length > 1)
-		{
-			return false;
-		}
+    @Override
+    public boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-		for(PsiElement element : elements)
-		{
-			if(!(element instanceof PsiMethod || element instanceof PsiVariable))
-			{
-				return false;
-			}
-		}
+    @Override
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        if (elements.length > 1) {
+            return false;
+        }
 
-		return true;
-	}
+        for (PsiElement element : elements) {
+            if (!(element instanceof PsiMethod || element instanceof PsiVariable)) {
+                return false;
+            }
+        }
 
-	@Override
-	protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context)
-	{
-		final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-		final PsiElement psiElement = file.findElementAt(offset);
-		final PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(psiElement, PsiReferenceParameterList.class);
-		if(referenceParameterList != null)
-		{
-			return referenceParameterList.getTypeArguments().length > 0;
-		}
-		return PsiTreeUtil.getParentOfType(psiElement, PsiTypeElement.class) != null;
-	}
+        return true;
+    }
 
-	@Override
-	public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext)
-	{
-		return new ChangeTypeSignatureHandler();
-	}
+    @Override
+    @RequiredReadAction
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+        PsiElement psiElement = file.findElementAt(offset);
+        PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(psiElement, PsiReferenceParameterList.class);
+        if (referenceParameterList != null) {
+            return referenceParameterList.getTypeArguments().length > 0;
+        }
+        return PsiTreeUtil.getParentOfType(psiElement, PsiTypeElement.class) != null;
+    }
+
+    @Override
+    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new ChangeTypeSignatureHandler();
+    }
 }

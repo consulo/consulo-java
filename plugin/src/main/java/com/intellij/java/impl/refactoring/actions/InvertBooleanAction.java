@@ -19,8 +19,10 @@ import com.intellij.java.impl.refactoring.invertBoolean.InvertBooleanHandler;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -31,25 +33,40 @@ import jakarta.annotation.Nonnull;
 /**
  * @author ven
  */
+@ActionImpl(id = "InvertBoolean")
 public class InvertBooleanAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
-
-  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return elements.length == 1 && (elements[0] instanceof PsiMethod || elements[0] instanceof PsiVariable);
-  }
-
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    if (element instanceof PsiVariable) {
-      return PsiType.BOOLEAN.equals(((PsiVariable) element).getType());
-    } else if (element instanceof PsiMethod) {
-      return PsiType.BOOLEAN.equals(((PsiMethod) element).getReturnType());
+    public InvertBooleanAction() {
+      super(JavaLocalize.actionInvertbooleanText(), JavaLocalize.actionInvertbooleanText());
     }
-    return false;
-  }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new InvertBooleanHandler();
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return false;
+    }
+
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1 && (elements[0] instanceof PsiMethod || elements[0] instanceof PsiVariable);
+    }
+
+    @Override
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        if (element instanceof PsiVariable variable) {
+            return PsiType.BOOLEAN.equals(variable.getType());
+        }
+        else if (element instanceof PsiMethod method) {
+            return PsiType.BOOLEAN.equals(method.getReturnType());
+        }
+        return false;
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new InvertBooleanHandler();
+    }
 }

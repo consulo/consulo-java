@@ -17,24 +17,43 @@ package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectHandler;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(
+    id = "IntroduceParameterObject",
+    parents = @ActionParentRef(
+        value = @ActionRef(id = "IntroduceActionsGroup"),
+        anchor = ActionRefAnchor.AFTER,
+        relatedToAction = @ActionRef(id = "IntroduceParameter")
+    )
+)
 public class IntroduceParameterObjectAction extends BaseRefactoringAction {
+    public IntroduceParameterObjectAction() {
+        super(JavaLocalize.actionIntroduceParameterObjectText(), JavaLocalize.actionIntroduceParameterObjectDescription());
+    }
 
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
-    return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false) != null;
-  }
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false) != null;
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
-    return new IntroduceParameterObjectHandler();
-  }
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
+        return new IntroduceParameterObjectHandler();
+    }
 }

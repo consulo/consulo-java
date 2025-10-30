@@ -1,0 +1,4 @@
+action.I18nize.description:
+    text: Replace Java string literal or JSP text with internationalized expression
+action.I18nize.text:
+    text: Internationali_ze...

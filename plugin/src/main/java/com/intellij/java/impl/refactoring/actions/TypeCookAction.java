@@ -15,12 +15,14 @@
  */
 package com.intellij.java.impl.refactoring.actions;
 
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataManager;
 import com.intellij.java.impl.refactoring.typeCook.TypeCookHandler;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.Language;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
@@ -31,42 +33,46 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import jakarta.annotation.Nonnull;
 
+@ActionImpl(id = "Generify")
 public class TypeCookAction extends BaseRefactoringAction {
-
-  @Override
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
-
-  @Override
-  public boolean isAvailableForLanguage(Language language) {
-    return language.equals(JavaLanguage.INSTANCE);
-  }
-
-  @Override
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    Project project = DataManager.getInstance().getDataContext().getData(Project.KEY);
-
-    if (project == null) {
-      return false;
+    public TypeCookAction() {
+        super(JavaLocalize.actionGenerifyText(), JavaLocalize.actionGenerifyDescription());
     }
 
-    for (PsiElement element : elements) {
-      if (!(element instanceof PsiClass || element instanceof PsiJavaFile
-        || element instanceof PsiDirectory || element instanceof PsiJavaPackage)) {
+    @Override
+    protected boolean isAvailableInEditorOnly() {
         return false;
-      }
     }
 
-    return true;
-  }
+    @Override
+    public boolean isAvailableForLanguage(Language language) {
+        return JavaLanguage.INSTANCE.equals(language);
+    }
 
-  @Override
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return getHandler();
-  }
+    @Override
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        Project project = DataManager.getInstance().getDataContext().getData(Project.KEY);
 
-  public RefactoringActionHandler getHandler() {
-    return new TypeCookHandler();
-  }
+        if (project == null) {
+            return false;
+        }
+
+        for (PsiElement element : elements) {
+            if (!(element instanceof PsiClass || element instanceof PsiJavaFile
+                || element instanceof PsiDirectory || element instanceof PsiJavaPackage)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return getHandler();
+    }
+
+    public RefactoringActionHandler getHandler() {
+        return new TypeCookHandler();
+    }
 }

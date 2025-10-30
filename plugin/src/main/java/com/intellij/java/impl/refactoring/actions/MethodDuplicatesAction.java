@@ -16,7 +16,9 @@
 package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
@@ -25,16 +27,24 @@ import jakarta.annotation.Nonnull;
 /**
  * @author dsl
  */
+@ActionImpl(id = "MethodDuplicates")
 public class MethodDuplicatesAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return true;
-  }
+    public MethodDuplicatesAction() {
+      super(JavaLocalize.actionMethodDuplicatesText(), JavaLocalize.actionMethodDuplicatesDescription());
+    }
 
-  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return false;
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return true;
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new MethodDuplicatesHandler();
-  }
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return false;
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new MethodDuplicatesHandler();
+    }
 }

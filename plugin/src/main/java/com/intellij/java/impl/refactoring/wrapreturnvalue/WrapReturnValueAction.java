@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
+import consulo.annotation.component.ActionImpl;
+import consulo.java.localize.JavaLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
@@ -26,33 +28,44 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-public class WrapReturnValueAction extends BaseRefactoringAction{
+@ActionImpl(id = "WrapReturnValue")
+public class WrapReturnValueAction extends BaseRefactoringAction {
+    public WrapReturnValueAction() {
+        super(JavaLocalize.actionWrapReturnValueText(), JavaLocalize.actionWrapReturnValueDescription());
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext context){
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
         return new WrapReturnValueHandler();
     }
 
-  public boolean isAvailableInEditorOnly(){
-      return false;
-  }
-
-  @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
-    if (psiMethod != null && !(psiMethod instanceof PsiCompiledElement)) {
-      final PsiType returnType = psiMethod.getReturnType();
-      return returnType != null && !PsiType.VOID.equals(returnType);
-    }
-    return false;
-  }
-
-  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    if (elements.length != 1) {
+    @Override
+    public boolean isAvailableInEditorOnly() {
         return false;
     }
-    final PsiElement element = elements[0];
-    final PsiMethod containingMethod =
-            PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
-    return containingMethod != null;
-  }
+
+    @Override
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
+        if (psiMethod != null && !(psiMethod instanceof PsiCompiledElement)) {
+            PsiType returnType = psiMethod.getReturnType();
+            return returnType != null && !PsiType.VOID.equals(returnType);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        if (elements.length != 1) {
+            return false;
+        }
+        PsiElement element = elements[0];
+        PsiMethod containingMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
+        return containingMethod != null;
+    }
 }

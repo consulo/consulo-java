@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 07-May-2008
- */
 package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.ReplaceConstructorWithBuilderHandler;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -31,24 +29,42 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import jakarta.annotation.Nonnull;
 
+/**
+ * @author anna
+ * @since 2008-05-07
+ */
+@ActionImpl(id = "ReplaceConstructorWithBuilder")
 public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return true;
-  }
+    public ReplaceConstructorWithBuilderAction() {
+        super(JavaLocalize.actionReplaceConstructorWithBuilderText(), JavaLocalize.actionReplaceConstructorWithBuilderDescription());
+    }
 
-  @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    final int offset = editor.getCaretModel().getOffset();
-    final PsiElement elementAt = file.findElementAt(offset);
-    final PsiClass psiClass = ReplaceConstructorWithBuilderHandler.getParentNamedClass(elementAt);
-    return psiClass != null && psiClass.getConstructors().length > 0;
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return true;
+    }
 
-  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
-    return false;
-  }
+    @Override
+    @RequiredReadAction
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement elementAt = file.findElementAt(offset);
+        PsiClass psiClass = ReplaceConstructorWithBuilderHandler.getParentNamedClass(elementAt);
+        return psiClass != null && psiClass.getConstructors().length > 0;
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull final DataContext dataContext) {
-    return new ReplaceConstructorWithBuilderHandler();
-  }
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return false;
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new ReplaceConstructorWithBuilderHandler();
+    }
 }

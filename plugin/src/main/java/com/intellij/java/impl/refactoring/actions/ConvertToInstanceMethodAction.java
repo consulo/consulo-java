@@ -18,9 +18,10 @@ package com.intellij.java.impl.refactoring.actions;
 import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodHandler;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -31,21 +32,37 @@ import jakarta.annotation.Nonnull;
 /**
  * @author dsl
  */
+@ActionImpl(id = "ConvertToInstanceMethod")
 public class ConvertToInstanceMethodAction extends BaseRefactoringAction {
-  protected boolean isAvailableInEditorOnly() {
-    return false;
-  }
+    public ConvertToInstanceMethodAction() {
+        super(JavaLocalize.actionConvertToInstanceMethodText(), JavaLocalize.actionConvertToInstanceMethodDescription());
+    }
 
-  protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    return elements.length == 1 && elements[0] instanceof PsiMethod;
-  }
+    @Override
+    protected boolean isAvailableInEditorOnly() {
+        return false;
+    }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
-    if (element instanceof PsiIdentifier) element = element.getParent();
-    return element instanceof PsiMethod && ((PsiMethod) element).hasModifierProperty(PsiModifier.STATIC);
-  }
+    @Override
+    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+        return elements.length == 1 && elements[0] instanceof PsiMethod;
+    }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
-    return new ConvertToInstanceMethodHandler();
-  }
+    @Override
+    protected boolean isAvailableOnElementInEditorAndFile(
+        @Nonnull PsiElement element,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull DataContext context
+    ) {
+        if (element instanceof PsiIdentifier) {
+            element = element.getParent();
+        }
+        return element instanceof PsiMethod method && method.isStatic();
+    }
+
+    @Override
+    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+        return new ConvertToInstanceMethodHandler();
+    }
 }
