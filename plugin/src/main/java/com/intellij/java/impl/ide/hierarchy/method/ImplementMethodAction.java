@@ -15,20 +15,29 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionRef;
 import consulo.ide.localize.IdeLocalize;
+import consulo.platform.base.localize.ActionLocalize;
 import consulo.ui.ex.action.Presentation;
 
+@ActionImpl(id = "MethodHierarchy.ImplementMethodAction", shortcutFrom = @ActionRef(id = "ImplementMethods"))
 public final class ImplementMethodAction extends OverrideImplementMethodAction {
+    public ImplementMethodAction() {
+        super(
+            ActionLocalize.actionMethodhierarchyImplementmethodactionText(),
+            ActionLocalize.actionMethodhierarchyImplementmethodactionDescription()
+        );
+    }
+
     @Override
     protected final void update(Presentation presentation, int toImplement, int toOverride) {
         if (toImplement > 0) {
-            presentation.setEnabled(true);
-            presentation.setVisible(true);
+            presentation.setEnabledAndVisible(true);
             presentation.setTextValue(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
         }
         else {
-            presentation.setEnabled(false);
-            presentation.setVisible(false);
+            presentation.setEnabledAndVisible(false);
         }
     }
 }

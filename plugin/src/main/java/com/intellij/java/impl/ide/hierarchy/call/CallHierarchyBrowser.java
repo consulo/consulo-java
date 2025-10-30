@@ -44,10 +44,10 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
 
     @Override
     protected void createTrees(@Nonnull Map<String, JTree> type2TreeMap) {
-        ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
+        ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
         JTree tree1 = createTree(false);
         PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
-        BaseOnThisMethodAction baseOnThisMethodAction = new BaseOnThisMethodAction();
+        BaseOnThisMethodAction baseOnThisMethodAction = new JavaBaseOnThisMethodAction();
         baseOnThisMethodAction
             .registerCustomShortcutSet(ActionManager.getInstance().getAction(IdeActions.ACTION_CALL_HIERARCHY).getShortcutSet(), tree1);
         type2TreeMap.put(CALLEE_TYPE, tree1);
@@ -97,8 +97,5 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
     @Override
     protected Comparator<NodeDescriptor> getComparator() {
         return JavaHierarchyUtil.getComparator(myProject);
-    }
-
-    public static final class BaseOnThisMethodAction extends CallHierarchyBrowserBase.BaseOnThisMethodAction {
     }
 }

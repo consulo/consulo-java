@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiSyntheticClass;
 import com.intellij.java.language.psi.util.MethodSignature;
-import consulo.application.Application;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -50,19 +49,19 @@ import java.util.List;
 abstract class OverrideImplementMethodAction extends AnAction {
     private static final Logger LOG = Logger.getInstance(OverrideImplementMethodAction.class);
 
-    @RequiredUIAccess
+    protected OverrideImplementMethodAction(@Nonnull LocalizeValue text, @Nonnull LocalizeValue description) {
+        super(text, description);
+    }
+
     @Override
+    @RequiredUIAccess
     public final void actionPerformed(@Nonnull AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
-        MethodHierarchyBrowser methodHierarchyBrowser = (MethodHierarchyBrowser)dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
+        MethodHierarchyBrowser methodHierarchyBrowser = (MethodHierarchyBrowser) dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
         if (methodHierarchyBrowser == null) {
             return;
         }
-        Project project = dataContext.getData(Project.KEY);
-        if (project == null) {
-            return;
-        }
-
+        Project project = dataContext.getRequiredData(Project.KEY);
         LocalizeValue commandName = event.getPresentation().getTextValue();
         CommandProcessor.getInstance().newCommand()
             .project(project)
@@ -75,7 +74,7 @@ abstract class OverrideImplementMethodAction extends AnAction {
                         List<VirtualFile> files = new ArrayList<>(selectedDescriptors.length);
                         for (HierarchyNodeDescriptor selectedDescriptor : selectedDescriptors) {
                             PsiFile containingFile =
-                                ((MethodHierarchyNodeDescriptor)selectedDescriptor).getPsiClass().getContainingFile();
+                                ((MethodHierarchyNodeDescriptor) selectedDescriptor).getPsiClass().getContainingFile();
                             if (containingFile != null) {
                                 VirtualFile vFile = containingFile.getVirtualFile();
                                 if (vFile != null) {
@@ -87,7 +86,7 @@ abstract class OverrideImplementMethodAction extends AnAction {
                             ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(VirtualFileUtil.toVirtualFileArray(files));
                         if (!status.hasReadonlyFiles()) {
                             for (HierarchyNodeDescriptor selectedDescriptor : selectedDescriptors) {
-                                PsiElement aClass = ((MethodHierarchyNodeDescriptor)selectedDescriptor).getPsiClass();
+                                PsiElement aClass = ((MethodHierarchyNodeDescriptor) selectedDescriptor).getPsiClass();
                                 if (aClass instanceof PsiClass psiClass) {
                                     OverrideImplementUtil.overrideOrImplement(psiClass, methodHierarchyBrowser.getBaseMethod());
                                 }
@@ -95,7 +94,7 @@ abstract class OverrideImplementMethodAction extends AnAction {
                             ToolWindowManager.getInstance(project).activateEditorComponent();
                         }
                         else {
-                            Application.get().invokeLater(
+                            project.getApplication().invokeLater(
                                 () -> Messages.showErrorDialog(project, status.getReadonlyFilesMessage(), commandName.get())
                             );
                         }
@@ -107,23 +106,20 @@ abstract class OverrideImplementMethodAction extends AnAction {
             });
     }
 
-    @RequiredUIAccess
     @Override
+    @RequiredUIAccess
     public final void update(@Nonnull AnActionEvent e) {
         Presentation presentation = e.getPresentation();
         DataContext dataContext = e.getDataContext();
 
         MethodHierarchyBrowser methodHierarchyBrowser =
-            (MethodHierarchyBrowser)dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
+            (MethodHierarchyBrowser) dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
         if (methodHierarchyBrowser == null) {
-            presentation.setEnabled(false);
-            presentation.setVisible(false);
+            presentation.setEnabledAndVisible(false);
             return;
         }
-        Project project = dataContext.getData(Project.KEY);
-        if (project == null) {
-            presentation.setEnabled(false);
-            presentation.setVisible(false);
+        if (!dataContext.hasData(Project.KEY)) {
+            presentation.setEnabledAndVisible(false);
             return;
         }
 
@@ -132,28 +128,25 @@ abstract class OverrideImplementMethodAction extends AnAction {
         int toOverride = 0;
 
         for (HierarchyNodeDescriptor descriptor : selectedDescriptors) {
-            if (canImplementOverride((MethodHierarchyNodeDescriptor)descriptor, methodHierarchyBrowser, true)) {
+            if (canImplementOverride((MethodHierarchyNodeDescriptor) descriptor, methodHierarchyBrowser, true)) {
                 if (toOverride > 0) {
                     // no mixed actions allowed
-                    presentation.setEnabled(false);
-                    presentation.setVisible(false);
+                    presentation.setEnabledAndVisible(false);
                     return;
                 }
                 toImplement++;
             }
-            else if (canImplementOverride((MethodHierarchyNodeDescriptor)descriptor, methodHierarchyBrowser, false)) {
+            else if (canImplementOverride((MethodHierarchyNodeDescriptor) descriptor, methodHierarchyBrowser, false)) {
                 if (toImplement > 0) {
                     // no mixed actions allowed
-                    presentation.setEnabled(false);
-                    presentation.setVisible(false);
+                    presentation.setEnabledAndVisible(false);
                     return;
                 }
                 toOverride++;
             }
             else {
                 // no action is applicable to this node
-                presentation.setEnabled(false);
-                presentation.setVisible(false);
+                presentation.setEnabledAndVisible(false);
                 return;
             }
         }
