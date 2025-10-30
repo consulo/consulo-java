@@ -106,6 +106,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return myExpression.isValid()
             && myExpression.getManager().isInProject(myExpression)
@@ -125,10 +126,9 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
         assert wrapper != null;
         PsiElementFactory factory = JavaPsiFacade.getInstance(file.getProject()).getElementFactory();
         String methodCallText = "Foo." + wrapper.getName() + "()";
-        PsiMethodCallExpression call = (PsiMethodCallExpression)factory.createExpressionFromText(methodCallText, null);
+        PsiMethodCallExpression call = (PsiMethodCallExpression) factory.createExpressionFromText(methodCallText, null);
         call.getArgumentList().add(myExpression);
-        ((PsiReferenceExpression)call.getMethodExpression().getQualifierExpression())
-            .bindToElement(wrapper.getContainingClass());
+        ((PsiReferenceExpression) call.getMethodExpression().getQualifierExpression()).bindToElement(wrapper.getContainingClass());
         myExpression.replace(call);
     }
 
@@ -155,7 +155,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
             PsiSubstitutor substitutor = candidate.getSubstitutor();
             PsiElement element = candidate.getElement();
             assert element != null;
-            PsiMethod method = (PsiMethod)element;
+            PsiMethod method = (PsiMethod) element;
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (!method.isVarArgs() && parameters.length != expressions.length) {
                 continue;

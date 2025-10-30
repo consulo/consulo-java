@@ -45,7 +45,6 @@ import consulo.ide.impl.idea.ide.projectView.impl.ProjectViewImpl;
 import consulo.project.ui.view.ProjectViewPane;
 import consulo.ide.impl.idea.ide.projectView.impl.ProjectViewToolWindowFactory;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
 import consulo.fileEditor.FileEditorManager;
 import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.virtualFileSystem.VirtualFile;
@@ -105,7 +104,7 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 
 		JComponent component = ((ProjectViewImpl) projectView).getComponent();
 		DataContext context = DataManager.getInstance().getDataContext(component);
-		PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
+		PsiElement element = context.getData(PsiElement.KEY);
 		assertEquals("Class1.java", ((PsiJavaFile) element).getName());
 	}
 

@@ -32,6 +32,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
@@ -51,7 +52,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -60,7 +61,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @ExtensionImpl
 public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspection {
-
     @SuppressWarnings("PublicField")
     public boolean ignoreTestClasses = false;
 
@@ -87,7 +87,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
     @Nullable
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(
             InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassIgnoreTestOption().get(),
             "ignoreTestClasses"
@@ -105,21 +105,23 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
     @Nullable
     @Override
-    public CommonProblemDescriptor[] checkElement(@Nonnull RefEntity refEntity,
-                                                  @Nonnull AnalysisScope scope,
-                                                  @Nonnull InspectionManager manager,
-                                                  @Nonnull GlobalInspectionContext globalContext,
-                                                  Object state) {
-        if (!(refEntity instanceof RefMethod)) {
+    @RequiredReadAction
+    public CommonProblemDescriptor[] checkElement(
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull Object state
+    ) {
+        if (!(refEntity instanceof RefMethod method)) {
             return null;
         }
-        final RefMethod method = (RefMethod) refEntity;
         if (!method.isStatic() || method.getAccessModifier() == PsiModifier.PRIVATE) {
             return null;
         }
         RefClass usageClass = null;
         for (RefElement reference : method.getInReferences()) {
-            final RefClass ownerClass = RefJavaUtil.getInstance().getOwnerClass(reference);
+            RefClass ownerClass = RefJavaUtil.getInstance().getOwnerClass(reference);
             if (usageClass == null) {
                 usageClass = ownerClass;
             }
@@ -127,29 +129,31 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
                 return null;
             }
         }
-        final RefClass containingClass = method.getOwnerClass();
+        RefClass containingClass = method.getOwnerClass();
         if (usageClass == containingClass) {
             return null;
         }
         if (usageClass == null) {
-            final PsiClass aClass = containingClass.getElement();
+            PsiClass aClass = containingClass.getElement();
             if (aClass != null) {
-                final SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(manager.getProject());
+                SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(manager.getProject());
                 method.putUserData(MARKER, smartPointerManager.createSmartPsiElementPointer(aClass));
             }
             return null;
         }
-        if (ignoreAnonymousClasses && (usageClass.isAnonymous() || usageClass.isLocalClass() || usageClass.getOwner() instanceof RefClass && !usageClass.isStatic())) {
+        if (ignoreAnonymousClasses
+            && (usageClass.isAnonymous() || usageClass.isLocalClass()
+            || usageClass.getOwner() instanceof RefClass && !usageClass.isStatic())) {
             return null;
         }
         if (ignoreTestClasses && usageClass.isTestCase()) {
             return null;
         }
-        final PsiClass psiClass = usageClass.getElement();
+        PsiClass psiClass = usageClass.getElement();
         if (psiClass == null) {
             return null;
         }
-        final PsiMethod psiMethod = (PsiMethod) method.getElement();
+        PsiMethod psiMethod = (PsiMethod) method.getElement();
         if (psiMethod == null) {
             return null;
         }
@@ -158,52 +162,58 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
                 return null;
             }
         }
-        final SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(manager.getProject());
+        SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(manager.getProject());
         method.putUserData(MARKER, smartPointerManager.createSmartPsiElementPointer(psiClass));
         return new ProblemDescriptor[]{createProblemDescriptor(manager, psiMethod.getNameIdentifier(), psiClass)};
     }
 
     @Nonnull
+    @RequiredReadAction
     static ProblemDescriptor createProblemDescriptor(@Nonnull InspectionManager manager, PsiElement problemElement, PsiClass usageClass) {
-        LocalizeValue message = (usageClass instanceof PsiAnonymousClass)
-            ? InspectionGadgetsLocalize.staticMethodOnlyUsedInOneAnonymousClassProblemDescriptor(((PsiAnonymousClass) usageClass).getBaseClassReference().getText())
+        LocalizeValue message = usageClass instanceof PsiAnonymousClass anonymousClass
+            ? InspectionGadgetsLocalize.staticMethodOnlyUsedInOneAnonymousClassProblemDescriptor(
+                anonymousClass.getBaseClassReference().getText()
+            )
             : InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassProblemDescriptor(usageClass.getName());
         return manager.createProblemDescriptor(problemElement, message.get(), false, null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
     }
 
     @Override
-    public boolean queryExternalUsagesRequests(@Nonnull final InspectionManager manager,
-                                               @Nonnull final GlobalInspectionContext globalContext,
-                                               @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                                               Object state) {
+    public boolean queryExternalUsagesRequests(
+        @Nonnull final InspectionManager manager,
+        @Nonnull final GlobalInspectionContext globalContext,
+        @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
+    ) {
         globalContext.getRefManager().iterate(new RefJavaVisitor() {
             @Override
+            @RequiredReadAction
             public void visitElement(@Nonnull RefEntity refEntity) {
-                if (refEntity instanceof RefMethod) {
-                    final SmartPsiElementPointer<PsiClass> classPointer = refEntity.getUserData(MARKER);
+                if (refEntity instanceof RefMethod refMethod) {
+                    SmartPsiElementPointer<PsiClass> classPointer = refMethod.getUserData(MARKER);
                     if (classPointer != null) {
-                        final Ref<PsiClass> ref = Ref.create(classPointer.getElement());
-                        final GlobalJavaInspectionContext globalJavaContext = globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT);
-                        globalJavaContext.enqueueMethodUsagesProcessor((RefMethod) refEntity, new GlobalJavaInspectionContext.UsagesProcessor() {
-                            @Override
-                            public boolean process(PsiReference reference) {
-                                final PsiClass containingClass = ClassUtils.getContainingClass(reference.getElement());
-                                if (problemDescriptionsProcessor.getDescriptions(refEntity) != null) {
+                        SimpleReference<PsiClass> ref = SimpleReference.create(classPointer.getElement());
+                        GlobalJavaInspectionContext globalJavaContext = globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT);
+                        globalJavaContext.enqueueMethodUsagesProcessor(
+                            refMethod,
+                            reference -> {
+                                PsiClass containingClass = ClassUtils.getContainingClass(reference.getElement());
+                                if (problemDescriptionsProcessor.getDescriptions(refMethod) != null) {
                                     if (containingClass != ref.get()) {
-                                        problemDescriptionsProcessor.ignoreElement(refEntity);
+                                        problemDescriptionsProcessor.ignoreElement(refMethod);
                                         return false;
                                     }
                                     return true;
                                 }
                                 else {
-                                    final PsiIdentifier identifier = ((PsiMethod) ((RefMethod) refEntity).getElement()).getNameIdentifier();
-                                    final ProblemDescriptor problemDescriptor = createProblemDescriptor(manager, identifier, containingClass);
-                                    problemDescriptionsProcessor.addProblemElement(refEntity, problemDescriptor);
+                                    PsiIdentifier identifier = ((PsiMethod) refMethod.getElement()).getNameIdentifier();
+                                    ProblemDescriptor problemDescriptor = createProblemDescriptor(manager, identifier, containingClass);
+                                    problemDescriptionsProcessor.addProblemElement(refMethod, problemDescriptor);
                                     ref.set(containingClass);
                                     return true;
                                 }
                             }
-                        });
+                        );
                     }
                 }
             }
@@ -212,8 +222,8 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         return false;
     }
 
-    static boolean areReferenceTargetsAccessible(final PsiElement elementToCheck, final PsiElement place) {
-        final AccessibleVisitor visitor = new AccessibleVisitor(elementToCheck, place);
+    static boolean areReferenceTargetsAccessible(PsiElement elementToCheck, PsiElement place) {
+        AccessibleVisitor visitor = new AccessibleVisitor(elementToCheck, place);
         elementToCheck.accept(visitor);
         return visitor.isAccessible();
     }
@@ -229,15 +239,15 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         }
 
         @Override
-        public void visitCallExpression(PsiCallExpression callExpression) {
+        @RequiredReadAction
+        public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
             if (!myAccessible) {
                 return;
             }
             super.visitCallExpression(callExpression);
-            final PsiMethod method = callExpression.resolveMethod();
-            if (callExpression instanceof PsiNewExpression && method == null) {
-                final PsiNewExpression newExpression = (PsiNewExpression) callExpression;
-                final PsiJavaCodeReferenceElement reference = newExpression.getClassReference();
+            PsiMethod method = callExpression.resolveMethod();
+            if (callExpression instanceof PsiNewExpression newExpression && method == null) {
+                PsiJavaCodeReferenceElement reference = newExpression.getClassReference();
                 if (reference != null) {
                     checkElement(reference.resolve());
                 }
@@ -248,6 +258,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         }
 
         @Override
+        @RequiredReadAction
         public void visitReferenceExpression(PsiReferenceExpression expression) {
             if (!myAccessible) {
                 return;
@@ -257,13 +268,13 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         }
 
         private void checkElement(PsiElement element) {
-            if (!(element instanceof PsiMember)) {
+            if (!(element instanceof PsiMember member)) {
                 return;
             }
             if (PsiTreeUtil.isAncestor(myElementToCheck, element, false)) {
                 return; // internal reference
             }
-            myAccessible = PsiUtil.isAccessible((PsiMember) element, myPlace, null);
+            myAccessible = PsiUtil.isAccessible(member, myPlace, null);
         }
 
         public boolean isAccessible() {
@@ -272,22 +283,22 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
     }
 
     private static class UsageProcessor implements Processor<PsiReference> {
-
         private final AtomicReference<PsiClass> foundClass = new AtomicReference<>();
 
         @Override
+        @RequiredReadAction
         public boolean process(PsiReference reference) {
             ProgressManager.checkCanceled();
-            final PsiElement element = reference.getElement();
-            final PsiClass usageClass = ClassUtils.getContainingClass(element);
+            PsiElement element = reference.getElement();
+            PsiClass usageClass = ClassUtils.getContainingClass(element);
             if (usageClass == null) {
                 return true;
             }
             if (foundClass.compareAndSet(null, usageClass)) {
                 return true;
             }
-            final PsiClass aClass = foundClass.get();
-            final PsiManager manager = usageClass.getManager();
+            PsiClass aClass = foundClass.get();
+            PsiManager manager = usageClass.getManager();
             return manager.areElementsEquivalent(aClass, usageClass);
         }
 
@@ -296,14 +307,16 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
          * used from 0 or more than 1 other classes.
          */
         @Nullable
-        public PsiClass findUsageClass(final PsiMethod method) {
-            ProgressManager.getInstance().runProcess(() ->
-            {
-                final Query<PsiReference> query = MethodReferencesSearch.search(method);
-                if (!query.forEach(this)) {
-                    foundClass.set(null);
-                }
-            }, null);
+        public PsiClass findUsageClass(PsiMethod method) {
+            ProgressManager.getInstance().runProcess(
+                () -> {
+                    Query<PsiReference> query = MethodReferencesSearch.search(method);
+                    if (!query.forEach(this)) {
+                        foundClass.set(null);
+                    }
+                },
+                null
+            );
             return foundClass.get();
         }
     }
@@ -314,38 +327,38 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         return new StaticMethodOnlyUsedInOneClassLocalInspection(this);
     }
 
-    private static class StaticMethodOnlyUsedInOneClassLocalInspection extends BaseSharedLocalInspection<StaticMethodOnlyUsedInOneClassInspection> {
-
+    private static class StaticMethodOnlyUsedInOneClassLocalInspection
+        extends BaseSharedLocalInspection<StaticMethodOnlyUsedInOneClassInspection> {
         public StaticMethodOnlyUsedInOneClassLocalInspection(StaticMethodOnlyUsedInOneClassInspection settingsDelegate) {
             super(settingsDelegate);
         }
 
-        @Override
         @Nonnull
+        @Override
+        @RequiredReadAction
         protected String buildErrorString(Object... infos) {
-            final PsiClass usageClass = (PsiClass) infos[0];
-            if (usageClass instanceof PsiAnonymousClass) {
-                return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneAnonymousClassProblemDescriptor(((PsiAnonymousClass) usageClass)
-                    .getBaseClassReference().getText()).get();
+            PsiClass usageClass = (PsiClass) infos[0];
+            if (usageClass instanceof PsiAnonymousClass anonymousClass) {
+                String refText = anonymousClass.getBaseClassReference().getText();
+                return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneAnonymousClassProblemDescriptor(refText).get();
             }
             else {
                 return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassProblemDescriptor(usageClass.getName()).get();
             }
         }
 
-        @Override
         @Nullable
+        @Override
         protected InspectionGadgetsFix buildFix(Object... infos) {
-            final PsiClass usageClass = (PsiClass) infos[0];
+            PsiClass usageClass = (PsiClass) infos[0];
             return new StaticMethodOnlyUsedInOneClassFix(usageClass);
         }
 
         private static class StaticMethodOnlyUsedInOneClassFix extends RefactoringInspectionGadgetsFix {
-
             private final SmartPsiElementPointer<PsiClass> usageClass;
 
             public StaticMethodOnlyUsedInOneClassFix(PsiClass usageClass) {
-                final SmartPointerManager pointerManager = SmartPointerManager.getInstance(usageClass.getProject());
+                SmartPointerManager pointerManager = SmartPointerManager.getInstance(usageClass.getProject());
                 this.usageClass = pointerManager.createSmartPsiElementPointer(usageClass);
             }
 
@@ -363,6 +376,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
             @Nonnull
             @Override
+            @RequiredReadAction
             public DataContext enhanceDataContext(DataContext context) {
                 return DataContext.builder().parent(context).add(LangDataKeys.TARGET_PSI_ELEMENT, usageClass.getElement()).build();
             }
@@ -374,29 +388,28 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         }
 
         private class StaticMethodOnlyUsedInOneClassVisitor extends BaseInspectionVisitor {
-
             @Override
-            public void visitMethod(final PsiMethod method) {
+            public void visitMethod(@Nonnull PsiMethod method) {
                 super.visitMethod(method);
-                if (!method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.PRIVATE) || method.getNameIdentifier() == null) {
+                if (!method.isStatic() || method.isPrivate() || method.getNameIdentifier() == null) {
                     return;
                 }
                 if (DeclarationSearchUtils.isTooExpensiveToSearch(method, true)) {
                     return;
                 }
-                final UsageProcessor usageProcessor = new UsageProcessor();
-                final PsiClass usageClass = usageProcessor.findUsageClass(method);
+                UsageProcessor usageProcessor = new UsageProcessor();
+                PsiClass usageClass = usageProcessor.findUsageClass(method);
                 if (usageClass == null) {
                     return;
                 }
-                final PsiClass containingClass = method.getContainingClass();
+                PsiClass containingClass = method.getContainingClass();
                 if (usageClass.equals(containingClass)) {
                     return;
                 }
                 if (mySettingsDelegate.ignoreTestClasses && TestUtils.isInTestCode(usageClass)) {
                     return;
                 }
-                if (usageClass.getContainingClass() != null && !usageClass.hasModifierProperty(PsiModifier.STATIC) || PsiUtil.isLocalOrAnonymousClass(usageClass)) {
+                if (usageClass.getContainingClass() != null && !usageClass.isStatic() || PsiUtil.isLocalOrAnonymousClass(usageClass)) {
                     if (mySettingsDelegate.ignoreAnonymousClasses) {
                         return;
                     }
