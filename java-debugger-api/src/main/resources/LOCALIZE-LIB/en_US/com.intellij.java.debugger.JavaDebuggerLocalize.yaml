@@ -14,6 +14,10 @@ action.evaluate.expression.dialog.switch.mode.description:
     text: Code Fragment &Mode
 action.evaluate.statement.dialog.switch.mode.description:
     text: Expression &Mode
+action.hotswap.description:
+    text: Reload all changed classes into application being debugged (HotSwap)
+action.hotswap.text:
+    text: Relo_ad Changed Classes
 action.interrupt.thread.text:
     text: Interrupt
 action.kill.process.description:

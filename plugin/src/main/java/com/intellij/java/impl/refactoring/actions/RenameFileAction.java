@@ -16,39 +16,56 @@
 package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.dumb.DumbAware;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import consulo.ui.ex.action.ActionPlaces;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.Presentation;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.*;
 import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * @author ven
  */
-public class RenameFileAction extends AnAction implements DumbAware {
-  public void actionPerformed(final AnActionEvent e) {
-    final PsiFile file = e.getData(PsiFile.KEY);
-    assert file != null;
-    final VirtualFile virtualFile = file.getVirtualFile();
-    assert virtualFile != null;
-    final Project project = e.getData(Project.KEY);
-    assert project != null;
-    PsiElementRenameHandler.invoke(file, project, file, null);
-  }
-
-  public void update(AnActionEvent e) {
-    PsiFile file = e.getData(PsiFile.KEY);
-    Presentation presentation = e.getPresentation();
-    boolean enabled = file instanceof PsiClassOwner && e.getPlace() != ActionPlaces.EDITOR_POPUP && e.getData(Project.KEY) != null;
-    presentation.setEnabled(enabled);
-    presentation.setVisible(enabled);
-    if (enabled) {
-      presentation.setText("Rename File...");
-      presentation.setDescription("Rename selected file");
+@ActionImpl(
+    id = "RenameFile",
+    parents = {
+        @ActionParentRef(
+            value = @ActionRef(id = IdeActions.GROUP_REFACTOR),
+            anchor = ActionRefAnchor.AFTER,
+            relatedToAction = @ActionRef(id = "RenameElement")
+        ),
+        @ActionParentRef(
+            value = @ActionRef(id = "EditorTabPopupMenuEx"),
+            anchor = ActionRefAnchor.AFTER,
+            relatedToAction = @ActionRef(id = "AddAllToFavorites")
+        )
     }
-  }
+)
+public class RenameFileAction extends AnAction implements DumbAware {
+    public RenameFileAction() {
+        super(JavaRefactoringLocalize.actionRenameFileText(), JavaRefactoringLocalize.actionRenameFileDescription());
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void actionPerformed(AnActionEvent e) {
+        PsiFile file = e.getRequiredData(PsiFile.KEY);
+        VirtualFile virtualFile = file.getVirtualFile();
+        assert virtualFile != null;
+        Project project = e.getRequiredData(Project.KEY);
+        PsiElementRenameHandler.invoke(file, project, file, null);
+    }
+
+    @Override
+    public void update(AnActionEvent e) {
+        PsiFile file = e.getData(PsiFile.KEY);
+        boolean enabled = file instanceof PsiClassOwner && e.getPlace() != ActionPlaces.EDITOR_POPUP && e.hasData(Project.KEY);
+        e.getPresentation().setEnabledAndVisible(enabled);
+    }
 }

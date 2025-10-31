@@ -37,19 +37,4 @@
 		<permission type="GET_ENV"/>
 		<permission type="PROCESS_CREATE"/>
 	</permissions>
-
-	<actions>
-		<action id="RenameFile" class="com.intellij.java.impl.refactoring.actions.RenameFileAction">
-			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="RenameElement"/>
-			<add-to-group group-id="EditorTabPopupMenuEx" anchor="after" relative-to-action="AddAllToFavorites"/>
-		</action>
-
-		<action id="Hotswap" class="com.intellij.java.debugger.impl.actions.HotSwapAction">
-			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
-		</action>
-
-		<action id="GenerateJavadoc" class="com.intellij.java.impl.javadoc.actions.GenerateJavadocAction" can-use-project-as-default="true" require-module-extensions="java">
-			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
-		</action>
-	</actions>
 </consulo-plugin>
