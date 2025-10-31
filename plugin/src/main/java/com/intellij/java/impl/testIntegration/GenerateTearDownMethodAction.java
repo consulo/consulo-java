@@ -23,7 +23,7 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateTearDownMethod")
 public class GenerateTearDownMethodAction extends BaseGenerateTestSupportMethodAction {
     public GenerateTearDownMethodAction() {
-        super(TestIntegrationUtils.MethodKind.TEAR_DOWN, JavaLocalize.actionGenerateteardownmethodText());
+        super(TestIntegrationUtils.MethodKind.TEAR_DOWN, JavaLocalize.actionGenerateTearDownMethodText());
     }
 
     @Override

@@ -27,7 +27,7 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateCreateUI")
 public class GenerateCreateUIAction extends BaseGenerateAction {
     public GenerateCreateUIAction() {
-        super(new GenerateCreateUIHandler(), JavaLocalize.actionGeneratecreateuiText());
+        super(new GenerateCreateUIHandler(), JavaLocalize.actionGenerateCreateUIText());
     }
 
     @Override

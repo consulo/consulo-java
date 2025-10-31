@@ -81,8 +81,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     public InferNullityAnnotationsAction() {
         super(
-            JavaLocalize.actionInfernullityText(),
-            JavaLocalize.actionInfernullityDescription(),
+            JavaLocalize.actionInferNullityText(),
+            JavaLocalize.actionInferNullityDescription(),
             LocalizeValue.localizeTODO("Infer Nullity"),
             INFER_NULLITY_ANNOTATIONS
         );
@@ -91,8 +91,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     @Override
     @RequiredUIAccess
     protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
-        boolean annotateLocaVars = myAnnotateLocalVariablesCb.getValueOrError();
-        ApplicationPropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocaVars);
+        boolean annotateLocalVars = myAnnotateLocalVariablesCb.getValueOrError();
+        ApplicationPropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocalVars);
         myAnnotateLocalVariablesCb = null;
 
         ProgressManager progressManager = ProgressManager.getInstance();
@@ -150,16 +150,16 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             return;
         }
         PsiDocumentManager.getInstance(project).commitAllDocuments();
-        UsageInfo[] usageInfos = findUsages(annotateLocaVars, project, scope, fileCount[0]);
+        UsageInfo[] usageInfos = findUsages(annotateLocalVars, project, scope, fileCount[0]);
         if (usageInfos == null) {
             return;
         }
 
-        processUsages(annotateLocaVars, project, scope, usageInfos);
+        processUsages(annotateLocalVars, project, scope, usageInfos);
     }
 
     protected void processUsages(
-        boolean annotateLocaVars,
+        boolean annotateLocalVars,
         @Nonnull Project project,
         @Nonnull AnalysisScope scope,
         @Nonnull UsageInfo[] usageInfos
@@ -168,7 +168,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             applyRunnable(project, () -> usageInfos).run();
         }
         else {
-            showUsageView(annotateLocaVars, project, usageInfos, scope);
+            showUsageView(annotateLocalVars, project, usageInfos, scope);
         }
     }
 
@@ -185,7 +185,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             message += StringUtil.join(modulesWithoutAnnotations, Module::getName, ", ");
             message += (modulesWithoutAnnotations.size() == 1 ? " doesn't" : " don't");
             message += " refer to the existing '" + annotationsLib.getName() + "' library" +
-                " with Consulo nullity annotations. Would you like to add the dependenc";
+                " with Consulo nullity annotations. Would you like to add the dependency";
             message += (modulesWithoutAnnotations.size() == 1 ? "y" : "ies") + " now?";
             if (Messages.showOkCancelDialog(project, message, title.get(), UIUtil.getErrorIcon()) == Messages.OK) {
                 project.getApplication().runWriteAction(() ->
@@ -199,26 +199,37 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             return false;
         }
 
-		/*if (Messages.showOkCancelDialog(project, "It is required that JetBrains annotations" + " be available in all your project sources.\n\nYou will need to add annotations.jar as a library. " +
-        "It is possible to configure custom JAR\nin e.g. Constant Conditions & Exceptions inspection or use JetBrains annotations available in installation. " + "\nIntelliJ IDEA nullity " +
-				"annotations are freely usable and redistributable under the Apache 2.0 license.\nWould you like to do it now?", title, Messages.getErrorIcon()) == Messages.OK)
-		{
-			Module firstModule = modulesWithoutAnnotations.iterator().next();
-			JavaProjectModelModificationService.getInstance(project).addDependency(modulesWithoutAnnotations, JetBrainsAnnotationsExternalLibraryResolver.getAnnotationsLibraryDescriptor(firstModule)
-					, DependencyScope.COMPILE);
-			return true;
-		} */
+        /*
+        if (Messages.showOkCancelDialog(
+            project,
+            "It is required that JetBrains annotations be available in all your project sources.\n\n" +
+                "You will need to add annotations.jar as a library. It is possible to configure custom JAR\n" +
+                "in e.g. Constant Conditions & Exceptions inspection or use JetBrains annotations available in installation.\n" +
+                "IntelliJ IDEA nullity annotations are freely usable and redistributable under the Apache 2.0 license.\n" +
+                "Would you like to do it now?",
+            title,
+            Messages.getErrorIcon()
+        ) == Messages.OK) {
+            Module firstModule = modulesWithoutAnnotations.iterator().next();
+            JavaProjectModelModificationService.getInstance(project).addDependency(
+                modulesWithoutAnnotations,
+                JetBrainsAnnotationsExternalLibraryResolver.getAnnotationsLibraryDescriptor(firstModule),
+                DependencyScope.COMPILE
+            );
+            return true;
+        }
+        */
         return false;
     }
 
     @Nullable
     protected UsageInfo[] findUsages(
-        boolean annotateLocaVars,
+        boolean annotateLocalVars,
         @Nonnull Project project,
         @Nonnull AnalysisScope scope,
         int fileCount
     ) {
-        NullityInferrer inferrer = new NullityInferrer(annotateLocaVars, project);
+        NullityInferrer inferrer = new NullityInferrer(annotateLocalVars, project);
         PsiManager psiManager = PsiManager.getInstance(project);
         Runnable searchForUsages = () -> scope.accept(new PsiElementVisitor() {
             int myFileCount;
@@ -235,7 +246,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
                 ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
                 if (progressIndicator != null) {
                     progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
-                    progressIndicator.setFraction(((double)myFileCount) / fileCount);
+                    progressIndicator.setFraction(((double) myFileCount) / fileCount);
                 }
                 if (file instanceof PsiJavaFile) {
                     inferrer.collect(file);
@@ -309,7 +320,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     }
 
     private void showUsageView(
-        boolean annotateLocaVars,
+        boolean annotateLocalVars,
         @Nonnull Project project,
         UsageInfo[] usageInfos,
         @Nonnull AnalysisScope scope
@@ -334,10 +345,10 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         presentation.setTabText("Infer Nullity Preview");
         presentation.setShowReadOnlyStatusAsRed(true);
         presentation.setShowCancelButton(true);
-        presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext().get());
+        presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext());
 
         UsageView usageView =
-            UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(annotateLocaVars, project, scope));
+            UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(annotateLocalVars, project, scope));
 
         Runnable refactoringRunnable = applyRunnable(project, () ->
         {
@@ -345,8 +356,9 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             return infos.toArray(new UsageInfo[infos.size()]);
         });
 
-        String canNotMakeString =
-            "Cannot perform operation.\nThere were changes in code after usages have been found.\nPlease perform operation search again.";
+        String canNotMakeString = "Cannot perform operation.\n" +
+            "There were changes in code after usages have been found.\n" +
+            "Please perform operation search again.";
 
         usageView.addPerformOperationAction(
             refactoringRunnable,
@@ -359,7 +371,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     @Nonnull
     private Supplier<UsageSearcher> rerunFactory(
-        boolean annotateLocaVars,
+        boolean annotateLocalVars,
         @Nonnull Project project,
         @Nonnull AnalysisScope scope
     ) {
@@ -368,7 +380,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             @Override
             protected UsageInfo[] findUsages() {
                 return ObjectUtil.notNull(
-                    InferNullityAnnotationsAction.this.findUsages(annotateLocaVars, project, scope, scope.getFileCount()),
+                    InferNullityAnnotationsAction.this.findUsages(annotateLocalVars, project, scope, scope.getFileCount()),
                     UsageInfo.EMPTY_ARRAY
                 );
             }
@@ -380,8 +392,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         };
     }
 
-    @RequiredUIAccess
     @Override
+    @RequiredUIAccess
     protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
         myAnnotateLocalVariablesCb =
             CheckBox.create(LocalizeValue.localizeTODO("Annotate local variables"));

@@ -49,8 +49,8 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
 
     public GenerateJavadocAction() {
         super(
-            JavaLocalize.actionGeneratejavadocText(),
-            JavaLocalize.actionGeneratejavadocDescription(),
+            JavaLocalize.actionGenerateJavadocText(),
+            JavaLocalize.actionGenerateJavadocDescription(),
             JavadocLocalize.javadocGenerateTitle(),
             JavadocLocalize.javadocGenerateTitle()
         );

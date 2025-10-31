@@ -28,6 +28,6 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateGetter")
 public class GenerateGetterAction extends GenerateGetterSetterBaseAction {
     public GenerateGetterAction() {
-        super(new GenerateGetterHandler(), JavaLocalize.actionGenerategetterText());
+        super(new GenerateGetterHandler(), JavaLocalize.actionGenerateGetterText());
     }
 }

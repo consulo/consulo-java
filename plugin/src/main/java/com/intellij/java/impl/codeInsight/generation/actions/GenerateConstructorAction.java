@@ -30,7 +30,7 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateConstructor")
 public class GenerateConstructorAction extends BaseGenerateAction {
     public GenerateConstructorAction() {
-        super(new GenerateConstructorHandler(), JavaLocalize.actionGenerateconstructorText());
+        super(new GenerateConstructorHandler(), JavaLocalize.actionGenerateConstructorText());
     }
 
     @Override

@@ -42,7 +42,7 @@ import jakarta.annotation.Nonnull;
 @ActionImpl(id = "MakeStatic")
 public class MakeStaticAction extends BaseRefactoringAction {
     public MakeStaticAction() {
-        super(JavaLocalize.actionMakestaticText(), JavaLocalize.actionMakestaticDescription());
+        super(JavaLocalize.actionMakeStaticText(), JavaLocalize.actionMakeStaticDescription());
     }
 
     @Override

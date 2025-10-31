@@ -10,41 +10,37 @@ action.encapsulate.fields.description:
     text: Replace direct access to fields in the selected class with use of accessor methods
 action.encapsulate.fields.text:
     text: _Encapsulate Fields...
-action.ExportThreads.description:
-    text: Save all threads information to a text file or clipboard
-action.ExportThreads.text:
-    text: Export T_hreads...
-action.GenerateConstructor.text:
+action.generate.constructor.text:
     text: Constructor
-action.GenerateCreateUI.text:
+action.generate.create.u.i.text:
     text: createUI(...)
-action.GenerateDataMethod.text:
+action.generate.data.method.text:
     text: Parameters Method
-action.GenerateEquals.text:
+action.generate.equals.text:
     text: equals() and hashCode()
-action.GenerateGetter.text:
+action.generate.getter.text:
     text: Getter
-action.GenerateGetterAndSetter.text:
+action.generate.getter.and.setter.text:
     text: Getter and Setter
-action.GenerateJavadoc.description:
+action.generate.javadoc.description:
     text: Run the JavaDoc tool
-action.GenerateJavadoc.text:
+action.generate.javadoc.text:
     text: Generate Java_Doc...
-action.GenerateSetUpMethod.text:
+action.generate.set.up.method.text:
     text: SetUp Method
-action.GenerateSetter.text:
+action.generate.setter.text:
     text: Setter
-action.GenerateTearDownMethod.text:
+action.generate.tear.down.method.text:
     text: TearDown Method
-action.GenerateTestMethod.text:
+action.generate.test.method.text:
     text: Test Method
-action.Generify.description:
+action.generify.description:
     text: Convert your code to use generic types
-action.Generify.text:
+action.generify.text:
     text: Ge_nerify...
-action.InferNullity.description:
+action.infer.nullity.description:
     text: Infer nullity
-action.InferNullity.text:
+action.infer.nullity.text:
     text: Infer _Nullity...
 action.inheritance.to.delegation.description:
     text: Replace inheritance with delegation
@@ -54,17 +50,17 @@ action.introduce.parameter.object.description:
     text: Replaces method parameters list with object
 action.introduce.parameter.object.text:
     text: Introduce Parameter Ob_ject...
-action.InvertBoolean.description:
+action.invert.boolean.description:
     text: Makes the method return or variable contain the opposite value and corrects the references
-action.InvertBoolean.text:
+action.invert.boolean.text:
     text: Invert _Boolean...
-action.JavaNewClass.description:
+action.new.class.description:
     text: Create new Java class
-action.JavaNewClass.text:
+action.new.class.text:
     text: Java Class
-action.MakeStatic.description:
+action.make.static.description:
     text: Convert method or inner class to static and correct all references
-action.MakeStatic.text:
+action.make.static.text:
     text: Make S_tatic...
 action.method.duplicates.description:
     text: Finds code in selected scope that can be transformed into a call of selected method/constant
@@ -94,28 +90,18 @@ action.replace.temp.with.query.description:
     text: Turn the selected variable into a method
 action.replace.temp.with.query.text:
     text: Replace Temp with _Query...
-action.ShowPackageCycles.description:
-    text: Browse code chosen analysis item used in cycles
-action.ShowPackageCycles.text:
-    text: Analyze _Cyclic Dependencies...
-action.SliceBackward.description:
+action.slice.backward.description:
     text: Search for values which can be assigned to selected expression
-action.SliceBackward.text:
+action.slice.backward.text:
     text: Analyze Data Flow _to Here
-action.SliceForward.description:
+action.slice.forward.description:
     text: Search for values escaped from this location
-action.SliceForward.text:
+action.slice.forward.text:
     text: Analyze Data Flow _from Here
-action.SliceSliceForward.description:
-    text: Search for values escaped from this location
 action.turn.refs.to.super.description:
     text: Change usages of a class to those of its superclass or interface
 action.turn.refs.to.super.text:
     text: Use Interface _Where Possible...
-action.Unscramble.description:
-    text: Open console with the navigatable stacktrace
-action.Unscramble.text:
-    text: Analyze _Stacktrace...
 action.wrap.return.value.description:
     text: Wrap return value of the specified method with object
 action.wrap.return.value.text:

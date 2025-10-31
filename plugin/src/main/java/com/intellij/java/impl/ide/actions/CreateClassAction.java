@@ -57,7 +57,7 @@ import java.util.Map;
 @ActionImpl(id = "JavaNewClass", parents = @ActionParentRef(value = @ActionRef(id = "NewGroup1"), anchor = ActionRefAnchor.FIRST))
 public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass> implements DumbAware {
     public CreateClassAction() {
-        super(LocalizeValue.empty(), LocalizeValue.empty(), PlatformIconGroup.nodesClass(), true);
+        super(JavaLocalize.actionNewClassText(), JavaLocalize.actionNewClassDescription(), PlatformIconGroup.nodesClass(), true);
     }
 
     @Override
@@ -100,14 +100,14 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
                 return null;
             }
 
-            @RequiredUIAccess
             @Override
+            @RequiredUIAccess
             public boolean checkInput(String inputString) {
                 return true;
             }
 
-            @RequiredUIAccess
             @Override
+            @RequiredUIAccess
             public boolean canClose(String inputString) {
                 return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
             }
