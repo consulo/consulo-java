@@ -7,10 +7,10 @@ import consulo.annotation.component.ExtensionAPI;
 
 /**
  * @author VISTALL
- * @since 20/12/2022
+ * @since 2022-12-20
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaDocNotNecessaryFilter {
-  @RequiredReadAction
-  boolean isJavaDocNotNecessary(PsiMethod method);
+    @RequiredReadAction
+    boolean isJavaDocNotNecessary(PsiMethod method);
 }
