@@ -51,41 +51,5 @@
 		<action id="GenerateJavadoc" class="com.intellij.java.impl.javadoc.actions.GenerateJavadocAction" can-use-project-as-default="true" require-module-extensions="java">
 			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
 		</action>
-
-		<group id="Debugger.Representation">
-			<reference ref="Debugger.CreateRenderer"/>
-			<separator/>
-			<reference ref="Debugger.AutoRenderer"/>
-		</group>
-
-		<group id="EditorPopupMenuDebugJava">
-			<separator/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<add-to-group group-id="EditorPopupMenuDebug" anchor="last"/>
-		</group>
-
-		<group id="JavaCompileGroup">
-			<reference ref="ToggleMethodBreakpoint"/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<add-to-group group-id="ProjectViewCompileGroup" anchor="first"/>
-			<add-to-group group-id="StructureViewCompileGroup" anchor="first"/>
-		</group>
-
-		<group id="Debugger.ThreadsPanelPopup">
-			<!--<reference ref="Debugger.ResumeThread"/>-->
-			<!--<reference ref="Debugger.FreezeThread"/>-->
-			<reference ref="Debugger.InterruptThread"/>
-			<!--<reference ref="Debugger.ShowFrame"/>-->
-			<reference ref="Debugger.PopFrame"/>
-			<!--<reference ref="Debugger.EditFrameSource"/>-->
-			<!--<reference ref="Debugger.EditTypeSource"/>-->
-			<!--<reference ref="EditSource"/>-->
-			<separator/>
-			<reference ref="ExportThreads"/>
-			<separator/>
-			<reference ref="Debugger.CustomizeThreadsView"/>
-		</group>
 	</actions>
 </consulo-plugin>
