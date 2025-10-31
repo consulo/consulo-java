@@ -17,6 +17,10 @@ package com.intellij.java.impl.javadoc.actions;
 
 import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.java.language.localize.JavadocLocalize;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.impl.action.BaseAnalysisAction;
@@ -32,6 +36,14 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
+@ActionImpl(
+    id = "GenerateJavadoc",
+    parents = @ActionParentRef(
+        value = @ActionRef(id = "ToolsBasicGroup"),
+        anchor = ActionRefAnchor.AFTER,
+        relatedToAction = @ActionRef(id = "SaveFileAsTemplate")
+    )
+)
 public final class GenerateJavadocAction extends BaseAnalysisAction {
     private JavadocConfigurable myConfigurable;
 

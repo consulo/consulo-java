@@ -19,6 +19,11 @@ import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.HotSwapUI;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
@@ -27,7 +32,19 @@ import consulo.ui.ex.action.AnActionEvent;
 /**
  * @author lex
  */
+@ActionImpl(
+    id = "Hotswap",
+    parents = @ActionParentRef(
+        value = @ActionRef(id = "DebugMainMenu"),
+        anchor = ActionRefAnchor.BEFORE,
+        relatedToAction = @ActionRef(id = "StepOver")
+    )
+)
 public class HotSwapAction extends AnAction {
+    public HotSwapAction() {
+        super(JavaDebuggerLocalize.actionHotswapText(), JavaDebuggerLocalize.actionHotswapDescription());
+    }
+
     @Override
     @RequiredUIAccess
     public void actionPerformed(AnActionEvent e) {

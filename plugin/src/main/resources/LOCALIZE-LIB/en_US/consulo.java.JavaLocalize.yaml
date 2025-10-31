@@ -42,10 +42,6 @@ action.Generify.description:
     text: Convert your code to use generic types
 action.Generify.text:
     text: Ge_nerify...
-action.Hotswap.description:
-    text: Reload all changed classes into application being debugged (HotSwap)
-action.Hotswap.text:
-    text: Relo_ad Changed Classes
 action.InferNullity.description:
     text: Infer nullity
 action.InferNullity.text:

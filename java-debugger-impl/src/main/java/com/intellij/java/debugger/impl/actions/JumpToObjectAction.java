@@ -46,7 +46,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
-@ActionImpl(id = "Debugger.EditTypeSource")
+@ActionImpl(id = DebuggerActions.EDIT_TYPE_SOURCE)
 public class JumpToObjectAction extends DebuggerAction {
     private static final Logger LOG = Logger.getInstance(JumpToObjectAction.class);
 
