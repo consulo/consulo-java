@@ -22,11 +22,7 @@ import consulo.execution.debug.XDebuggerActions;
  */
 public interface DebuggerActions extends XDebuggerActions {
     String POP_FRAME = "Debugger.PopFrame";
-    String EVALUATION_DIALOG_POPUP = "Debugger.EvaluationDialogPopup";
-    String FRAME_PANEL_POPUP = "Debugger.FramePanelPopup";
-    String INSPECT_PANEL_POPUP = "Debugger.InspectPanelPopup";
     String THREADS_PANEL_POPUP = "Debugger.ThreadsPanelPopup";
-    String WATCH_PANEL_POPUP = "Debugger.WatchesPanelPopup";
     String REMOVE_WATCH = "Debugger.RemoveWatch";
     String NEW_WATCH = "Debugger.NewWatch";
     String EDIT_WATCH = "Debugger.EditWatch";

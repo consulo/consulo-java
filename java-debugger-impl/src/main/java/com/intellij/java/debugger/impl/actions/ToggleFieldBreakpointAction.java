@@ -16,24 +16,19 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.InstanceFilter;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SourcePositionProvider;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.breakpoints.FieldBreakpoint;
-import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
@@ -41,18 +36,14 @@ import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
 import consulo.fileEditor.FileEditorManager;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.Presentation;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -93,19 +84,6 @@ public class ToggleFieldBreakpointAction extends AnAction {
                 if (breakpoint == null) {
                     FieldBreakpoint fieldBreakpoint = manager.addFieldBreakpoint(document, offset);
                     if (fieldBreakpoint != null) {
-                        if (DebuggerAction.isContextView(e)) {
-                            DebuggerTreeNodeImpl selectedNode = DebuggerAction.getSelectedNode(e.getDataContext());
-                            if (selectedNode != null && selectedNode.getDescriptor() instanceof FieldDescriptorImpl fieldDescriptor) {
-                                ObjectReference object = fieldDescriptor.getObject();
-                                if (object != null) {
-                                    long id = object.uniqueID();
-                                    InstanceFilter[] instanceFilters = new InstanceFilter[]{InstanceFilter.create(Long.toString(id))};
-                                    fieldBreakpoint.setInstanceFilters(instanceFilters);
-                                    fieldBreakpoint.setInstanceFiltersEnabled(true);
-                                }
-                            }
-                        }
-
                         Editor editor = e.getData(Editor.KEY);
                         if (editor != null) {
                             manager.editBreakpoint(fieldBreakpoint, editor);
@@ -122,31 +100,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
     @Override
     @RequiredUIAccess
     public void update(@Nonnull AnActionEvent event) {
-        SourcePosition place = getPlace(event);
-        boolean toEnable = place != null;
-
-        Presentation presentation = event.getPresentation();
-        if (POPUP_PLACES.contains(event.getPlace())) {
-            presentation.setVisible(toEnable);
-        }
-        else if (DebuggerAction.isContextView(event)) {
-            presentation.setTextValue(JavaDebuggerLocalize.actionAddFieldWatchpointText());
-            Project project = event.getData(Project.KEY);
-            if (project != null && place != null) {
-                Document document = PsiDocumentManager.getInstance(project).getDocument(place.getFile());
-                if (document != null) {
-                    int offset = place.getOffset();
-                    BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
-                    Breakpoint fieldBreakpoint =
-                        offset >= 0 ? breakpointManager.findBreakpoint(document, offset, FieldBreakpoint.CATEGORY) : null;
-                    if (fieldBreakpoint != null) {
-                        presentation.setEnabled(false);
-                        return;
-                    }
-                }
-            }
-        }
-        presentation.setVisible(toEnable);
+        event.getPresentation().setVisible(getPlace(event) != null);
     }
 
     @Nullable
@@ -185,30 +139,6 @@ public class ToggleFieldBreakpointAction extends AnAction {
                     return sourcePosition;
                 }
             }
-        }
-
-        if (DebuggerAction.isContextView(event)) {
-            DebuggerTree tree = event.getData(DebuggerTree.DATA_KEY);
-            if (tree != null && tree.getSelectionPath() != null) {
-                DebuggerTreeNodeImpl node = (DebuggerTreeNodeImpl) tree.getSelectionPath().getLastPathComponent();
-                if (node != null && node.getDescriptor() instanceof FieldDescriptorImpl fieldDescriptor) {
-                    Field field = fieldDescriptor.getField();
-                    DebuggerSession session = tree.getDebuggerContext().getDebuggerSession();
-                    PsiClass psiClass = DebuggerUtils.findClass(
-                        field.declaringType().name(),
-                        project,
-                        session != null ? session.getSearchScope() : GlobalSearchScope.allScope(project)
-                    );
-                    if (psiClass != null) {
-                        psiClass = (PsiClass) psiClass.getNavigationElement();
-                        PsiField psiField = psiClass.findFieldByName(field.name(), true);
-                        if (psiField != null) {
-                            return SourcePosition.createFromElement(psiField);
-                        }
-                    }
-                }
-            }
-            return null;
         }
 
         Editor editor = event.getData(Editor.KEY);

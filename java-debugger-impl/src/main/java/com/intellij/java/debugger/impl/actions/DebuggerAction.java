@@ -43,7 +43,6 @@ import javax.swing.tree.TreePath;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class DebuggerAction
@@ -51,13 +50,6 @@ import java.util.Set;
  * @author Jeka
  */
 public abstract class DebuggerAction extends AnAction {
-    private static final Set<String> POPUP_PLACES = Set.of(
-        DebuggerActions.EVALUATION_DIALOG_POPUP,
-        DebuggerActions.FRAME_PANEL_POPUP,
-        DebuggerActions.WATCH_PANEL_POPUP,
-        DebuggerActions.INSPECT_PANEL_POPUP
-    );
-
     private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
     protected DebuggerAction(@Nonnull LocalizeValue text) {
@@ -127,10 +119,6 @@ public abstract class DebuggerAction extends AnAction {
     public static DebuggerStateManager getContextManager(DataContext dataContext) {
         DebuggerTreePanel panel = getPanel(dataContext);
         return panel == null ? null : panel.getContextManager();
-    }
-
-    public static boolean isContextView(AnActionEvent e) {
-        return POPUP_PLACES.contains(e.getPlace());
     }
 
     public static Disposable installEditAction(JTree tree, String actionName) {

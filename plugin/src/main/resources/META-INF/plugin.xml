@@ -73,68 +73,6 @@
 			<add-to-group group-id="StructureViewCompileGroup" anchor="first"/>
 		</group>
 
-		<group id="Debugger.FramePanelPopup">
-			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="XDebugger.Inspect"/>
-			<reference ref="Debugger.MarkObject"/>
-			<!--<reference ref="Debugger.SetValue"/> -->
-			<reference ref="Debugger.EditNodeSource"/>
-			<reference ref="Debugger.EditTypeSource"/>
-			<separator/>
-			<reference ref="Debugger.ViewAsGroup"/>
-			<separator/>
-			<reference ref="Debugger.AddToWatch"/>
-			<separator/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<!--<reference ref="Debugger.CopyValue"/> -->
-			<!--<reference ref="Debugger.ViewText"/>-->
-			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
-			<reference ref="Debugger.CustomizeContextView"/>
-		</group>
-
-		<group id="Debugger.EvaluationDialogPopup">
-			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="XDebugger.Inspect"/>
-			<reference ref="Debugger.MarkObject"/>
-			<!--<reference ref="Debugger.SetValue"/> -->
-			<reference ref="Debugger.EditNodeSource"/>
-			<reference ref="Debugger.EditTypeSource"/>
-			<separator/>
-			<!--<reference ref="Debugger.ShowAsHex"/>-->
-			<reference ref="Debugger.ViewAsGroup"/>
-			<separator/>
-			<reference ref="Debugger.AddToWatch"/>
-			<separator/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<!--<reference ref="Debugger.CopyValue"/> -->
-			<!--<reference ref="Debugger.ViewText"/>-->
-			<!--<reference ref="Debugger.CompareValueWithClipboard"/> -->
-			<reference ref="Debugger.CustomizeContextView"/>
-		</group>
-
-		<group id="Debugger.InspectPanelPopup">
-			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="XDebugger.Inspect"/>
-			<reference ref="Debugger.MarkObject"/>
-			<!--<reference ref="Debugger.SetValue"/> -->
-			<reference ref="Debugger.EditNodeSource"/>
-			<reference ref="Debugger.EditTypeSource"/>
-			<separator/>
-			<reference ref="Debugger.AddToWatch"/>
-			<separator/>
-			<!--<reference ref="Debugger.ShowAsHex"/>-->
-			<reference ref="Debugger.ViewAsGroup"/>
-			<separator/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<!--<reference ref="Debugger.CopyValue"/> -->
-			<!--<reference ref="Debugger.ViewText"/>-->
-			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
-			<reference ref="Debugger.CustomizeContextView"/>
-		</group>
-
 		<group id="Debugger.ThreadsPanelPopup">
 			<!--<reference ref="Debugger.ResumeThread"/>-->
 			<!--<reference ref="Debugger.FreezeThread"/>-->
@@ -148,32 +86,6 @@
 			<reference ref="ExportThreads"/>
 			<separator/>
 			<reference ref="Debugger.CustomizeThreadsView"/>
-		</group>
-
-		<group id="Debugger.WatchesPanelPopup">
-			<!--<reference ref="Debugger.NewWatch"/>-->
-			<!--<reference ref="Debugger.EditWatch"/>-->
-			<!--<reference ref="Debugger.RemoveWatch"/>-->
-			<!--<reference ref="Debugger.RemoveAllWatches"/>-->
-			<separator/>
-			<reference ref="Debugger.AdjustArrayRange"/>
-			<!--<reference ref="Debugger.Inspect"/>-->
-			<reference ref="Debugger.MarkObject"/>
-			<!--<reference ref="Debugger.SetValue"/>-->
-			<reference ref="Debugger.EditNodeSource"/>
-			<reference ref="Debugger.EditTypeSource"/>
-			<separator/>
-			<!--<reference ref="Debugger.ShowAsHex"/>-->
-			<reference ref="Debugger.ViewAsGroup"/>
-			<separator/>
-			<reference ref="Debugger.AddToWatch"/>
-			<separator/>
-			<reference ref="ToggleFieldBreakpoint"/>
-			<separator/>
-			<!--<reference ref="Debugger.CopyValue"/>-->
-			<!--<reference ref="Debugger.ViewText"/>-->
-			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
-			<reference ref="Debugger.CustomizeContextView"/>
 		</group>
 	</actions>
 </consulo-plugin>
