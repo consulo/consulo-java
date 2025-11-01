@@ -30,7 +30,7 @@ import consulo.language.psi.PsiFile;
 @ActionImpl(id = "GenerateEquals")
 public class GenerateEqualsAction extends BaseGenerateAction {
     public GenerateEqualsAction() {
-        super(new GenerateEqualsHandler(), JavaLocalize.actionGenerateequalsText());
+        super(new GenerateEqualsHandler(), JavaLocalize.actionGenerateEqualsText());
     }
 
     @Override

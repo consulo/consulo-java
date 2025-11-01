@@ -21,6 +21,6 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateTestMethod")
 public class GenerateTestMethodAction extends BaseGenerateTestSupportMethodAction {
     public GenerateTestMethodAction() {
-        super(TestIntegrationUtils.MethodKind.TEST, JavaLocalize.actionGeneratetestmethodText());
+        super(TestIntegrationUtils.MethodKind.TEST, JavaLocalize.actionGenerateTestMethodText());
     }
 }

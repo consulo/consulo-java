@@ -36,7 +36,7 @@ import jakarta.annotation.Nonnull;
 @ActionImpl(id = "InvertBoolean")
 public class InvertBooleanAction extends BaseRefactoringAction {
     public InvertBooleanAction() {
-      super(JavaLocalize.actionInvertbooleanText(), JavaLocalize.actionInvertbooleanText());
+      super(JavaLocalize.actionInvertBooleanText(), JavaLocalize.actionInvertBooleanDescription());
     }
 
     @Override

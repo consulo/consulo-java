@@ -23,7 +23,7 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateSetUpMethod")
 public class GenerateSetUpMethodAction extends BaseGenerateTestSupportMethodAction {
     public GenerateSetUpMethodAction() {
-        super(TestIntegrationUtils.MethodKind.SET_UP, JavaLocalize.actionGeneratesetupmethodText());
+        super(TestIntegrationUtils.MethodKind.SET_UP, JavaLocalize.actionGenerateSetUpMethodText());
     }
 
     @Override

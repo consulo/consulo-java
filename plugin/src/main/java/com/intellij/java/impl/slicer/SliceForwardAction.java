@@ -30,7 +30,7 @@ public class SliceForwardAction extends CodeInsightAction {
     private final SliceHandler myHandler = new SliceForwardHandler();
 
     public SliceForwardAction() {
-        super(JavaLocalize.actionSliceforwardText(), JavaLocalize.actionSliceforwardDescription());
+        super(JavaLocalize.actionSliceForwardText(), JavaLocalize.actionSliceForwardDescription());
     }
 
     @Nonnull

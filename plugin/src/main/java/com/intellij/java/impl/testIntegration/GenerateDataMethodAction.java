@@ -24,7 +24,7 @@ import consulo.java.localize.JavaLocalize;
 @ActionImpl(id = "GenerateDataMethod")
 public class GenerateDataMethodAction extends BaseGenerateTestSupportMethodAction {
     public GenerateDataMethodAction() {
-        super(TestIntegrationUtils.MethodKind.DATA, JavaLocalize.actionGeneratedatamethodText());
+        super(TestIntegrationUtils.MethodKind.DATA, JavaLocalize.actionGenerateDataMethodText());
     }
 
     @Override
