@@ -1,34 +1,34 @@
-generate.equals.hashcode.wizard.title:
-  text: Generate equals() and hashCode()
-generate.equals.hashcode.equals.fields.chooser.title:
-  text: Choose &fields to be included in equals()
-generate.equals.hashcode.hashcode.fields.chooser.title:
-  text: Choose &fields to be included in hashCode()
-generate.equals.hashcode.non.null.fields.chooser.title:
-  text: Select all non-null &fields
-generate.equals.hashcode.use.getters:
-  text: Use &getters during code generation
-generate.equals.hashcode.template:
-  text: '&Template:'
-generate.equals.hashcode.accept.sublcasses:
-  text: Accept &subclasses as parameter to equals() method
-generate.equals.hashcode.accept.sublcasses.explanation:
-  text: <html><body>While generally incompliant to Object.equals() specification accepting<br>subclasses might be necessary for generated method to work correctly<br>with frameworks, which generate Proxy subclasses like Hibernate.</body></html>
-generate.equals.hashcode.internal.error:
-  text: Internal error
-generate.equals.warning.equals.for.nested.arrays.not.supported:
-  text: equals() for nested arrays is not supported
-generate.equals.warning.generated.equals.could.be.incorrect:
-  text: Generated equals() for Object[] can be incorrect
-generate.equals.hashcode.warning.hashcode.for.arrays.is.not.supported:
-  text: hashCode () for arrays is not supported
 action.structureview.show.non.public:
-  text: Show non-public
+    text: Show non-public
 action.structureview.show.properties:
-  text: Show Properties
+    text: Show Properties
 file.structure.toggle.show.anonymous.classes:
-  text: Anonymous Classes
+    text: Anonymous Classes
 file.structure.toggle.show.collapse.show.lambdas:
-  text: Lambdas
+    text: Lambdas
+generate.equals.hashcode.accept.sublcasses:
+    text: Accept &subclasses as parameter to equals() method
+generate.equals.hashcode.accept.sublcasses.explanation:
+    text: <html><body>While generally incompliant to Object.equals() specification accepting<br>subclasses might be necessary for generated method to work correctly<br>with frameworks, which generate Proxy subclasses like Hibernate.</body></html>
+generate.equals.hashcode.equals.fields.chooser.title:
+    text: Choose &fields to be included in equals()
+generate.equals.hashcode.hashcode.fields.chooser.title:
+    text: Choose &fields to be included in hashCode()
+generate.equals.hashcode.internal.error:
+    text: Internal error
+generate.equals.hashcode.non.null.fields.chooser.title:
+    text: Select all non-null &fields
+generate.equals.hashcode.template:
+    text: '&Template:'
+generate.equals.hashcode.use.getters:
+    text: Use &getters during code generation
+generate.equals.hashcode.warning.hashcode.for.arrays.is.not.supported:
+    text: hashCode () for arrays is not supported
+generate.equals.hashcode.wizard.title:
+    text: Generate equals() and hashCode()
+generate.equals.warning.equals.for.nested.arrays.not.supported:
+    text: equals() for nested arrays is not supported
+generate.equals.warning.generated.equals.could.be.incorrect:
+    text: Generated equals() for Object[] can be incorrect
 static.class.initializer:
-  text: '{0}class initializer'
+    text: '{0}class initializer'

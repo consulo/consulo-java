@@ -2,10 +2,22 @@ action.anonymous.to.inner.description:
     text: Convert anonymous class into an inner class
 action.anonymous.to.inner.text:
     text: Convert Anon_ymous to Inner...
+action.change.type.signature.description:
+    text: Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references
+action.change.type.signature.text:
+    text: T_ype Migration...
 action.convert.to.instance.method.description:
     text: Convert static method to instance method and correct all references
 action.convert.to.instance.method.text:
     text: C_onvert To Instance Method...
+action.create.new.module.info.description:
+    text: Create new module-info.java
+action.create.new.module.info.title:
+    text: module-info.java
+action.create.new.package.info.description:
+    text: Create new package-info.java
+action.create.new.package.info.title:
+    text: package-info.java
 action.encapsulate.fields.description:
     text: Replace direct access to fields in the selected class with use of accessor methods
 action.encapsulate.fields.text:
@@ -18,10 +30,10 @@ action.generate.data.method.text:
     text: Parameters Method
 action.generate.equals.text:
     text: equals() and hashCode()
-action.generate.getter.text:
-    text: Getter
 action.generate.getter.and.setter.text:
     text: Getter and Setter
+action.generate.getter.text:
+    text: Getter
 action.generate.javadoc.description:
     text: Run the JavaDoc tool
 action.generate.javadoc.text:
@@ -30,14 +42,30 @@ action.generate.set.up.method.text:
     text: SetUp Method
 action.generate.setter.text:
     text: Setter
+action.generate.super.method.call.description:
+    text: Generate super method call
+action.generate.super.method.call.text:
+    text: Super Method Call
 action.generate.tear.down.method.text:
     text: TearDown Method
 action.generate.test.method.text:
     text: Test Method
+action.generate.to.string.description:
+    text: Generate toString() method
+action.generate.to.string.text:
+    text: to_String()
 action.generify.description:
     text: Convert your code to use generic types
 action.generify.text:
     text: Ge_nerify...
+action.go.to.implementation.text:
+    text: Go to implementation(s)
+action.go.to.overriding.methods.text:
+    text: Go to overriding methods
+action.go.to.subclass.text:
+    text: Go to subclass(es)
+action.go.to.super.method.text:
+    text: Go to super method
 action.infer.nullity.description:
     text: Infer nullity
 action.infer.nullity.text:
@@ -54,10 +82,6 @@ action.invert.boolean.description:
     text: Makes the method return or variable contain the opposite value and corrects the references
 action.invert.boolean.text:
     text: Invert _Boolean...
-action.new.class.description:
-    text: Create new Java class
-action.new.class.text:
-    text: Java Class
 action.make.static.description:
     text: Convert method or inner class to static and correct all references
 action.make.static.text:
@@ -70,6 +94,10 @@ action.migrate.description:
     text: Open migration dialog
 action.migrate.text:
     text: _Migrate...
+action.new.class.description:
+    text: Create new Java class
+action.new.class.text:
+    text: Java Class
 action.remove.middleman.description:
     text: Inline delegate to the selected field methods
 action.remove.middleman.text:
@@ -106,34 +134,6 @@ action.wrap.return.value.description:
     text: Wrap return value of the specified method with object
 action.wrap.return.value.text:
     text: Wrap Method Re_turn Value...
-action.change.type.signature.description:
-    text: Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references
-action.change.type.signature.text:
-    text: T_ype Migration...
-action.create.new.module.info.description:
-    text: Create new module-info.java
-action.create.new.module.info.title:
-    text: module-info.java
-action.create.new.package.info.description:
-    text: Create new package-info.java
-action.create.new.package.info.title:
-    text: package-info.java
-action.generate.super.method.call.description:
-    text: Generate super method call
-action.generate.super.method.call.text:
-    text: Super Method Call
-action.generate.to.string.description:
-    text: Generate toString() method
-action.generate.to.string.text:
-    text: to_String()
-action.go.to.implementation.text:
-    text: Go to implementation(s)
-action.go.to.overriding.methods.text:
-    text: Go to overriding methods
-action.go.to.subclass.text:
-    text: Go to subclass(es)
-action.go.to.super.method.text:
-    text: Go to super method
 annotation.processor.name:
     text: Annotation Processors
 checkbox.collapse.annotations:
