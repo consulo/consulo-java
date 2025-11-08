@@ -1,1070 +1,1070 @@
-add.explicit.type.arguments:
-  text: Add explicit type arguments
-change.type.arguments:
-  text: Change type arguments
-change.type.arguments.to.0:
-  text: Change type arguments to <{0}>
-convert.0.to.float:
-  text: Convert ''{0}'' to float
-type.information.local.object:
-  text: local object
-dataflow.message.array.index.out.of.bounds:
-  text: Array index is out of bounds
-dataflow.message.arraystore:
-  text: Storing element of type <code>{0}</code> to array of <code>{1}</code> elements will produce <code>ArrayStoreException</code>
-dataflow.message.assigning.null.notannotated:
-  text: Assigning <code>null</code> value to non-annotated field
-dataflow.message.assigning.null:
-  text: <code>null</code> is assigned to a variable that is annotated with @NotNull
-dataflow.message.assigning.nullable.notannotated:
-  text: 'Expression <code>#ref</code> #loc might be null but is assigned to non-annotated field'
-dataflow.message.assigning.nullable:
-  text: Expression <code>#ref</code> might evaluate to null but is assigned to a variable that is annotated with @NotNull
-dataflow.message.cce.always:
-  text: 'Casting <code>{0}</code> to <code>#ref</code> #loc will produce <code>ClassCastException</code> for any non-null value'
-dataflow.message.cce:
-  text: 'Casting <code>{0}</code> to <code>#ref</code> #loc may produce <code>ClassCastException</code>'
-dataflow.message.constant.condition.when.reached:
-  text: 'Condition <code>#ref</code> #loc is always <code>{0, choice, 0#false|1#true}</code> when reached'
-dataflow.message.constant.condition:
-  text: 'Condition <code>#ref</code> #loc is always <code>{0, choice, 0#false|1#true}</code>'
-dataflow.message.constant.method.reference:
-  text: Method reference result is always ''{0}''
-dataflow.message.constant.no.ref:
-  text: Condition is always {0, choice, 0#false|1#true}
-dataflow.message.contract.fail.index:
-  text: The call to '#ref' always fails as index is out of bounds
-dataflow.message.contract.fail:
-  text: The call to '#ref' always fails, according to its method contracts
-dataflow.message.immutable.modified:
-  text: Immutable object is modified
-dataflow.message.immutable.passed:
-  text: Immutable object is passed where mutable is expected
-dataflow.message.npe.array.access.sure:
-  text: 'Array access <code>#ref</code> #loc will produce <code>NullPointerException</code>'
-dataflow.message.npe.array.access:
-  text: 'Array access <code>#ref</code> #loc may produce <code>NullPointerException</code>'
-dataflow.message.npe.field.access.sure:
-  text: 'Dereference of <code>#ref</code> #loc will produce <code>NullPointerException</code>'
-dataflow.message.npe.field.access:
-  text: 'Dereference of <code>#ref</code> #loc may produce <code>NullPointerException</code>'
-dataflow.message.npe.inner.class.construction.sure:
-  text: Inner class construction will produce <code>NullPointerException</code>
-dataflow.message.npe.inner.class.construction:
-  text: Inner class construction may produce <code>NullPointerException</code>
-dataflow.message.npe.method.invocation.sure:
-  text: 'Method invocation <code>#ref</code> #loc will produce <code>NullPointerException</code>'
-dataflow.message.npe.method.invocation:
-  text: 'Method invocation <code>#ref</code> #loc may produce <code>NullPointerException</code>'
-dataflow.message.npe.methodref.invocation:
-  text: 'Method reference invocation <code>#ref</code> #loc may produce <code>NullPointerException</code>'
-dataflow.message.only.switch.label:
-  text: 'Switch label <code>#ref</code> #loc is the only reachable in the whole switch'
-dataflow.message.passing.null.argument.nonannotated:
-  text: Passing <code>null</code> argument to non-annotated parameter
-dataflow.message.passing.null.argument:
-  text: Passing <code>null</code> argument to parameter annotated as @NotNull
-dataflow.message.passing.nullable.argument.methodref.nonannotated:
-  text: Method reference argument might be null but passed to non-annotated parameter
-dataflow.message.passing.nullable.argument.methodref:
-  text: Method reference argument might be null
-dataflow.message.passing.nullable.argument.nonannotated:
-  text: 'Argument <code>#ref</code> #loc might be null but passed to non-annotated parameter'
-dataflow.message.passing.nullable.argument:
-  text: 'Argument <code>#ref</code> #loc might be null'
-dataflow.message.passing.non.null.argument.to.optional:
-  text: Passing a non-null argument to <code>Optional</code>
-dataflow.message.passing.null.argument.to.optional:
-  text: Passing <code>null</code> argument to <code>Optional</code>
-dataflow.message.pointless.assignment.expression:
-  text: 'Condition <code>#ref</code> #loc at the left side of assignment expression is always <code>{0}</code>. Can be simplified'
-dataflow.message.pointless.same.arguments:
-  text: Arguments of '#ref' are the same. Calling this method with the same arguments is meaningless
-dataflow.message.pointless.same.argument.and.result:
-  text: Result of '#ref' is the same as the {0,choice,1#first|2#second} argument making the call meaningless
-dataflow.message.redundant.assignment:
-  text: Variable is already assigned to this value
-dataflow.message.redundant.instanceof:
-  text: 'Condition <code>#ref</code> #loc is redundant and can be replaced with a null check'
-dataflow.message.redundant.update:
-  text: Variable update does nothing
-dataflow.message.return.notnull.from.nullable:
-  text: '@{0} method ''''{1}'''' always returns a non-null value'
-dataflow.message.return.null.from.notnull:
-  text: <code>null</code> is returned by the method declared as @{0}
-dataflow.message.return.null.from.notnullable:
-  text: <code>null</code> is returned by the method which is not declared as @{0}
-dataflow.message.return.nullable.from.notnull.function:
-  text: Function may return null, but it's not allowed here
-dataflow.message.return.nullable.from.notnull:
-  text: Expression <code>#ref</code> might evaluate to null but is returned by the method declared as @{0}
-dataflow.message.return.nullable.from.notnullable:
-  text: Expression <code>#ref</code> might evaluate to null but is returned by the method which is not declared as @{0}
-dataflow.message.storing.array.null:
-  text: <code>null</code> is stored to an array of @NotNull elements
-dataflow.message.storing.array.nullable:
-  text: Expression <code>#ref</code> might evaluate to null but is stored to an array of @NotNull elements
-dataflow.message.unboxing.nullable.argument.methodref:
-  text: Passing an argument to the method reference requires unboxing which may produce <code>NullPointerException</code>
-dataflow.message.unboxing.method.reference:
-  text: 'Use of <code>#ref</code> #loc would need unboxing which may produce <code>NullPointerException</code>'
-dataflow.message.unboxing:
-  text: 'Unboxing of <code>#ref</code> #loc may produce <code>NullPointerException</code>'
-dataflow.message.unreachable.switch.label:
-  text: 'Switch label <code>#ref</code> #loc is unreachable'
-dataflow.message.constant.expression:
-  text: 'Result of <code>#ref</code> #loc is always ''''{0}'''''
-dataflow.message.constant.value:
-  text: 'Value <code>#ref</code> #loc is always ''''{0}'''''
-dataflow.method.fails.with.null.argument:
-  text: Method will throw an exception when parameter is null
-dataflow.not.precise:
-  text: '{0} is complex: data flow results could be imprecise'
-dataflow.too.complex:
-  text: '{0} is too complex to analyze by data flow algorithm'
-dataflow.method.with.name.template:
-  text: "Method <code>#ref</code>"
-dataflow.constructor:
-  text: "Class initializer"
-delete.repeated.0:
-  text: Delete repeated ''{0}''
-delete.repeated.interface:
-  text: Delete repeated interface
-exception.removal.will.break.source.code.proceed.anyway:
-  text: Exception removal will break source code. Proceed anyway?
-feature.generics:
-  text: Generics
-feature.annotations:
-  text: Annotations
-feature.static.imports:
-  text: Static imports
-feature.for.each:
-  text: For-each loops
-feature.varargs:
-  text: Variable arity methods
-feature.hex.fp.literals:
-  text: Hexadecimal floating point literals
-feature.diamond.types:
-  text: Diamond types
-feature.multi.catch:
-  text: Multi-catches
-feature.try.with.resources:
-  text: Try-with-resources
-feature.binary.literals:
-  text: Binary literals
-feature.underscores.in.literals:
-  text: Underscores in literals
-feature.extension.methods:
-  text: Extension methods
-feature.method.references:
-  text: Method references
-feature.lambda.expressions:
-  text: Lambda expressions
-feature.type.annotations:
-  text: Type annotations
-feature.type.receivers:
-  text: Receiver parameters
-feature.intersections.in.casts:
-  text: Intersection types in casts
-feature.static.interface.calls:
-  text: Static interface method calls
-feature.try.with.resources.refs:
-  text: Resource references
-feature.modules:
-  text: Modules
-feature.lvti:
-  text: Local variable type inference
-feature.var.lambda.parameter:
-  text: '''var'' in lambda parameters'
-feature.text.blocks:
-  text: Text block literals
-feature.text.block.escape.sequences:
-  text: '''\s'' and ''\'' escape sequences'
-feature.enhanced.switch:
-  text: Enhanced 'switch' blocks
-feature.switch.expressions:
-  text: '''switch'' expressions'
-feature.records:
-  text: Records
-feature.patterns.instanceof:
-  text: Patterns in 'instanceof'
-feature.sealed.classes:
-  text: Sealed classes
-feature.local.interfaces:
-  text: Local interfaces
-feature.local.enums:
-  text: Local enums
-find.searching.for.references.to.class.progress:
-  text: Searching for references to class {0}...
-find.usages.panel.title.derived.classes:
-  text: Derived Classes
-find.usages.panel.title.derived.interfaces:
-  text: Derived Interfaces
-find.usages.panel.title.implementing.classes:
-  text: Implementing Classes
-find.usages.panel.title.implementing.methods:
-  text: Implementing Methods
-find.usages.panel.title.overloaded.methods.usages:
-  text: Overloaded Methods Usages
-find.usages.panel.title.overriding.methods:
-  text: Overriding Methods
-message.class.inaccessible.from.module:
-  text: Class ''{0}'' is not accessible from module ''{1}''
-message.class.inaccessible:
-  text: Class ''{0}'' is not accessible here
-inspection.i18n.quickfix.annotate:
-  text: Annotate...
-inspection.i18n.quickfix.annotate.as:
-  text: Annotate as @{0}
-inspection.i18n.quickfix.annotate.element:
-  text: Annotate {0} ''{1}''...
-inspection.i18n.quickfix.annotate.element.as:
-  text: Annotate {0} ''{1}'' as @{2}
-inspection.reference.default.package:
-  text: <default>
-error.message.invalid.java.type:
-  text: Invalid Java type
-move.0.to.the.beginning:
-  text: Move ''{0}'' to the beginning
-move.to.front:
-  text: Move to front
-processing.method.usages:
-  text: Processing Method Usages...
-qualify.0:
-  text: Qualify {0}
-qualify.with.0.this:
-  text: Qualify with {0}.this
-remove.annotation:
-  text: Remove annotation
-remove.left.side.of.assignment:
-  text: Remove left side of assignment
-replace.get.class.with.class.literal:
-  text: Replace getClass() with .class literal
-service.provides:
-  text: 'Provides service <a href="#javaClass/{0}">{0}</a><br><div style=''margin-top: 5px''><font size=''2''>Click to navigate</font></div>'
-service.uses:
-  text: 'Uses service <a href="#javaClass/{0}">{0}</a><br><div style=''margin-top: 5px''><font size=''2''>Click to navigate</font></div>'
-suppress.for.parameter:
-  text: Suppress for parameter
-suppress.for.statement.with.comment:
-  text: Suppress for statement with comment
-intention.add.annotation.family:
-  text: Add annotation
-intention.text.remove.annotation:
-  text: Remove
-scope.package:
-  text: Package {0}
 0.field.is.always.initialized.not.null:
-  text: '@{0} field is always initialized not-null'
+    text: '@{0} field is always initialized not-null'
 access.can.be.0:
-  text: Access can be {0}
+    text: Access can be {0}
 access.to.field.code.ref.code.outside.of.declared.guards.loc:
-  text: 'Access to field <code>#ref</code> outside of declared guards #loc'
-call.to.method.code.ref.code.outside.of.declared.guards.loc:
-  text: 'Call to method <code>#ref()</code> outside of declared guards #loc'
+    text: 'Access to field <code>#ref</code> outside of declared guards #loc'
+add.explicit.type.arguments:
+    text: Add explicit type arguments
 annotate.as.safevarargs:
-  text: Annotate as @SafeVarargs
-annotate.overridden.methods.parameters.family.name:
-  text: Annotate overridden method parameters
+    text: Annotate as @SafeVarargs
 annotate.overridden.methods.parameters:
-  text: Annotate overridden method parameters as ''@{0}''
+    text: Annotate overridden method parameters as ''@{0}''
+annotate.overridden.methods.parameters.family.name:
+    text: Annotate overridden method parameters
 anonymous.ref.loc.can.be.replaced.with.0:
-  text: 'Anonymous #ref #loc can be replaced with {0}'
+    text: 'Anonymous #ref #loc can be replaced with {0}'
 anonymous.ref.loc.can.be.replaced.with.lambda:
-  text: 'Anonymous #ref #loc can be replaced with lambda'
-assigning.a.collection.of.nullable.elements:
-  text: Assigning a collection of nullable elements into a collection of non-null elements
-nullable.stuff.error.overriding.nullable.with.notnull:
-  text: Overriding a collection of nullable elements with a collection of non-null elements
-nullable.stuff.error.overriding.notnull.with.nullable:
-  text: Overriding a collection of not-null elements with a collection of nullable elements
-comparision.between.object.and.primitive:
-  text: Comparision between Object and primitive is illegal and is accepted in java 7 only
-custom.exception.class.should.have.a.constructor:
-  text: Custom exception class should have a constructor with a single message parameter of String type
-delimiters.argument.contains.duplicated.characters:
-  text: Delimiters argument contains duplicated characters
-deprecated.class.usage.group.xml:
-  text: XML
-deprecated.member.0.is.still.used:
-  text: Deprecated member ''{0}'' is still used
-detach.library.quickfix.name:
-  text: Detach library
-detach.library.roots.quickfix.name:
-  text: Detach unused library roots
-don.t.report.unused.jars.inside.used.library:
-  text: Don't report unused jars inside used library
-explicit.type.argument.ref.loc.can.be.replaced.with:
-  text: 'Explicit type argument #ref #loc can be replaced with <>'
-exports.to.itself.delete.module.ref.fix:
-  text: Delete reference to module ''{0}''
-exports.to.itself.delete.statement.fix:
-  text: Delete directive
-html.classes.exposed.with.code.module.info.code.html:
-  text: <html>Classes exposed with <code>module-info</code></html>
-html.ignore.overrides.of.deprecated.abstract.methods:
-  text: <html>Ignore overrides of deprecated abstract methods from non-deprecated supers</html>
-ignore.casts.in.suspicious.collections.method.calls:
-  text: Ignore casts in suspicious collections method calls
-ignore.exceptions.thrown.by.entry.points.methods:
-  text: Ignore exceptions thrown by entry points methods
-ignore.in.the.same.outermost.class:
-  text: Ignore in the same outermost class
-ignore.inside.deprecated.members:
-  text: Ignore inside deprecated members
-ignore.inside.non.static.imports:
-  text: Ignore inside non-static imports
-ignore.members.of.deprecated.classes:
-  text: Ignore members of deprecated classes
-ignore.operation.which.results.in.negative.value:
-  text: Ignore '<<' operation which results in negative value
-inspection.annotate.method.quickfix.family.name:
-  text: Annotate method
-inspection.annotate.method.quickfix.name:
-  text: Annotate method with ''@{0}''
-inspection.annotate.overridden.method.and.self.quickfix.family.name:
-  text: Annotate overridden methods and self
-inspection.annotate.overridden.method.and.self.quickfix.name:
-  text: Annotate overridden methods and self with ''@{0}''
-inspection.annotate.overridden.method.quickfix.family.name:
-  text: Annotate overridden methods
-inspection.annotate.overridden.method.quickfix.name:
-  text: Annotate overridden methods with ''@{0}''
-inspection.annotate.overridden.method.nullable.quickfix.name:
-  text: Annotate overridden methods as ''@{0}''
-inspection.c.style.array.declarations.option:
-  text: Ignore C-style declarations in variables
-inspection.can.be.final.accept.quickfix:
-  text: Make final
-inspection.can.be.final.option1:
-  text: Report methods
-inspection.can.be.final.option2:
-  text: Report fields
-inspection.can.be.final.option:
-  text: Report classes
-inspection.can.be.local.parameter.problem.descriptor:
-  text: Parameter <code>#ref</code> can have <code>final</code> modifier
-inspection.can.be.local.variable.problem.descriptor:
-  text: Variable <code>#ref</code> can have <code>final</code> modifier
-inspection.can.be.replaced.with.message:
-  text: Can be replaced with ''{0}''
-inspection.class.getclass.display.name:
-  text: Class.getClass() call
-inspection.class.getclass.fix.remove.name:
-  text: Remove 'getClass()' call
-inspection.class.getclass.fix.replace.name:
-  text: Replace with 'Class.class'
-inspection.class.getclass.message:
-  text: '''getClass()'' is called on Class instance'
-inspection.class.has.no.to.string.method.description:
-  text: Class ''{0}'' does not override ''toString()'' method
-inspection.class.has.no.to.string.method.exclude.classes.reg.exp.option:
-  text: 'Exclude classes (reg exp):'
-inspection.class.has.no.to.string.method.ignore.abstract.classes.option:
-  text: Ignore abstract classes
-inspection.class.has.no.to.string.method.ignore.deprecated.classes.option:
-  text: Ignore deprecated classes
-inspection.class.has.no.to.string.method.ignore.enum.classes.option:
-  text: Ignore enum classes
-inspection.class.has.no.to.string.method.ignore.exception.classes.option:
-  text: Ignore exception classes
-inspection.class.has.no.to.string.method.ignore.inner.classes.option:
-  text: Ignore inner classes
-inspection.class.has.no.to.string.method.ignore.test.classes.option:
-  text: Ignore test classes
-inspection.common.if.parts.disable.highlight.tail.call:
-  text: Do not highlight common parts, if tail statement is call
-inspection.common.if.parts.family.else.if.description:
-  text: '''else if'' can be merged'
-inspection.common.if.parts.family.else.if:
-  text: Merge 'else if' statement
-inspection.common.if.parts.family:
-  text: Extract common parts of 'if' statement
-inspection.common.if.parts.settings.highlight.when.tail.call:
-  text: Highlight when last common statement is call
-inspection.compiler.javac.quirks.anno.array.comma.fix:
-  text: Remove trailing comma
-inspection.compiler.javac.quirks.anno.array.comma.problem:
-  text: Trailing comma in annotation array initializer may cause compilation error in some Javac versions (e.g. JDK 5 and JDK 6).
-inspection.compiler.javac.quirks.name:
-  text: Javac quirks
-inspection.compiler.javac.quirks.qualifier.type.args.fix:
-  text: Remove generic parameter
-inspection.compiler.javac.quirks.qualifier.type.args.problem:
-  text: Generics in qualifier reference may cause compilation error in some Javac versions (e.g. JDK 5 and JDK 6).
-inspection.constant.on.wrong.side.of.a.comparison.side.option:
-  text: 'Constant should be on this side of a comparison:'
-inspection.contract.display.name:
-  text: Contract issues
-inspection.data.flow.redundant.instanceof.quickfix:
-  text: Replace with a null check
-inspection.data.flow.simplify.boolean.expression.quickfix:
-  text: Simplify boolean expression
-inspection.data.flow.simplify.to.assignment.quickfix.name:
-  text: Simplify to normal assignment
-inspection.data.flow.turn.off.constant.references.quickfix:
-  text: Don't report values which are guaranteed to be constant
-inspection.data.flow.turn.off.nullable.returning.notnull.quickfix:
-  text: Don't report nullable methods which always return not-null value
-inspection.data.flow.turn.off.true.asserts.quickfix:
-  text: Don't report always true assertions
-inspection.duplicate.throws.display.name:
-  text: Duplicate throws
-inspection.duplicate.throws.ignore.subclassing.option:
-  text: Ignore exceptions subclassing others
-inspection.duplicate.throws.more.general.problem:
-  text: There is a more general exception, ''{0}'', in the throws list already.
-inspection.duplicate.throws.problem:
-  text: Duplicate throws
-inspection.equals.hashcode.only.one.defined.problem.descriptor:
-  text: Class has {0} defined but does not define {1}
-inspection.export.results.can.be.final.description:
-  text: Declaration can have final modifier
-inspection.field.not.used.in.to.string.description2:
-  text: Field ''{0}'' is not used in ''toString()'' method
-inspection.field.not.used.in.to.string.description:
-  text: Method ''{0}'' is not used in ''toString()'' method
-inspection.implicit.subclass.display.forClass:
-  text: Class ''{0}'' could be implicitly subclassed and must not be final
-inspection.implicit.subclass.display.name:
-  text: Final declaration can't be overridden at runtime
-inspection.implicit.subclass.extendable:
-  text: Make ''{0}'' overridable
-inspection.implicit.subclass.make.class.extendable:
-  text: Make class ''{0}'' {1,choice,0#|1#and method {2} |1<and {1} required methods }extendable
-inspection.infinite.loop.option:
-  text: Ignore when placed in Thread.run
-inspection.java.module.naming.terminal.digits:
-  text: Module name component ''{0}'' should avoid terminal digits
-inspection.java.module.naming:
-  text: Java module naming conventions
-inspection.local.can.be.final.display.name:
-  text: Local variable or parameter can be final
-inspection.local.can.be.final.option1:
-  text: Report method parameters
-inspection.local.can.be.final.option2:
-  text: Report catch parameters
-inspection.local.can.be.final.option3:
-  text: Report foreach parameters
-inspection.local.can.be.final.option4:
-  text: Report variables which are implicit final
-inspection.local.can.be.final.option:
-  text: Report local variables
-inspection.module.exports.package.to.itself:
-  text: Module exports/opens package to itself
-inspection.nullable.problems.NotNull.parameter.overrides.Nullable:
-  text: Parameter annotated @{0} must not override @{1} parameter
-inspection.nullable.problems.NotNull.parameter.overrides.not.annotated:
-  text: Parameter annotated @{0} should not override non-annotated parameter
-inspection.nullable.problems.NotNull.parameter.receives.null.literal:
-  text: Parameter annotated @{0} should not receive ''null'' as an argument
-inspection.nullable.problems.Nullable.NotNull.conflict:
-  text: Cannot annotate with both @{0} and @{1}
-inspection.nullable.problems.Nullable.method.overrides.NotNull:
-  text: Method annotated with @{0} must not override @{1} method
-inspection.nullable.problems.annotated.field.constructor.parameter.not.annotated:
-  text: Constructor parameter for @{0} field might be annotated @{0} itself
-inspection.nullable.problems.annotated.field.getter.conflict:
-  text: Getter for @{0} field is annotated @{1}
-inspection.nullable.problems.annotated.field.getter.not.annotated:
-  text: Getter for @{0} field might be annotated @{0} itself
-inspection.nullable.problems.annotated.field.setter.parameter.conflict:
-  text: Setter parameter for @{0} field is annotated @{1}
-inspection.nullable.problems.annotated.field.setter.parameter.not.annotated:
-  text: Setter parameter for @{0} field might be annotated @{0} itself
-inspection.nullable.problems.method.overrides.NotNull:
-  text: Not annotated method overrides method annotated with @{0}
-inspection.nullable.problems.parameter.overrides.NotNull:
-  text: Not annotated parameter overrides @{0} parameter
-inspection.nullable.problems.primitive.type.annotation:
-  text: Primitive type members cannot be annotated
-inspection.objects.equals.can.be.simplified.display.name:
-  text: Objects.equals() can be replaced with equals()
-inspection.redundant.cast.problem.descriptor:
-  text: Casting {0} to {1} is redundant
-inspection.redundant.cast.remove.quickfix:
-  text: Remove redundant cast(s)
-inspection.redundant.field.initialization.option:
-  text: Only warn on initialization to null
-inspection.redundant.requires.statement.description:
-  text: Redundant directive ''requires {0}''
-inspection.redundant.requires.statement.fix.family:
-  text: Delete redundant 'requires' directive
-inspection.redundant.requires.statement.fix.name:
-  text: Delete directive ''requires {0}''
-inspection.redundant.throws.problem.descriptor1:
-  text: The declared exception {0} is never thrown in this method, nor in its derivables
-inspection.redundant.throws.problem.descriptor2:
-  text: The declared exception {0} is never thrown
-inspection.redundant.throws.problem.descriptor:
-  text: The declared exception {0} is never thrown in method implementations
-inspection.redundant.throws.remove.quickfix:
-  text: Remove unnecessary 'throws' declarations
-inspection.redundant.type.display.name:
-  text: Redundant type arguments
-inspection.redundant.type.no.generics.method.reference.problem.descriptor:
-  text: Type arguments are redundant for the non-generic method reference
-inspection.redundant.type.no.generics.problem.descriptor:
-  text: Type arguments are redundant for the non-generic method call
-inspection.redundant.type.problem.descriptor:
-  text: Explicit type arguments can be inferred
-inspection.redundant.type.remove.quickfix:
-  text: Remove type arguments
-inspection.reference.anonymous.name:
-  text: anonymous ({0})
-inspection.reference.implicit.constructor.name:
-  text: implicit constructor of {0}
-inspection.reference.jsp.holder.method.anonymous.name:
-  text: <% page content %>
-inspection.requires.auto.module.message:
-  text: '''requires'' directive for an automatic module'
-inspection.requires.auto.module.option:
-  text: Highlight only transitive dependencies
-inspection.requires.auto.module.transitive:
-  text: '''requires transitive'' directive for an automatic module'
-inspection.requires.auto.module:
-  text: Dependencies on automatic modules
-inspection.same.return.value.display.name:
-  text: Method returns the same value
-inspection.same.return.value.problem.descriptor1:
-  text: Method and all its derivables always return {0}
-inspection.same.return.value.problem.descriptor2:
-  text: All implementations of this method always return {0}
-inspection.same.return.value.problem.descriptor:
-  text: Method always returns {0}
-inspection.surround.requirenonnull.quickfix:
-  text: Replace with ''Objects.requireNonNull({0})''
-inspection.suspicious.array.method.call.display.name:
-  text: Suspicious Arrays method calls
-inspection.suspicious.array.method.call.problem.arrays:
-  text: 'Array types are incompatible: arrays are always different'
-inspection.suspicious.array.method.call.problem.element:
-  text: Element type is not compatible with array type
-inspection.suspicious.collections.method.calls.display.name:
-  text: Suspicious collections method calls
-inspection.suspicious.collections.method.calls.problem.descriptor1:
-  text: Suspicious call to ''{0}''
-inspection.suspicious.collections.method.calls.problem.descriptor:
-  text: '''''{0}'''' may not contain {2} of type ''''{1}'''''
-inspection.suspicious.getter.setter.field.option:
-  text: Only warn when field matching getter/setter name is present
-inspection.suspicious.integer.div.assignment.option:
-  text: Report suspicious but possibly exact divisions
-inspection.test.only.problems.display.name:
-  text: Test-only class or method call in production code
-inspection.test.only.problems.test.only.class.reference:
-  text: Test-only class is referenced in production code
-inspection.test.only.problems.test.only.field.reference:
-  text: Test-only field is referenced in production code
-inspection.test.only.problems.test.only.method.call:
-  text: Test-only method is called in production code
-inspection.unary.plus.unary.binary.option:
-  text: Only report in confusing binary or unary expression context
-inspection.unnecessary.super.qualifier.option:
-  text: Ignore clarification 'super' qualifier
-inspection.use.compare.method.fix.family.name:
-  text: Replace with single comparison method
-inspection.visibility.accept.quickfix:
-  text: Accept suggested access level
-inspection.visibility.compose.suggestion:
-  text: Can be {0}
-inspection.visibility.option.constants:
-  text: Suggest weaker visibility for constants
-inspection.visibility.option.package.private.members:
-  text: Suggest package-private visibility level for class members
-inspection.visibility.package.private.top.level.classes:
-  text: Suggest package-private visibility level for top-level classes
-inspection.visibility.private.inner.members:
-  text: <html>Suggest private for inner class members when referenced from outer class only</html>
-instance.member.guarded.by.static.0.loc:
-  text: 'Instance member guarded by static "{0}" #loc'
-instance.member.guarded.by.static.ref.loc:
-  text: 'Instance member guarded by static #ref #loc'
-junit.rule.classrule.option:
-  text: Report @ClassRule problems
-junit.rule.rule.option:
-  text: Report @Rule problems
-make.0.default.annotation:
-  text: Make "{0}" default annotation
-make.default.the.last.case.family.name:
-  text: Make 'default' the last case
-make.final.and.annotate.as.safevarargs:
-  text: Make final and annotate as @SafeVarargs
-method.reference.mapped.to.comparator:
-  text: Method reference mapped to Comparator interface does not fulfill the Comparator contract
-module.0.with.language.level.1.depends.on.module.2.with.language.level.3:
-  text: Module {0} with language level {1} depends on module {2} with language level {3}
-non.final.field.code.ref.code.in.immutable.class.loc:
-  text: 'Non-final field <code>#ref</code> in @Immutable class  #loc'
-non.final.guarded.by.field.0.loc:
-  text: 'Non-final @GuardedBy field "{0}" #loc'
-non.final.guarded.by.field.ref.loc:
-  text: 'Non-final @GuardedBy field #ref #loc'
-non.null.type.argument.is.expected:
-  text: Non-null type argument is expected
-not.annotated.method.is.used.as.an.override.for.a.method.annotated.with.0:
-  text: Not annotated method is used as an override for a method annotated with {0}
-nullable.stuff.problems.overridden.method.parameters.are.not.annotated:
-  text: Overridden method parameters are not annotated
-nullable.stuff.problems.overridden.methods.are.not.annotated:
-  text: Overridden methods are not annotated
-parameter.can.be.null:
-  text: Parameter can be null
-parameter.is.always.not.null:
-  text: Parameter is always not-null
-possible.heap.pollution.from.parameterized.vararg.type.loc:
-  text: 'Possible heap pollution from parameterized vararg type #loc'
-redundant.block.marker:
-  text: Redundant block marker
-remove.block.marker.comments:
-  text: Remove block marker comments
-remove.dependency:
-  text: Remove dependency
-remove.switch.branch.0:
-  text: Remove switch branch ''{0}''
-remove.switch.label.0:
-  text: Remove switch label ''{0}''
-remove.switch.label:
-  text: Remove switch label
-replace.0.with:
-  text: Replace ''''{0}'''' with ''''=''''
-replace.anonymous.class.with.lambda.alternative:
-  text: Replace anonymous class with lambda alternative
-replace.operator.assignment.with.assignment:
-  text: Replace Operator Assignment with Assignment
-replace.stringtokenizer.delimiters.parameter.with.unique.symbols:
-  text: Replace StringTokenizer delimiters parameter with unique symbols
-replace.var.with.explicit.type:
-  text: Replace 'var' with explicit type
-replace.with.0:
-  text: Replace with {0}
-replace.with.comparator:
-  text: Replace with comparator
-replace.with.constant.value:
-  text: Replace with constant value
-replace.with.expression.lambda:
-  text: Replace with expression lambda
-replace.with.lambda:
-  text: Replace with lambda
-report.suspicious.but.possibly.correct.method.calls:
-  text: '&Report suspicious but possibly correct method calls'
-report.when.interface.is.not.annotated.with.functional.interface:
-  text: Report when interface is not annotated with @FunctionalInterface
-searching.for.overriding.methods:
-  text: Searching for Overriding Methods
-statement.lambda.can.be.replaced.with.expression.lambda:
-  text: Statement lambda can be replaced with expression lambda
-static.inheritrance.fix.replace.progress:
-  text: Replacing usages of {0}
-static.member.guarded.by.instance.0.loc:
-  text: 'Static member guarded by instance "{0}" #loc'
-static.member.guarded.by.instance.ref.loc:
-  text: 'Static member guarded by instance #ref #loc'
-suppress.all.for.class:
-  text: Suppress all inspections for class
-suppress.inspection.class:
-  text: Suppress for class
-suppress.inspection.field:
-  text: Suppress for field
-suppress.inspection.member:
-  text: Suppress for member
-suppress.inspection.method:
-  text: Suppress for method
-suppress.inspection.module:
-  text: Suppress for module declaration
-suspected.module.dependency.problem.descriptor:
-  text: Module ''{0}'' does not depend on module ''{1}''. Though ''{1}'' was not inspected for exported dependencies needed for scope ''{2}''
-unknown.guardedby.reference.0.loc:
-  text: 'Unknown @GuardedBy reference "{0}" #loc'
-unknown.guardedby.reference.ref.loc:
-  text: 'Unknown @GuardedBy reference #ref #loc'
-unnecessary.module.dependency.display.name:
-  text: Unnecessary module dependency
-unnecessary.module.dependency.problem.descriptor:
-  text: Module ''{0}'' sources do not depend on module ''{1}'' sources
-unused.import.display.name:
-  text: Unused import
-unused.import.statement:
-  text: Unused import statement
-unused.library.display.name:
-  text: Unused library
-unused.library.problem.descriptor:
-  text: Unused library ''{0}''
-unused.library.roots.problem.descriptor:
-  text: Unused roots {0} from library ''{1}''
-var.can.be.replaced.with.explicit.type:
-  text: '''var'' can be replaced with explicit type'
-vararg.method.call.with.50.poly.arguments:
-  text: Vararg method call with 50+ poly arguments may cause compilation and analysis slowdown
-visible.for.testing.makes.little.sense.on.test.only.code:
-  text: '@VisibleForTesting makes little sense on @TestOnly code'
-inspection.inconsistent.language.level.display.name:
-  text: Inconsistent language level settings
-inspection.weaker.access.display.name:
-  text: Declaration access can be weaker
-inspection.can.be.final.display.name:
-  text: Declaration can have final modifier
-inspection.redundant.throws.display.name:
-  text: Redundant 'throws' clause
-inspection.java.9.redundant.requires.statement.display.name:
-  text: Redundant 'requires' statement in module-info
-inspection.numeric.overflow.display.name:
-  text: Numeric overflow
-inspection.redundant.cast.display.name:
-  text: Redundant type cast
-inspection.deprecated.is.still.used.display.name:
-  text: Deprecated member is still used
-inspection.deprecated.class.usage.inspection.display.name:
-  text: Deprecated API usage in XML
-inspection.field.access.not.guarded.display.name:
-  text: Unguarded field access or method call
-inspection.instance.guarded.by.static.display.name:
-  text: Instance member guarded by static field
-inspection.non.final.field.in.immutable.display.name:
-  text: Non-final field in @Immutable class
-inspection.non.final.guard.display.name:
-  text: Non-final @GuardedBy field
-inspection.static.guarded.by.instance.display.name:
-  text: Static member guarded by instance field or this
-inspection.unknown.guard.display.name:
-  text: Unknown @GuardedBy field
-inspection.use.compare.method.display.name:
-  text: '''compare()'' method can be used to compare numbers'
-inspection.convert.2.diamond.display.name:
-  text: Explicit type can be replaced with <>
-inspection.convert.2.lambda.display.name:
-  text: Anonymous type can be replaced with lambda
-inspection.invalid.comparator.method.reference.display.name:
-  text: Invalid method reference used for Comparator
-inspection.safe.varargs.detector.display.name:
-  text: Possible heap pollution from parameterized vararg type
-inspection.block.marker.comments.display.name:
-  text: Block marker comment
-inspection.string.tokenizer.delimiter.display.name:
-  text: Duplicated delimiters in java.util.StringTokenizer
-inspection.anonymous.has.lambda.alternative.display.name:
-  text: Anonymous type has shorter lambda alternative
-inspection.java.8.list.sort.display.name:
-  text: Collections.sort() can be replaced with List.sort()
-inspection.class.has.no.to.string.method.display.name:
-  text: Class does not override 'toString()' method
-inspection.field.not.used.in.to.string.display.name:
-  text: Field not used in 'toString()' method
-inspection.contract.checker.clause.syntax:
-  text: A contract clause must be in form arg1, ..., argN -> return-value
-inspection.contract.checker.unknown.return.value:
-  text: 'Return value should be one of: {0}. Found: {1}'
-inspection.contract.checker.unknown.constraint:
-  text: 'Constraint should be one of: {0}. Found: {1}'
-inspection.contract.checker.empty.constraint:
-  text: Constraint should not be empty
-inspection.contract.checker.unreachable.contract.clause:
-  text: 'Contract clause ''''{0}'''' is unreachable: previous contracts cover all possible cases'
-inspection.contract.checker.contract.clause.never.satisfied:
-  text: Contract clause ''{0}'' is never satisfied as its conditions are covered by previous contracts
-inspection.contract.checker.pure.method.mutation.contract:
-  text: Pure method cannot have mutation contract
-inspection.contract.checker.parameter.count.mismatch:
-  text: Method takes {0} parameters, while contract clause ''{1}'' expects {2}
-inspection.contract.checker.primitive.parameter.nullability:
-  text: Parameter ''{0}'' has primitive type ''{1}'', so ''{2}'' is not applicable
-inspection.contract.checker.inferred.notnull.parameter.null:
-  text: Parameter ''{0}'' is inferred to be not-null, so ''null'' is not applicable
-inspection.contract.checker.notnull.parameter.null:
-  text: Parameter ''{0}'' is annotated as not-null, so ''null'' is not applicable
-inspection.contract.checker.inferred.notnull.parameter.notnull:
-  text: Parameter ''{0}'' is inferred to be not-null, so ''!null'' is always satisfied
-inspection.contract.checker.notnull.parameter.notnull:
-  text: Parameter ''{0}'' is annotated as not-null, so ''!null'' is always satisfied
-inspection.contract.checker.boolean.condition.for.nonboolean.parameter:
-  text: Parameter ''{0}'' has ''{1}'' type (expected boolean)
-inspection.contract.checker.contract.violated:
-  text: Contract clause ''{0}'' is violated
-inspection.contract.checker.no.exception.thrown:
-  text: 'Contract clause ''''{0}'''' is violated: no exception is thrown'
-inspection.contract.checker.method.always.fails.trivial:
-  text: Return value of clause ''{0}'' could be replaced with ''fail'' as method always fails
-inspection.contract.checker.method.always.fails.nontrivial:
-  text: Return value of clause ''{0}'' could be replaced with ''fail'' as method always fails in this case
-contract.return.validator.not.applicable.for.constructor:
-  text: not applicable for constructor
-contract.return.validator.not.applicable.static:
-  text: not applicable for static method
-contract.return.validator.not.applicable.primitive:
-  text: not applicable for primitive return type ''{0}''
-contract.return.validator.return.type.must.be.boolean:
-  text: method return type must be 'boolean'
-contract.return.validator.method.return.incompatible.with.method.containing.class:
-  text: method return type should be compatible with method containing class
-contract.return.validator.too.few.parameters:
-  text: not applicable for method that has {0, choice, 0#no parameters|1#one parameter|2#{0} parameters}
-contract.return.validator.incompatible.return.parameter.type:
-  text: return type ''{0}'' must be convertible from parameter type ''{1}''
-contract.return.value.validation.prefix:
-  text: 'Contract return value ''''{0}'''':'
-suspicious.invocation.handler.implementation.display.name:
-  text: Suspicious InvocationHandler implementation
-suspicious.invocation.handler.implementation.method.unused.message:
-  text: 'Method is never used in ''invoke'': it''s unlikely that ''hashCode'', ''equals'' and ''toString'' are implemented correctly'
-suspicious.invocation.handler.implementation.type.mismatch.message:
-  text: 'Incompatible type might be returned when proxying method ''''{0}()'''': required: {1}; got: {2}'
-suspicious.invocation.handler.implementation.null.returned.for.toString.message:
-  text: 'Null might be returned when proxying method ''toString()'': this is discouraged'
-suspicious.invocation.handler.implementation.null.returned.message:
-  text: 'Null might be returned when proxying method ''''{0}()'''': this may cause NullPointerException'
-error.class.not.found:
-  text: Class {0} not found
-intention.name.qualify.expression:
-  text: Qualify {0} expression with ''{1}''
-nullability.null:
-  text: 'null'
-nullability.nullable:
-  text: nullable
-nullability.non.null:
-  text: non-null
-long.range.set.presentation.empty:
-  text: unknown
-long.range.set.presentation.any:
-  text: any value
-long.range.set.presentation.two.values:
-  text: '{0} or {1}'
-long.range.set.presentation.range:
-  text: in {0}
-long.range.set.presentation.even:
-  text: even
-long.range.set.presentation.odd:
-  text: odd
-long.range.set.presentation.divisible.by:
-  text: divisible by {0}
-long.range.set.presentation.range.with.mod:
-  text: '{0}; {1}'
-duplication.policy.ask:
-  text: Ask
-duplication.policy.replace:
-  text: Replace existing
-duplication.policy.generate.duplicate:
-  text: Generate duplicating method
-dftype.presentation.empty.optional:
-  text: empty Optional
-dftype.presentation.present.optional:
-  text: present Optional
-mutability.unknown:
-  text: unknown
-mutability.modifiable:
-  text: modifiable
-mutability.unmodifiable.view:
-  text: unmodifiable view
-mutability.unmodifiable:
-  text: unmodifiable
-special.field.array.length:
-  text: Array length
-special.field.string.length:
-  text: String length
-special.field.collection.size:
-  text: Size
-special.field.unboxed.value:
-  text: Unboxed value
-special.field.optional.value:
-  text: Optional value
-text.unused.import.in.template:
-  text: Unused import (specified in template)
-text.raw.ctor.reference.with.type.parameters:
-  text: Raw constructor reference with explicit type parameters for constructor
-dfa.find.cause.unable:
-  text: Unable to find the cause
-dfa.find.cause.cast.may.fail:
-  text: cast may fail
-dfa.find.cause.may.be.null:
-  text: may be null
-dfa.find.cause.call.always.fails:
-  text: call always fails
-dfa.find.cause.one.of.the.following.happens:
-  text: 'one of the following happens:'
-dfa.find.cause.an.execution.might.exist.where:
-  text: 'an execution might exist where:'
-dfa.find.cause.value.is.always.the.same:
-  text: value is always {0}
-dfa.find.cause.value.x.is.always.the.same:
-  text: value ''{0}'' is always ''{1}''
-dfa.find.cause.compile.time.constant:
-  text: it''s compile-time constant which evaluates to ''{0}''
-dfa.find.cause.equality.established.from.condition:
-  text: '''''{0}'''' was established from condition'
-dfa.find.cause.was.assigned.to:
-  text: '''''{0}'''' was assigned to ''''{1}'''''
-dfa.find.cause.was.assigned:
-  text: '''''{0}'''' was assigned'
-dfa.find.cause.operand.of.boolean.expression.is.the.same:
-  text: 'operand #{0} of {1, choice, 0#and|1#or}-chain is {2}'
-dfa.find.cause.comparison.arguments.are.the.same:
-  text: comparison arguments are the same
-dfa.find.cause.comparison.arguments.are.different.constants:
-  text: comparison arguments are different constants
-dfa.find.cause.variable.is.initialized:
-  text: '{0} ''''{1}'''' is initialized to {2}'
-dfa.find.cause.object.kind.generic:
-  text: an object
-dfa.find.cause.object.kind.expression:
-  text: an expression
-dfa.find.cause.object.kind.method.return:
-  text: method return
-dfa.find.cause.type.known:
-  text: '{0} type is {1}'
-dfa.find.cause.type.is.known.from.place:
-  text: type of ''{0}'' is known from ___PLACE___
-dfa.find.cause.condition.is.known.from.place:
-  text: it''s known that ''{0}'' from ___PLACE___
-dfa.find.cause.range.is.known.from.place:
-  text: range is known from ___PLACE___
-dfa.find.cause.value.is.known.from.place:
-  text: '''''{0}'''' is known to be ''''{1}'''' from ___PLACE___'
-dfa.find.cause.place.line.number:
-  text: 'line #{0}'
-dfa.find.cause.place.here:
-  text: here
-dfa.find.cause.values.cannot.be.equal.because:
-  text: values cannot be equal because {0}
-dfa.find.cause.condition.was.checked.before:
-  text: condition ''{0}'' was checked before
-dfa.find.cause.condition.was.deduced:
-  text: condition ''{0}'' was deduced
-dfa.find.cause.was.passed.as.non.null.parameter:
-  text: '''''{0}'''' was passed as an argument to a method accepting non-null parameter'
-dfa.find.cause.was.dereferenced:
-  text: '''''{0}'''' was dereferenced'
-dfa.find.cause.instanceof.implies.non.nullity:
-  text: the 'instanceof' check implies non-nullity
-dfa.find.cause.nullability.inferred:
-  text: '{0} ''''{1}'''' was inferred to be ''''{2}'''''
-dfa.find.cause.nullability.externally.annotated:
-  text: '{0} ''''{1}'''' is externally annotated as ''''{2}'''''
-dfa.find.cause.nullability.explicitly.annotated:
-  text: '{0} ''''{1}'''' is annotated as ''''{2}'''''
-dfa.find.cause.nullability.inherited.from.container:
-  text: '{0} ''''{1}'''' inherits container annotation, thus ''''{2}'''''
-dfa.find.cause.nullability.inherited.from.class:
-  text: '{0} ''''{1}'''' inherits annotation from class {2}, thus ''''{3}'''''
-dfa.find.cause.nullability.inherited.from.package:
-  text: '{0} ''''{1}'''' inherits annotation from package {2}, thus ''''{3}'''''
-dfa.find.cause.nullability.inherited.from.named.element:
-  text: '{0} ''''{1}'''' inherits from {2}, thus ''''{3}'''''
-dfa.find.cause.field.initializer.nullability:
-  text: field ''{0}'' is initialized to ''{1}'' value
-dfa.find.cause.field.assigned.nullability:
-  text: field ''{0}'' is known to be always initialized to ''{1}'' value
-dfa.find.cause.array.length.is.always.non.negative:
-  text: array length is always non-negative
-dfa.find.cause.string.length.is.always.non.negative:
-  text: string length is always non-negative
-dfa.find.cause.collection.size.is.always.non.negative:
-  text: collection size is always non-negative
-dfa.find.cause.range.is.specified.by.annotation:
-  text: the range of ''{0}'' is specified by annotation as {1}
-dfa.find.cause.result.of.primitive.cast.template:
-  text: result of ''({0})'' cast is %s
-dfa.find.cause.result.of.numeric.operation.template:
-  text: result of ''{0}'' is %s
-dfa.find.cause.left.operand.range.template:
-  text: left operand is %s
-dfa.find.cause.right.operand.range.template:
-  text: right operand is %s
-dfa.find.cause.numeric.cast.operand.template:
-  text: cast operand is %s
-dfa.find.cause.numeric.range.generic.template:
-  text: value is %s
-dfa.find.cause.obviously.non.null.expression:
-  text: expression cannot be null as it''s {0}
-dfa.find.cause.nonnull.expression.kind.newly.created.object:
-  text: newly created object
-dfa.find.cause.nonnull.expression.kind.literal:
-  text: literal
-dfa.find.cause.nonnull.expression.kind.primitive.type:
-  text: a value of primitive type ''{0}''
-dfa.find.cause.nonnull.expression.kind.concatenation:
-  text: concatenation
-dfa.find.cause.nonnull.expression.kind.this.object:
-  text: '''this'' object'
-dfa.find.cause.contract.trivial:
-  text: according to {0}, method ''{1}'' always returns ''{2}'' value
-dfa.find.cause.contract.throws.on.condition:
-  text: according to {0}, method ''{1}'' throws exception when {2}
-dfa.find.cause.contract.returns.on.condition:
-  text: according to {0}, method ''{1}'' returns ''{2}'' value when {3}
-dfa.find.cause.contract.kind.explicit:
-  text: contract
-dfa.find.cause.contract.kind.inferred:
-  text: inferred contract
-dfa.find.cause.contract.kind.hard.coded:
-  text: hard-coded contract
-dfa.find.cause.condition.joiner:
-  text: ' and'
-type.constraint.assignability.explanation.exact:
-  text: '{0} is already known to be {1}'
-type.constraint.assignability.explanation.exact.subtype:
-  text: '{0} type is exactly {1} which is a subtype of {2}'
-type.constraint.assignability.explanation.exact.not.subtype:
-  text: '{0} type is exactly {1} which is not a subtype of {2}'
-type.constraint.assignability.explanation.subtype.of.subtype:
-  text: '{0} is already known to be {1} which is a subtype of {2}'
-type.constraint.assignability.explanation.not.instance.of:
-  text: '{0} is known to be not {1}'
-type.constraint.assignability.explanation.not.instance.of.supertype:
-  text: '{0} is known to be not {1} which is a supertype of {2}'
-type.constraint.assignability.explanation.definitely.inconvertible:
-  text: '{0} is known to be {1} which is definitely incompatible with {2}'
-type.presentation.except.values:
-  text: '{0}, not in {1}'
-inspection.message.javac.quick.intersection.type.problem:
-  text: 'Though assignment is formal correct, it could lead to ClassCastException at runtime. Expected: ''''{0}'''', actual: ''''{1}'''''
-suggest.package.private.visibility.level.for.classes.in.exported.packages.java.9:
-  text: Suggest package-private visibility level for classes in exported packages (Java 9+)
-generate.members.position.at.caret:
-  text: At caret
-generate.members.position.after.equals.and.hashcode:
-  text: After equals() and hashCode()
-generate.members.position.at.the.end.of.class:
-  text: At the end of class
-navigate.to.overridden.methods.title:
-  text: Overriding methods of {0}
-subclasses.search.progress.title:
-  text: Searching for Overridden Methods
-progress.title.searching.for.overridden.methods:
-  text: Searching for Overridden Methods
+    text: 'Anonymous #ref #loc can be replaced with lambda'
 arguments.count.mismatch:
-  text: Expected {0} arguments but found {1}
-inspection.message.nullable.method.implements.non.null.method:
-  text: Nullable method ''{0}'' from ''{1}'' implements non-null method from ''{2}''
-inspection.message.non.annotated.method.implements.non.null.method:
-  text: Non-annotated method ''{0}'' from ''{1}'' implements non-null method from ''{2}''
-inspection.message.non.null.parameter.should.not.override.nullable.parameter:
-  text: Non-null parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override nullable parameter from ''{3}''
-inspection.message.non.annotated.parameter.should.not.override.non.null.parameter:
-  text: Non-annotated parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override non-null parameter from ''{3}''
-inspection.message.non.null.parameter.should.not.override.non.annotated.parameter:
-  text: Non-null parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override non-annotated parameter from ''{3}''
-element.kind.keys:
-  text: keys
-element.kind.values:
-  text: values
-element.kind.objects:
-  text: objects
-mutation.signature.problem.static.method.cannot.mutate.this:
-  text: Static method cannot mutate 'this'
-mutation.signature.problem.reference.to.parameter.invalid:
-  text: 'Reference to parameter #{0} is invalid'
-mutation.signature.problem.parameter.has.immutable.type:
-  text: 'Parameter #{0} has immutable type ''''{1}'''''
-mutation.signature.problem.invalid.token:
-  text: 'Invalid token: {0}; supported are ''''this'''', ''''param1'''', ''''param2'''', etc.'
-required.type:
-  text: Required type
-provided.type:
-  text: Provided
-type.mismatch.reason:
-  text: 'reason: {0}'
-inspection.message.code.generation.different.nullability.annotation.will.be.used:
-  text: The generated code will use ''{1}'' instead of ''{0}''.
+    text: Expected {0} arguments but found {1}
+assigning.a.collection.of.nullable.elements:
+    text: Assigning a collection of nullable elements into a collection of non-null elements
+call.to.method.code.ref.code.outside.of.declared.guards.loc:
+    text: 'Call to method <code>#ref()</code> outside of declared guards #loc'
+change.type.arguments:
+    text: Change type arguments
+change.type.arguments.to.0:
+    text: Change type arguments to <{0}>
 change.visibility.level:
-  text: Make {0} {1}
+    text: Make {0} {1}
+comparision.between.object.and.primitive:
+    text: Comparision between Object and primitive is illegal and is accepted in java 7 only
+contract.return.validator.incompatible.return.parameter.type:
+    text: return type ''{0}'' must be convertible from parameter type ''{1}''
+contract.return.validator.method.return.incompatible.with.method.containing.class:
+    text: method return type should be compatible with method containing class
+contract.return.validator.not.applicable.for.constructor:
+    text: not applicable for constructor
+contract.return.validator.not.applicable.primitive:
+    text: not applicable for primitive return type ''{0}''
+contract.return.validator.not.applicable.static:
+    text: not applicable for static method
+contract.return.validator.return.type.must.be.boolean:
+    text: method return type must be 'boolean'
+contract.return.validator.too.few.parameters:
+    text: not applicable for method that has {0, choice, 0#no parameters|1#one parameter|2#{0} parameters}
+contract.return.value.validation.prefix:
+    text: 'Contract return value ''''{0}'''':'
+convert.0.to.float:
+    text: Convert ''{0}'' to float
+custom.exception.class.should.have.a.constructor:
+    text: Custom exception class should have a constructor with a single message parameter of String type
+dataflow.constructor:
+    text: Class initializer
+dataflow.message.array.index.out.of.bounds:
+    text: Array index is out of bounds
+dataflow.message.arraystore:
+    text: Storing element of type <code>{0}</code> to array of <code>{1}</code> elements will produce <code>ArrayStoreException</code>
+dataflow.message.assigning.null:
+    text: <code>null</code> is assigned to a variable that is annotated with @NotNull
+dataflow.message.assigning.null.notannotated:
+    text: Assigning <code>null</code> value to non-annotated field
+dataflow.message.assigning.nullable:
+    text: Expression <code>#ref</code> might evaluate to null but is assigned to a variable that is annotated with @NotNull
+dataflow.message.assigning.nullable.notannotated:
+    text: 'Expression <code>#ref</code> #loc might be null but is assigned to non-annotated field'
+dataflow.message.cce:
+    text: 'Casting <code>{0}</code> to <code>#ref</code> #loc may produce <code>ClassCastException</code>'
+dataflow.message.cce.always:
+    text: 'Casting <code>{0}</code> to <code>#ref</code> #loc will produce <code>ClassCastException</code> for any non-null value'
+dataflow.message.constant.condition:
+    text: 'Condition <code>#ref</code> #loc is always <code>{0, choice, 0#false|1#true}</code>'
+dataflow.message.constant.condition.when.reached:
+    text: 'Condition <code>#ref</code> #loc is always <code>{0, choice, 0#false|1#true}</code> when reached'
+dataflow.message.constant.expression:
+    text: 'Result of <code>#ref</code> #loc is always ''''{0}'''''
+dataflow.message.constant.method.reference:
+    text: Method reference result is always ''{0}''
+dataflow.message.constant.no.ref:
+    text: Condition is always {0, choice, 0#false|1#true}
+dataflow.message.constant.value:
+    text: 'Value <code>#ref</code> #loc is always ''''{0}'''''
+dataflow.message.contract.fail:
+    text: The call to '#ref' always fails, according to its method contracts
+dataflow.message.contract.fail.index:
+    text: The call to '#ref' always fails as index is out of bounds
+dataflow.message.immutable.modified:
+    text: Immutable object is modified
+dataflow.message.immutable.passed:
+    text: Immutable object is passed where mutable is expected
+dataflow.message.npe.array.access:
+    text: 'Array access <code>#ref</code> #loc may produce <code>NullPointerException</code>'
+dataflow.message.npe.array.access.sure:
+    text: 'Array access <code>#ref</code> #loc will produce <code>NullPointerException</code>'
+dataflow.message.npe.field.access:
+    text: 'Dereference of <code>#ref</code> #loc may produce <code>NullPointerException</code>'
+dataflow.message.npe.field.access.sure:
+    text: 'Dereference of <code>#ref</code> #loc will produce <code>NullPointerException</code>'
+dataflow.message.npe.inner.class.construction:
+    text: Inner class construction may produce <code>NullPointerException</code>
+dataflow.message.npe.inner.class.construction.sure:
+    text: Inner class construction will produce <code>NullPointerException</code>
+dataflow.message.npe.method.invocation:
+    text: 'Method invocation <code>#ref</code> #loc may produce <code>NullPointerException</code>'
+dataflow.message.npe.method.invocation.sure:
+    text: 'Method invocation <code>#ref</code> #loc will produce <code>NullPointerException</code>'
+dataflow.message.npe.methodref.invocation:
+    text: 'Method reference invocation <code>#ref</code> #loc may produce <code>NullPointerException</code>'
+dataflow.message.only.switch.label:
+    text: 'Switch label <code>#ref</code> #loc is the only reachable in the whole switch'
+dataflow.message.passing.non.null.argument.to.optional:
+    text: Passing a non-null argument to <code>Optional</code>
+dataflow.message.passing.null.argument:
+    text: Passing <code>null</code> argument to parameter annotated as @NotNull
+dataflow.message.passing.null.argument.nonannotated:
+    text: Passing <code>null</code> argument to non-annotated parameter
+dataflow.message.passing.null.argument.to.optional:
+    text: Passing <code>null</code> argument to <code>Optional</code>
+dataflow.message.passing.nullable.argument:
+    text: 'Argument <code>#ref</code> #loc might be null'
+dataflow.message.passing.nullable.argument.methodref:
+    text: Method reference argument might be null
+dataflow.message.passing.nullable.argument.methodref.nonannotated:
+    text: Method reference argument might be null but passed to non-annotated parameter
+dataflow.message.passing.nullable.argument.nonannotated:
+    text: 'Argument <code>#ref</code> #loc might be null but passed to non-annotated parameter'
+dataflow.message.pointless.assignment.expression:
+    text: 'Condition <code>#ref</code> #loc at the left side of assignment expression is always <code>{0}</code>. Can be simplified'
+dataflow.message.pointless.same.argument.and.result:
+    text: Result of '#ref' is the same as the {0,choice,1#first|2#second} argument making the call meaningless
+dataflow.message.pointless.same.arguments:
+    text: Arguments of '#ref' are the same. Calling this method with the same arguments is meaningless
+dataflow.message.redundant.assignment:
+    text: Variable is already assigned to this value
+dataflow.message.redundant.instanceof:
+    text: 'Condition <code>#ref</code> #loc is redundant and can be replaced with a null check'
+dataflow.message.redundant.update:
+    text: Variable update does nothing
+dataflow.message.return.notnull.from.nullable:
+    text: '@{0} method ''''{1}'''' always returns a non-null value'
+dataflow.message.return.null.from.notnull:
+    text: <code>null</code> is returned by the method declared as @{0}
+dataflow.message.return.null.from.notnullable:
+    text: <code>null</code> is returned by the method which is not declared as @{0}
+dataflow.message.return.nullable.from.notnull:
+    text: Expression <code>#ref</code> might evaluate to null but is returned by the method declared as @{0}
+dataflow.message.return.nullable.from.notnull.function:
+    text: Function may return null, but it's not allowed here
+dataflow.message.return.nullable.from.notnullable:
+    text: Expression <code>#ref</code> might evaluate to null but is returned by the method which is not declared as @{0}
+dataflow.message.storing.array.null:
+    text: <code>null</code> is stored to an array of @NotNull elements
+dataflow.message.storing.array.nullable:
+    text: Expression <code>#ref</code> might evaluate to null but is stored to an array of @NotNull elements
+dataflow.message.unboxing:
+    text: 'Unboxing of <code>#ref</code> #loc may produce <code>NullPointerException</code>'
+dataflow.message.unboxing.method.reference:
+    text: 'Use of <code>#ref</code> #loc would need unboxing which may produce <code>NullPointerException</code>'
+dataflow.message.unboxing.nullable.argument.methodref:
+    text: Passing an argument to the method reference requires unboxing which may produce <code>NullPointerException</code>
+dataflow.message.unreachable.switch.label:
+    text: 'Switch label <code>#ref</code> #loc is unreachable'
+dataflow.method.fails.with.null.argument:
+    text: Method will throw an exception when parameter is null
+dataflow.method.with.name.template:
+    text: Method <code>#ref</code>
+dataflow.not.precise:
+    text: '{0} is complex: data flow results could be imprecise'
+dataflow.too.complex:
+    text: '{0} is too complex to analyze by data flow algorithm'
+delete.repeated.0:
+    text: Delete repeated ''{0}''
+delete.repeated.interface:
+    text: Delete repeated interface
+delimiters.argument.contains.duplicated.characters:
+    text: Delimiters argument contains duplicated characters
+deprecated.class.usage.group.xml:
+    text: XML
+deprecated.member.0.is.still.used:
+    text: Deprecated member ''{0}'' is still used
+detach.library.quickfix.name:
+    text: Detach library
+detach.library.roots.quickfix.name:
+    text: Detach unused library roots
+dfa.find.cause.an.execution.might.exist.where:
+    text: 'an execution might exist where:'
+dfa.find.cause.array.length.is.always.non.negative:
+    text: array length is always non-negative
+dfa.find.cause.call.always.fails:
+    text: call always fails
+dfa.find.cause.cast.may.fail:
+    text: cast may fail
+dfa.find.cause.collection.size.is.always.non.negative:
+    text: collection size is always non-negative
+dfa.find.cause.comparison.arguments.are.different.constants:
+    text: comparison arguments are different constants
+dfa.find.cause.comparison.arguments.are.the.same:
+    text: comparison arguments are the same
+dfa.find.cause.compile.time.constant:
+    text: it''s compile-time constant which evaluates to ''{0}''
+dfa.find.cause.condition.is.known.from.place:
+    text: it''s known that ''{0}'' from ___PLACE___
+dfa.find.cause.condition.joiner:
+    text: ' and'
+dfa.find.cause.condition.was.checked.before:
+    text: condition ''{0}'' was checked before
+dfa.find.cause.condition.was.deduced:
+    text: condition ''{0}'' was deduced
+dfa.find.cause.contract.kind.explicit:
+    text: contract
+dfa.find.cause.contract.kind.hard.coded:
+    text: hard-coded contract
+dfa.find.cause.contract.kind.inferred:
+    text: inferred contract
+dfa.find.cause.contract.returns.on.condition:
+    text: according to {0}, method ''{1}'' returns ''{2}'' value when {3}
+dfa.find.cause.contract.throws.on.condition:
+    text: according to {0}, method ''{1}'' throws exception when {2}
+dfa.find.cause.contract.trivial:
+    text: according to {0}, method ''{1}'' always returns ''{2}'' value
+dfa.find.cause.equality.established.from.condition:
+    text: '''''{0}'''' was established from condition'
+dfa.find.cause.field.assigned.nullability:
+    text: field ''{0}'' is known to be always initialized to ''{1}'' value
+dfa.find.cause.field.initializer.nullability:
+    text: field ''{0}'' is initialized to ''{1}'' value
+dfa.find.cause.instanceof.implies.non.nullity:
+    text: the 'instanceof' check implies non-nullity
+dfa.find.cause.left.operand.range.template:
+    text: left operand is %s
+dfa.find.cause.may.be.null:
+    text: may be null
+dfa.find.cause.nonnull.expression.kind.concatenation:
+    text: concatenation
+dfa.find.cause.nonnull.expression.kind.literal:
+    text: literal
+dfa.find.cause.nonnull.expression.kind.newly.created.object:
+    text: newly created object
+dfa.find.cause.nonnull.expression.kind.primitive.type:
+    text: a value of primitive type ''{0}''
+dfa.find.cause.nonnull.expression.kind.this.object:
+    text: '''this'' object'
+dfa.find.cause.nullability.explicitly.annotated:
+    text: '{0} ''''{1}'''' is annotated as ''''{2}'''''
+dfa.find.cause.nullability.externally.annotated:
+    text: '{0} ''''{1}'''' is externally annotated as ''''{2}'''''
+dfa.find.cause.nullability.inferred:
+    text: '{0} ''''{1}'''' was inferred to be ''''{2}'''''
+dfa.find.cause.nullability.inherited.from.class:
+    text: '{0} ''''{1}'''' inherits annotation from class {2}, thus ''''{3}'''''
+dfa.find.cause.nullability.inherited.from.container:
+    text: '{0} ''''{1}'''' inherits container annotation, thus ''''{2}'''''
+dfa.find.cause.nullability.inherited.from.named.element:
+    text: '{0} ''''{1}'''' inherits from {2}, thus ''''{3}'''''
+dfa.find.cause.nullability.inherited.from.package:
+    text: '{0} ''''{1}'''' inherits annotation from package {2}, thus ''''{3}'''''
+dfa.find.cause.numeric.cast.operand.template:
+    text: cast operand is %s
+dfa.find.cause.numeric.range.generic.template:
+    text: value is %s
+dfa.find.cause.object.kind.expression:
+    text: an expression
+dfa.find.cause.object.kind.generic:
+    text: an object
+dfa.find.cause.object.kind.method.return:
+    text: method return
+dfa.find.cause.obviously.non.null.expression:
+    text: expression cannot be null as it''s {0}
+dfa.find.cause.one.of.the.following.happens:
+    text: 'one of the following happens:'
+dfa.find.cause.operand.of.boolean.expression.is.the.same:
+    text: 'operand #{0} of {1, choice, 0#and|1#or}-chain is {2}'
+dfa.find.cause.place.here:
+    text: here
+dfa.find.cause.place.line.number:
+    text: 'line #{0}'
+dfa.find.cause.range.is.known.from.place:
+    text: range is known from ___PLACE___
+dfa.find.cause.range.is.specified.by.annotation:
+    text: the range of ''{0}'' is specified by annotation as {1}
+dfa.find.cause.result.of.numeric.operation.template:
+    text: result of ''{0}'' is %s
+dfa.find.cause.result.of.primitive.cast.template:
+    text: result of ''({0})'' cast is %s
+dfa.find.cause.right.operand.range.template:
+    text: right operand is %s
+dfa.find.cause.string.length.is.always.non.negative:
+    text: string length is always non-negative
+dfa.find.cause.type.is.known.from.place:
+    text: type of ''{0}'' is known from ___PLACE___
+dfa.find.cause.type.known:
+    text: '{0} type is {1}'
+dfa.find.cause.unable:
+    text: Unable to find the cause
+dfa.find.cause.value.is.always.the.same:
+    text: value is always {0}
+dfa.find.cause.value.is.known.from.place:
+    text: '''''{0}'''' is known to be ''''{1}'''' from ___PLACE___'
+dfa.find.cause.value.x.is.always.the.same:
+    text: value ''{0}'' is always ''{1}''
+dfa.find.cause.values.cannot.be.equal.because:
+    text: values cannot be equal because {0}
+dfa.find.cause.variable.is.initialized:
+    text: '{0} ''''{1}'''' is initialized to {2}'
+dfa.find.cause.was.assigned:
+    text: '''''{0}'''' was assigned'
+dfa.find.cause.was.assigned.to:
+    text: '''''{0}'''' was assigned to ''''{1}'''''
+dfa.find.cause.was.dereferenced:
+    text: '''''{0}'''' was dereferenced'
+dfa.find.cause.was.passed.as.non.null.parameter:
+    text: '''''{0}'''' was passed as an argument to a method accepting non-null parameter'
+dftype.presentation.empty.optional:
+    text: empty Optional
+dftype.presentation.present.optional:
+    text: present Optional
+don.t.report.unused.jars.inside.used.library:
+    text: Don't report unused jars inside used library
+duplication.policy.ask:
+    text: Ask
+duplication.policy.generate.duplicate:
+    text: Generate duplicating method
+duplication.policy.replace:
+    text: Replace existing
+element.kind.keys:
+    text: keys
+element.kind.objects:
+    text: objects
+element.kind.values:
+    text: values
+error.class.not.found:
+    text: Class {0} not found
+error.message.invalid.java.type:
+    text: Invalid Java type
+exception.removal.will.break.source.code.proceed.anyway:
+    text: Exception removal will break source code. Proceed anyway?
+explicit.type.argument.ref.loc.can.be.replaced.with:
+    text: 'Explicit type argument #ref #loc can be replaced with <>'
+exports.to.itself.delete.module.ref.fix:
+    text: Delete reference to module ''{0}''
+exports.to.itself.delete.statement.fix:
+    text: Delete directive
+feature.annotations:
+    text: Annotations
+feature.binary.literals:
+    text: Binary literals
+feature.diamond.types:
+    text: Diamond types
+feature.enhanced.switch:
+    text: Enhanced 'switch' blocks
+feature.extension.methods:
+    text: Extension methods
+feature.for.each:
+    text: For-each loops
+feature.generics:
+    text: Generics
+feature.hex.fp.literals:
+    text: Hexadecimal floating point literals
+feature.intersections.in.casts:
+    text: Intersection types in casts
+feature.lambda.expressions:
+    text: Lambda expressions
+feature.local.enums:
+    text: Local enums
+feature.local.interfaces:
+    text: Local interfaces
+feature.lvti:
+    text: Local variable type inference
+feature.method.references:
+    text: Method references
+feature.modules:
+    text: Modules
+feature.multi.catch:
+    text: Multi-catches
+feature.patterns.instanceof:
+    text: Patterns in 'instanceof'
+feature.records:
+    text: Records
+feature.sealed.classes:
+    text: Sealed classes
+feature.static.imports:
+    text: Static imports
+feature.static.interface.calls:
+    text: Static interface method calls
+feature.switch.expressions:
+    text: '''switch'' expressions'
+feature.text.block.escape.sequences:
+    text: '''\s'' and ''\'' escape sequences'
+feature.text.blocks:
+    text: Text block literals
+feature.try.with.resources:
+    text: Try-with-resources
+feature.try.with.resources.refs:
+    text: Resource references
+feature.type.annotations:
+    text: Type annotations
+feature.type.receivers:
+    text: Receiver parameters
+feature.underscores.in.literals:
+    text: Underscores in literals
+feature.var.lambda.parameter:
+    text: '''var'' in lambda parameters'
+feature.varargs:
+    text: Variable arity methods
+find.searching.for.references.to.class.progress:
+    text: Searching for references to class {0}...
+find.usages.panel.title.derived.classes:
+    text: Derived Classes
+find.usages.panel.title.derived.interfaces:
+    text: Derived Interfaces
+find.usages.panel.title.implementing.classes:
+    text: Implementing Classes
+find.usages.panel.title.implementing.methods:
+    text: Implementing Methods
+find.usages.panel.title.overloaded.methods.usages:
+    text: Overloaded Methods Usages
+find.usages.panel.title.overriding.methods:
+    text: Overriding Methods
+generate.members.position.after.equals.and.hashcode:
+    text: After equals() and hashCode()
+generate.members.position.at.caret:
+    text: At caret
+generate.members.position.at.the.end.of.class:
+    text: At the end of class
+html.classes.exposed.with.code.module.info.code.html:
+    text: <html>Classes exposed with <code>module-info</code></html>
+html.ignore.overrides.of.deprecated.abstract.methods:
+    text: <html>Ignore overrides of deprecated abstract methods from non-deprecated supers</html>
+ignore.casts.in.suspicious.collections.method.calls:
+    text: Ignore casts in suspicious collections method calls
+ignore.exceptions.thrown.by.entry.points.methods:
+    text: Ignore exceptions thrown by entry points methods
+ignore.in.the.same.outermost.class:
+    text: Ignore in the same outermost class
+ignore.inside.deprecated.members:
+    text: Ignore inside deprecated members
+ignore.inside.non.static.imports:
+    text: Ignore inside non-static imports
+ignore.members.of.deprecated.classes:
+    text: Ignore members of deprecated classes
+ignore.operation.which.results.in.negative.value:
+    text: Ignore '<<' operation which results in negative value
+inspection.annotate.method.quickfix.family.name:
+    text: Annotate method
+inspection.annotate.method.quickfix.name:
+    text: Annotate method with ''@{0}''
+inspection.annotate.overridden.method.and.self.quickfix.family.name:
+    text: Annotate overridden methods and self
+inspection.annotate.overridden.method.and.self.quickfix.name:
+    text: Annotate overridden methods and self with ''@{0}''
+inspection.annotate.overridden.method.nullable.quickfix.name:
+    text: Annotate overridden methods as ''@{0}''
+inspection.annotate.overridden.method.quickfix.family.name:
+    text: Annotate overridden methods
+inspection.annotate.overridden.method.quickfix.name:
+    text: Annotate overridden methods with ''@{0}''
+inspection.anonymous.has.lambda.alternative.display.name:
+    text: Anonymous type has shorter lambda alternative
+inspection.block.marker.comments.display.name:
+    text: Block marker comment
+inspection.c.style.array.declarations.option:
+    text: Ignore C-style declarations in variables
+inspection.can.be.final.accept.quickfix:
+    text: Make final
+inspection.can.be.final.display.name:
+    text: Declaration can have final modifier
+inspection.can.be.final.option:
+    text: Report classes
+inspection.can.be.final.option1:
+    text: Report methods
+inspection.can.be.final.option2:
+    text: Report fields
+inspection.can.be.local.parameter.problem.descriptor:
+    text: Parameter <code>#ref</code> can have <code>final</code> modifier
+inspection.can.be.local.variable.problem.descriptor:
+    text: Variable <code>#ref</code> can have <code>final</code> modifier
+inspection.can.be.replaced.with.message:
+    text: Can be replaced with ''{0}''
+inspection.class.getclass.display.name:
+    text: Class.getClass() call
+inspection.class.getclass.fix.remove.name:
+    text: Remove 'getClass()' call
+inspection.class.getclass.fix.replace.name:
+    text: Replace with 'Class.class'
+inspection.class.getclass.message:
+    text: '''getClass()'' is called on Class instance'
+inspection.class.has.no.to.string.method.description:
+    text: Class ''{0}'' does not override ''toString()'' method
+inspection.class.has.no.to.string.method.display.name:
+    text: Class does not override 'toString()' method
+inspection.class.has.no.to.string.method.exclude.classes.reg.exp.option:
+    text: 'Exclude classes (reg exp):'
+inspection.class.has.no.to.string.method.ignore.abstract.classes.option:
+    text: Ignore abstract classes
+inspection.class.has.no.to.string.method.ignore.deprecated.classes.option:
+    text: Ignore deprecated classes
+inspection.class.has.no.to.string.method.ignore.enum.classes.option:
+    text: Ignore enum classes
+inspection.class.has.no.to.string.method.ignore.exception.classes.option:
+    text: Ignore exception classes
+inspection.class.has.no.to.string.method.ignore.inner.classes.option:
+    text: Ignore inner classes
+inspection.class.has.no.to.string.method.ignore.test.classes.option:
+    text: Ignore test classes
+inspection.common.if.parts.disable.highlight.tail.call:
+    text: Do not highlight common parts, if tail statement is call
+inspection.common.if.parts.family:
+    text: Extract common parts of 'if' statement
+inspection.common.if.parts.family.else.if:
+    text: Merge 'else if' statement
+inspection.common.if.parts.family.else.if.description:
+    text: '''else if'' can be merged'
+inspection.common.if.parts.settings.highlight.when.tail.call:
+    text: Highlight when last common statement is call
+inspection.compiler.javac.quirks.anno.array.comma.fix:
+    text: Remove trailing comma
+inspection.compiler.javac.quirks.anno.array.comma.problem:
+    text: Trailing comma in annotation array initializer may cause compilation error in some Javac versions (e.g. JDK 5 and JDK 6).
+inspection.compiler.javac.quirks.name:
+    text: Javac quirks
+inspection.compiler.javac.quirks.qualifier.type.args.fix:
+    text: Remove generic parameter
+inspection.compiler.javac.quirks.qualifier.type.args.problem:
+    text: Generics in qualifier reference may cause compilation error in some Javac versions (e.g. JDK 5 and JDK 6).
+inspection.constant.on.wrong.side.of.a.comparison.side.option:
+    text: 'Constant should be on this side of a comparison:'
+inspection.contract.checker.boolean.condition.for.nonboolean.parameter:
+    text: Parameter ''{0}'' has ''{1}'' type (expected boolean)
+inspection.contract.checker.clause.syntax:
+    text: A contract clause must be in form arg1, ..., argN -> return-value
+inspection.contract.checker.contract.clause.never.satisfied:
+    text: Contract clause ''{0}'' is never satisfied as its conditions are covered by previous contracts
+inspection.contract.checker.contract.violated:
+    text: Contract clause ''{0}'' is violated
+inspection.contract.checker.empty.constraint:
+    text: Constraint should not be empty
+inspection.contract.checker.inferred.notnull.parameter.notnull:
+    text: Parameter ''{0}'' is inferred to be not-null, so ''!null'' is always satisfied
+inspection.contract.checker.inferred.notnull.parameter.null:
+    text: Parameter ''{0}'' is inferred to be not-null, so ''null'' is not applicable
+inspection.contract.checker.method.always.fails.nontrivial:
+    text: Return value of clause ''{0}'' could be replaced with ''fail'' as method always fails in this case
+inspection.contract.checker.method.always.fails.trivial:
+    text: Return value of clause ''{0}'' could be replaced with ''fail'' as method always fails
+inspection.contract.checker.no.exception.thrown:
+    text: 'Contract clause ''''{0}'''' is violated: no exception is thrown'
+inspection.contract.checker.notnull.parameter.notnull:
+    text: Parameter ''{0}'' is annotated as not-null, so ''!null'' is always satisfied
+inspection.contract.checker.notnull.parameter.null:
+    text: Parameter ''{0}'' is annotated as not-null, so ''null'' is not applicable
+inspection.contract.checker.parameter.count.mismatch:
+    text: Method takes {0} parameters, while contract clause ''{1}'' expects {2}
+inspection.contract.checker.primitive.parameter.nullability:
+    text: Parameter ''{0}'' has primitive type ''{1}'', so ''{2}'' is not applicable
+inspection.contract.checker.pure.method.mutation.contract:
+    text: Pure method cannot have mutation contract
+inspection.contract.checker.unknown.constraint:
+    text: 'Constraint should be one of: {0}. Found: {1}'
+inspection.contract.checker.unknown.return.value:
+    text: 'Return value should be one of: {0}. Found: {1}'
+inspection.contract.checker.unreachable.contract.clause:
+    text: 'Contract clause ''''{0}'''' is unreachable: previous contracts cover all possible cases'
+inspection.contract.display.name:
+    text: Contract issues
+inspection.convert.2.diamond.display.name:
+    text: Explicit type can be replaced with <>
+inspection.convert.2.lambda.display.name:
+    text: Anonymous type can be replaced with lambda
+inspection.data.flow.redundant.instanceof.quickfix:
+    text: Replace with a null check
+inspection.data.flow.simplify.boolean.expression.quickfix:
+    text: Simplify boolean expression
+inspection.data.flow.simplify.to.assignment.quickfix.name:
+    text: Simplify to normal assignment
+inspection.data.flow.turn.off.constant.references.quickfix:
+    text: Don't report values which are guaranteed to be constant
+inspection.data.flow.turn.off.nullable.returning.notnull.quickfix:
+    text: Don't report nullable methods which always return not-null value
+inspection.data.flow.turn.off.true.asserts.quickfix:
+    text: Don't report always true assertions
+inspection.deprecated.class.usage.inspection.display.name:
+    text: Deprecated API usage in XML
+inspection.deprecated.is.still.used.display.name:
+    text: Deprecated member is still used
+inspection.duplicate.throws.display.name:
+    text: Duplicate throws
+inspection.duplicate.throws.ignore.subclassing.option:
+    text: Ignore exceptions subclassing others
+inspection.duplicate.throws.more.general.problem:
+    text: There is a more general exception, ''{0}'', in the throws list already.
+inspection.duplicate.throws.problem:
+    text: Duplicate throws
+inspection.equals.hashcode.only.one.defined.problem.descriptor:
+    text: Class has {0} defined but does not define {1}
+inspection.export.results.can.be.final.description:
+    text: Declaration can have final modifier
+inspection.field.access.not.guarded.display.name:
+    text: Unguarded field access or method call
+inspection.field.not.used.in.to.string.description:
+    text: Method ''{0}'' is not used in ''toString()'' method
+inspection.field.not.used.in.to.string.description2:
+    text: Field ''{0}'' is not used in ''toString()'' method
+inspection.field.not.used.in.to.string.display.name:
+    text: Field not used in 'toString()' method
+inspection.i18n.quickfix.annotate:
+    text: Annotate...
+inspection.i18n.quickfix.annotate.as:
+    text: Annotate as @{0}
+inspection.i18n.quickfix.annotate.element:
+    text: Annotate {0} ''{1}''...
+inspection.i18n.quickfix.annotate.element.as:
+    text: Annotate {0} ''{1}'' as @{2}
+inspection.implicit.subclass.display.forClass:
+    text: Class ''{0}'' could be implicitly subclassed and must not be final
+inspection.implicit.subclass.display.name:
+    text: Final declaration can't be overridden at runtime
+inspection.implicit.subclass.extendable:
+    text: Make ''{0}'' overridable
+inspection.implicit.subclass.make.class.extendable:
+    text: Make class ''{0}'' {1,choice,0#|1#and method {2} |1<and {1} required methods }extendable
+inspection.inconsistent.language.level.display.name:
+    text: Inconsistent language level settings
+inspection.infinite.loop.option:
+    text: Ignore when placed in Thread.run
+inspection.instance.guarded.by.static.display.name:
+    text: Instance member guarded by static field
+inspection.invalid.comparator.method.reference.display.name:
+    text: Invalid method reference used for Comparator
+inspection.java.8.list.sort.display.name:
+    text: Collections.sort() can be replaced with List.sort()
+inspection.java.9.redundant.requires.statement.display.name:
+    text: Redundant 'requires' statement in module-info
+inspection.java.module.naming:
+    text: Java module naming conventions
+inspection.java.module.naming.terminal.digits:
+    text: Module name component ''{0}'' should avoid terminal digits
+inspection.local.can.be.final.display.name:
+    text: Local variable or parameter can be final
+inspection.local.can.be.final.option:
+    text: Report local variables
+inspection.local.can.be.final.option1:
+    text: Report method parameters
+inspection.local.can.be.final.option2:
+    text: Report catch parameters
+inspection.local.can.be.final.option3:
+    text: Report foreach parameters
+inspection.local.can.be.final.option4:
+    text: Report variables which are implicit final
+inspection.message.code.generation.different.nullability.annotation.will.be.used:
+    text: The generated code will use ''{1}'' instead of ''{0}''.
+inspection.message.javac.quick.intersection.type.problem:
+    text: 'Though assignment is formal correct, it could lead to ClassCastException at runtime. Expected: ''''{0}'''', actual: ''''{1}'''''
+inspection.message.non.annotated.method.implements.non.null.method:
+    text: Non-annotated method ''{0}'' from ''{1}'' implements non-null method from ''{2}''
+inspection.message.non.annotated.parameter.should.not.override.non.null.parameter:
+    text: Non-annotated parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override non-null parameter from ''{3}''
+inspection.message.non.null.parameter.should.not.override.non.annotated.parameter:
+    text: Non-null parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override non-annotated parameter from ''{3}''
+inspection.message.non.null.parameter.should.not.override.nullable.parameter:
+    text: Non-null parameter ''{0}'' in method ''{1}'' from ''{2}'' should not override nullable parameter from ''{3}''
+inspection.message.nullable.method.implements.non.null.method:
+    text: Nullable method ''{0}'' from ''{1}'' implements non-null method from ''{2}''
+inspection.module.exports.package.to.itself:
+    text: Module exports/opens package to itself
+inspection.non.final.field.in.immutable.display.name:
+    text: Non-final field in @Immutable class
+inspection.non.final.guard.display.name:
+    text: Non-final @GuardedBy field
+inspection.nullable.problems.NotNull.parameter.overrides.Nullable:
+    text: Parameter annotated @{0} must not override @{1} parameter
+inspection.nullable.problems.NotNull.parameter.overrides.not.annotated:
+    text: Parameter annotated @{0} should not override non-annotated parameter
+inspection.nullable.problems.NotNull.parameter.receives.null.literal:
+    text: Parameter annotated @{0} should not receive ''null'' as an argument
+inspection.nullable.problems.Nullable.NotNull.conflict:
+    text: Cannot annotate with both @{0} and @{1}
+inspection.nullable.problems.Nullable.method.overrides.NotNull:
+    text: Method annotated with @{0} must not override @{1} method
+inspection.nullable.problems.annotated.field.constructor.parameter.not.annotated:
+    text: Constructor parameter for @{0} field might be annotated @{0} itself
+inspection.nullable.problems.annotated.field.getter.conflict:
+    text: Getter for @{0} field is annotated @{1}
+inspection.nullable.problems.annotated.field.getter.not.annotated:
+    text: Getter for @{0} field might be annotated @{0} itself
+inspection.nullable.problems.annotated.field.setter.parameter.conflict:
+    text: Setter parameter for @{0} field is annotated @{1}
+inspection.nullable.problems.annotated.field.setter.parameter.not.annotated:
+    text: Setter parameter for @{0} field might be annotated @{0} itself
+inspection.nullable.problems.method.overrides.NotNull:
+    text: Not annotated method overrides method annotated with @{0}
+inspection.nullable.problems.parameter.overrides.NotNull:
+    text: Not annotated parameter overrides @{0} parameter
+inspection.nullable.problems.primitive.type.annotation:
+    text: Primitive type members cannot be annotated
+inspection.numeric.overflow.display.name:
+    text: Numeric overflow
+inspection.objects.equals.can.be.simplified.display.name:
+    text: Objects.equals() can be replaced with equals()
+inspection.redundant.cast.display.name:
+    text: Redundant type cast
+inspection.redundant.cast.problem.descriptor:
+    text: Casting {0} to {1} is redundant
+inspection.redundant.cast.remove.quickfix:
+    text: Remove redundant cast(s)
+inspection.redundant.field.initialization.option:
+    text: Only warn on initialization to null
+inspection.redundant.requires.statement.description:
+    text: Redundant directive ''requires {0}''
+inspection.redundant.requires.statement.fix.family:
+    text: Delete redundant 'requires' directive
+inspection.redundant.requires.statement.fix.name:
+    text: Delete directive ''requires {0}''
+inspection.redundant.throws.display.name:
+    text: Redundant 'throws' clause
+inspection.redundant.throws.problem.descriptor:
+    text: The declared exception {0} is never thrown in method implementations
+inspection.redundant.throws.problem.descriptor1:
+    text: The declared exception {0} is never thrown in this method, nor in its derivables
+inspection.redundant.throws.problem.descriptor2:
+    text: The declared exception {0} is never thrown
+inspection.redundant.throws.remove.quickfix:
+    text: Remove unnecessary 'throws' declarations
+inspection.redundant.type.display.name:
+    text: Redundant type arguments
+inspection.redundant.type.no.generics.method.reference.problem.descriptor:
+    text: Type arguments are redundant for the non-generic method reference
+inspection.redundant.type.no.generics.problem.descriptor:
+    text: Type arguments are redundant for the non-generic method call
+inspection.redundant.type.problem.descriptor:
+    text: Explicit type arguments can be inferred
+inspection.redundant.type.remove.quickfix:
+    text: Remove type arguments
+inspection.reference.anonymous.name:
+    text: anonymous ({0})
+inspection.reference.default.package:
+    text: <default>
+inspection.reference.implicit.constructor.name:
+    text: implicit constructor of {0}
+inspection.reference.jsp.holder.method.anonymous.name:
+    text: <% page content %>
+inspection.requires.auto.module:
+    text: Dependencies on automatic modules
+inspection.requires.auto.module.message:
+    text: '''requires'' directive for an automatic module'
+inspection.requires.auto.module.option:
+    text: Highlight only transitive dependencies
+inspection.requires.auto.module.transitive:
+    text: '''requires transitive'' directive for an automatic module'
+inspection.safe.varargs.detector.display.name:
+    text: Possible heap pollution from parameterized vararg type
+inspection.same.return.value.display.name:
+    text: Method returns the same value
+inspection.same.return.value.problem.descriptor:
+    text: Method always returns {0}
+inspection.same.return.value.problem.descriptor1:
+    text: Method and all its derivables always return {0}
+inspection.same.return.value.problem.descriptor2:
+    text: All implementations of this method always return {0}
+inspection.static.guarded.by.instance.display.name:
+    text: Static member guarded by instance field or this
+inspection.string.tokenizer.delimiter.display.name:
+    text: Duplicated delimiters in java.util.StringTokenizer
+inspection.surround.requirenonnull.quickfix:
+    text: Replace with ''Objects.requireNonNull({0})''
+inspection.suspicious.array.method.call.display.name:
+    text: Suspicious Arrays method calls
+inspection.suspicious.array.method.call.problem.arrays:
+    text: 'Array types are incompatible: arrays are always different'
+inspection.suspicious.array.method.call.problem.element:
+    text: Element type is not compatible with array type
+inspection.suspicious.collections.method.calls.display.name:
+    text: Suspicious collections method calls
+inspection.suspicious.collections.method.calls.problem.descriptor:
+    text: '''''{0}'''' may not contain {2} of type ''''{1}'''''
+inspection.suspicious.collections.method.calls.problem.descriptor1:
+    text: Suspicious call to ''{0}''
+inspection.suspicious.getter.setter.field.option:
+    text: Only warn when field matching getter/setter name is present
+inspection.suspicious.integer.div.assignment.option:
+    text: Report suspicious but possibly exact divisions
+inspection.test.only.problems.display.name:
+    text: Test-only class or method call in production code
+inspection.test.only.problems.test.only.class.reference:
+    text: Test-only class is referenced in production code
+inspection.test.only.problems.test.only.field.reference:
+    text: Test-only field is referenced in production code
+inspection.test.only.problems.test.only.method.call:
+    text: Test-only method is called in production code
+inspection.unary.plus.unary.binary.option:
+    text: Only report in confusing binary or unary expression context
+inspection.unknown.guard.display.name:
+    text: Unknown @GuardedBy field
+inspection.unnecessary.super.qualifier.option:
+    text: Ignore clarification 'super' qualifier
+inspection.use.compare.method.display.name:
+    text: '''compare()'' method can be used to compare numbers'
+inspection.use.compare.method.fix.family.name:
+    text: Replace with single comparison method
+inspection.visibility.accept.quickfix:
+    text: Accept suggested access level
+inspection.visibility.compose.suggestion:
+    text: Can be {0}
+inspection.visibility.option.constants:
+    text: Suggest weaker visibility for constants
+inspection.visibility.option.package.private.members:
+    text: Suggest package-private visibility level for class members
+inspection.visibility.package.private.top.level.classes:
+    text: Suggest package-private visibility level for top-level classes
+inspection.visibility.private.inner.members:
+    text: <html>Suggest private for inner class members when referenced from outer class only</html>
+inspection.weaker.access.display.name:
+    text: Declaration access can be weaker
+instance.member.guarded.by.static.0.loc:
+    text: 'Instance member guarded by static "{0}" #loc'
+instance.member.guarded.by.static.ref.loc:
+    text: 'Instance member guarded by static #ref #loc'
+intention.add.annotation.family:
+    text: Add annotation
+intention.name.qualify.expression:
+    text: Qualify {0} expression with ''{1}''
+intention.text.remove.annotation:
+    text: Remove
+junit.rule.classrule.option:
+    text: Report @ClassRule problems
+junit.rule.rule.option:
+    text: Report @Rule problems
+long.range.set.presentation.any:
+    text: any value
+long.range.set.presentation.divisible.by:
+    text: divisible by {0}
+long.range.set.presentation.empty:
+    text: unknown
+long.range.set.presentation.even:
+    text: even
+long.range.set.presentation.odd:
+    text: odd
+long.range.set.presentation.range:
+    text: in {0}
+long.range.set.presentation.range.with.mod:
+    text: '{0}; {1}'
+long.range.set.presentation.two.values:
+    text: '{0} or {1}'
+make.0.default.annotation:
+    text: Make "{0}" default annotation
+make.default.the.last.case.family.name:
+    text: Make 'default' the last case
+make.final.and.annotate.as.safevarargs:
+    text: Make final and annotate as @SafeVarargs
+message.class.inaccessible:
+    text: Class ''{0}'' is not accessible here
+message.class.inaccessible.from.module:
+    text: Class ''{0}'' is not accessible from module ''{1}''
+method.reference.mapped.to.comparator:
+    text: Method reference mapped to Comparator interface does not fulfill the Comparator contract
+module.0.with.language.level.1.depends.on.module.2.with.language.level.3:
+    text: Module {0} with language level {1} depends on module {2} with language level {3}
+move.0.to.the.beginning:
+    text: Move ''{0}'' to the beginning
+move.to.front:
+    text: Move to front
+mutability.modifiable:
+    text: modifiable
+mutability.unknown:
+    text: unknown
+mutability.unmodifiable:
+    text: unmodifiable
+mutability.unmodifiable.view:
+    text: unmodifiable view
+mutation.signature.problem.invalid.token:
+    text: 'Invalid token: {0}; supported are ''''this'''', ''''param1'''', ''''param2'''', etc.'
+mutation.signature.problem.parameter.has.immutable.type:
+    text: 'Parameter #{0} has immutable type ''''{1}'''''
+mutation.signature.problem.reference.to.parameter.invalid:
+    text: 'Reference to parameter #{0} is invalid'
+mutation.signature.problem.static.method.cannot.mutate.this:
+    text: Static method cannot mutate 'this'
+navigate.to.overridden.methods.title:
+    text: Overriding methods of {0}
+non.final.field.code.ref.code.in.immutable.class.loc:
+    text: 'Non-final field <code>#ref</code> in @Immutable class  #loc'
+non.final.guarded.by.field.0.loc:
+    text: 'Non-final @GuardedBy field "{0}" #loc'
+non.final.guarded.by.field.ref.loc:
+    text: 'Non-final @GuardedBy field #ref #loc'
+non.null.type.argument.is.expected:
+    text: Non-null type argument is expected
+not.annotated.method.is.used.as.an.override.for.a.method.annotated.with.0:
+    text: Not annotated method is used as an override for a method annotated with {0}
+nullability.non.null:
+    text: non-null
+nullability.null:
+    text: 'null'
+nullability.nullable:
+    text: nullable
+nullable.stuff.error.overriding.notnull.with.nullable:
+    text: Overriding a collection of not-null elements with a collection of nullable elements
+nullable.stuff.error.overriding.nullable.with.notnull:
+    text: Overriding a collection of nullable elements with a collection of non-null elements
+nullable.stuff.problems.overridden.method.parameters.are.not.annotated:
+    text: Overridden method parameters are not annotated
+nullable.stuff.problems.overridden.methods.are.not.annotated:
+    text: Overridden methods are not annotated
+parameter.can.be.null:
+    text: Parameter can be null
+parameter.is.always.not.null:
+    text: Parameter is always not-null
+possible.heap.pollution.from.parameterized.vararg.type.loc:
+    text: 'Possible heap pollution from parameterized vararg type #loc'
+processing.method.usages:
+    text: Processing Method Usages...
+progress.title.searching.for.overridden.methods:
+    text: Searching for Overridden Methods
+provided.type:
+    text: Provided
+qualify.0:
+    text: Qualify {0}
+qualify.with.0.this:
+    text: Qualify with {0}.this
+redundant.block.marker:
+    text: Redundant block marker
+remove.annotation:
+    text: Remove annotation
+remove.block.marker.comments:
+    text: Remove block marker comments
+remove.dependency:
+    text: Remove dependency
+remove.left.side.of.assignment:
+    text: Remove left side of assignment
+remove.switch.branch.0:
+    text: Remove switch branch ''{0}''
+remove.switch.label:
+    text: Remove switch label
+remove.switch.label.0:
+    text: Remove switch label ''{0}''
+replace.0.with:
+    text: Replace ''''{0}'''' with ''''=''''
+replace.anonymous.class.with.lambda.alternative:
+    text: Replace anonymous class with lambda alternative
+replace.get.class.with.class.literal:
+    text: Replace getClass() with .class literal
+replace.operator.assignment.with.assignment:
+    text: Replace Operator Assignment with Assignment
+replace.stringtokenizer.delimiters.parameter.with.unique.symbols:
+    text: Replace StringTokenizer delimiters parameter with unique symbols
+replace.var.with.explicit.type:
+    text: Replace 'var' with explicit type
+replace.with.0:
+    text: Replace with {0}
+replace.with.comparator:
+    text: Replace with comparator
+replace.with.constant.value:
+    text: Replace with constant value
+replace.with.expression.lambda:
+    text: Replace with expression lambda
+replace.with.lambda:
+    text: Replace with lambda
+report.suspicious.but.possibly.correct.method.calls:
+    text: '&Report suspicious but possibly correct method calls'
+report.when.interface.is.not.annotated.with.functional.interface:
+    text: Report when interface is not annotated with @FunctionalInterface
+required.type:
+    text: Required type
+scope.package:
+    text: Package {0}
+searching.for.overriding.methods:
+    text: Searching for Overriding Methods
+service.provides:
+    text: 'Provides service <a href="#javaClass/{0}">{0}</a><br><div style=''margin-top: 5px''><font size=''2''>Click to navigate</font></div>'
+service.uses:
+    text: 'Uses service <a href="#javaClass/{0}">{0}</a><br><div style=''margin-top: 5px''><font size=''2''>Click to navigate</font></div>'
+special.field.array.length:
+    text: Array length
+special.field.collection.size:
+    text: Size
+special.field.optional.value:
+    text: Optional value
+special.field.string.length:
+    text: String length
+special.field.unboxed.value:
+    text: Unboxed value
+statement.lambda.can.be.replaced.with.expression.lambda:
+    text: Statement lambda can be replaced with expression lambda
+static.inheritrance.fix.replace.progress:
+    text: Replacing usages of {0}
+static.member.guarded.by.instance.0.loc:
+    text: 'Static member guarded by instance "{0}" #loc'
+static.member.guarded.by.instance.ref.loc:
+    text: 'Static member guarded by instance #ref #loc'
+subclasses.search.progress.title:
+    text: Searching for Overridden Methods
+suggest.package.private.visibility.level.for.classes.in.exported.packages.java.9:
+    text: Suggest package-private visibility level for classes in exported packages (Java 9+)
+suppress.all.for.class:
+    text: Suppress all inspections for class
+suppress.for.parameter:
+    text: Suppress for parameter
+suppress.for.statement.with.comment:
+    text: Suppress for statement with comment
+suppress.inspection.class:
+    text: Suppress for class
+suppress.inspection.field:
+    text: Suppress for field
+suppress.inspection.member:
+    text: Suppress for member
+suppress.inspection.method:
+    text: Suppress for method
+suppress.inspection.module:
+    text: Suppress for module declaration
+suspected.module.dependency.problem.descriptor:
+    text: Module ''{0}'' does not depend on module ''{1}''. Though ''{1}'' was not inspected for exported dependencies needed for scope ''{2}''
+suspicious.invocation.handler.implementation.display.name:
+    text: Suspicious InvocationHandler implementation
+suspicious.invocation.handler.implementation.method.unused.message:
+    text: 'Method is never used in ''invoke'': it''s unlikely that ''hashCode'', ''equals'' and ''toString'' are implemented correctly'
+suspicious.invocation.handler.implementation.null.returned.for.toString.message:
+    text: 'Null might be returned when proxying method ''toString()'': this is discouraged'
+suspicious.invocation.handler.implementation.null.returned.message:
+    text: 'Null might be returned when proxying method ''''{0}()'''': this may cause NullPointerException'
+suspicious.invocation.handler.implementation.type.mismatch.message:
+    text: 'Incompatible type might be returned when proxying method ''''{0}()'''': required: {1}; got: {2}'
+text.raw.ctor.reference.with.type.parameters:
+    text: Raw constructor reference with explicit type parameters for constructor
 text.shebang.mechanism.in.java.files.not.permitted:
-  text: Shebang mechanism in .java files is not permitted
+    text: Shebang mechanism in .java files is not permitted
+text.unused.import.in.template:
+    text: Unused import (specified in template)
+type.constraint.assignability.explanation.definitely.inconvertible:
+    text: '{0} is known to be {1} which is definitely incompatible with {2}'
+type.constraint.assignability.explanation.exact:
+    text: '{0} is already known to be {1}'
+type.constraint.assignability.explanation.exact.not.subtype:
+    text: '{0} type is exactly {1} which is not a subtype of {2}'
+type.constraint.assignability.explanation.exact.subtype:
+    text: '{0} type is exactly {1} which is a subtype of {2}'
+type.constraint.assignability.explanation.not.instance.of:
+    text: '{0} is known to be not {1}'
+type.constraint.assignability.explanation.not.instance.of.supertype:
+    text: '{0} is known to be not {1} which is a supertype of {2}'
+type.constraint.assignability.explanation.subtype.of.subtype:
+    text: '{0} is already known to be {1} which is a subtype of {2}'
+type.information.local.object:
+    text: local object
+type.mismatch.reason:
+    text: 'reason: {0}'
+type.presentation.except.values:
+    text: '{0}, not in {1}'
+unknown.guardedby.reference.0.loc:
+    text: 'Unknown @GuardedBy reference "{0}" #loc'
+unknown.guardedby.reference.ref.loc:
+    text: 'Unknown @GuardedBy reference #ref #loc'
+unnecessary.module.dependency.display.name:
+    text: Unnecessary module dependency
+unnecessary.module.dependency.problem.descriptor:
+    text: Module ''{0}'' sources do not depend on module ''{1}'' sources
+unused.import.display.name:
+    text: Unused import
+unused.import.statement:
+    text: Unused import statement
+unused.library.display.name:
+    text: Unused library
+unused.library.problem.descriptor:
+    text: Unused library ''{0}''
+unused.library.roots.problem.descriptor:
+    text: Unused roots {0} from library ''{1}''
+var.can.be.replaced.with.explicit.type:
+    text: '''var'' can be replaced with explicit type'
+vararg.method.call.with.50.poly.arguments:
+    text: Vararg method call with 50+ poly arguments may cause compilation and analysis slowdown
+visible.for.testing.makes.little.sense.on.test.only.code:
+    text: '@VisibleForTesting makes little sense on @TestOnly code'
