@@ -1,5 +1,3 @@
-0.refactor.j.is.not.licensed:
-    text: '{0}Refactor-J is not licensed.'
 0.the.caret.should.be.positioned.at.an.annotation.to.be.refactored.to.be.refactored:
     text: '{0}The caret should be positioned at an annotation to be refactored to be refactored.'
 a.class.can.not.be.made.an.inner.class.of.itself:
@@ -102,10 +100,6 @@ do.you.wish.to.invert.all.uses.of.parameter:
     text: Do you wish to invert all uses of parameter {0}?
 do.you.wish.to.invert.all.uses.of.variable:
     text: Do you wish to invert all uses of variable {0}?
-enter.license.key.for.refactor.j:
-    text: Enter license key for Refactor-J
-enter.refactor.j.license.data.title:
-    text: Enter Refactor-J License Data
 existing.wrapper.class.label:
     text: Use Existing Parameter Class
 exposed.delegation.command.name:
@@ -152,10 +146,6 @@ genericize.uses.in.border:
     text: Genericize uses of {0} in {1}
 global.library.source:
     text: 'Global Library: {0}'
-i.do.not.accept.the.terms.of.this.license:
-    text: I &do not accept the terms of this license.
-i.have.read.the.terms.of.this.license.and.i.accept.them:
-    text: '&I have read the terms of this license, and I accept them.'
 initialization.expression.checkbox:
     text: 'Initialization expression (optional):'
 introduce.parameter.object:
@@ -188,14 +178,6 @@ invert.variable.command.name:
     text: Inverted
 javadoced.class:
     text: Javadoced class
-license.entered:
-    text: License Entered
-license.expired:
-    text: License Expired
-license.key:
-    text: '&License Key:'
-license.renewal.needed:
-    text: License renewal needed
 make.class.an.inner.class.border:
     text: Make class {0} an inner class
 make.class.inner:
@@ -308,10 +290,6 @@ push.up.javadoc.command.name:
     text: Push up Javadoc
 refactor:
     text: Refactor
-refactor.j.is.not.licensed:
-    text: Refactor-J is not licensed.
-refactor.j.licensed.to:
-    text: 'Refactor-J licensed to:'
 reference:
     text: reference
 references.to.be.changed.usage.view:
@@ -394,8 +372,6 @@ superclass.elements.to.be.annotated:
     text: Superclass elements to be annotated
 superclass.methods.to.be.javadoced:
     text: Superclass methods to be javadoced
-thank.you.for.supporting.sixth.and.red.river.software:
-    text: Thank you for supporting Sixth and Red River Software
 the.caret.should.be.positioned.at.an.annotation.to.be.refactored.to.be.refactored:
     text: The caret should be positioned at an annotation to be refactored to be refactored.
 the.caret.should.be.positioned.at.on.a.class.to.be.made.into.an.inner.class:
@@ -445,16 +421,6 @@ there.already.exists.an.incompatible.class.with.the.chosen.name:
 there.are.non.genericizable.instances.of.the.type.you.selected:
     text: |
         There are non-genericizable instances of the type you selected.
-to.purchase.a.commercial.license.please.visit:
-    text: To purchase a commercial license, please visit
-to.purchase.a.full.license.please.contact.sixth.and.red.river.software:
-    text: To purchase a full license, please contact Sixth and Red River Software.
-to.purchase.a.license.for.the.latest.version.please.contact.sixth.and.red.river.software:
-    text: To purchase a license for the latest version, please contact Sixth and Red River Software
-to.purchase.a.license.for.the.refactor.j.please.contact.sixth.and.red.river.software:
-    text: To purchase a license for the Refactor-J, please contact Sixth and Red River Software
-to.purchase.a.new.license.please.contact.sixth.and.red.river.software:
-    text: To purchase a new license, please contact Sixth and Red River Software
 type.parameter.question.label:
     text: Do you wish to remove type parameter {0} and all uses of it?
 type.parameter.selected.extends.multiple.types:
@@ -497,18 +463,3 @@ wrap.return.value.title:
     text: Wrap Return Value
 wrapped.return.command.name:
     text: Wrapped return as {0} for {1}{2}{3}()
-www.sixthandredriver.com:
-    text: www.sixthandredriver.com
-your.evaluation.license.for.refactor.j.will.expire.in.less.than.a.day.n:
-    text: |
-        Your evaluation license for Refactor-J will expire in less than a day.
-your.evaluation.license.for.refactor.j.will.expire.in.less.than.n.days:
-    text: |
-        Your evaluation license for Refactor-J will expire in less than {0} days.
-your.evaluation.license.for.refactor.j.will.expire.in.one.day:
-    text: |
-        Your evaluation license for Refactor-J will expire in one day.
-your.refactor.j.license.has.expired:
-    text: "Your Refactor-J license has expired. \n"
-your.refactor.j.license.is.for.an.older.version.and.does.not.support.the.currently.installed.version.of.refactor.j:
-    text: "Your Refactor-J license is for an older version, and does not support the currently installed version of Refactor-J. \n"
