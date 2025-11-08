@@ -173,7 +173,7 @@ duplicate.property.value.progress.indicator.text:
 edit.dependency.rules.family:
     text: Edit dependency rules
 edit.dependency.rules.text:
-    text: Edit dependency rule "{0} "
+    text: Edit dependency rule "{0}"
 edit.inspection.options:
     text: Edit ''{0}'' Options
 edit.options.of.reporter.inspection.family:
@@ -605,7 +605,7 @@ inspection.disabled.title:
 inspection.disabled.wrong.id:
     text: 'Inspection ''''{0}'''' is disabled: ID ''''{1}'''' not matches ''''{2}'''' pattern.'
 inspection.display.name:
-    text: Analyzing code ...
+    text: Analyzing code...
 inspection.done:
     text: done.
 inspection.duplicate.throws.display.name:
