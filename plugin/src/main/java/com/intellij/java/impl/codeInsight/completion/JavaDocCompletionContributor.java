@@ -386,7 +386,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
                     result.addElement(LookupElementDecorator.withInsertHandler(LookupElementBuilder.create(s), new InlineInsertHandler()));
                 }
                 else {
-                    result.addElement(TailTypeDecorator.withTail(LookupElementBuilder.create(s), TailType.INSERT_SPACE));
+                    result.addElement(TailTypeDecorator.withTail(LookupElementBuilder.create(s), TailType.HUMBLE_SPACE_BEFORE_WORD));
                 }
             }
             result.stopHere(); // no word completions at this point
