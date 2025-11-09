@@ -246,22 +246,14 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
             return false;
         }
         PsiType expressionType = expression.getType();
-        Object value = ConstantExpressionUtil.computeCastTo(expression, expressionType);
-        if (value == null) {
-            return false;
-        }
-        if (value instanceof Integer && (Integer) value == 0xFFFFFFFF) {
-            return true;
-        }
-        if (value instanceof Long && (Long) value == 0xFFFFFFFFFFFFFFFFL) {
-            return true;
-        }
-        if (value instanceof Short && (Short) value == (short) 0xFFFF) {
-            return true;
-        }
-        if (value instanceof Character && (Character) value == (char) 0xFFFF) {
-            return true;
-        }
-        return value instanceof Byte && (Byte) value == (byte) 0xFF;
+        return switch (ConstantExpressionUtil.computeCastTo(expression, expressionType)) {
+            case null -> false;
+            case Integer intValue -> intValue == 0xFFFFFFFF;
+            case Long longValue -> longValue == 0xFFFFFFFFFFFFFFFFL;
+            case Short shortValue -> shortValue == (short) 0xFFFF;
+            case Character charValue -> charValue == (char) 0xFFFF;
+            case Byte byteValue -> byteValue == (byte) 0xFF;
+            default -> false;
+        };
     }
 }
