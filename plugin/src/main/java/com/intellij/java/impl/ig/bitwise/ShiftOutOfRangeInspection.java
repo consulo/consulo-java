@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -39,10 +40,10 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
         return InspectionGadgetsLocalize.shiftOperationByInappropriateConstantDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public String buildErrorString(Object... infos) {
-        final Integer value = (Integer) infos[0];
+        Integer value = (Integer) infos[0];
         return value > 0
             ? InspectionGadgetsLocalize.shiftOperationByInappropriateConstantProblemDescriptorTooLarge().get()
             : InspectionGadgetsLocalize.shiftOperationByInappropriateConstantProblemDescriptorNegative().get();
@@ -59,7 +60,6 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
     }
 
     private static class ShiftOutOfRangeFix extends InspectionGadgetsFix {
-
         private final int value;
         private final boolean isLong;
 
@@ -76,32 +76,27 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
         }
 
         @Override
-        protected void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            if (!(parent instanceof PsiBinaryExpression)) {
+        @RequiredWriteAction
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiBinaryExpression binaryExpression)) {
                 return;
             }
-            final PsiBinaryExpression binaryExpression =
-                (PsiBinaryExpression) parent;
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (rhs == null) {
                 return;
             }
-            final PsiElementFactory factory =
-                JavaPsiFacade.getElementFactory(project);
-            final String text;
-            final PsiExpression lhs = binaryExpression.getLOperand();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            String text;
+            PsiExpression lhs = binaryExpression.getLOperand();
             if (PsiType.LONG.equals(lhs.getType())) {
-                text = String.valueOf(value & 63);
+                text = String.valueOf(value & 0x3F);
             }
             else {
-                text = String.valueOf(value & 31);
+                text = String.valueOf(value & 0x1F);
             }
-            final PsiExpression newExpression =
-                factory.createExpressionFromText(
-                    text, element);
+            PsiExpression newExpression = factory.createExpressionFromText(text, element);
             rhs.replace(newExpression);
         }
     }
@@ -112,39 +107,32 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
     }
 
     private static class ShiftOutOfRange extends BaseInspectionVisitor {
-
         @Override
-        public void visitBinaryExpression(
-            @Nonnull PsiBinaryExpression expression
-        ) {
+        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
-            final PsiJavaToken sign = expression.getOperationSign();
-            final IElementType tokenType = sign.getTokenType();
+            PsiJavaToken sign = expression.getOperationSign();
+            IElementType tokenType = sign.getTokenType();
             if (!tokenType.equals(JavaTokenType.LTLT) &&
                 !tokenType.equals(JavaTokenType.GTGT) &&
                 !tokenType.equals(JavaTokenType.GTGTGT)) {
                 return;
             }
-            final PsiType expressionType = expression.getType();
+            PsiType expressionType = expression.getType();
             if (expressionType == null) {
                 return;
             }
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
             if (!PsiUtil.isConstantExpression(rhs)) {
                 return;
             }
-            final Integer valueObject =
-                (Integer) ConstantExpressionUtil.computeCastTo(
-                    rhs,
-                    PsiType.INT
-                );
+            Integer valueObject = (Integer) ConstantExpressionUtil.computeCastTo(rhs, PsiType.INT);
             if (valueObject == null) {
                 return;
             }
-            final int value = valueObject.intValue();
+            int value = valueObject;
             if (expressionType.equals(PsiType.LONG)) {
                 if (value < 0 || value > 63) {
                     registerError(sign, valueObject, Boolean.TRUE);

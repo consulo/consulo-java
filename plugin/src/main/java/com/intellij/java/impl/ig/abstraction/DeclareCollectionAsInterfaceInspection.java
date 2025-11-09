@@ -25,6 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -42,7 +43,6 @@ import java.util.List;
 
 @ExtensionImpl
 public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
-
     /**
      * @noinspection PublicField
      */
@@ -52,29 +52,29 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
      */
     public boolean ignorePrivateMethodsAndFields = false;
 
-    @Override
     @Nonnull
+    @Override
     public String getID() {
         return "CollectionDeclaredAsConcreteClass";
     }
 
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.collectionDeclaredByClassDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public String buildErrorString(Object... infos) {
-        final String type = (String) infos[0];
+        String type = (String) infos[0];
         return InspectionGadgetsLocalize.collectionDeclaredByClassProblemDescriptor(type).get();
     }
 
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.collectionDeclaredByClassIgnoreLocalsOption().get(),
             "ignoreLocalVariables"
@@ -106,24 +106,24 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
         }
 
         @Override
+        @RequiredWriteAction
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            if (!(parent instanceof PsiJavaCodeReferenceElement)) {
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiJavaCodeReferenceElement referenceElement)) {
                 return;
             }
-            final StringBuilder newElementText = new StringBuilder(typeString);
-            final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
-            final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+            StringBuilder newElementText = new StringBuilder(typeString);
+            PsiReferenceParameterList parameterList = referenceElement.getParameterList();
             if (parameterList != null) {
                 newElementText.append(parameterList.getText());
             }
-            final PsiElement grandParent = parent.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiTypeElement)) {
                 return;
             }
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiTypeElement newTypeElement = factory.createTypeElementFromText(newElementText.toString(), element);
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiTypeElement newTypeElement = factory.createTypeElementFromText(newElementText.toString(), element);
             JavaCodeStyleManager.getInstance(project).shortenClassReferences(grandParent.replace(newTypeElement));
         }
     }
@@ -150,22 +150,17 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
                     }
                 }
             }
-            if (variable instanceof PsiParameter) {
-                final PsiParameter parameter = (PsiParameter) variable;
-                final PsiElement scope = parameter.getDeclarationScope();
-                if (scope instanceof PsiMethod) {
-                    if (ignorePrivateMethodsAndFields) {
-                        final PsiMethod method = (PsiMethod) scope;
-                        if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
-                            return;
-                        }
+            if (variable instanceof PsiParameter parameter) {
+                if (parameter.getDeclarationScope() instanceof PsiMethod method) {
+                    if (ignorePrivateMethodsAndFields && method.isPrivate()) {
+                        return;
                     }
                 }
                 else if (ignoreLocalVariables) {
                     return;
                 }
             }
-            final PsiType type = variable.getType();
+            PsiType type = variable.getType();
             if (!CollectionUtils.isConcreteCollectionClass(type) || LibraryUtil.isOverrideOfLibraryMethodParameter(variable)) {
                 return;
             }
@@ -176,13 +171,13 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
-            if (ignorePrivateMethodsAndFields && method.hasModifierProperty(PsiModifier.PRIVATE)) {
+            if (ignorePrivateMethodsAndFields && method.isPrivate()) {
                 return;
             }
             if (isOnTheFly() && DeclarationSearchUtils.isTooExpensiveToSearch(method, false)) {
                 return;
             }
-            final PsiType type = method.getReturnType();
+            PsiType type = method.getReturnType();
             if (!CollectionUtils.isConcreteCollectionClass(type) || LibraryUtil.isOverrideOfLibraryMethod(method)) {
                 return;
             }
@@ -194,33 +189,33 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
             if (typeElement == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement reference = typeElement.getInnermostComponentReferenceElement();
+            PsiJavaCodeReferenceElement reference = typeElement.getInnermostComponentReferenceElement();
             if (reference == null) {
                 return;
             }
-            final PsiElement nameElement = reference.getReferenceNameElement();
+            PsiElement nameElement = reference.getReferenceNameElement();
             if (nameElement == null) {
                 return;
             }
-            final Collection<PsiClass> weaklings = WeakestTypeFinder.calculateWeakestClassesNecessary(variable, false, true);
+            Collection<PsiClass> weaklings = WeakestTypeFinder.calculateWeakestClassesNecessary(variable, false, true);
             if (weaklings.isEmpty()) {
                 return;
             }
-            final PsiClassType javaLangObject = PsiType.getJavaLangObject(nameElement.getManager(), nameElement.getResolveScope());
-            final List<PsiClass> weaklingList = new ArrayList<>(weaklings);
-            final PsiClass objectClass = javaLangObject.resolve();
+            PsiClassType javaLangObject = PsiType.getJavaLangObject(nameElement.getManager(), nameElement.getResolveScope());
+            List<PsiClass> weaklingList = new ArrayList<>(weaklings);
+            PsiClass objectClass = javaLangObject.resolve();
             weaklingList.remove(objectClass);
             if (weaklingList.isEmpty()) {
-                final String typeText = type.getCanonicalText();
-                final String interfaceText = CollectionUtils.getInterfaceForClass(typeText);
+                String typeText = type.getCanonicalText();
+                String interfaceText = CollectionUtils.getInterfaceForClass(typeText);
                 if (interfaceText == null) {
                     return;
                 }
                 registerError(nameElement, interfaceText);
             }
             else {
-                final PsiClass weakling = weaklingList.get(0);
-                final String qualifiedName = weakling.getQualifiedName();
+                PsiClass weakling = weaklingList.get(0);
+                String qualifiedName = weakling.getQualifiedName();
                 registerError(nameElement, qualifiedName);
             }
         }

@@ -21,13 +21,13 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArrayEqualsInspection extends BaseInspection {
@@ -50,12 +50,9 @@ public class ArrayEqualsInspection extends BaseInspection {
 
     @Override
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiArrayType type = (PsiArrayType) infos[0];
-        if (type != null) {
-            final PsiType componentType = type.getComponentType();
-            if (componentType instanceof PsiArrayType) {
-                return new ArrayEqualsFix(true);
-            }
+        PsiArrayType type = (PsiArrayType) infos[0];
+        if (type != null && type.getComponentType() instanceof PsiArrayType) {
+            return new ArrayEqualsFix(true);
         }
         return new ArrayEqualsFix(false);
     }
@@ -68,6 +65,7 @@ public class ArrayEqualsInspection extends BaseInspection {
         }
 
         @Nonnull
+        @Override
         public LocalizeValue getName() {
             return deepEquals
                 ? InspectionGadgetsLocalize.replaceWithArraysDeepEquals()
@@ -75,20 +73,20 @@ public class ArrayEqualsInspection extends BaseInspection {
         }
 
         @Override
-        public void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
+        @RequiredWriteAction
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
+            PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
             assert expression != null;
-            final PsiMethodCallExpression call = (PsiMethodCallExpression) expression.getParent();
-            final PsiExpression qualifier = expression.getQualifierExpression();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) expression.getParent();
+            PsiExpression qualifier = expression.getQualifierExpression();
             assert qualifier != null;
-            final String qualifierText = qualifier.getText();
+            String qualifierText = qualifier.getText();
             assert call != null;
-            final PsiExpressionList argumentList = call.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
-            final String argumentText = arguments[0].getText();
-            @NonNls final StringBuilder newExpressionText = new StringBuilder();
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
+            String argumentText = arguments[0].getText();
+            StringBuilder newExpressionText = new StringBuilder();
             if (deepEquals) {
                 newExpressionText.append("java.util.Arrays.deepEquals(");
             }
@@ -110,39 +108,26 @@ public class ArrayEqualsInspection extends BaseInspection {
 
     private static class ArrayEqualsVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
-        ) {
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
-                expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.EQUALS.equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            if (argument == null) {
+            PsiExpression argument = arguments[0];
+            if (argument == null || !(argument.getType() instanceof PsiArrayType)) {
                 return;
             }
-            final PsiType argumentType = argument.getType();
-            if (!(argumentType instanceof PsiArrayType)) {
-                return;
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null && qualifier.getType() instanceof PsiArrayType arrayType) {
+                registerMethodCallError(expression, arrayType);
             }
-            final PsiExpression qualifier =
-                methodExpression.getQualifierExpression();
-            if (qualifier == null) {
-                return;
-            }
-            final PsiType qualifierType = qualifier.getType();
-            if (!(qualifierType instanceof PsiArrayType)) {
-                return;
-            }
-            registerMethodCallError(expression, qualifierType);
         }
     }
 }

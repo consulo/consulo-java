@@ -7,68 +7,79 @@ import consulo.configurable.ConfigurableBuilderState;
 import consulo.configurable.UnnamedConfigurable;
 import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.InspectionToolState;
-import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
 import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
- * @since 25/03/2023
+ * @since 2023-03-25
  */
-public class DataFlowInspectionState extends DataFlowInspectionStateBase implements InspectionToolState<DataFlowInspectionState>
-{
-	@Nullable
-	@Override
-	public UnnamedConfigurable createConfigurable()
-	{
-		ConfigurableBuilder<ConfigurableBuilderState> builder = ConfigurableBuilder.newBuilder();
-		builder.checkBox(JavaInspectionsLocalize.inspectionDataFlowNullableQuickfixOption(),
-				() -> SUGGEST_NULLABLE_ANNOTATIONS,
-				b -> SUGGEST_NULLABLE_ANNOTATIONS = b);
+public class DataFlowInspectionState extends DataFlowInspectionStateBase implements InspectionToolState<DataFlowInspectionState> {
+    @Nullable
+    @Override
+    public UnnamedConfigurable createConfigurable() {
+        ConfigurableBuilder<ConfigurableBuilderState> builder = ConfigurableBuilder.newBuilder();
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowNullableQuickfixOption(),
+            () -> SUGGEST_NULLABLE_ANNOTATIONS,
+            b -> SUGGEST_NULLABLE_ANNOTATIONS = b
+        );
 
-		builder.checkBox(JavaInspectionsLocalize.inspectionDataFlowTrueAssertsOption(),
-				() -> DONT_REPORT_TRUE_ASSERT_STATEMENTS,
-				b -> DONT_REPORT_TRUE_ASSERT_STATEMENTS = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowTrueAssertsOption(),
+            () -> DONT_REPORT_TRUE_ASSERT_STATEMENTS,
+            b -> DONT_REPORT_TRUE_ASSERT_STATEMENTS = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Ignore assert statements"),
-				() -> IGNORE_ASSERT_STATEMENTS,
-				b -> IGNORE_ASSERT_STATEMENTS = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowIgnoreAssertStatements(),
+            () -> IGNORE_ASSERT_STATEMENTS,
+            b -> IGNORE_ASSERT_STATEMENTS = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Warn when reading a value guaranteed to be constant"),
-				() -> REPORT_CONSTANT_REFERENCE_VALUES,
-				b -> REPORT_CONSTANT_REFERENCE_VALUES = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowReportConstantReferenceValues(),
+            () -> REPORT_CONSTANT_REFERENCE_VALUES,
+            b -> REPORT_CONSTANT_REFERENCE_VALUES = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Treat non-annotated members and parameters as @Nullable"),
-				() -> TREAT_UNKNOWN_MEMBERS_AS_NULLABLE,
-				b -> TREAT_UNKNOWN_MEMBERS_AS_NULLABLE = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowTreatNonAnnotatedMembersAndParametersAsNullable(),
+            () -> TREAT_UNKNOWN_MEMBERS_AS_NULLABLE,
+            b -> TREAT_UNKNOWN_MEMBERS_AS_NULLABLE = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Report not-null required parameter with null-literal argument usages"),
-				() -> REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER,
-				b -> REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowReportNotNullRequiredParameterWithNullLiteralArgumentUsages(),
+            () -> REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER,
+            b -> REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Report nullable methods that always return a non-null value"),
-				() -> REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL,
-				b -> REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowReportNullableMethodsThatAlwaysReturnANonNullValue(),
+            () -> REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL,
+            b -> REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL = b
+        );
 
-		builder.checkBox(LocalizeValue.localizeTODO("Report problems that happen only on some code paths"),
-				() -> REPORT_UNSOUND_WARNINGS,
-				b -> REPORT_UNSOUND_WARNINGS = b);
+        builder.checkBox(
+            JavaInspectionsLocalize.inspectionDataFlowReportProblemsThatHappenOnlyOnSomeCodePaths(),
+            () -> REPORT_UNSOUND_WARNINGS,
+            b -> REPORT_UNSOUND_WARNINGS = b
+        );
 
-		builder.component(() -> NullableNotNullDialog.createConfigureAnnotationsButton());
-		return builder.buildUnnamed();
-	}
+        builder.component(NullableNotNullDialog::createConfigureAnnotationsButton);
+        return builder.buildUnnamed();
+    }
 
-	@Nullable
-	@Override
-	public DataFlowInspectionState getState()
-	{
-		return this;
-	}
+    @Nullable
+    @Override
+    public DataFlowInspectionState getState() {
+        return this;
+    }
 
-	@Override
-	public void loadState(DataFlowInspectionState state)
-	{
-		XmlSerializerUtil.copyBean(state, this);
-	}
+    @Override
+    public void loadState(DataFlowInspectionState state) {
+        XmlSerializerUtil.copyBean(state, this);
+    }
 }

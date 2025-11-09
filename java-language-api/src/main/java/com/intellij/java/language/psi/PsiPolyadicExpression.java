@@ -21,15 +21,15 @@ import consulo.language.ast.IElementType;
 import jakarta.annotation.Nullable;
 
 /**
- * User: cdr
+ * @author cdr
  */
 public interface PsiPolyadicExpression extends PsiExpression {
-  @Nonnull
-  PsiExpression[] getOperands();
+    @Nonnull
+    PsiExpression[] getOperands();
 
-  @Nonnull
-  IElementType getOperationTokenType();
+    @Nonnull
+    IElementType getOperationTokenType();
 
-  @Nullable
-  PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand);
+    @Nullable
+    PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand);
 }

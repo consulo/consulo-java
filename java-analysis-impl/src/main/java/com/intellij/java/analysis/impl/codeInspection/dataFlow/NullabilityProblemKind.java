@@ -223,7 +223,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
         }
         PsiElement parent = context.getParent();
         if (parent instanceof PsiReferenceExpression refExpr) {
-            if (refExpr.resolve() instanceof PsiMember member && member.hasModifierProperty(PsiModifier.STATIC)) {
+            if (refExpr.resolve() instanceof PsiMember member && member.isStatic()) {
                 return null;
             }
             if (parent.getParent() instanceof PsiMethodCallExpression methodCall) {
@@ -400,7 +400,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
                 }
                 if (nullability == Nullability.UNKNOWN && lho instanceof PsiReferenceExpression lhoRefExpr) {
                     PsiField field = ObjectUtil.tryCast(lhoRefExpr.resolve(), PsiField.class);
-                    if (field != null && !field.hasModifierProperty(PsiModifier.FINAL)) {
+                    if (field != null && !field.isFinal()) {
                         return assigningToNonAnnotatedField.problem(context, expression);
                     }
                 }
@@ -573,17 +573,17 @@ public final class NullabilityProblemKind<T extends PsiElement> {
         }
 
         @Nonnull
-        public String getMessage(Map<PsiExpression, DataFlowInspectionBase.ConstantResult> expressions) {
+        public LocalizeValue getMessage(Map<PsiExpression, DataFlowInspectionBase.ConstantResult> expressions) {
             if (myKind.myAlwaysNullMessage == null || myKind.myNormalMessage == null) {
                 throw new IllegalStateException("This problem kind has no message associated: " + myKind);
             }
             PsiExpression expression = PsiUtil.skipParenthesizedExprDown(getDereferencedExpression());
             if (expression != null) {
                 if (ExpressionUtils.isNullLiteral(expression) || expressions.get(expression) == DataFlowInspectionBase.ConstantResult.NULL) {
-                    return myKind.myAlwaysNullMessage.get();
+                    return myKind.myAlwaysNullMessage;
                 }
             }
-            return myKind.myNormalMessage.get();
+            return myKind.myNormalMessage;
         }
 
         @Nonnull
@@ -600,8 +600,8 @@ public final class NullabilityProblemKind<T extends PsiElement> {
                 return false;
             }
             NullabilityProblem<?> problem = (NullabilityProblem<?>)o;
-            return myKind.equals(problem.myKind) && myAnchor.equals(problem.myAnchor) &&
-                Objects.equals(myDereferencedExpression, problem.myDereferencedExpression);
+            return myKind.equals(problem.myKind) && myAnchor.equals(problem.myAnchor)
+                && Objects.equals(myDereferencedExpression, problem.myDereferencedExpression);
         }
 
         @Override

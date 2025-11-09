@@ -68,7 +68,11 @@ public class DataFlowInspection extends DataFlowInspectionBase {
     }
 
     @Override
-    protected LocalQuickFix[] createConditionalAssignmentFixes(boolean evaluatesToTrue, PsiAssignmentExpression assignment, final boolean onTheFly) {
+    protected LocalQuickFix[] createConditionalAssignmentFixes(
+        boolean evaluatesToTrue,
+        PsiAssignmentExpression assignment,
+        boolean onTheFly
+    ) {
         IElementType op = assignment.getOperationTokenType();
         boolean toRemove = op == JavaTokenType.ANDEQ && !evaluatesToTrue || op == JavaTokenType.OREQ && evaluatesToTrue;
         if (toRemove && !onTheFly) {
@@ -94,13 +98,18 @@ public class DataFlowInspection extends DataFlowInspectionBase {
     }
 
     @Override
+    @RequiredReadAction
     protected LocalQuickFix createMutabilityViolationFix(PsiElement violation, boolean onTheFly) {
         return WrapWithMutableCollectionFix.createFix(violation, onTheFly);
     }
 
     @Nullable
     @Override
-    protected LocalQuickFix createExplainFix(PsiExpression anchor, TrackingRunner.DfaProblemType problemType, DataFlowInspectionStateBase state) {
+    protected LocalQuickFix createExplainFix(
+        PsiExpression anchor,
+        TrackingRunner.DfaProblemType problemType,
+        DataFlowInspectionStateBase state
+    ) {
         return new FindDfaProblemCauseFix(state.TREAT_UNKNOWN_MEMBERS_AS_NULLABLE, state.IGNORE_ASSERT_STATEMENTS, anchor, problemType);
     }
 
@@ -116,19 +125,19 @@ public class DataFlowInspection extends DataFlowInspectionBase {
     }
 
     @Override
+    @RequiredReadAction
     protected LocalQuickFixOnPsiElement createSimplifyBooleanFix(PsiElement element, boolean value) {
-        if (!(element instanceof PsiExpression)) {
+        if (!(element instanceof PsiExpression expression)) {
             return null;
         }
         if (PsiTreeUtil.findChildOfType(element, PsiAssignmentExpression.class) != null) {
             return null;
         }
 
-        final PsiExpression expression = (PsiExpression) element;
         while (element.getParent() instanceof PsiExpression) {
             element = element.getParent();
         }
-        final SimplifyBooleanExpressionFix fix = new SimplifyBooleanExpressionFix(expression, value);
+        SimplifyBooleanExpressionFix fix = new SimplifyBooleanExpressionFix(expression, value);
         // simplify intention already active
         if (!fix.isAvailable() || SimplifyBooleanExpressionFix.canBeSimplified((PsiExpression) element)) {
             return null;
@@ -138,7 +147,7 @@ public class DataFlowInspection extends DataFlowInspectionBase {
 
     @RequiredReadAction
     private static boolean isVolatileFieldReference(PsiExpression qualifier) {
-        PsiElement target = qualifier instanceof PsiReferenceExpression referenceExpression ? referenceExpression.resolve() : null;
+        PsiElement target = qualifier instanceof PsiReferenceExpression ref ? ref.resolve() : null;
         return target instanceof PsiField field && field.hasModifierProperty(PsiModifier.VOLATILE);
     }
 
@@ -155,18 +164,22 @@ public class DataFlowInspection extends DataFlowInspectionBase {
 
     @Override
     protected LocalQuickFix createRemoveAssignmentFix(PsiAssignmentExpression assignment) {
-        if (assignment == null || assignment.getRExpression() == null || !(assignment.getParent() instanceof PsiExpressionStatement)) {
-            return null;
+        if (assignment != null && assignment.getRExpression() != null
+            && assignment.getParent() instanceof PsiExpressionStatement exprStmt) {
+            return new DeleteSideEffectsAwareFix(exprStmt, assignment.getRExpression(), true);
         }
-        return new DeleteSideEffectsAwareFix((PsiStatement) assignment.getParent(), assignment.getRExpression(), true);
+        return null;
     }
 
-    @Override
     @Nonnull
-    protected List<LocalQuickFix> createCastFixes(PsiTypeCastExpression castExpression,
-                                                  PsiType realType,
-                                                  boolean onTheFly,
-                                                  boolean alwaysFails) {
+    @Override
+    @RequiredReadAction
+    protected List<LocalQuickFix> createCastFixes(
+        PsiTypeCastExpression castExpression,
+        PsiType realType,
+        boolean onTheFly,
+        boolean alwaysFails
+    ) {
         List<LocalQuickFix> fixes = new ArrayList<>();
         PsiExpression operand = castExpression.getOperand();
         PsiTypeElement typeElement = castExpression.getCastType();
@@ -198,12 +211,18 @@ public class DataFlowInspection extends DataFlowInspectionBase {
         return fixes;
     }
 
-    @Override
     @Nonnull
-    protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly, DataFlowInspectionStateBase state) {
+    @Override
+    @RequiredReadAction
+    protected List<LocalQuickFix> createNPEFixes(
+        PsiExpression qualifier,
+        PsiExpression expression,
+        boolean onTheFly,
+        DataFlowInspectionStateBase state
+    ) {
         qualifier = PsiUtil.deparenthesizeExpression(qualifier);
 
-        final List<LocalQuickFix> fixes = new SmartList<>();
+        List<LocalQuickFix> fixes = new SmartList<>();
         if (qualifier == null || expression == null) {
             return fixes;
         }
@@ -216,8 +235,8 @@ public class DataFlowInspection extends DataFlowInspectionBase {
             }
             else if (!ExpressionUtils.isNullLiteral(qualifier) && !SideEffectChecker.mayHaveSideEffects(qualifier)) {
                 String suffix = " != null";
-                if (PsiUtil.getLanguageLevel(qualifier).isAtLeast(LanguageLevel.JDK_1_4) &&
-                    RefactoringUtil.getParentStatement(expression, false) != null) {
+                if (PsiUtil.getLanguageLevel(qualifier).isAtLeast(LanguageLevel.JDK_1_4)
+                    && RefactoringUtil.getParentStatement(expression, false) != null) {
                     String replacement = ParenthesesUtils.getText(qualifier, ParenthesesUtils.EQUALITY_PRECEDENCE) + suffix;
                     fixes.add(new AddAssertStatementFix(replacement));
                 }
