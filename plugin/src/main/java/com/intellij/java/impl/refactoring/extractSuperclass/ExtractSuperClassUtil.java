@@ -68,7 +68,7 @@ public class ExtractSuperClassUtil {
     assert subClassExtends != null: subclass;
     copyPsiReferenceList(subClassExtends, superclass.getExtendsList());
 
-    // create constructors if neccesary
+    // create constructors if necessary
     PsiMethod[] constructors = getCalledBaseConstructors(subclass);
     if (constructors.length > 0) {
       createConstructorsByPattern(project, superclass, constructors);

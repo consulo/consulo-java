@@ -58,7 +58,7 @@ public class BoundsParser extends SignatureParser{
 
       super.parseClassTypeSignature(it, buf);
 
-      final String qName = convertToQalifiedName(buf.substring(start + 1, buf.length() - 1));
+      final String qName = convertToQualifiedName(buf.substring(start + 1, buf.length() - 1));
       myInterfaceBounds.add(qName);
     }
     else {
@@ -66,7 +66,7 @@ public class BoundsParser extends SignatureParser{
     }
   }
 
-  private static String convertToQalifiedName(String ifaceSignature) {
+  private static String convertToQualifiedName(String ifaceSignature) {
     ifaceSignature = ifaceSignature.replaceAll("<.*>", "");
     return ifaceSignature.replace('/', '.');
   }

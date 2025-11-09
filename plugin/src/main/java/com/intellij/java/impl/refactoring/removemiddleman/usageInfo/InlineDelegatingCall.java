@@ -28,15 +28,15 @@ public class InlineDelegatingCall extends FixableUsageInfo {
   private final PsiMethodCallExpression expression;
   private final String myAccess;
   private final String delegatingName;
-  private final int[] paramaterPermutation;
+  private final int[] parameterPermutation;
 
   public InlineDelegatingCall(PsiMethodCallExpression expression,
-                              int[] paramaterPermutation,
+                              int[] parameterPermutation,
                               String access,
                               String delegatingName) {
     super(expression);
     this.expression = expression;
-    this.paramaterPermutation = paramaterPermutation;
+    this.parameterPermutation = parameterPermutation;
     myAccess = access;
     this.delegatingName = delegatingName;
   }
@@ -55,7 +55,7 @@ public class InlineDelegatingCall extends FixableUsageInfo {
     assert argumentList != null;
     final PsiExpression[] args = argumentList.getExpressions();
     boolean first = true;
-    for (int i : paramaterPermutation) {
+    for (int i : parameterPermutation) {
       if (!first) {
         replacementText.append(", ");
       }

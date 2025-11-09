@@ -71,7 +71,7 @@ public class AnyExceptionBreakpoint extends ExceptionBreakpoint
 	@Override
 	public void processClassPrepare(DebugProcess debugProcess, ReferenceType refType)
 	{
-		// should be emty - does not make sense for this breakpoint
+		// should be empty - does not make sense for this breakpoint
 	}
 
 	@Override

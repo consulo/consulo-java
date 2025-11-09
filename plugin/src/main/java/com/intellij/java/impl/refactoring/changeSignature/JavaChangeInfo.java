@@ -52,7 +52,7 @@ public interface JavaChangeInfo extends ChangeInfo {
 
   boolean isRetainsVarargs();
 
-  boolean isObtainsVarags();
+  boolean isObtainsVarargs();
 
   boolean isArrayToVarargs();
 

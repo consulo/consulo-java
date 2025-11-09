@@ -24,7 +24,7 @@ final class MethodHierarchyUtil {
         if (baseMethod == null) {
             return null; // base method is invalid
         }
-        if (cannotBeOverridding(baseMethod)) {
+        if (cannotBeOverriding(baseMethod)) {
             return null;
         }
         /*if (!checkBases) return MethodSignatureUtil.findMethodBySignature(aClass, signature, false);*/
@@ -33,7 +33,7 @@ final class MethodHierarchyUtil {
         return signature == null ? null : signature.getMethod();*/
     }
 
-    private static boolean cannotBeOverridding(PsiMethod method) {
+    private static boolean cannotBeOverriding(PsiMethod method) {
         PsiClass parentClass = method.getContainingClass();
         return parentClass == null || method.isConstructor() || method.isStatic() || method.isPrivate();
     }

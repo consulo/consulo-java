@@ -74,8 +74,8 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
 
         if (!DumbService.getInstance(element.getProject()).isDumb()) {
           final PsiManager manager = psiClass.getManager();
-          final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
-          final boolean isException = javaLangTrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangTrowable, true);
+          final PsiClass javaLangThrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
+          final boolean isException = javaLangThrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangThrowable, true);
           if (isException) {
             iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractException : AllIcons.Nodes.ExceptionClass);
           }

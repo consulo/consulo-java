@@ -24,9 +24,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.annotation.Nonnull;
 
 /**
- * User: Irina.Chernushina
- * Date: 8/5/11
- * Time: 7:46 PM
+ * @author Irina.Chernushina
+ * @since 2011-08-05
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ExceptionFilterFactory {

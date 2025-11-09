@@ -122,7 +122,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
       return null;
     }
     if (!this.equals(fromMethod)) {
-      if (!createParametersInfo(fromMethod.newParms)) {
+      if (!createParametersInfo(fromMethod.newParams)) {
         return null;
       }
       if ((fromMethod.newReturnType != null && getNewReturnType() == null) || (fromMethod.newReturnType == null && getNewReturnType() != null) || (fromMethod.newReturnType != null &&
@@ -135,7 +135,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
       }
 
       try {
-        final DetectedJavaChangeInfo javaChangeInfo = new DetectedJavaChangeInfo(fromMethod.getNewVisibility(), getMethod(), fromMethod.newReturnType, fromMethod.newParms, getNewExceptions()
+        final DetectedJavaChangeInfo javaChangeInfo = new DetectedJavaChangeInfo(fromMethod.getNewVisibility(), getMethod(), fromMethod.newReturnType, fromMethod.newParams, getNewExceptions()
             , method.getName(), getOldName(), delegate) {
           @Override
           protected void fillOldParams(PsiMethod method) {
@@ -150,8 +150,8 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
               }
             }
 
-            for (int i = 0, length = Math.min(newParms.length, oldParameterNames.length); i < length; i++) {
-              ParameterInfoImpl parm = newParms[i];
+            for (int i = 0, length = Math.min(newParams.length, oldParameterNames.length); i < length; i++) {
+              ParameterInfoImpl parm = newParams[i];
               if (parm.getName().equals(oldParameterNames[i]) && parm.getTypeText().equals(oldParameterTypes[i])) {
                 parm.oldParameterIndex = i;
               }

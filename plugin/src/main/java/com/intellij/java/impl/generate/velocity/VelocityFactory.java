@@ -30,11 +30,11 @@ public class VelocityFactory
 {
 	private static class Holder
 	{
-		private static final VelocityEngine engine = newVeloictyEngine();
+		private static final VelocityEngine engine = newVelocityEngine();
 	}
 
 	/**
-	 * Privte constructor.
+	 * Private constructor.
 	 */
 	private VelocityFactory()
 	{
@@ -47,7 +47,7 @@ public class VelocityFactory
 	 *
 	 * @return a new velocity engine that is initialized.
 	 */
-	private static VelocityEngine newVeloictyEngine()
+	private static VelocityEngine newVelocityEngine()
 	{
 		Properties prop = new Properties();
 		prop.setProperty("runtime.log.logsystem.log4j.category", "GenerateToString");
@@ -59,7 +59,7 @@ public class VelocityFactory
 	}
 
 	/**
-	 * Get's a shared instance of the VelocityEngine.
+	 * Gets a shared instance of the VelocityEngine.
 	 * <p/>
 	 * The engine is initialized and outputs its logging to IDEA logging.
 	 *

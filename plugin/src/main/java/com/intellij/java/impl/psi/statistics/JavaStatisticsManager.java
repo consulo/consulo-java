@@ -38,21 +38,21 @@ public abstract class JavaStatisticsManager {
 
   private static StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
                                                       final String propertyName,
-                                                      final String canonialTypeText) {
-    String key1 = getVariableNameUseKey1(propertyName, canonialTypeText);
+                                                      final String canonicalTypeText) {
+    String key1 = getVariableNameUseKey1(propertyName, canonicalTypeText);
     String key2 = getVariableNameUseKey2(variableKind, name);
     return new StatisticsInfo(key1, key2);
   }
 
-  private static String getVariableNameUseKey1(String propertyName, String canonialTypeText) {
+  private static String getVariableNameUseKey1(String propertyName, String canonicalTypeText) {
     @NonNls StringBuilder buffer = new StringBuilder();
     buffer.append("variableName#");
     if (propertyName != null) {
       buffer.append(propertyName);
     }
     buffer.append("#");
-    if (canonialTypeText != null) {
-      buffer.append(canonialTypeText);
+    if (canonicalTypeText != null) {
+      buffer.append(canonicalTypeText);
     }
     return buffer.toString();
   }
@@ -73,8 +73,8 @@ public abstract class JavaStatisticsManager {
     incVariableNameUseCount(name, variableKind, propertyName, type == null ? null : type.getCanonicalText());
   }
 
-  public static void incVariableNameUseCount(String name, VariableKind variableKind, String propertyName, String canonialTypeText) {
-    createVariableUseInfo(name, variableKind, propertyName, canonialTypeText).incUseCount();
+  public static void incVariableNameUseCount(String name, VariableKind variableKind, String propertyName, String canonicalTypeText) {
+    createVariableUseInfo(name, variableKind, propertyName, canonicalTypeText).incUseCount();
   }
 
   @Nullable

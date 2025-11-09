@@ -72,7 +72,7 @@ public class FunctionalInterfaceParameterizationUtil {
   }
 
   /**
-   * 18.5.3. Functional Interface Parameterization Inference
+   * 18.5.3. Functional Interface Parametrization Inference
    */
   private static PsiType getFunctionalTypeExplicit(PsiType psiClassType, PsiLambdaExpression expr, boolean performFinalCheck) {
     final PsiParameter[] lambdaParams = expr.getParameterList().getParameters();

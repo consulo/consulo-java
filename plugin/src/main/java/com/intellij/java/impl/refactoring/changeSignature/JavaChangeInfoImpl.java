@@ -46,9 +46,9 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
   String[] oldParameterTypes;
   final String newName;
   final CanonicalTypes.Type newReturnType;
-  final ParameterInfoImpl[] newParms;
+  final ParameterInfoImpl[] newParams;
   ThrownExceptionInfo[] newExceptions;
-  final boolean[] toRemoveParm;
+  final boolean[] toRemoveParam;
   boolean isVisibilityChanged = false;
   boolean isNameChanged = false;
   boolean isReturnTypeChanged = false;
@@ -60,7 +60,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
   boolean isPropagationEnabled = true;
   final boolean wasVararg;
   final boolean retainsVarargs;
-  final boolean obtainsVarags;
+  final boolean obtainsVarargs;
   final boolean arrayToVarargs;
   PsiIdentifier newNameIdentifier;
 //  PsiType newTypeElement;
@@ -77,12 +77,12 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                     PsiMethod method,
                     String newName,
                     CanonicalTypes.Type newType,
-                    @Nonnull ParameterInfoImpl[] newParms,
+                    @Nonnull ParameterInfoImpl[] newParams,
                     ThrownExceptionInfo[] newExceptions,
                     boolean generateDelegate,
                     Set<PsiMethod> propagateParametersMethods,
                     Set<PsiMethod> propagateExceptionsMethods) {
-    this(newVisibility, method, newName, newType, newParms, newExceptions, generateDelegate, propagateParametersMethods,
+    this(newVisibility, method, newName, newType, newParams, newExceptions, generateDelegate, propagateParametersMethods,
          propagateExceptionsMethods, method.getName());
   }
 
@@ -94,7 +94,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                             PsiMethod method,
                             String newName,
                             CanonicalTypes.Type newType,
-                            @Nonnull ParameterInfoImpl[] newParms,
+                            @Nonnull ParameterInfoImpl[] newParams,
                             ThrownExceptionInfo[] newExceptions,
                             boolean generateDelegate,
                             Set<PsiMethod> propagateParametersMethods,
@@ -104,7 +104,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     this.method = method;
     this.newName = newName;
     newReturnType = newType;
-    this.newParms = newParms;
+    this.newParams = newParams;
     wasVararg = method.isVarArgs();
 
     this.isGenerateDelegate =generateDelegate;
@@ -125,22 +125,22 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
 
     isNameChanged = !newName.equals(this.oldName);
 
-    if (oldParameterNames.length != newParms.length){
+    if (oldParameterNames.length != newParams.length){
       isParameterSetOrOrderChanged = true;
     }
     else {
-      for(int i = 0; i < newParms.length; i++){
-        ParameterInfoImpl parmInfo = newParms[i];
+      for(int i = 0; i < newParams.length; i++){
+        ParameterInfoImpl paramInfo = newParams[i];
 
-        if (i != parmInfo.oldParameterIndex){
+        if (i != paramInfo.oldParameterIndex){
           isParameterSetOrOrderChanged = true;
           break;
         }
-        if (!parmInfo.getName().equals(oldParameterNames[i])){
+        if (!paramInfo.getName().equals(oldParameterNames[i])){
           isParameterNamesChanged = true;
         }
         try {
-          if (!parmInfo.getTypeText().equals(oldParameterTypes[i])){
+          if (!paramInfo.getTypeText().equals(oldParameterTypes[i])){
             isParameterTypesChanged = true;
           }
         }
@@ -150,21 +150,21 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
       }
     }
 
-    setupPropagationEnabled(method.getParameterList().getParameters(), newParms);
+    setupPropagationEnabled(method.getParameterList().getParameters(), newParams);
 
     setupExceptions(newExceptions, method);
 
-    toRemoveParm = new boolean[oldParameterNames.length];
-    Arrays.fill(toRemoveParm, true);
-    for (ParameterInfoImpl info : newParms) {
+    toRemoveParam = new boolean[oldParameterNames.length];
+    Arrays.fill(toRemoveParam, true);
+    for (ParameterInfoImpl info : newParams) {
       if (info.oldParameterIndex < 0) continue;
-      toRemoveParm[info.oldParameterIndex] = false;
+      toRemoveParam[info.oldParameterIndex] = false;
     }
 
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-    defaultValues = new PsiExpression[newParms.length];
-    for(int i = 0; i < newParms.length; i++){
-      ParameterInfoImpl info = newParms[i];
+    defaultValues = new PsiExpression[newParams.length];
+    for(int i = 0; i < newParams.length; i++){
+      ParameterInfoImpl info = newParams[i];
       if (info.oldParameterIndex < 0 && !info.isVarargType()){
         if (StringUtil.isEmpty(info.defaultValue)) continue;
         try{
@@ -176,17 +176,17 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
       }
     }
 
-    if (this.newParms.length == 0) {
+    if (this.newParams.length == 0) {
       retainsVarargs = false;
-      obtainsVarags = false;
+      obtainsVarargs = false;
       arrayToVarargs = false;
     }
     else {
-      final ParameterInfoImpl lastNewParm = this.newParms[this.newParms.length - 1];
-      obtainsVarags = lastNewParm.isVarargType();
-      retainsVarargs = lastNewParm.oldParameterIndex >= 0 && obtainsVarags;
+      final ParameterInfoImpl lastNewParam = this.newParams[this.newParams.length - 1];
+      obtainsVarargs = lastNewParam.isVarargType();
+      retainsVarargs = lastNewParam.oldParameterIndex >= 0 && obtainsVarargs;
       if (retainsVarargs) {
-        arrayToVarargs = oldParameterTypes[lastNewParm.oldParameterIndex].endsWith("[]");
+        arrayToVarargs = oldParameterTypes[lastNewParam.oldParameterIndex].endsWith("[]");
       }
       else {
         arrayToVarargs = false;
@@ -221,7 +221,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
 
   @Nonnull
   public JavaParameterInfo[] getNewParameters() {
-    return newParms;
+    return newParams;
   }
 
   @PsiModifier.ModifierConstant
@@ -258,14 +258,14 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     isExceptionSetOrOrderChanged |= isExceptionSetChanged;
   }
 
-  protected void setupPropagationEnabled(final PsiParameter[] parameters, final ParameterInfoImpl[] newParms) {
-    if (parameters.length != newParms.length) {
+  protected void setupPropagationEnabled(final PsiParameter[] parameters, final ParameterInfoImpl[] newParams) {
+    if (parameters.length != newParams.length) {
       isPropagationEnabled = false;
     }
     else {
       for (int i = 0; i < parameters.length; i++) {
-        final ParameterInfoImpl newParm = newParms[i];
-        if (newParm.oldParameterIndex != i) {
+        final ParameterInfoImpl newParam = newParams[i];
+        if (newParam.oldParameterIndex != i) {
           isPropagationEnabled = false;
           break;
         }
@@ -292,9 +292,9 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
 
   public ParameterInfoImpl[] getCreatedParmsInfoWithoutVarargs() {
     List<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
-    for (ParameterInfoImpl newParm : newParms) {
-      if (newParm.oldParameterIndex < 0 && !newParm.isVarargType()) {
-        result.add(newParm);
+    for (ParameterInfoImpl newParam : newParams) {
+      if (newParam.oldParameterIndex < 0 && !newParam.isVarargType()) {
+        result.add(newParam);
       }
     }
     return result.toArray(new ParameterInfoImpl[result.size()]);
@@ -303,7 +303,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
   @Nullable
   public PsiExpression getValue(int i, PsiCallExpression expr) throws IncorrectOperationException {
     if (defaultValues[i] != null) return defaultValues[i];
-    return newParms[i].getValue(expr);
+    return newParams[i].getValue(expr);
   }
 
   public boolean isVisibilityChanged() {
@@ -364,8 +364,8 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return retainsVarargs;
   }
 
-  public boolean isObtainsVarags() {
-    return obtainsVarags;
+  public boolean isObtainsVarargs() {
+    return obtainsVarargs;
   }
 
   public boolean isArrayToVarargs() {
@@ -385,7 +385,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
   }
 
   public boolean[] toRemoveParm() {
-    return toRemoveParm;
+    return toRemoveParam;
   }
 
   protected boolean checkMethodEquality() {
@@ -410,7 +410,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     if (isPropagationEnabled != that.isPropagationEnabled) return false;
     if (isReturnTypeChanged != that.isReturnTypeChanged) return false;
     if (isVisibilityChanged != that.isVisibilityChanged) return false;
-    if (obtainsVarags != that.obtainsVarags) return false;
+    if (obtainsVarargs != that.obtainsVarargs) return false;
     if (retainsVarargs != that.retainsVarargs) return false;
     if (wasVararg != that.wasVararg) return false;
     if (!Arrays.equals(defaultValues, that.defaultValues)) return false;
@@ -418,7 +418,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     if (!Arrays.equals(newExceptions, that.newExceptions)) return false;
     if (!newName.equals(that.newName)) return false;
     if (newNameIdentifier != null ? !newNameIdentifier.equals(that.newNameIdentifier) : that.newNameIdentifier != null) return false;
-    if (!Arrays.equals(newParms, that.newParms)) return false;
+    if (!Arrays.equals(newParams, that.newParams)) return false;
     if (newReturnType != null ? that.newReturnType == null || !Comparing.strEqual(newReturnType.getTypeText(), that.newReturnType.getTypeText()) : that.newReturnType != null) return false;
     if (newVisibility != null ? !newVisibility.equals(that.newVisibility) : that.newVisibility != null) return false;
     if (!oldName.equals(that.oldName)) return false;
@@ -427,7 +427,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     if (oldType != null ? !oldType.equals(that.oldType): that.oldType != null) return false;
     if (!propagateExceptionsMethods.equals(that.propagateExceptionsMethods)) return false;
     if (!propagateParametersMethods.equals(that.propagateParametersMethods)) return false;
-    if (!Arrays.equals(toRemoveParm, that.toRemoveParm)) return false;
+    if (!Arrays.equals(toRemoveParam, that.toRemoveParam)) return false;
 
     return true;
   }
@@ -444,9 +444,9 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     result = 31 * result + Arrays.hashCode(oldParameterTypes);
     result = 31 * result + newName.hashCode();
     result = 31 * result + (newReturnType != null ? newReturnType.getTypeText().hashCode() : 0);
-    result = 31 * result + Arrays.hashCode(newParms);
+    result = 31 * result + Arrays.hashCode(newParams);
     result = 31 * result + Arrays.hashCode(newExceptions);
-    result = 31 * result + Arrays.hashCode(toRemoveParm);
+    result = 31 * result + Arrays.hashCode(toRemoveParam);
     result = 31 * result + (isVisibilityChanged ? 1 : 0);
     result = 31 * result + (isNameChanged ? 1 : 0);
     result = 31 * result + (isReturnTypeChanged ? 1 : 0);
@@ -458,7 +458,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     result = 31 * result + (isPropagationEnabled ? 1 : 0);
     result = 31 * result + (wasVararg ? 1 : 0);
     result = 31 * result + (retainsVarargs ? 1 : 0);
-    result = 31 * result + (obtainsVarags ? 1 : 0);
+    result = 31 * result + (obtainsVarargs ? 1 : 0);
     result = 31 * result + (arrayToVarargs ? 1 : 0);
     result = 31 * result + (newNameIdentifier != null ? newNameIdentifier.hashCode() : 0);
     result = 31 * result + (defaultValues != null ? Arrays.hashCode(defaultValues) : 0);

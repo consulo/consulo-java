@@ -40,24 +40,24 @@ import java.util.Set;
 public abstract class RenameJavaMemberProcessor extends RenamePsiElementProcessor {
   private static final Logger LOG = Logger.getInstance(RenameJavaMemberProcessor.class);
 
-  public static void qualifyMember(PsiMember member, PsiElement occurence, String newName) throws IncorrectOperationException {
-    qualifyMember(occurence, newName, member.getContainingClass(), member.hasModifierProperty(PsiModifier.STATIC));
+  public static void qualifyMember(PsiMember member, PsiElement occurrence, String newName) throws IncorrectOperationException {
+    qualifyMember(occurrence, newName, member.getContainingClass(), member.hasModifierProperty(PsiModifier.STATIC));
   }
 
-  protected static void qualifyMember(final PsiElement occurence, final String newName, final PsiClass containingClass, final boolean isStatic)
+  protected static void qualifyMember(final PsiElement occurrence, final String newName, final PsiClass containingClass, final boolean isStatic)
       throws IncorrectOperationException {
-    PsiManager psiManager = occurence.getManager();
+    PsiManager psiManager = occurrence.getManager();
     PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
     if (isStatic) {
       PsiReferenceExpression qualified = (PsiReferenceExpression)factory.createExpressionFromText("a." + newName, null);
       qualified = (PsiReferenceExpression)CodeStyleManager.getInstance(psiManager.getProject()).reformat(qualified);
       qualified.getQualifierExpression().replace(factory.createReferenceExpression(containingClass));
-      occurence.replace(qualified);
+      occurrence.replace(qualified);
     }
     else {
-      PsiReferenceExpression qualified = createQualifiedMemberReference(occurence, newName, containingClass, isStatic);
+      PsiReferenceExpression qualified = createQualifiedMemberReference(occurrence, newName, containingClass, isStatic);
       qualified = (PsiReferenceExpression)CodeStyleManager.getInstance(psiManager.getProject()).reformat(qualified);
-      occurence.replace(qualified);
+      occurrence.replace(qualified);
     }
   }
 
