@@ -56,7 +56,7 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 			Cache newClassesCache,
 			int classId,
 			File file,
-			ThrowableComputable<byte[], IOException> bytesCompitable,
+			ThrowableComputable<byte[], IOException> bytesComputable,
 			InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException
 	{
 		Sdk jdk = JavaCompilerUtil.getSdkForCompilation(affectedModule);
@@ -70,7 +70,7 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 			return null;
 		}
 
-		byte[] bytes = bytesCompitable.compute();
+		byte[] bytes = bytesComputable.compute();
 		FailSafeClassReader reader = new FailSafeClassReader(bytes, 0, bytes.length);
 
 		assert classFinder != null;

@@ -31,13 +31,13 @@ public interface ClassReferenceVisitor {
 
   void visitReferenceExpression(PsiReferenceExpression referenceExpression);
 
-  void visitLocalVariableDeclaration(PsiLocalVariable variable, TypeOccurence occurence);
-  void visitFieldDeclaration(PsiField field, TypeOccurence occurence);
-  void visitParameterDeclaration(PsiParameter parameter, TypeOccurence occurence);
-  void visitMethodReturnType(PsiMethod method, TypeOccurence occurence);
-  void visitTypeCastExpression(PsiTypeCastExpression typeCastExpression, TypeOccurence occurence);
+  void visitLocalVariableDeclaration(PsiLocalVariable variable, TypeOccurence occurrence);
+  void visitFieldDeclaration(PsiField field, TypeOccurence occurrence);
+  void visitParameterDeclaration(PsiParameter parameter, TypeOccurence occurrence);
+  void visitMethodReturnType(PsiMethod method, TypeOccurence occurrence);
+  void visitTypeCastExpression(PsiTypeCastExpression typeCastExpression, TypeOccurence occurrence);
 
-  void visitNewExpression(PsiNewExpression newExpression, TypeOccurence occurence);
+  void visitNewExpression(PsiNewExpression newExpression, TypeOccurence occurrence);
 
   void visitOther(PsiElement ref);
 }

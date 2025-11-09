@@ -13,16 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Oct 12, 2001
- * Time: 9:40:45 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
-
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
@@ -77,6 +67,10 @@ import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
+/**
+ * @author max
+ * @since 2001-10-12
+ */
 public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTool implements OldStyleInspection {
   @Deprecated
   public boolean ADD_MAINS_TO_ENTRIES = true;
@@ -661,7 +655,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     @Override
     public void visitMethod(@Nonnull RefMethod method) {
       if (!myProcessedMethods.contains(method)) {
-        // Process class's static intitializers
+        // Process class's static initializers
         if (method.isStatic() || method.isConstructor()) {
           if (method.isConstructor()) {
             addInstantiatedClass(method.getOwnerClass());
@@ -695,7 +689,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
       ((RefClassImpl)refClass).setReachable(true);
 
       if (!alreadyActive) {
-        // Process class's static intitializers.
+        // Process class's static initializers.
         makeClassInitializersReachable(refClass);
       }
 
@@ -704,7 +698,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
     @Override
     public void visitField(@Nonnull RefField field) {
-      // Process class's static intitializers.
+      // Process class's static initializers.
       if (!field.isReachable()) {
         makeContentReachable((RefJavaElementImpl)field);
         makeClassInitializersReachable(field.getOwnerClass());

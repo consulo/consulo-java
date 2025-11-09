@@ -24,7 +24,7 @@ public interface PsiAssertStatement extends PsiStatement{
   /**
    * Returns the expression representing the asserted condition.
    *
-   * @return the asserted conditione expression, or null if the assert statement
+   * @return the asserted condition expression, or null if the assert statement
    * is incomplete.
    */
   @Nullable

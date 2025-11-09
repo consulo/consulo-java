@@ -43,6 +43,6 @@ public interface JavaBytecodeProcessor {
                           Cache newClassesCache,
                           int classId,
                           File file,
-                          ThrowableComputable<byte[], IOException> bytesCompitable,
+                          ThrowableComputable<byte[], IOException> bytesComputable,
                           InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException;
 }

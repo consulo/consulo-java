@@ -29,8 +29,8 @@ import consulo.language.util.IncorrectOperationException;
  * @author dsl
  */
 public class SafeDeletePrivatizeMethod extends SafeDeleteUsageInfo implements SafeDeleteCustomUsageInfo {
-  public SafeDeletePrivatizeMethod(PsiMethod method, PsiMethod overridenMethod) {
-    super(method, overridenMethod);
+  public SafeDeletePrivatizeMethod(PsiMethod method, PsiMethod overriddenMethod) {
+    super(method, overriddenMethod);
   }
 
   public PsiMethod getMethod() {

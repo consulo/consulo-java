@@ -23,8 +23,7 @@ import consulo.ui.image.Image;
 import jakarta.annotation.Nullable;
 
 /**
- * Created by IntelliJ IDEA.
- * User: michael.golubev
+ * @author michael.golubev
  */
 public interface DebugUIEnvironment {
   DebugEnvironment getEnvironment();

@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: dsl
- * Date: 06.05.2002
- * Time: 16:54:19
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import com.intellij.java.impl.refactoring.HelpID;
@@ -49,13 +40,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * @author dsl
+ * @since 2002-05-06
+ */
 public class IntroduceParameterDialog extends RefactoringDialog {
   private TypeSelector myTypeSelector;
   private NameSuggestionsManager myNameSuggestionsManager;
 
   private final Project myProject;
   private final List<UsageInfo> myClassMembersList;
-  private final int myOccurenceNumber;
+  private final int myOccurrenceNumber;
   private final PsiMethod myMethodToSearchFor;
   private final PsiMethod myMethodToReplaceIn;
   private final boolean myMustBeFinal;
@@ -77,7 +72,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
 
   IntroduceParameterDialog(@Nonnull Project project,
                            @Nonnull List<UsageInfo> classMembersList,
-                           PsiExpression[] occurences,
+                           PsiExpression[] occurrences,
                            PsiLocalVariable onLocalVariable,
                            PsiExpression onExpression,
                            @Nonnull NameSuggestionsGenerator generator,
@@ -90,9 +85,9 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     myPanel = new IntroduceParameterSettingsPanel(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);
     myProject = project;
     myClassMembersList = classMembersList;
-    myOccurenceNumber = occurences.length;
-    for (PsiExpression occurence : occurences) {
-      if (PsiUtil.isAccessedForWriting(occurence)) {
+    myOccurrenceNumber = occurrences.length;
+    for (PsiExpression occurrence : occurrences) {
+      if (PsiUtil.isAccessedForWriting(occurrence)) {
         myHasWriteAccess = true;
         break;
       }
@@ -199,9 +194,9 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.gridx = 0;
     gbConstraints.insets = new Insets(4, 0, 4, 8);
     gbConstraints.gridwidth = 2;
-    if (myOccurenceNumber > 1 && !myPanel.myIsInvokedOnDeclaration) {
+    if (myOccurrenceNumber > 1 && !myPanel.myIsInvokedOnDeclaration) {
       gbConstraints.gridy++;
-      myPanel.createOccurrencesCb(gbConstraints, panel, myOccurenceNumber);
+      myPanel.createOccurrencesCb(gbConstraints, panel, myOccurrenceNumber);
     }
     if(myPanel.myCbReplaceAllOccurences != null) {
       gbConstraints.insets = new Insets(0, 16, 4, 8);

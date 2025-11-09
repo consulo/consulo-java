@@ -36,9 +36,7 @@ import java.util.regex.Pattern;
 public class JavaDocUtil {
   private static final Logger LOG = Logger.getInstance(JavaDocUtil.class);
 
-  private static final
-  @NonNls
-  Pattern ourTypePattern = Pattern.compile("[ ]+[^ ^\\[^\\]]");
+  private static final Pattern ourTypePattern = Pattern.compile("[ ]+[^ ^\\[^\\]]");
 
   private JavaDocUtil() {
   }
@@ -49,22 +47,22 @@ public class JavaDocUtil {
    * @return length of the extracted reference
    */
   public static int extractReference(String text) {
-    int lparenthIndex = text.indexOf('(');
+    int lParenIndex = text.indexOf('(');
     int spaceIndex = text.indexOf(' ');
     if (spaceIndex < 0) {
       spaceIndex = text.length();
     }
-    if (lparenthIndex < 0) {
+    if (lParenIndex < 0) {
       return spaceIndex;
     } else {
-      if (spaceIndex < lparenthIndex) {
+      if (spaceIndex < lParenIndex) {
         return spaceIndex;
       }
-      int rparenthIndex = text.indexOf(')', lparenthIndex);
-      if (rparenthIndex < 0) {
-        rparenthIndex = text.length() - 1;
+      int rParenIndex = text.indexOf(')', lParenIndex);
+      if (rParenIndex < 0) {
+        rParenIndex = text.length() - 1;
       }
-      return rparenthIndex + 1;
+      return rParenIndex + 1;
     }
   }
 
@@ -124,8 +122,8 @@ public class JavaDocUtil {
 
   @Nullable
   private static PsiElement findReferencedMember(PsiClass aClass, String memberRefText, PsiElement context) {
-    int parenthIndex = memberRefText.indexOf('(');
-    if (parenthIndex < 0) {
+    int parenIndex = memberRefText.indexOf('(');
+    if (parenIndex < 0) {
       String name = memberRefText;
       PsiField field = aClass.findFieldByName(name, true);
       if (field != null) {
@@ -143,25 +141,25 @@ public class JavaDocUtil {
       }
       return null;
     } else {
-      String name = memberRefText.substring(0, parenthIndex).trim();
+      String name = memberRefText.substring(0, parenIndex).trim();
       int rparenIndex = memberRefText.lastIndexOf(')');
       if (rparenIndex == -1) {
         return null;
       }
 
-      String parmsText = memberRefText.substring(parenthIndex + 1, rparenIndex).trim();
-      StringTokenizer tokenizer = new StringTokenizer(parmsText.replaceAll("[*]", ""), ",");
+      String paramsText = memberRefText.substring(parenIndex + 1, rparenIndex).trim();
+      StringTokenizer tokenizer = new StringTokenizer(paramsText.replaceAll("[*]", ""), ",");
       PsiType[] types = new PsiType[tokenizer.countTokens()];
       int i = 0;
       PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
       while (tokenizer.hasMoreTokens()) {
-        String parmText = tokenizer.nextToken().trim();
+        String paramText = tokenizer.nextToken().trim();
         try {
-          Matcher typeMatcher = ourTypePattern.matcher(parmText);
-          String typeText = parmText;
+          Matcher typeMatcher = ourTypePattern.matcher(paramText);
+          String typeText = paramText;
 
           if (typeMatcher.find()) {
-            typeText = parmText.substring(0, typeMatcher.start());
+            typeText = paramText.substring(0, typeMatcher.start());
           }
 
           PsiType type = factory.createTypeFromText(typeText, context);
@@ -173,19 +171,19 @@ public class JavaDocUtil {
       PsiMethod[] methods = aClass.findMethodsByName(name, true);
       MethodsLoop:
       for (PsiMethod method : methods) {
-        PsiParameter[] parms = method.getParameterList().getParameters();
-        if (parms.length != types.length) {
+        PsiParameter[] params = method.getParameterList().getParameters();
+        if (params.length != types.length) {
           continue;
         }
 
-        for (int k = 0; k < parms.length; k++) {
-          PsiParameter parm = parms[k];
-          final PsiType parmType = parm.getType();
+        for (int k = 0; k < params.length; k++) {
+          PsiParameter param = params[k];
+          final PsiType paramType = param.getType();
           if (types[k] != null &&
-              !TypeConversionUtil.erasure(parmType).getCanonicalText().equals(types[k].getCanonicalText
+              !TypeConversionUtil.erasure(paramType).getCanonicalText().equals(types[k].getCanonicalText
                   ()) &&
-              !parmType.getCanonicalText().equals(types[k].getCanonicalText()) &&
-              !TypeConversionUtil.isAssignable(parmType, types[k])) {
+              !paramType.getCanonicalText().equals(types[k].getCanonicalText()) &&
+              !TypeConversionUtil.isAssignable(paramType, types[k])) {
             continue MethodsLoop;
           }
         }
@@ -193,7 +191,7 @@ public class JavaDocUtil {
         int hashIndex = memberRefText.indexOf('#', rparenIndex);
         if (hashIndex != -1) {
           int parameterNumber = Integer.parseInt(memberRefText.substring(hashIndex + 1));
-          if (parameterNumber < parms.length) {
+          if (parameterNumber < params.length) {
             return method.getParameterList().getParameters()[parameterNumber].getNavigationElement();
           }
         }
@@ -233,14 +231,14 @@ public class JavaDocUtil {
       buffer.append("#");
       buffer.append(name);
       buffer.append("(");
-      PsiParameter[] parms = method.getParameterList().getParameters();
+      PsiParameter[] params = method.getParameterList().getParameters();
       boolean spaceBeforeComma = JavaDocCodeStyle.getInstance(project).spaceBeforeComma();
       boolean spaceAfterComma = JavaDocCodeStyle.getInstance(project).spaceAfterComma();
-      for (int i = 0; i < parms.length; i++) {
-        PsiParameter parm = parms[i];
-        String typeText = TypeConversionUtil.erasure(parm.getType()).getCanonicalText();
+      for (int i = 0; i < params.length; i++) {
+        PsiParameter param = params[i];
+        String typeText = TypeConversionUtil.erasure(param.getType()).getCanonicalText();
         buffer.append(typeText);
-        if (i < parms.length - 1) {
+        if (i < params.length - 1) {
           if (spaceBeforeComma) {
             buffer.append(" ");
           }
@@ -335,18 +333,18 @@ public class JavaDocUtil {
 
   private static String getMemberLabelText(Project project, PsiManager manager, String memberText,
                                            PsiElement context) {
-    int parenthIndex = memberText.indexOf('(');
-    if (parenthIndex < 0) {
+    int parenIndex = memberText.indexOf('(');
+    if (parenIndex < 0) {
       return memberText;
     }
     if (!StringUtil.endsWithChar(memberText, ')')) {
       return memberText;
     }
-    String parms = memberText.substring(parenthIndex + 1, memberText.length() - 1);
+    String params = memberText.substring(parenIndex + 1, memberText.length() - 1);
     StringBuffer buffer = new StringBuffer();
     boolean spaceBeforeComma = JavaDocCodeStyle.getInstance(project).spaceBeforeComma();
     boolean spaceAfterComma = JavaDocCodeStyle.getInstance(project).spaceAfterComma();
-    StringTokenizer tokenizer = new StringTokenizer(parms, ",");
+    StringTokenizer tokenizer = new StringTokenizer(params, ",");
     while (tokenizer.hasMoreTokens()) {
       String param = tokenizer.nextToken().trim();
       int index1 = param.indexOf('[');
@@ -372,7 +370,7 @@ public class JavaDocUtil {
         }
       }
     }
-    return memberText.substring(0, parenthIndex + 1) + buffer.toString() + ")";
+    return memberText.substring(0, parenIndex + 1) + buffer.toString() + ")";
   }
 
   public static PsiClassType[] getImplementsList(PsiClass aClass) {

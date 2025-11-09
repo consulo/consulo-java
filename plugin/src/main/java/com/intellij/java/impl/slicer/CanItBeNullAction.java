@@ -28,7 +28,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class CanItBeNullAction  extends AnAction {
   private final SliceTreeBuilder myTreeBuilder;
-  private static final String TEXT = "Group by leaf expression nullness";
+  private static final String TEXT = "Group by leaf expression nullity";
 
   public CanItBeNullAction(SliceTreeBuilder treeBuilder) {
     super(TEXT, "Determine whether null can flow into this expression", ExecutionDebugIconGroup.breakpointBreakpointdisabled());

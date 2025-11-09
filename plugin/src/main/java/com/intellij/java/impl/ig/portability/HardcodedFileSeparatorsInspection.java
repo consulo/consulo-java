@@ -68,7 +68,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
       Pattern.compile("^[a-z][a-z0-9+\\-:]+://.*$");
 
   /**
-   * All mimetypes, see http://www.iana.org/assignments/media-types/
+   * All mime-types, see http://www.iana.org/assignments/media-types/
    */
   private static final Set<String> mimeTypes = new HashSet();
 

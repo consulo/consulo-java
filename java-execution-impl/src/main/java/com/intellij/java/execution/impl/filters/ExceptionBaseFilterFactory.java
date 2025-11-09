@@ -23,10 +23,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.annotation.Nonnull;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Irina.Chernushina
- * Date: 8/8/11
- * Time: 12:11 PM
+ * @author Irina.Chernushina
+ * @since 2011-08-08
  */
 @ExtensionImpl
 public class ExceptionBaseFilterFactory implements ExceptionFilterFactory {

@@ -43,7 +43,7 @@ public class ClassElement
 	 * Does the class implement the given interface?
 	 * <p/>
 	 * The name should <b>not</b> be the qualified name.
-	 * <br/>The interface name can also be a comma seperated list to test against several interfaces. Will return true if the class implement just one of the interfaces.
+	 * <br/>The interface name can also be a comma separated list to test against several interfaces. Will return true if the class implement just one of the interfaces.
 	 *
 	 * @param interfaceName interface name.
 	 * @return true if the class implements this interface, false if not.
@@ -64,7 +64,7 @@ public class ClassElement
 	/**
 	 * Does the class extends any of the given classnames?
 	 *
-	 * @param classNames list of classes seperated by comma.
+	 * @param classNames list of classes separated by comma.
 	 * @return true if this class extends one of the given classnames.
 	 */
 	public boolean isExtends(String classNames)
