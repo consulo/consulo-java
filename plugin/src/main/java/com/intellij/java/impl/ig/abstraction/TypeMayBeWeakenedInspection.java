@@ -49,8 +49,8 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean doNotWeakenToJavaLangObject = true;
 
-    @SuppressWarnings({"PublicField"})
-    public boolean onlyWeakenToInterface = true;
+    @SuppressWarnings({"PublicField", "SpellCheckingInspection"})
+    public boolean onlyWeakentoInterface = true;
 
     @Nonnull
     @Override
@@ -256,7 +256,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
                 PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, variable.getResolveScope());
                 weakestClasses.remove(javaLangObjectClass);
             }
-            if (onlyWeakenToInterface) {
+            if (onlyWeakentoInterface) {
                 for (Iterator<PsiClass> iterator = weakestClasses.iterator(); iterator.hasNext(); ) {
                     PsiClass weakestClass = iterator.next();
                     if (!weakestClass.isInterface()) {
@@ -298,7 +298,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
                 PsiClass javaLangObjectClass = facade.findClass(CommonClassNames.JAVA_LANG_OBJECT, method.getResolveScope());
                 weakestClasses.remove(javaLangObjectClass);
             }
-            if (onlyWeakenToInterface) {
+            if (onlyWeakentoInterface) {
                 for (Iterator<PsiClass> iterator = weakestClasses.iterator(); iterator.hasNext(); ) {
                     PsiClass weakestClass = iterator.next();
                     if (!weakestClass.isInterface()) {
