@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.completion.CompletionConfidence;
@@ -39,40 +40,41 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
  */
 @ExtensionImpl(id = "javadoc", order = "before javaComments")
 public class JavadocCompletionConfidence extends CompletionConfidence {
-
-  @Nonnull
-  @Override
-  public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
-    if (psiElement().inside(PsiDocTag.class).accepts(contextElement)) {
-      if (findJavaReference(psiFile, offset - 1) != null) {
-        return ThreeState.NO;
-      }
-      if (PlatformPatterns.psiElement(JavaDocTokenType.DOC_TAG_NAME).accepts(contextElement)) {
-        return ThreeState.NO;
-      }
-      if (contextElement.textMatches("#")) {
-        return ThreeState.NO;
-      }
-    }
-    return super.shouldSkipAutopopup(contextElement, psiFile, offset);
-  }
-
-  @Nullable
-  private static PsiJavaReference findJavaReference(final PsiFile file, final int offset) {
-    PsiReference reference = file.findReferenceAt(offset);
-    if (reference instanceof PsiMultiReference) {
-      for (final PsiReference psiReference : ((PsiMultiReference) reference).getReferences()) {
-        if (psiReference instanceof PsiJavaReference) {
-          return (PsiJavaReference) psiReference;
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+        if (psiElement().inside(PsiDocTag.class).accepts(contextElement)) {
+            if (findJavaReference(psiFile, offset - 1) != null) {
+                return ThreeState.NO;
+            }
+            if (PlatformPatterns.psiElement(JavaDocTokenType.DOC_TAG_NAME).accepts(contextElement)) {
+                return ThreeState.NO;
+            }
+            if (contextElement.textMatches("#")) {
+                return ThreeState.NO;
+            }
         }
-      }
+        return super.shouldSkipAutopopup(contextElement, psiFile, offset);
     }
-    return reference instanceof PsiJavaReference ? (PsiJavaReference) reference : null;
-  }
 
-  @Nonnull
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nullable
+    @RequiredReadAction
+    private static PsiJavaReference findJavaReference(PsiFile file, int offset) {
+        PsiReference reference = file.findReferenceAt(offset);
+        if (reference instanceof PsiMultiReference multiRef) {
+            for (PsiReference psiReference : multiRef.getReferences()) {
+                if (psiReference instanceof PsiJavaReference javaRef) {
+                    return javaRef;
+                }
+            }
+        }
+        return reference instanceof PsiJavaReference javaRef ? javaRef : null;
+    }
+
+    @Nonnull
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }
