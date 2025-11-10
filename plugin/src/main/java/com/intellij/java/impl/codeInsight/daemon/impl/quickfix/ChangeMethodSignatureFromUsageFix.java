@@ -27,6 +27,7 @@ import consulo.find.FindManager;
 import consulo.find.FindUsagesHandler;
 import consulo.ide.impl.idea.find.findUsages.FindUsagesManager;
 import consulo.ide.impl.idea.find.impl.FindManagerImpl;
+import consulo.ide.localize.IdeLocalize;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.impl.codeInsight.JavaTargetElementUtilEx;
 import consulo.language.editor.FileModificationService;
@@ -53,9 +54,61 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionAction {
+    private static class ParameterTypes {
+        @Nullable
+        private final PsiType[] myParamTypes;
+
+        private ParameterTypes(@Nullable ParameterInfoImpl[] parameterInfos, @Nonnull PsiElement context) {
+            if (parameterInfos == null) {
+                myParamTypes = null;
+                return;
+            }
+            int n = parameterInfos.length;
+            myParamTypes = new PsiType[n];
+            for (int i = 0; i < n; i++) {
+                PsiType paramType;
+                try {
+                    paramType = parameterInfos[i].createType(context);
+                }
+                catch (IncorrectOperationException e) {
+                    paramType = null;
+                }
+                myParamTypes[i] = paramType;
+            }
+        }
+
+        @Nonnull
+        public String getPresentableText() {
+            if (myParamTypes == null) {
+                return IdeLocalize.textNotApplicable().get();
+            }
+            StringBuilder result = new StringBuilder();
+            for (PsiType paramType : myParamTypes) {
+                if (result.length() != 0) {
+                    result.append(", ");
+                }
+                result.append(paramType != null ? paramType.getPresentableText() : IdeLocalize.textNotApplicable().get());
+            }
+            return result.toString();
+        }
+
+        public boolean isValid() {
+            if (myParamTypes == null) {
+                return false;
+            }
+            for (PsiType paramType : myParamTypes) {
+                if (paramType == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     final PsiMethod myTargetMethod;
     final PsiExpression[] myExpressions;
     final PsiSubstitutor mySubstitutor;
+    @Nonnull
     final PsiElement myContext;
     private final boolean myChangeAllUsages;
     private final int myMinUsagesNumberToShowDialog;
@@ -78,8 +131,8 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         myMinUsagesNumberToShowDialog = minUsagesNumberToShowDialog;
     }
 
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getText() {
         LocalizeValue shortText = myShortName;
         if (shortText != LocalizeValue.of()) {
@@ -88,7 +141,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         return JavaQuickFixLocalize.changeMethodSignatureFromUsageText(
             JavaHighlightUtil.formatMethod(myTargetMethod),
             myTargetMethod.getName(),
-            formatTypesList(myNewParametersInfo, myContext)
+            new ParameterTypes(myNewParametersInfo, myContext).getPresentableText()
         );
     }
 
@@ -125,30 +178,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         return LocalizeValue.localizeTODO("<html> Change signature of " + targetMethodName + "(" + buf + ")</html>");
     }
 
-    @Nullable
-    private static String formatTypesList(ParameterInfoImpl[] infos, PsiElement context) {
-        if (infos == null) {
-            return null;
-        }
-        StringBuilder result = new StringBuilder();
-        try {
-            for (ParameterInfoImpl info : infos) {
-                PsiType type = info.createType(context);
-                if (type == null) {
-                    return null;
-                }
-                if (result.length() != 0) {
-                    result.append(", ");
-                }
-                result.append(type.getPresentableText());
-            }
-            return result.toString();
-        }
-        catch (IncorrectOperationException e) {
-            return null;
-        }
-    }
-
     @Override
     @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
@@ -170,7 +199,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         Set<ParameterInfoImpl> changedParams = new HashSet<>();
         myNewParametersInfo =
             getNewParametersInfo(myExpressions, myTargetMethod, mySubstitutor, buf, newParams, removedParams, changedParams);
-        if (myNewParametersInfo == null || formatTypesList(myNewParametersInfo, myContext) == null) {
+        if (!new ParameterTypes(myNewParametersInfo, myContext).isValid()) {
             return false;
         }
         myShortName = getShortText(buf, newParams, removedParams, changedParams);
