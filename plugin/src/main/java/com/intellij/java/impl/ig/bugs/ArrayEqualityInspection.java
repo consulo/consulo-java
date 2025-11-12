@@ -21,6 +21,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -29,7 +31,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArrayEqualityInspection extends BaseInspection {
@@ -47,12 +48,8 @@ public class ArrayEqualityInspection extends BaseInspection {
 
     @Override
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiArrayType type = (PsiArrayType) infos[0];
-        final PsiType componentType = type.getComponentType();
-        if (componentType instanceof PsiArrayType) {
-            return new ArrayEqualityFix(true);
-        }
-        return new ArrayEqualityFix(false);
+        PsiArrayType type = (PsiArrayType) infos[0];
+        return new ArrayEqualityFix(type.getComponentType() instanceof PsiArrayType);
     }
 
     private static class ArrayEqualityFix extends InspectionGadgetsFix {
@@ -71,18 +68,15 @@ public class ArrayEqualityInspection extends BaseInspection {
         }
 
         @Override
-        protected void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            if (!(parent instanceof PsiBinaryExpression)) {
+        @RequiredWriteAction
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            if (!(parent instanceof PsiBinaryExpression binaryExpression)) {
                 return;
             }
-            final PsiBinaryExpression binaryExpression =
-                (PsiBinaryExpression) parent;
-            final IElementType tokenType =
-                binaryExpression.getOperationTokenType();
-            @NonNls final StringBuilder newExpressionText = new StringBuilder();
+            IElementType tokenType = binaryExpression.getOperationTokenType();
+            StringBuilder newExpressionText = new StringBuilder();
             if (JavaTokenType.NE.equals(tokenType)) {
                 newExpressionText.append('!');
             }
@@ -97,16 +91,13 @@ public class ArrayEqualityInspection extends BaseInspection {
             }
             newExpressionText.append(binaryExpression.getLOperand().getText());
             newExpressionText.append(',');
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (rhs == null) {
                 return;
             }
             newExpressionText.append(rhs.getText());
             newExpressionText.append(')');
-            replaceExpressionAndShorten(
-                binaryExpression,
-                newExpressionText.toString()
-            );
+            replaceExpressionAndShorten(binaryExpression, newExpressionText.toString());
         }
     }
 
@@ -116,36 +107,34 @@ public class ArrayEqualityInspection extends BaseInspection {
     }
 
     private static class ArrayEqualityVisitor extends BaseInspectionVisitor {
-
         @Override
-        public void visitBinaryExpression(
-            @Nonnull PsiBinaryExpression expression
-        ) {
+        @RequiredReadAction
+        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
-            final PsiType lhsType = lhs.getType();
+            PsiExpression lhs = expression.getLOperand();
+            PsiType lhsType = lhs.getType();
             if (!(lhsType instanceof PsiArrayType)) {
                 return;
             }
             if (!(rhs.getType() instanceof PsiArrayType)) {
                 return;
             }
-            final String lhsText = lhs.getText();
+            String lhsText = lhs.getText();
             if (PsiKeyword.NULL.equals(lhsText)) {
                 return;
             }
-            final String rhsText = rhs.getText();
+            String rhsText = rhs.getText();
             if (PsiKeyword.NULL.equals(rhsText)) {
                 return;
             }
-            final PsiJavaToken sign = expression.getOperationSign();
+            PsiJavaToken sign = expression.getOperationSign();
             registerError(sign, lhsType);
         }
     }

@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -28,28 +29,25 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
-
-    @Override
     @Nonnull
+    @Override
     public String getID() {
         return "UseOfArchaicSystemPropertyAccessors";
     }
 
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public String buildErrorString(Object... infos) {
-        final PsiMethodCallExpression call =
-            (PsiMethodCallExpression) infos[0];
+        PsiMethodCallExpression call = (PsiMethodCallExpression) infos[0];
         if (isIntegerGetInteger(call)) {
             return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsProblemDescriptorInteger().get();
         }
@@ -69,26 +67,24 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
     }
 
     private static class ReplaceWithParseMethodFix extends InspectionGadgetsFix {
-
         @Nonnull
+        @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsReplaceParseQuickfix();
         }
 
         @Override
-        public void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiIdentifier location =
-                (PsiIdentifier) descriptor.getPsiElement();
-            final PsiElement parent = location.getParent();
+        @RequiredWriteAction
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiIdentifier location = (PsiIdentifier) descriptor.getPsiElement();
+            PsiElement parent = location.getParent();
             assert parent != null;
-            final PsiMethodCallExpression call =
-                (PsiMethodCallExpression) parent.getParent();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) parent.getParent();
             assert call != null;
-            final PsiExpressionList argList = call.getArgumentList();
-            final PsiExpression[] args = argList.getExpressions();
-            final String argText = args[0].getText();
-            @NonNls final String parseMethodCall;
+            PsiExpressionList argList = call.getArgumentList();
+            PsiExpression[] args = argList.getExpressions();
+            String argText = args[0].getText();
+            String parseMethodCall;
             if (isIntegerGetInteger(call)) {
                 parseMethodCall = "Integer.valueOf(" + argText + ')';
             }
@@ -102,45 +98,36 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
         }
     }
 
-    private static class ReplaceWithStandardPropertyAccessFix
-        extends InspectionGadgetsFix {
-
+    private static class ReplaceWithStandardPropertyAccessFix extends InspectionGadgetsFix {
         @Nonnull
+        @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsReplaceStandardQuickfix();
         }
 
         @Override
-        public void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiIdentifier location =
-                (PsiIdentifier) descriptor.getPsiElement();
-            final PsiElement parent = location.getParent();
+        @RequiredWriteAction
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiIdentifier location = (PsiIdentifier) descriptor.getPsiElement();
+            PsiElement parent = location.getParent();
             assert parent != null;
-            final PsiMethodCallExpression call =
-                (PsiMethodCallExpression) parent.getParent();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) parent.getParent();
             assert call != null;
-            final PsiExpressionList argList = call.getArgumentList();
-            final PsiExpression[] args = argList.getExpressions();
-            final String argText = args[0].getText();
-            @NonNls final String parseMethodCall;
+            PsiExpressionList argList = call.getArgumentList();
+            PsiExpression[] args = argList.getExpressions();
+            String argText = args[0].getText();
+            String parseMethodCall;
             if (isIntegerGetInteger(call)) {
-                parseMethodCall = "Integer.parseInt(System.getProperty("
-                    + argText + "))";
+                parseMethodCall = "Integer.parseInt(System.getProperty(" + argText + "))";
             }
             else if (isLongGetLong(call)) {
-                parseMethodCall = "Long.parseLong(System.getProperty("
-                    + argText + "))";
+                parseMethodCall = "Long.parseLong(System.getProperty(" + argText + "))";
+            }
+            else if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
+                parseMethodCall = "Boolean.valueOf(System.getProperty(" + argText + ")).booleanValue()";
             }
             else {
-                if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
-                    parseMethodCall = "Boolean.valueOf(System.getProperty("
-                        + argText + ")).booleanValue()";
-                }
-                else {
-                    parseMethodCall = "Boolean.parseBoolean(System.getProperty("
-                        + argText + "))";
-                }
+                parseMethodCall = "Boolean.parseBoolean(System.getProperty(" + argText + "))";
             }
             replaceExpression(call, parseMethodCall);
         }
@@ -151,9 +138,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
         return new ArchaicSystemPropertyAccessVisitor();
     }
 
-    private static class ArchaicSystemPropertyAccessVisitor
-        extends BaseInspectionVisitor {
-
+    private static class ArchaicSystemPropertyAccessVisitor extends BaseInspectionVisitor {
         @Override
         public void visitMethodCallExpression(
             @Nonnull PsiMethodCallExpression expression) {
@@ -178,27 +163,21 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
         return isCallTo(expression, CommonClassNames.JAVA_LANG_BOOLEAN, "getBoolean");
     }
 
-    private static boolean isCallTo(PsiMethodCallExpression expression,
-                                    String className, @NonNls String methodName) {
-        final PsiReferenceExpression methodExpression =
-            expression.getMethodExpression();
-        @NonNls final String expressionMethodName =
-            methodExpression.getReferenceName();
+    private static boolean isCallTo(PsiMethodCallExpression expression, String className, String methodName) {
+        PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        String expressionMethodName = methodExpression.getReferenceName();
         if (!methodName.equals(expressionMethodName)) {
             return false;
         }
-        final PsiMethod method = expression.resolveMethod();
+        PsiMethod method = expression.resolveMethod();
         if (method == null) {
             return false;
         }
-        final PsiClass aClass = method.getContainingClass();
+        PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             return false;
         }
-        final String expressionClassName = aClass.getQualifiedName();
-        if (expressionClassName == null) {
-            return false;
-        }
-        return className.equals(expressionClassName);
+        String expressionClassName = aClass.getQualifiedName();
+        return expressionClassName != null && className.equals(expressionClassName);
     }
 }

@@ -23,6 +23,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -30,50 +32,39 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseInspection {
-    private static final Map<String, String> gridbagConstants = new HashMap();
+    private static final Map<String, String> GRID_BAG_CONSTANTS = Map.of(
+        "NORTHWEST", "FIRST_LINE_START",
+        "NORTHEAST", "FIRST_LINE_END",
+        "SOUTHWEST", "LAST_LINE_START",
+        "SOUTHEAST", "LAST_LINE_END"
+    );
 
-    static {
-        gridbagConstants.put("NORTHWEST", "FIRST_LINE_START");
-        gridbagConstants.put("NORTHEAST", "FIRST_LINE_END");
-        gridbagConstants.put("SOUTHWEST", "LAST_LINE_START");
-        gridbagConstants.put("SOUTHEAST", "LAST_LINE_END");
-    }
+    private static final Map<String, String> BORDER_LAYOUT_CONSTANTS = Map.of(
+        "NORTH", "PAGE_START",
+        "SOUTH", "PAGE_END",
+        "EAST", "LINE_END",
+        "WEST", "LINE_START"
+    );
 
-    private static final Map<String, String> borderLayoutConstants = new HashMap();
+    private static final Map<String, String> FLOW_LAYOUT_CONSTANTS = Map.of(
+        "LEFT", "LEADING",
+        "RIGHT", "TRAILING"
+    );
 
-    static {
-        borderLayoutConstants.put("NORTH", "PAGE_START");
-        borderLayoutConstants.put("SOUTH", "PAGE_END");
-        borderLayoutConstants.put("EAST", "LINE_END");
-        borderLayoutConstants.put("WEST", "LINE_START");
-    }
+    private static final Map<String, String> SCROLL_PANE_CONSTANTS = Map.of(
+        "LOWER_LEFT_CORNER", "LOWER_LEADING_CORNER",
+        "LOWER_RIGHT_CORNER", "LOWER_TRAILING_CORNER",
+        "UPPER_LEFT_CORNER", "UPPER_LEADING_CORNER",
+        "UPPER_RIGHT_CORNER", "UPPER_TRAILING_CORNER"
+    );
 
-    private static final Map<String, String> flowLayoutConstants = new HashMap();
-
-    static {
-        flowLayoutConstants.put("LEFT", "LEADING");
-        flowLayoutConstants.put("RIGHT", "TRAILING");
-    }
-
-    private static final Map<String, String> scrollPaneConstants = new HashMap();
-
-    static {
-        scrollPaneConstants.put("LOWER_LEFT_CORNER", "LOWER_LEADING_CORNER");
-        scrollPaneConstants.put("LOWER_RIGHT_CORNER", "LOWER_TRAILING_CORNER");
-        scrollPaneConstants.put("UPPER_LEFT_CORNER", "UPPER_LEADING_CORNER");
-        scrollPaneConstants.put("UPPER_RIGHT_CORNER", "UPPER_TRAILING_CORNER");
-    }
-
-    private static final Map<String, String> boxLayoutConstants = new HashMap();
-
-    static {
-        boxLayoutConstants.put("X_AXIS", "LINE_AXIS");
-        boxLayoutConstants.put("Y_AXIS", "PAGE_AXIS");
-    }
+    private static final Map<String, String> BOX_LAYOUT_CONSTANTS = Map.of(
+        "X_AXIS", "LINE_AXIS",
+        "Y_AXIS", "PAGE_AXIS"
+    );
 
     @Nonnull
     @Override
@@ -84,8 +75,8 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        final String className = (String) infos[0];
-        final String shortClassName = className.substring(className.lastIndexOf('.') + 1);
+        String className = (String) infos[0];
+        String shortClassName = className.substring(className.lastIndexOf('.') + 1);
         return InspectionGadgetsLocalize.absoluteAlignmentInUserInterfaceProblemDescriptor(shortClassName).get();
     }
 
@@ -111,13 +102,12 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
         }
 
         @Override
+        @RequiredWriteAction
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            if (!(parent instanceof PsiReferenceExpression)) {
+            PsiElement element = descriptor.getPsiElement();
+            if (!(element.getParent() instanceof PsiReferenceExpression referenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) parent;
             replaceExpression(referenceExpression, myClassName + '.' + myReplacement);
         }
     }
@@ -128,30 +118,33 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
     }
 
     private static class AbsoluteAlignmentInUserInterfaceVisitor extends BaseInspectionVisitor {
-
         @Override
+        @RequiredReadAction
         public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            final PsiElement referenceNameElement = expression.getReferenceNameElement();
+            PsiElement referenceNameElement = expression.getReferenceNameElement();
             if (referenceNameElement == null) {
                 return;
             }
-            final String referenceName = expression.getReferenceName();
-            final String className;
+            String referenceName = expression.getReferenceName();
+            String className;
             String value;
-            if ((value = gridbagConstants.get(referenceName)) != null) {
+            if (referenceName == null) {
+                return;
+            }
+            else if ((value = GRID_BAG_CONSTANTS.get(referenceName)) != null) {
                 className = checkExpression(expression, "java.awt.GridBagConstraints");
             }
-            else if ((value = borderLayoutConstants.get(referenceName)) != null) {
+            else if ((value = BORDER_LAYOUT_CONSTANTS.get(referenceName)) != null) {
                 className = checkExpression(expression, "java.awt.BorderLayout", "java.awt.GridBagConstraints");
             }
-            else if ((value = flowLayoutConstants.get(referenceName)) != null) {
+            else if ((value = FLOW_LAYOUT_CONSTANTS.get(referenceName)) != null) {
                 className = checkExpression(expression, "java.awt.FlowLayout");
             }
-            else if ((value = scrollPaneConstants.get(referenceName)) != null) {
+            else if ((value = SCROLL_PANE_CONSTANTS.get(referenceName)) != null) {
                 className = checkExpression(expression, "javax.swing.ScrollPaneConstants");
             }
-            else if ((value = boxLayoutConstants.get(referenceName)) != null) {
+            else if ((value = BOX_LAYOUT_CONSTANTS.get(referenceName)) != null) {
                 className = checkExpression(expression, "javax.swing.BoxLayout");
             }
             else {
@@ -163,13 +156,12 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
             registerError(referenceNameElement, className, value);
         }
 
+        @RequiredReadAction
         private static String checkExpression(PsiReferenceExpression expression, String... classNames) {
-            final PsiElement target = expression.resolve();
-            if (!(target instanceof PsiField)) {
+            if (!(expression.resolve() instanceof PsiField field)) {
                 return null;
             }
-            final PsiField field = (PsiField) target;
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             for (String className : classNames) {
                 if (InheritanceUtil.isInheritor(containingClass, className)) {
                     return className;

@@ -474,6 +474,18 @@ inspection.data.flow.simplify.to.assignment.quickfix.name:
     text: Simplify to normal assignment
 inspection.data.flow.true.asserts.option:
     text: Don't report assertions with condition statically proven to be always <code>true</code>
+inspection.data.flow.ignore.assert.statements:
+    text: Ignore assert statements
+inspection.data.flow.treat.non.annotated.members.and.parameters.as.nullable:
+    text: Treat non-annotated members and parameters as @Nullable
+inspection.data.flow.report.constant.reference.values:
+    text: Warn when reading a value guaranteed to be constant
+inspection.data.flow.report.not.null.required.parameter.with.null.literal.argument.usages:
+    text: Report non-null required parameter with null-literal argument usages
+inspection.data.flow.report.nullable.methods.that.always.return.a.non.null.value:
+    text: Report nullable methods that always return a non-null value
+inspection.data.flow.report.problems.that.happen.only.on.some.code.paths:
+    text: Report problems that happen only on some code paths
 inspection.data.flow.use.computeifpresent.quickfix:
     text: Replace 'compute' with 'computeIfPresent'
 inspection.dead.code.comment:

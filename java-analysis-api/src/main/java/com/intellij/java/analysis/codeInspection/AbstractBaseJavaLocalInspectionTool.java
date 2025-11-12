@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import consulo.language.editor.inspection.*;
@@ -50,6 +51,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailableForFile(@Nonnull PsiFile file) {
         for (JavaFeature feature : requiredFeatures()) {
             if (!PsiUtil.isAvailable(feature, file)) {
@@ -154,26 +156,31 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
     ) {
         return new JavaElementVisitor() {
             @Override
-            public void visitMethod(PsiMethod method) {
+            @RequiredReadAction
+            public void visitMethod(@Nonnull PsiMethod method) {
                 addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly, state));
             }
 
             @Override
-            public void visitClass(PsiClass aClass) {
+            @RequiredReadAction
+            public void visitClass(@Nonnull PsiClass aClass) {
                 addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly, state));
             }
 
             @Override
-            public void visitField(PsiField field) {
+            @RequiredReadAction
+            public void visitField(@Nonnull PsiField field) {
                 addDescriptors(checkField(field, holder.getManager(), isOnTheFly, state));
             }
 
             @Override
+            @RequiredReadAction
             public void visitFile(PsiFile file) {
                 addDescriptors(checkFile(file, holder.getManager(), isOnTheFly, state));
             }
 
-            private void addDescriptors(final ProblemDescriptor[] descriptors) {
+            @RequiredReadAction
+            private void addDescriptors(ProblemDescriptor[] descriptors) {
                 if (descriptors != null) {
                     for (ProblemDescriptor descriptor : descriptors) {
                         holder.registerProblem(descriptor);
@@ -184,7 +191,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
     }
 
     @Override
-    public PsiNamedElement getProblemElement(final PsiElement psiElement) {
+    public PsiNamedElement getProblemElement(PsiElement psiElement) {
         return PsiTreeUtil.getNonStrictParentOfType(psiElement, PsiFile.class, PsiClass.class, PsiMethod.class, PsiField.class);
     }
 

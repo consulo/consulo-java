@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -28,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArrayHashCodeInspection extends BaseInspection {
@@ -51,7 +51,7 @@ public class ArrayHashCodeInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiArrayType type = (PsiArrayType) infos[0];
+        PsiArrayType type = (PsiArrayType) infos[0];
         if (type.getComponentType() instanceof PsiArrayType) {
             return new ArrayHashCodeFix(true);
         }
@@ -59,7 +59,6 @@ public class ArrayHashCodeInspection extends BaseInspection {
     }
 
     private static class ArrayHashCodeFix extends InspectionGadgetsFix {
-
         private final boolean deepHashCode;
 
         public ArrayHashCodeFix(boolean deepHashCode) {
@@ -75,24 +74,20 @@ public class ArrayHashCodeInspection extends BaseInspection {
         }
 
         @Override
-        protected void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final PsiElement grandParent = parent.getParent();
-            if (!(grandParent instanceof PsiMethodCallExpression)) {
+        @RequiredWriteAction
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            PsiElement grandParent = parent.getParent();
+            if (!(grandParent instanceof PsiMethodCallExpression methodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression =
-                (PsiMethodCallExpression) grandParent;
-            final PsiReferenceExpression methodExpression =
-                methodCallExpression.getMethodExpression();
-            final PsiExpression qualifier =
-                methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            @NonNls final StringBuilder newExpressionText = new StringBuilder();
+            StringBuilder newExpressionText = new StringBuilder();
             if (deepHashCode) {
                 newExpressionText.append("java.util.Arrays.deepHashCode(");
             }
@@ -101,10 +96,7 @@ public class ArrayHashCodeInspection extends BaseInspection {
             }
             newExpressionText.append(qualifier.getText());
             newExpressionText.append(')');
-            replaceExpressionAndShorten(
-                methodCallExpression,
-                newExpressionText.toString()
-            );
+            replaceExpressionAndShorten(methodCallExpression, newExpressionText.toString());
         }
     }
 
@@ -114,33 +106,23 @@ public class ArrayHashCodeInspection extends BaseInspection {
     }
 
     private static class ArrayHashCodeVisitor extends BaseInspectionVisitor {
-
         @Override
-        public void visitMethodCallExpression(
-            PsiMethodCallExpression expression
-        ) {
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
-                expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.HASH_CODE.equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 0) {
                 return;
             }
-            final PsiExpression qualifier =
-                methodExpression.getQualifierExpression();
-            if (qualifier == null) {
-                return;
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null && qualifier.getType() instanceof PsiArrayType arrayType) {
+                registerMethodCallError(expression, arrayType);
             }
-            final PsiType type = qualifier.getType();
-            if (!(type instanceof PsiArrayType)) {
-                return;
-            }
-            registerMethodCallError(expression, type);
         }
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig;
 
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.localize.LocalizeValue;
@@ -26,28 +27,29 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import jakarta.annotation.Nonnull;
 
 public class DelegatingFix extends InspectionGadgetsFix {
+    private final LocalQuickFix delegate;
 
-  private final LocalQuickFix delegate;
+    public DelegatingFix(LocalQuickFix delegate) {
+        this.delegate = delegate;
+    }
 
-  public DelegatingFix(LocalQuickFix delegate) {
-    this.delegate = delegate;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return delegate.getName();
+    }
 
-  @Nonnull
-  public LocalizeValue getName() {
-    return delegate.getName();
-  }
+    @Override
+    @RequiredWriteAction
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        delegate.applyFix(project, descriptor);
+    }
 
-  protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-    delegate.applyFix(project, descriptor);
-  }
-
-  /**
-   * Delegating fix should check for read-only status separately
-   */
-  @Override
-  protected boolean isQuickFixOnReadOnlyFile(PsiElement problemElement) {
-    return false;
-  }
+    /**
+     * Delegating fix should check for read-only status separately
+     */
+    @Override
+    protected boolean isQuickFixOnReadOnlyFile(PsiElement problemElement) {
+        return false;
+    }
 }
