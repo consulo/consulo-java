@@ -672,16 +672,13 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                     resultVar = (PsiLocalVariable)statement.getDeclaredElements()[0];
                 }
             }
-            if (statements.length > 0) {
-                if (statements[statements.length - 1] instanceof PsiReturnStatement returnStmt
-                    && tailCall != InlineUtil.TailCallType.Return) {
-                    PsiExpression returnValue = returnStmt.getReturnValue();
-                    if (returnValue != null && PsiUtil.isStatement(returnValue)) {
-                        PsiExpressionStatement exprStatement =
-                            (PsiExpressionStatement)myFactory.createStatementFromText("a;", null);
-                        exprStatement.getExpression().replace(returnValue);
-                        anchorParent.addBefore(exprStatement, anchor);
-                    }
+            if (statements[statements.length - 1] instanceof PsiReturnStatement returnStmt
+                && tailCall != InlineUtil.TailCallType.Return) {
+                PsiExpression returnValue = returnStmt.getReturnValue();
+                if (returnValue != null && PsiUtil.isStatement(returnValue)) {
+                    PsiExpressionStatement exprStatement = (PsiExpressionStatement)myFactory.createStatementFromText("a;", null);
+                    exprStatement.getExpression().replace(returnValue);
+                    anchorParent.addBefore(exprStatement, anchor);
                 }
             }
         }
@@ -707,14 +704,12 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         else if (methodCall.getParent() instanceof PsiExpressionStatement || tailCall == InlineUtil.TailCallType.Return) {
             methodCall.getParent().delete();
         }
+        else if (blockData.resultVar != null) {
+            PsiExpression expr = myFactory.createExpressionFromText(blockData.resultVar.getName(), null);
+            methodCall.replace(expr);
+        }
         else {
-            if (blockData.resultVar != null) {
-                PsiExpression expr = myFactory.createExpressionFromText(blockData.resultVar.getName(), null);
-                methodCall.replace(expr);
-            }
-            else {
-                //??
-            }
+            //??
         }
 
         if (thisVar != null) {
@@ -783,7 +778,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         return !sourceContainingClass.equals(targetContainingClass);
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     private BlockData prepareBlock(
         PsiReferenceExpression ref,
         PsiSubstitutor callSubstitutor,
@@ -985,7 +980,6 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                             do {
                                 parentClass = PsiTreeUtil.getParentOfType(parentClass, PsiClass.class, true);
                                 if (InheritanceUtil.isInheritorOrSelf(parentClass, containingClass, true)) {
-                                    LOG.assertTrue(parentClass != null);
                                     String childClassName = parentClass.getName();
                                     qualifier = myFactory.createExpressionFromText(
                                         childClassName != null ? childClassName + ".this" : "this",

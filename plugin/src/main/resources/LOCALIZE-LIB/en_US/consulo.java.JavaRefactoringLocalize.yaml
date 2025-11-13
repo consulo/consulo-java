@@ -148,6 +148,18 @@ global.library.source:
     text: 'Global Library: {0}'
 initialization.expression.checkbox:
     text: 'Initialization expression (optional):'
+inline.conflicts.progress:
+    text: Check if inline is possible…
+inline.constant.field.not.supported.for.enum.constants:
+    text: '{0} is not supported for enum constants'
+inline.field.used.in.javadoc:
+    text: Inlined field is used in javadoc
+inline.field.used.in.reflection:
+    text: Inlined field is used reflectively
+inline.local.unable.try.catch.warning.message:
+    text: Unable to inline outside try/catch statement
+inline.local.variable.declared.outside.cannot.refactor.message:
+    text: Variable is declared outside a code block
 introduce.parameter.object:
     text: Introduce Parameter Object
 introduce.parameter.object.title:

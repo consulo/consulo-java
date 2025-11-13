@@ -30,53 +30,64 @@ import java.awt.*;
  * @author yole
  */
 public class InlineParameterDialog extends RefactoringDialog {
-  private JCheckBox myCreateLocalCheckbox;
-  private final PsiCallExpression myMethodCall;
-  private final PsiMethod myMethod;
-  private final PsiParameter myParameter;
-  private final PsiExpression myInitializer;
+    private JCheckBox myCreateLocalCheckbox;
+    private final PsiCallExpression myMethodCall;
+    private final PsiMethod myMethod;
+    private final PsiParameter myParameter;
+    private final PsiExpression myInitializer;
 
-  public InlineParameterDialog(PsiCallExpression methodCall, PsiMethod method, PsiParameter psiParameter, PsiExpression initializer,
-                               boolean createLocal) {
-    super(method.getProject(), true);
-    myMethodCall = methodCall;
-    myMethod = method;
-    myParameter = psiParameter;
-    myInitializer = initializer;
-    init();
-    myCreateLocalCheckbox.setSelected(createLocal);
-    setTitle(InlineParameterHandler.REFACTORING_NAME);
-  }
+    public InlineParameterDialog(
+        PsiCallExpression methodCall,
+        PsiMethod method,
+        PsiParameter psiParameter,
+        PsiExpression initializer,
+        boolean createLocal
+    ) {
+        super(method.getProject(), true);
+        myMethodCall = methodCall;
+        myMethod = method;
+        myParameter = psiParameter;
+        myInitializer = initializer;
+        init();
+        myCreateLocalCheckbox.setSelected(createLocal);
+        setTitle(InlineParameterHandler.REFACTORING_NAME);
+    }
 
-  @Override
-  protected JComponent createNorthPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    panel.add(
-      new JLabel(
-        RefactoringLocalize.inlineParameterConfirmation(myParameter.getName(), myInitializer.getText()).get(),
-        UIManager.getIcon("OptionPane.questionIcon"),
-        2
-      ),
-      BorderLayout.NORTH
-    );
-    return panel;
-  }
+    @Override
+    protected JComponent createNorthPanel() {
+        final JPanel panel = new JPanel(new BorderLayout());
+        panel.add(
+            new JLabel(
+                RefactoringLocalize.inlineParameterConfirmation(myParameter.getName(), myInitializer.getText()).get(),
+                UIManager.getIcon("OptionPane.questionIcon"),
+                2
+            ),
+            BorderLayout.NORTH
+        );
+        return panel;
+    }
 
-  @Override
-  protected JComponent createCenterPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    myCreateLocalCheckbox = new JCheckBox(RefactoringLocalize.inlineParameterReplaceWithLocalCheckbox().get());
-    panel.add(myCreateLocalCheckbox, BorderLayout.SOUTH);
-    return panel;
-  }
+    @Override
+    protected JComponent createCenterPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        myCreateLocalCheckbox = new JCheckBox(RefactoringLocalize.inlineParameterReplaceWithLocalCheckbox().get());
+        panel.add(myCreateLocalCheckbox, BorderLayout.SOUTH);
+        return panel;
+    }
 
-  @Override
-  protected String getHelpId() {
-    return HelpID.INLINE_VARIABLE;
-  }
+    @Override
+    protected String getHelpId() {
+        return HelpID.INLINE_VARIABLE;
+    }
 
-  @Override
-  protected void doAction() {
-    invokeRefactoring(new InlineParameterExpressionProcessor(myMethodCall, myMethod, myParameter, myInitializer, myCreateLocalCheckbox.isSelected()));
-  }
+    @Override
+    protected void doAction() {
+        invokeRefactoring(new InlineParameterExpressionProcessor(
+            myMethodCall,
+            myMethod,
+            myParameter,
+            myInitializer,
+            myCreateLocalCheckbox.isSelected()
+        ));
+    }
 }
