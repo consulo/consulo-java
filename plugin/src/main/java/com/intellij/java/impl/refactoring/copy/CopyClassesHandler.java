@@ -268,7 +268,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
                 relativePathsMap,
                 targetDirectory,
                 defaultTargetDirectory,
-                RefactoringLocalize.copyHandlerCopyClass().get(),
+                RefactoringLocalize.copyHandlerCopyClass(),
                 false
             );
         }
@@ -306,7 +306,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
                 null,
                 targetDirectory,
                 targetDirectory,
-                RefactoringLocalize.copyHandlerCloneClass().get(),
+                RefactoringLocalize.copyHandlerCloneClass(),
                 true
             );
         }
@@ -319,14 +319,14 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
         Map<PsiFile, String> map,
         Object targetDirectory,
         PsiDirectory defaultTargetDirectory,
-        String commandName,
+        @Nonnull LocalizeValue commandName,
         boolean selectInActivePanel
     ) {
         boolean[] result = new boolean[]{false};
         CommandProcessor processor = CommandProcessor.getInstance();
         processor.newCommand()
             .project(project)
-            .name(LocalizeValue.ofNullable(commandName))
+            .name(commandName)
             .inWriteAction()
             .run(() -> {
                 try {
