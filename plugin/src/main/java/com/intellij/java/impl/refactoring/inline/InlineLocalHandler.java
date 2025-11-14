@@ -46,6 +46,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
@@ -91,7 +92,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         if (query.findFirst() == null) {
             LOG.assertTrue(refExpr == null);
             LocalizeValue message = RefactoringLocalize.variableIsNeverUsed(localName);
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
 
@@ -127,7 +128,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
             LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
                 JavaRefactoringLocalize.inlineLocalVariableDeclaredOutsideCannotRefactorMessage()
             );
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
 
@@ -140,7 +141,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
                     ? RefactoringLocalize.variableHasNoInitializer(localName)
                     : RefactoringLocalize.variableHasNoDominatingDefinition()
             );
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
 
@@ -153,7 +154,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         }
         if (refsToInlineList.size() == 0) {
             LocalizeValue message = RefactoringLocalize.variableIsNeverUsedBeforeModification(localName);
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
         PsiElement[] refsToInline = PsiUtilBase.toPsiElementArray(refsToInlineList);
@@ -164,7 +165,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
             highlightManager.addOccurrenceHighlights(editor, defs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
             LocalizeValue message =
                 RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
 
@@ -179,15 +180,15 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
             PsiFile otherFile = ref.getContainingFile();
             if (!otherFile.equals(workingFile)) {
                 LocalizeValue message = RefactoringLocalize.variableIsReferencedInMultipleFiles(localName);
-                CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
                 return;
             }
             if (tryStatement != null && !PsiTreeUtil.isAncestor(tryStatement, ref, false)) {
                 CommonRefactoringUtil.showErrorHint(
                     project,
                     editor,
-                    JavaRefactoringLocalize.inlineLocalUnableTryCatchWarningMessage().get(),
-                    REFACTORING_NAME.get(),
+                    JavaRefactoringLocalize.inlineLocalUnableTryCatchWarningMessage(),
+                    REFACTORING_NAME,
                     HelpID.INLINE_VARIABLE
                 );
                 return;
@@ -206,7 +207,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
                 LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
                     RefactoringLocalize.variableIsAccessedForWritingAndUsedWithInlined(localName)
                 );
-                CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
                 return;
             }
         }
@@ -217,7 +218,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
                 .addOccurrenceHighlights(editor, new PsiElement[]{writeAccess}, EditorColors.WRITE_SEARCH_RESULT_ATTRIBUTES, true, null);
             LocalizeValue message =
                 RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_VARIABLE);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
         }
 
@@ -235,10 +236,10 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
                 : RefactoringLocalize.inlineLocalVariableDefinitionPrompt(localName);
             LocalizeValue occurrencesString = RefactoringLocalize.occurencesString(occurrencesCount);
             RefactoringMessageDialog dialog = new RefactoringMessageDialog(
-                REFACTORING_NAME.get(),
-                message + " " + occurrencesString,
+                REFACTORING_NAME,
+                LocalizeValue.join(message, LocalizeValue.space(), occurrencesString),
                 HelpID.INLINE_VARIABLE,
-                "OptionPane.questionIcon",
+                UIUtil.getQuestionIcon(),
                 true,
                 project
             );
@@ -289,7 +290,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     }
 
     @Nullable
-    public static PsiElement checkRefsInAugmentedAssignmentOrUnaryModified( PsiElement[] refsToInline) {
+    public static PsiElement checkRefsInAugmentedAssignmentOrUnaryModified(PsiElement[] refsToInline) {
         for (PsiElement element : refsToInline) {
 
             PsiElement parent = element.getParent();
@@ -321,7 +322,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         return tokenType == JavaTokenType.PLUSPLUS || tokenType == JavaTokenType.MINUSMINUS;
     }
 
-    private static boolean isSameDefinition( PsiElement def, PsiExpression defToInline) {
+    private static boolean isSameDefinition(PsiElement def, PsiExpression defToInline) {
         if (def instanceof PsiLocalVariable localVar) {
             return defToInline.equals(localVar.getInitializer());
         }
@@ -329,7 +330,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         return parent instanceof PsiAssignmentExpression assignment && defToInline.equals(assignment.getRExpression());
     }
 
-    private static boolean isInliningVariableInitializer( PsiExpression defToInline) {
+    private static boolean isInliningVariableInitializer(PsiExpression defToInline) {
         return defToInline.getParent() instanceof PsiVariable;
     }
 

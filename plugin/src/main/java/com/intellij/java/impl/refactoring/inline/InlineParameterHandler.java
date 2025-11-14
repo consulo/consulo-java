@@ -24,9 +24,11 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -38,10 +40,11 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.ref.SimpleReference;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
@@ -51,7 +54,6 @@ import java.util.*;
  */
 @ExtensionImpl
 public class InlineParameterHandler extends JavaInlineActionHandler {
-    private static final Logger LOG = Logger.getInstance(InlineParameterHandler.class);
     public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.inlineParameterRefactoring();
 
     @Override
@@ -68,19 +70,18 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     public void inlineElement(final Project project, Editor editor, PsiElement psiElement) {
         final PsiParameter psiParameter = (PsiParameter) psiElement;
         PsiParameterList parameterList = (PsiParameterList) psiParameter.getParent();
-        if (!(parameterList.getParent() instanceof PsiMethod)) {
+        if (!(parameterList.getParent() instanceof PsiMethod method)) {
             return;
         }
         int index = parameterList.getParameterIndex(psiParameter);
-        final PsiMethod method = (PsiMethod) parameterList.getParent();
 
-        String errorMessage = getCannotInlineMessage(psiParameter, method);
-        if (errorMessage != null) {
+        LocalizeValue errorMessage = getCannotInlineMessage(psiParameter, method);
+        if (errorMessage != LocalizeValue.empty()) {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
                 errorMessage,
-                RefactoringLocalize.inlineParameterRefactoring().get(),
+                RefactoringLocalize.inlineParameterRefactoring(),
                 null
             );
             return;
@@ -131,40 +132,43 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(refExpr, PsiCodeBlock.class);
         if (codeBlock != null) {
             PsiElement[] defs = DefUseUtil.getDefs(codeBlock, psiParameter, refExpr);
-            if (defs.length == 1) {
-                final PsiElement def = defs[0];
-                if (def instanceof PsiReferenceExpression referenceExpression && PsiUtil.isOnAssignmentLeftHand(referenceExpression)) {
-                    final PsiExpression rExpr = ((PsiAssignmentExpression) def.getParent()).getRExpression();
-                    if (rExpr != null) {
-                        final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, psiParameter, refExpr);
+            if (defs.length == 1 && defs[0] instanceof PsiReferenceExpression defRefExpr && PsiUtil.isOnAssignmentLeftHand(defRefExpr)) {
+                final PsiExpression rExpr = ((PsiAssignmentExpression) defRefExpr.getParent()).getRExpression();
+                if (rExpr != null) {
+                    final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, psiParameter, refExpr);
 
-                        if (InlineLocalHandler.checkRefsInAugmentedAssignmentOrUnaryModified(refs) == null) {
-                            new WriteCommandAction(project) {
-                                @Override
-                                protected void run(Result result) throws Throwable {
-                                    for (final PsiElement ref : refs) {
-                                        InlineUtil.inlineVariable(psiParameter, rExpr, (PsiJavaCodeReferenceElement) ref);
-                                    }
-                                    def.getParent().delete();
+                    if (InlineLocalHandler.checkRefsInAugmentedAssignmentOrUnaryModified(refs) == null) {
+                        new WriteCommandAction(project) {
+                            @Override
+                            @RequiredWriteAction
+                            protected void run(Result result) throws Throwable {
+                                for (PsiElement ref : refs) {
+                                    InlineUtil.inlineVariable(psiParameter, rExpr, (PsiJavaCodeReferenceElement) ref);
                                 }
-                            }.execute();
-                            return;
-                        }
+                                defRefExpr.getParent().delete();
+                            }
+                        }.execute();
+                        return;
                     }
                 }
             }
         }
         if (occurrences.isEmpty()) {
-            CommonRefactoringUtil
-                .showErrorHint(project, editor, "Method has no usages", RefactoringLocalize.inlineParameterRefactoring().get(), null);
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineParameterNoUsagesWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
             return;
         }
         if (!result) {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                "Cannot find constant initializer for parameter",
-                RefactoringLocalize.inlineParameterRefactoring().get(),
+                JavaRefactoringLocalize.inlineParameterCannotFindInitializerWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
                 null
             );
             return;
@@ -192,8 +196,8 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                "Cannot find constant initializer for parameter",
-                RefactoringLocalize.inlineParameterRefactoring().get(),
+                JavaRefactoringLocalize.inlineParameterCannotFindInitializerWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
                 null
             );
             return;
@@ -216,8 +220,8 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                "Constant initializer is not accessible in method body",
-                RefactoringLocalize.inlineParameterRefactoring().get(),
+                JavaRefactoringLocalize.inlineParameterNotAccessibleWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
                 null
             );
             return;
@@ -229,8 +233,8 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
                 CommonRefactoringUtil.showErrorHint(
                     project,
                     editor,
-                    "Inline parameter which has write usages is not supported",
-                    RefactoringLocalize.inlineParameterRefactoring().get(),
+                    LocalizeValue.localizeTODO("Inline parameter which has write usages is not supported"),
+                    RefactoringLocalize.inlineParameterRefactoring(),
                     null
                 );
                 return;
@@ -239,13 +243,16 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
 
         if (!project.getApplication().isUnitTestMode()) {
             LocalizeValue occurrencesString = RefactoringLocalize.occurencesString(occurrences.size());
-            String question = RefactoringLocalize.inlineParameterConfirmation(psiParameter.getName(), constantExpression.getText()).get()
-                + " " + occurrencesString;
+            LocalizeValue question = LocalizeValue.join(
+                RefactoringLocalize.inlineParameterConfirmation(psiParameter.getName(), constantExpression.getText()),
+                LocalizeValue.space(),
+                occurrencesString
+            );
             RefactoringMessageDialog dialog = new RefactoringMessageDialog(
-                REFACTORING_NAME.get(),
+                REFACTORING_NAME,
                 question,
                 HelpID.INLINE_VARIABLE,
-                "OptionPane.questionIcon",
+                UIUtil.getQuestionIcon(),
                 true,
                 project
             );
@@ -294,15 +301,15 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         return value1 != null && value2 != null && value1.equals(value2);
     }
 
-    @Nullable
-    private static String getCannotInlineMessage(PsiParameter psiParameter, PsiMethod method) {
+    @Nonnull
+    private static LocalizeValue getCannotInlineMessage(PsiParameter psiParameter, PsiMethod method) {
         if (psiParameter.isVarArgs()) {
-            return RefactoringLocalize.inlineParameterErrorVarargs().get();
+            return RefactoringLocalize.inlineParameterErrorVarargs();
         }
         if (method.findSuperMethods().length > 0 ||
             OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0) {
-            return RefactoringLocalize.inlineParameterErrorHierarchy().get();
+            return RefactoringLocalize.inlineParameterErrorHierarchy();
         }
-        return null;
+        return LocalizeValue.empty();
     }
 }

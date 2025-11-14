@@ -26,73 +26,96 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiReferenceList;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 
 import java.util.Collection;
 
 @ExtensionImpl
 public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler {
-  public static final String REFACTORING_NAME = "Inline Super Class";
+    public static final LocalizeValue REFACTORING_NAME = JavaRefactoringLocalize.inlineSuperClass();
 
-  @Override
-  public boolean isEnabledOnElement(PsiElement element) {
-    return element instanceof PsiClass;
-  }
-
-  public boolean canInlineElement(PsiElement element) {
-    if (!(element instanceof PsiClass)) return false;
-    if (element.getLanguage() != JavaLanguage.INSTANCE) return false;
-    Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass)element).findAll();
-    return inheritors.size() > 0;
-  }
-
-  public void inlineElement(final Project project, final Editor editor, final PsiElement element) {
-    PsiClass superClass = (PsiClass)element;
-    Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass)element).findAll();
-    if (!superClass.getManager().isInProject(superClass)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, "Cannot inline non-project class", REFACTORING_NAME, null);
-      return;
+    @Override
+    public boolean isEnabledOnElement(PsiElement element) {
+        return element instanceof PsiClass;
     }
 
-    for (PsiClass inheritor : inheritors) {
-      if (PsiTreeUtil.isAncestor(superClass, inheritor, false)) {
-        CommonRefactoringUtil.showErrorHint(project,
-                                            editor,
-                                            "Cannot inline into the inner class. Move \'" + inheritor.getName() + "\' to upper level",
-                                            REFACTORING_NAME,
-                                            null);
-        return;
-      }
-      if (inheritor instanceof PsiAnonymousClass) {
-        CommonRefactoringUtil.showErrorHint(project, editor, "Cannot inline into anonymous class.", REFACTORING_NAME, null);
-        return;
-      }
-    }
-
-    PsiClass chosen = null;
-    PsiReference reference = editor != null ? TargetElementUtil.findReference(editor, editor.getCaretModel().getOffset()) : null;
-    if (reference != null) {
-      final PsiElement resolve = reference.resolve();
-      if (resolve == superClass) {
-        final PsiElement referenceElement = reference.getElement();
-        if (referenceElement != null) {
-          final PsiElement parent = referenceElement.getParent();
-          if (parent instanceof PsiReferenceList) {
-            final PsiElement gParent = parent.getParent();
-            if (gParent instanceof PsiClass && inheritors.contains(gParent)) {
-              chosen = (PsiClass)gParent;
-            }
-          }
+    @Override
+    @RequiredReadAction
+    public boolean canInlineElement(PsiElement element) {
+        if (!(element instanceof PsiClass)) {
+            return false;
         }
-      }
+        if (element.getLanguage() != JavaLanguage.INSTANCE) {
+            return false;
+        }
+        Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass) element).findAll();
+        return inheritors.size() > 0;
     }
-    new InlineSuperClassRefactoringDialog(project, superClass, chosen, inheritors.toArray(new PsiClass[inheritors.size()])).show();
-  }
+
+    @Override
+    @RequiredUIAccess
+    public void inlineElement(Project project, Editor editor, PsiElement element) {
+        PsiClass superClass = (PsiClass) element;
+        Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass) element).findAll();
+        if (!superClass.getManager().isInProject(superClass)) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineSuperNonProjectClassWarningMessage(),
+                REFACTORING_NAME,
+                null
+            );
+            return;
+        }
+
+        for (PsiClass inheritor : inheritors) {
+            if (PsiTreeUtil.isAncestor(superClass, inheritor, false)) {
+                CommonRefactoringUtil.showErrorHint(
+                    project,
+                    editor,
+                    JavaRefactoringLocalize.inlineSuperNoInnerClass(inheritor.getName()),
+                    REFACTORING_NAME,
+                    null
+                );
+                return;
+            }
+            if (inheritor instanceof PsiAnonymousClass) {
+                CommonRefactoringUtil.showErrorHint(
+                    project,
+                    editor,
+                    JavaRefactoringLocalize.inlineSuperNoAnonymousClass(),
+                    REFACTORING_NAME,
+                    null
+                );
+                return;
+            }
+        }
+
+        PsiClass chosen = null;
+        PsiReference reference = editor != null ? TargetElementUtil.findReference(editor, editor.getCaretModel().getOffset()) : null;
+        if (reference != null) {
+            PsiElement resolve = reference.resolve();
+            if (resolve == superClass) {
+                PsiElement referenceElement = reference.getElement();
+                if (referenceElement != null
+                    && referenceElement.getParent() instanceof PsiReferenceList refList
+                    && refList.getParent() instanceof PsiClass psiClass
+                    && inheritors.contains(psiClass)) {
+                    chosen = psiClass;
+                }
+            }
+        }
+        new InlineSuperClassRefactoringDialog(project, superClass, chosen, inheritors.toArray(new PsiClass[inheritors.size()])).show();
+    }
 }

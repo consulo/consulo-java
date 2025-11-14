@@ -223,6 +223,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(UsageInfo[] usages) {
         List<PsiClassType> thrownExceptions = ExceptionUtil.getThrownCheckedExceptions(myInitializer);
         Set<PsiVariable> varsUsedInInitializer = new HashSet<>();
@@ -319,11 +320,13 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
         }
 
         @Nullable
+        @RequiredReadAction
         public PsiElement getReplacement() {
             return myReplacement.isValid() ? myReplacement : null;
         }
 
         @Nullable
+        @RequiredReadAction
         public PsiVariable getVariable() {
             return myVariable != null && myVariable.isValid() ? myVariable : null;
         }

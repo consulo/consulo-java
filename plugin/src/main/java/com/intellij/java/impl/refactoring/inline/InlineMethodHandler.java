@@ -55,7 +55,7 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
             LocalizeValue message = method.isAbstract()
                 ? RefactoringLocalize.refactoringCannotBeAppliedToAbstractMethods(REFACTORING_NAME)
                 : RefactoringLocalize.refactoringCannotBeAppliedNoSourcesAttached(REFACTORING_NAME);
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_METHOD);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
             return;
         }
 
@@ -67,7 +67,7 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
                     "Inline of Java method",
                     refElement.getLanguage().getDisplayName()
                 );
-                CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_METHOD);
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
                 return;
             }
         }
@@ -79,14 +79,14 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
             else {
                 LocalizeValue message =
                     RefactoringLocalize.refactoringIsNotSupportedWhenReturnStatementInterruptsTheExecutionFlow(REFACTORING_NAME);
-                CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_METHOD);
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
                 return;
             }
         }
 
         if (reference == null && checkRecursive(method)) {
             LocalizeValue message = RefactoringLocalize.refactoringIsNotSupportedForRecursiveMethods(REFACTORING_NAME);
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_METHOD);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
             return;
         }
 
@@ -102,9 +102,9 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
         }
 
         if (reference != null) {
-            String errorMessage = InlineMethodProcessor.checkCalledInSuperOrThisExpr(methodBody, reference.getElement());
-            if (errorMessage != null) {
-                CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, REFACTORING_NAME.get(), HelpID.INLINE_METHOD);
+            LocalizeValue errorMessage = InlineMethodProcessor.checkCalledInSuperOrThisExpr(methodBody, reference.getElement());
+            if (errorMessage != LocalizeValue.empty()) {
+                CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, REFACTORING_NAME, HelpID.INLINE_METHOD);
                 return;
             }
         }
@@ -112,14 +112,14 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
         if (method.isConstructor()) {
             if (method.isVarArgs()) {
                 LocalizeValue message = RefactoringLocalize.refactoringCannotBeAppliedToVarargConstructors(REFACTORING_NAME);
-                CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_CONSTRUCTOR);
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
                 return;
             }
             boolean chainingConstructor = isChainingConstructor(method);
             if (!chainingConstructor) {
                 if (!isThisReference(reference)) {
                     LocalizeValue message = RefactoringLocalize.refactoringCannotBeAppliedToInlineNonChainingConstructors(REFACTORING_NAME);
-                    CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.INLINE_CONSTRUCTOR);
+                    CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
                     return;
                 }
                 allowInlineThisOnly = true;

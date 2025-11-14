@@ -26,6 +26,8 @@ add.property.to.constructors.checkbox:
     text: Add property to constructors
 annotation:
     text: Annotation
+annotation.types.cannot.be.inlined:
+    text: Annotation types cannot be inlined
 can.not.find.any.available.overriding.methods.for.the.selected.method:
     text: Can not find any available overriding methods for the selected method
 can.not.find.any.available.subclasses.for.the.selected.class:
@@ -45,6 +47,38 @@ choose.destination.class.label:
     text: Choose destination class
 choose.destination.package.label:
     text: Choose Destination Package
+class.cannot.be.inlined.because.a.call.to.its.constructor.is.unresolved:
+    text: Class cannot be inlined because a call to its constructor is unresolved
+class.cannot.be.inlined.because.an.interface.implemented.by.it.cannot.be.resolved:
+    text: Class cannot be inlined because an interface implemented by it cannot be resolved
+class.cannot.be.inlined.because.it.has.static.fields.with.non.constant.initializers:
+    text: Class cannot be inlined because it has static fields with non-constant initializers
+class.cannot.be.inlined.because.it.has.static.initializers:
+    text: Class cannot be inlined because it has static initializers
+class.cannot.be.inlined.because.it.has.static.inner.classes:
+    text: Class cannot be inlined because it has static inner classes
+class.cannot.be.inlined.because.it.has.static.methods:
+    text: Class cannot be inlined because it has static methods
+class.cannot.be.inlined.because.it.has.static.non.final.fields:
+    text: Class cannot be inlined because it has static non-final fields
+class.cannot.be.inlined.because.it.has.usages.of.fields.not.inherited.from.its.superclass:
+    text: Class cannot be inlined because it has usages of fields not inherited from its superclass
+class.cannot.be.inlined.because.it.has.usages.of.its.class.literal:
+    text: Class cannot be inlined because it has usages of its class literal
+class.cannot.be.inlined.because.it.has.usages.of.its.inner.classes:
+    text: Class cannot be inlined because it has usages of its inner classes
+class.cannot.be.inlined.because.it.is.used.as.a.this.qualifier:
+    text: Class cannot be inlined because it is used as a 'this' qualifier
+class.cannot.be.inlined.because.it.is.used.in.a.catch.clause:
+    text: Class cannot be inlined because it is used in a 'catch' clause
+class.cannot.be.inlined.because.it.is.used.in.a.throws.clause:
+    text: Class cannot be inlined because it is used in a 'throws' clause
+class.cannot.be.inlined.because.its.constructor.contains.return.statements:
+    text: Class cannot be inlined because its constructor contains 'return' statements
+class.cannot.be.inlined.because.its.superclass.cannot.be.resolved:
+    text: Class cannot be inlined because its superclass cannot be resolved
+class.cannot.be.inlined.because.there.are.usages.of.its.methods.not.inherited.from.its.superclass.or.interface:
+    text: Class cannot be inlined because there are usages of its methods not inherited from its superclass or interface
 class.found.column.header:
     text: Class found
 class.references.to.be.made.inner:
@@ -100,6 +134,8 @@ do.you.wish.to.invert.all.uses.of.parameter:
     text: Do you wish to invert all uses of parameter {0}?
 do.you.wish.to.invert.all.uses.of.variable:
     text: Do you wish to invert all uses of variable {0}?
+enums.cannot.be.inlined:
+    text: Enums cannot be inlined
 existing.wrapper.class.label:
     text: Use Existing Parameter Class
 exposed.delegation.command.name:
@@ -148,6 +184,8 @@ global.library.source:
     text: 'Global Library: {0}'
 initialization.expression.checkbox:
     text: 'Initialization expression (optional):'
+inline.anonymous.conflict.progress:
+    text: Searching for class "{0}" inheritors…
 inline.conflicts.progress:
     text: Check if inline is possible…
 inline.constant.field.not.supported.for.enum.constants:
@@ -160,6 +198,30 @@ inline.local.unable.try.catch.warning.message:
     text: Unable to inline outside try/catch statement
 inline.local.variable.declared.outside.cannot.refactor.message:
     text: Variable is declared outside a code block
+inline.method.multiline.method.in.ctor.call:
+    text: Inline cannot be applied to multiline method in constructor call
+inline.method.used.in.javadoc:
+    text: Inlined method is used in javadoc
+inline.parameter.cannot.find.initializer.warning.message:
+    text: Cannot find constant initializer for parameter
+inline.parameter.no.usages.warning.message:
+    text: Method has no usages
+inline.parameter.not.accessible.warning.message:
+    text: Constant initializer is not accessible in method body
+inline.super.class:
+    text: Inline Super Class
+inline.super.class.action.name:
+    text: Inline Super Class\u2026
+inline.super.class.label:
+    text: Class {0}
+inline.super.no.anonymous.class:
+    text: Cannot inline into anonymous class.
+inline.super.no.inner.class:
+    text: Cannot inline into the inner class. Move ''{0}'' to upper level
+inline.super.non.project.class.warning.message:
+    text: Cannot inline non-project class
+interfaces.cannot.be.inlined:
+    text: Interfaces cannot be inlined
 introduce.parameter.object:
     text: Introduce Parameter Object
 introduce.parameter.object.title:
@@ -190,6 +252,8 @@ invert.variable.command.name:
     text: Inverted
 javadoced.class:
     text: Javadoced class
+library.classes.cannot.be.inlined:
+    text: Library classes cannot be inlined
 make.class.an.inner.class.border:
     text: Make class {0} an inner class
 make.class.inner:
@@ -300,6 +364,8 @@ push.javadoc.down.title:
     text: Push Javadoc Down
 push.up.javadoc.command.name:
     text: Push up Javadoc
+records.cannot.be.inlined:
+    text: Record classes cannot be inlined
 refactor:
     text: Refactor
 reference:
@@ -443,6 +509,8 @@ type.parameter.to.be.remove:
     text: Type parameter to be remove
 type.parameters.can.not.be.introduced.as.type.parameters:
     text: Type parameters can not be introduced as type parameters.
+type.parameters.cannot.be.inlined:
+    text: Type parameters cannot be inlined
 type.selected.is.not.in.class.context:
     text: Type selected is not in class context.
 unable.to.find.the.requested.class:

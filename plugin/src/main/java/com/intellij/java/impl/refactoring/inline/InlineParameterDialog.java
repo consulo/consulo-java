@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 
@@ -54,8 +55,9 @@ public class InlineParameterDialog extends RefactoringDialog {
     }
 
     @Override
+    @RequiredReadAction
     protected JComponent createNorthPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         panel.add(
             new JLabel(
                 RefactoringLocalize.inlineParameterConfirmation(myParameter.getName(), myInitializer.getText()).get(),

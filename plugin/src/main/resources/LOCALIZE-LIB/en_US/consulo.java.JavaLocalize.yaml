@@ -164,6 +164,8 @@ class.file.decompiled.text:
     text: Decompiled .class file
 class.file.open.source.action:
     text: Open source file
+class.not.found.error.message:
+    text: Class ''{0}'' not found
 dependencies.tree.node.default.package.abbreviation:
     text: <default package>
 error.package.already.contains.package.html:
