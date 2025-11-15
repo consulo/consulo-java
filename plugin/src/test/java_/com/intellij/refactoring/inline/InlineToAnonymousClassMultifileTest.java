@@ -18,6 +18,7 @@ package com.intellij.refactoring.inline;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassProcessor;
+import consulo.localize.LocalizeValue;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
@@ -58,7 +59,7 @@ public abstract class InlineToAnonymousClassMultifileTest extends RefactoringTes
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
     final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
     PsiClass classToInline = myJavaFacade.findClass(className, ProjectScope.getAllScope(myProject));
-    assertEquals(null, InlineToAnonymousClassHandler.getCannotInlineMessage(classToInline));
+    assertEquals(LocalizeValue.empty(), InlineToAnonymousClassHandler.getCannotInlineMessage(classToInline));
     InlineToAnonymousClassProcessor processor = new InlineToAnonymousClassProcessor(myProject,
                                                                                     classToInline,
                                                                                     null, false, false, false);

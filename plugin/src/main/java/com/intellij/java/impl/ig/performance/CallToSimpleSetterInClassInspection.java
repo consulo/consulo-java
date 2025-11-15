@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
@@ -33,162 +34,164 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
 @ExtensionImpl
 public class CallToSimpleSetterInClassInspection extends BaseInspection {
+    @SuppressWarnings("UnusedDeclaration")
+    public boolean ignoreSetterCallsOnOtherObjects = false;
 
-  @SuppressWarnings("UnusedDeclaration")
-  public boolean ignoreSetterCallsOnOtherObjects = false;
-
-  @SuppressWarnings("UnusedDeclaration")
-  public boolean onlyReportPrivateSetter = false;
-
-  @Nonnull
-  public String getID() {
-    return "CallToSimpleSetterFromWithinClass";
-  }
-
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionGadgetsLocalize.callToSimpleSetterInClassDisplayName();
-  }
-
-  @Nonnull
-  public String buildErrorString(Object... infos) {
-    return InspectionGadgetsLocalize.callToSimpleSetterInClassProblemDescriptor().get();
-  }
-
-  @Nullable
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(
-      InspectionGadgetsLocalize.callToSimpleSetterInClassIgnoreOption().get(),
-      "ignoreSetterCallsOnOtherObjects"
-    );
-    optionsPanel.addCheckbox(
-      InspectionGadgetsLocalize.callToPrivateSetterInClassOption().get(),
-      "onlyReportPrivateSetter"
-    );
-    return optionsPanel;
-  }
-
-  public InspectionGadgetsFix buildFix(Object... infos) {
-    return new InlineCallFix();
-  }
-
-  private static class InlineCallFix extends InspectionGadgetsFix {
+    @SuppressWarnings("UnusedDeclaration")
+    public boolean onlyReportPrivateSetter = false;
 
     @Nonnull
-    public LocalizeValue getName() {
-      return InspectionGadgetsLocalize.callToSimpleSetterInClassInlineQuickfix();
+    @Override
+    public String getID() {
+        return "CallToSimpleSetterFromWithinClass";
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiElement methodIdentifier = descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression = (PsiReferenceExpression)methodIdentifier.getParent();
-      if (methodExpression == null) {
-        return;
-      }
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)methodExpression.getParent();
-      if (call == null) {
-        return;
-      }
-      final PsiExpressionList argumentList = call.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      final PsiExpression argument = arguments[0];
-      final PsiMethod method = call.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      final PsiCodeBlock body = method.getBody();
-      if (body == null) {
-        return;
-      }
-      final PsiStatement[] statements = body.getStatements();
-      final PsiExpressionStatement assignmentStatement = (PsiExpressionStatement)statements[0];
-      final PsiAssignmentExpression assignment = (PsiAssignmentExpression)assignmentStatement.getExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      final PsiReferenceExpression lhs = (PsiReferenceExpression)assignment.getLExpression();
-      final PsiField field = (PsiField)lhs.resolve();
-      if (field == null) {
-        return;
-      }
-      final String fieldName = field.getName();
-      if (qualifier == null) {
-        final JavaPsiFacade manager = JavaPsiFacade.getInstance(call.getProject());
-        final PsiResolveHelper resolveHelper = manager.getResolveHelper();
-        final PsiVariable variable = resolveHelper.resolveReferencedVariable(fieldName, call);
-        if (variable == null) {
-          return;
-        }
-        @NonNls final String newExpression;
-        if (variable.equals(field)) {
-          newExpression = fieldName + " = " + argument.getText();
-        }
-        else {
-          newExpression = "this." + fieldName + " = " + argument.getText();
-        }
-        replaceExpression(call, newExpression);
-      }
-      else {
-        final String newExpression = qualifier.getText() + '.' + fieldName + " = " + argument.getText();
-        replaceExpression(call, newExpression);
-      }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.callToSimpleSetterInClassDisplayName();
     }
-  }
 
-  public BaseInspectionVisitor buildVisitor() {
-    return new CallToSimpleSetterInClassVisitor();
-  }
+    @Nonnull
+    @Override
+    public String buildErrorString(Object... infos) {
+        return InspectionGadgetsLocalize.callToSimpleSetterInClassProblemDescriptor().get();
+    }
 
-  private class CallToSimpleSetterInClassVisitor extends BaseInspectionVisitor {
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        optionsPanel.addCheckbox(
+            InspectionGadgetsLocalize.callToSimpleSetterInClassIgnoreOption().get(),
+            "ignoreSetterCallsOnOtherObjects"
+        );
+        optionsPanel.addCheckbox(
+            InspectionGadgetsLocalize.callToPrivateSetterInClassOption().get(),
+            "onlyReportPrivateSetter"
+        );
+        return optionsPanel;
+    }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
-      super.visitMethodCallExpression(call);
-      final PsiClass containingClass = ClassUtils.getContainingClass(call);
-      if (containingClass == null) {
-        return;
-      }
-      final PsiMethod method = call.resolveMethod();
-      if (method == null) {
-        return;
-      }
-      if (!containingClass.equals(method.getContainingClass())) {
-        return;
-      }
-      final PsiReferenceExpression methodExpression = call.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
-        if (ignoreSetterCallsOnOtherObjects) {
-          return;
-        }
-        final PsiType type = qualifier.getType();
-        if (!(type instanceof PsiClassType)) {
-          return;
-        }
-        final PsiClassType classType = (PsiClassType)type;
-        final PsiClass qualifierClass = classType.resolve();
-        if (!containingClass.equals(qualifierClass)) {
-          return;
-        }
-      }
-      if (!PropertyUtil.isSimpleSetter(method)) {
-        return;
-      }
-      if (onlyReportPrivateSetter && !method.hasModifierProperty(PsiModifier.PRIVATE)) {
-        return;
-      }
-      final Query<PsiMethod> query = OverridingMethodsSearch.search(method, true);
-      final PsiMethod overridingMethod = query.findFirst();
-      if (overridingMethod != null) {
-        return;
-      }
-      registerMethodCallError(call);
+    public InspectionGadgetsFix buildFix(Object... infos) {
+        return new InlineCallFix();
     }
-  }
+
+    private static class InlineCallFix extends InspectionGadgetsFix {
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return InspectionGadgetsLocalize.callToSimpleSetterInClassInlineQuickfix();
+        }
+
+        @Override
+        @RequiredWriteAction
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiElement methodIdentifier = descriptor.getPsiElement();
+            PsiReferenceExpression methodExpression = (PsiReferenceExpression) methodIdentifier.getParent();
+            if (methodExpression == null) {
+                return;
+            }
+            PsiMethodCallExpression call = (PsiMethodCallExpression) methodExpression.getParent();
+            if (call == null) {
+                return;
+            }
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression argument = arguments[0];
+            PsiMethod method = call.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            PsiCodeBlock body = method.getBody();
+            if (body == null) {
+                return;
+            }
+            PsiStatement[] statements = body.getStatements();
+            PsiExpressionStatement assignmentStatement = (PsiExpressionStatement) statements[0];
+            PsiAssignmentExpression assignment = (PsiAssignmentExpression) assignmentStatement.getExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression lhs = (PsiReferenceExpression) assignment.getLExpression();
+            PsiField field = (PsiField) lhs.resolve();
+            if (field == null) {
+                return;
+            }
+            String fieldName = field.getName();
+            if (qualifier == null) {
+                PsiResolveHelper resolveHelper = PsiResolveHelper.getInstance(call.getProject());
+                PsiVariable variable = resolveHelper.resolveReferencedVariable(fieldName, call);
+                if (variable == null) {
+                    return;
+                }
+                String newExpression;
+                if (variable.equals(field)) {
+                    newExpression = fieldName + " = " + argument.getText();
+                }
+                else {
+                    newExpression = "this." + fieldName + " = " + argument.getText();
+                }
+                replaceExpression(call, newExpression);
+            }
+            else {
+                String newExpression = qualifier.getText() + '.' + fieldName + " = " + argument.getText();
+                replaceExpression(call, newExpression);
+            }
+        }
+    }
+
+    @Override
+    public BaseInspectionVisitor buildVisitor() {
+        return new CallToSimpleSetterInClassVisitor();
+    }
+
+    private class CallToSimpleSetterInClassVisitor extends BaseInspectionVisitor {
+        @Override
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+            super.visitMethodCallExpression(call);
+            PsiClass containingClass = ClassUtils.getContainingClass(call);
+            if (containingClass == null) {
+                return;
+            }
+            PsiMethod method = call.resolveMethod();
+            if (method == null) {
+                return;
+            }
+            if (!containingClass.equals(method.getContainingClass())) {
+                return;
+            }
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
+            if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
+                if (ignoreSetterCallsOnOtherObjects) {
+                    return;
+                }
+                PsiType type = qualifier.getType();
+                if (!(type instanceof PsiClassType classType)) {
+                    return;
+                }
+                PsiClass qualifierClass = classType.resolve();
+                if (!containingClass.equals(qualifierClass)) {
+                    return;
+                }
+            }
+            if (!PropertyUtil.isSimpleSetter(method)) {
+                return;
+            }
+            if (onlyReportPrivateSetter && !method.isPrivate()) {
+                return;
+            }
+            Query<PsiMethod> query = OverridingMethodsSearch.search(method, true);
+            PsiMethod overridingMethod = query.findFirst();
+            if (overridingMethod != null) {
+                return;
+            }
+            registerMethodCallError(call);
+        }
+    }
 }

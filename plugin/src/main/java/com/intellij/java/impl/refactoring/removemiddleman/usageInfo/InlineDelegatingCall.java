@@ -19,52 +19,56 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
 
 public class InlineDelegatingCall extends FixableUsageInfo {
-  private final PsiMethodCallExpression expression;
-  private final String myAccess;
-  private final String delegatingName;
-  private final int[] parameterPermutation;
+    private final PsiMethodCallExpression expression;
+    private final String myAccess;
+    private final String delegatingName;
+    private final int[] parameterPermutation;
 
-  public InlineDelegatingCall(PsiMethodCallExpression expression,
-                              int[] parameterPermutation,
-                              String access,
-                              String delegatingName) {
-    super(expression);
-    this.expression = expression;
-    this.parameterPermutation = parameterPermutation;
-    myAccess = access;
-    this.delegatingName = delegatingName;
-  }
+    public InlineDelegatingCall(
+        PsiMethodCallExpression expression,
+        int[] parameterPermutation,
+        String access,
+        String delegatingName
+    ) {
+        super(expression);
+        this.expression = expression;
+        this.parameterPermutation = parameterPermutation;
+        myAccess = access;
+        this.delegatingName = delegatingName;
+    }
 
-  public void fixUsage() throws IncorrectOperationException {
-    final StringBuffer replacementText = new StringBuffer();
-    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    final PsiElement qualifier = methodExpression.getQualifier();
-    if (qualifier != null) {
-      final String qualifierText = qualifier.getText();
-      replacementText.append(qualifierText + '.');
+    @Override
+    @RequiredWriteAction
+    public void fixUsage() throws IncorrectOperationException {
+        StringBuilder replacementText = new StringBuilder();
+        PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        PsiElement qualifier = methodExpression.getQualifier();
+        if (qualifier != null) {
+            String qualifierText = qualifier.getText();
+            replacementText.append(qualifierText + '.');
+        }
+        replacementText.append(myAccess).append(".");
+        replacementText.append(delegatingName).append('(');
+        PsiExpressionList argumentList = expression.getArgumentList();
+        PsiExpression[] args = argumentList.getExpressions();
+        boolean first = true;
+        for (int i : parameterPermutation) {
+            if (!first) {
+                replacementText.append(", ");
+            }
+            first = false;
+            String argText = args[i].getText();
+            replacementText.append(argText);
+        }
+        replacementText.append(')');
+        String replacementTextString = replacementText.toString();
+        MutationUtils.replaceExpression(replacementTextString, expression);
     }
-    replacementText.append(myAccess).append(".");
-    replacementText.append(delegatingName).append('(');
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    assert argumentList != null;
-    final PsiExpression[] args = argumentList.getExpressions();
-    boolean first = true;
-    for (int i : parameterPermutation) {
-      if (!first) {
-        replacementText.append(", ");
-      }
-      first = false;
-      final String argText = args[i].getText();
-      replacementText.append(argText);
-    }
-    replacementText.append(')');
-    final String replacementTextString = replacementText.toString();
-    MutationUtils.replaceExpression(replacementTextString, expression);
-  }
 }

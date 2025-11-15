@@ -24,12 +24,13 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
@@ -39,10 +40,11 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.util.lang.ref.Ref;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.lang.ref.SimpleReference;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
@@ -52,258 +54,262 @@ import java.util.*;
  */
 @ExtensionImpl
 public class InlineParameterHandler extends JavaInlineActionHandler {
-  private static final Logger LOG = Logger.getInstance(InlineParameterHandler.class);
-  public static final String REFACTORING_NAME = RefactoringBundle.message("inline.parameter.refactoring");
+    public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.inlineParameterRefactoring();
 
-  @RequiredReadAction
-  public boolean canInlineElement(PsiElement element) {
-    if (element instanceof PsiParameter) {
-      final PsiElement parent = element.getParent();
-      if (parent instanceof PsiParameterList &&
-          parent.getParent() instanceof PsiMethod &&
-          element.getLanguage() == JavaLanguage.INSTANCE) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  @RequiredReadAction
-  @RequiredUIAccess
-  public void inlineElement(final Project project, final Editor editor, final PsiElement psiElement) {
-    final PsiParameter psiParameter = (PsiParameter) psiElement;
-    final PsiParameterList parameterList = (PsiParameterList) psiParameter.getParent();
-    if (!(parameterList.getParent() instanceof PsiMethod)) {
-      return;
-    }
-    final int index = parameterList.getParameterIndex(psiParameter);
-    final PsiMethod method = (PsiMethod) parameterList.getParent();
-
-    String errorMessage = getCannotInlineMessage(psiParameter, method);
-    if (errorMessage != null) {
-      CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, RefactoringLocalize.inlineParameterRefactoring().get(), null);
-      return;
+    @Override
+    @RequiredReadAction
+    public boolean canInlineElement(PsiElement element) {
+        return element instanceof PsiParameter param
+            && param.getParent() instanceof PsiParameterList paramList
+            && paramList.getParent() instanceof PsiMethod
+            && param.getLanguage() == JavaLanguage.INSTANCE;
     }
 
-    final Ref<PsiExpression> refInitializer = new Ref<>();
-    final Ref<PsiExpression> refConstantInitializer = new Ref<>();
-    final Ref<PsiCallExpression> refMethodCall = new Ref<>();
-    final List<PsiReference> occurrences = Collections.synchronizedList(new ArrayList<PsiReference>());
-    final Collection<PsiFile> containingFiles = Collections.synchronizedSet(new HashSet<PsiFile>());
-    containingFiles.add(psiParameter.getContainingFile());
-    boolean result = ReferencesSearch.search(method).forEach(psiReference -> {
-      PsiElement element = psiReference.getElement();
-      final PsiElement parent = element.getParent();
-      if (parent instanceof PsiCallExpression methodCall) {
-        occurrences.add(psiReference);
-        containingFiles.add(element.getContainingFile());
-        final PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
-        if (expressions.length <= index) return false;
-        PsiExpression argument = expressions[index];
-        if (!refInitializer.isNull()) {
-          return argument != null
-            && PsiEquivalenceUtil.areElementsEquivalent(refInitializer.get(), argument)
-            && PsiEquivalenceUtil.areElementsEquivalent(refMethodCall.get(), methodCall);
+    @Override
+    @RequiredUIAccess
+    public void inlineElement(final Project project, Editor editor, PsiElement psiElement) {
+        final PsiParameter psiParameter = (PsiParameter) psiElement;
+        PsiParameterList parameterList = (PsiParameterList) psiParameter.getParent();
+        if (!(parameterList.getParent() instanceof PsiMethod method)) {
+            return;
         }
-        if (InlineToAnonymousConstructorProcessor.isConstant(argument) || getReferencedFinalField(argument) != null) {
-          if (refConstantInitializer.isNull()) {
-            refConstantInitializer.set(argument);
-          }
-          else if (!isSameConstant(argument, refConstantInitializer.get())) {
-            return false;
-          }
-        } else if (!isRecursiveReferencedParameter(argument, psiParameter)) {
-          if (!refConstantInitializer.isNull()) return false;
-          refInitializer.set(argument);
-          refMethodCall.set(methodCall);
-        }
-      }
-      return true;
-    });
-    final int offset = editor.getCaretModel().getOffset();
-    final PsiElement refExpr = psiElement.getContainingFile().findElementAt(offset);
-    final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(refExpr, PsiCodeBlock.class);
-    if (codeBlock != null) {
-      final PsiElement[] defs = DefUseUtil.getDefs(codeBlock, psiParameter, refExpr);
-      if (defs.length == 1) {
-        final PsiElement def = defs[0];
-        if (def instanceof PsiReferenceExpression referenceExpression && PsiUtil.isOnAssignmentLeftHand(referenceExpression)) {
-          final PsiExpression rExpr = ((PsiAssignmentExpression)def.getParent()).getRExpression();
-          if (rExpr != null) {
-            final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, psiParameter, refExpr);
+        int index = parameterList.getParameterIndex(psiParameter);
 
-            if (InlineLocalHandler.checkRefsInAugmentedAssignmentOrUnaryModified(refs) == null) {
-              new WriteCommandAction(project) {
-                @Override
-                protected void run(Result result) throws Throwable {
-                  for (final PsiElement ref : refs) {
-                    InlineUtil.inlineVariable(psiParameter, rExpr, (PsiJavaCodeReferenceElement)ref);
-                  }
-                  def.getParent().delete();
+        LocalizeValue errorMessage = getCannotInlineMessage(psiParameter, method);
+        if (errorMessage != LocalizeValue.empty()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                errorMessage,
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
+            return;
+        }
+
+        SimpleReference<PsiExpression> refInitializer = new SimpleReference<>();
+        SimpleReference<PsiExpression> refConstantInitializer = new SimpleReference<>();
+        SimpleReference<PsiCallExpression> refMethodCall = new SimpleReference<>();
+        List<PsiReference> occurrences = Collections.synchronizedList(new ArrayList<PsiReference>());
+        Collection<PsiFile> containingFiles = Collections.synchronizedSet(new HashSet<PsiFile>());
+        containingFiles.add(psiParameter.getContainingFile());
+        boolean result = ReferencesSearch.search(method).forEach(psiReference -> {
+            PsiElement element = psiReference.getElement();
+            PsiElement parent = element.getParent();
+            if (parent instanceof PsiCallExpression methodCall) {
+                occurrences.add(psiReference);
+                containingFiles.add(element.getContainingFile());
+                PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
+                if (expressions.length <= index) {
+                    return false;
                 }
-              }.execute();
-              return;
+                PsiExpression argument = expressions[index];
+                if (!refInitializer.isNull()) {
+                    return argument != null
+                        && PsiEquivalenceUtil.areElementsEquivalent(refInitializer.get(), argument)
+                        && PsiEquivalenceUtil.areElementsEquivalent(refMethodCall.get(), methodCall);
+                }
+                if (InlineToAnonymousConstructorProcessor.isConstant(argument) || getReferencedFinalField(argument) != null) {
+                    if (refConstantInitializer.isNull()) {
+                        refConstantInitializer.set(argument);
+                    }
+                    else if (!isSameConstant(argument, refConstantInitializer.get())) {
+                        return false;
+                    }
+                }
+                else if (!isRecursiveReferencedParameter(argument, psiParameter)) {
+                    if (!refConstantInitializer.isNull()) {
+                        return false;
+                    }
+                    refInitializer.set(argument);
+                    refMethodCall.set(methodCall);
+                }
             }
-          }
+            return true;
+        });
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement refExpr = psiElement.getContainingFile().findElementAt(offset);
+        PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(refExpr, PsiCodeBlock.class);
+        if (codeBlock != null) {
+            PsiElement[] defs = DefUseUtil.getDefs(codeBlock, psiParameter, refExpr);
+            if (defs.length == 1 && defs[0] instanceof PsiReferenceExpression defRefExpr && PsiUtil.isOnAssignmentLeftHand(defRefExpr)) {
+                final PsiExpression rExpr = ((PsiAssignmentExpression) defRefExpr.getParent()).getRExpression();
+                if (rExpr != null) {
+                    final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, psiParameter, refExpr);
+
+                    if (InlineLocalHandler.checkRefsInAugmentedAssignmentOrUnaryModified(refs) == null) {
+                        new WriteCommandAction(project) {
+                            @Override
+                            @RequiredWriteAction
+                            protected void run(Result result) throws Throwable {
+                                for (PsiElement ref : refs) {
+                                    InlineUtil.inlineVariable(psiParameter, rExpr, (PsiJavaCodeReferenceElement) ref);
+                                }
+                                defRefExpr.getParent().delete();
+                            }
+                        }.execute();
+                        return;
+                    }
+                }
+            }
         }
-      }
-    }
-    if (occurrences.isEmpty()) {
-      CommonRefactoringUtil
-        .showErrorHint(project, editor, "Method has no usages", RefactoringLocalize.inlineParameterRefactoring().get(), null);
-      return;
-    }
-    if (!result) {
-      CommonRefactoringUtil.showErrorHint(
-        project,
-        editor,
-        "Cannot find constant initializer for parameter",
-        RefactoringLocalize.inlineParameterRefactoring().get(),
-        null
-      );
-      return;
-    }
-    if (!refInitializer.isNull()) {
-      if (project.getApplication().isUnitTestMode()) {
-        final InlineParameterExpressionProcessor processor =
-          new InlineParameterExpressionProcessor(
-            refMethodCall.get(),
-            method,
-            psiParameter,
-            refInitializer.get(),
-            method.getProject().getUserData(InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS)
-          );
-        processor.run();
-      }
-      else {
-        final boolean createLocal = ReferencesSearch.search(psiParameter).findAll().size() > 1;
-        InlineParameterDialog dlg = new InlineParameterDialog(refMethodCall.get(), method, psiParameter, refInitializer.get(), createLocal);
-        dlg.show();
-      }
-      return;
-    }
-    if (refConstantInitializer.isNull()) {
-      CommonRefactoringUtil.showErrorHint(
-        project,
-        editor,
-        "Cannot find constant initializer for parameter",
-        RefactoringLocalize.inlineParameterRefactoring().get(),
-        null
-      );
-      return;
-    }
-
-    final Ref<Boolean> isNotConstantAccessible = new Ref<>();
-    final PsiExpression constantExpression = refConstantInitializer.get();
-    constantExpression.accept(new JavaRecursiveElementVisitor(){
-      @Override
-      @RequiredReadAction
-      public void visitReferenceExpression(PsiReferenceExpression expression) {
-        super.visitReferenceExpression(expression);
-        final PsiElement resolved = expression.resolve();
-        if (resolved instanceof PsiMember member && !PsiUtil.isAccessible(member, method, null)) {
-          isNotConstantAccessible.set(Boolean.TRUE);
+        if (occurrences.isEmpty()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineParameterNoUsagesWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
+            return;
         }
-      }
-    });
-    if (!isNotConstantAccessible.isNull() && isNotConstantAccessible.get()) {
-      CommonRefactoringUtil.showErrorHint(
-        project,
-        editor,
-        "Constant initializer is not accessible in method body",
-        RefactoringLocalize.inlineParameterRefactoring().get(),
-        null
-      );
-      return;
-    }
-
-    for (PsiReference psiReference : ReferencesSearch.search(psiParameter)) {
-      final PsiElement element = psiReference.getElement();
-      if (element instanceof PsiExpression expression && PsiUtil.isAccessedForWriting(expression)) {
-        CommonRefactoringUtil.showErrorHint(
-          project,
-          editor,
-          "Inline parameter which has write usages is not supported",
-          RefactoringLocalize.inlineParameterRefactoring().get(),
-          null
-        );
-        return;
-      }
-    }
-
-    if (!project.getApplication().isUnitTestMode()) {
-      LocalizeValue occurencesString = RefactoringLocalize.occurencesString(occurrences.size());
-      String question = RefactoringLocalize.inlineParameterConfirmation(psiParameter.getName(), constantExpression.getText()).get()
-        + " " + occurencesString;
-      RefactoringMessageDialog dialog = new RefactoringMessageDialog(
-        REFACTORING_NAME,
-        question,
-        HelpID.INLINE_VARIABLE,
-        "OptionPane.questionIcon",
-        true,
-        project
-      );
-      dialog.show();
-      if (!dialog.isOK()){
-        return;
-      }
-    }
-
-    SameParameterValueInspection.InlineParameterValueFix.inlineSameParameterValue(method, psiParameter, constantExpression);
-  }
-
-  @Nullable
-  @RequiredReadAction
-  private static PsiField getReferencedFinalField(final PsiExpression argument) {
-    if (argument instanceof PsiReferenceExpression referenceExpression) {
-      final PsiElement element = referenceExpression.resolve();
-      if (element instanceof PsiField field) {
-        final PsiModifierList modifierList = field.getModifierList();
-        if (modifierList != null && modifierList.hasModifierProperty(PsiModifier.FINAL)) {
-          return field;
+        if (!result) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineParameterCannotFindInitializerWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
+            return;
         }
-      }
-    }
-    return null;
-  }
+        if (!refInitializer.isNull()) {
+            if (project.getApplication().isUnitTestMode()) {
+                InlineParameterExpressionProcessor processor = new InlineParameterExpressionProcessor(
+                    refMethodCall.get(),
+                    method,
+                    psiParameter,
+                    refInitializer.get(),
+                    method.getProject().getUserData(InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS)
+                );
+                processor.run();
+            }
+            else {
+                boolean createLocal = ReferencesSearch.search(psiParameter).findAll().size() > 1;
+                InlineParameterDialog dlg =
+                    new InlineParameterDialog(refMethodCall.get(), method, psiParameter, refInitializer.get(), createLocal);
+                dlg.show();
+            }
+            return;
+        }
+        if (refConstantInitializer.isNull()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineParameterCannotFindInitializerWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
+            return;
+        }
 
-  @RequiredReadAction
-  private static boolean isRecursiveReferencedParameter(final PsiExpression argument, final PsiParameter param) {
-    if (argument instanceof PsiReferenceExpression referenceExpression) {
-      final PsiElement element = referenceExpression.resolve();
-      if (element instanceof PsiParameter) {
-        return element.equals(param);
-      }
-    }
-    return false;
-  }
+        final SimpleReference<Boolean> isNotConstantAccessible = new SimpleReference<>();
+        PsiExpression constantExpression = refConstantInitializer.get();
+        constantExpression.accept(new JavaRecursiveElementVisitor() {
+            @Override
+            @RequiredReadAction
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
+                super.visitReferenceExpression(expression);
+                PsiElement resolved = expression.resolve();
+                if (resolved instanceof PsiMember member && !PsiUtil.isAccessible(member, method, null)) {
+                    isNotConstantAccessible.set(Boolean.TRUE);
+                }
+            }
+        });
+        if (!isNotConstantAccessible.isNull() && isNotConstantAccessible.get()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                JavaRefactoringLocalize.inlineParameterNotAccessibleWarningMessage(),
+                RefactoringLocalize.inlineParameterRefactoring(),
+                null
+            );
+            return;
+        }
 
-  @RequiredReadAction
-  private static boolean isSameConstant(final PsiExpression expr1, final PsiExpression expr2) {
-    boolean expr1Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr1);
-    boolean expr2Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr2);
-    if (expr1Null || expr2Null) {
-      return expr1Null && expr2Null;
-    }
-    final PsiField field1 = getReferencedFinalField(expr1);
-    final PsiField field2 = getReferencedFinalField(expr2);
-    if (field1 != null && field1 == field2) {
-      return true;
-    }
-    Object value1 = JavaPsiFacade.getInstance(expr1.getProject()).getConstantEvaluationHelper().computeConstantExpression(expr1);
-    Object value2 = JavaPsiFacade.getInstance(expr2.getProject()).getConstantEvaluationHelper().computeConstantExpression(expr2);
-    return value1 != null && value2 != null && value1.equals(value2);
-  }
+        for (PsiReference psiReference : ReferencesSearch.search(psiParameter)) {
+            PsiElement element = psiReference.getElement();
+            if (element instanceof PsiExpression expression && PsiUtil.isAccessedForWriting(expression)) {
+                CommonRefactoringUtil.showErrorHint(
+                    project,
+                    editor,
+                    LocalizeValue.localizeTODO("Inline parameter which has write usages is not supported"),
+                    RefactoringLocalize.inlineParameterRefactoring(),
+                    null
+                );
+                return;
+            }
+        }
 
-  @Nullable
-  private static String getCannotInlineMessage(final PsiParameter psiParameter, final PsiMethod method) {
-    if (psiParameter.isVarArgs()) {
-      return RefactoringLocalize.inlineParameterErrorVarargs().get();
+        if (!project.getApplication().isUnitTestMode()) {
+            LocalizeValue occurrencesString = RefactoringLocalize.occurencesString(occurrences.size());
+            LocalizeValue question = LocalizeValue.join(
+                RefactoringLocalize.inlineParameterConfirmation(psiParameter.getName(), constantExpression.getText()),
+                LocalizeValue.space(),
+                occurrencesString
+            );
+            RefactoringMessageDialog dialog = new RefactoringMessageDialog(
+                REFACTORING_NAME,
+                question,
+                HelpID.INLINE_VARIABLE,
+                UIUtil.getQuestionIcon(),
+                true,
+                project
+            );
+            dialog.show();
+            if (!dialog.isOK()) {
+                return;
+            }
+        }
+
+        SameParameterValueInspection.InlineParameterValueFix.inlineSameParameterValue(method, psiParameter, constantExpression);
     }
-    if (method.findSuperMethods().length > 0 ||
-        OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0) {
-      return RefactoringLocalize.inlineParameterErrorHierarchy().get();
+
+    @Nullable
+    @RequiredReadAction
+    private static PsiField getReferencedFinalField(PsiExpression argument) {
+        if (argument instanceof PsiReferenceExpression referenceExpression && referenceExpression.resolve() instanceof PsiField field) {
+            PsiModifierList modifierList = field.getModifierList();
+            if (modifierList != null && modifierList.hasModifierProperty(PsiModifier.FINAL)) {
+                return field;
+            }
+        }
+        return null;
     }
-    return null;
-  }
+
+    @RequiredReadAction
+    private static boolean isRecursiveReferencedParameter(PsiExpression argument, PsiParameter param) {
+        return argument instanceof PsiReferenceExpression referenceExpression
+            && referenceExpression.resolve() instanceof PsiParameter parameter
+            && parameter.equals(param);
+    }
+
+    @RequiredReadAction
+    private static boolean isSameConstant(PsiExpression expr1, PsiExpression expr2) {
+        boolean expr1Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr1);
+        boolean expr2Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr2);
+        if (expr1Null || expr2Null) {
+            return expr1Null && expr2Null;
+        }
+        PsiField field1 = getReferencedFinalField(expr1);
+        PsiField field2 = getReferencedFinalField(expr2);
+        if (field1 != null && field1 == field2) {
+            return true;
+        }
+        Object value1 = JavaPsiFacade.getInstance(expr1.getProject()).getConstantEvaluationHelper().computeConstantExpression(expr1);
+        Object value2 = JavaPsiFacade.getInstance(expr2.getProject()).getConstantEvaluationHelper().computeConstantExpression(expr2);
+        return value1 != null && value2 != null && value1.equals(value2);
+    }
+
+    @Nonnull
+    private static LocalizeValue getCannotInlineMessage(PsiParameter psiParameter, PsiMethod method) {
+        if (psiParameter.isVarArgs()) {
+            return RefactoringLocalize.inlineParameterErrorVarargs();
+        }
+        if (method.findSuperMethods().length > 0 ||
+            OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0) {
+            return RefactoringLocalize.inlineParameterErrorHierarchy();
+        }
+        return LocalizeValue.empty();
+    }
 }

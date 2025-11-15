@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.psi;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -25,93 +26,85 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
 public class MutationUtils {
-  private MutationUtils() {
-    super();
-  }
-
-
-  public static void replaceType(String newExpression,
-                                 PsiTypeElement typeElement)
-      throws IncorrectOperationException {
-    final PsiManager mgr = typeElement.getManager();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
-    final PsiType newType =
-        factory.createTypeFromText(newExpression, null);
-    final PsiTypeElement newTypeElement = factory.createTypeElement(newType);
-    final PsiElement insertedElement = typeElement.replace(newTypeElement);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
-    final PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
-    codeStyleManager.reformat(shortenedElement);
-  }
-
-  public static void replaceExpression(String newExpression,
-                                       PsiExpression exp)
-      throws IncorrectOperationException {
-    final PsiManager mgr = exp.getManager();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
-    final PsiExpression newCall =
-        factory.createExpressionFromText(newExpression, null);
-    final PsiElement insertedElement = exp.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
-    final PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
-    codeStyleManager.reformat(shortenedElement);
-  }
-
-  public static void replaceExpressionIfValid(String newExpression,
-                                              PsiExpression exp) throws IncorrectOperationException {
-    final PsiManager mgr = exp.getManager();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
-    final PsiExpression newCall;
-    try {
-      newCall = factory.createExpressionFromText(newExpression, null);
-    } catch (IncorrectOperationException e) {
-      return;
+    private MutationUtils() {
+        super();
     }
-    final PsiElement insertedElement = exp.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
-    final PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
-    codeStyleManager.reformat(shortenedElement);
-  }
 
-  public static void replaceReference(String className,
-                                      PsiJavaCodeReferenceElement reference)
-      throws IncorrectOperationException {
-    final PsiManager mgr = reference.getManager();
-    final Project project = mgr.getProject();
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(mgr.getProject());
-    final PsiElementFactory factory = facade.getElementFactory();
-    final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-
-
-    final PsiElement insertedElement;
-    final PsiElement parent = reference.getParent();
-    if (parent instanceof PsiReferenceExpression) {
-      final PsiClass aClass = facade.findClass(className, scope);
-      if (aClass == null) return;
-      ((PsiReferenceExpression) parent).setQualifierExpression(factory.createReferenceExpression(aClass));
-      insertedElement = ((PsiReferenceExpression) parent).getQualifierExpression();
-    } else {
-      final PsiJavaCodeReferenceElement newReference =
-          factory.createReferenceElementByFQClassName(className, scope);
-      insertedElement = reference.replace(newReference);
+    @RequiredWriteAction
+    public static void replaceType(String newExpression, PsiTypeElement typeElement) throws IncorrectOperationException {
+        PsiManager mgr = typeElement.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
+        PsiType newType = factory.createTypeFromText(newExpression, null);
+        PsiTypeElement newTypeElement = factory.createTypeElement(newType);
+        PsiElement insertedElement = typeElement.replace(newTypeElement);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
+        PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
+        codeStyleManager.reformat(shortenedElement);
     }
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
-    final PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
-    codeStyleManager.reformat(shortenedElement);
-  }
 
-  public static void replaceStatement(String newStatement,
-                                      PsiStatement statement)
-      throws IncorrectOperationException {
-    final Project project = statement.getProject();
-    final PsiManager mgr = PsiManager.getInstance(project);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
-    final PsiStatement newCall =
-        factory.createStatementFromText(newStatement, null);
-    final PsiElement insertedElement = statement.replace(newCall);
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
-    final PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
-    codeStyleManager.reformat(shortenedElement);
-  }
+    @RequiredWriteAction
+    public static void replaceExpression(String newExpression, PsiExpression exp) throws IncorrectOperationException {
+        PsiManager mgr = exp.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
+        PsiExpression newCall = factory.createExpressionFromText(newExpression, null);
+        PsiElement insertedElement = exp.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
+        PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
+        codeStyleManager.reformat(shortenedElement);
+    }
 
+    @RequiredWriteAction
+    public static void replaceExpressionIfValid(String newExpression, PsiExpression exp) throws IncorrectOperationException {
+        PsiManager mgr = exp.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
+        PsiExpression newCall;
+        try {
+            newCall = factory.createExpressionFromText(newExpression, null);
+        }
+        catch (IncorrectOperationException e) {
+            return;
+        }
+        PsiElement insertedElement = exp.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
+        PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
+        codeStyleManager.reformat(shortenedElement);
+    }
+
+    @RequiredWriteAction
+    public static void replaceReference(String className, PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
+        PsiManager mgr = reference.getManager();
+        Project project = mgr.getProject();
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(mgr.getProject());
+        PsiElementFactory factory = facade.getElementFactory();
+        GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+
+        PsiElement insertedElement;
+        if (reference.getParent() instanceof PsiReferenceExpression refExpr) {
+            PsiClass aClass = facade.findClass(className, scope);
+            if (aClass == null) {
+                return;
+            }
+            refExpr.setQualifierExpression(factory.createReferenceExpression(aClass));
+            insertedElement = refExpr.getQualifierExpression();
+        }
+        else {
+            PsiJavaCodeReferenceElement newReference = factory.createReferenceElementByFQClassName(className, scope);
+            insertedElement = reference.replace(newReference);
+        }
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
+        PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
+        codeStyleManager.reformat(shortenedElement);
+    }
+
+    @RequiredWriteAction
+    public static void replaceStatement(String newStatement, PsiStatement statement) throws IncorrectOperationException {
+        Project project = statement.getProject();
+        PsiManager mgr = PsiManager.getInstance(project);
+        PsiElementFactory factory = JavaPsiFacade.getInstance(mgr.getProject()).getElementFactory();
+        PsiStatement newCall = factory.createStatementFromText(newStatement, null);
+        PsiElement insertedElement = statement.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(mgr.getProject());
+        PsiElement shortenedElement = JavaCodeStyleManager.getInstance(mgr.getProject()).shortenClassReferences(insertedElement);
+        codeStyleManager.reformat(shortenedElement);
+    }
 }

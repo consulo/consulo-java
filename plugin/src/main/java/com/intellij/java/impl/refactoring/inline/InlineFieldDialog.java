@@ -21,97 +21,105 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.HelpManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
-  public static final String REFACTORING_NAME = RefactoringBundle.message("inline.field.title");
-  private final PsiReferenceExpression myReferenceExpression;
+    private final PsiReferenceExpression myReferenceExpression;
 
-  private final PsiField myField;
-  protected final int myOccurrencesNumber;
+    private final PsiField myField;
+    protected final int myOccurrencesNumber;
 
-  public InlineFieldDialog(Project project, PsiField field, PsiReferenceExpression ref) {
-    super(project, true, field);
-    myField = field;
-    myReferenceExpression = ref;
-    myInvokedOnReference = myReferenceExpression != null;
+    @RequiredReadAction
+    public InlineFieldDialog(Project project, PsiField field, PsiReferenceExpression ref) {
+        super(project, true, field);
+        myField = field;
+        myReferenceExpression = ref;
+        myInvokedOnReference = myReferenceExpression != null;
 
-    setTitle(REFACTORING_NAME);
-    myOccurrencesNumber = initOccurrencesNumber(myField);
-    init();
-  }
-
-  @Nonnull
-  @Override
-  protected LocalizeValue getNameLabelText() {
-    String fieldText = PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);
-    return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText);
-  }
-
-  @Nonnull
-  @Override
-  protected LocalizeValue getBorderTitle() {
-    return RefactoringLocalize.inlineFieldBorderTitle();
-  }
-
-  @Nonnull
-  @Override
-  protected LocalizeValue getInlineThisText() {
-    return RefactoringLocalize.thisReferenceOnlyAndKeepTheField();
-  }
-
-  @Nonnull
-  @Override
-  protected LocalizeValue getInlineAllText() {
-    final String occurrencesString = myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
-    return LocalizeValue.join(RefactoringLocalize.allReferencesAndRemoveTheField(), LocalizeValue.localizeTODO(occurrencesString));
-  }
-
-  @Override
-  protected boolean isInlineThis() {
-    return JavaRefactoringSettings.getInstance().INLINE_FIELD_THIS;
-  }
-
-  @Override
-  protected boolean isSearchInCommentsAndStrings() {
-    return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_FIELD;
-  }
-
-  @Override
-  protected void saveSearchInCommentsAndStrings(boolean searchInComments) {
-    JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_FIELD = searchInComments;
-  }
-
-  @Override
-  protected boolean isSearchForTextOccurrences() {
-    return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_FIELD;
-  }
-
-  @Override
-  protected void saveSearchInTextOccurrences(boolean searchInTextOccurrences) {
-    JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_FIELD = searchInTextOccurrences;
-  }
-
-  @Override
-  protected void doAction() {
-    super.doAction();
-    invokeRefactoring(
-        new InlineConstantFieldProcessor(myField, getProject(), myReferenceExpression, isInlineThisOnly(), isSearchInCommentsAndStrings(),
-            isSearchForTextOccurrences()));
-    JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
-    if (myRbInlineThisOnly.isEnabled() && myRbInlineAll.isEnabled()) {
-      settings.INLINE_FIELD_THIS = isInlineThisOnly();
+        setTitle(RefactoringLocalize.inlineFieldTitle());
+        myOccurrencesNumber = initOccurrencesNumber(myField);
+        init();
     }
-  }
 
-  @Override
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.INLINE_FIELD);
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue getNameLabelText() {
+        String fieldText = PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);
+        return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText);
+    }
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getBorderTitle() {
+        return RefactoringLocalize.inlineFieldBorderTitle();
+    }
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getInlineThisText() {
+        return RefactoringLocalize.thisReferenceOnlyAndKeepTheField();
+    }
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getInlineAllText() {
+        String occurrencesString =
+            myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
+        return LocalizeValue.join(RefactoringLocalize.allReferencesAndRemoveTheField(), LocalizeValue.localizeTODO(occurrencesString));
+    }
+
+    @Override
+    protected boolean isInlineThis() {
+        return JavaRefactoringSettings.getInstance().INLINE_FIELD_THIS;
+    }
+
+    @Override
+    protected boolean isSearchInCommentsAndStrings() {
+        return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_FIELD;
+    }
+
+    @Override
+    protected void saveSearchInCommentsAndStrings(boolean searchInComments) {
+        JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_FIELD = searchInComments;
+    }
+
+    @Override
+    protected boolean isSearchForTextOccurrences() {
+        return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_FIELD;
+    }
+
+    @Override
+    protected void saveSearchInTextOccurrences(boolean searchInTextOccurrences) {
+        JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_FIELD = searchInTextOccurrences;
+    }
+
+    @Override
+    protected void doAction() {
+        super.doAction();
+        invokeRefactoring(new InlineConstantFieldProcessor(
+            myField,
+            getProject(),
+            myReferenceExpression,
+            isInlineThisOnly(),
+            isSearchInCommentsAndStrings(),
+            isSearchForTextOccurrences()
+        ));
+        JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
+        if (myRbInlineThisOnly.isEnabled() && myRbInlineAll.isEnabled()) {
+            settings.INLINE_FIELD_THIS = isInlineThisOnly();
+        }
+    }
+
+    @Override
+    @RequiredUIAccess
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.INLINE_FIELD);
+    }
 }

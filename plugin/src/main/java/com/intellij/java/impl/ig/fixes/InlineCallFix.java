@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -30,27 +30,28 @@ import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class InlineCallFix extends InspectionGadgetsFix {
-
-  @Nonnull
-  public LocalizeValue getName() {
-    return InspectionGadgetsLocalize.inlineCallQuickfix();
-  }
-
-  @RequiredReadAction
-  public void doFix(final Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiReferenceExpression methodExpression = (PsiReferenceExpression)nameElement.getParent();
-    assert methodExpression != null;
-    final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)methodExpression.getParent();
-    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
-    final RefactoringActionHandler inlineHandler = factory.createInlineHandler();
-    final Runnable runnable = () -> inlineHandler.invoke(project, new PsiElement[]{methodCallExpression}, null);
-    final Application application = project.getApplication();
-    if (application.isUnitTestMode()) {
-      runnable.run();
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return InspectionGadgetsLocalize.inlineCallQuickfix();
     }
-    else {
-      application.invokeLater(runnable, project.getDisposed());
+
+    @Override
+    @RequiredWriteAction
+    public void doFix(Project project, ProblemDescriptor descriptor) {
+        PsiElement nameElement = descriptor.getPsiElement();
+        PsiReferenceExpression methodExpression = (PsiReferenceExpression) nameElement.getParent();
+        assert methodExpression != null;
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) methodExpression.getParent();
+        JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+        RefactoringActionHandler inlineHandler = factory.createInlineHandler();
+        Runnable runnable = () -> inlineHandler.invoke(project, new PsiElement[]{methodCallExpression}, null);
+        Application application = project.getApplication();
+        if (application.isUnitTestMode()) {
+            runnable.run();
+        }
+        else {
+            application.invokeLater(runnable, project.getDisposed());
+        }
     }
-  }
 }
