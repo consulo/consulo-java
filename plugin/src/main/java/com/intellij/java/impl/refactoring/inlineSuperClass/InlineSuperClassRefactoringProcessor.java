@@ -32,6 +32,7 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.psi.PsiElement;
@@ -124,7 +125,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                         if (refList.getParent() instanceof PsiClass inheritor
                             && (refList.equals(inheritor.getExtendsList()) || refList.equals(inheritor.getImplementsList()))) {
                             usages.add(new ReplaceExtendsListUsageInfo(
-                                (PsiJavaCodeReferenceElement)element,
+                                (PsiJavaCodeReferenceElement) element,
                                 mySuperClass,
                                 inheritor
                             ));
@@ -198,7 +199,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                     if (superConstructor.getParameterList().getParametersCount() == 0) {
                         PsiExpression expression =
                             JavaPsiFacade.getElementFactory(myProject).createExpressionFromText("super()", constructor);
-                        usages.add(new InlineSuperCallUsageInfo((PsiMethodCallExpression)expression, constrBody));
+                        usages.add(new InlineSuperCallUsageInfo((PsiMethodCallExpression) expression, constrBody));
                     }
                 }
             }
@@ -259,7 +260,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                         PsiParameter[] parameters = method.getParameterList().getParameters();
                         if (i >= parameters.length) {
                             if (method.isVarArgs()) {
-                                return ((PsiEllipsisType)parameters[parameters.length - 1].getType()).getComponentType();
+                                return ((PsiEllipsisType) parameters[parameters.length - 1].getType()).getComponentType();
                             }
                         }
                         else {
@@ -285,6 +286,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
 
             @Override
             @RequiredUIAccess
+            @RequiredWriteAction
             protected void performRefactoring(@Nonnull UsageInfo[] pushDownUsages) {
                 if (myCurrentInheritor != null) {
                     encodeRefs();
@@ -297,7 +299,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                 for (UsageInfo usageInfo : usages) {
                     if (!(usageInfo instanceof ReplaceExtendsListUsageInfo || usageInfo instanceof RemoveImportUsageInfo)) {
                         try {
-                            ((FixableUsageInfo)usageInfo).fixUsage();
+                            ((FixableUsageInfo) usageInfo).fixUsage();
                         }
                         catch (IncorrectOperationException e) {
                             LOG.info(e);
@@ -309,7 +311,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                 //postpone broken hierarchy
                 for (UsageInfo usage : usages) {
                     if (usage instanceof ReplaceExtendsListUsageInfo || usage instanceof RemoveImportUsageInfo) {
-                        ((FixableUsageInfo)usage).fixUsage();
+                        ((FixableUsageInfo) usage).fixUsage();
                     }
                 }
                 if (myCurrentInheritor == null) {
@@ -324,6 +326,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
         }.run();
     }
 
+    @RequiredWriteAction
     private void replaceInnerTypeUsages() {
         JavaPsiFacade facade = JavaPsiFacade.getInstance(myProject);
         PsiElementFactory elementFactory = facade.getElementFactory();
@@ -411,6 +414,6 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     @Nonnull
     @Override
     protected String getCommandName() {
-        return InlineSuperClassRefactoringHandler.REFACTORING_NAME;
+        return InlineSuperClassRefactoringHandler.REFACTORING_NAME.get();
     }
 }
