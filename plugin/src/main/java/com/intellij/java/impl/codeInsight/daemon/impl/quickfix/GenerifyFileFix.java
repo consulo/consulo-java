@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.refactoring.actions.TypeCookAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
@@ -30,10 +31,12 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
-    private String myFileName;
+    @Nonnull
+    private String myFileName = "";
 
     @Nonnull
     @Override
@@ -48,8 +51,9 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-        final PsiElement element = descriptor.getPsiElement();
+    @RequiredUIAccess
+    public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+        PsiElement element = descriptor.getPsiElement();
         if (element == null) {
             return;
         }
@@ -58,6 +62,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
             myFileName = file.getName();
             new WriteCommandAction(project) {
                 @Override
+                @RequiredUIAccess
                 protected void run(Result result) throws Throwable {
                     invoke(project, FileEditorManager.getInstance(project).getSelectedTextEditor(), file);
                 }
@@ -66,6 +71,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         if (file != null && file.isValid()) {
             myFileName = file.getName();
@@ -77,6 +83,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
     }
 
     @Override
+    @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
