@@ -17,12 +17,10 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.refactoring.actions.TypeCookAction;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -32,16 +30,17 @@ import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.undoRedo.CommandProcessor;
 import jakarta.annotation.Nonnull;
 
 public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
     @Nonnull
-    private String myFileName = "";
+    private LocalizeValue myText = LocalizeValue.empty();
 
     @Nonnull
     @Override
     public LocalizeValue getText() {
-        return JavaQuickFixLocalize.generifyText(myFileName);
+        return myText;
     }
 
     @Nonnull
@@ -52,21 +51,17 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
 
     @Override
     @RequiredUIAccess
-    public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {
             return;
         }
-        final PsiFile file = element.getContainingFile();
+        PsiFile file = element.getContainingFile();
         if (isAvailable(project, null, file)) {
-            myFileName = file.getName();
-            new WriteCommandAction(project) {
-                @Override
-                @RequiredUIAccess
-                protected void run(Result result) throws Throwable {
-                    invoke(project, FileEditorManager.getInstance(project).getSelectedTextEditor(), file);
-                }
-            }.execute();
+            CommandProcessor.getInstance().newCommand()
+                .project(project)
+                .inWriteAction()
+                .run(() -> invoke(project, FileEditorManager.getInstance(project).getSelectedTextEditor(), file));
         }
     }
 
@@ -74,10 +69,11 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
     @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         if (file != null && file.isValid()) {
-            myFileName = file.getName();
+            myText = JavaQuickFixLocalize.generifyText(file.getName());
             return PsiManager.getInstance(project).isInProject(file);
         }
         else {
+            myText = LocalizeValue.empty();
             return false;
         }
     }
