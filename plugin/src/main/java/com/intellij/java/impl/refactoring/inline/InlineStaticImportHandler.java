@@ -15,15 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.java.localize.JavaRefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.undoRedo.CommandProcessor;
+import consulo.undoRedo.UndoConfirmationPolicy;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -31,30 +34,31 @@ import static com.intellij.java.language.impl.psi.util.ImportsUtil.collectRefere
 import static com.intellij.java.language.impl.psi.util.ImportsUtil.replaceAllAndDeleteImport;
 
 /**
- * User: anna
- * Date: 9/1/11
+ * @author anna
+ * @since 2011-09-01
  */
 @ExtensionImpl
 public class InlineStaticImportHandler extends JavaInlineActionHandler {
+    @Override
+    public boolean canInlineElement(@Nonnull PsiElement element) {
+        if (element.getContainingFile() == null) {
+            return false;
+        }
+        return PsiTreeUtil.getParentOfType(element, PsiImportStaticStatement.class) != null;
+    }
 
-  private static final String REFACTORING_NAME = "Expand static import";
+    @Override
+    @RequiredUIAccess
+    public void inlineElement(Project project, Editor editor, PsiElement element) {
+        PsiImportStaticStatement staticStatement = PsiTreeUtil.getParentOfType(element, PsiImportStaticStatement.class);
+        List<PsiJavaCodeReferenceElement> referenceElements =
+            collectReferencesThrough(element.getContainingFile(), null, staticStatement);
 
-  @Override
-  public boolean canInlineElement(PsiElement element) {
-    if (element.getContainingFile() == null) return false;
-    return PsiTreeUtil.getParentOfType(element, PsiImportStaticStatement.class) != null;
-  }
-
-  @Override
-  public void inlineElement(Project project, Editor editor, PsiElement element) {
-    final PsiImportStaticStatement staticStatement = PsiTreeUtil.getParentOfType(element, PsiImportStaticStatement.class);
-    final List<PsiJavaCodeReferenceElement> referenceElements =
-      collectReferencesThrough(element.getContainingFile(), null, staticStatement);
-    new WriteCommandAction(project, REFACTORING_NAME){
-      @Override
-      protected void run(Result result) throws Throwable {
-        replaceAllAndDeleteImport(referenceElements, null, staticStatement);
-      }
-    }.execute();
-  }
+        CommandProcessor.getInstance().newCommand()
+            .project(project)
+            .name(JavaRefactoringLocalize.actionExpandStaticImportText())
+            .undoConfirmationPolicy(UndoConfirmationPolicy.DO_NOT_REQUEST_CONFIRMATION)
+            .inWriteAction()
+            .run(() -> replaceAllAndDeleteImport(referenceElements, null, staticStatement));
+    }
 }
