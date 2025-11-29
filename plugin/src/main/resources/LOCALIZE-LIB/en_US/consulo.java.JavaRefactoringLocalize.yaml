@@ -6,6 +6,8 @@ a.class.can.not.be.made.an.inner.class.of.one.of.it.s.decendents:
     text: A class can not be made an inner class of one of it's decendents.
 action.column.header:
     text: Action
+action.expand.static.import.text:
+    text: Expand Static Import
 action.rename.file.description:
     text: Rename selected file
 action.rename.file.text:
