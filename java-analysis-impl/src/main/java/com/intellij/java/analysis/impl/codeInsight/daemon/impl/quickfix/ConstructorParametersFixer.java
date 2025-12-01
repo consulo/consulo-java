@@ -34,7 +34,7 @@ public class ConstructorParametersFixer {
         @Nonnull PsiJavaCodeReferenceElement ctrRef,
         PsiConstructorCall constructorCall,
         @Nonnull HighlightInfo.Builder highlightInfo,
-        TextRange fixRange
+        @Nonnull TextRange fixRange
     ) {
         JavaResolveResult resolved = ctrRef.advancedResolve(false);
         PsiClass aClass = (PsiClass)resolved.getElement();

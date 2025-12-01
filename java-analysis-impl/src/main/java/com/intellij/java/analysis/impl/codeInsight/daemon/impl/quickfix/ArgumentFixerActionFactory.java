@@ -24,6 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
@@ -38,7 +39,7 @@ public abstract class ArgumentFixerActionFactory {
     protected abstract PsiExpression getModifiedArgument(PsiExpression expression, PsiType toType) throws IncorrectOperationException;
 
     @RequiredWriteAction
-    public void registerCastActions(CandidateInfo[] candidates, PsiCall call, HighlightInfo.Builder hlBuilder, TextRange fixRange) {
+    public void registerCastActions(CandidateInfo[] candidates, PsiCall call, HighlightInfo.Builder hlBuilder, @Nonnull TextRange fixRange) {
         if (candidates.length == 0) {
             return;
         }

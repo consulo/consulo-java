@@ -2732,10 +2732,11 @@ public class HighlightUtil extends HighlightUtilBase {
                     referencedClass = PsiUtil.resolveClassInType(type);
                 }
                 else if (qualifier == null) {
-                    resolved = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiMember.class);
-                    if (resolved != null) {
-                        referencedClass = ((PsiMethod) resolved).getContainingClass();
+                    PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiMember.class);
+                    if (method != null) {
+                        referencedClass = method.getContainingClass();
                     }
+                    resolved = method;
                 }
                 else if (qualifier instanceof PsiThisExpression thisExpr) {
                     referencedClass = PsiUtil.resolveClassInType(thisExpr.getType());

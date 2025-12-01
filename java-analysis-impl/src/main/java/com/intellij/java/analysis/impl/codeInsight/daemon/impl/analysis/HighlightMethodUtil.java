@@ -1776,7 +1776,7 @@ public class HighlightMethodUtil {
         PsiFile containingFile,
         @Nonnull LanguageLevel languageLevel
     ) {
-        String description = null;
+        LocalizeValue description = LocalizeValue.empty();
         boolean appendImplementMethodFix = true;
         Collection<HierarchicalMethodSignature> visibleSignatures = aClass.getVisibleSignatures();
         PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(aClass.getProject()).getResolveHelper();
@@ -1821,7 +1821,7 @@ public class HighlightMethodUtil {
                             HighlightUtil.formatClass(containingClass),
                             JavaHighlightUtil.formatMethod(superMethod),
                             HighlightUtil.formatClass(superMethod.getContainingClass())
-                        ).get();
+                        );
                         appendImplementMethodFix = false;
                         break Ultimate;
                     }
@@ -1829,14 +1829,14 @@ public class HighlightMethodUtil {
                 continue;
             }
 
-            if (description == null) {
+            if (description == LocalizeValue.empty()) {
                 highlightInfo = checkMethodIncompatibleThrows(signature, superSignatures, false, aClass);
                 if (highlightInfo != null) {
                     description = highlightInfo.getDescription();
                 }
             }
 
-            if (description == null) {
+            if (description == LocalizeValue.empty()) {
                 HighlightInfo.Builder hlBuilder = checkMethodWeakerPrivileges(signature, superSignatures, false, containingFile);
                 highlightInfo = hlBuilder == null ? null : hlBuilder.create();
                 if (highlightInfo != null) {
@@ -1844,12 +1844,12 @@ public class HighlightMethodUtil {
                 }
             }
 
-            if (description != null) {
+            if (description != LocalizeValue.empty()) {
                 break;
             }
         }
 
-        if (description != null) {
+        if (description != LocalizeValue.empty()) {
             // show error info at the class level
             HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(HighlightNamesUtil.getClassDeclarationTextRange(aClass))
@@ -2321,22 +2321,10 @@ public class HighlightMethodUtil {
         PsiSubstitutor substitutor = candidate.getSubstitutor();
         if (method != null && context.getManager().isInProject(method)) {
             QuickFixFactory factory = QuickFixFactory.getInstance();
-            hlBuilder.newFix(factory.createChangeMethodSignatureFromUsageFix(
-                    method,
-                    expressions,
-                    substitutor,
-                    context,
-                    false,
-                    2
-                )).fixRange(fixRange).register()
-                .newFix(factory.createChangeMethodSignatureFromUsageReverseOrderFix(
-                    method,
-                    expressions,
-                    substitutor,
-                    context,
-                    false,
-                    2
-                )).fixRange(fixRange).register();
+            hlBuilder.newFix(factory.createChangeMethodSignatureFromUsageFix(method, expressions, substitutor, context, false, 2))
+                .fixRange(fixRange).register()
+                .newFix(factory.createChangeMethodSignatureFromUsageReverseOrderFix(method, expressions, substitutor, context, false, 2))
+                .fixRange(fixRange).register();
         }
     }
 }

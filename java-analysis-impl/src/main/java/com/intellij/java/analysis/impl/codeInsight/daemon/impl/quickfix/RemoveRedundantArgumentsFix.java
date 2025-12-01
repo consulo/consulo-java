@@ -127,7 +127,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
         @Nonnull JavaResolveResult[] candidates,
         @Nonnull PsiExpressionList arguments,
         @Nullable HighlightInfo.Builder hlBuilder,
-        TextRange fixRange
+        @Nonnull TextRange fixRange
     ) {
         if (hlBuilder == null) {
             return;
@@ -140,7 +140,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     private static void registerIntention(
         @Nonnull PsiExpressionList arguments,
         @Nonnull HighlightInfo.Builder hlBuilder,
-        TextRange fixRange,
+        @Nonnull TextRange fixRange,
         @Nonnull JavaResolveResult candidate,
         @Nonnull PsiElement context
     ) {

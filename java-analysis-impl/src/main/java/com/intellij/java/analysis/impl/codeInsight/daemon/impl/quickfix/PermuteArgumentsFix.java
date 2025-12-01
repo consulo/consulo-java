@@ -78,7 +78,12 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
     }
 
     @RequiredReadAction
-    public static void registerFix(HighlightInfo.Builder hlBuilder, PsiCall callExpression, CandidateInfo[] candidates, TextRange fixRange) {
+    public static void registerFix(
+        HighlightInfo.Builder hlBuilder,
+        PsiCall callExpression,
+        CandidateInfo[] candidates,
+        @Nonnull TextRange fixRange
+    ) {
         PsiExpression[] expressions = callExpression.getArgumentList().getExpressions();
         if (hlBuilder == null || expressions.length < 2) {
             return;
@@ -87,7 +92,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
 
         for (CandidateInfo candidate : candidates) {
             if (candidate instanceof MethodCandidateInfo) {
-                MethodCandidateInfo methodCandidate = (MethodCandidateInfo)candidate;
+                MethodCandidateInfo methodCandidate = (MethodCandidateInfo) candidate;
                 PsiMethod method = methodCandidate.getElement();
                 PsiSubstitutor substitutor = methodCandidate.getSubstitutor();
 
@@ -158,7 +163,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
                 {
                     ArrayUtil.rotateLeft(expressions, i, j);
                     if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-                        PsiCall copy = (PsiCall)callExpression.copy();
+                        PsiCall copy = (PsiCall) callExpression.copy();
                         PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
                         for (int k = i; k < copyExpressions.length; k++) {
                             copyExpressions[k].replace(expressions[k]);
@@ -178,7 +183,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
                 {
                     ArrayUtil.rotateRight(expressions, i, j);
                     if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-                        PsiCall copy = (PsiCall)callExpression.copy();
+                        PsiCall copy = (PsiCall) callExpression.copy();
                         PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
                         for (int k = i; k < copyExpressions.length; k++) {
                             copyExpressions[k].replace(expressions[k]);
@@ -218,7 +223,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
             for (int j = i + 1; j <= maxIncompatibleIndex; j++) {
                 ArrayUtil.swap(expressions, i, j);
                 if (PsiUtil.isApplicable(method, substitutor, expressions)) {
-                    PsiCall copy = (PsiCall)callExpression.copy();
+                    PsiCall copy = (PsiCall) callExpression.copy();
                     PsiExpression[] copyExpressions = copy.getArgumentList().getExpressions();
                     copyExpressions[i].replace(expressions[i]);
                     copyExpressions[j].replace(expressions[j]);
