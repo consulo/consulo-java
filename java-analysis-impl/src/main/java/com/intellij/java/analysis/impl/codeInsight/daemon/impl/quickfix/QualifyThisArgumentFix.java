@@ -77,7 +77,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
         CandidateInfo[] candidates,
         PsiCall call,
         HighlightInfo.Builder highlightInfo,
-        TextRange fixRange
+        @Nonnull TextRange fixRange
     ) {
         if (candidates.length == 0) {
             return;
