@@ -16,14 +16,14 @@
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
  */
-public class UnsupportedExpressionException extends EvaluateException
-{
-	public UnsupportedExpressionException(String message)
-	{
-		super(message);
-	}
+public class UnsupportedExpressionException extends EvaluateException {
+    public UnsupportedExpressionException(@Nonnull LocalizeValue message) {
+        super(message.get());
+    }
 }
