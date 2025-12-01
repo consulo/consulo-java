@@ -17,18 +17,28 @@ package com.intellij.java.debugger.engine.evaluation;
 
 import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class EvaluateException extends Exception {
     private static final Logger LOG = Logger.getInstance(EvaluateException.class);
     private ObjectReference myTargetException;
 
+    public EvaluateException(@Nonnull LocalizeValue message) {
+        this(message.get());
+    }
+
     public EvaluateException(String message) {
         super(message);
         if (LOG.isDebugEnabled()) {
             LOG.debug(message);
         }
+    }
+
+    public EvaluateException(@Nonnull LocalizeValue msg, Throwable th) {
+        this(msg.get(), th);
     }
 
     public EvaluateException(String msg, Throwable th) {
