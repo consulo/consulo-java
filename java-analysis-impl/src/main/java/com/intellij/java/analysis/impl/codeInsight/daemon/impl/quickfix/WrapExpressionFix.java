@@ -188,7 +188,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
         }
 
         if (expectedType != null) {
-            hlBuilder.registerFix(new WrapExpressionFix(expectedType, expr), expr.getTextRange());
+            hlBuilder.newFix(new WrapExpressionFix(expectedType, expr)).fixRange(expr.getTextRange()).register();
         }
     }
 }

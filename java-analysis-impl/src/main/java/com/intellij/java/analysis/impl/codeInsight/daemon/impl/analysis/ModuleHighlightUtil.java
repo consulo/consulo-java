@@ -28,11 +28,10 @@ import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.Application;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
-import consulo.language.editor.intention.QuickFixAction;
+import consulo.java.language.localize.JavaCompilationErrorLocalize;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
@@ -80,7 +79,7 @@ public class ModuleHighlightUtil {
         if (PsiUtil.isModuleFile(file)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(statement)
-                .descriptionAndTooltip(JavaErrorLocalize.moduleNoPackage())
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleNoPackage())
                 .registerFix(factory().createDeleteFix(statement))
                 .create();
         }
@@ -92,7 +91,7 @@ public class ModuleHighlightUtil {
                 if (origin != null) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(statement)
-                        .descriptionAndTooltip(JavaErrorLocalize.moduleConflictingPackages(packageName, origin.getName()))
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleConflictingPackages(packageName, origin.getName()))
                         .create();
                 }
             }
@@ -107,7 +106,7 @@ public class ModuleHighlightUtil {
         if (!MODULE_INFO_FILE.equals(file.getName())) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(range(element))
-                .descriptionAndTooltip(JavaErrorLocalize.moduleFileWrongName())
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleFileWrongName())
                 .registerFix(factory().createRenameFileFix(MODULE_INFO_FILE))
                 .create();
         }
@@ -124,19 +123,15 @@ public class ModuleHighlightUtil {
             Collection<VirtualFile> others =
                 FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module));
             if (others.size() > 1) {
-                HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(range(element))
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleFileDuplicate())
-                    .create();
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleFileDuplicate());
                 others.stream()
                     .map(f -> PsiManager.getInstance(project).findFile(f))
                     .filter(f -> f != file)
                     .findFirst()
-                    .ifPresent(duplicate -> QuickFixAction.registerQuickFixAction(
-                        info,
-                        new GoToSymbolFix(duplicate, JavaErrorLocalize.moduleOpenDuplicateText())
-                    ));
-                return info;
+                    .ifPresent(duplicate -> hlBuilder.registerFix(new GoToSymbolFix(duplicate, JavaErrorLocalize.moduleOpenDuplicateText())));
+                return hlBuilder.create();
             }
         }
 
@@ -151,35 +146,35 @@ public class ModuleHighlightUtil {
         checkDuplicateRefs(
             module.getRequires(),
             st -> Optional.ofNullable(st.getReferenceElement()).map(PsiJavaModuleReferenceElement::getReferenceText),
-            JavaErrorLocalize::moduleDuplicateRequires,
+            JavaCompilationErrorLocalize::moduleDuplicateRequires,
             results
         );
 
         checkDuplicateRefs(
             module.getExports(),
             st -> Optional.ofNullable(st.getPackageReference()).map(ModuleHighlightUtil::refText),
-            JavaErrorLocalize::moduleDuplicateExports,
+            JavaCompilationErrorLocalize::moduleDuplicateExports,
             results
         );
 
         checkDuplicateRefs(
             module.getOpens(),
             st -> Optional.ofNullable(st.getPackageReference()).map(ModuleHighlightUtil::refText),
-            JavaErrorLocalize::moduleDuplicateOpens,
+            JavaCompilationErrorLocalize::moduleDuplicateOpens,
             results
         );
 
         checkDuplicateRefs(
             module.getUses(),
             st -> Optional.ofNullable(st.getClassReference()).map(ModuleHighlightUtil::refText),
-            JavaErrorLocalize::moduleDuplicateUses,
+            JavaCompilationErrorLocalize::moduleDuplicateUses,
             results
         );
 
         checkDuplicateRefs(
             module.getProvides(),
             st -> Optional.ofNullable(st.getInterfaceReference()).map(ModuleHighlightUtil::refText),
-            JavaErrorLocalize::moduleDuplicateProvides,
+            JavaCompilationErrorLocalize::moduleDuplicateProvides,
             results
         );
 
@@ -258,7 +253,7 @@ public class ModuleHighlightUtil {
             if (root != null && !root.equals(vFile.getParent())) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WARNING)
                     .range(range(element))
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleFileWrongLocation())
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleFileWrongLocation())
                     .registerFix(new MoveFileFix(vFile, root, JavaQuickFixLocalize.moveFileToSourceRootText()))
                     .create();
             }
@@ -280,19 +275,19 @@ public class ModuleHighlightUtil {
             else if (target == container) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(refElement)
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleCyclicDependence(container.getName()))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleCyclicDependence(container.getName()))
                     .create();
             }
             else {
                 Collection<PsiJavaModule> cycle = JavaModuleGraphUtil.findCycle((PsiJavaModule)target);
-                if (cycle != null && cycle.contains(container)) {
+                if (cycle.contains(container)) {
                     Stream<String> stream = cycle.stream().map(PsiJavaModule::getName);
-                    if (Application.get().isUnitTestMode()) {
+                    if (container.getApplication().isUnitTestMode()) {
                         stream = stream.sorted();
                     }
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(refElement)
-                        .descriptionAndTooltip(JavaErrorLocalize.moduleCyclicDependence(stream.collect(Collectors.joining(", "))))
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleCyclicDependence(stream.collect(Collectors.joining(", "))))
                         .create();
                 }
             }
@@ -338,7 +333,7 @@ public class ModuleHighlightUtil {
             if (PsiUtil.isPackageEmpty(directories, packageName)) {
                 return HighlightInfo.newHighlightInfo(type)
                     .range(refElement)
-                    .descriptionAndTooltip(JavaErrorLocalize.packageIsEmpty(packageName))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleReferencePackageEmpty(packageName))
                     .create();
             }
         }
@@ -359,8 +354,8 @@ public class ModuleHighlightUtil {
             if (!targets.add(refText)) {
                 boolean exports = statement.getRole() == Role.EXPORTS;
                 LocalizeValue message = exports
-                    ? JavaErrorLocalize.moduleDuplicateExportsTarget(refText)
-                    : JavaErrorLocalize.moduleDuplicateOpensTarget(refText);
+                    ? JavaCompilationErrorLocalize.moduleDuplicateExportsTarget(refText)
+                    : JavaCompilationErrorLocalize.moduleDuplicateOpensTarget(refText);
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(refElement)
                     .descriptionAndTooltip(message)
@@ -371,7 +366,7 @@ public class ModuleHighlightUtil {
             else if (ref.multiResolve(true).length == 0) {
                 results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.WARNING)
                     .range(refElement)
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleNotFound(refElement.getReferenceText()))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleNotFound(refElement.getReferenceText()))
                     .create());
             }
         }
@@ -387,13 +382,13 @@ public class ModuleHighlightUtil {
             if (target == null) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(range(refElement))
-                    .descriptionAndTooltip(JavaErrorLocalize.cannotResolveSymbol(refElement.getReferenceName()))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.referenceUnresolved(refElement.getReferenceName()))
                     .create();
             }
             else if (target instanceof PsiClass psiClass && psiClass.isEnum()) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(range(refElement))
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleServiceEnum(psiClass.getName()))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceEnum(psiClass.getName()))
                     .create();
             }
         }
@@ -419,7 +414,7 @@ public class ModuleHighlightUtil {
             if (!filter.add(refText)) {
                 HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(implRef)
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleDuplicateImpl(refText))
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleDuplicateImplementation(refText))
                     .registerFix(factory().createDeleteFix(implRef, JavaQuickFixLocalize.deleteReferenceFixText()))
                     .create();
                 results.add(info);
@@ -435,7 +430,7 @@ public class ModuleHighlightUtil {
                 if (findModule(statement) != findModule(implClass)) {
                     results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(range(implRef))
-                        .descriptionAndTooltip(JavaErrorLocalize.moduleServiceAlien())
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceAlien())
                         .create());
                 }
 
@@ -450,7 +445,7 @@ public class ModuleHighlightUtil {
                     if (!InheritanceUtil.isInheritorOrSelf(typeClass, (PsiClass)intTarget, true)) {
                         results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(range(implRef))
-                            .descriptionAndTooltip(JavaErrorLocalize.moduleServiceProviderType(implClass.getName()))
+                            .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceProviderType(implClass.getName()))
                             .create());
                     }
                 }
@@ -458,26 +453,26 @@ public class ModuleHighlightUtil {
                     if (implClass.isAbstract()) {
                         results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(range(implRef))
-                            .descriptionAndTooltip(JavaErrorLocalize.moduleServiceAbstract(implClass.getName()))
+                            .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceAbstract(implClass.getName()))
                             .create());
                     }
                     else if (!(ClassUtil.isTopLevelClass(implClass) || implClass.isStatic())) {
                         results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(range(implRef))
-                            .descriptionAndTooltip(JavaErrorLocalize.moduleServiceInner(implClass.getName()))
+                            .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceInner(implClass.getName()))
                             .create());
                     }
                     else if (!PsiUtil.hasDefaultConstructor(implClass)) {
                         results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(range(implRef))
-                            .descriptionAndTooltip(JavaErrorLocalize.moduleServiceNoCtor(implClass.getName()))
+                            .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceNoConstructor(implClass.getName()))
                             .create());
                     }
                 }
                 else {
                     results.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(range(implRef))
-                        .descriptionAndTooltip(JavaErrorLocalize.moduleServiceImpl())
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleServiceImplementationType())
                         .create());
                 }
             }
@@ -564,7 +559,7 @@ public class ModuleHighlightUtil {
         if (conflict != null) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(range(module))
-                .descriptionAndTooltip(JavaErrorLocalize.moduleConflictingReads(
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleConflictingReads(
                     module.getName(),
                     conflict.first,
                     conflict.second.getName(),
@@ -588,7 +583,7 @@ public class ModuleHighlightUtil {
         if (ref.multiResolve(true).length == 0) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                 .range(refElement)
-                .descriptionAndTooltip(JavaErrorLocalize.moduleNotFound(refElement.getReferenceText()))
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.moduleNotFound(refElement.getReferenceText()))
                 .create();
         }
         else if (ref.multiResolve(false).length > 1) {

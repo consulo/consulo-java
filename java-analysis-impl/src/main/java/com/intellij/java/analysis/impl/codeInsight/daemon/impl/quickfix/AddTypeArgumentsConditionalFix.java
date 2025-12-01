@@ -131,9 +131,9 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
 
     @RequiredReadAction
     private static void inferTypeArgs(@Nonnull HighlightInfo.Builder highlightInfo, PsiType lType, PsiExpression thenExpression) {
-        PsiMethodCallExpression thenMethodCall = (PsiMethodCallExpression)thenExpression;
+        PsiMethodCallExpression thenMethodCall = (PsiMethodCallExpression) thenExpression;
         JavaResolveResult result = thenMethodCall.resolveMethodGenerics();
-        PsiMethod method = (PsiMethod)result.getElement();
+        PsiMethod method = (PsiMethod) result.getElement();
         if (method != null) {
             PsiType returnType = method.getReturnType();
             PsiClass aClass = method.getContainingClass();
@@ -141,7 +141,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
                 JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(method.getProject());
                 PsiDeclarationStatement variableDeclarationStatement = javaPsiFacade.getElementFactory()
                     .createVariableDeclarationStatement("xxx", lType, thenExpression);
-                PsiExpression initializer = ((PsiLocalVariable)variableDeclarationStatement.getDeclaredElements()[0]).getInitializer();
+                PsiExpression initializer = ((PsiLocalVariable) variableDeclarationStatement.getDeclaredElements()[0]).getInitializer();
                 LOG.assertTrue(initializer != null);
 
                 PsiSubstitutor substitutor = javaPsiFacade.getResolveHelper().inferTypeArguments(
@@ -154,10 +154,9 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
                 );
                 PsiType substitutedType = substitutor.substitute(returnType);
                 if (substitutedType != null && TypeConversionUtil.isAssignable(lType, substitutedType)) {
-                    highlightInfo.registerFix(
-                        new AddTypeArgumentsConditionalFix(substitutor, thenMethodCall, method),
-                        thenExpression.getTextRange()
-                    );
+                    highlightInfo.newFix(new AddTypeArgumentsConditionalFix(substitutor, thenMethodCall, method))
+                        .fixRange(thenExpression.getTextRange())
+                        .register();
                 }
             }
         }

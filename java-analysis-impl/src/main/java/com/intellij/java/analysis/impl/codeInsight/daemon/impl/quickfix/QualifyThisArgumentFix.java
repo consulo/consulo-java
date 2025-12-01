@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
@@ -54,6 +55,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
     }
 
     @Override
+    @RequiredReadAction
     public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
         if (!myExpression.isValid()) {
             return false;
@@ -75,13 +77,13 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
         CandidateInfo[] candidates,
         PsiCall call,
         HighlightInfo.Builder highlightInfo,
-        final TextRange fixRange
+        TextRange fixRange
     ) {
         if (candidates.length == 0) {
             return;
         }
 
-        final Set<PsiClass> containingClasses = new HashSet<>();
+        Set<PsiClass> containingClasses = new HashSet<>();
         PsiClass parentClass = PsiTreeUtil.getParentOfType(call, PsiClass.class);
         while (parentClass != null) {
             if (parentClass.isStatic()) {
@@ -96,20 +98,18 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
             return;
         }
 
-        final PsiExpressionList list = call.getArgumentList();
-        final PsiExpression[] expressions = list.getExpressions();
+        PsiExpressionList list = call.getArgumentList();
+        PsiExpression[] expressions = list.getExpressions();
         if (expressions.length == 0) {
             return;
         }
 
         for (int i1 = 0, expressionsLength = expressions.length; i1 < expressionsLength; i1++) {
-            final PsiExpression expression = expressions[i1];
-            if (expression instanceof PsiThisExpression) {
-                final PsiType exprType = expression.getType();
+            if (expressions[i1] instanceof PsiThisExpression thisExpr) {
+                PsiType exprType = thisExpr.getType();
                 for (CandidateInfo candidate : candidates) {
                     PsiMethod method = (PsiMethod)candidate.getElement();
                     PsiSubstitutor substitutor = candidate.getSubstitutor();
-                    assert method != null;
                     PsiParameter[] parameters = method.getParameterList().getParameters();
                     if (expressions.length != parameters.length) {
                         continue;
@@ -123,9 +123,9 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
                     }
 
                     if (!TypeConversionUtil.isAssignable(parameterType, exprType)) {
-                        final PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(parameterType);
+                        PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(parameterType);
                         if (psiClass != null && containingClasses.contains(psiClass)) {
-                            highlightInfo.registerFix(new QualifyThisArgumentFix((PsiThisExpression)expression, psiClass), fixRange);
+                            highlightInfo.newFix(new QualifyThisArgumentFix(thisExpr, psiClass)).fixRange(fixRange).register();
                         }
                     }
                 }

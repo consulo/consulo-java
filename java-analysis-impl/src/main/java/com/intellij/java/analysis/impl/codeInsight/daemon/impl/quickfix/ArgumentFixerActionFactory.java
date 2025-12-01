@@ -17,8 +17,8 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.document.util.TextRange;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -37,6 +37,7 @@ public abstract class ArgumentFixerActionFactory {
     @Nullable
     protected abstract PsiExpression getModifiedArgument(PsiExpression expression, PsiType toType) throws IncorrectOperationException;
 
+    @RequiredWriteAction
     public void registerCastActions(CandidateInfo[] candidates, PsiCall call, HighlightInfo.Builder hlBuilder, TextRange fixRange) {
         if (candidates.length == 0) {
             return;
@@ -53,7 +54,6 @@ public abstract class ArgumentFixerActionFactory {
             CandidateInfo candidate = methodCandidates.get(i);
             PsiMethod method = (PsiMethod)candidate.getElement();
             PsiSubstitutor substitutor = candidate.getSubstitutor();
-            assert method != null;
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (expressions.length != parameters.length) {
                 methodCandidates.remove(i);
@@ -87,7 +87,6 @@ public abstract class ArgumentFixerActionFactory {
                 for (CandidateInfo candidate : methodCandidates) {
                     PsiMethod method = (PsiMethod)candidate.getElement();
                     PsiSubstitutor substitutor = candidate.getSubstitutor();
-                    assert method != null;
                     PsiParameter[] parameters = method.getParameterList().getParameters();
                     PsiType originalParameterType = parameters[i].getType();
                     PsiType parameterType = substitutor.substitute(originalParameterType);
@@ -113,7 +112,7 @@ public abstract class ArgumentFixerActionFactory {
                     JavaResolveResult resolveResult = newCall.resolveMethodGenerics();
                     if (resolveResult.getElement() != null && resolveResult.isValidResult()) {
                         suggestedCasts.add(parameterType.getCanonicalText());
-                        hlBuilder.registerFix(createFix(list, i, parameterType), fixRange);
+                        hlBuilder.newFix(createFix(list, i, parameterType)).fixRange(fixRange).register();
                     }
                 }
             }
