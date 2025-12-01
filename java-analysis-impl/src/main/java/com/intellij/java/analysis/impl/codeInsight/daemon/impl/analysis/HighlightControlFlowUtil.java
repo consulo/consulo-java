@@ -29,11 +29,13 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
+import consulo.java.language.localize.JavaCompilationErrorLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
@@ -51,7 +53,7 @@ import java.util.function.Predicate;
 
 /**
  * @author cdr
- * @since Aug 8, 2002
+ * @since 2022-08-08
  */
 public class HighlightControlFlowUtil {
     private HighlightControlFlowUtil() {
@@ -72,7 +74,7 @@ public class HighlightControlFlowUtil {
                 PsiJavaToken rBrace = body.getRBrace();
                 HighlightInfo.Builder info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(rBrace == null ? body.getLastChild() : rBrace)
-                    .descriptionAndTooltip(JavaErrorLocalize.missingReturnStatement());
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.returnMissing());
                 if (body.getParent() instanceof PsiMethod method) {
                     info.registerFix(QuickFixFactory.getInstance().createAddReturnFix(method));
                     info.registerFix(QuickFixFactory.getInstance().createMethodReturnFix(method, PsiType.VOID, true));
@@ -119,7 +121,7 @@ public class HighlightControlFlowUtil {
                 PsiElement element = keyword != null ? keyword : unreachableStatement;
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(element)
-                    .descriptionAndTooltip(JavaErrorLocalize.unreachableStatement())
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.statementUnreachable())
                     .registerFix(QuickFixFactory.getInstance().createDeleteFix(
                         unreachableStatement,
                         JavaQuickFixLocalize.deleteUnreachableStatementFixText()
@@ -226,8 +228,7 @@ public class HighlightControlFlowUtil {
         @Override
         @RequiredReadAction
         public boolean test(PsiReference reference) {
-            PsiElement element = reference.getElement();
-            if (element instanceof PsiReferenceExpression && PsiUtil.isAccessedForWriting((PsiExpression)element)) {
+            if (reference.getElement() instanceof PsiReferenceExpression refExpr && PsiUtil.isAccessedForWriting(refExpr)) {
                 myIsWriteRefFound = true;
                 return false;
             }
@@ -276,17 +277,12 @@ public class HighlightControlFlowUtil {
 
         TextRange range = HighlightNamesUtil.getFieldDeclarationTextRange(field);
         QuickFixFactory factory = QuickFixFactory.getInstance();
+        TextRange fixRange = HighlightMethodUtil.getFixRange(field);
         HighlightInfo.Builder highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(range)
-            .descriptionAndTooltip(JavaErrorLocalize.variableNotInitialized(field.getName()))
-            .registerFix(
-                factory.createCreateConstructorParameterFromFieldFix(field),
-                HighlightMethodUtil.getFixRange(field)
-            )
-            .registerFix(
-                factory.createInitializeFinalFieldInConstructorFix(field),
-                HighlightMethodUtil.getFixRange(field)
-            );
+            .descriptionAndTooltip(JavaCompilationErrorLocalize.variableNotInitialized(field.getName()))
+            .newFix(factory.createCreateConstructorParameterFromFieldFix(field)).fixRange(fixRange).register()
+            .newFix(factory.createInitializeFinalFieldInConstructorFix(field)).fixRange(fixRange).register();
         PsiClass containingClass = field.getContainingClass();
         if (containingClass != null && !containingClass.isInterface()) {
             highlightInfo.registerFix(factory.createModifierFixBuilder(field).remove(PsiModifier.FINAL).create());
@@ -498,7 +494,7 @@ public class HighlightControlFlowUtil {
             QuickFixFactory factory = QuickFixFactory.getInstance();
             HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
-                .descriptionAndTooltip(JavaErrorLocalize.variableNotInitialized(name))
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.variableNotInitialized(name))
                 .registerFix(factory.createAddVariableInitializerFix(variable));
             if (variable instanceof PsiLocalVariable) {
                 //highlightInfo.registerFix(HighlightFixUtil.createInsertSwitchDefaultFix(variable, topBlock, expression));
@@ -548,7 +544,7 @@ public class HighlightControlFlowUtil {
         while (member != null) {
             if (member.getContainingClass() == containingClass) {
                 return member instanceof PsiField
-                    || member instanceof PsiMethod && ((PsiMethod)member).isConstructor()
+                    || member instanceof PsiMethod method && method.isConstructor()
                     || member instanceof PsiClassInitializer;
             }
             member = PsiTreeUtil.getParentOfType(member, PsiMember.class, true);
@@ -676,7 +672,7 @@ public class HighlightControlFlowUtil {
             QuickFixFactory factory = QuickFixFactory.getInstance();
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
-                .descriptionAndTooltip(JavaErrorLocalize.variableAlreadyAssigned(variable.getName()))
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.variableAlreadyAssigned(variable.getName()))
                 .registerFix(factory.createModifierFixBuilder(variable).remove(PsiModifier.FINAL).create())
                 .registerFix(factory.createDeferFinalAssignmentFix(variable, expression))
                 .create();
@@ -714,8 +710,11 @@ public class HighlightControlFlowUtil {
         if (ControlFlowUtil.isVariableAssignedInLoop(expression, resolved)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
-                .descriptionAndTooltip(JavaErrorLocalize.variableAssignedInLoop(((PsiVariable)resolved).getName()))
-                .registerFix(QuickFixFactory.getInstance().createModifierFixBuilder((PsiVariable)resolved).remove(PsiModifier.FINAL).create())
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.variableAssignedInLoop(((PsiVariable) resolved).getName()))
+                .registerFix(QuickFixFactory.getInstance()
+                    .createModifierFixBuilder((PsiVariable) resolved)
+                    .remove(PsiModifier.FINAL)
+                    .create())
                 .create();
         }
         return null;
@@ -758,8 +757,8 @@ public class HighlightControlFlowUtil {
         if (readBeforeWrite || !canWrite) {
             String name = variable.getName();
             LocalizeValue description = canWrite
-                ? JavaErrorLocalize.variableNotInitialized(name)
-                : JavaErrorLocalize.assignmentToFinalVariable(name);
+                ? JavaCompilationErrorLocalize.variableNotInitialized(name)
+                : JavaCompilationErrorLocalize.assignmentToFinalVariable(name);
             PsiElement innerClass = getInnerClassVariableReferencedFrom(variable, expression);
             QuickFixFactory factory = QuickFixFactory.getInstance();
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
@@ -816,8 +815,8 @@ public class HighlightControlFlowUtil {
         @Nonnull PsiReferenceExpression reference,
         @Nonnull PsiFile containingFile
     ) {
-        if (!containingFile.getManager()
-            .areElementsEquivalent(enclosingCtrOrInitializer.getContainingClass(), field.getContainingClass())) {
+        PsiManager manager = containingFile.getManager();
+        if (!manager.areElementsEquivalent(enclosingCtrOrInitializer.getContainingClass(), field.getContainingClass())) {
             return false;
         }
         return LocalsOrMyInstanceFieldsControlFlowPolicy.isLocalOrMyInstanceReference(reference);
@@ -833,8 +832,7 @@ public class HighlightControlFlowUtil {
         if (variable.hasModifierProperty(PsiModifier.FINAL)) {
             return null;
         }
-        PsiElement innerClass = getInnerClassVariableReferencedFrom(variable, context);
-        if (innerClass instanceof PsiClass) {
+        if (getInnerClassVariableReferencedFrom(variable, context) instanceof PsiClass innerClass) {
             if (variable instanceof PsiParameter param
                 && variable.getParent() instanceof PsiParameterList paramList
                 && paramList instanceof PsiLambdaExpression
@@ -846,12 +844,15 @@ public class HighlightControlFlowUtil {
                 return null;
             }
             LocalizeValue description = isToBeEffectivelyFinal
-                ? JavaErrorLocalize.variableMustBeFinalOrEffectivelyFinal(context.getText())
-                : JavaErrorLocalize.variableMustBeFinal(context.getText());
+                ? JavaCompilationErrorLocalize.variableMustBeEffectivelyFinal(context.getText())
+                : JavaCompilationErrorLocalize.variableMustBeFinal(context.getText());
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(context)
                 .descriptionAndTooltip(description)
-                .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, innerClass));
+                .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(
+                    variable,
+                    getInnerClassVariableReferencedFrom(variable, context)
+                ));
         }
         return checkWriteToFinalInsideLambda(variable, context);
     }
@@ -871,7 +872,7 @@ public class HighlightControlFlowUtil {
             if (!isEffectivelyFinal(variable, lambdaExpression, context)) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(context)
-                    .descriptionAndTooltip(JavaErrorLocalize.lambdaVariableMustBeFinal())
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.variableMustBeEffectivelyFinalLambda())
                     .registerFix(QuickFixFactory.getInstance().createVariableAccessFromInnerClassFix(variable, lambdaExpression));
             }
         }
@@ -885,8 +886,8 @@ public class HighlightControlFlowUtil {
         @Nullable PsiJavaCodeReferenceElement context
     ) {
         boolean effectivelyFinal;
-        if (variable instanceof PsiParameter) {
-            effectivelyFinal = notAccessedForWriting(variable, new LocalSearchScope(((PsiParameter)variable).getDeclarationScope()));
+        if (variable instanceof PsiParameter param) {
+            effectivelyFinal = notAccessedForWriting(param, new LocalSearchScope(param.getDeclarationScope()));
         }
         else {
             ControlFlow controlFlow;
@@ -920,8 +921,7 @@ public class HighlightControlFlowUtil {
     @RequiredReadAction
     private static boolean notAccessedForWriting(@Nonnull PsiVariable variable, @Nonnull LocalSearchScope searchScope) {
         for (PsiReference reference : ReferencesSearch.search(variable, searchScope)) {
-            PsiElement element = reference.getElement();
-            if (element instanceof PsiExpression && PsiUtil.isAccessedForWriting((PsiExpression)element)) {
+            if (reference.getElement() instanceof PsiExpression expr && PsiUtil.isAccessedForWriting(expr)) {
                 return false;
             }
         }
@@ -980,7 +980,7 @@ public class HighlightControlFlowUtil {
             if ((completionReasons & ControlFlowUtil.NORMAL_COMPLETION_REASON) == 0) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(body)
-                    .descriptionAndTooltip(JavaErrorLocalize.initializerMustBeAbleToCompleteNormally())
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.classInitializerMustCompleteNormally())
                     .create();
             }
         }

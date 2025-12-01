@@ -150,7 +150,9 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
         PsiMethod method = (PsiMethod)candidate.getElement();
         PsiSubstitutor substitutor = candidate.getSubstitutor();
         if (method != null && context.getManager().isInProject(method)) {
-            hlBuilder.registerFix(new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor), fixRange);
+            hlBuilder.newFix(new RemoveRedundantArgumentsFix(method, arguments.getExpressions(), substitutor))
+                .fixRange(fixRange)
+                .register();
         }
     }
 }

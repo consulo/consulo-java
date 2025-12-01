@@ -136,7 +136,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
             }
         }
         if (permutations.size() == 1) {
-            hlBuilder.registerFix(new PermuteArgumentsFix(callExpression, permutations.get(0)), fixRange);
+            hlBuilder.newFix(new PermuteArgumentsFix(callExpression, permutations.get(0))).fixRange(fixRange).register();
         }
     }
 

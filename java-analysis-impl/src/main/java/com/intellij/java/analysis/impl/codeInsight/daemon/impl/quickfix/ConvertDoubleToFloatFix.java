@@ -56,8 +56,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
         if (myExpression.isValid()) {
             if (!StringUtil.endsWithIgnoreCase(myExpression.getText(), "f")) {
                 PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
-                final Object value = expression.getValue();
-                return value instanceof Float floatValue
+                return expression.getValue() instanceof Float floatValue
                     && !floatValue.isInfinite()
                     && !(floatValue == 0 && !TypeConversionUtil.isFPZero(expression.getText()));
             }
@@ -73,7 +72,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
 
     @RequiredReadAction
     private PsiExpression createFloatingPointExpression(Project project) {
-        final String text = myExpression.getText();
+        String text = myExpression.getText();
         if (StringUtil.endsWithIgnoreCase(text, "d")) {
             return JavaPsiFacade.getElementFactory(project)
                 .createExpressionFromText(text.substring(0, text.length() - 1) + "f", myExpression);
@@ -119,11 +118,10 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
             if (parameters.length == expressions.length) {
                 for (int i = 0, length = parameters.length; i < length; i++) {
                     PsiParameter parameter = parameters[i];
-                    PsiExpression expression = expressions[i];
-                    if (expression instanceof PsiLiteralExpression
+                    if (expressions[i] instanceof PsiLiteralExpression literal
                         && PsiType.FLOAT.equals(parameter.getType())
-                        && PsiType.DOUBLE.equals(expression.getType())) {
-                        hlBuilder.registerFix(new ConvertDoubleToFloatFix(expression), fixRange);
+                        && PsiType.DOUBLE.equals(literal.getType())) {
+                        hlBuilder.newFix(new ConvertDoubleToFloatFix(literal)).fixRange(fixRange).register();
                     }
                 }
             }

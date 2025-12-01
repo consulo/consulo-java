@@ -18,6 +18,7 @@ package com.intellij.codeInsight.daemon.lambda;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import consulo.localize.LocalizeValue;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
@@ -32,11 +33,11 @@ public abstract class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCas
   private void doTestFunctionalInterface(@Nullable String expectedErrorMessage) throws Exception {
     String filePath = BASE_PATH + "/" + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiClass psiClass = getJavaFacade().findClass("Foo", GlobalSearchScope.projectScope(getProject()));
+    PsiClass psiClass = getJavaFacade().findClass("Foo", GlobalSearchScope.projectScope(getProject()));
     assertNotNull("Class Foo not found", psiClass);
 
-    final String errorMessage = LambdaHighlightingUtil.checkInterfaceFunctional(psiClass);
-    assertEquals(expectedErrorMessage, errorMessage);
+    LocalizeValue errorMessage = LambdaHighlightingUtil.checkInterfaceFunctional(psiClass);
+    assertEquals(expectedErrorMessage, errorMessage.get());
   }
 
   public void testSimple() throws Exception {

@@ -183,8 +183,6 @@ error.inference.variable.has.incompatible.bounds:
         {3}: {4}
 error.message.wildcard.not.expected:
     text: Unexpected wildcard
-error.type.parameter.has.incompatible.upper.bounds:
-    text: 'Type parameter {0} has incompatible upper bounds: {1}'
 expected.array.initializer:
     text: Array initializer expected
 expected.boolean.expression:
