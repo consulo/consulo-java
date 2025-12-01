@@ -64,7 +64,13 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     JDK_22_PREVIEW(JavaLanguageLocalize.jdk22PreviewLanguageLevelDescription(), 22),
     JDK_23(JavaLanguageLocalize.jdk23LanguageLevelDescription(), 23),
     JDK_23_PREVIEW(JavaLanguageLocalize.jdk23PreviewLanguageLevelDescription(), 23),
-    JDK_X(JavaLanguageLocalize.jdkXLanguageLevelDescription(), 23),
+    JDK_24(JavaLanguageLocalize.jdk24LanguageLevelDescription(), 24),
+    JDK_24_PREVIEW(JavaLanguageLocalize.jdk24PreviewLanguageLevelDescription(), 24),
+    JDK_25(JavaLanguageLocalize.jdk25LanguageLevelDescription(), 25),
+    JDK_25_PREVIEW(JavaLanguageLocalize.jdk25PreviewLanguageLevelDescription(), 25),
+    JDK_26(JavaLanguageLocalize.jdk26LanguageLevelDescription(), 26),
+    JDK_26_PREVIEW(JavaLanguageLocalize.jdk26PreviewLanguageLevelDescription(), 26),
+    JDK_X(JavaLanguageLocalize.jdkXLanguageLevelDescription(), 27),
 
     ;
     private static final Map<Integer, LanguageLevel> ourStandardVersions =

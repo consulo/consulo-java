@@ -471,6 +471,18 @@ jdk.23.language.level.description:
     text: 23 - Markdown documentation comments
 jdk.23.preview.language.level.description:
     text: 23 (Preview) - Primitive types in patterns, implicitly declared classes, etc.
+jdk.24.language.level.description:
+    text: 24 - No new language features
+jdk.24.preview.language.level.description:
+    text: 24 (Preview) - No new language features
+jdk.25.language.level.description:
+    text: 25 - No new language features
+jdk.25.preview.language.level.description:
+    text: 25 (Preview) - No new language features
+jdk.26.language.level.description:
+    text: 26 - No new language features
+jdk.26.preview.language.level.description:
+    text: 26 (Preview) - No new language features
 jdk.X.language.level.description:
     text: X - Experimental features
 jdk.unsupported.preview.language.level.description:
