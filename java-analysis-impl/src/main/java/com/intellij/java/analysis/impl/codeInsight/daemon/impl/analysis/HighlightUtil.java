@@ -2916,7 +2916,8 @@ public class HighlightUtil extends HighlightUtilBase {
                 }
             }
 
-            if (element.getParent() instanceof PsiClass psiClass && InheritanceUtil.isInheritorOrSelf(psiClass, referencedClass, true)) {
+            element = element.getParent();
+            if (element instanceof PsiClass psiClass && InheritanceUtil.isInheritorOrSelf(psiClass, referencedClass, true)) {
                 return null;
             }
         }
