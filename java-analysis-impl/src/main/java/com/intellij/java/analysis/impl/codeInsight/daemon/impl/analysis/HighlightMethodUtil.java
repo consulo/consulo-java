@@ -2322,9 +2322,9 @@ public class HighlightMethodUtil {
         if (method != null && context.getManager().isInProject(method)) {
             QuickFixFactory factory = QuickFixFactory.getInstance();
             hlBuilder.newFix(factory.createChangeMethodSignatureFromUsageFix(method, expressions, substitutor, context, false, 2))
-                .fixRange(fixRange).register()
+                .optionalFixRange(fixRange).register()
                 .newFix(factory.createChangeMethodSignatureFromUsageReverseOrderFix(method, expressions, substitutor, context, false, 2))
-                .fixRange(fixRange).register();
+                .optionalFixRange(fixRange).register();
         }
     }
 }

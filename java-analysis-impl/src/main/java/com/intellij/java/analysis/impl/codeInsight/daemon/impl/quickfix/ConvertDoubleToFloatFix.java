@@ -91,7 +91,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
         @Nonnull JavaResolveResult[] candidates,
         @Nonnull PsiExpressionList list,
         @Nullable HighlightInfo.Builder hlBuilder,
-        TextRange fixRange
+        @Nullable TextRange fixRange
     ) {
         if (hlBuilder == null || candidates.length == 0) {
             return;
@@ -105,7 +105,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     private static void registerIntention(
         @Nonnull PsiExpression[] expressions,
         @Nonnull HighlightInfo.Builder hlBuilder,
-        TextRange fixRange,
+        @Nullable TextRange fixRange,
         @Nonnull JavaResolveResult candidate,
         @Nonnull PsiElement context
     ) {
@@ -121,7 +121,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
                     if (expressions[i] instanceof PsiLiteralExpression literal
                         && PsiType.FLOAT.equals(parameter.getType())
                         && PsiType.DOUBLE.equals(literal.getType())) {
-                        hlBuilder.newFix(new ConvertDoubleToFloatFix(literal)).fixRange(fixRange).register();
+                        hlBuilder.newFix(new ConvertDoubleToFloatFix(literal)).optionalFixRange(fixRange).register();
                     }
                 }
             }
