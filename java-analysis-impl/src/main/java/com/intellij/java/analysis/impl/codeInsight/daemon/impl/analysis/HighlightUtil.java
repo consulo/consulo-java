@@ -354,7 +354,7 @@ public class HighlightUtil extends HighlightUtilBase {
                     }
                     LocalQuickFixAndIntentionActionOnPsiElement action =
                         QuickFixFactory.getInstance().createModifierFixBuilder(refElement).add(modifier).showContainingClass().create();
-                    hlBuilder.newFix(action).fixRange(fixRange).register();
+                    hlBuilder.newFix(action).optionalFixRange(fixRange).register();
                 }
             }
         }
