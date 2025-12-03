@@ -23,10 +23,8 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
@@ -43,9 +41,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalInspection {
-
-    private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE =
-        Key.create("ONLY_USED_FROM_TEST_CODE");
+    private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE = Key.create("ONLY_USED_FROM_TEST_CODE");
 
     @Nonnull
     @Override
@@ -55,84 +51,81 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
 
     @Override
     @Nullable
-    public RefGraphAnnotator getAnnotator(RefManager refManager) {
+    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager) {
         return new ElementOnlyUsedFromTestCodeAnnotator();
     }
 
     @Nullable
     @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
-        GlobalInspectionContext globalContext,
-        ProblemDescriptionsProcessor processor,
-        Object state) {
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor processor,
+        @Nonnull Object state
+    ) {
         if (!isOnlyUsedFromTestCode(refEntity)) {
             return null;
         }
-        if (!(refEntity instanceof RefJavaElement)) {
+        if (!(refEntity instanceof RefJavaElement javaElement)) {
             return null;
         }
-        final RefJavaElement javaElement = (RefJavaElement) refEntity;
         if (!javaElement.isReferenced()) {
             return null;
         }
-        final PsiElement element = javaElement.getElement();
-        if (element instanceof PsiClass) {
-            final PsiClass aClass = (PsiClass) element;
-            final PsiIdentifier identifier = aClass.getNameIdentifier();
+        PsiElement element = javaElement.getElement();
+        if (element instanceof PsiClass aClass) {
+            PsiIdentifier identifier = aClass.getNameIdentifier();
             if (identifier == null) {
                 return null;
             }
             return new CommonProblemDescriptor[]{
-                manager.createProblemDescriptor(identifier,
-                    InspectionGadgetsLocalize.classOnlyUsedFromTestCodeProblemDescriptor().get(),
-                    true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+                manager.newProblemDescriptor(InspectionGadgetsLocalize.classOnlyUsedFromTestCodeProblemDescriptor())
+                    .range(identifier)
+                    .create()
             };
         }
-        else if (element instanceof PsiMethod) {
-            final PsiMethod method = (PsiMethod) element;
-            final PsiIdentifier identifier = method.getNameIdentifier();
+        else if (element instanceof PsiMethod method) {
+            PsiIdentifier identifier = method.getNameIdentifier();
             if (identifier == null) {
                 return null;
             }
             return new CommonProblemDescriptor[]{
-                manager.createProblemDescriptor(identifier,
-                    InspectionGadgetsLocalize.methodOnlyUsedFromTestCodeProblemDescriptor().get(),
-                    true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+                manager.newProblemDescriptor(InspectionGadgetsLocalize.methodOnlyUsedFromTestCodeProblemDescriptor())
+                    .range(identifier)
+                    .create()
             };
         }
-        else if (element instanceof PsiField) {
-            final PsiField field = (PsiField) element;
-            final PsiIdentifier identifier = field.getNameIdentifier();
+        else if (element instanceof PsiField field) {
             return new CommonProblemDescriptor[]{
-                manager.createProblemDescriptor(identifier,
-                    InspectionGadgetsLocalize.fieldOnlyUsedFromTestCodeProblemDescriptor().get(),
-                    true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+                manager.newProblemDescriptor(InspectionGadgetsLocalize.fieldOnlyUsedFromTestCodeProblemDescriptor())
+                    .range(field.getNameIdentifier())
+                    .create()
             };
         }
         return null;
     }
 
     private static boolean isInsideTestClass(@Nonnull PsiElement e) {
-        final PsiClass aClass = getTopLevelParentClass(e);
+        PsiClass aClass = getTopLevelParentClass(e);
         return aClass != null && TestFrameworks.getInstance().isTestClass(aClass);
     }
 
     private static boolean isUnderTestSources(PsiElement e) {
-        final ProjectRootManager rootManager =
-            ProjectRootManager.getInstance(e.getProject());
-        final VirtualFile file = e.getContainingFile().getVirtualFile();
-        return file != null &&
-            rootManager.getFileIndex().isInTestSourceContent(file);
+        ProjectRootManager rootManager = ProjectRootManager.getInstance(e.getProject());
+        VirtualFile file = e.getContainingFile().getVirtualFile();
+        return file != null && rootManager.getFileIndex().isInTestSourceContent(file);
     }
 
     @Nullable
     public static PsiClass getTopLevelParentClass(PsiElement e) {
         PsiClass result = null;
         PsiElement parent = e.getParent();
-        while (parent != null && !(parent instanceof PsiFile)) {
-            if (parent instanceof PsiClass) {
-                result = (PsiClass) parent;
+        while (!(parent == null || parent instanceof PsiFile)) {
+            if (parent instanceof PsiClass psiClass) {
+                result = psiClass;
             }
             parent = parent.getParent();
         }
@@ -140,63 +133,50 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
     }
 
     private static boolean isOnlyUsedFromTestCode(RefEntity refElement) {
-        final Boolean usedFromTestCode =
-            refElement.getUserData(ONLY_USED_FROM_TEST_CODE);
-        return usedFromTestCode != null && usedFromTestCode.booleanValue();
+        Boolean usedFromTestCode = refElement.getUserData(ONLY_USED_FROM_TEST_CODE);
+        return usedFromTestCode != null && usedFromTestCode;
     }
 
-    private static class ElementOnlyUsedFromTestCodeAnnotator
-        extends RefGraphAnnotator {
-
+    private static class ElementOnlyUsedFromTestCodeAnnotator extends RefGraphAnnotator {
         @Override
-        public void onMarkReferenced(RefElement refWhat, RefElement refFrom,
-                                     boolean referencedFromClassInitializer) {
-            if (!(refWhat instanceof RefMethod) &&
-                !(refWhat instanceof RefField) &&
-                !(refWhat instanceof RefClass)) {
+        public void onMarkReferenced(RefElement refWhat, RefElement refFrom, boolean referencedFromClassInitializer) {
+            if (!(refWhat instanceof RefMethod)
+                && !(refWhat instanceof RefField)
+                && !(refWhat instanceof RefClass)) {
                 return;
             }
-            if (referencedFromClassInitializer ||
-                refFrom instanceof RefImplicitConstructor) {
+            if (referencedFromClassInitializer || refFrom instanceof RefImplicitConstructor) {
                 return;
             }
-            final PsiElement whatElement = refWhat.getElement();
-            if (isInsideTestClass(whatElement) ||
-                isUnderTestSources(whatElement)) {
+            PsiElement whatElement = refWhat.getElement();
+            if (isInsideTestClass(whatElement) || isUnderTestSources(whatElement)) {
                 // test code itself is allowed to only be used from test code
                 return;
             }
-            if (refFrom instanceof RefMethod && refWhat instanceof RefClass) {
-                final RefMethod method = (RefMethod) refFrom;
-                if (method.isConstructor() &&
-                    method.getOwnerClass() == refWhat) {
-                    // don't count references to class from its own constructor
-                    return;
-                }
+            if (refFrom instanceof RefMethod method
+                && refWhat instanceof RefClass
+                && method.isConstructor()
+                && method.getOwnerClass() == refWhat) {
+                // don't count references to class from its own constructor
+                return;
             }
-            final Boolean onlyUsedFromTestCode =
-                refWhat.getUserData(ONLY_USED_FROM_TEST_CODE);
+            Boolean onlyUsedFromTestCode = refWhat.getUserData(ONLY_USED_FROM_TEST_CODE);
             if (onlyUsedFromTestCode == null) {
                 refWhat.putUserData(ONLY_USED_FROM_TEST_CODE, Boolean.TRUE);
             }
-            else if (!onlyUsedFromTestCode.booleanValue()) {
+            else if (!onlyUsedFromTestCode) {
                 return;
             }
-            final PsiElement fromElement = refFrom.getElement();
-            if (isInsideTestClass(fromElement) ||
-                isUnderTestSources(fromElement)) {
+            PsiElement fromElement = refFrom.getElement();
+            if (isInsideTestClass(fromElement) || isUnderTestSources(fromElement)) {
                 return;
             }
 
-            if (refWhat instanceof RefMethod) {
-                final RefMethod what = (RefMethod) refWhat;
-                if (what.isConstructor()) {
-                    final RefClass ownerClass = what.getOwnerClass();
-                    ownerClass.putUserData(ONLY_USED_FROM_TEST_CODE,
-                        Boolean.FALSE);
-                    // do count references to class from its own constructor
-                    // when that constructor is used outside of test code.
-                }
+            if (refWhat instanceof RefMethod what && what.isConstructor()) {
+                RefClass ownerClass = what.getOwnerClass();
+                ownerClass.putUserData(ONLY_USED_FROM_TEST_CODE, Boolean.FALSE);
+                // do count references to class from its own constructor
+                // when that constructor is used outside of test code.
             }
             refWhat.putUserData(ONLY_USED_FROM_TEST_CODE, Boolean.FALSE);
         }

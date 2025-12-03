@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -36,8 +37,9 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class SameReturnValueInspection extends GlobalJavaInspectionTool {
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
         @Nonnull RefEntity refEntity,
         @Nonnull AnalysisScope scope,
@@ -53,7 +55,7 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
 
             String returnValue = refMethod.getReturnValueIfSame();
             if (returnValue != null) {
-                final LocalizeValue message;
+                LocalizeValue message;
                 if (refMethod.getDerivedMethods().isEmpty()) {
                     message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor("<code>" + returnValue + "</code>");
                 }
@@ -65,13 +67,9 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
                 }
 
                 return new ProblemDescriptor[]{
-                    manager.createProblemDescriptor(
-                        refMethod.getElement().getNavigationElement(),
-                        message.get(),
-                        false,
-                        null,
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-                    )
+                    manager.newProblemDescriptor(message)
+                        .range(refMethod.getElement().getNavigationElement())
+                        .create()
                 };
             }
         }
@@ -82,7 +80,7 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        final RefManager manager,
+        RefManager manager,
         final GlobalJavaInspectionContext globalContext,
         final ProblemDescriptionsProcessor processor,
         Object state
@@ -93,11 +91,14 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull final RefMethod refMethod) {
-                            globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
-                                processor.ignoreElement(refMethod);
-                                return false;
-                            });
+                        public void visitMethod(@Nonnull RefMethod refMethod) {
+                            globalContext.enqueueDerivedMethodsProcessor(
+                                refMethod,
+                                derivedMethod -> {
+                                    processor.ignoreElement(refMethod);
+                                    return false;
+                                }
+                            );
                         }
                     });
                 }

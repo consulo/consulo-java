@@ -4,6 +4,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -47,35 +48,37 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
 
     @Nullable
     @Override
+    @RequiredReadAction
     public ProblemDescriptor[] checkClass(
-        @Nonnull final PsiClass aClass,
-        @Nonnull final InspectionManager manager,
-        final boolean isOnTheFly, Object state
+        @Nonnull PsiClass aClass,
+        @Nonnull InspectionManager manager,
+        boolean isOnTheFly,
+        Object state
     ) {
-        if (aClass.isInterface() ||
-            aClass instanceof PsiTypeParameter ||
-            aClass.getMethods().length != 0 ||
-            aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+        if (aClass.isInterface()
+            || aClass instanceof PsiTypeParameter
+            || aClass.getMethods().length != 0
+            || aClass.isAbstract()) {
             return null;
         }
 
-        final PsiClass superClass = getSuperIfUnique(aClass);
+        PsiClass superClass = getSuperIfUnique(aClass);
         if (superClass == null) {
             return null;
         }
 
-        final List<InheritorsStatisticsSearchResult> topInheritors =
+        List<InheritorsStatisticsSearchResult> topInheritors =
             InheritorsStatisticalDataSearch.search(superClass, aClass, aClass.getResolveScope(), MIN_PERCENT_RATIO);
 
         if (topInheritors.isEmpty()) {
             return null;
         }
 
-        final Collection<LocalQuickFix> topInheritorsQuickFix = new ArrayList<LocalQuickFix>(topInheritors.size());
+        Collection<LocalQuickFix> topInheritorsQuickFix = new ArrayList<>(topInheritors.size());
 
         boolean isFirst = true;
-        for (final InheritorsStatisticsSearchResult searchResult : topInheritors) {
-            final LocalQuickFix quickFix;
+        for (InheritorsStatisticsSearchResult searchResult : topInheritors) {
+            LocalQuickFix quickFix;
             if (isFirst) {
                 quickFix = new ChangeSuperClassFix(searchResult.getPsiClass(), searchResult.getPercent(), superClass);
                 isFirst = false;
@@ -88,24 +91,26 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
                 break;
             }
         }
-        return new ProblemDescriptor[]{manager
-            .createProblemDescriptor(
-            aClass,
-            "Class may extend a commonly used base class instead of implementing interface or extending abstract class",
-            false,
-            topInheritorsQuickFix.toArray(new LocalQuickFix[topInheritorsQuickFix.size()]),
-            ProblemHighlightType.INFORMATION
-        )};
+        return new ProblemDescriptor[]{
+            manager.newProblemDescriptor(LocalizeValue.localizeTODO(
+                    "Class may extend a commonly used base class instead of implementing interface or extending abstract class"
+                ))
+                .range(aClass)
+                .highlightType(ProblemHighlightType.INFORMATION)
+                .withFixes(topInheritorsQuickFix)
+                .create()
+        };
     }
 
     @Nullable
-    private static PsiClass getSuperIfUnique(final @Nonnull PsiClass aClass) {
-        if (aClass instanceof PsiAnonymousClass) {
-            return (PsiClass) ((PsiAnonymousClass) aClass).getBaseClassReference().resolve();
+    @RequiredReadAction
+    private static PsiClass getSuperIfUnique(@Nonnull PsiClass aClass) {
+        if (aClass instanceof PsiAnonymousClass anonymousClass) {
+            return (PsiClass) anonymousClass.getBaseClassReference().resolve();
         }
-        final PsiReferenceList extendsList = aClass.getExtendsList();
+        PsiReferenceList extendsList = aClass.getExtendsList();
         if (extendsList != null) {
-            final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
             if (referenceElements.length == 1) {
                 PsiClass returnClass = (PsiClass) referenceElements[0].resolve();
                 if (returnClass != null
@@ -116,9 +121,9 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
             }
         }
 
-        final PsiReferenceList implementsList = aClass.getImplementsList();
+        PsiReferenceList implementsList = aClass.getImplementsList();
         if (implementsList != null) {
-            final PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
             if (referenceElements.length == 1) {
                 PsiClass returnClass = (PsiClass) referenceElements[0].resolve();
                 if (returnClass != null && returnClass.isInterface()) {

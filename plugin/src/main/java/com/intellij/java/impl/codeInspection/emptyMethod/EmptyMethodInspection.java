@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.Application;
 import consulo.application.util.query.Query;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
@@ -53,7 +52,6 @@ import consulo.util.lang.Pair;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,29 +64,27 @@ import java.util.List;
  */
 @ExtensionImpl
 public class EmptyMethodInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
-    @NonNls
     private static final String SHORT_NAME = "EmptyMethod";
 
-    private final BidirectionalMap<Boolean, QuickFix> myQuickFixes = new BidirectionalMap<Boolean, QuickFix>();
+    private final BidirectionalMap<Boolean, QuickFix> myQuickFixes = new BidirectionalMap<>();
 
     public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
     private static final Logger LOG = Logger.getInstance(EmptyMethodInspection.class);
 
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
         @Nonnull RefEntity refEntity,
         @Nonnull AnalysisScope scope,
         @Nonnull InspectionManager manager,
         @Nonnull GlobalInspectionContext globalContext,
         @Nonnull ProblemDescriptionsProcessor processor,
-        Object state
+        @Nonnull Object state
     ) {
-        if (!(refEntity instanceof RefMethod)) {
+        if (!(refEntity instanceof RefMethod refMethod)) {
             return null;
         }
-        final RefMethod refMethod = (RefMethod) refEntity;
-
         if (!isBodyEmpty(refMethod)) {
             return null;
         }
@@ -105,75 +101,73 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
             }
         }
 
-        String message = null;
+        LocalizeValue message = LocalizeValue.empty();
         boolean needToDeleteHierarchy = false;
         if (refMethod.isOnlyCallsSuper() && !refMethod.isFinal()) {
             RefMethod refSuper = findSuperWithBody(refMethod);
-            final RefJavaUtil refUtil = RefJavaUtil.getInstance();
+            RefJavaUtil refUtil = RefJavaUtil.getInstance();
             if (refSuper != null && Comparing.strEqual(refMethod.getAccessModifier(), refSuper.getAccessModifier())) {
-                if (Comparing.strEqual(refSuper.getAccessModifier(), PsiModifier.PROTECTED) //protected modificator gives access to method in another package
+                //protected modificator gives access to method in another package
+                if (Comparing.strEqual(refSuper.getAccessModifier(), PsiModifier.PROTECTED)
                     && !Comparing.strEqual(refUtil.getPackageName(refSuper), refUtil.getPackageName(refMethod))) {
                     return null;
                 }
-                final PsiModifierListOwner modifierListOwner = refMethod.getElement();
+                PsiModifierListOwner modifierListOwner = refMethod.getElement();
                 if (modifierListOwner != null) {
-                    final PsiModifierList list = modifierListOwner.getModifierList();
+                    PsiModifierList list = modifierListOwner.getModifierList();
                     if (list != null) {
-                        final PsiModifierListOwner supMethod = refSuper.getElement();
-                        if (supMethod != null) {
-                            final PsiModifierList superModifiedList = supMethod.getModifierList();
-                            LOG.assertTrue(superModifiedList != null);
-                            if (list.hasModifierProperty(PsiModifier.SYNCHRONIZED) && !superModifiedList.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
-                                return null;
-                            }
+                        PsiModifierListOwner supMethod = refSuper.getElement();
+                        if (supMethod != null && list.hasModifierProperty(PsiModifier.SYNCHRONIZED)
+                            && !supMethod.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
+                            return null;
                         }
                     }
                 }
             }
             if (refSuper == null || refUtil.compareAccess(refMethod.getAccessModifier(), refSuper.getAccessModifier()) <= 0) {
-                message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor().get();
+                message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor();
             }
         }
         else if (refMethod.hasBody() && hasEmptySuperImplementation(refMethod)) {
-
-            message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor1().get();
+            message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor1();
         }
         else if (areAllImplementationsEmpty(refMethod)) {
             if (refMethod.hasBody()) {
                 if (refMethod.getDerivedMethods().isEmpty()) {
                     if (refMethod.getSuperMethods().isEmpty()) {
-                        message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor2().get();
+                        message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor2();
                     }
                 }
                 else {
                     needToDeleteHierarchy = true;
-                    message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor3().get();
+                    message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor3();
                 }
             }
             else if (!refMethod.getDerivedMethods().isEmpty()) {
                 needToDeleteHierarchy = true;
-                message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor4().get();
+                message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor4();
             }
         }
 
         if (message != null) {
-            final ArrayList<LocalQuickFix> fixes = new ArrayList<LocalQuickFix>();
+            List<LocalQuickFix> fixes = new ArrayList<>();
             fixes.add(getFix(processor, needToDeleteHierarchy));
-            SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(refMethod.getElement(), qualifiedName -> {
-                fixes.add(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
-                    JavaQuickFixLocalize.fixAddSpecialAnnotationText(qualifiedName),
-                    JavaQuickFixLocalize.fixAddSpecialAnnotationFamily(),
-                    EXCLUDE_ANNOS, qualifiedName, refMethod.getElement()));
-                return true;
-            });
-
-            final ProblemDescriptor descriptor = manager.createProblemDescriptor(
-                refMethod.getElement().getNavigationElement(),
-                message,
-                false,
-                fixes.toArray(new LocalQuickFix[fixes.size()]),
-                ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+            SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(
+                refMethod.getElement(),
+                qualifiedName -> {
+                    fixes.add(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
+                        JavaQuickFixLocalize.fixAddSpecialAnnotationText(qualifiedName),
+                        JavaQuickFixLocalize.fixAddSpecialAnnotationFamily(),
+                        EXCLUDE_ANNOS, qualifiedName, refMethod.getElement()
+                    ));
+                    return true;
+                }
             );
+
+            ProblemDescriptor descriptor = manager.newProblemDescriptor(message)
+                .range(refMethod.getElement().getNavigationElement())
+                .withFixes(fixes)
+                .create();
             return new ProblemDescriptor[]{descriptor};
         }
 
@@ -181,15 +175,15 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
     }
 
     @RequiredReadAction
-    private boolean isBodyEmpty(final RefMethod refMethod) {
+    private boolean isBodyEmpty(RefMethod refMethod) {
         if (!refMethod.isBodyEmpty()) {
             return false;
         }
-        final PsiModifierListOwner owner = refMethod.getElement();
+        PsiModifierListOwner owner = refMethod.getElement();
         if (owner == null || AnnotationUtil.isAnnotated(owner, EXCLUDE_ANNOS)) {
             return false;
         }
-        for (ImplicitMethodBodyProvider provider : Application.get().getExtensionPoint(ImplicitMethodBodyProvider.class)) {
+        for (ImplicitMethodBodyProvider provider : owner.getApplication().getExtensionPoint(ImplicitMethodBodyProvider.class)) {
             if (provider.hasImplicitMethodBody(refMethod)) {
                 return false;
             }
@@ -208,6 +202,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         return null;
     }
 
+    @RequiredReadAction
     private boolean areAllImplementationsEmpty(RefMethod refMethod) {
         if (refMethod.hasBody() && !isBodyEmpty(refMethod)) {
             return false;
@@ -222,6 +217,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         return true;
     }
 
+    @RequiredReadAction
     private boolean hasEmptySuperImplementation(RefMethod refMethod) {
         for (RefMethod refSuper : refMethod.getSuperMethods()) {
             if (refSuper.hasBody() && isBodyEmpty(refSuper)) {
@@ -234,7 +230,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        @Nonnull final RefManager manager,
+        @Nonnull RefManager manager,
         @Nonnull final GlobalJavaInspectionContext context,
         @Nonnull final ProblemDescriptionsProcessor descriptionsProcessor,
         Object state
@@ -245,7 +241,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
                 if (refEntity instanceof RefElement && descriptionsProcessor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull final RefMethod refMethod) {
+                        public void visitMethod(@Nonnull RefMethod refMethod) {
                             context.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
                                 PsiCodeBlock body = derivedMethod.getBody();
                                 if (body == null || body.getStatements().length == 0
@@ -283,7 +279,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         return SHORT_NAME;
     }
 
-    private LocalQuickFix getFix(final ProblemDescriptionsProcessor processor, final boolean needToDeleteHierarchy) {
+    private LocalQuickFix getFix(ProblemDescriptionsProcessor processor, boolean needToDeleteHierarchy) {
         QuickFix fix = myQuickFixes.get(needToDeleteHierarchy);
         if (fix == null) {
             fix = new DeleteMethodQuickFix(processor, needToDeleteHierarchy);
@@ -294,8 +290,8 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
     }
 
     @Override
-    public String getHint(@Nonnull final QuickFix fix) {
-        final List<Boolean> list = myQuickFixes.getKeysByValue(fix);
+    public String getHint(@Nonnull QuickFix fix) {
+        List<Boolean> list = myQuickFixes.getKeysByValue(fix);
         if (list != null) {
             LOG.assertTrue(list.size() == 1);
             return String.valueOf(list.get(0));
@@ -303,21 +299,21 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         return null;
     }
 
-    @Override
     @Nullable
-    public LocalQuickFix getQuickFix(final String hint) {
+    @Override
+    public LocalQuickFix getQuickFix(String hint) {
         return new DeleteMethodIntention(hint);
     }
 
-    @Override
     @Nullable
+    @Override
     public JComponent createOptionsPanel() {
-        final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+        JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
             EXCLUDE_ANNOS,
             InspectionLocalize.specialAnnotationsAnnotationsList().get()
         );
 
-        final JPanel panel = new JPanel(new BorderLayout(2, 2));
+        JPanel panel = new JPanel(new BorderLayout(2, 2));
         panel.add(listPanel, BorderLayout.CENTER);
         return panel;
     }
@@ -325,7 +321,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
     private class DeleteMethodIntention implements LocalQuickFix {
         private final String myHint;
 
-        public DeleteMethodIntention(final String hint) {
+        public DeleteMethodIntention(String hint) {
             myHint = hint;
         }
 
@@ -337,13 +333,13 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-            final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class, false);
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class, false);
             if (psiMethod != null) {
-                final List<PsiElement> psiElements = new ArrayList<>();
+                List<PsiElement> psiElements = new ArrayList<>();
                 psiElements.add(psiMethod);
                 if (Boolean.valueOf(myHint)) {
-                    final Query<Pair<PsiMethod, PsiMethod>> query = AllOverridingMethodsSearch.search(psiMethod.getContainingClass());
+                    Query<Pair<PsiMethod, PsiMethod>> query = AllOverridingMethodsSearch.search(psiMethod.getContainingClass());
                     query.forEach(pair -> {
                         if (pair.first == psiMethod) {
                             psiElements.add(pair.second);
@@ -364,7 +360,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         private final ProblemDescriptionsProcessor myProcessor;
         private final boolean myNeedToDeleteHierarchy;
 
-        public DeleteMethodQuickFix(final ProblemDescriptionsProcessor processor, final boolean needToDeleteHierarchy) {
+        public DeleteMethodQuickFix(ProblemDescriptionsProcessor processor, boolean needToDeleteHierarchy) {
             myProcessor = processor;
             myNeedToDeleteHierarchy = needToDeleteHierarchy;
         }
@@ -376,7 +372,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         }
 
         @Override
-        public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
             applyFix(project, new ProblemDescriptor[]{descriptor}, new ArrayList<>(), null);
         }
 
@@ -401,10 +397,10 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
         @Override
         public void applyFix(
-            @Nonnull final Project project,
-            @Nonnull final CommonProblemDescriptor[] descriptors,
-            final List<PsiElement> psiElementsToIgnore,
-            final Runnable refreshViews
+            @Nonnull Project project,
+            @Nonnull CommonProblemDescriptor[] descriptors,
+            List<PsiElement> psiElementsToIgnore,
+            Runnable refreshViews
         ) {
             for (CommonProblemDescriptor descriptor : descriptors) {
                 RefElement refElement = (RefElement) myProcessor.getElement(descriptor);

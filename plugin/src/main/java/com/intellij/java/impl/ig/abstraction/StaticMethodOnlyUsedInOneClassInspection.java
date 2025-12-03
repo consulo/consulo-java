@@ -35,7 +35,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
-import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.dataContext.DataContext;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
@@ -58,6 +57,7 @@ import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 @ExtensionImpl
 public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspection {
@@ -175,7 +175,9 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
                 anonymousClass.getBaseClassReference().getText()
             )
             : InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassProblemDescriptor(usageClass.getName());
-        return manager.createProblemDescriptor(problemElement, message.get(), false, null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        return manager.newProblemDescriptor(message)
+            .range(problemElement)
+            .create();
     }
 
     @Override
@@ -282,12 +284,12 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         }
     }
 
-    private static class UsageProcessor implements Processor<PsiReference> {
+    private static class UsageProcessor implements Predicate<PsiReference> {
         private final AtomicReference<PsiClass> foundClass = new AtomicReference<>();
 
         @Override
         @RequiredReadAction
-        public boolean process(PsiReference reference) {
+        public boolean test(PsiReference reference) {
             ProgressManager.checkCanceled();
             PsiElement element = reference.getElement();
             PsiClass usageClass = ClassUtils.getContainingClass(element);

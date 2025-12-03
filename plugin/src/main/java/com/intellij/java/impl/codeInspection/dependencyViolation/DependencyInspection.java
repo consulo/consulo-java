@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInspection.dependencyViolation;
 
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataManager;
 import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
@@ -25,7 +26,6 @@ import consulo.ide.impl.idea.packageDependencies.ui.DependencyConfigurable;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.packageDependency.DependencyRule;
@@ -42,7 +42,7 @@ import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.ArrayList;import java.util.List;
 
 /**
  * @author anna
@@ -77,7 +77,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JButton editDependencies = new JButton(InspectionLocalize.inspectionDependencyConfigureButtonText().get());
+        JButton editDependencies = new JButton(InspectionLocalize.inspectionDependencyConfigureButtonText().get());
         editDependencies.addActionListener(e -> {
             Project project = DataManager.getInstance().getDataContext(editDependencies).getData(Project.KEY);
             if (project == null) {
@@ -91,46 +91,47 @@ public class DependencyInspection extends BaseLocalInspectionTool {
         return depPanel;
     }
 
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public ProblemDescriptor[] checkFile(
-        @Nonnull final PsiFile file,
-        @Nonnull final InspectionManager manager,
-        final boolean isOnTheFly,
+        @Nonnull PsiFile file,
+        @Nonnull InspectionManager manager,
+        boolean isOnTheFly,
         Object state
     ) {
-        if (file == null) {
-            return null;
-        }
         if (file.getViewProvider().getPsi(JavaLanguage.INSTANCE) == null) {
             return null;
         }
-        final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
+        DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
         if (!validationManager.hasRules()) {
             return null;
         }
         if (validationManager.getApplicableRules(file).length == 0) {
             return null;
         }
-        final ArrayList<ProblemDescriptor> problems = new ArrayList<>();
+        List<ProblemDescriptor> problems = new ArrayList<>();
         ForwardDependenciesBuilder builder = new ForwardDependenciesBuilder(file.getProject(), new AnalysisScope(file));
-        DependenciesBuilder.analyzeFileDependencies(file, (place, dependency) -> {
-            PsiFile dependencyFile = dependency.getContainingFile();
-            if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
-                final DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
-                for (DependencyRule dependencyRule : rule) {
-                    StringBuilder message = new StringBuilder();
-                    message.append(InspectionLocalize.inspectionDependencyViolatorProblemDescriptor(dependencyRule.getDisplayText()));
-                    problems.add(manager.createProblemDescriptor(
-                        place,
-                        message.toString(),
-                        isOnTheFly,
-                        new LocalQuickFix[]{new EditDependencyRulesAction(dependencyRule)},
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-                    ));
+        DependenciesBuilder.analyzeFileDependencies(
+            file,
+            (place, dependency) -> {
+                PsiFile dependencyFile = dependency.getContainingFile();
+                if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
+                    DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
+                    for (DependencyRule dependencyRule : rule) {
+                        problems.add(
+                            manager.newProblemDescriptor(InspectionLocalize.inspectionDependencyViolatorProblemDescriptor(
+                                    dependencyRule.getDisplayText()
+                                ))
+                                .range(place)
+                                .onTheFly(isOnTheFly)
+                                .withFix(new EditDependencyRulesAction(dependencyRule))
+                                .create()
+                        );
+                    }
                 }
             }
-        });
+        );
         return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
@@ -159,5 +160,4 @@ public class DependencyInspection extends BaseLocalInspectionTool {
             ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));
         }
     }
-
 }
