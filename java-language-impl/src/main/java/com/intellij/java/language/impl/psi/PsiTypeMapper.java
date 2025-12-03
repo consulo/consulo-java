@@ -69,10 +69,10 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     return var;
   }
 
-  @Override
-  public PsiType visitBottom(final Bottom bottom) {
-    return bottom;
-  }
+//  @Override
+//  public PsiType visitBottom(final Bottom bottom) {
+//    return bottom;
+//  }
 
   @Override
   public PsiType visitCapturedWildcardType(final PsiCapturedWildcardType type) {

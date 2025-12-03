@@ -21,10 +21,8 @@ import com.intellij.java.impl.ig.psiutils.MethodInheritanceUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
@@ -37,80 +35,72 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
-  private static final Key<Boolean> ALWAYS_CONSTANT = Key.create("ALWAYS_CONSTANT");
+    private static final Key<Boolean> ALWAYS_CONSTANT = Key.create("ALWAYS_CONSTANT");
 
-  @Nonnull
-  @Override
-  public LocalizeValue getDisplayName() {
-    return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName();
+    }
 
-  public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity,
-    AnalysisScope scope,
-    InspectionManager manager,
-    GlobalInspectionContext globalContext
-  ) {
-    if (!(refEntity instanceof RefMethod)) {
-      return null;
+    @RequiredReadAction
+    public CommonProblemDescriptor[] checkElement(
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext
+    ) {
+        if (!(refEntity instanceof RefMethod refMethod)) {
+            return null;
+        }
+        Boolean alreadyProcessed = refMethod.getUserData(ALWAYS_CONSTANT);
+        if (alreadyProcessed != null && alreadyProcessed) {
+            return null;
+        }
+        if (!(refMethod.getElement() instanceof PsiMethod method)) {
+            return null;
+        }
+        if (method.getBody() == null) {
+            return null;     //we'll catch it on another method
+        }
+        if (!alwaysReturnsConstant(method)) {
+            return null;
+        }
+        Set<RefMethod> siblingMethods = MethodInheritanceUtils.calculateSiblingMethods(refMethod);
+        for (RefMethod siblingMethod : siblingMethods) {
+            PsiMethod siblingPsiMethod = (PsiMethod) siblingMethod.getElement();
+            if (method.getBody() != null &&
+                !alwaysReturnsConstant(siblingPsiMethod)) {
+                return null;
+            }
+        }
+        List<ProblemDescriptor> out = new ArrayList<>();
+        for (RefMethod siblingRefMethod : siblingMethods) {
+            PsiMethod siblingMethod = (PsiMethod) siblingRefMethod.getElement();
+            PsiIdentifier identifier = siblingMethod.getNameIdentifier();
+            if (identifier == null) {
+                continue;
+            }
+            out.add(
+                manager.newProblemDescriptor(InspectionGadgetsLocalize.methodReturnAlwaysConstantProblemDescriptor())
+                    .range(identifier)
+                    .create()
+            );
+            siblingRefMethod.putUserData(ALWAYS_CONSTANT, Boolean.TRUE);
+        }
+        return out.toArray(new ProblemDescriptor[out.size()]);
     }
-    final RefMethod refMethod = (RefMethod) refEntity;
-    final Boolean alreadyProcessed = refMethod.getUserData(ALWAYS_CONSTANT);
-    if (alreadyProcessed != null && alreadyProcessed.booleanValue()) {
-      return null;
-    }
-    if (!(refMethod.getElement() instanceof PsiMethod)) {
-      return null;
-    }
-    final PsiMethod method = (PsiMethod) refMethod.getElement();
-    if (method.getBody() == null) {
-      return null;     //we'll catch it on another method
-    }
-    if (!alwaysReturnsConstant(method)) {
-      return null;
-    }
-    final Set<RefMethod> siblingMethods = MethodInheritanceUtils.calculateSiblingMethods(refMethod);
-    for (RefMethod siblingMethod : siblingMethods) {
-      final PsiMethod siblingPsiMethod = (PsiMethod) siblingMethod.getElement();
-      if (method.getBody() != null &&
-          !alwaysReturnsConstant(siblingPsiMethod)) {
-        return null;
-      }
-    }
-    final List<ProblemDescriptor> out = new ArrayList<ProblemDescriptor>();
-    for (RefMethod siblingRefMethod : siblingMethods) {
-      final PsiMethod siblingMethod = (PsiMethod) siblingRefMethod.getElement();
-      final PsiIdentifier identifier = siblingMethod.getNameIdentifier();
-      if (identifier == null) {
-        continue;
-      }
-      out.add(manager.createProblemDescriptor(
-        identifier,
-        InspectionGadgetsLocalize.methodReturnAlwaysConstantProblemDescriptor().get(),
-        false,
-        null,
-        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-      ));
-      siblingRefMethod.putUserData(ALWAYS_CONSTANT, Boolean.TRUE);
-    }
-    return out.toArray(new ProblemDescriptor[out.size()]);
-  }
 
-  private static boolean alwaysReturnsConstant(PsiMethod method) {
-    final PsiCodeBlock body = method.getBody();
-    if (body == null) {
-      return false;
+    private static boolean alwaysReturnsConstant(PsiMethod method) {
+        PsiCodeBlock body = method.getBody();
+        if (body == null) {
+            return false;
+        }
+        PsiStatement[] statements = body.getStatements();
+        if (!(statements.length == 1 && statements[0] instanceof PsiReturnStatement returnStatement)) {
+            return false;
+        }
+        PsiExpression value = returnStatement.getReturnValue();
+        return value != null && PsiUtil.isConstantExpression(value);
     }
-    final PsiStatement[] statements = body.getStatements();
-    if (statements.length != 1) {
-      return false;
-    }
-    final PsiStatement statement = statements[0];
-    if (!(statement instanceof PsiReturnStatement)) {
-      return false;
-    }
-    final PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
-    final PsiExpression value = returnStatement.getReturnValue();
-    return value != null && PsiUtil.isConstantExpression(value);
-  }
 }
