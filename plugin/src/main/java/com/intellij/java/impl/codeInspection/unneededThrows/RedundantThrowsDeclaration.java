@@ -19,10 +19,10 @@ import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionToo
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -32,7 +32,6 @@ import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -56,15 +55,14 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
         return InspectionLocalize.redundantThrowsDeclaration();
     }
 
-    @Override
     @Nonnull
-    @NonNls
+    @Override
     public String getShortName() {
         return "RedundantThrowsDeclaration";
     }
 
-    @Override
     @Nullable
+    @Override
     public ProblemDescriptor[] checkFile(
         @Nonnull PsiFile file,
         @Nonnull final InspectionManager manager,
@@ -74,30 +72,29 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
         final Set<ProblemDescriptor> problems = new HashSet<>();
         file.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
+            @RequiredReadAction
             public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
-                final ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
+                ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
                 if (descriptor != null) {
                     problems.add(descriptor);
                 }
             }
-
         });
         return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
+    @RequiredReadAction
     private static ProblemDescriptor checkExceptionsNeverThrown(
         PsiJavaCodeReferenceElement referenceElement,
         InspectionManager inspectionManager,
         boolean onTheFly
     ) {
-        if (!(referenceElement.getParent() instanceof PsiReferenceList)) {
+        if (!(referenceElement.getParent() instanceof PsiReferenceList referenceList)) {
             return null;
         }
-        PsiReferenceList referenceList = (PsiReferenceList) referenceElement.getParent();
-        if (!(referenceList.getParent() instanceof PsiMethod)) {
+        if (!(referenceList.getParent() instanceof PsiMethod method)) {
             return null;
         }
-        PsiMethod method = (PsiMethod) referenceList.getParent();
         if (referenceList != method.getThrowsList()) {
             return null;
         }
@@ -117,13 +114,10 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
             return null;
         }
 
-        PsiModifierList modifierList = method.getModifierList();
-        if (!modifierList.hasModifierProperty(PsiModifier.PRIVATE)
-            && !modifierList.hasModifierProperty(PsiModifier.STATIC)
-            && !modifierList.hasModifierProperty(PsiModifier.FINAL)
+        if (!method.isPrivate() && !method.isStatic() && !method.isFinal()
             && !method.isConstructor()
             && !(containingClass instanceof PsiAnonymousClass)
-            && !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+            && !containingClass.isFinal()) {
             return null;
         }
 
@@ -133,8 +127,8 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
             // there may be field initializer throwing exception
             // that exception must be caught in the constructor
             PsiField[] fields = containingClass.getFields();
-            for (final PsiField field : fields) {
-                if (field.hasModifierProperty(PsiModifier.STATIC)) {
+            for (PsiField field : fields) {
+                if (field.isStatic()) {
                     continue;
                 }
                 PsiExpression initializer = field.getInitializer();
@@ -155,14 +149,11 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
             return null;
         }
 
-        String description = JavaErrorBundle.message("exception.is.never.thrown", JavaHighlightUtil.formatType(exceptionType));
-        LocalQuickFix quickFixes = new DeleteThrowsFix(method, exceptionType);
-        return inspectionManager.createProblemDescriptor(
-            referenceElement,
-            description,
-            quickFixes,
-            ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-            onTheFly
-        );
+        return inspectionManager.newProblemDescriptor(JavaErrorLocalize.exceptionIsNeverThrown(JavaHighlightUtil.formatType(exceptionType)))
+            .range(referenceElement)
+            .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+            .onTheFly(onTheFly)
+            .withFix(new DeleteThrowsFix(method, exceptionType))
+            .create();
     }
 }

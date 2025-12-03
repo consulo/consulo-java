@@ -24,6 +24,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
@@ -56,15 +57,16 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 
     public boolean IGNORE_BUILDER_PATTERN = false;
 
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        RefEntity refEntity,
-        AnalysisScope scope,
-        InspectionManager manager,
-        GlobalInspectionContext globalContext,
-        ProblemDescriptionsProcessor processor,
-        Object state
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor processor,
+        @Nonnull Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.isConstructor()
@@ -74,23 +76,20 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
             }
 
             if (!refMethod.isReturnValueUsed()) {
-                final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
+                PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
                 if (IGNORE_BUILDER_PATTERN && PropertyUtil.isSimplePropertySetter(psiMethod)) {
                     return null;
                 }
 
-                final boolean isNative = psiMethod.hasModifierProperty(PsiModifier.NATIVE);
+                boolean isNative = psiMethod.hasModifierProperty(PsiModifier.NATIVE);
                 if (refMethod.isExternalOverride() && !isNative) {
                     return null;
                 }
                 return new ProblemDescriptor[]{
-                    manager.createProblemDescriptor(
-                        psiMethod.getNavigationElement(),
-                        InspectionLocalize.inspectionUnusedReturnValueProblemDescriptor().get(),
-                        !isNative ? getFix(processor) : null,
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        false
-                    )
+                    manager.newProblemDescriptor(InspectionLocalize.inspectionUnusedReturnValueProblemDescriptor())
+                        .range(psiMethod.getNavigationElement())
+                        .withOptionalFix(!isNative ? getFix(processor) : null)
+                        .create()
                 };
             }
         }
@@ -105,7 +104,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        final RefManager manager,
+        RefManager manager,
         final GlobalJavaInspectionContext globalContext,
         final ProblemDescriptionsProcessor processor,
         Object state
@@ -116,7 +115,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull final RefMethod refMethod) {
+                        public void visitMethod(@Nonnull RefMethod refMethod) {
                             globalContext.enqueueMethodUsagesProcessor(refMethod, psiReference -> {
                                 processor.ignoreElement(refMethod);
                                 return false;
@@ -148,7 +147,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
         return "UnusedReturnValue";
     }
 
-    private LocalQuickFix getFix(final ProblemDescriptionsProcessor processor) {
+    private LocalQuickFix getFix(ProblemDescriptionsProcessor processor) {
         if (myQuickFix == null) {
             myQuickFix = new MakeVoidQuickFix(processor);
         }
@@ -165,7 +164,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
         private final ProblemDescriptionsProcessor myProcessor;
         private static final Logger LOG = Logger.getInstance(MakeVoidQuickFix.class);
 
-        public MakeVoidQuickFix(final ProblemDescriptionsProcessor processor) {
+        public MakeVoidQuickFix(ProblemDescriptionsProcessor processor) {
             myProcessor = processor;
         }
 
@@ -194,19 +193,20 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
             makeMethodHierarchyVoid(project, psiMethod);
         }
 
+        @RequiredWriteAction
         private static void makeMethodHierarchyVoid(Project project, @Nonnull PsiMethod psiMethod) {
             replaceReturnStatements(psiMethod);
-            for (final PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod)) {
+            for (PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod)) {
                 replaceReturnStatements(oMethod);
             }
-            final PsiParameter[] params = psiMethod.getParameterList().getParameters();
-            final ParameterInfoImpl[] infos = new ParameterInfoImpl[params.length];
+            PsiParameter[] params = psiMethod.getParameterList().getParameters();
+            ParameterInfoImpl[] infos = new ParameterInfoImpl[params.length];
             for (int i = 0; i < params.length; i++) {
                 PsiParameter param = params[i];
                 infos[i] = new ParameterInfoImpl(i, param.getName(), param.getType());
             }
 
-            final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(
+            ChangeSignatureProcessor csp = new ChangeSignatureProcessor(
                 project,
                 psiMethod,
                 false, null, psiMethod.getName(),
@@ -217,22 +217,23 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
             csp.run();
         }
 
-        private static void replaceReturnStatements(@Nonnull final PsiMethod method) {
-            final PsiCodeBlock body = method.getBody();
+        @RequiredWriteAction
+        private static void replaceReturnStatements(@Nonnull PsiMethod method) {
+            PsiCodeBlock body = method.getBody();
             if (body != null) {
                 final List<PsiReturnStatement> returnStatements = new ArrayList<>();
                 body.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
-                    public void visitReturnStatement(@Nonnull final PsiReturnStatement statement) {
+                    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
                         super.visitReturnStatement(statement);
                         returnStatements.add(statement);
                     }
                 });
-                final PsiStatement[] psiStatements = body.getStatements();
-                final PsiStatement lastStatement = psiStatements[psiStatements.length - 1];
+                PsiStatement[] psiStatements = body.getStatements();
+                PsiStatement lastStatement = psiStatements[psiStatements.length - 1];
                 for (PsiReturnStatement returnStatement : returnStatements) {
                     try {
-                        final PsiExpression expression = returnStatement.getReturnValue();
+                        PsiExpression expression = returnStatement.getReturnValue();
                         if (expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression) {    //avoid side effects
                             if (returnStatement == lastStatement) {
                                 returnStatement.delete();
