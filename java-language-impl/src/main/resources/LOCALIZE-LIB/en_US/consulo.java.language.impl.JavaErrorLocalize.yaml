@@ -30,6 +30,8 @@ direct.abstract.method.access:
     text: Abstract method ''{0}'' cannot be accessed directly
 exception.already.caught.warn:
     text: 'Unreachable section: {1, choice, 0#exception|2#exceptions} ''''{0}'''' {1, choice, 0#has|2#have} already been caught'
+exception.is.never.thrown:
+    text: Exception ''{0}'' is never thrown in the method
 expression.expected:
     text: Expression expected
 extends.after.enum:
@@ -104,6 +106,8 @@ method.is.not.used:
     text: Method ''{0}'' is never used
 missing.method.body:
     text: Missing method body, or declare abstract
+missing.package.statement:
+    text: 'Missing package statement: ''''{0}'''''
 missing.return.type:
     text: Invalid method declaration; return type required
 modifiers.for.enum.constants:

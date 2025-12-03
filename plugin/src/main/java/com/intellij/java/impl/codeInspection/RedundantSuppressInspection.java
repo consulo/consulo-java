@@ -48,7 +48,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.*;
@@ -92,9 +91,8 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         return InspectionLocalize.inspectionRedundantSuppressionName();
     }
 
-    @Override
     @Nonnull
-    @NonNls
+    @Override
     public String getShortName() {
         return "RedundantSuppression";
     }
@@ -106,7 +104,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
     @Override
     public void runInspection(
-        @Nonnull final AnalysisScope scope,
+        @Nonnull AnalysisScope scope,
         @Nonnull final InspectionManager manager,
         @Nonnull final GlobalInspectionContext globalContext,
         @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
@@ -123,9 +121,9 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                 if (descriptors != null) {
                     for (CommonProblemDescriptor descriptor : descriptors) {
                         if (descriptor instanceof ProblemDescriptor problemDescriptor) {
-                            final PsiElement psiElement = problemDescriptor.getPsiElement();
-                            final PsiMember member = PsiTreeUtil.getParentOfType(psiElement, PsiMember.class);
-                            final RefElement refElement = globalContext.getRefManager().getReference(member);
+                            PsiElement psiElement = problemDescriptor.getPsiElement();
+                            PsiMember member = PsiTreeUtil.getParentOfType(psiElement, PsiMember.class);
+                            RefElement refElement = globalContext.getRefManager().getReference(member);
                             if (refElement != null) {
                                 problemDescriptionsProcessor.addProblemElement(refElement, descriptor);
                                 continue;
@@ -146,7 +144,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         @Nonnull Project project,
         Object state
     ) {
-        final PsiClass psiClass = refEntity.getElement();
+        PsiClass psiClass = refEntity.getElement();
         if (psiClass == null) {
             return null;
         }
@@ -165,9 +163,8 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
             @Override
             public void visitModifierList(@Nonnull PsiModifierList list) {
                 super.visitModifierList(list);
-                final PsiElement parent = list.getParent();
-                if (parent instanceof PsiModifierListOwner && !(parent instanceof PsiClass)) {
-                    checkElement(parent);
+                if (list.getParent() instanceof PsiModifierListOwner modifierListOwner && !(modifierListOwner instanceof PsiClass)) {
+                    checkElement(modifierListOwner);
                 }
             }
 
@@ -184,7 +181,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                 }
             }
 
-            private void checkElement(final PsiElement owner) {
+            private void checkElement( PsiElement owner) {
                 String idsString = JavaSuppressionUtil.getSuppressedInspectionIdsIn(owner);
                 if (idsString != null && !idsString.isEmpty()) {
                     List<String> ids = StringUtil.split(idsString, ",");
@@ -215,16 +212,16 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         InspectionToolWrapper[] toolWrappers = getInspectionTools(psiElement, manager);
         for (Collection<String> ids : suppressedScopes.values()) {
             for (Iterator<String> iterator = ids.iterator(); iterator.hasNext(); ) {
-                final String shortName = iterator.next().trim();
+                String shortName = iterator.next().trim();
                 for (InspectionToolWrapper toolWrapper : toolWrappers) {
-                    if (toolWrapper instanceof LocalInspectionToolWrapper localInspectionToolWrapper
-                        && localInspectionToolWrapper.getTool().getID().equals(shortName)) {
-                        if (localInspectionToolWrapper.isUnfair()) {
+                    if (toolWrapper instanceof LocalInspectionToolWrapper localToolWrapper
+                        && localToolWrapper.getTool().getID().equals(shortName)) {
+                        if (localToolWrapper.isUnfair()) {
                             iterator.remove();
                             break;
                         }
                         else {
-                            suppressedTools.add(toolWrapper);
+                            suppressedTools.add(localToolWrapper);
                         }
                     }
                     else if (toolWrapper.getShortName().equals(shortName)) {
@@ -246,9 +243,9 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
         final GlobalInspectionContextBase globalContext = new GlobalInspectionContextBase(file.getProject());
         globalContext.setCurrentScope(scope);
-        final RefManagerImpl refManager = (RefManagerImpl) globalContext.getRefManager();
+        RefManagerImpl refManager = (RefManagerImpl) globalContext.getRefManager();
         refManager.inspectionReadActionStarted();
-        final List<ProblemDescriptor> result;
+        List<ProblemDescriptor> result;
         try {
             result = new ArrayList<>();
             for (InspectionToolWrapper toolWrapper : suppressedTools) {
@@ -258,7 +255,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                 final Collection<CommonProblemDescriptor> descriptors;
                 if (toolWrapper instanceof LocalInspectionToolWrapper local) {
                     if (local.isUnfair()) {
-                        continue; //cant't work with passes other than LocalInspectionPass
+                        continue; //can't work with passes other than LocalInspectionPass
                     }
                     List<ProblemDescriptor> results = manager.runLocalToolLocaly(local.getTool(), file, state);
                     descriptors = new ArrayList<>(results);
@@ -317,10 +314,10 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                         continue;
                     }
                     for (CommonProblemDescriptor descriptor : descriptors) {
-                        if (!(descriptor instanceof ProblemDescriptor)) {
+                        if (!(descriptor instanceof ProblemDescriptor problemDescriptor)) {
                             continue;
                         }
-                        PsiElement element = ((ProblemDescriptor) descriptor).getPsiElement();
+                        PsiElement element = problemDescriptor.getPsiElement();
                         if (element == null) {
                             continue;
                         }
@@ -343,15 +340,14 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                     }
                     else {
                         psiMember = PsiTreeUtil.getParentOfType(suppressedScope, PsiDocCommentOwner.class);
-                        final PsiStatement statement = PsiTreeUtil.getNextSiblingOfType(suppressedScope, PsiStatement.class);
+                        PsiStatement statement = PsiTreeUtil.getNextSiblingOfType(suppressedScope, PsiStatement.class);
                         problemLine = statement != null ? statement.getText() : null;
                     }
                     if (psiMember != null && psiMember.isValid()) {
-                        String description = InspectionLocalize.inspectionRedundantSuppressionDescription().get();
                         if (myQuickFixes == null) {
                             myQuickFixes = new BidirectionalMap<>();
                         }
-                        final String key = toolId + (problemLine != null ? ";" + problemLine : "");
+                        String key = toolId + (problemLine != null ? ";" + problemLine : "");
                         QuickFix fix = myQuickFixes.get(key);
                         if (fix == null) {
                             fix = new RemoveSuppressWarningAction(toolId, problemLine);
@@ -370,13 +366,12 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                         if (identifier == null) {
                             identifier = psiMember;
                         }
-                        result.add(manager.createProblemDescriptor(
-                            identifier,
-                            description,
-                            (LocalQuickFix) fix,
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                            false
-                        ));
+                        result.add(
+                            manager.newProblemDescriptor(InspectionLocalize.inspectionRedundantSuppressionDescription())
+                                .range(identifier)
+                                .withFix((LocalQuickFix) fix)
+                                .create()
+                        );
                     }
                 }
             }
@@ -396,19 +391,17 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         return profile.getInspectionTools(psiElement);
     }
 
-
-    @Override
     @Nullable
-    public QuickFix getQuickFix(final String hint) {
+    @Override
+    public QuickFix getQuickFix(String hint) {
         return myQuickFixes != null ? myQuickFixes.get(hint) : new RemoveSuppressWarningAction(hint);
     }
 
-
-    @Override
     @Nullable
-    public String getHint(@Nonnull final QuickFix fix) {
+    @Override
+    public String getHint(@Nonnull QuickFix fix) {
         if (myQuickFixes != null) {
-            final List<String> list = myQuickFixes.getKeysByValue(fix);
+            List<String> list = myQuickFixes.getKeysByValue(fix);
             if (list != null) {
                 LOG.assertTrue(list.size() == 1);
                 return list.get(0);

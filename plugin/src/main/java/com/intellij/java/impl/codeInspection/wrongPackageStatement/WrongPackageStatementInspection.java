@@ -17,13 +17,12 @@ package com.intellij.java.impl.codeInspection.wrongPackageStatement;
 
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.impl.codeInspection.MoveToPackageFix;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -33,99 +32,95 @@ import consulo.localize.LocalizeValue;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User: anna
- * Date: 14-Nov-2005
+ * @author anna
+ * @since 2005-11-14
  */
 @ExtensionImpl
 public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool<Object> {
-  @Override
-  @Nullable
-  @RequiredReadAction
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    if (file instanceof PsiJavaFile javaFile) {
-      PsiDirectory directory = javaFile.getContainingDirectory();
-      if (directory == null) return null;
-      PsiJavaPackage dirPackage = JavaDirectoryService.getInstance().getPackage(directory);
-      if (dirPackage == null) return null;
-      PsiPackageStatement packageStatement = javaFile.getPackageStatement();
+    @Override
+    @Nullable
+    @RequiredReadAction
+    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+        if (file instanceof PsiJavaFile javaFile) {
+            PsiDirectory directory = javaFile.getContainingDirectory();
+            if (directory == null) {
+                return null;
+            }
+            PsiJavaPackage dirPackage = JavaDirectoryService.getInstance().getPackage(directory);
+            if (dirPackage == null) {
+                return null;
+            }
+            PsiPackageStatement packageStatement = javaFile.getPackageStatement();
 
-      // highlight the first class in the file only
-      PsiClass[] classes = javaFile.getClasses();
-      if (classes.length == 0 && packageStatement == null || classes.length == 1 && classes[0] instanceof PsiSyntheticClass) return null;
+            // highlight the first class in the file only
+            PsiClass[] classes = javaFile.getClasses();
+            if (classes.length == 0 && packageStatement == null || classes.length == 1 && classes[0] instanceof PsiSyntheticClass) {
+                return null;
+            }
 
-      String packageName = dirPackage.getQualifiedName();
-      if (!Comparing.strEqual(packageName, "", true) && packageStatement == null) {
-        String description = JavaErrorBundle.message("missing.package.statement", packageName);
+            String packageName = dirPackage.getQualifiedName();
+            if (!Comparing.strEqual(packageName, "", true) && packageStatement == null) {
 
-        return new ProblemDescriptor[]{
-          manager.createProblemDescriptor(
-            classes[0].getNameIdentifier(),
-            description,
-            new AdjustPackageNameFix(packageName),
-            ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-            isOnTheFly
-          )
-        };
-      }
-      if (packageStatement != null) {
-        final PsiJavaCodeReferenceElement packageReference = packageStatement.getPackageReference();
-        PsiJavaPackage classPackage = (PsiJavaPackage)packageReference.resolve();
-        List<LocalQuickFix> availableFixes = new ArrayList<>();
-        if (classPackage == null || !Comparing.equal(dirPackage.getQualifiedName(), packageReference.getQualifiedName(), true)) {
-          availableFixes.add(new AdjustPackageNameFix(packageName));
-          MoveToPackageFix moveToPackageFix =
-            new MoveToPackageFix(classPackage != null ? classPackage.getQualifiedName() : packageReference.getQualifiedName());
-          if (moveToPackageFix.isAvailable(file)) {
-            availableFixes.add(moveToPackageFix);
-          }
+                return new ProblemDescriptor[]{
+                    manager.newProblemDescriptor(JavaErrorLocalize.missingPackageStatement(packageName))
+                        .range(classes[0].getNameIdentifier())
+                        .onTheFly(isOnTheFly)
+                        .withFix(new AdjustPackageNameFix(packageName))
+                        .create()
+                };
+            }
+            if (packageStatement != null) {
+                PsiJavaCodeReferenceElement packageReference = packageStatement.getPackageReference();
+                PsiJavaPackage classPackage = (PsiJavaPackage) packageReference.resolve();
+                List<LocalQuickFix> availableFixes = new ArrayList<>();
+                if (classPackage == null || !Comparing.equal(dirPackage.getQualifiedName(), packageReference.getQualifiedName(), true)) {
+                    availableFixes.add(new AdjustPackageNameFix(packageName));
+                    MoveToPackageFix moveToPackageFix =
+                        new MoveToPackageFix(classPackage != null ? classPackage.getQualifiedName() : packageReference.getQualifiedName());
+                    if (moveToPackageFix.isAvailable(file)) {
+                        availableFixes.add(moveToPackageFix);
+                    }
+                }
+                if (!availableFixes.isEmpty()) {
+                    ProblemDescriptor descriptor = manager.newProblemDescriptor(
+                            JavaErrorLocalize.packageNameFilePathMismatch(packageReference.getQualifiedName(), dirPackage.getQualifiedName())
+                        )
+                        .range(packageStatement.getPackageReference())
+                        .onTheFly(isOnTheFly)
+                        .withFixes(availableFixes)
+                        .create();
+                    return new ProblemDescriptor[]{descriptor};
+                }
+            }
         }
-        if (!availableFixes.isEmpty()){
-          String description = JavaErrorBundle.message("package.name.file.path.mismatch",
-                                                         packageReference.getQualifiedName(),
-                                                         dirPackage.getQualifiedName());
-          LocalQuickFix[] fixes = availableFixes.toArray(new LocalQuickFix[availableFixes.size()]);
-          ProblemDescriptor descriptor = manager.createProblemDescriptor(
-            packageStatement.getPackageReference(),
-            description,
-            isOnTheFly,
-            fixes,
-            ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-          );
-          return new ProblemDescriptor[]{descriptor};
-
-        }
-      }
+        return null;
     }
-    return null;
-  }
 
-  @Override
-  @Nonnull
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.ERROR;
-  }
+    @Override
+    @Nonnull
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.ERROR;
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.wrongPackageStatement();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.wrongPackageStatement();
+    }
 
-  @Override
-  @Nonnull
-  @NonNls
-  public String getShortName() {
-    return "WrongPackageStatement";
-  }
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return "WrongPackageStatement";
+    }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 }

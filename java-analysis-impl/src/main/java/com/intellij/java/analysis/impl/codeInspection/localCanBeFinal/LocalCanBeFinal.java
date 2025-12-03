@@ -25,7 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -37,7 +36,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,308 +49,332 @@ import java.util.List;
  */
 @ExtensionImpl
 public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
-  private static final Logger LOG = Logger.getInstance(LocalCanBeFinal.class);
+    private static final Logger LOG = Logger.getInstance(LocalCanBeFinal.class);
 
-  public boolean REPORT_VARIABLES = true;
-  public boolean REPORT_PARAMETERS = true;
+    public boolean REPORT_VARIABLES = true;
+    public boolean REPORT_PARAMETERS = true;
 
-  private final LocalQuickFix myQuickFix;
-  @NonNls
-  public static final String SHORT_NAME = "LocalCanBeFinal";
+    private final LocalQuickFix myQuickFix;
+    public static final String SHORT_NAME = "LocalCanBeFinal";
 
-  public LocalCanBeFinal() {
-    myQuickFix = new AcceptSuggested();
-  }
-
-  @Nonnull
-  @Override
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.WARNING;
-  }
-
-  @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    List<ProblemDescriptor> list = checkCodeBlock(method.getBody(), manager, isOnTheFly);
-    return list == null ? null : list.toArray(new ProblemDescriptor[list.size()]);
-  }
-
-  @Override
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    List<ProblemDescriptor> allProblems = null;
-    final PsiClassInitializer[] initializers = aClass.getInitializers();
-    for (PsiClassInitializer initializer : initializers) {
-      final List<ProblemDescriptor> problems = checkCodeBlock(initializer.getBody(), manager, isOnTheFly);
-      if (problems != null) {
-        if (allProblems == null) {
-          allProblems = new ArrayList<>(1);
-        }
-        allProblems.addAll(problems);
-      }
-    }
-    return allProblems == null ? null : allProblems.toArray(new ProblemDescriptor[allProblems.size()]);
-  }
-
-  @Nullable
-  private List<ProblemDescriptor> checkCodeBlock(final PsiCodeBlock body, InspectionManager manager, boolean onTheFly) {
-    if (body == null) return null;
-    final ControlFlow flow;
-    try {
-      ControlFlowPolicy policy = new ControlFlowPolicy() {
-        @Override
-        @RequiredReadAction
-        public PsiVariable getUsedVariable(PsiReferenceExpression refExpr) {
-          if (refExpr.isQualified()) return null;
-
-          PsiElement refElement = refExpr.resolve();
-          if (refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter) {
-            if (!isVariableDeclaredInMethod((PsiVariable) refElement)) return null;
-            return (PsiVariable) refElement;
-          }
-
-          return null;
-        }
-
-        @Override
-        public boolean isParameterAccepted(PsiParameter psiParameter) {
-          return isVariableDeclaredInMethod(psiParameter);
-        }
-
-        @Override
-        public boolean isLocalVariableAccepted(PsiLocalVariable psiVariable) {
-          return isVariableDeclaredInMethod(psiVariable);
-        }
-
-        private boolean isVariableDeclaredInMethod(PsiVariable psiVariable) {
-          return PsiTreeUtil.getParentOfType(psiVariable, PsiClass.class) == PsiTreeUtil.getParentOfType(body, PsiClass.class);
-        }
-      };
-      flow = ControlFlowFactory.getInstance(body.getProject()).getControlFlow(body, policy, false);
-    } catch (AnalysisCanceledException e) {
-      return null;
+    public LocalCanBeFinal() {
+        myQuickFix = new AcceptSuggested();
     }
 
-    int start = flow.getStartOffset(body);
-    int end = flow.getEndOffset(body);
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 
-    final List<PsiVariable> writtenVariables =
-      new ArrayList<>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
+    @Override
+    @RequiredReadAction
+    public ProblemDescriptor[] checkMethod(
+        @Nonnull PsiMethod method,
+        @Nonnull InspectionManager manager,
+        boolean isOnTheFly,
+        Object state
+    ) {
+        List<ProblemDescriptor> list = checkCodeBlock(method.getBody(), manager, isOnTheFly);
+        return list == null ? null : list.toArray(new ProblemDescriptor[list.size()]);
+    }
 
-    final HashSet<PsiVariable> ssaVarsSet = new HashSet<>();
-    body.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override
-      @RequiredReadAction
-      public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
-        super.visitCodeBlock(block);
-        PsiElement anchor = block;
-        if (block.getParent() instanceof PsiSwitchStatement) {
-          anchor = block.getParent();
+    @Override
+    @RequiredReadAction
+    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+        List<ProblemDescriptor> allProblems = null;
+        PsiClassInitializer[] initializers = aClass.getInitializers();
+        for (PsiClassInitializer initializer : initializers) {
+            List<ProblemDescriptor> problems = checkCodeBlock(initializer.getBody(), manager, isOnTheFly);
+            if (problems != null) {
+                if (allProblems == null) {
+                    allProblems = new ArrayList<>(1);
+                }
+                allProblems.addAll(problems);
+            }
         }
-        int from = flow.getStartOffset(anchor);
-        int end = flow.getEndOffset(anchor);
-        List<PsiVariable> ssa = ControlFlowUtil.getSSAVariables(flow, from, end, true);
-        HashSet<PsiElement> declared = getDeclaredVariables(block);
-        for (PsiVariable psiVariable : ssa) {
-          if (declared.contains(psiVariable)) {
-            ssaVarsSet.add(psiVariable);
-          }
-        }
-      }
+        return allProblems == null ? null : allProblems.toArray(new ProblemDescriptor[allProblems.size()]);
+    }
 
-      @Override
-      public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
-        super.visitForeachStatement(statement);
-        final PsiParameter param = statement.getIterationParameter();
-        final PsiStatement body = statement.getBody();
-        if (body == null) return;
-        int from = flow.getStartOffset(body);
+    @Nullable
+    @RequiredReadAction
+    private List<ProblemDescriptor> checkCodeBlock(final PsiCodeBlock body, InspectionManager manager, boolean onTheFly) {
+        if (body == null) {
+            return null;
+        }
+        final ControlFlow flow;
+        try {
+            ControlFlowPolicy policy = new ControlFlowPolicy() {
+                @Override
+                @RequiredReadAction
+                public PsiVariable getUsedVariable(PsiReferenceExpression refExpr) {
+                    if (refExpr.isQualified()) {
+                        return null;
+                    }
+
+                    PsiElement refElement = refExpr.resolve();
+                    if (refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter) {
+                        if (!isVariableDeclaredInMethod((PsiVariable) refElement)) {
+                            return null;
+                        }
+                        return (PsiVariable) refElement;
+                    }
+
+                    return null;
+                }
+
+                @Override
+                public boolean isParameterAccepted(PsiParameter psiParameter) {
+                    return isVariableDeclaredInMethod(psiParameter);
+                }
+
+                @Override
+                public boolean isLocalVariableAccepted(PsiLocalVariable psiVariable) {
+                    return isVariableDeclaredInMethod(psiVariable);
+                }
+
+                private boolean isVariableDeclaredInMethod(PsiVariable psiVariable) {
+                    return PsiTreeUtil.getParentOfType(psiVariable, PsiClass.class) == PsiTreeUtil.getParentOfType(body, PsiClass.class);
+                }
+            };
+            flow = ControlFlowFactory.getInstance(body.getProject()).getControlFlow(body, policy, false);
+        }
+        catch (AnalysisCanceledException e) {
+            return null;
+        }
+
+        int start = flow.getStartOffset(body);
         int end = flow.getEndOffset(body);
-        if (!ControlFlowUtil.getWrittenVariables(flow, from, end, false).contains(param)) {
-          writtenVariables.remove(param);
-          ssaVarsSet.add(param);
-        }
-      }
 
-      @RequiredReadAction
-      private HashSet<PsiElement> getDeclaredVariables(PsiCodeBlock block) {
-        final HashSet<PsiElement> result = new HashSet<>();
-        PsiElement[] children = block.getChildren();
-        for (PsiElement child : children) {
-          child.accept(new JavaElementVisitor() {
+        final List<PsiVariable> writtenVariables =
+            new ArrayList<>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
+
+        final HashSet<PsiVariable> ssaVarsSet = new HashSet<>();
+        body.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
-              visitReferenceElement(expression);
+            @RequiredReadAction
+            public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
+                super.visitCodeBlock(block);
+                PsiElement anchor = block;
+                if (block.getParent() instanceof PsiSwitchStatement) {
+                    anchor = block.getParent();
+                }
+                int from = flow.getStartOffset(anchor);
+                int end = flow.getEndOffset(anchor);
+                List<PsiVariable> ssa = ControlFlowUtil.getSSAVariables(flow, from, end, true);
+                HashSet<PsiElement> declared = getDeclaredVariables(block);
+                for (PsiVariable psiVariable : ssa) {
+                    if (declared.contains(psiVariable)) {
+                        ssaVarsSet.add(psiVariable);
+                    }
+                }
             }
 
             @Override
-            public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
-              PsiElement[] declaredElements = statement.getDeclaredElements();
-              for (PsiElement declaredElement : declaredElements) {
-                if (declaredElement instanceof PsiVariable) result.add(declaredElement);
-              }
+            public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+                super.visitForeachStatement(statement);
+                PsiParameter param = statement.getIterationParameter();
+                PsiStatement body = statement.getBody();
+                if (body == null) {
+                    return;
+                }
+                int from = flow.getStartOffset(body);
+                int end = flow.getEndOffset(body);
+                if (!ControlFlowUtil.getWrittenVariables(flow, from, end, false).contains(param)) {
+                    writtenVariables.remove(param);
+                    ssaVarsSet.add(param);
+                }
             }
-          });
+
+            @RequiredReadAction
+            private HashSet<PsiElement> getDeclaredVariables(PsiCodeBlock block) {
+                final HashSet<PsiElement> result = new HashSet<>();
+                PsiElement[] children = block.getChildren();
+                for (PsiElement child : children) {
+                    child.accept(new JavaElementVisitor() {
+                        @Override
+                        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+                            visitReferenceElement(expression);
+                        }
+
+                        @Override
+                        public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+                            PsiElement[] declaredElements = statement.getDeclaredElements();
+                            for (PsiElement declaredElement : declaredElements) {
+                                if (declaredElement instanceof PsiVariable) {
+                                    result.add(declaredElement);
+                                }
+                            }
+                        }
+                    });
+                }
+
+                return result;
+            }
+
+            @Override
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
+            }
+        });
+
+        List<PsiVariable> result = new ArrayList<>(ssaVarsSet);
+
+        if (body.getParent() instanceof PsiMethod method) {
+            for (PsiParameter parameter : method.getParameterList().getParameters()) {
+                if (!result.contains(parameter)) {
+                    result.add(parameter);
+                }
+            }
         }
 
-        return result;
-      }
+        PsiVariable[] psiVariables = result.toArray(new PsiVariable[result.size()]);
+        for (PsiVariable psiVariable : psiVariables) {
+            if (!isReportParameters() && psiVariable instanceof PsiParameter
+                || !isReportVariables() && psiVariable instanceof PsiLocalVariable
+                || psiVariable.hasModifierProperty(PsiModifier.FINAL)) {
+                result.remove(psiVariable);
+            }
 
-      @Override
-      public void visitReferenceExpression(PsiReferenceExpression expression) {
-      }
-    });
-
-    ArrayList<PsiVariable> result = new ArrayList<>(ssaVarsSet);
-
-    if (body.getParent() instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) body.getParent();
-      PsiParameter[] parameters = method.getParameterList().getParameters();
-      for (PsiParameter parameter : parameters) {
-        if (!result.contains(parameter)) result.add(parameter);
-      }
-    }
-
-    PsiVariable[] psiVariables = result.toArray(new PsiVariable[result.size()]);
-    for (PsiVariable psiVariable : psiVariables) {
-      if (!isReportParameters() && psiVariable instanceof PsiParameter
-        || !isReportVariables() && psiVariable instanceof PsiLocalVariable
-        || psiVariable.hasModifierProperty(PsiModifier.FINAL)) {
-        result.remove(psiVariable);
-      }
-
-      if (psiVariable instanceof PsiLocalVariable) {
-        PsiDeclarationStatement decl = (PsiDeclarationStatement) psiVariable.getParent();
-        if (decl != null && decl.getParent() instanceof PsiForStatement) {
-          result.remove(psiVariable);
+            if (psiVariable instanceof PsiLocalVariable) {
+                PsiDeclarationStatement decl = (PsiDeclarationStatement) psiVariable.getParent();
+                if (decl != null && decl.getParent() instanceof PsiForStatement) {
+                    result.remove(psiVariable);
+                }
+            }
         }
-      }
+
+        for (PsiVariable writtenVariable : writtenVariables) {
+            if (writtenVariable instanceof PsiParameter) {
+                result.remove(writtenVariable);
+            }
+        }
+
+        if (result.isEmpty()) {
+            return null;
+        }
+        for (Iterator<PsiVariable> iterator = result.iterator(); iterator.hasNext(); ) {
+            PsiVariable variable = iterator.next();
+            if (!variable.isPhysical()) {
+                iterator.remove();
+            }
+        }
+        List<ProblemDescriptor> problems = new ArrayList<>(result.size());
+        for (PsiVariable variable : result) {
+            PsiIdentifier nameIdentifier = variable.getNameIdentifier();
+            PsiElement problemElement = nameIdentifier != null ? nameIdentifier : variable;
+            if (variable instanceof PsiParameter param && !(param.getDeclarationScope() instanceof PsiForeachStatement)) {
+                problems.add(manager.newProblemDescriptor(InspectionLocalize.inspectionCanBeLocalParameterProblemDescriptor())
+                    .range(problemElement)
+                    .onTheFly(onTheFly)
+                    .withOptionalFix(myQuickFix)
+                    .create());
+            }
+            else {
+                problems.add(manager.newProblemDescriptor(InspectionLocalize.inspectionCanBeLocalVariableProblemDescriptor())
+                    .range(problemElement)
+                    .onTheFly(onTheFly)
+                    .withOptionalFix(myQuickFix)
+                    .create());
+            }
+        }
+
+        return problems;
     }
 
-    for (PsiVariable writtenVariable : writtenVariables) {
-      if (writtenVariable instanceof PsiParameter) {
-        result.remove(writtenVariable);
-      }
-    }
-
-    if (result.isEmpty()) return null;
-    for (Iterator<PsiVariable> iterator = result.iterator(); iterator.hasNext(); ) {
-      final PsiVariable variable = iterator.next();
-      if (!variable.isPhysical()) {
-        iterator.remove();
-      }
-    }
-    List<ProblemDescriptor> problems = new ArrayList<>(result.size());
-    for (PsiVariable variable : result) {
-      final PsiIdentifier nameIdenitier = variable.getNameIdentifier();
-      PsiElement problemElement = nameIdenitier != null ? nameIdenitier : variable;
-      if (variable instanceof PsiParameter && !(((PsiParameter) variable).getDeclarationScope() instanceof PsiForeachStatement)) {
-        problems.add(manager.createProblemDescriptor(
-          problemElement,
-          InspectionLocalize.inspectionCanBeLocalParameterProblemDescriptor().get(),
-          myQuickFix,
-          ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-          onTheFly
-        ));
-      } else {
-        problems.add(manager.createProblemDescriptor(
-          problemElement,
-          InspectionLocalize.inspectionCanBeLocalVariableProblemDescriptor().get(),
-          myQuickFix,
-          ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-          onTheFly
-        ));
-      }
-    }
-
-    return problems;
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionLocalCanBeFinalDisplayName();
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.groupNamesCodeStyleIssues();
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return SHORT_NAME;
-  }
-
-  private static class AcceptSuggested implements LocalQuickFix {
     @Override
     @Nonnull
-    public LocalizeValue getName() {
-      return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionLocalCanBeFinalDisplayName();
     }
 
     @Override
-    @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
-      if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) return;
-      PsiElement nameIdentifier = problem.getPsiElement();
-      if (nameIdentifier == null) return;
-      PsiVariable psiVariable = PsiTreeUtil.getParentOfType(nameIdentifier, PsiVariable.class, false);
-      if (psiVariable == null) return;
-      try {
-        psiVariable.normalizeDeclaration();
-        PsiUtil.setModifierProperty(psiVariable, PsiModifier.FINAL, true);
-      } catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesCodeStyleIssues();
     }
-  }
 
-  @Override
-  public JComponent createOptionsPanel() {
-    return new OptionsPanel();
-  }
-
-  private boolean isReportVariables() {
-    return REPORT_VARIABLES;
-  }
-
-  private boolean isReportParameters() {
-    return REPORT_PARAMETERS;
-  }
-
-  private class OptionsPanel extends JPanel {
-    private final JCheckBox myReportVariablesCheckbox;
-    private final JCheckBox myReportParametersCheckbox;
-
-    private OptionsPanel() {
-      super(new GridBagLayout());
-
-      GridBagConstraints gc = new GridBagConstraints();
-      gc.weighty = 0;
-      gc.weightx = 1;
-      gc.fill = GridBagConstraints.HORIZONTAL;
-      gc.anchor = GridBagConstraints.NORTHWEST;
-
-
-      myReportVariablesCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption().get());
-      myReportVariablesCheckbox.setSelected(REPORT_VARIABLES);
-      myReportVariablesCheckbox.getModel().addChangeListener(e -> REPORT_VARIABLES = myReportVariablesCheckbox.isSelected());
-      gc.gridy = 0;
-      add(myReportVariablesCheckbox, gc);
-
-      myReportParametersCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption1().get());
-      myReportParametersCheckbox.setSelected(REPORT_PARAMETERS);
-      myReportParametersCheckbox.getModel().addChangeListener(e -> REPORT_PARAMETERS = myReportParametersCheckbox.isSelected());
-
-      gc.weighty = 1;
-      gc.gridy++;
-      add(myReportParametersCheckbox, gc);
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return SHORT_NAME;
     }
-  }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return false;
-  }
+    private static class AcceptSuggested implements LocalQuickFix {
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
+        }
+
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
+            if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) {
+                return;
+            }
+            PsiElement nameIdentifier = problem.getPsiElement();
+            if (nameIdentifier == null) {
+                return;
+            }
+            PsiVariable psiVariable = PsiTreeUtil.getParentOfType(nameIdentifier, PsiVariable.class, false);
+            if (psiVariable == null) {
+                return;
+            }
+            try {
+                psiVariable.normalizeDeclaration();
+                PsiUtil.setModifierProperty(psiVariable, PsiModifier.FINAL, true);
+            }
+            catch (IncorrectOperationException e) {
+                LOG.error(e);
+            }
+        }
+    }
+
+    @Override
+    public JComponent createOptionsPanel() {
+        return new OptionsPanel();
+    }
+
+    private boolean isReportVariables() {
+        return REPORT_VARIABLES;
+    }
+
+    private boolean isReportParameters() {
+        return REPORT_PARAMETERS;
+    }
+
+    private class OptionsPanel extends JPanel {
+        private final JCheckBox myReportVariablesCheckbox;
+        private final JCheckBox myReportParametersCheckbox;
+
+        private OptionsPanel() {
+            super(new GridBagLayout());
+
+            GridBagConstraints gc = new GridBagConstraints();
+            gc.weighty = 0;
+            gc.weightx = 1;
+            gc.fill = GridBagConstraints.HORIZONTAL;
+            gc.anchor = GridBagConstraints.NORTHWEST;
+
+
+            myReportVariablesCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption().get());
+            myReportVariablesCheckbox.setSelected(REPORT_VARIABLES);
+            myReportVariablesCheckbox.getModel().addChangeListener(e -> REPORT_VARIABLES = myReportVariablesCheckbox.isSelected());
+            gc.gridy = 0;
+            add(myReportVariablesCheckbox, gc);
+
+            myReportParametersCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption1().get());
+            myReportParametersCheckbox.setSelected(REPORT_PARAMETERS);
+            myReportParametersCheckbox.getModel().addChangeListener(e -> REPORT_PARAMETERS = myReportParametersCheckbox.isSelected());
+
+            gc.weighty = 1;
+            gc.gridy++;
+            add(myReportParametersCheckbox, gc);
+        }
+    }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return false;
+    }
 }

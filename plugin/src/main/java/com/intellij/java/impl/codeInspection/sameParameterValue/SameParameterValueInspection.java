@@ -24,6 +24,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcess
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
@@ -58,8 +59,9 @@ import java.util.List;
 public class SameParameterValueInspection extends GlobalJavaInspectionTool {
     private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
         @Nonnull RefEntity refEntity,
         @Nonnull AnalysisScope scope,
@@ -68,7 +70,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
         @Nonnull ProblemDescriptionsProcessor processor,
         @Nonnull Object state
     ) {
-        ArrayList<ProblemDescriptor> problems = null;
+        List<ProblemDescriptor> problems = null;
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.hasSuperMethods()) {
                 return null;
@@ -85,17 +87,16 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
                     if (problems == null) {
                         problems = new ArrayList<>(1);
                     }
-                    final String paramName = refParameter.getName();
-                    problems.add(manager.createProblemDescriptor(
-                        refParameter.getElement(),
-                        InspectionLocalize.inspectionSameParameterProblemDescriptor(
-                            "<code>" + paramName + "</code>",
-                            "<code>" + value + "</code>"
-                        ).get(),
-                        new InlineParameterValueFix(paramName, value),
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        false
-                    ));
+                    String paramName = refParameter.getName();
+                    problems.add(
+                        manager.newProblemDescriptor(InspectionLocalize.inspectionSameParameterProblemDescriptor(
+                                "<code>" + paramName + "</code>",
+                                "<code>" + value + "</code>"
+                            ))
+                            .range(refParameter.getElement())
+                            .withFix(new InlineParameterValueFix(paramName, value))
+                            .create()
+                    );
                 }
             }
         }
@@ -106,7 +107,8 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        final RefManager manager, final GlobalJavaInspectionContext globalContext,
+        RefManager manager,
+        final GlobalJavaInspectionContext globalContext,
         final ProblemDescriptionsProcessor processor, Object state
     ) {
         manager.iterate(new RefJavaVisitor() {
@@ -115,7 +117,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull final RefMethod refMethod) {
+                        public void visitMethod(@Nonnull RefMethod refMethod) {
                             globalContext.enqueueMethodUsagesProcessor(refMethod, psiReference -> {
                                 processor.ignoreElement(refMethod);
                                 return false;
@@ -149,23 +151,23 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
 
     @Override
     @Nullable
-    public QuickFix getQuickFix(final String hint) {
+    public QuickFix getQuickFix(String hint) {
         if (hint == null) {
             return null;
         }
-        final int spaceIdx = hint.indexOf(' ');
+        int spaceIdx = hint.indexOf(' ');
         if (spaceIdx == -1 || spaceIdx >= hint.length() - 1) {
             return null; //invalid hint
         }
-        final String paramName = hint.substring(0, spaceIdx);
-        final String value = hint.substring(spaceIdx + 1);
+        String paramName = hint.substring(0, spaceIdx);
+        String value = hint.substring(spaceIdx + 1);
         return new InlineParameterValueFix(paramName, value);
     }
 
-    @Override
     @Nullable
-    public String getHint(@Nonnull final QuickFix fix) {
-        final InlineParameterValueFix valueFix = (InlineParameterValueFix) fix;
+    @Override
+    public String getHint(@Nonnull QuickFix fix) {
+        InlineParameterValueFix valueFix = (InlineParameterValueFix) fix;
         return valueFix.getParamName() + " " + valueFix.getValue();
     }
 
@@ -173,7 +175,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
         private final String myValue;
         private final String myParameterName;
 
-        public InlineParameterValueFix(final String parameterName, final String value) {
+        public InlineParameterValueFix(String parameterName, String value) {
             myValue = value;
             myParameterName = parameterName;
         }
@@ -186,13 +188,13 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiElement element = descriptor.getPsiElement();
+            PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
             LOG.assertTrue(method != null);
             PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class, false);
             if (parameter == null) {
-                final PsiParameter[] parameters = method.getParameterList().getParameters();
+                PsiParameter[] parameters = method.getParameterList().getParameters();
                 for (PsiParameter psiParameter : parameters) {
                     if (Comparing.strEqual(psiParameter.getName(), myParameterName)) {
                         parameter = psiParameter;
@@ -204,20 +206,20 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
                 return;
             }
 
-            final PsiExpression defToInline;
+            PsiExpression defToInline;
             try {
                 defToInline = JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(myValue, parameter);
             }
             catch (IncorrectOperationException e) {
                 return;
             }
-            final PsiParameter parameterToInline = parameter;
+            PsiParameter parameterToInline = parameter;
             inlineSameParameterValue(method, parameterToInline, defToInline);
         }
 
         @RequiredUIAccess
-        public static void inlineSameParameterValue(final PsiMethod method, final PsiParameter parameter, final PsiExpression defToInline) {
-            final Collection<PsiReference> refsToInline = ReferencesSearch.search(parameter).findAll();
+        public static void inlineSameParameterValue(PsiMethod method, PsiParameter parameter, PsiExpression defToInline) {
+            Collection<PsiReference> refsToInline = ReferencesSearch.search(parameter).findAll();
 
             method.getApplication().runWriteAction(() -> {
                 try {
@@ -229,7 +231,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
                         }
                     }
 
-                    for (final PsiExpression expr : exprs) {
+                    for (PsiExpression expr : exprs) {
                         if (expr != null) {
                             InlineUtil.tryToInlineArrayCreationForVarargs(expr);
                         }
@@ -243,11 +245,12 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
             removeParameter(method, parameter);
         }
 
-        public static void removeParameter(final PsiMethod method, final PsiParameter parameter) {
-            final PsiParameter[] parameters = method.getParameterList().getParameters();
-            final List<ParameterInfoImpl> psiParameters = new ArrayList<>();
+        @RequiredUIAccess
+        public static void removeParameter(PsiMethod method, PsiParameter parameter) {
+            PsiParameter[] parameters = method.getParameterList().getParameters();
+            List<ParameterInfoImpl> psiParameters = new ArrayList<>();
             int paramIdx = 0;
-            final String paramName = parameter.getName();
+            String paramName = parameter.getName();
             for (PsiParameter param : parameters) {
                 if (!Comparing.strEqual(paramName, param.getName())) {
                     psiParameters.add(new ParameterInfoImpl(paramIdx, param.getName(), param.getType()));

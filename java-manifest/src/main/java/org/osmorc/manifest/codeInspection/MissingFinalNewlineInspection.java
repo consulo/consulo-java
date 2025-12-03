@@ -22,23 +22,22 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.osmorc.manifest.codeInspection;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.osmorc.manifest.lang.ManifestLanguage;
@@ -52,80 +51,88 @@ import org.osmorc.manifest.lang.psi.Section;
  */
 @ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.inspectionGeneralToolsGroupName();
-  }
-
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return ManifestLanguage.INSTANCE;
-  }
-
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return LocalizeValue.localizeTODO("Missing Final New Line");
-  }
-
-  @Nonnull
-  public String getShortName() {
-    return getClass().getSimpleName();
-  }
-
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Nonnull
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.ERROR;
-  }
-
-  @Override
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
-    if (file instanceof ManifestFile) {
-      String text = file.getText();
-      // http://ea.jetbrains.com/browser/ea_problems/22570
-      if (text != null && text.length() > 0) {
-        if (text.charAt(text.length() - 1) != '\n') {
-          Section section = PsiTreeUtil.findElementOfClassAtOffset(file, text.length() - 1,
-                                                                   Section.class, false);
-          if (section != null) {
-            return new ProblemDescriptor[]{manager.createProblemDescriptor(section.getLastChild(),
-                                                                           "Manifest file doesn't end with a final newline",
-                                                                           new AddNewlineQuickFix(section),
-                                                                           ProblemHighlightType.GENERIC_ERROR_OR_WARNING, isOnTheFly)};
-          }
-        }
-      }
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.inspectionGeneralToolsGroupName();
     }
-    return ProblemDescriptor.EMPTY_ARRAY;
-  }
 
-  private static class AddNewlineQuickFix implements LocalQuickFix {
-    private final Section section;
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return ManifestLanguage.INSTANCE;
+    }
 
-    private AddNewlineQuickFix(Section section) {
-      this.section = section;
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return LocalizeValue.localizeTODO("Missing Final New Line");
+    }
+
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return getClass().getSimpleName();
     }
 
     @Override
-    @Nonnull
-    public LocalizeValue getName() {
-      return LocalizeValue.localizeTODO("Add newline");
+    public boolean isEnabledByDefault() {
+        return true;
     }
 
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      PsiElement lastChild = section.getLastChild();
-      if (lastChild instanceof Header) {
-        Header header = (Header)lastChild;
-        header.getNode().addLeaf(ManifestTokenType.NEWLINE, "\n", null);
-      }
-      else {
-        throw new RuntimeException("No header found to add a newline to");
-      }
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.ERROR;
     }
-  }
+
+    @Override
+    @RequiredReadAction
+    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+        if (file instanceof ManifestFile) {
+            String text = file.getText();
+            // http://ea.jetbrains.com/browser/ea_problems/22570
+            if (text != null && text.length() > 0) {
+                if (text.charAt(text.length() - 1) != '\n') {
+                    Section section = PsiTreeUtil.findElementOfClassAtOffset(file, text.length() - 1, Section.class, false);
+                    if (section != null) {
+                        return new ProblemDescriptor[]{
+                            manager.newProblemDescriptor(
+                                    LocalizeValue.localizeTODO("Manifest file doesn't end with a final newline")
+                                )
+                                .range(section.getLastChild())
+                                .onTheFly(isOnTheFly)
+                                .withFix(new AddNewlineQuickFix(section))
+                                .create()};
+                    }
+                }
+            }
+        }
+        return ProblemDescriptor.EMPTY_ARRAY;
+    }
+
+    private static class AddNewlineQuickFix implements LocalQuickFix {
+        private final Section section;
+
+        private AddNewlineQuickFix(Section section) {
+            this.section = section;
+        }
+
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return LocalizeValue.localizeTODO("Add newline");
+        }
+
+        @Override
+        @RequiredUIAccess
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            if (section.getLastChild() instanceof Header header) {
+                header.getNode().addLeaf(ManifestTokenType.NEWLINE, "\n", null);
+            }
+            else {
+                throw new RuntimeException("No header found to add a newline to");
+            }
+        }
+    }
 }

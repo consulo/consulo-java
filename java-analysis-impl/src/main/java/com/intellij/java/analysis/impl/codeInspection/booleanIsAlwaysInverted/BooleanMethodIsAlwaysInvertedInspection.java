@@ -28,258 +28,206 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
 /**
- * User: anna
- * Date: 06-Jan-2006
+ * @author anna
+ * @since 2006-01-06
  */
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.BooleanMethodIsAlwaysInvertedInspection", fileExtensions = "java", categories = {"Java", "Boolean"})
-public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool
-{
-	private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
+public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool {
+    private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
 
-	@Nonnull
-	@Override
-	public HighlightDisplayLevel getDefaultLevel()
-	{
-		return HighlightDisplayLevel.WARNING;
-	}
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.WARNING;
+    }
 
-	@Override
-	@Nonnull
-	public LocalizeValue getDisplayName()
-	{
-		return InspectionLocalize.booleanMethodIsAlwaysInvertedDisplayName();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.booleanMethodIsAlwaysInvertedDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	public LocalizeValue getGroupDisplayName()
-	{
-		return InspectionLocalize.groupNamesDataFlowIssues();
-	}
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDataFlowIssues();
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getShortName()
-	{
-		return "BooleanMethodIsAlwaysInverted";
-	}
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return "BooleanMethodIsAlwaysInverted";
+    }
 
-	@Override
-	@Nullable
-	public RefGraphAnnotator getAnnotator(final RefManager refManager, Object state)
-	{
-		return new BooleanInvertedAnnotator();
-	}
+    @Nullable
+    @Override
+    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager, @Nonnull Object state) {
+        return new BooleanInvertedAnnotator();
+    }
 
-	@Override
-	public CommonProblemDescriptor[] checkElement(
-		RefEntity refEntity,
-		@Nonnull AnalysisScope scope,
-		@Nonnull final InspectionManager manager,
-		@Nonnull final GlobalInspectionContext globalContext,
-		Object state
-	)
-	{
-		if (refEntity instanceof RefMethod refMethod)
-		{
-			if (!refMethod.isReferenced() || hasNonInvertedCalls(refMethod) || !refMethod.getSuperMethods().isEmpty()) {
-				return null;
-			}
-			final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
-			final PsiIdentifier psiIdentifier = psiMethod.getNameIdentifier();
-			if (psiIdentifier != null)
-			{
-				return new ProblemDescriptor[]{
-					manager.createProblemDescriptor(
-						psiIdentifier,
-						InspectionLocalize.booleanMethodIsAlwaysInvertedProblemDescriptor().get(),
-						new InvertMethodFix(),
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-						false
-					)
-				};
-			}
-		}
-		return null;
-	}
+    @Override
+    @RequiredReadAction
+    public CommonProblemDescriptor[] checkElement(
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull Object state
+    ) {
+        if (refEntity instanceof RefMethod refMethod) {
+            if (!refMethod.isReferenced() || hasNonInvertedCalls(refMethod) || !refMethod.getSuperMethods().isEmpty()) {
+                return null;
+            }
+            PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
+            PsiIdentifier psiIdentifier = psiMethod.getNameIdentifier();
+            if (psiIdentifier != null) {
+                return new ProblemDescriptor[]{
+                    manager.newProblemDescriptor(InspectionLocalize.booleanMethodIsAlwaysInvertedProblemDescriptor())
+                        .range(psiIdentifier)
+                        .withFix(new InvertMethodFix())
+                        .create()
+                };
+            }
+        }
+        return null;
+    }
 
-	private static boolean hasNonInvertedCalls(final RefMethod refMethod)
-	{
-		final Boolean alwaysInverted = refMethod.getUserData(ALWAYS_INVERTED);
-		if (alwaysInverted == null || refMethod.isExternalOverride() || (refMethod.isReferenced() && !alwaysInverted)) {
-			return true;
-		}
-		final Collection<RefMethod> superMethods = refMethod.getSuperMethods();
-		for (RefMethod superMethod : superMethods)
-		{
-			if (hasNonInvertedCalls(superMethod))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    private static boolean hasNonInvertedCalls(RefMethod refMethod) {
+        Boolean alwaysInverted = refMethod.getUserData(ALWAYS_INVERTED);
+        if (alwaysInverted == null || refMethod.isExternalOverride() || (refMethod.isReferenced() && !alwaysInverted)) {
+            return true;
+        }
+        Collection<RefMethod> superMethods = refMethod.getSuperMethods();
+        for (RefMethod superMethod : superMethods) {
+            if (hasNonInvertedCalls(superMethod)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	protected boolean queryExternalUsagesRequests(
-		final RefManager manager,
-		final GlobalJavaInspectionContext context,
-		final ProblemDescriptionsProcessor descriptionsProcessor,
-		Object state
-	)
-	{
-		manager.iterate(new RefJavaVisitor()
-		{
-			@Override
-			@RequiredReadAction
-			public void visitMethod(@Nonnull final RefMethod refMethod)
-			{
-				if (descriptionsProcessor.getDescriptions(refMethod) != null)
-				{ //suspicious method -> need to check external usages
-					final GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = psiReference -> {
-						final PsiElement psiReferenceExpression = psiReference.getElement();
-						if (psiReferenceExpression instanceof PsiReferenceExpression referenceExpression && !isInvertedMethodCall(referenceExpression))
-						{
-							descriptionsProcessor.ignoreElement(refMethod);
-						}
-						return false;
-					};
-					traverseSuperMethods(refMethod, context, usagesProcessor);
-				}
-			}
-		});
-		return false;
-	}
+    @Override
+    protected boolean queryExternalUsagesRequests(
+        RefManager manager,
+        final GlobalJavaInspectionContext context,
+        final ProblemDescriptionsProcessor descriptionsProcessor,
+        Object state
+    ) {
+        manager.iterate(new RefJavaVisitor() {
+            @Override
+            @RequiredReadAction
+            public void visitMethod(@Nonnull RefMethod refMethod) {
+                if (descriptionsProcessor.getDescriptions(refMethod) != null) { //suspicious method -> need to check external usages
+                    GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = psiReference -> {
+                        PsiElement psiReferenceExpression = psiReference.getElement();
+                        if (psiReferenceExpression instanceof PsiReferenceExpression referenceExpression
+                            && !isInvertedMethodCall(referenceExpression)) {
+                            descriptionsProcessor.ignoreElement(refMethod);
+                        }
+                        return false;
+                    };
+                    traverseSuperMethods(refMethod, context, usagesProcessor);
+                }
+            }
+        });
+        return false;
+    }
 
-	private static void traverseSuperMethods(
-		RefMethod refMethod,
-		GlobalJavaInspectionContext globalContext,
-		GlobalJavaInspectionContext.UsagesProcessor processor
-	)
-	{
-		final Collection<RefMethod> superMethods = refMethod.getSuperMethods();
-		for (RefMethod superMethod : superMethods)
-		{
-			traverseSuperMethods(superMethod, globalContext, processor);
-		}
-		globalContext.enqueueMethodUsagesProcessor(refMethod, processor);
-	}
+    private static void traverseSuperMethods(
+        RefMethod refMethod,
+        GlobalJavaInspectionContext globalContext,
+        GlobalJavaInspectionContext.UsagesProcessor processor
+    ) {
+        Collection<RefMethod> superMethods = refMethod.getSuperMethods();
+        for (RefMethod superMethod : superMethods) {
+            traverseSuperMethods(superMethod, globalContext, processor);
+        }
+        globalContext.enqueueMethodUsagesProcessor(refMethod, processor);
+    }
 
-	private static void checkMethodCall(RefElement refWhat, final PsiElement element)
-	{
-		if (!(refWhat instanceof RefMethod))
-		{
-			return;
-		}
-		final RefMethod refMethod = (RefMethod) refWhat;
-		final PsiElement psiElement = refMethod.getElement();
-		if (!(psiElement instanceof PsiMethod))
-		{
-			return;
-		}
-		final PsiMethod psiMethod = (PsiMethod) psiElement;
-		if (!PsiType.BOOLEAN.equals(psiMethod.getReturnType()))
-		{
-			return;
-		}
-		element.accept(new JavaRecursiveElementVisitor()
-		{
-			@Override
-			public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call)
-			{
-				super.visitMethodCallExpression(call);
-				final PsiReferenceExpression methodExpression = call.getMethodExpression();
-				if (methodExpression.isReferenceTo(psiMethod))
-				{
-					if (isInvertedMethodCall(methodExpression))
-					{
-						return;
-					}
-					refMethod.putUserData(ALWAYS_INVERTED, Boolean.FALSE);
-				}
-			}
-		});
-	}
+    private static void checkMethodCall(RefElement refWhat, PsiElement element) {
+        if (refWhat instanceof RefMethod refMethod
+            && refMethod.getElement() instanceof PsiMethod method
+            && PsiType.BOOLEAN.equals(method.getReturnType())) {
+            element.accept(new JavaRecursiveElementVisitor() {
+                @Override
+                @RequiredReadAction
+                public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+                    super.visitMethodCallExpression(call);
+                    PsiReferenceExpression methodExpression = call.getMethodExpression();
+                    if (methodExpression.isReferenceTo(method)) {
+                        if (isInvertedMethodCall(methodExpression)) {
+                            return;
+                        }
+                        refMethod.putUserData(ALWAYS_INVERTED, Boolean.FALSE);
+                    }
+                }
+            });
+        }
+    }
 
-	private static boolean isInvertedMethodCall(final PsiReferenceExpression methodExpression)
-	{
-		final PsiPrefixExpression prefixExpression = PsiTreeUtil.getParentOfType(methodExpression, PsiPrefixExpression.class);
-		if (methodExpression.getQualifierExpression() instanceof PsiSuperExpression)
-		{
-			return true; //don't flag super calls
-		}
-		if (prefixExpression != null)
-		{
-			final IElementType tokenType = prefixExpression.getOperationTokenType();
-			if (tokenType.equals(JavaTokenType.EXCL))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    private static boolean isInvertedMethodCall(PsiReferenceExpression methodExpression) {
+        PsiPrefixExpression prefixExpression = PsiTreeUtil.getParentOfType(methodExpression, PsiPrefixExpression.class);
+        if (methodExpression.getQualifierExpression() instanceof PsiSuperExpression) {
+            return true; //don't flag super calls
+        }
+        if (prefixExpression != null) {
+            IElementType tokenType = prefixExpression.getOperationTokenType();
+            if (tokenType.equals(JavaTokenType.EXCL)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private static class BooleanInvertedAnnotator extends RefGraphAnnotator
-	{
-		@Override
-		public void onInitialize(RefElement refElement)
-		{
-			if (refElement instanceof RefMethod)
-			{
-				final PsiElement element = refElement.getElement();
-				if (!(element instanceof PsiMethod method && PsiType.BOOLEAN.equals(method.getReturnType()))) {
-					return;
-				}
-				refElement.putUserData(ALWAYS_INVERTED, Boolean.TRUE); //initial mark boolean methods
-			}
-		}
+    private static class BooleanInvertedAnnotator extends RefGraphAnnotator {
+        @Override
+        public void onInitialize(RefElement refElement) {
+            if (refElement instanceof RefMethod refMethod
+                && refMethod.getElement() instanceof PsiMethod method
+                && PsiType.BOOLEAN.equals(method.getReturnType())) {
+                refElement.putUserData(ALWAYS_INVERTED, Boolean.TRUE); //initial mark boolean methods
+            }
+        }
 
-		@Override
-		public void onMarkReferenced(RefElement refWhat, RefElement refFrom, boolean referencedFromClassInitializer)
-		{
-			checkMethodCall(refWhat, refFrom.getElement());
-		}
-	}
+        @Override
+        public void onMarkReferenced(RefElement refWhat, RefElement refFrom, boolean referencedFromClassInitializer) {
+            checkMethodCall(refWhat, refFrom.getElement());
+        }
+    }
 
-	@Override
-	public QuickFix getQuickFix(final String hint)
-	{
-		return new InvertMethodFix();
-	}
+    @Override
+    public QuickFix getQuickFix(String hint) {
+        return new InvertMethodFix();
+    }
 
-	private static class InvertMethodFix implements LocalQuickFix
-	{
-		@Override
-		@Nonnull
-		public LocalizeValue getName()
-		{
-			return LocalizeValue.localizeTODO("Invert method");
-		}
+    private static class InvertMethodFix implements LocalQuickFix {
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return LocalizeValue.localizeTODO("Invert method");
+        }
 
-		@Override
-		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
-		{
-			final PsiElement element = descriptor.getPsiElement();
-			final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-			assert psiMethod != null;
-			final RefactoringActionHandler invertBooleanHandler = JavaRefactoringActionHandlerFactory.getInstance().createInvertBooleanHandler();
-			final Runnable runnable =
-				() -> invertBooleanHandler.invoke(project, new PsiElement[]{psiMethod}, DataManager.getInstance().getDataContext());
-			if (project.getApplication().isUnitTestMode())
-			{
-				runnable.run();
-			}
-			else
-			{
-				project.getApplication().invokeLater(runnable, project.getDisposed());
-			}
-		}
-	}
+        @Override
+        @RequiredReadAction
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiElement element = descriptor.getPsiElement();
+            PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+            assert psiMethod != null;
+            RefactoringActionHandler invertBooleanHandler = JavaRefactoringActionHandlerFactory.getInstance().createInvertBooleanHandler();
+            Runnable runnable =
+                () -> invertBooleanHandler.invoke(project, new PsiElement[]{psiMethod}, DataManager.getInstance().getDataContext());
+            if (project.getApplication().isUnitTestMode()) {
+                runnable.run();
+            }
+            else {
+                project.getApplication().invokeLater(runnable, project.getDisposed());
+            }
+        }
+    }
 }

@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Dec 21, 2001
- * Time: 8:46:41 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.impl.codeInspection.visibility;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
@@ -62,6 +53,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * @author max
+ * @since 2001-12-21
+ */
 @ExtensionImpl
 public class VisibilityInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
     private class OptionsPanel extends JPanel {
@@ -201,17 +196,16 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                 PsiElement element = refElement.getElement();
                 PsiElement nameIdentifier = element != null ? IdentifierUtil.getNameIdentifier(element) : null;
                 if (nameIdentifier != null) {
+                    LocalizeValue descriptionTemplate = access.equals(PsiModifier.PRIVATE)
+                        ? InspectionLocalize.inspectionVisibilityComposeSuggestion("private")
+                        : access.equals(PsiModifier.PACKAGE_LOCAL)
+                        ? InspectionLocalize.inspectionVisibilityComposeSuggestion("package local")
+                        : InspectionLocalize.inspectionVisibilityComposeSuggestion("protected");
                     return new ProblemDescriptor[]{
-                        manager.createProblemDescriptor(
-                            nameIdentifier,
-                            access.equals(PsiModifier.PRIVATE)
-                                ? InspectionLocalize.inspectionVisibilityComposeSuggestion("private").get()
-                                : access.equals(PsiModifier.PACKAGE_LOCAL)
-                                ? InspectionLocalize.inspectionVisibilityComposeSuggestion("package local").get()
-                                : InspectionLocalize.inspectionVisibilityComposeSuggestion("protected").get(),
-                            new AcceptSuggestedAccess(globalContext.getRefManager(), access),
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false
-                        )
+                        manager.newProblemDescriptor(descriptionTemplate)
+                            .range(nameIdentifier)
+                            .withFix(new AcceptSuggestedAccess(globalContext.getRefManager(), access))
+                            .create()
                     };
                 }
             }
@@ -292,8 +286,8 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         }
 
         if (to instanceof RefMethod refMethod) {
-            if (refMethod.isAbstract() && (refMethod.getDerivedMethods()
-                .isEmpty() || refMethod.getAccessModifier() == PsiModifier.PRIVATE)) {
+            if (refMethod.isAbstract()
+                && (refMethod.getDerivedMethods().isEmpty() || refMethod.getAccessModifier() == PsiModifier.PRIVATE)) {
                 return false;
             }
 
@@ -320,7 +314,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             List children = refClass.getChildren();
             if (children != null) {
                 for (Object refElement : children) {
-                    if (!isAccessible((RefJavaElement)refElement, accessModifier)) {
+                    if (!isAccessible((RefJavaElement) refElement, accessModifier)) {
                         return false;
                     }
                 }
@@ -332,7 +326,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                 }
             }
 
-            List<RefJavaElement> classExporters = ((RefClassImpl)refClass).getClassExporters();
+            List<RefJavaElement> classExporters = ((RefClassImpl) refClass).getClassExporters();
             if (classExporters != null) {
                 for (RefJavaElement refExporter : classExporters) {
                     if (getAccessLevel(accessModifier) < getAccessLevel(refExporter.getAccessModifier())) {
@@ -564,15 +558,14 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             }
         }
 
-        RefEntity owner = refElement.getOwner();
-        if (owner instanceof RefElement) {
-            processor.ignoreElement(owner);
+        if (refElement.getOwner() instanceof RefElement ownerRef) {
+            processor.ignoreElement(ownerRef);
         }
     }
 
     @Override
     public void compose(@Nonnull StringBuffer buf, @Nonnull RefEntity refEntity, HTMLComposer composer) {
-        composer.appendElementInReferences(buf, (RefElement)refEntity);
+        composer.appendElementInReferences(buf, (RefElement) refEntity);
     }
 
     @Override
@@ -584,7 +577,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     @Override
     @Nullable
     public String getHint(@Nonnull QuickFix fix) {
-        return ((AcceptSuggestedAccess)fix).getHint();
+        return ((AcceptSuggestedAccess) fix).getHint();
     }
 
     private static class AcceptSuggestedAccess implements LocalQuickFix {

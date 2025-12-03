@@ -18,6 +18,7 @@ package consulo.java.properties.impl.i18n;
 import com.intellij.lang.properties.ResourceBundle;
 import com.intellij.lang.properties.*;
 import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.inspection.*;
@@ -44,6 +45,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
     private static final Key<Set<ResourceBundle>> VISITED_BUNDLES_KEY = Key.create("VISITED_BUNDLES_KEY");
 
     @Nonnull
+    @Override
     public LocalizeValue getGroupDisplayName() {
         return PropertiesLocalize.propertiesFilesInspectionGroupDisplayName();
     }
@@ -79,14 +81,17 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
     }
 
     @Override
-    public void inspectionStarted(@Nonnull InspectionManager manager,
-                                  @Nonnull GlobalInspectionContext globalContext,
-                                  @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                                  @Nonnull Object state) {
+    public void inspectionStarted(
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        @Nonnull Object state
+    ) {
         globalContext.putUserData(VISITED_BUNDLES_KEY, new HashSet<>());
     }
 
     @Override
+    @RequiredReadAction
     public void checkFile(
         @Nonnull PsiFile file,
         @Nonnull InspectionManager manager,
@@ -100,18 +105,18 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         checkFile(file, manager, visitedBundles, globalContext.getRefManager(), problemDescriptionsProcessor, inspectionState);
     }
 
+    @RequiredReadAction
     private void checkFile(
-        @Nonnull final PsiFile file,
-        @Nonnull final InspectionManager manager,
+        @Nonnull PsiFile file,
+        @Nonnull InspectionManager manager,
         @Nonnull Set<ResourceBundle> visitedBundles,
         RefManager refManager,
         ProblemDescriptionsProcessor processor,
         InconsistentResourceBundleInspectionState state
     ) {
-        if (!(file instanceof PropertiesFile)) {
+        if (!(file instanceof PropertiesFile propertiesFile)) {
             return;
         }
-        final PropertiesFile propertiesFile = (PropertiesFile) file;
         ResourceBundle resourceBundle = propertiesFile.getResourceBundle();
         if (!visitedBundles.add(resourceBundle)) {
             return;
@@ -148,11 +153,12 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         }
     }
 
+    @RequiredReadAction
     private static void checkDuplicatedProperties(
-        final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
-        final List<PropertiesFile> files,
-        final Map<PropertiesFile, Set<String>> keysUpToParent,
-        final InspectionManager manager,
+        BidirectionalMap<PropertiesFile, PropertiesFile> parents,
+        List<PropertiesFile> files,
+        Map<PropertiesFile, Set<String>> keysUpToParent,
+        InspectionManager manager,
         RefManager refManager,
         ProblemDescriptionsProcessor processor
     ) {
@@ -171,13 +177,10 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
                     IProperty parentProperty = parent.findPropertyByKey(overriddenKey);
                     if (parentProperty != null && Comparing.strEqual(property.getValue(), parentProperty.getValue())) {
                         LocalizeValue message = InspectionLocalize.inconsistentBundlePropertyInheritedWithTheSameValue(parent.getName());
-                        ProblemDescriptor descriptor = manager.createProblemDescriptor(
-                            property.getPsiElement(),
-                            message.get(),
-                            RemovePropertyLocalFix.INSTANCE,
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                            false
-                        );
+                        ProblemDescriptor descriptor = manager.newProblemDescriptor(message)
+                            .range(property.getPsiElement())
+                            .withFix(RemovePropertyLocalFix.INSTANCE)
+                            .create();
                         processor.addProblemElement(refManager.getReference(file.getContainingFile()), descriptor);
                     }
                     parent = parents.get(parent);
@@ -186,11 +189,12 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         }
     }
 
+    @RequiredReadAction
     private static void checkConsistency(
-        final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
-        final List<PropertiesFile> files,
-        final Map<PropertiesFile, Set<String>> keysUpToParent,
-        final InspectionManager manager,
+        BidirectionalMap<PropertiesFile, PropertiesFile> parents,
+        List<PropertiesFile> files,
+        Map<PropertiesFile, Set<String>> keysUpToParent,
+        InspectionManager manager,
         RefManager refManager,
         ProblemDescriptionsProcessor processor
     ) {
@@ -215,24 +219,23 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
                 IProperty property = file.findPropertyByKey(inconsistentKey);
                 assert property != null;
                 LocalizeValue message = InspectionLocalize.inconsistentBundlePropertyError(inconsistentKey, parent.getName());
-                ProblemDescriptor descriptor = manager.createProblemDescriptor(
-                    property.getPsiElement(),
-                    message.get(),
-                    false,
-                    LocalQuickFix.EMPTY_ARRAY,
-                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-                );
+                ProblemDescriptor descriptor = manager.newProblemDescriptor(message)
+                    .range(property.getPsiElement())
+                    .create();
                 processor.addProblemElement(refManager.getReference(file.getContainingFile()), descriptor);
             }
         }
     }
 
-    private static void checkMissingTranslations(final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
-                                                 final List<PropertiesFile> files,
-                                                 final Map<PropertiesFile, Set<String>> keysUpToParent,
-                                                 final InspectionManager manager,
-                                                 RefManager refManager,
-                                                 ProblemDescriptionsProcessor processor) {
+    @RequiredReadAction
+    private static void checkMissingTranslations(
+        BidirectionalMap<PropertiesFile, PropertiesFile> parents,
+        List<PropertiesFile> files,
+        Map<PropertiesFile, Set<String>> keysUpToParent,
+        InspectionManager manager,
+        RefManager refManager,
+        ProblemDescriptionsProcessor processor
+    ) {
         for (PropertiesFile file : files) {
             PropertiesFile parent = parents.get(file);
             if (parent == null) {
@@ -268,13 +271,9 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
                 }
                 assert untranslatedProperty != null;
                 LocalizeValue message = InspectionLocalize.inconsistentBundleUntranslatedPropertyError(untranslatedKey, file.getName());
-                ProblemDescriptor descriptor = manager.createProblemDescriptor(
-                    untranslatedProperty.getPsiElement(),
-                    message.get(),
-                    false,
-                    LocalQuickFix.EMPTY_ARRAY,
-                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING
-                );
+                ProblemDescriptor descriptor = manager.newProblemDescriptor(message)
+                    .range(untranslatedProperty.getPsiElement())
+                    .create();
                 processor.addProblemElement(refManager.getReference(untranslatedFile.getContainingFile()), descriptor);
             }
         }

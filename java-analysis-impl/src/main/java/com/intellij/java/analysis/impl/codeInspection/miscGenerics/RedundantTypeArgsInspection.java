@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -40,149 +41,170 @@ import java.util.List;
  */
 @ExtensionImpl
 public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
-  private static final Logger LOG = Logger.getInstance(RedundantTypeArgsInspection.class);
+    private static final Logger LOG = Logger.getInstance(RedundantTypeArgsInspection.class);
 
-  public RedundantTypeArgsInspection() {
-    myQuickFixAction = new MyQuickFixAction();
-  }
-
-  private final LocalQuickFix myQuickFixAction;
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionRedundantTypeDisplayName();
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "RedundantTypeArguments";
-  }
-
-  @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    final PsiCodeBlock body = psiMethod.getBody();
-    if (body != null) {
-      return getDescriptions(body, manager, isOnTheFly, state);
+    public RedundantTypeArgsInspection() {
+        myQuickFixAction = new MyQuickFixAction();
     }
-    return null;
-  }
 
-  @Override
-  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager inspectionManager, boolean isOnTheFly, Object state) {
-    final List<ProblemDescriptor> problems = new ArrayList<>();
-    place.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override
-      public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
-        final PsiType[] typeArguments = expression.getTypeArguments();
-        if (typeArguments.length > 0) {
-          checkCallExpression(expression.getMethodExpression(), typeArguments, expression, inspectionManager, problems);
+    private final LocalQuickFix myQuickFixAction;
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
+    }
+
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionRedundantTypeDisplayName();
+    }
+
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "RedundantTypeArguments";
+    }
+
+    @Override
+    public ProblemDescriptor[] checkMethod(
+        @Nonnull PsiMethod psiMethod,
+        @Nonnull InspectionManager manager,
+        boolean isOnTheFly,
+        Object state
+    ) {
+        PsiCodeBlock body = psiMethod.getBody();
+        if (body != null) {
+            return getDescriptions(body, manager, isOnTheFly, state);
         }
-      }
+        return null;
+    }
 
-      @Override
-      public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-        final PsiType[] typeArguments = expression.getTypeArguments();
-        if (typeArguments.length > 0) {
-          final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
-          if (classReference != null) {
-            checkCallExpression(classReference, typeArguments, expression, inspectionManager, problems);
-          }
-        }
-      }
-
-      private void checkCallExpression(
-        final PsiJavaCodeReferenceElement reference,
-        final PsiType[] typeArguments,
-        PsiCallExpression expression,
+    @Override
+    public ProblemDescriptor[] getDescriptions(
+        PsiElement place,
         final InspectionManager inspectionManager,
-        final List<ProblemDescriptor> problems
-      ) {
-        PsiExpressionList argumentList = expression.getArgumentList();
-        if (argumentList == null) return;
-        final JavaResolveResult resolveResult = reference.advancedResolve(false);
-
-        final PsiElement element = resolveResult.getElement();
-        if (element instanceof PsiMethod method && resolveResult.isValidResult()) {
-          final PsiTypeParameter[] typeParameters = method.getTypeParameters();
-          if (typeParameters.length == typeArguments.length) {
-            final PsiParameter[] parameters = method.getParameterList().getParameters();
-            PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
-            final PsiSubstitutor psiSubstitutor = resolveHelper.inferTypeArguments(
-              typeParameters,
-              parameters,
-              argumentList.getExpressions(),
-              PsiSubstitutor.EMPTY,
-              expression,
-              DefaultParameterTypeInferencePolicy.INSTANCE
-            );
-            for (int i = 0, length = typeParameters.length; i < length; i++) {
-              PsiTypeParameter typeParameter = typeParameters[i];
-              final PsiType inferredType = psiSubstitutor.getSubstitutionMap().get(typeParameter);
-              if (!typeArguments[i].equals(inferredType)) return;
-              if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter
-                && PsiPrimitiveType.getUnboxedType(inferredType) != null) {
-                return;
-              }
+        boolean isOnTheFly,
+        Object state
+    ) {
+        final List<ProblemDescriptor> problems = new ArrayList<>();
+        place.accept(new JavaRecursiveElementWalkingVisitor() {
+            @Override
+            @RequiredReadAction
+            public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+                PsiType[] typeArguments = expression.getTypeArguments();
+                if (typeArguments.length > 0) {
+                    checkCallExpression(expression.getMethodExpression(), typeArguments, expression, inspectionManager, problems);
+                }
             }
 
-            final PsiCallExpression copy = (PsiCallExpression) expression.copy(); //see IDEADEV-8174
-            try {
-              copy.getTypeArgumentList().delete();
-              if (copy.resolveMethod() != element) return;
-            } catch (IncorrectOperationException e) {
-              LOG.error(e);
-              return;
+            @Override
+            @RequiredReadAction
+            public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+                PsiType[] typeArguments = expression.getTypeArguments();
+                if (typeArguments.length > 0) {
+                    PsiJavaCodeReferenceElement classReference = expression.getClassReference();
+                    if (classReference != null) {
+                        checkCallExpression(classReference, typeArguments, expression, inspectionManager, problems);
+                    }
+                }
             }
 
-            final ProblemDescriptor descriptor = inspectionManager.createProblemDescriptor(
-              expression.getTypeArgumentList(),
-              InspectionLocalize.inspectionRedundantTypeProblemDescriptor().get(),
-              myQuickFixAction,
-              ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-              false
-            );
-            problems.add(descriptor);
-          }
+            @RequiredReadAction
+            private void checkCallExpression(
+                PsiJavaCodeReferenceElement reference,
+                PsiType[] typeArguments,
+                PsiCallExpression expression,
+                InspectionManager inspectionManager,
+                List<ProblemDescriptor> problems
+            ) {
+                PsiExpressionList argumentList = expression.getArgumentList();
+                if (argumentList == null) {
+                    return;
+                }
+                JavaResolveResult resolveResult = reference.advancedResolve(false);
+
+                if (resolveResult.getElement() instanceof PsiMethod method && resolveResult.isValidResult()) {
+                    PsiTypeParameter[] typeParameters = method.getTypeParameters();
+                    if (typeParameters.length == typeArguments.length) {
+                        PsiParameter[] parameters = method.getParameterList().getParameters();
+                        PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
+                        PsiSubstitutor psiSubstitutor = resolveHelper.inferTypeArguments(
+                            typeParameters,
+                            parameters,
+                            argumentList.getExpressions(),
+                            PsiSubstitutor.EMPTY,
+                            expression,
+                            DefaultParameterTypeInferencePolicy.INSTANCE
+                        );
+                        for (int i = 0, length = typeParameters.length; i < length; i++) {
+                            PsiTypeParameter typeParameter = typeParameters[i];
+                            PsiType inferredType = psiSubstitutor.getSubstitutionMap().get(typeParameter);
+                            if (!typeArguments[i].equals(inferredType)) {
+                                return;
+                            }
+                            if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter
+                                && PsiPrimitiveType.getUnboxedType(inferredType) != null) {
+                                return;
+                            }
+                        }
+
+                        PsiCallExpression copy = (PsiCallExpression) expression.copy(); //see IDEADEV-8174
+                        try {
+                            copy.getTypeArgumentList().delete();
+                            if (copy.resolveMethod() != method) {
+                                return;
+                            }
+                        }
+                        catch (IncorrectOperationException e) {
+                            LOG.error(e);
+                            return;
+                        }
+
+                        ProblemDescriptor descriptor = inspectionManager.newProblemDescriptor(
+                                InspectionLocalize.inspectionRedundantTypeProblemDescriptor()
+                            )
+                            .range(expression.getTypeArgumentList())
+                            .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                            .withOptionalFix(myQuickFixAction)
+                            .create();
+                        problems.add(descriptor);
+                    }
+                }
+            }
+        });
+
+        if (problems.isEmpty()) {
+            return null;
         }
-      }
-
-    });
-
-    if (problems.isEmpty()) return null;
-    return problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
-
-  private static class MyQuickFixAction implements LocalQuickFix {
-    @Override
-    @Nonnull
-    public LocalizeValue getName() {
-      return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix();
+        return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    @Override
-    @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
-      try {
-        final PsiMethodCallExpression expr = (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory()
-          .createExpressionFromText("foo()", null);
-        typeArgumentList.replace(expr.getTypeArgumentList());
-      } catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
+    private static class MyQuickFixAction implements LocalQuickFix {
+        @Override
+        @Nonnull
+        public LocalizeValue getName() {
+            return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix();
+        }
+
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
+            try {
+                PsiMethodCallExpression expr = (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory()
+                    .createExpressionFromText("foo()", null);
+                typeArgumentList.replace(expr.getTypeArgumentList());
+            }
+            catch (IncorrectOperationException e) {
+                LOG.error(e);
+            }
+        }
     }
-  }
 }
