@@ -13,51 +13,54 @@ import jakarta.annotation.Nonnull;
  * The main purpose of this enum is to be able to display localized element name in UI
  */
 public enum JavaElementKind {
-    ABSTRACT_METHOD(JavaLanguageLocalize.elementAbstract_method()),
-    ANNOTATION(JavaLanguageLocalize.elementAnnotation()),
-    ANONYMOUS_CLASS(JavaLanguageLocalize.elementAnonymous_class()),
-    CLASS(JavaLanguageLocalize.elementClass()),
-    TYPE_PARAMETER(JavaLanguageLocalize.elementTypeParameter()),
-    CONSTANT(JavaLanguageLocalize.elementConstant()),
-    CONSTRUCTOR(JavaLanguageLocalize.elementConstructor()),
-    ENUM(JavaLanguageLocalize.elementEnum()),
-    ENUM_CONSTANT(JavaLanguageLocalize.elementEnum_constant()),
-    EXPRESSION(JavaLanguageLocalize.elementExpression()),
-    FIELD(JavaLanguageLocalize.elementField()),
-    INITIALIZER(JavaLanguageLocalize.elementInitializer()),
-    INTERFACE(JavaLanguageLocalize.elementInterface()),
-    LABEL(JavaLanguageLocalize.elementLabel()),
-    LOCAL_VARIABLE(JavaLanguageLocalize.elementLocal_variable()),
-    METHOD(JavaLanguageLocalize.elementMethod()),
-    MODULE(JavaLanguageLocalize.elementModule()),
-    PACKAGE(JavaLanguageLocalize.elementPackage()),
-    PARAMETER(JavaLanguageLocalize.elementParameter()),
-    PATTERN_VARIABLE(JavaLanguageLocalize.elementPattern_variable()),
-    RECORD(JavaLanguageLocalize.elementRecord()),
-    RECORD_COMPONENT(JavaLanguageLocalize.elementRecord_component()),
-    SNIPPET_BODY(JavaLanguageLocalize.elementSnippet_body()),
-    STATEMENT(JavaLanguageLocalize.elementStatement()),
-    UNKNOWN(JavaLanguageLocalize.elementUnknown()),
-    VARIABLE(JavaLanguageLocalize.elementVariable()),
-    THROWS_LIST(JavaLanguageLocalize.elementThrowsList()),
-    EXTENDS_LIST(JavaLanguageLocalize.elementExtendsList()),
-    RECEIVER_PARAMETER(JavaLanguageLocalize.elementReceiverParameter()),
-    METHOD_CALL(JavaLanguageLocalize.elementMethodCall()),
-    TYPE_ARGUMENTS(JavaLanguageLocalize.elementTypeArguments()),
-    SEMICOLON(JavaLanguageLocalize.elementTypeSemicolon());
+    ABSTRACT_METHOD(JavaLanguageLocalize.elementAbstractMethodNominative(), JavaLanguageLocalize.elementAbstractMethodAccusative()),
+    ANNOTATION(JavaLanguageLocalize.elementAnnotationNominative(), JavaLanguageLocalize.elementAnnotationAccusative()),
+    ANONYMOUS_CLASS(JavaLanguageLocalize.elementAnonymousClassNominative(), JavaLanguageLocalize.elementAnonymousClassAccusative()),
+    CLASS(JavaLanguageLocalize.elementClassNominative(), JavaLanguageLocalize.elementClassAccusative()),
+    TYPE_PARAMETER(JavaLanguageLocalize.elementTypeParameterNominative(), JavaLanguageLocalize.elementTypeParameterAccusative()),
+    CONSTANT(JavaLanguageLocalize.elementConstantNominative(), JavaLanguageLocalize.elementConstantAccusative()),
+    CONSTRUCTOR(JavaLanguageLocalize.elementConstructorNominative(), JavaLanguageLocalize.elementConstructorAccusative()),
+    ENUM(JavaLanguageLocalize.elementEnumNominative(), JavaLanguageLocalize.elementEnumAccusative()),
+    ENUM_CONSTANT(JavaLanguageLocalize.elementEnumConstantNominative(), JavaLanguageLocalize.elementEnumConstantAccusative()),
+    EXPRESSION(JavaLanguageLocalize.elementExpressionNominative(), JavaLanguageLocalize.elementExpressionAccusative()),
+    FIELD(JavaLanguageLocalize.elementFieldNominative(), JavaLanguageLocalize.elementFieldAccusative()),
+    INITIALIZER(JavaLanguageLocalize.elementInitializerNominative(), JavaLanguageLocalize.elementInitializerAccusative()),
+    INTERFACE(JavaLanguageLocalize.elementInterfaceNominative(), JavaLanguageLocalize.elementInterfaceAccusative()),
+    LABEL(JavaLanguageLocalize.elementLabelNominative(), JavaLanguageLocalize.elementLabelAccusative()),
+    LOCAL_VARIABLE(JavaLanguageLocalize.elementLocalVariableNominative(), JavaLanguageLocalize.elementLocalVariableAccusative()),
+    METHOD(JavaLanguageLocalize.elementMethodNominative(), JavaLanguageLocalize.elementMethodAccusative()),
+    MODULE(JavaLanguageLocalize.elementModuleNominative(), JavaLanguageLocalize.elementModuleAccusative()),
+    PACKAGE(JavaLanguageLocalize.elementPackageNominative(), JavaLanguageLocalize.elementPackageAccusative()),
+    PARAMETER(JavaLanguageLocalize.elementParameterNominative(), JavaLanguageLocalize.elementParameterAccusative()),
+    PATTERN_VARIABLE(JavaLanguageLocalize.elementPatternVariableNominative(), JavaLanguageLocalize.elementPatternVariableAccusative()),
+    RECORD(JavaLanguageLocalize.elementRecordNominative(), JavaLanguageLocalize.elementRecordAccusative()),
+    RECORD_COMPONENT(JavaLanguageLocalize.elementRecordComponentNominative(), JavaLanguageLocalize.elementRecordComponentAccusative()),
+    SNIPPET_BODY(JavaLanguageLocalize.elementSnippetBodyNominative(), JavaLanguageLocalize.elementSnippetBodyAccusative()),
+    STATEMENT(JavaLanguageLocalize.elementStatementNominative(), JavaLanguageLocalize.elementStatementAccusative()),
+    UNKNOWN(JavaLanguageLocalize.elementUnknownNominative(), JavaLanguageLocalize.elementUnknownAccusative()),
+    VARIABLE(JavaLanguageLocalize.elementVariableNominative(), JavaLanguageLocalize.elementVariableAccusative()),
+    THROWS_LIST(JavaLanguageLocalize.elementThrowsListNominative(), JavaLanguageLocalize.elementThrowsListAccusative()),
+    EXTENDS_LIST(JavaLanguageLocalize.elementExtendsListNominative(), JavaLanguageLocalize.elementExtendsListAccusative()),
+    RECEIVER_PARAMETER(JavaLanguageLocalize.elementReceiverParameterNominative(), JavaLanguageLocalize.elementReceiverParameterAccusative()),
+    METHOD_CALL(JavaLanguageLocalize.elementMethodCallNominative(), JavaLanguageLocalize.elementMethodCallAccusative()),
+    TYPE_ARGUMENTS(JavaLanguageLocalize.elementTypeArgumentsNominative(), JavaLanguageLocalize.elementTypeArgumentsAccusative()),
+    SEMICOLON(JavaLanguageLocalize.elementTypeSemicolonNominative(), JavaLanguageLocalize.elementTypeSemicolonAccusative());
 
     @Nonnull
-    private final LocalizeValue myName;
+    private final LocalizeValue myNameNominative;
+    @Nonnull
+    private final LocalizeValue myNameAccusative;
 
-    JavaElementKind(@Nonnull LocalizeValue name) {
-        myName = name;
+    JavaElementKind(@Nonnull LocalizeValue nameNominative, @Nonnull LocalizeValue nameAccusative) {
+        myNameNominative = nameNominative;
+        myNameAccusative = nameAccusative;
     }
 
     /**
      * @return human-readable name of the item having the subject role in the sentence (nominative case)
      */
     public LocalizeValue subject() {
-        return myName;
+        return myNameNominative;
     }
 
     /**
@@ -65,7 +68,7 @@ public enum JavaElementKind {
      */
     @Nonnull
     public LocalizeValue object() {
-        return myName;
+        return myNameAccusative;
     }
 
     /**
@@ -113,7 +116,7 @@ public enum JavaElementKind {
             if (method.isConstructor()) {
                 return CONSTRUCTOR;
             }
-            if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+            if (method.isAbstract()) {
                 return ABSTRACT_METHOD;
             }
             return METHOD;
@@ -122,7 +125,7 @@ public enum JavaElementKind {
             if (field instanceof PsiEnumConstant) {
                 return ENUM_CONSTANT;
             }
-            if (field.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(PsiModifier.FINAL)) {
+            if (field.isStatic() && field.isFinal()) {
                 return CONSTANT;
             }
             return FIELD;

@@ -66,71 +66,135 @@ diamond.error.cannot.infer.type.arguments:
     text: Cannot infer type arguments for {0}
 diamond.error.explicit.type.parameters.for.constructor:
     text: Cannot use diamonds with explicit type parameters for constructor
-element.abstract_method:
+element.abstract.method.accusative:
     text: abstract method
-element.annotation:
+element.abstract.method.nominative:
+    text: abstract method
+element.annotation.accusative:
     text: annotation
-element.anonymous_class:
+element.annotation.nominative:
+    text: annotation
+element.anonymous.class.accusative:
     text: anonymous class
-element.class:
+element.anonymous.class.nominative:
+    text: anonymous class
+element.class.accusative:
     text: class
-element.constant:
+element.class.nominative:
+    text: class
+element.constant.accusative:
     text: constant field
-element.constructor:
+element.constant.nominative:
+    text: constant field
+element.constructor.accusative:
     text: constructor
-element.enum:
+element.constructor.nominative:
+    text: constructor
+element.enum.accusative:
     text: enum
-element.enum_constant:
+element.enum.constant.accusative:
     text: enum constant
-element.expression:
+element.enum.constant.nominative:
+    text: enum constant
+element.enum.nominative:
+    text: enum
+element.expression.accusative:
     text: expression
-element.extends.list:
+element.expression.nominative:
+    text: expression
+element.extends.list.accusative:
     text: extends list
-element.field:
+element.extends.list.nominative:
+    text: extends list
+element.field.accusative:
     text: field
-element.initializer:
+element.field.nominative:
+    text: field
+element.initializer.accusative:
     text: initializer
-element.interface:
+element.initializer.nominative:
+    text: initializer
+element.interface.accusative:
+    text: interface
+element.interface.nominative:
     text: interface
 element.kind.and.name:
     text: '{0} {1}'
-element.label:
+element.label.accusative:
     text: label
-element.local_variable:
+element.label.nominative:
+    text: label
+element.local.variable.accusative:
     text: local variable
-element.method:
+element.local.variable.nominative:
+    text: local variable
+element.method.accusative:
     text: method
-element.method.call:
+element.method.nominative:
+    text: method
+element.method.call.accusative:
     text: method call
-element.module:
+element.method.call.nominative:
+    text: method call
+element.module.accusative:
     text: module
-element.package:
+element.module.nominative:
+    text: module
+element.package.accusative:
     text: package
-element.parameter:
+element.package.nominative:
+    text: package
+element.parameter.accusative:
     text: parameter
-element.pattern_variable:
+element.parameter.nominative:
+    text: parameter
+element.pattern.variable.accusative:
     text: pattern variable
-element.receiver.parameter:
+element.pattern.variable.nominative:
+    text: pattern variable
+element.receiver.parameter.accusative:
     text: receiver parameter
-element.record:
+element.receiver.parameter.nominative:
+    text: receiver parameter
+element.record.accusative:
     text: record
-element.record_component:
+element.record.nominative:
+    text: record
+element.record.component.accusative:
     text: record component
-element.snippet_body:
+element.record.component.nominative:
+    text: record component
+element.snippet.body.accusative:
     text: snippet body
-element.statement:
+element.snippet.body.nominative:
+    text: snippet body
+element.statement.accusative:
     text: statement
-element.throws.list:
+element.statement.nominative:
+    text: statement
+element.throws.list.accusative:
     text: throws list
-element.type.arguments:
+element.throws.list.nominative:
+    text: throws list
+element.type.arguments.accusative:
     text: type arguments
-element.type.parameter:
+element.type.arguments.nominative:
+    text: type arguments
+element.type.parameter.accusative:
     text: type parameter
-element.type.semicolon:
+element.type.parameter.nominative:
+    text: type parameter
+element.type.semicolon.accusative:
     text: semicolon
-element.unknown:
+element.type.semicolon.nominative:
+    text: semicolon
+element.unknown.accusative:
     text: element
-element.variable:
+element.unknown.nominative:
+    text: element
+element.variable.accusative:
+    text: variable
+element.variable.nominative:
     text: variable
 else.without.if:
     text: '''else'' without ''if'''
