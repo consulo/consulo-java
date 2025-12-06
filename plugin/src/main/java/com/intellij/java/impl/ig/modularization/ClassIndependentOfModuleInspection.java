@@ -22,9 +22,8 @@ import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
@@ -43,48 +42,42 @@ public abstract class ClassIndependentOfModuleInspection extends BaseGlobalInspe
 
     @Nullable
     @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        RefEntity refEntity,
-        AnalysisScope scope,
-        InspectionManager manager,
-        GlobalInspectionContext globalContext,
-        Object state) {
-        if (!(refEntity instanceof RefClass)) {
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull Object state
+    ) {
+        if (!(refEntity instanceof RefClass refClass)) {
             return null;
         }
-        final RefClass refClass = (RefClass) refEntity;
-        final RefEntity owner = refClass.getOwner();
-        if (!(owner instanceof RefPackage)) {
+        if (!(refClass.getOwner() instanceof RefPackage)) {
             return null;
         }
 
-        final Set<RefClass> dependencies =
-            DependencyUtils.calculateDependenciesForClass(refClass);
+        Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
         for (RefClass dependency : dependencies) {
             if (inSameModule(refClass, dependency)) {
                 return null;
             }
         }
-        final Set<RefClass> dependents =
-            DependencyUtils.calculateDependentsForClass(refClass);
+        Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
         for (RefClass dependent : dependents) {
             if (inSameModule(refClass, dependent)) {
                 return null;
             }
         }
-        final PsiClass aClass = refClass.getElement();
-        final PsiIdentifier identifier = aClass.getNameIdentifier();
+        PsiClass aClass = refClass.getElement();
+        PsiIdentifier identifier = aClass.getNameIdentifier();
         if (identifier == null) {
             return null;
         }
         return new CommonProblemDescriptor[]{
-            manager.createProblemDescriptor(
-                identifier,
-                InspectionGadgetsLocalize.classIndependentOfModuleProblemDescriptor().get(),
-                true,
-                ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                false
-            )
+            manager.newProblemDescriptor(InspectionGadgetsLocalize.classIndependentOfModuleProblemDescriptor())
+                .range(identifier)
+                .create()
         };
     }
 

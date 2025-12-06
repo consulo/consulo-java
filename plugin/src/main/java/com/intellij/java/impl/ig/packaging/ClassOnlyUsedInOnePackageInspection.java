@@ -23,9 +23,8 @@ import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
@@ -44,26 +43,25 @@ public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInsp
 
     @Nullable
     @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        RefEntity refEntity,
-        AnalysisScope scope,
-        InspectionManager manager,
-        GlobalInspectionContext globalContext,
-        Object state
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull Object state
     ) {
-        if (!(refEntity instanceof RefClass)) {
+        if (!(refEntity instanceof RefClass refClass)) {
             return null;
         }
-        final RefClass refClass = (RefClass) refEntity;
-        final RefEntity owner = refClass.getOwner();
-        if (!(owner instanceof RefPackage)) {
+        if (!(refClass.getOwner() instanceof RefPackage ownerPackage)) {
             return null;
         }
-        final Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
+        Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
         RefPackage otherPackage = null;
         for (RefClass dependency : dependencies) {
-            final RefPackage refPackage = RefJavaUtil.getPackage(dependency);
-            if (owner == refPackage) {
+            RefPackage refPackage = RefJavaUtil.getPackage(dependency);
+            if (ownerPackage == refPackage) {
                 return null;
             }
             if (otherPackage != refPackage) {
@@ -75,10 +73,10 @@ public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInsp
                 }
             }
         }
-        final Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
+        Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
         for (RefClass dependent : dependents) {
-            final RefPackage refPackage = RefJavaUtil.getPackage(dependent);
-            if (owner == refPackage) {
+            RefPackage refPackage = RefJavaUtil.getPackage(dependent);
+            if (ownerPackage == refPackage) {
                 return null;
             }
             if (otherPackage != refPackage) {
@@ -93,20 +91,15 @@ public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInsp
         if (otherPackage == null) {
             return null;
         }
-        final PsiClass aClass = refClass.getElement();
-        final PsiIdentifier identifier = aClass.getNameIdentifier();
+        PsiClass aClass = refClass.getElement();
+        PsiIdentifier identifier = aClass.getNameIdentifier();
         if (identifier == null) {
             return null;
         }
-        final String packageName = otherPackage.getName();
         return new CommonProblemDescriptor[]{
-            manager.createProblemDescriptor(
-                identifier,
-                InspectionGadgetsLocalize.classOnlyUsedInOnePackageProblemDescriptor(packageName).get(),
-                true,
-                ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                false
-            )
+            manager.newProblemDescriptor(InspectionGadgetsLocalize.classOnlyUsedInOnePackageProblemDescriptor(otherPackage.getName()))
+                .range(identifier)
+                .create()
         };
     }
 }

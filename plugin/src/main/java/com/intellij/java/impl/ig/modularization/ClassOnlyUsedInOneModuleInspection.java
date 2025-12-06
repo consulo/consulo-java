@@ -22,9 +22,9 @@ import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
@@ -44,25 +44,24 @@ public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspe
 
     @Nullable
     @Override
+    @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        RefEntity refEntity,
-        AnalysisScope scope,
-        InspectionManager manager,
-        GlobalInspectionContext globalContext,
-        Object state
+        @Nonnull RefEntity refEntity,
+        @Nonnull AnalysisScope scope,
+        @Nonnull InspectionManager manager,
+        @Nonnull GlobalInspectionContext globalContext,
+        @Nonnull Object state
     ) {
-        if (!(refEntity instanceof RefClass)) {
+        if (!(refEntity instanceof RefClass refClass)) {
             return null;
         }
-        final RefClass refClass = (RefClass) refEntity;
-        final RefEntity owner = refClass.getOwner();
-        if (!(owner instanceof RefPackage)) {
+        if (!(refClass.getOwner() instanceof RefPackage)) {
             return null;
         }
-        final Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
+        Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
         RefModule otherModule = null;
         for (RefClass dependency : dependencies) {
-            final RefModule module = dependency.getModule();
+            RefModule module = dependency.getModule();
             if (refClass.getModule() == module) {
                 return null;
             }
@@ -75,9 +74,9 @@ public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspe
                 }
             }
         }
-        final Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
+        Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
         for (RefClass dependent : dependents) {
-            final RefModule module = dependent.getModule();
+            RefModule module = dependent.getModule();
             if (refClass.getModule() == module) {
                 return null;
             }
@@ -93,20 +92,15 @@ public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspe
         if (otherModule == null) {
             return null;
         }
-        final PsiClass aClass = refClass.getElement();
-        final PsiIdentifier identifier = aClass.getNameIdentifier();
+        PsiClass aClass = refClass.getElement();
+        PsiIdentifier identifier = aClass.getNameIdentifier();
         if (identifier == null) {
             return null;
         }
-        final String moduleName = otherModule.getName();
         return new CommonProblemDescriptor[]{
-            manager.createProblemDescriptor(
-                identifier,
-                InspectionGadgetsLocalize.classOnlyUsedInOneModuleProblemDescriptor(moduleName).get(),
-                true,
-                ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                false
-            )
+            manager.newProblemDescriptor(InspectionGadgetsLocalize.classOnlyUsedInOneModuleProblemDescriptor(otherModule.getName()))
+                .range(identifier)
+                .create()
         };
     }
 }
