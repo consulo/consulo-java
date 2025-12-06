@@ -13,47 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.analysis.impl.codeInsight.intention;
 
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
  */
-public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIntentionAction
-{
-  public AddAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String... annotationsToRemove) {
-    this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
-  }
+public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIntentionAction {
+    @RequiredReadAction
+    public AddAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String... annotationsToRemove) {
+        this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
+    }
 
-  public AddAnnotationFix(@Nonnull String fqn,
-                          @Nonnull PsiModifierListOwner modifierListOwner,
-                          @Nonnull PsiNameValuePair[] values,
-                          @Nonnull String... annotationsToRemove) {
-    super(fqn, modifierListOwner, values, annotationsToRemove);
-  }
+    @RequiredReadAction
+    public AddAnnotationFix(
+        @Nonnull String fqn,
+        @Nonnull PsiModifierListOwner modifierListOwner,
+        @Nonnull PsiNameValuePair[] values,
+        @Nonnull String... annotationsToRemove
+    ) {
+        super(fqn, modifierListOwner, values, annotationsToRemove);
+    }
 
-  @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return isAvailable();
-  }
+    @Override
+    @RequiredUIAccess
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        return isAvailable();
+    }
 
-  @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    applyFix();
-  }
+    @Override
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        applyFix();
+    }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return true;
+    }
 }
