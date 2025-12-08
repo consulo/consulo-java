@@ -20,7 +20,6 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
-import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -29,7 +28,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessToken;
 import consulo.application.WriteAction;
-import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -94,59 +92,49 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
             if (modifierList == null) {
                 return;
             }
-            final MultiMap<PsiElement, String> conflicts = new MultiMap();
+            final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
             if (member instanceof PsiMethod) {
                 final PsiMethod method = (PsiMethod) member;
-                SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(
-                    new Processor<MethodSignatureBackedByPsiMethod>() {
-                        @Override
-                        public boolean process(MethodSignatureBackedByPsiMethod methodSignature) {
-                            final PsiMethod superMethod = methodSignature.getMethod();
-                            conflicts.putValue(
-                                superMethod,
-                                InspectionGadgetsLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
-                                    RefactoringUIUtil.getDescription(method, false),
-                                    RefactoringUIUtil.getDescription(superMethod, true)
-                                ).get()
-                            );
-                            return true;
-                        }
-                    });
-                OverridingMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
-                    @Override
-                    public boolean process(PsiMethod overridingMethod) {
-                        conflicts.putValue(
-                            overridingMethod,
-                            InspectionGadgetsLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
-                                RefactoringUIUtil.getDescription(method, false),
-                                RefactoringUIUtil.getDescription(overridingMethod, true)
-                            ).get()
-                        );
-                        return false;
-                    }
+                SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(methodSignature -> {
+                    PsiMethod superMethod = methodSignature.getMethod();
+                    conflicts.putValue(
+                        superMethod,
+                        InspectionGadgetsLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
+                            RefactoringUIUtil.getDescription(method, false),
+                            RefactoringUIUtil.getDescription(superMethod, true)
+                        )
+                    );
+                    return true;
+                });
+                OverridingMethodsSearch.search(method).forEach(overridingMethod -> {
+                    conflicts.putValue(
+                        overridingMethod,
+                        InspectionGadgetsLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
+                            RefactoringUIUtil.getDescription(method, false),
+                            RefactoringUIUtil.getDescription(overridingMethod, true)
+                        )
+                    );
+                    return false;
                 });
             }
             final PsiModifierList modifierListCopy = (PsiModifierList) modifierList.copy();
             modifierListCopy.setModifierProperty(PsiModifier.PRIVATE, true);
             final Query<PsiReference> search = ReferencesSearch.search(member, member.getResolveScope());
-            search.forEach(new Processor<PsiReference>() {
-                @Override
-                public boolean process(PsiReference reference) {
-                    final PsiElement element = reference.getElement();
-                    if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element, null, null)) {
-                        final PsiElement context =
-                            PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiField.class, PsiClass.class, PsiFile.class);
-                        conflicts.putValue(
-                            element,
-                            RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
-                                RefactoringUIUtil.getDescription(member, false),
-                                PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
-                                RefactoringUIUtil.getDescription(context, true)
-                            ).get()
-                        );
-                    }
-                    return true;
+            search.forEach(reference -> {
+                PsiElement element1 = reference.getElement();
+                if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element1, null, null)) {
+                    PsiElement context =
+                        PsiTreeUtil.getParentOfType(element1, PsiMethod.class, PsiField.class, PsiClass.class, PsiFile.class);
+                    conflicts.putValue(
+                        element1,
+                        RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
+                            RefactoringUIUtil.getDescription(member, false),
+                            PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
+                            RefactoringUIUtil.getDescription(context, true)
+                        )
+                    );
                 }
+                return true;
             });
             final boolean conflictsDialogOK;
             if (conflicts.isEmpty()) {
@@ -156,10 +144,11 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                 if (!isOnTheFly()) {
                     return;
                 }
-                final ConflictsDialog conflictsDialog = new ConflictsDialog(member.getProject(), conflicts, new Runnable() {
-                    @Override
-                    public void run() {
-                        final AccessToken token = WriteAction.start();
+                ConflictsDialog conflictsDialog = new ConflictsDialog(
+                    member.getProject(),
+                    conflicts,
+                    (Runnable) () -> {
+                        AccessToken token = WriteAction.start();
                         try {
                             modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
                         }
@@ -167,7 +156,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                             token.finish();
                         }
                     }
-                });
+                );
                 conflictsDialog.show();
                 conflictsDialogOK = conflictsDialog.isOK();
             }

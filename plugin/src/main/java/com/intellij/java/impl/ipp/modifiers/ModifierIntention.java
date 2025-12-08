@@ -36,6 +36,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
 import consulo.util.io.FileUtil;
 import jakarta.annotation.Nonnull;
@@ -64,15 +65,17 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
         if (modifierList == null) {
             return;
         }
-        final MultiMap<PsiElement, String> conflicts = checkForConflicts(member);
+        MultiMap<PsiElement, LocalizeValue> conflicts = checkForConflicts(member);
         final boolean conflictsDialogOK;
         if (conflicts.isEmpty()) {
             conflictsDialogOK = true;
         }
         else {
-            final ConflictsDialog conflictsDialog = new ConflictsDialog(member.getProject(), conflicts, () -> {
-                WriteAction.run(() -> modifierList.setModifierProperty(getModifier(), true));
-            });
+            ConflictsDialog conflictsDialog = new ConflictsDialog(
+                member.getProject(),
+                conflicts,
+                () -> WriteAction.run(() -> modifierList.setModifierProperty(getModifier(), true))
+            );
             conflictsDialog.show();
             conflictsDialogOK = conflictsDialog.isOK();
         }
@@ -82,7 +85,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
         }
     }
 
-    private MultiMap<PsiElement, String> checkForConflicts(@Nonnull final PsiMember member) {
+    private MultiMap<PsiElement, LocalizeValue> checkForConflicts(@Nonnull PsiMember member) {
         if (member instanceof PsiClass && getModifier().equals(PsiModifier.PUBLIC)) {
             final PsiClass aClass = (PsiClass) member;
             final PsiElement parent = aClass.getParent();
@@ -95,30 +98,55 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
             if (name.equals(className)) {
                 return MultiMap.empty();
             }
-            final MultiMap<PsiElement, String> conflicts = new MultiMap();
-            conflicts.putValue(aClass, IntentionPowerPackLocalize.zeroIsDeclaredIn1ButWhenPublicShouldBeDeclaredInAFileNamed2(RefactoringUIUtil.getDescription(aClass, false), RefactoringUIUtil.getDescription(javaFile, false), CommonRefactoringUtil.htmlEmphasize(className + ".java")).get());
+            MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+            conflicts.putValue(
+                aClass,
+                IntentionPowerPackLocalize.zeroIsDeclaredIn1ButWhenPublicShouldBeDeclaredInAFileNamed2(
+                    RefactoringUIUtil.getDescription(aClass, false),
+                    RefactoringUIUtil.getDescription(javaFile, false),
+                    CommonRefactoringUtil.htmlEmphasize(className + ".java")
+                )
+            );
             return conflicts;
         }
         final PsiModifierList modifierList = member.getModifierList();
         if (modifierList == null || modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
             return MultiMap.empty();
         }
-        final MultiMap<PsiElement, String> conflicts = new MultiMap();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         if (member instanceof PsiMethod) {
             final PsiMethod method = (PsiMethod) member;
             SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(methodSignature -> {
                 final PsiMethod superMethod = methodSignature.getMethod();
                 if (!hasCompatibleVisibility(superMethod, true)) {
-                    conflicts.putValue(superMethod, IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(superMethod, true)).get());
+                    conflicts.putValue(
+                        superMethod,
+                        IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
+                            RefactoringUIUtil.getDescription(method, false),
+                            RefactoringUIUtil.getDescription(superMethod, true)
+                        )
+                    );
                 }
                 return true;
             });
             OverridingMethodsSearch.search(method).forEach(overridingMethod -> {
                 if (!isVisibleFromOverridingMethod(method, overridingMethod)) {
-                    conflicts.putValue(overridingMethod, IntentionPowerPackLocalize.zeroWillNoLongerBeVisibleFromOverriding1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(overridingMethod, true)).get());
+                    conflicts.putValue(
+                        overridingMethod,
+                        IntentionPowerPackLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
+                            RefactoringUIUtil.getDescription(method, false),
+                            RefactoringUIUtil.getDescription(overridingMethod, true)
+                        )
+                    );
                 }
                 else if (!hasCompatibleVisibility(overridingMethod, false)) {
-                    conflicts.putValue(overridingMethod, IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithOverriding1(RefactoringUIUtil.getDescription(method, false), RefactoringUIUtil.getDescription(overridingMethod, true)).get());
+                    conflicts.putValue(
+                        overridingMethod,
+                        IntentionPowerPackLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithOverriding1(
+                            RefactoringUIUtil.getDescription(method, false),
+                            RefactoringUIUtil.getDescription(overridingMethod, true)
+                        )
+                    );
                 }
                 return false;
             });
@@ -141,7 +169,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
                     RefactoringUIUtil.getDescription(member, false),
                     PsiBundle.visibilityPresentation(getModifier()),
                     RefactoringUIUtil.getDescription(context, true)
-                ).get()
+                )
             );
             return true;
         });

@@ -20,7 +20,8 @@ import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperClassUti
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
@@ -37,6 +38,7 @@ import consulo.localHistory.LocalHistoryAction;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
@@ -45,112 +47,127 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public class ExtractInterfaceHandler implements RefactoringActionHandler, ElementsHandler {
-  private static final Logger LOG = Logger.getInstance(ExtractInterfaceHandler.class);
+    private static final Logger LOG = Logger.getInstance(ExtractInterfaceHandler.class);
 
-  public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractInterfaceTitle();
+    public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractInterfaceTitle();
 
-  private Project myProject;
-  private PsiClass myClass;
+    private Project myProject;
+    private PsiClass myClass;
 
-  private String myInterfaceName;
-  private MemberInfo[] mySelectedMembers;
-  private PsiDirectory myTargetDir;
-  private DocCommentPolicy myJavaDocPolicy;
+    private String myInterfaceName;
+    private MemberInfo[] mySelectedMembers;
+    private PsiDirectory myTargetDir;
+    private DocCommentPolicy myJavaDocPolicy;
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    int offset = editor.getCaretModel().getOffset();
-    editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    PsiElement element = file.findElementAt(offset);
-    while (true) {
-      if (element == null || element instanceof PsiFile) {
-        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
-        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_INTERFACE);
-        return;
-      }
-      if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
-        invoke(project, new PsiElement[]{element}, dataContext);
-        return;
-      }
-      element = element.getParent();
-    }
-  }
-
-  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    if (elements.length != 1) return;
-
-    myProject = project;
-    myClass = (PsiClass) elements[0];
-
-
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, myClass)) return;
-
-    final ExtractInterfaceDialog dialog = new ExtractInterfaceDialog(myProject, myClass);
-    dialog.show();
-    if (!dialog.isOK() || !dialog.isExtractSuperclass()) return;
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    ExtractSuperClassUtil.checkSuperAccessible(dialog.getTargetDirectory(), conflicts, myClass);
-    if (!ExtractSuperClassUtil.showConflicts(dialog, conflicts, myProject)) return;
-    CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          public void run() {
-            myInterfaceName = dialog.getExtractedSuperName();
-            mySelectedMembers = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
-            myTargetDir = dialog.getTargetDirectory();
-            myJavaDocPolicy = new DocCommentPolicy(dialog.getDocCommentPolicy());
-            try {
-              doRefactoring();
-            } catch (IncorrectOperationException e) {
-              LOG.error(e);
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        int offset = editor.getCaretModel().getOffset();
+        editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
+        PsiElement element = file.findElementAt(offset);
+        while (true) {
+            if (element == null || element instanceof PsiFile) {
+                LocalizeValue message =
+                    RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_INTERFACE);
+                return;
             }
-          }
-        });
-      }
-    }, REFACTORING_NAME.get(), null);
-  }
-
-  private void doRefactoring() throws IncorrectOperationException {
-    LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
-    final PsiClass anInterface;
-    try {
-      anInterface = extractInterface(myTargetDir, myClass, myInterfaceName, mySelectedMembers, myJavaDocPolicy);
-    } finally {
-      a.finish();
-    }
-
-    if (anInterface != null) {
-      final SmartPsiElementPointer<PsiClass> classPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(myClass);
-      final SmartPsiElementPointer<PsiClass> interfacePointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(anInterface);
-      final Runnable turnRefsToSuperRunnable = new Runnable() {
-        @Override
-        public void run() {
-          ExtractClassUtil.askAndTurnRefsToSuper(myProject, classPointer, interfacePointer);
+            if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
+                invoke(project, new PsiElement[]{element}, dataContext);
+                return;
+            }
+            element = element.getParent();
         }
-      };
-      SwingUtilities.invokeLater(turnRefsToSuperRunnable);
     }
-  }
 
-  static PsiClass extractInterface(PsiDirectory targetDir,
-                                   PsiClass aClass,
-                                   String interfaceName,
-                                   MemberInfo[] selectedMembers,
-                                   DocCommentPolicy javaDocPolicy) throws IncorrectOperationException {
-    PsiClass anInterface = JavaDirectoryService.getInstance().createInterface(targetDir, interfaceName);
-    PsiJavaCodeReferenceElement ref = ExtractSuperClassUtil.createExtendingReference(anInterface, aClass, selectedMembers);
-    final PsiReferenceList referenceList = aClass.isInterface() ? aClass.getExtendsList() : aClass.getImplementsList();
-    assert referenceList != null;
-    referenceList.add(ref);
-    PullUpProcessor pullUpHelper = new PullUpProcessor(aClass, anInterface, selectedMembers, javaDocPolicy);
-    pullUpHelper.moveMembersToBase();
-    return anInterface;
-  }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        if (elements.length != 1) {
+            return;
+        }
 
-  private String getCommandName() {
-    return RefactoringLocalize.extractInterfaceCommandName(myInterfaceName, DescriptiveNameUtil.getDescriptiveName(myClass)).get();
-  }
+        myProject = project;
+        myClass = (PsiClass) elements[0];
 
-  public boolean isEnabledOnElements(PsiElement[] elements) {
-    return elements.length == 1 && elements[0] instanceof PsiClass;
-  }
+        if (!CommonRefactoringUtil.checkReadOnlyStatus(project, myClass)) {
+            return;
+        }
+
+        ExtractInterfaceDialog dialog = new ExtractInterfaceDialog(myProject, myClass);
+        dialog.show();
+        if (!dialog.isOK() || !dialog.isExtractSuperclass()) {
+            return;
+        }
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        ExtractSuperClassUtil.checkSuperAccessible(dialog.getTargetDirectory(), conflicts, myClass);
+        if (!ExtractSuperClassUtil.showConflicts(dialog, conflicts, myProject)) {
+            return;
+        }
+        CommandProcessor.getInstance().newCommand()
+            .project(myProject)
+            .name(REFACTORING_NAME)
+            .inWriteAction()
+            .run(() -> {
+                myInterfaceName = dialog.getExtractedSuperName();
+                mySelectedMembers = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
+                myTargetDir = dialog.getTargetDirectory();
+                myJavaDocPolicy = new DocCommentPolicy(dialog.getDocCommentPolicy());
+                try {
+                    doRefactoring();
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            });
+    }
+
+    @RequiredWriteAction
+    private void doRefactoring() throws IncorrectOperationException {
+        LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
+        PsiClass anInterface;
+        try {
+            anInterface = extractInterface(myTargetDir, myClass, myInterfaceName, mySelectedMembers, myJavaDocPolicy);
+        }
+        finally {
+            a.finish();
+        }
+
+        if (anInterface != null) {
+            SmartPsiElementPointer<PsiClass> classPointer =
+                SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(myClass);
+            SmartPsiElementPointer<PsiClass> interfacePointer =
+                SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(anInterface);
+            Runnable turnRefsToSuperRunnable = () -> ExtractClassUtil.askAndTurnRefsToSuper(myProject, classPointer, interfacePointer);
+            SwingUtilities.invokeLater(turnRefsToSuperRunnable);
+        }
+    }
+
+    @RequiredWriteAction
+    static PsiClass extractInterface(
+        PsiDirectory targetDir,
+        PsiClass aClass,
+        String interfaceName,
+        MemberInfo[] selectedMembers,
+        DocCommentPolicy javaDocPolicy
+    ) throws IncorrectOperationException {
+        PsiClass anInterface = JavaDirectoryService.getInstance().createInterface(targetDir, interfaceName);
+        PsiJavaCodeReferenceElement ref = ExtractSuperClassUtil.createExtendingReference(anInterface, aClass, selectedMembers);
+        PsiReferenceList referenceList = aClass.isInterface() ? aClass.getExtendsList() : aClass.getImplementsList();
+        assert referenceList != null;
+        referenceList.add(ref);
+        PullUpProcessor pullUpHelper = new PullUpProcessor(aClass, anInterface, selectedMembers, javaDocPolicy);
+        pullUpHelper.moveMembersToBase();
+        return anInterface;
+    }
+
+    @RequiredReadAction
+    private String getCommandName() {
+        return RefactoringLocalize.extractInterfaceCommandName(myInterfaceName, DescriptiveNameUtil.getDescriptiveName(myClass)).get();
+    }
+
+    @Override
+    public boolean isEnabledOnElements(PsiElement[] elements) {
+        return elements.length == 1 && elements[0] instanceof PsiClass;
+    }
 }

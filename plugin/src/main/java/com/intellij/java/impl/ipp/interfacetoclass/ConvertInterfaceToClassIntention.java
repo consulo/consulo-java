@@ -113,7 +113,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
         final PsiClass anInterface = (PsiClass) element.getParent();
         final SearchScope searchScope = anInterface.getUseScope();
         final Query<PsiClass> query = ClassInheritorsSearch.search(anInterface, searchScope, false);
-        final MultiMap<PsiElement, String> conflicts = new MultiMap();
+        final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         query.forEach(new Processor<PsiClass>() {
             @Override
             public boolean process(PsiClass aClass) {
@@ -125,7 +125,14 @@ public class ConvertInterfaceToClassIntention extends Intention {
                 if (referenceElements.length > 0) {
                     final PsiElement target = referenceElements[0].resolve();
                     if (target != null) {
-                        conflicts.putValue(aClass, IntentionPowerPackLocalize.zeroAlreadyExtends1AndWillNotCompileAfterConverting2ToAClass(RefactoringUIUtil.getDescription(aClass, true), RefactoringUIUtil.getDescription(target, true), RefactoringUIUtil.getDescription(anInterface, false)).get());
+                        conflicts.putValue(
+                            aClass,
+                            IntentionPowerPackLocalize.zeroAlreadyExtends1AndWillNotCompileAfterConverting2ToAClass(
+                                RefactoringUIUtil.getDescription(aClass, true),
+                                RefactoringUIUtil.getDescription(target, true),
+                                RefactoringUIUtil.getDescription(anInterface, false)
+                            )
+                        );
                     }
                 }
                 return true;
@@ -136,10 +143,11 @@ public class ConvertInterfaceToClassIntention extends Intention {
             conflictsDialogOK = true;
         }
         else {
-            final ConflictsDialog conflictsDialog = new ConflictsDialog(anInterface.getProject(), conflicts, new Runnable() {
-                @Override
-                public void run() {
-                    final AccessToken token = WriteAction.start();
+            ConflictsDialog conflictsDialog = new ConflictsDialog(
+                anInterface.getProject(),
+                conflicts,
+                () -> {
+                    AccessToken token = WriteAction.start();
                     try {
                         convertInterfaceToClass(anInterface);
                     }
@@ -147,7 +155,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
                         token.finish();
                     }
                 }
-            });
+            );
             conflictsDialog.show();
             conflictsDialogOK = conflictsDialog.isOK();
         }
@@ -205,8 +213,10 @@ public class ConvertInterfaceToClassIntention extends Intention {
         return true;
     }
 
-    private static void moveReference(@Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
-                                      @Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
+    private static void moveReference(
+        @Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
+        @Nonnull PsiJavaCodeReferenceElement reference
+    ) throws IncorrectOperationException {
         final PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
         final String qualifiedName = reference.getQualifiedName();
         for (PsiJavaCodeReferenceElement implementsReference : implementsReferences) {
