@@ -204,7 +204,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
 
     @Override
     protected void doOKAction() {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         checkMethodConflicts(conflicts);
         if (!conflicts.isEmpty()) {
             final ConflictsDialog conflictsDialog = new ConflictsDialog(myProject, conflicts);
@@ -610,7 +610,7 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
         return "extract.method.dialog";
     }
 
-    protected void checkMethodConflicts(MultiMap<PsiElement, String> conflicts) {
+    protected void checkMethodConflicts(MultiMap<PsiElement, LocalizeValue> conflicts) {
         PsiMethod prototype;
         try {
             PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();

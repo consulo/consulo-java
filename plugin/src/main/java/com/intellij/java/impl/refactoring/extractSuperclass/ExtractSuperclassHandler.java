@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * created at Oct 25, 2001
- * @author Jeka
- */
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
 import com.intellij.java.impl.refactoring.HelpID;
@@ -56,144 +51,164 @@ import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.List;
 
+/**
+ * @since 2001-10-25
+ * @author Jeka
+ */
 public class ExtractSuperclassHandler implements RefactoringActionHandler, ExtractSuperclassDialog.Callback, ElementsHandler {
-  private static final Logger LOG = Logger.getInstance(ExtractSuperclassHandler.class);
+    private static final Logger LOG = Logger.getInstance(ExtractSuperclassHandler.class);
 
-  public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractSuperclassTitle();
+    public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractSuperclassTitle();
 
-  private PsiClass mySubclass;
-  private Project myProject;
+    private PsiClass mySubclass;
+    private Project myProject;
 
-  @RequiredUIAccess
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    int offset = editor.getCaretModel().getOffset();
-    PsiElement element = file.findElementAt(offset);
-    while (true) {
-      if (element == null || element instanceof PsiFile) {
-        LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
-        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
-        return;
-      }
-      if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
-        invoke(project, new PsiElement[]{element}, dataContext);
-        return;
-      }
-      element = element.getParent();
-    }
-  }
-
-  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    if (elements.length != 1) return;
-
-    myProject = project;
-    mySubclass = (PsiClass)elements[0];
-
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, mySubclass)) return;
-
-    Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
-    if (mySubclass.isInterface()) {
-      LocalizeValue message =
-          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface());
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
-      return;
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement element = file.findElementAt(offset);
+        while (true) {
+            if (element == null || element instanceof PsiFile) {
+                LocalizeValue message =
+                    RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionClass());
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+                return;
+            }
+            if (element instanceof PsiClass && !(element instanceof PsiAnonymousClass)) {
+                invoke(project, new PsiElement[]{element}, dataContext);
+                return;
+            }
+            element = element.getParent();
+        }
     }
 
-    if (mySubclass.isEnum()) {
-      LocalizeValue message =
-        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum());
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.EXTRACT_SUPERCLASS);
-      return;
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        if (elements.length != 1) {
+            return;
+        }
+
+        myProject = project;
+        mySubclass = (PsiClass) elements[0];
+
+        if (!CommonRefactoringUtil.checkReadOnlyStatus(project, mySubclass)) {
+            return;
+        }
+
+        Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
+        if (mySubclass.isInterface()) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface());
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+            return;
+        }
+
+        if (mySubclass.isEnum()) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum());
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
+            return;
+        }
+
+        List<MemberInfo> memberInfos = MemberInfo.extractClassMembers(mySubclass, element -> true, false);
+
+        ExtractSuperclassDialog dialog =
+            new ExtractSuperclassDialog(project, mySubclass, memberInfos, ExtractSuperclassHandler.this);
+        dialog.show();
+        if (!dialog.isOK() || !dialog.isExtractSuperclass()) {
+            return;
+        }
+
+        CommandProcessor.getInstance().newCommand()
+            .project(myProject)
+            .name(REFACTORING_NAME)
+            .inWriteAction()
+            .run(() -> doRefactoring(project, mySubclass, dialog));
     }
 
-    final List<MemberInfo> memberInfos = MemberInfo.extractClassMembers(mySubclass, element -> true, false);
-
-    final ExtractSuperclassDialog dialog =
-      new ExtractSuperclassDialog(project, mySubclass, memberInfos, ExtractSuperclassHandler.this);
-    dialog.show();
-    if (!dialog.isOK() || !dialog.isExtractSuperclass()) return;
-
-    CommandProcessor.getInstance().executeCommand(
-      myProject,
-      () -> myProject.getApplication().runWriteAction(() -> doRefactoring(project, mySubclass, dialog)),
-      REFACTORING_NAME.get(),
-      null
-    );
-  }
-
-  public boolean checkConflicts(final ExtractSuperclassDialog dialog) {
-    final MemberInfo[] infos = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
-    final PsiDirectory targetDirectory = dialog.getTargetDirectory();
-    final PsiJavaPackage targetPackage;
-    if (targetDirectory != null) {
-      targetPackage = JavaDirectoryService.getInstance().getPackage(targetDirectory);
+    @Override
+    @RequiredUIAccess
+    public boolean checkConflicts(ExtractSuperclassDialog dialog) {
+        MemberInfo[] infos = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
+        PsiDirectory targetDirectory = dialog.getTargetDirectory();
+        PsiJavaPackage targetPackage;
+        if (targetDirectory != null) {
+            targetPackage = JavaDirectoryService.getInstance().getPackage(targetDirectory);
+        }
+        else {
+            targetPackage = null;
+        }
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+            () -> {
+                PsiClass superClass = mySubclass.getExtendsListTypes().length > 0 ? mySubclass.getSuperClass() : null;
+                conflicts.putAllValues(PullUpConflictsUtil.checkConflicts(
+                    infos,
+                    mySubclass,
+                    superClass,
+                    targetPackage,
+                    targetDirectory,
+                    dialog.getContainmentVerifier(),
+                    false
+                ));
+            },
+            RefactoringLocalize.detectingPossibleConflicts(),
+            true,
+            myProject
+        )) {
+            return false;
+        }
+        ExtractSuperClassUtil.checkSuperAccessible(targetDirectory, conflicts, mySubclass);
+        return ExtractSuperClassUtil.showConflicts(dialog, conflicts, myProject);
     }
-    else {
-      targetPackage = null;
+
+    // invoked inside Command and Atomic action
+    @RequiredWriteAction
+    private void doRefactoring(Project project, PsiClass subclass, ExtractSuperclassDialog dialog) {
+        String superclassName = dialog.getExtractedSuperName();
+        PsiDirectory targetDirectory = dialog.getTargetDirectory();
+        MemberInfo[] selectedMemberInfos = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
+        DocCommentPolicy javaDocPolicy = new DocCommentPolicy(dialog.getDocCommentPolicy());
+        LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName(subclass, superclassName));
+        try {
+            PsiClass superclass;
+
+            try {
+                superclass = ExtractSuperClassUtil.extractSuperClass(
+                    project,
+                    targetDirectory,
+                    superclassName,
+                    subclass,
+                    selectedMemberInfos,
+                    javaDocPolicy
+                );
+            }
+            finally {
+                a.finish();
+            }
+
+            // ask whether to search references to subclass and turn them into refs to superclass if possible
+            if (superclass != null) {
+                SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
+                SmartPsiElementPointer<PsiClass> classPointer = pointerManager.createSmartPsiElementPointer(subclass);
+                SmartPsiElementPointer<PsiClass> interfacePointer = pointerManager.createSmartPsiElementPointer(superclass);
+                SwingUtilities.invokeLater(() -> ExtractClassUtil.askAndTurnRefsToSuper(project, classPointer, interfacePointer));
+            }
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
     }
-    final MultiMap<PsiElement,String> conflicts = new MultiMap<>();
-    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
-      () -> {
-        final PsiClass superClass = mySubclass.getExtendsListTypes().length > 0 ? mySubclass.getSuperClass() : null;
-        conflicts.putAllValues(PullUpConflictsUtil.checkConflicts(
-          infos,
-          mySubclass,
-          superClass,
-          targetPackage,
-          targetDirectory,
-          dialog.getContainmentVerifier(),
-          false
-        ));
-      },
-      RefactoringLocalize.detectingPossibleConflicts().get(),
-      true,
-      myProject
-    )) {
-      return false;
+
+    @RequiredReadAction
+    private String getCommandName(PsiClass subclass, String newName) {
+        return RefactoringLocalize.extractSuperclassCommandName(newName, DescriptiveNameUtil.getDescriptiveName(subclass)).get();
     }
-    ExtractSuperClassUtil.checkSuperAccessible(targetDirectory, conflicts, mySubclass);
-    return ExtractSuperClassUtil.showConflicts(dialog, conflicts, myProject);
-  }
 
-  // invoked inside Command and Atomic action
-  @RequiredWriteAction
-  private void doRefactoring(final Project project, final PsiClass subclass, final ExtractSuperclassDialog dialog) {
-    final String superclassName = dialog.getExtractedSuperName();
-    final PsiDirectory targetDirectory = dialog.getTargetDirectory();
-    final MemberInfo[] selectedMemberInfos = ArrayUtil.toObjectArray(dialog.getSelectedMemberInfos(), MemberInfo.class);
-    final DocCommentPolicy javaDocPolicy = new DocCommentPolicy(dialog.getDocCommentPolicy());
-    LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName(subclass, superclassName));
-    try {
-      final PsiClass superclass;
-
-      try {
-        superclass =
-          ExtractSuperClassUtil.extractSuperClass(project, targetDirectory, superclassName, subclass, selectedMemberInfos, javaDocPolicy);
-      }
-      finally {
-        a.finish();
-      }
-
-      // ask whether to search references to subclass and turn them into refs to superclass if possible
-      if (superclass != null) {
-        SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
-        final SmartPsiElementPointer<PsiClass> classPointer = pointerManager.createSmartPsiElementPointer(subclass);
-        final SmartPsiElementPointer<PsiClass> interfacePointer = pointerManager.createSmartPsiElementPointer(superclass);
-        SwingUtilities.invokeLater(() -> ExtractClassUtil.askAndTurnRefsToSuper(project, classPointer, interfacePointer));
-      }
+    @Override
+    public boolean isEnabledOnElements(PsiElement[] elements) {
+        return elements.length == 1 && elements[0] instanceof PsiClass psiClass && !psiClass.isInterface() && !psiClass.isEnum();
     }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
-
-  @RequiredReadAction
-  private String getCommandName(final PsiClass subclass, String newName) {
-    return RefactoringLocalize.extractSuperclassCommandName(newName, DescriptiveNameUtil.getDescriptiveName(subclass)).get();
-  }
-
-  public boolean isEnabledOnElements(PsiElement[] elements) {
-    return elements.length == 1 && elements[0] instanceof PsiClass && !((PsiClass) elements[0]).isInterface()
-      &&!((PsiClass)elements[0]).isEnum();
-  }
 }
