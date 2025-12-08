@@ -103,7 +103,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     protected UsageInfo[] findUsages() {
         GlobalSearchScope projectScope = GlobalSearchScope.projectScope(myProject);
 
-        ArrayList<UsageInfo> usages = new ArrayList<>();
+        List<UsageInfo> usages = new ArrayList<>();
         myNonNewConstructorUsages = new ArrayList<>();
 
         for (PsiReference reference : ReferencesSearch.search(
@@ -147,7 +147,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
 
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         PsiResolveHelper helper = JavaPsiFacade.getInstance(myProject).getResolveHelper();
         PsiClass constructorContainingClass = getConstructorContainingClass();
         if (!helper.isAccessible(constructorContainingClass, myTargetClass, null)) {
@@ -155,7 +155,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
                 RefactoringUIUtil.getDescription(constructorContainingClass, true),
                 RefactoringUIUtil.getDescription(myTargetClass, true)
             );
-            conflicts.putValue(constructorContainingClass, message.get());
+            conflicts.putValue(constructorContainingClass, message);
         }
 
         Set<PsiElement> reportedContainers = new HashSet<>();
@@ -169,7 +169,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
                         targetClassDescription,
                         RefactoringUIUtil.getDescription(container, true)
                     );
-                    conflicts.putValue(myTargetClass, message.get());
+                    conflicts.putValue(myTargetClass, message);
                 }
             }
         }
@@ -185,12 +185,11 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
                             RefactoringUIUtil.getDescription(field, true),
                             RefactoringUIUtil.getDescription(constructorContainingClass, false)
                         );
-                        conflicts.putValue(field, message.get());
+                        conflicts.putValue(field, message);
                     }
                 }
             }
         }
-
 
         return showConflicts(conflicts, usages);
     }
@@ -265,7 +264,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         }
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     private PsiMethod createFactoryMethod() throws IncorrectOperationException {
         PsiClass containingClass = getConstructorContainingClass();
         PsiClassType type = myFactory.createType(containingClass, PsiSubstitutor.EMPTY);

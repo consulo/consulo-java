@@ -7,6 +7,7 @@ import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
@@ -51,7 +52,7 @@ public abstract class MoveDirectoryWithClassesHelper {
         Set<PsiFile> files,
         UsageInfo[] infos,
         PsiDirectory directory,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
     }
 

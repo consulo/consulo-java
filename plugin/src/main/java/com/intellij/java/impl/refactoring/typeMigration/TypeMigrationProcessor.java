@@ -22,6 +22,7 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
@@ -117,6 +118,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
         TypeMigrationProcessor processor =
             new TypeMigrationProcessor(project, roots, migrationTypeFunction, rules, allowDependentRoots) {
                 @Override
+                @RequiredWriteAction
                 public void performRefactoring(@Nonnull UsageInfo[] usages) {
                     super.performRefactoring(usages);
                     if (editor != null) {
@@ -159,7 +161,6 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
         processor.run();
     }
 
-
     @Nonnull
     @Override
     protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
@@ -170,7 +171,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         if (hasFailedConversions()) {
-            if (Application.get().isUnitTestMode()) {
+            if (myProject.getApplication().isUnitTestMode()) {
                 if (ourSkipFailedConversionInTestMode) {
                     prepareSuccessful();
                     return true;
@@ -267,10 +268,12 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
+    @RequiredWriteAction
     public void performRefactoring(@Nonnull UsageInfo[] usages) {
         change(usages, myLabeler, myProject);
     }
 
+    @RequiredWriteAction
     public static void change(UsageInfo[] usages, TypeMigrationLabeler labeler, Project project) {
         List<SmartPsiElementPointer<PsiNewExpression>> newExpressionsToCheckDiamonds = new SmartList<>();
         TypeMigrationLabeler.MigrationProducer producer = labeler.createMigratorFor(usages);

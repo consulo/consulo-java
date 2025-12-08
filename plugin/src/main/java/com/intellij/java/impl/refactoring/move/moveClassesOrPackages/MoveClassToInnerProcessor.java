@@ -140,6 +140,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         if (!prepareWritable(usages)) {
             return;
@@ -237,11 +238,8 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     @Override
     protected String getCommandName() {
         return RefactoringLocalize.moveClassToInnerCommandName(
-            (myClassesToMove.length > 1 ? "classes " : "class ") + StringUtil.join(
-                myClassesToMove,
-                PsiNamedElement::getName,
-                ", "
-            ),
+            (myClassesToMove.length > 1 ? "classes " : "class ") +
+                StringUtil.join(myClassesToMove, PsiNamedElement::getName, ", "),
             myTargetClass.getQualifiedName()
         ).get();
     }
@@ -256,8 +254,8 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
 
     @RequiredReadAction
-    public MultiMap<PsiElement, String> getConflicts(UsageInfo[] usages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+    public MultiMap<PsiElement, LocalizeValue> getConflicts(UsageInfo[] usages) {
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         for (PsiClass classToMove : myClassesToMove) {
             PsiClass innerClass = myTargetClass.findInnerClassByName(classToMove.getName(), false);
@@ -267,7 +265,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
                     RefactoringLocalize.moveToInnerDuplicateInnerClass(
                         CommonRefactoringUtil.htmlEmphasize(myTargetClass.getQualifiedName()),
                         CommonRefactoringUtil.htmlEmphasize(classToMove.getName())
-                    ).get()
+                    )
                 );
             }
         }
@@ -349,10 +347,11 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     private static class ConflictsCollector {
         private final PsiClass myClassToMove;
-        private final MultiMap<PsiElement, String> myConflicts;
+        @Nonnull
+        private final MultiMap<PsiElement, LocalizeValue> myConflicts;
         private final Set<PsiElement> myReportedContainers = new HashSet<>();
 
-        public ConflictsCollector(PsiClass classToMove, MultiMap<PsiElement, String> conflicts) {
+        public ConflictsCollector(PsiClass classToMove, @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts) {
             myClassToMove = classToMove;
             myConflicts = conflicts;
         }
@@ -369,7 +368,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
                     targetDescription,
                     RefactoringUIUtil.getDescription(container, true)
                 );
-                myConflicts.putValue(targetElement, message.get());
+                myConflicts.putValue(targetElement, message);
             }
         }
 

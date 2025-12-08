@@ -21,23 +21,23 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.project.Project;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.PsiUtilCore;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
 import consulo.language.editor.refactoring.rename.RenameUtil;
-import consulo.usage.UsageInfo;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
+
 import java.util.Map;
 
 /**
@@ -45,94 +45,107 @@ import java.util.Map;
  */
 @ExtensionImpl
 public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
-  private final Logger LOG = Logger.getInstance(RenamePsiPackageProcessor.class);
-
-  public boolean canProcessElement(@Nonnull final PsiElement element) {
-    return element instanceof PsiJavaPackage;
-  }
-
-  public void renameElement(final PsiElement element,
-                            final String newName,
-                            final UsageInfo[] usages,
-                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
-    final PsiJavaPackage psiPackage = (PsiJavaPackage) element;
-    psiPackage.handleQualifiedNameChange(PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName));
-    RenameUtil.doRenameGenericNamedElement(element, newName, usages, listener);
-  }
-
-  public String getQualifiedNameAfterRename(final PsiElement element, final String newName, final boolean nonJava) {
-    return getPackageQualifiedNameAfterRename((PsiJavaPackage) element, newName, nonJava);
-  }
-
-  public static String getPackageQualifiedNameAfterRename(final PsiJavaPackage element, final String newName, final boolean nonJava) {
-    if (nonJava) {
-      String qName = element.getQualifiedName();
-      int index = qName.lastIndexOf('.');
-      return index < 0 ? newName : qName.substring(0, index + 1) + newName;
-    } else {
-      return newName;
+    @Override
+    public boolean canProcessElement(@Nonnull PsiElement element) {
+        return element instanceof PsiJavaPackage;
     }
-  }
 
-  @Override
-  public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, String> conflicts) {
-    final PsiJavaPackage aPackage = (PsiJavaPackage) element;
-    final Project project = element.getProject();
-    final String qualifiedNameAfterRename = getPackageQualifiedNameAfterRename(aPackage, newName, true);
-    final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(qualifiedNameAfterRename, GlobalSearchScope.allScope(project));
-    if (psiClass != null) {
-      conflicts.putValue(psiClass, "Class with qualified name \'" + qualifiedNameAfterRename + "\'  already exist");
+    @Override
+    @RequiredWriteAction
+    public void renameElement(
+        PsiElement element,
+        String newName,
+        UsageInfo[] usages,
+        @Nullable RefactoringElementListener listener
+    ) throws IncorrectOperationException {
+        PsiJavaPackage psiPackage = (PsiJavaPackage) element;
+        psiPackage.handleQualifiedNameChange(PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName));
+        RenameUtil.doRenameGenericNamedElement(element, newName, usages, listener);
     }
-  }
 
-  public void prepareRenaming(final PsiElement element, final String newName, final Map<PsiElement, String> allRenames) {
-    preparePackageRenaming((PsiJavaPackage) element, newName, allRenames);
-  }
-
-  public static void preparePackageRenaming(PsiJavaPackage psiPackage, final String newName, Map<PsiElement, String> allRenames) {
-    final PsiDirectory[] directories = psiPackage.getDirectories();
-    for (PsiDirectory directory : directories) {
-      if (!JavaDirectoryService.getInstance().isSourceRoot(directory)) {
-        allRenames.put(directory, newName);
-      }
+    @Override
+    public String getQualifiedNameAfterRename(PsiElement element, String newName, boolean nonJava) {
+        return getPackageQualifiedNameAfterRename((PsiJavaPackage) element, newName, nonJava);
     }
-  }
 
-  @Nullable
-  public Runnable getPostRenameCallback(final PsiElement element, final String newName, final RefactoringElementListener listener) {
-    final Project project = element.getProject();
-    final PsiJavaPackage psiPackage = (PsiJavaPackage) element;
-    final String newQualifiedName = PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName);
-    return new Runnable() {
-      public void run() {
-        final PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(newQualifiedName);
-        if (aPackage == null) {
-          return; //rename failed e.g. when the dir is used by another app
+    public static String getPackageQualifiedNameAfterRename(PsiJavaPackage element, String newName, boolean nonJava) {
+        if (nonJava) {
+            String qName = element.getQualifiedName();
+            int index = qName.lastIndexOf('.');
+            return index < 0 ? newName : qName.substring(0, index + 1) + newName;
         }
-        listener.elementRenamed(aPackage);
-      }
-    };
-  }
+        else {
+            return newName;
+        }
+    }
 
-  @Nullable
-  @NonNls
-  public String getHelpID(final PsiElement element) {
-    return HelpID.RENAME_PACKAGE;
-  }
+    @Override
+    public void findExistingNameConflicts(@Nonnull PsiElement element, String newName, MultiMap<PsiElement, LocalizeValue> conflicts) {
+        PsiJavaPackage aPackage = (PsiJavaPackage) element;
+        Project project = element.getProject();
+        String qualifiedNameAfterRename = getPackageQualifiedNameAfterRename(aPackage, newName, true);
+        PsiClass psiClass =
+            JavaPsiFacade.getInstance(project).findClass(qualifiedNameAfterRename, GlobalSearchScope.allScope(project));
+        if (psiClass != null) {
+            conflicts.putValue(
+                psiClass,
+                LocalizeValue.localizeTODO("Class with qualified name \'" + qualifiedNameAfterRename + "\'  already exist")
+            );
+        }
+    }
 
-  public boolean isToSearchInComments(final PsiElement psiElement) {
-    return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE;
-  }
+    @Override
+    public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
+        preparePackageRenaming((PsiJavaPackage) element, newName, allRenames);
+    }
 
-  public void setToSearchInComments(final PsiElement element, final boolean enabled) {
-    JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE = enabled;
-  }
+    public static void preparePackageRenaming(PsiJavaPackage psiPackage, String newName, Map<PsiElement, String> allRenames) {
+        PsiDirectory[] directories = psiPackage.getDirectories();
+        for (PsiDirectory directory : directories) {
+            if (!JavaDirectoryService.getInstance().isSourceRoot(directory)) {
+                allRenames.put(directory, newName);
+            }
+        }
+    }
 
-  public boolean isToSearchForTextOccurrences(final PsiElement element) {
-    return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE;
-  }
+    @Nullable
+    @Override
+    public Runnable getPostRenameCallback(@Nonnull PsiElement element, String newName, RefactoringElementListener listener) {
+        Project project = element.getProject();
+        PsiJavaPackage psiPackage = (PsiJavaPackage) element;
+        String newQualifiedName = PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName);
+        return () -> {
+            PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(newQualifiedName);
+            if (aPackage == null) {
+                return; //rename failed e.g. when the dir is used by another app
+            }
+            listener.elementRenamed(aPackage);
+        };
+    }
 
-  public void setToSearchForTextOccurrences(final PsiElement element, final boolean enabled) {
-    JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE = enabled;
-  }
+    @Nullable
+    @Override
+    public String getHelpID(PsiElement element) {
+        return HelpID.RENAME_PACKAGE;
+    }
+
+    @Override
+    public boolean isToSearchInComments(PsiElement psiElement) {
+        return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE;
+    }
+
+    @Override
+    public void setToSearchInComments(PsiElement element, boolean enabled) {
+        JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE = enabled;
+    }
+
+    @Override
+    public boolean isToSearchForTextOccurrences(PsiElement element) {
+        return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE;
+    }
+
+    @Override
+    public void setToSearchForTextOccurrences(PsiElement element, boolean enabled) {
+        JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE = enabled;
+    }
 }

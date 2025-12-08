@@ -9,6 +9,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
@@ -83,11 +84,14 @@ public abstract class ContractReturnValue {
      * @return null if this contract return value makes sense for the supplied return type.
      * Otherwise the human-readable error message is returned.
      */
-    public final String getMethodCompatibilityProblem(PsiMethod method) {
-        //noinspection HardCodedStringLiteral
-        return validators().map(fn -> fn.apply(method)).filter(Objects::nonNull).findFirst()
-            .map((JavaAnalysisLocalize.contractReturnValueValidationPrefix(this).get() + ' ')::concat)
-            .orElse(null);
+    @Nonnull
+    public final LocalizeValue getMethodCompatibilityProblem(PsiMethod method) {
+        return validators()
+            .map(fn -> fn.apply(method))
+            .filter(Objects::nonNull)
+            .findFirst()
+            .map(value -> JavaAnalysisLocalize.contractReturnValueValidationProblem(myName, value))
+            .orElse(LocalizeValue.empty());
     }
 
     /**
@@ -575,7 +579,7 @@ public abstract class ContractReturnValue {
 
         @Override
         public boolean equals(Object obj) {
-            return this == obj || (obj instanceof ParameterReturnValue && ((ParameterReturnValue)obj).myParamNumber == myParamNumber);
+            return this == obj || (obj instanceof ParameterReturnValue paramReturnValue && paramReturnValue.myParamNumber == myParamNumber);
         }
 
         @Override

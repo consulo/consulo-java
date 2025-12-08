@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.*;
@@ -27,96 +28,105 @@ import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 
 /**
- *  @author dsl
+ * @author dsl
  */
 public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
-  private static final Logger LOG = Logger.getInstance(
-		  MultipleRootsMoveDestination.class);
+    private static final Logger LOG = Logger.getInstance(MultipleRootsMoveDestination.class);
 
-  public MultipleRootsMoveDestination(PackageWrapper aPackage) {
-    super(aPackage);
-  }
-
-  public PackageWrapper getTargetPackage() {
-    return myPackage;
-  }
-
-
-  public PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException {
-    //if (JavaDirectoryService.getInstance().isSourceRoot(source)) return null;
-    return getOrCreateDirectoryForSource(source.getVirtualFile());
-  }
-
-  public PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException {
-    return getOrCreateDirectoryForSource(source.getVirtualFile());
-  }
-
-  public PsiDirectory getTargetIfExists(PsiFile source) {
-    return findTargetDirectoryForSource(source.getVirtualFile());
-  }
-
-  public String verify(PsiFile source) {
-    VirtualFile virtualFile = source.getVirtualFile();
-    if (virtualFile.isDirectory()) {
-      virtualFile = virtualFile.getParent();
-      LOG.assertTrue(virtualFile.isDirectory());
+    public MultipleRootsMoveDestination(PackageWrapper aPackage) {
+        super(aPackage);
     }
 
-    final VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
-    if (sourceRootForFile == null) {
-      return "";
+    @Override
+    public PackageWrapper getTargetPackage() {
+        return myPackage;
     }
-    return checkCanCreateInSourceRoot(sourceRootForFile);
-  }
 
-  @Nullable
-  public String verify(PsiDirectory source) {
-    VirtualFile virtualFile = source.getVirtualFile();
-    final VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
-    if (sourceRootForFile == null) {
-      return "";
+    @Override
+    public PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException {
+        //if (JavaDirectoryService.getInstance().isSourceRoot(source)) return null;
+        return getOrCreateDirectoryForSource(source.getVirtualFile());
     }
-    if (virtualFile.equals(sourceRootForFile)) return null;
-    return checkCanCreateInSourceRoot(sourceRootForFile);
-  }
 
-  @Nullable
-  public String verify(PsiJavaPackage source) {
-    PsiDirectory[] directories = source.getDirectories();
-    for (final PsiDirectory directory : directories) {
-      String s = verify(directory);
-      if (s != null) return s;
+    @Override
+    public PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException {
+        return getOrCreateDirectoryForSource(source.getVirtualFile());
     }
-    return null;
-  }
 
-  public void analyzeModuleConflicts(final Collection<PsiElement> elements,
-                                     MultiMap<PsiElement,String> conflicts, final UsageInfo[] usages) {
-  }
+    @Override
+    public PsiDirectory getTargetIfExists(PsiFile source) {
+        return findTargetDirectoryForSource(source.getVirtualFile());
+    }
 
-  @Override
-  public boolean isTargetAccessible(Project project, VirtualFile place) {
-    return true;
-  }
+    @Override
+    public String verify(PsiFile source) {
+        VirtualFile virtualFile = source.getVirtualFile();
+        if (virtualFile.isDirectory()) {
+            virtualFile = virtualFile.getParent();
+            LOG.assertTrue(virtualFile.isDirectory());
+        }
 
-  public PsiDirectory getTargetIfExists(PsiDirectory source) {
-    return findTargetDirectoryForSource(source.getVirtualFile());
-  }
+        VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
+        if (sourceRootForFile == null) {
+            return "";
+        }
+        return checkCanCreateInSourceRoot(sourceRootForFile);
+    }
 
+    @Nullable
+    @Override
+    public String verify(PsiDirectory source) {
+        VirtualFile virtualFile = source.getVirtualFile();
+        VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
+        if (sourceRootForFile == null) {
+            return "";
+        }
+        if (virtualFile.equals(sourceRootForFile)) {
+            return null;
+        }
+        return checkCanCreateInSourceRoot(sourceRootForFile);
+    }
 
-  private PsiDirectory findTargetDirectoryForSource(final VirtualFile file) {
-    final VirtualFile sourceRoot = myFileIndex.getSourceRootForFile(file);
-    LOG.assertTrue(sourceRoot != null);
-    return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, sourceRoot);
-  }
+    @Nullable
+    @Override
+    public String verify(PsiJavaPackage source) {
+        PsiDirectory[] directories = source.getDirectories();
+        for (PsiDirectory directory : directories) {
+            String s = verify(directory);
+            if (s != null) {
+                return s;
+            }
+        }
+        return null;
+    }
 
-  private PsiDirectory getOrCreateDirectoryForSource(final VirtualFile file)
-    throws IncorrectOperationException {
-    final VirtualFile sourceRoot = myFileIndex.getSourceRootForFile(file);
-    LOG.assertTrue(sourceRoot != null);
-    return RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, sourceRoot);
-  }
+    @Override
+    public void analyzeModuleConflicts(Collection<PsiElement> elements, MultiMap<PsiElement, LocalizeValue> conflicts, UsageInfo[] usages) {
+    }
+
+    @Override
+    public boolean isTargetAccessible(Project project, VirtualFile place) {
+        return true;
+    }
+
+    @Override
+    public PsiDirectory getTargetIfExists(PsiDirectory source) {
+        return findTargetDirectoryForSource(source.getVirtualFile());
+    }
+
+    private PsiDirectory findTargetDirectoryForSource(VirtualFile file) {
+        VirtualFile sourceRoot = myFileIndex.getSourceRootForFile(file);
+        LOG.assertTrue(sourceRoot != null);
+        return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, sourceRoot);
+    }
+
+    private PsiDirectory getOrCreateDirectoryForSource(VirtualFile file) throws IncorrectOperationException {
+        VirtualFile sourceRoot = myFileIndex.getSourceRootForFile(file);
+        LOG.assertTrue(sourceRoot != null);
+        return RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, sourceRoot);
+    }
 }

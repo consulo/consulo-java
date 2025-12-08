@@ -19,12 +19,14 @@ import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -37,71 +39,88 @@ import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 /**
- *  @author dsl
+ * @author dsl
  */
 public class AutocreatingSingleSourceRootMoveDestination extends AutocreatingMoveDestination {
-  private final VirtualFile mySourceRoot;
+    private final VirtualFile mySourceRoot;
 
-  public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, @Nonnull VirtualFile sourceRoot) {
-    super(targetPackage);
-    mySourceRoot = sourceRoot;
-  }
-
-  public PackageWrapper getTargetPackage() {
-    return myPackage;
-  }
-
-  public PsiDirectory getTargetIfExists(PsiDirectory source) {
-    return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
-  }
-
-  public PsiDirectory getTargetIfExists(PsiFile source) {
-    return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
-  }
-
-  public PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException {
-    return getDirectory();
-  }
-
-  public PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException {
-    return getDirectory();
-  }
-
-  @Nullable
-  public String verify(PsiFile source) {
-    return checkCanCreateInSourceRoot(mySourceRoot);
-  }
-
-  public String verify(PsiDirectory source) {
-    return checkCanCreateInSourceRoot(mySourceRoot);
-  }
-
-  public String verify(PsiJavaPackage aPackage) {
-    return checkCanCreateInSourceRoot(mySourceRoot);
-  }
-
-  public void analyzeModuleConflicts(final Collection<PsiElement> elements,
-                                     MultiMap<PsiElement,String> conflicts, final UsageInfo[] usages) {
-    RefactoringConflictsUtil.analyzeModuleConflicts(getTargetPackage().getManager().getProject(), elements, usages, mySourceRoot, conflicts);
-  }
-
-  @Override
-  public boolean isTargetAccessible(Project project, VirtualFile place) {
-    final boolean inTestSourceContent = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(place);
-    final Module module = ModuleUtilCore.findModuleForFile(place, project);
-    if (mySourceRoot != null &&
-        module != null &&
-        !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent).contains(mySourceRoot)) {
-      return false;
+    public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, @Nonnull VirtualFile sourceRoot) {
+        super(targetPackage);
+        mySourceRoot = sourceRoot;
     }
-    return true;
-  }
 
-  PsiDirectory myTargetDirectory = null;
-  private PsiDirectory getDirectory() throws IncorrectOperationException {
-    if (myTargetDirectory == null) {
-      myTargetDirectory = RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
+    @Override
+    public PackageWrapper getTargetPackage() {
+        return myPackage;
     }
-    return RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
-  }
+
+    @Override
+    public PsiDirectory getTargetIfExists(PsiDirectory source) {
+        return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
+    }
+
+    @Override
+    public PsiDirectory getTargetIfExists(PsiFile source) {
+        return RefactoringUtil.findPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
+    }
+
+    @Override
+    public PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException {
+        return getDirectory();
+    }
+
+    @Override
+    public PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException {
+        return getDirectory();
+    }
+
+    @Nullable
+    @Override
+    public String verify(PsiFile source) {
+        return checkCanCreateInSourceRoot(mySourceRoot);
+    }
+
+    @Override
+    public String verify(PsiDirectory source) {
+        return checkCanCreateInSourceRoot(mySourceRoot);
+    }
+
+    @Override
+    public String verify(PsiJavaPackage aPackage) {
+        return checkCanCreateInSourceRoot(mySourceRoot);
+    }
+
+    @Override
+    @RequiredReadAction
+    public void analyzeModuleConflicts(
+        Collection<PsiElement> elements,
+        MultiMap<PsiElement, LocalizeValue> conflicts,
+        UsageInfo[] usages
+    ) {
+        RefactoringConflictsUtil.analyzeModuleConflicts(
+            getTargetPackage().getManager().getProject(),
+            elements,
+            usages,
+            mySourceRoot,
+            conflicts
+        );
+    }
+
+    @Override
+    public boolean isTargetAccessible(Project project, VirtualFile place) {
+        boolean inTestSourceContent = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(place);
+        Module module = ModuleUtilCore.findModuleForFile(place, project);
+        return mySourceRoot == null
+            || module == null
+            || GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent).contains(mySourceRoot);
+    }
+
+    PsiDirectory myTargetDirectory = null;
+
+    private PsiDirectory getDirectory() throws IncorrectOperationException {
+        if (myTargetDirectory == null) {
+            myTargetDirectory = RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
+        }
+        return RefactoringUtil.createPackageDirectoryInSourceRoot(myPackage, mySourceRoot);
+    }
 }

@@ -155,7 +155,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     protected void refreshElements(PsiElement[] elements) {
         boolean condition = elements.length == 1 && elements[0] instanceof PsiClass;
         LOG.assertTrue(condition);
-        myInnerClass = (PsiClass)elements[0];
+        myInnerClass = (PsiClass) elements[0];
     }
 
     public boolean isSearchInComments() {
@@ -223,8 +223,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                     continue;
                 }
                 PsiElement refElement = usage.getElement();
-                PsiReference[] references = refElement.getReferences();
-                for (PsiReference reference : references) {
+                for (PsiReference reference : refElement.getReferences()) {
                     if (reference.isReferenceTo(myInnerClass)) {
                         referencesToRebind.add(reference);
                     }
@@ -242,7 +241,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                 if (myParameterNameOuterClass != null) { // should pass outer as parameter
                     PsiElement refParent = refElement.getParent();
                     if (refParent instanceof PsiNewExpression || refParent instanceof PsiAnonymousClass) {
-                        PsiNewExpression newExpr = refParent instanceof PsiNewExpression ne ? ne : (PsiNewExpression)refParent.getParent();
+                        PsiNewExpression newExpr = refParent instanceof PsiNewExpression ne ? ne : (PsiNewExpression) refParent.getParent();
 
                         PsiExpressionList argList = newExpr.getArgumentList();
 
@@ -322,12 +321,12 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         if (members != null) {
             for (PsiMember member : members) {
                 if (!member.isStatic()) {
-                    return (PsiField)myInnerClass.addBefore(field, member);
+                    return (PsiField) myInnerClass.addBefore(field, member);
                 }
             }
         }
 
-        return (PsiField)myInnerClass.add(field);
+        return (PsiField) myInnerClass.add(field);
     }
 
     @Override
@@ -341,7 +340,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         final Map<PsiElement, Set<PsiElement>> reported = new HashMap<>();
         class Visitor extends JavaRecursiveElementWalkingVisitor {
             @Override
@@ -370,10 +369,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
             @RequiredReadAction
             public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
                 super.visitReferenceElement(reference);
-                PsiElement resolve = reference.resolve();
-                if (resolve instanceof PsiMember member
+                if (reference.resolve() instanceof PsiMember member
                     && PsiTreeUtil.isAncestor(myOuterClass, member, true)
-                    && !PsiTreeUtil.isAncestor(myInnerClass, resolve, false)
+                    && !PsiTreeUtil.isAncestor(myInnerClass, member, false)
                     && becomesInaccessible(member)) {
                     registerConflict(reference, member, reported, conflicts);
                 }
@@ -387,7 +385,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         PsiJavaCodeReferenceElement reference,
         PsiElement resolved,
         Map<PsiElement, Set<PsiElement>> reported,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         PsiElement container = ConflictsUtil.getContainer(reference);
         Set<PsiElement> containerSet = reported.get(container);
@@ -408,7 +406,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
             }
             LocalizeValue message =
                 RefactoringLocalize.zeroWillBecomeInaccessibleFrom1(placesDescription, RefactoringUIUtil.getDescription(container, true));
-            conflicts.put(container, Collections.singletonList(message.get()));
+            conflicts.put(container, Collections.singletonList(message));
         }
     }
 
@@ -506,6 +504,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredWriteAction
     private PsiStatement createAssignmentStatement(PsiMethod constructor, String fieldName, String parameterName)
         throws IncorrectOperationException {
 
@@ -515,17 +514,17 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
             pattern = "this." + pattern;
         }
 
-        PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText(pattern, null);
-        statement = (PsiExpressionStatement)CodeStyleManager.getInstance(myProject).reformat(statement);
+        PsiExpressionStatement statement = (PsiExpressionStatement) factory.createStatementFromText(pattern, null);
+        statement = (PsiExpressionStatement) CodeStyleManager.getInstance(myProject).reformat(statement);
 
         PsiCodeBlock body = constructor.getBody();
         assert body != null : constructor;
-        statement = (PsiExpressionStatement)body.addAfter(statement, getAnchorElement(body));
+        statement = (PsiExpressionStatement) body.addAfter(statement, getAnchorElement(body));
 
-        PsiAssignmentExpression assignment = (PsiAssignmentExpression)statement.getExpression();
-        PsiReferenceExpression rExpr = (PsiReferenceExpression)assignment.getRExpression();
+        PsiAssignmentExpression assignment = (PsiAssignmentExpression) statement.getExpression();
+        PsiReferenceExpression rExpr = (PsiReferenceExpression) assignment.getRExpression();
         assert rExpr != null : assignment;
-        PsiIdentifier identifier = (PsiIdentifier)rExpr.getReferenceNameElement();
+        PsiIdentifier identifier = (PsiIdentifier) rExpr.getReferenceNameElement();
         assert identifier != null : assignment;
         identifier.replace(factory.createIdentifier(parameterName));
         return statement;

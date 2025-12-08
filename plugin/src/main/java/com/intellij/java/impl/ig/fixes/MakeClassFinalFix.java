@@ -21,9 +21,10 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.AccessToken;
 import consulo.application.WriteAction;
-import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
@@ -37,79 +38,79 @@ import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 
 /**
-* @author Bas Leijdekkers
-*/
+ * @author Bas Leijdekkers
+ */
 public class MakeClassFinalFix extends InspectionGadgetsFix {
+    private final String className;
 
-  private final String className;
-
-  public MakeClassFinalFix(PsiClass aClass) {
-    className = aClass.getName();
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getName() {
-    return InspectionGadgetsLocalize.makeClassFinalFixName(className);
-  }
-
-  @Override
-  protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-    final PsiElement element = descriptor.getPsiElement();
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-    if (containingClass == null) {
-      return;
+    @RequiredReadAction
+    public MakeClassFinalFix(PsiClass aClass) {
+        className = aClass.getName();
     }
-    final PsiModifierList modifierList = containingClass.getModifierList();
-    if (modifierList == null) {
-      return;
+
+    @Nonnull
+    @Override
+    public LocalizeValue getName() {
+        return InspectionGadgetsLocalize.makeClassFinalFixName(className);
     }
-    if (!isOnTheFly()) {
-      if (ClassInheritorsSearch.search(containingClass).findFirst() != null) {
-        return;
-      }
-      modifierList.setModifierProperty(PsiModifier.FINAL, true);
-      modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
-      return;
-    }
-    final MultiMap<PsiElement, String> conflicts = new MultiMap();
-    final Query<PsiClass> search = ClassInheritorsSearch.search(containingClass);
-    search.forEach(new Processor<PsiClass>() {
-      @Override
-      public boolean process(PsiClass aClass) {
-        conflicts.putValue(
-          containingClass,
-          InspectionGadgetsLocalize.zeroWillNoLongerBeOverridableBy1(
-            RefactoringUIUtil.getDescription(containingClass, false),
-            RefactoringUIUtil.getDescription(aClass, false)
-          ).get()
-        );
-        return true;
-      }
-    });
-    final boolean conflictsDialogOK;
-    if (!conflicts.isEmpty()) {
-      final ConflictsDialog conflictsDialog = new ConflictsDialog(element.getProject(), conflicts, new Runnable() {
-        @Override
-        public void run() {
-          final AccessToken token = WriteAction.start();
-          try {
+
+    @Override
+    @RequiredWriteAction
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        PsiElement element = descriptor.getPsiElement();
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+        if (containingClass == null) {
+            return;
+        }
+        PsiModifierList modifierList = containingClass.getModifierList();
+        if (modifierList == null) {
+            return;
+        }
+        if (!isOnTheFly()) {
+            if (ClassInheritorsSearch.search(containingClass).findFirst() != null) {
+                return;
+            }
             modifierList.setModifierProperty(PsiModifier.FINAL, true);
             modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
-          }
-          finally {
-            token.finish();
-          }
+            return;
         }
-      });
-      conflictsDialog.show();
-      conflictsDialogOK = conflictsDialog.isOK();
-    } else {
-      conflictsDialogOK = true;
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        Query<PsiClass> search = ClassInheritorsSearch.search(containingClass);
+        search.forEach(aClass -> {
+            conflicts.putValue(
+                containingClass,
+                InspectionGadgetsLocalize.zeroWillNoLongerBeOverridableBy1(
+                    RefactoringUIUtil.getDescription(containingClass, false),
+                    RefactoringUIUtil.getDescription(aClass, false)
+                )
+            );
+            return true;
+        });
+        boolean conflictsDialogOK;
+        if (!conflicts.isEmpty()) {
+            ConflictsDialog conflictsDialog = new ConflictsDialog(
+                element.getProject(),
+                conflicts,
+                () -> {
+                    AccessToken token = WriteAction.start();
+                    try {
+                        modifierList.setModifierProperty(PsiModifier.FINAL, true);
+                        modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
+                    }
+                    finally {
+                        token.finish();
+                    }
+                }
+            );
+            conflictsDialog.show();
+            conflictsDialogOK = conflictsDialog.isOK();
+        }
+        else {
+            conflictsDialogOK = true;
+        }
+        if (conflictsDialogOK) {
+            modifierList.setModifierProperty(PsiModifier.FINAL, true);
+            modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
+        }
     }
-    if (conflictsDialogOK) {
-      modifierList.setModifierProperty(PsiModifier.FINAL, true);
-      modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
-    }
-  }
 }

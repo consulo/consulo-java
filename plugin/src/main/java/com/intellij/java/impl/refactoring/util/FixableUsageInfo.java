@@ -15,7 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nullable;
@@ -23,14 +25,15 @@ import jakarta.annotation.Nullable;
 
 @SuppressWarnings({"AbstractClassExtendsConcreteClass"})
 public abstract class FixableUsageInfo extends UsageInfo {
+    @RequiredReadAction
     public FixableUsageInfo(PsiElement element) {
         super(element);
     }
 
-  public abstract void fixUsage() throws IncorrectOperationException;
+    public abstract void fixUsage() throws IncorrectOperationException;
 
-  @Nullable
-  public String getConflictMessage() {
-    return null;
-  }
+    @Nullable
+    public LocalizeValue getConflictMessage() {
+        return LocalizeValue.empty();
+    }
 }

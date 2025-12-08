@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.refactoring;
 
+import consulo.annotation.access.RequiredReadAction;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiDirectory;
@@ -37,33 +39,38 @@ import java.util.Collection;
  *
  * Instances of this interface can be obtained via methods of {@link RefactoringFactory}.
  *
- * @see JavaRefactoringFactory#createSourceFolderPreservingMoveDestination(String) 
+ * @author dsl
+ * @see JavaRefactoringFactory#createSourceFolderPreservingMoveDestination(String)
  * @see JavaRefactoringFactory#createSourceRootMoveDestination(String, com.intellij.openapi.vfs.VirtualFile)
- *  @author dsl
  */
 public interface MoveDestination {
-  /**
-   * Invoked in command & write action
-   */
-  PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException;
-  /**
-   * Invoked in command & write action
-   */
-  PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException;
+    /**
+     * Invoked in command & write action
+     */
+    PsiDirectory getTargetDirectory(PsiDirectory source) throws IncorrectOperationException;
 
-  PackageWrapper getTargetPackage();
+    /**
+     * Invoked in command & write action
+     */
+    PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException;
 
-  PsiDirectory getTargetIfExists(PsiDirectory source);
-  PsiDirectory getTargetIfExists(PsiFile source);
+    PackageWrapper getTargetPackage();
 
-  @Nullable
-  String verify(PsiFile source);
-  @Nullable
-  String verify(PsiDirectory source);
-  @Nullable
-  String verify(PsiJavaPackage source);
+    PsiDirectory getTargetIfExists(PsiDirectory source);
 
-  void analyzeModuleConflicts(final Collection<PsiElement> elements, MultiMap<PsiElement,String> conflicts, final UsageInfo[] usages);
+    PsiDirectory getTargetIfExists(PsiFile source);
 
-  boolean isTargetAccessible(Project project, VirtualFile place);
+    @Nullable
+    String verify(PsiFile source);
+
+    @Nullable
+    String verify(PsiDirectory source);
+
+    @Nullable
+    String verify(PsiJavaPackage source);
+
+    @RequiredReadAction
+    void analyzeModuleConflicts(Collection<PsiElement> elements, MultiMap<PsiElement, LocalizeValue> conflicts, UsageInfo[] usages);
+
+    boolean isTargetAccessible(Project project, VirtualFile place);
 }

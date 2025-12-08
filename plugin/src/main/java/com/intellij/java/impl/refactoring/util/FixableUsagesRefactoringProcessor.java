@@ -17,10 +17,12 @@ package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.xml.util.XmlUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -40,6 +42,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usageInfos);
         for (UsageInfo usageInfo : usageInfos) {
@@ -67,11 +70,11 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
     protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
 
     @RequiredReadAction
-    protected static void checkConflicts(SimpleReference<UsageInfo[]> refUsages, MultiMap<PsiElement, String> conflicts) {
+    protected static void checkConflicts(SimpleReference<UsageInfo[]> refUsages, MultiMap<PsiElement, LocalizeValue> conflicts) {
         for (UsageInfo info : refUsages.get()) {
-            String conflict = ((FixableUsageInfo)info).getConflictMessage();
+            LocalizeValue conflict = ((FixableUsageInfo)info).getConflictMessage();
             if (conflict != null) {
-                conflicts.putValue(info.getElement(), XmlUtil.escape(conflict));
+                conflicts.putValue(info.getElement(), conflict.map(XmlUtil::escape));
             }
         }
     }
