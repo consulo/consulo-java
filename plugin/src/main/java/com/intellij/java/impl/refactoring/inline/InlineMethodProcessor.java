@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.JavaLangClassMemberReference;
 import com.intellij.java.impl.refactoring.introduceParameter.Util;
 import com.intellij.java.impl.refactoring.rename.RenameJavaVariableProcessor;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
@@ -66,6 +68,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
@@ -211,29 +214,34 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
             }
         }
         UsageInfo[] usagesIn = refUsages.get();
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         if (!myInlineThisOnly) {
             PsiMethod[] superMethods = myMethod.findSuperMethods();
             for (PsiMethod method : superMethods) {
+                String className = Objects.requireNonNull(method.getContainingClass()).getQualifiedName();
                 LocalizeValue message = method.isAbstract()
-                    ? RefactoringLocalize.inlinedMethodImplementsMethodFrom0(method.getContainingClass().getQualifiedName())
-                    : RefactoringLocalize.inlinedMethodOverridesMethodFrom0(method.getContainingClass().getQualifiedName());
-                conflicts.putValue(method, message.get());
+                    ? RefactoringLocalize.inlinedMethodImplementsMethodFrom0(className)
+                    : RefactoringLocalize.inlinedMethodOverridesMethodFrom0(className);
+                conflicts.putValue(method, message);
             }
 
             for (UsageInfo info : usagesIn) {
                 PsiElement element = info.getElement();
-                if (element instanceof PsiDocMethodOrFieldRef && !PsiTreeUtil.isAncestor(myMethod, element, false)) {
-                    conflicts.putValue(element, JavaRefactoringLocalize.inlineMethodUsedInJavadoc().get());
+                if (element instanceof PsiDocMethodOrFieldRef memberRef && !PsiTreeUtil.isAncestor(myMethod, memberRef, false)) {
+                    conflicts.putValue(memberRef, JavaRefactoringLocalize.inlineMethodUsedInJavadoc());
                 }
-                if (element instanceof PsiMethodReferenceExpression) {
-                    conflicts.putValue(element, "Inlined method is used in method reference");
+                if (element instanceof PsiLiteralExpression literal
+                    && ContainerUtil.or(literal.getReferences(), JavaLangClassMemberReference.class::isInstance)) {
+                    conflicts.putValue(literal, JavaRefactoringLocalize.inlineMethodUsedInReflection());
+                }
+                if (element instanceof PsiMethodReferenceExpression methodRef) {
+                    processSideEffectsInMethodReferenceQualifier(conflicts, methodRef);
                 }
 
                 LocalizeValue errorMessage = checkCalledInSuperOrThisExpr(myMethod.getBody(), element);
                 if (errorMessage != LocalizeValue.empty()) {
-                    conflicts.putValue(element, errorMessage.get());
+                    conflicts.putValue(element, errorMessage);
                 }
             }
         }
@@ -248,7 +256,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                 @Nonnull
                 @Override
                 @RequiredReadAction
-                public MultiMap<PsiElement, String> getConflicts(@Nonnull PsiReference reference, @Nonnull PsiElement referenced) {
+                public MultiMap<PsiElement, LocalizeValue> getConflicts(@Nonnull PsiReference reference, @Nonnull PsiElement referenced) {
                     return MultiMap.empty();
                 }
 
@@ -281,7 +289,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                     if (reference != null) {
                         InlineUtil.TailCallType type = InlineUtil.getTailCallType(reference);
                         if (type == InlineUtil.TailCallType.Simple) {
-                            conflicts.putValue(statement, "Inlined result would contain parse errors");
+                            conflicts.putValue(statement, LocalizeValue.localizeTODO("Inlined result would contain parse errors"));
                             break;
                         }
                     }
@@ -294,6 +302,20 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         addInaccessibleSuperCallsConflicts(usagesIn, conflicts);
 
         return showConflicts(conflicts, usagesIn);
+    }
+
+    private static void processSideEffectsInMethodReferenceQualifier(
+        @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts,
+        @Nonnull PsiMethodReferenceExpression methodRef
+    ) {
+        PsiExpression qualifierExpression = methodRef.getQualifierExpression();
+        if (qualifierExpression != null) {
+            List<PsiElement> sideEffects = new ArrayList<>();
+            SideEffectChecker.checkSideEffects(qualifierExpression, sideEffects);
+            if (!sideEffects.isEmpty()) {
+                conflicts.putValue(methodRef, JavaRefactoringLocalize.inlineMethodQualifierUsageSideEffect());
+            }
+        }
     }
 
     @RequiredReadAction
@@ -312,8 +334,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         return myMethod.isWritable() || myMethod instanceof PsiCompiledElement;
     }
 
-    private void addInaccessibleSuperCallsConflicts(final UsageInfo[] usagesIn, final MultiMap<PsiElement, String> conflicts) {
-
+    private void addInaccessibleSuperCallsConflicts(final UsageInfo[] usagesIn, final MultiMap<PsiElement, LocalizeValue> conflicts) {
         myMethod.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             public void visitClass(@Nonnull PsiClass aClass) {
@@ -347,8 +368,14 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                         LOG.assertTrue(methodCallExpression != null);
                         conflicts.putValue(
                             expression,
-                            "Inlined method calls " + methodCallExpression.getText() + " which won't be accessed in " +
-                                StringUtil.join(targetContainingClasses, psiClass -> RefactoringUIUtil.getDescription(psiClass, false), ",")
+                            LocalizeValue.localizeTODO(
+                                "Inlined method calls " + methodCallExpression.getText() + " which won't be accessed in " +
+                                    StringUtil.join(
+                                        targetContainingClasses,
+                                        psiClass -> RefactoringUIUtil.getDescription(psiClass, false),
+                                        ","
+                                    )
+                            )
                         );
                     }
                 }
@@ -361,7 +388,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         PsiElement element,
         UsageInfo[] usages,
         ReferencedElementsCollector collector,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         element.accept(collector);
         Map<PsiMember, Set<PsiMember>> containersToReferenced = getInaccessible(collector.myReferencedMembers, usages, element);
@@ -376,7 +403,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                     referencedDescription,
                     containerDescription
                 );
-                conflicts.putValue(container, CommonRefactoringUtil.capitalize(message.get()));
+                conflicts.putValue(container, message.capitalize());
             }
         }
     }
@@ -384,14 +411,10 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     /**
      * Given a set of referencedElements, returns a map from containers (in a sense of ConflictsUtil.getContainer)
      * to subsets of referencedElements that are not accessible from that container
-     *
-     * @param referencedElements
-     * @param usages
-     * @param elementToInline
      */
     @RequiredReadAction
     private static Map<PsiMember, Set<PsiMember>> getInaccessible(
-        HashSet<PsiMember> referencedElements,
+        Set<PsiMember> referencedElements,
         UsageInfo[] usages,
         PsiElement elementToInline
     ) {
@@ -584,7 +607,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         boolean isParameterReference = false;
         if (element instanceof PsiReferenceExpression expression
             && expression.resolve() instanceof PsiParameter parameter
-            && element.getManager().areElementsEquivalent(parameter.getDeclarationScope(), oldConstructor)) {
+            && expression.getManager().areElementsEquivalent(parameter.getDeclarationScope(), oldConstructor)) {
             isParameterReference = true;
             PsiElement declarationScope = parameter.getDeclarationScope();
             PsiParameter[] declarationParameters = ((PsiMethod) declarationScope).getParameterList().getParameters();
@@ -823,7 +846,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
             if (paramType instanceof PsiEllipsisType ellipsisType) {
                 paramType = callSubstitutor.substitute(ellipsisType.toArrayType());
                 if (applicabilityLevel == MethodCandidateInfo.ApplicabilityLevel.VARARGS) {
-                    defaultValue = "new " + ((PsiArrayType) paramType).getComponentType().getCanonicalText() + "[]{}";
+                    defaultValue = "new " + ellipsisType.getComponentType().getCanonicalText() + "[]{}";
                 }
                 else {
                     defaultValue = PsiTypesUtil.getDefaultValueOfType(paramType);
@@ -1468,8 +1491,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                 @Override
                 public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
                     super.visitReturnStatement(statement);
-                    PsiExpression expr = statement.getReturnValue();
-                    if (expr instanceof PsiMethodCallExpression methodCall) {
+                    if (statement.getReturnValue() instanceof PsiMethodCallExpression methodCall) {
                         refsVector.add(methodCall.getMethodExpression());
                     }
                 }
@@ -1494,11 +1516,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         if (psiStatements.length != 1) {
             return null;
         }
-        PsiStatement statement = psiStatements[0];
-        if (!(statement instanceof PsiReturnStatement)) {
-            return null;
-        }
-        return ((PsiReturnStatement) statement).getReturnValue();
+        return psiStatements[0] instanceof PsiReturnStatement returnStmt ? returnStmt.getReturnValue() : null;
     }
 
     private static void addMarkedElements(final List<PsiReferenceExpression> array, PsiElement scope) {
