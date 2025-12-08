@@ -30,83 +30,91 @@ import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 
 public class InlineSuperCallUsageInfo extends FixableUsageInfo {
-  private PsiCodeBlock myConstrBody;
+    private PsiCodeBlock myConstrBody;
 
-  public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression) {
-    super(methodCallExpression);
-  }
-
-  public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression, PsiCodeBlock constrBody) {
-    super(methodCallExpression);
-    myConstrBody = constrBody;
-  }
-
-  @Override
-  public void fixUsage() throws IncorrectOperationException {
-    PsiElement element = getElement();
-    if (element != null && myConstrBody != null) {
-      assert !element.isPhysical();
-      final PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstrBody);
-      element = ((PsiExpressionStatement)myConstrBody.addBefore(statement, myConstrBody.getFirstBodyElement())).getExpression();
+    public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression) {
+        super(methodCallExpression);
     }
-    if (element instanceof PsiMethodCallExpression) {
-      PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
-      final PsiMethod superConstructor = (PsiMethod)methodExpression.resolve();
-      if (superConstructor != null) {
-        PsiMethod methodCopy = JavaPsiFacade.getElementFactory(getProject()).createMethod("toInline", PsiType.VOID);
-        final PsiCodeBlock constructorBody = superConstructor.getBody();
-        if (constructorBody != null) {
-          final PsiCodeBlock methodBody = methodCopy.getBody();
-          assert methodBody != null;
-          methodBody.replace(constructorBody);
 
-          methodCopy.getParameterList().replace(superConstructor.getParameterList());
-          methodCopy.getThrowsList().replace(superConstructor.getThrowsList());
+    public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression, PsiCodeBlock constrBody) {
+        super(methodCallExpression);
+        myConstrBody = constrBody;
+    }
 
-          methodExpression = (PsiReferenceExpression)methodExpression.replace(JavaPsiFacade.getElementFactory(getProject()).createExpressionFromText(methodCopy.getName(), methodExpression));
-          final PsiClass inliningClass = superConstructor.getContainingClass();
-          assert inliningClass != null;
-          methodCopy = (PsiMethod)inliningClass.add(methodCopy);
-          final InlineMethodProcessor inlineMethodProcessor = new InlineMethodProcessor(getProject(), methodCopy, methodExpression, null, true);
-          inlineMethodProcessor.inlineMethodCall(methodExpression);
-          methodCopy.delete();
+    @Override
+    public void fixUsage() throws IncorrectOperationException {
+        PsiElement element = getElement();
+        if (element != null && myConstrBody != null) {
+            assert !element.isPhysical();
+            final PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstrBody);
+            element = ((PsiExpressionStatement) myConstrBody.addBefore(statement, myConstrBody.getFirstBodyElement())).getExpression();
         }
-      }
-    }
-  }
+        if (element instanceof PsiMethodCallExpression) {
+            PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
+            final PsiMethod superConstructor = (PsiMethod) methodExpression.resolve();
+            if (superConstructor != null) {
+                PsiMethod methodCopy = JavaPsiFacade.getElementFactory(getProject()).createMethod("toInline", PsiType.VOID);
+                final PsiCodeBlock constructorBody = superConstructor.getBody();
+                if (constructorBody != null) {
+                    final PsiCodeBlock methodBody = methodCopy.getBody();
+                    assert methodBody != null;
+                    methodBody.replace(constructorBody);
 
-  @Override
-  public String getConflictMessage() {
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    final PsiElement element = getElement();
-    if (element instanceof PsiMethodCallExpression) {
-      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
-      final PsiMethod superConstructor = methodCallExpression.resolveMethod();
-      if (superConstructor != null) {
-        InlineMethodProcessor.addInaccessibleMemberConflicts(superConstructor, new UsageInfo[]{new UsageInfo(methodCallExpression.getMethodExpression())}, new ReferencedElementsCollector(){
-          @Override
-          protected void checkAddMember(@Nonnull PsiMember member) {
-            if (!PsiTreeUtil.isAncestor(superConstructor.getContainingClass(), member, false)) {
-              super.checkAddMember(member);
+                    methodCopy.getParameterList().replace(superConstructor.getParameterList());
+                    methodCopy.getThrowsList().replace(superConstructor.getThrowsList());
+
+                    methodExpression = (PsiReferenceExpression) methodExpression.replace(JavaPsiFacade.getElementFactory(getProject())
+                        .createExpressionFromText(methodCopy.getName(), methodExpression));
+                    final PsiClass inliningClass = superConstructor.getContainingClass();
+                    assert inliningClass != null;
+                    methodCopy = (PsiMethod) inliningClass.add(methodCopy);
+                    final InlineMethodProcessor inlineMethodProcessor =
+                        new InlineMethodProcessor(getProject(), methodCopy, methodExpression, null, true);
+                    inlineMethodProcessor.inlineMethodCall(methodExpression);
+                    methodCopy.delete();
+                }
             }
-          }
-        }, conflicts);
-        if (InlineMethodProcessor.checkBadReturns(superConstructor) && !InlineUtil.allUsagesAreTailCalls(superConstructor)) {
-          conflicts.putValue(
-            superConstructor,
-            CommonRefactoringUtil.capitalize(
-              RefactoringLocalize.refactoringIsNotSupportedWhenReturnStatementInterruptsTheExecutionFlow("").get() +
-                " of super constructor"
-            )
-          );
         }
-      }
     }
-    return conflicts.isEmpty() ? null : conflicts.values().iterator().next(); //todo
-  }
+
+    @Override
+    public LocalizeValue getConflictMessage() {
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        final PsiElement element = getElement();
+        if (element instanceof PsiMethodCallExpression) {
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) element;
+            final PsiMethod superConstructor = methodCallExpression.resolveMethod();
+            if (superConstructor != null) {
+                InlineMethodProcessor.addInaccessibleMemberConflicts(
+                    superConstructor,
+                    new UsageInfo[]{new UsageInfo(methodCallExpression.getMethodExpression())},
+                    new ReferencedElementsCollector() {
+                        @Override
+                        protected void checkAddMember(@Nonnull PsiMember member) {
+                            if (!PsiTreeUtil.isAncestor(superConstructor.getContainingClass(), member, false)) {
+                                super.checkAddMember(member);
+                            }
+                        }
+                    },
+                    conflicts
+                );
+                if (InlineMethodProcessor.checkBadReturns(superConstructor) && !InlineUtil.allUsagesAreTailCalls(superConstructor)) {
+                    conflicts.putValue(
+                        superConstructor,
+                        LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(
+                            RefactoringLocalize.refactoringIsNotSupportedWhenReturnStatementInterruptsTheExecutionFlow("") +
+                                " of super constructor"
+                        ))
+                    );
+                }
+            }
+        }
+        return conflicts.isEmpty() ? null : conflicts.values().iterator().next(); //todo
+    }
 }

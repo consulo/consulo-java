@@ -13,131 +13,143 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 29-Aug-2008
- */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import java.util.function.Function;
+/**
+ * @author anna
+ * @since 2008-08-29
+ */
+public class ReplaceConstructorUsageInfo extends FixableUsageInfo {
+    private final PsiType myNewType;
+    @Nonnull
+    private LocalizeValue myConflict;
+    private static final LocalizeValue CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND =
+        LocalizeValue.localizeTODO("Constructor matching super not found");
 
-public class ReplaceConstructorUsageInfo extends FixableUsageInfo{
-  private final PsiType myNewType;
-  private String myConflict;
-  private static final String CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND = "Constructor matching super not found";
-
-  public ReplaceConstructorUsageInfo(PsiNewExpression element, PsiType newType, final PsiClass[] targetClasses) {
-    super(element);
-    myNewType = newType;
-    final PsiMethod[] constructors = targetClasses[0].getConstructors();
-    final PsiMethod constructor = element.resolveConstructor();
-    if (constructor == null) {
-      if (constructors.length == 1 && constructors[0].getParameterList().getParametersCount() > 0 || constructors.length > 1) {
-        myConflict = CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND;
-      }
-    } else {
-      final PsiParameter[] superParameters = constructor.getParameterList().getParameters();
-      boolean foundMatchingConstructor = constructors.length == 0 && superParameters.length == 0;
-      constr: for (PsiMethod method : constructors) {
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
-        if (superParameters.length == parameters.length) {
-          for (int i = 0; i < parameters.length; i++) {
-            PsiParameter parameter = parameters[i];
-            if (!TypeConversionUtil.isAssignable(TypeConversionUtil.erasure(parameter.getType()),
-                                                 TypeConversionUtil.erasure(superParameters[i].getType()))) {
-              continue constr;
+    @RequiredReadAction
+    public ReplaceConstructorUsageInfo(PsiNewExpression element, PsiType newType, PsiClass[] targetClasses) {
+        super(element);
+        myNewType = newType;
+        PsiMethod[] constructors = targetClasses[0].getConstructors();
+        PsiMethod constructor = element.resolveConstructor();
+        if (constructor == null) {
+            if (constructors.length == 1 && constructors[0].getParameterList().getParametersCount() > 0 || constructors.length > 1) {
+                myConflict = CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND;
             }
-          }
-          foundMatchingConstructor = true;
         }
-      }
-      if (!foundMatchingConstructor) {
-        myConflict = CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND;
-      }
-
-    }
-
-    PsiType type = element.getType();
-    if (type == null) {
-      appendConflict("Type is unknown");
-      return;
-    } else {
-      type = type.getDeepComponentType();
-    }
-
-    if (!TypeConversionUtil.isAssignable(type, newType)) {
-      final String conflict = "Type parameters do not agree in " + element.getText() + ". " +
-                              "Expected " + newType.getPresentableText() + " but found " + type.getPresentableText();
-      appendConflict(conflict);
-    }
-
-    if (targetClasses.length > 1) {
-      final String conflict = "Constructor " + element.getText() + " can be replaced with any of " + StringUtil.join(targetClasses, new Function<PsiClass, String>() {
-        public String apply(final PsiClass psiClass) {
-          return psiClass.getQualifiedName();
-        }
-      }, ", ");
-      appendConflict(conflict);
-    }
-  }
-
-  private void appendConflict(final String conflict) {
-    if (myConflict == null) {
-      myConflict = conflict;
-    } else {
-      myConflict += "\n" + conflict;
-    }
-  }
-
-  public void fixUsage() throws IncorrectOperationException {
-    final PsiNewExpression newExpression = (PsiNewExpression)getElement();
-    if (newExpression != null) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(newExpression.getProject()).getElementFactory();
-
-      final StringBuffer buf = new StringBuffer();
-      buf.append("new ").append(myNewType.getCanonicalText());
-      final PsiArrayInitializerExpression arrayInitializer = newExpression.getArrayInitializer();
-      final PsiType newExpressionType = newExpression.getType();
-      assert newExpressionType != null;
-      if (arrayInitializer != null) {
-        for (int i = 0; i < newExpressionType.getArrayDimensions(); i++) {
-          buf.append("[]");
-        }
-        buf.append(arrayInitializer.getText());
-      }
-      else {
-        final PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
-        if (arrayDimensions.length > 0) {
-          buf.append("[");
-          buf.append(StringUtil.join(arrayDimensions, new Function<PsiExpression, String>() {
-            public String apply(PsiExpression psiExpression) {
-              return psiExpression.getText();
+        else {
+            PsiParameter[] superParameters = constructor.getParameterList().getParameters();
+            boolean foundMatchingConstructor = constructors.length == 0 && superParameters.length == 0;
+            constr:
+            for (PsiMethod method : constructors) {
+                PsiParameter[] parameters = method.getParameterList().getParameters();
+                if (superParameters.length == parameters.length) {
+                    for (int i = 0; i < parameters.length; i++) {
+                        PsiParameter parameter = parameters[i];
+                        if (!TypeConversionUtil.isAssignable(
+                            TypeConversionUtil.erasure(parameter.getType()),
+                            TypeConversionUtil.erasure(superParameters[i].getType())
+                        )) {
+                            continue constr;
+                        }
+                    }
+                    foundMatchingConstructor = true;
+                }
             }
-          }, "]["));
-          buf.append("]");
-          for (int i = 0; i < newExpressionType.getArrayDimensions() - arrayDimensions.length; i++) {
-            buf.append("[]");
-          }
-        } else {
-          final PsiExpressionList list = newExpression.getArgumentList();
-          if (list != null) {
-            buf.append(list.getText());
-          }
+            if (!foundMatchingConstructor) {
+                myConflict = CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND;
+            }
+
         }
-      }
 
-      newExpression.replace(elementFactory.createExpressionFromText(buf.toString(), newExpression));
+        PsiType type = element.getType();
+        if (type == null) {
+            appendConflict(LocalizeValue.localizeTODO("Type is unknown"));
+            return;
+        }
+        else {
+            type = type.getDeepComponentType();
+        }
+
+        if (!TypeConversionUtil.isAssignable(type, newType)) {
+            LocalizeValue conflict = LocalizeValue.localizeTODO(
+                "Type parameters do not agree in " + element.getText() + ". " +
+                    "Expected " + newType.getPresentableText() + " but found " + type.getPresentableText()
+            );
+            appendConflict(conflict);
+        }
+
+        if (targetClasses.length > 1) {
+            LocalizeValue conflict = LocalizeValue.localizeTODO(
+                "Constructor " + element.getText() + " can be replaced with any of " +
+                    StringUtil.join(targetClasses, PsiClass::getQualifiedName, ", ")
+            );
+            appendConflict(conflict);
+        }
     }
-  }
 
-  public String getConflictMessage() {
-    return myConflict;
-  }
+    private void appendConflict(@Nonnull LocalizeValue conflict) {
+        if (myConflict == LocalizeValue.empty()) {
+            myConflict = conflict;
+        }
+        else {
+            myConflict = LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
+        }
+    }
+
+    @Override
+    @RequiredWriteAction
+    public void fixUsage() throws IncorrectOperationException {
+        PsiNewExpression newExpression = (PsiNewExpression) getElement();
+        if (newExpression != null) {
+            PsiElementFactory elementFactory = JavaPsiFacade.getInstance(newExpression.getProject()).getElementFactory();
+
+            StringBuilder buf = new StringBuilder();
+            buf.append("new ").append(myNewType.getCanonicalText());
+            PsiArrayInitializerExpression arrayInitializer = newExpression.getArrayInitializer();
+            PsiType newExpressionType = newExpression.getType();
+            assert newExpressionType != null;
+            if (arrayInitializer != null) {
+                for (int i = 0; i < newExpressionType.getArrayDimensions(); i++) {
+                    buf.append("[]");
+                }
+                buf.append(arrayInitializer.getText());
+            }
+            else {
+                PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
+                if (arrayDimensions.length > 0) {
+                    buf.append("[");
+                    buf.append(StringUtil.join(arrayDimensions, PsiElement::getText, "]["));
+                    buf.append("]");
+                    for (int i = 0; i < newExpressionType.getArrayDimensions() - arrayDimensions.length; i++) {
+                        buf.append("[]");
+                    }
+                }
+                else {
+                    PsiExpressionList list = newExpression.getArgumentList();
+                    if (list != null) {
+                        buf.append(list.getText());
+                    }
+                }
+            }
+
+            newExpression.replace(elementFactory.createExpressionFromText(buf.toString(), newExpression));
+        }
+    }
+
+    @Override
+    public LocalizeValue getConflictMessage() {
+        return myConflict;
+    }
 }
