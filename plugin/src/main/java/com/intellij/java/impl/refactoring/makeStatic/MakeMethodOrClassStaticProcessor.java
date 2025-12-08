@@ -21,6 +21,7 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
@@ -51,7 +52,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*
+/**
  * @author dsl
  * @since 2002-04-16
  */
@@ -78,7 +79,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     protected final boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         if (myPrepareSuccessfulSwingThreadCallback != null) {
-            MultiMap<PsiElement, String> conflicts = getConflictDescriptions(usagesIn);
+            MultiMap<PsiElement, LocalizeValue> conflicts = getConflictDescriptions(usagesIn);
             if (conflicts.size() > 0) {
                 ConflictsDialog conflictsDialog = prepareConflictsDialog(conflicts, refUsages.get());
                 conflictsDialog.show();
@@ -120,8 +121,8 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     }
 
     @RequiredReadAction
-    protected MultiMap<PsiElement, String> getConflictDescriptions(UsageInfo[] usages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+    protected MultiMap<PsiElement, LocalizeValue> getConflictDescriptions(UsageInfo[] usages) {
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         Set<PsiElement> processed = new HashSet<>();
         String typeString = StringUtil.capitalize(UsageViewUtil.getType(myMember));
         for (UsageInfo usageInfo : usages) {
@@ -130,8 +131,8 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                 if (!mySettings.isMakeClassParameter()) {
                     if (referencedElement instanceof PsiModifierListOwner modifierListOwner
                         && modifierListOwner.hasModifierProperty(PsiModifier.STATIC)) {
-                            continue;
-                        }
+                        continue;
+                    }
 
                     if (processed.contains(referencedElement)) {
                         continue;
@@ -142,24 +143,24 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                             String description = RefactoringUIUtil.getDescription(field, true);
                             LocalizeValue message =
                                 RefactoringLocalize.zeroUsesNonStatic1WhichIsNotPassedAsAParameter(typeString, description);
-                            conflicts.putValue(field, message.get());
+                            conflicts.putValue(field, message);
                         }
                     }
                     else {
                         String description = RefactoringUIUtil.getDescription(referencedElement, true);
                         LocalizeValue message = RefactoringLocalize.zeroUses1WhichNeedsClassInstance(typeString, description);
-                        conflicts.putValue(referencedElement, message.get());
+                        conflicts.putValue(referencedElement, message);
                     }
                 }
             }
             if (usageInfo instanceof OverridingMethodUsageInfo) {
                 LOG.assertTrue(myMember instanceof PsiMethod);
-                PsiMethod overridingMethod = (PsiMethod)usageInfo.getElement();
+                PsiMethod overridingMethod = (PsiMethod) usageInfo.getElement();
                 LocalizeValue message = RefactoringLocalize.method0IsOverriddenBy1(
                     RefactoringUIUtil.getDescription(myMember, false),
                     RefactoringUIUtil.getDescription(overridingMethod, true)
                 );
-                conflicts.putValue(overridingMethod, message.get());
+                conflicts.putValue(overridingMethod, message);
             }
             else {
                 PsiElement element = usageInfo.getElement();
@@ -169,7 +170,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                 }
                 processed.add(container);
                 List<Settings.FieldParameter> fieldParameters = mySettings.getParameterOrderList();
-                ArrayList<PsiField> inaccessible = new ArrayList<>();
+                List<PsiField> inaccessible = new ArrayList<>();
 
                 for (Settings.FieldParameter fieldParameter : fieldParameters) {
                     if (!PsiUtil.isAccessible(fieldParameter.field, element, null)) {
@@ -188,9 +189,9 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     }
 
     private static void createInaccessibleFieldsConflictDescription(
-        ArrayList<PsiField> inaccessible,
+        List<PsiField> inaccessible,
         PsiElement container,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         if (inaccessible.size() == 1) {
             PsiField field = inaccessible.get(0);
@@ -199,7 +200,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                 RefactoringLocalize.field0IsNotAccessible(
                     CommonRefactoringUtil.htmlEmphasize(field.getName()),
                     RefactoringUIUtil.getDescription(container, true)
-                ).get()
+                )
             );
         }
         else {
@@ -209,7 +210,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                     RefactoringLocalize.field0IsNotAccessible(
                         CommonRefactoringUtil.htmlEmphasize(field.getName()),
                         RefactoringUIUtil.getDescription(container, true)
-                    ).get()
+                    )
                 );
             }
         }
@@ -218,7 +219,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     @Nonnull
     @Override
     protected UsageInfo[] findUsages() {
-        ArrayList<UsageInfo> result = new ArrayList<>();
+        List<UsageInfo> result = new ArrayList<>();
 
         ContainerUtil.addAll(result, MakeStaticUtil.findClassRefsInMember(myMember, true));
 
@@ -239,10 +240,10 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         return result.toArray(new UsageInfo[result.size()]);
     }
 
-    protected abstract void findExternalUsages(ArrayList<UsageInfo> result);
+    protected abstract void findExternalUsages(List<UsageInfo> result);
 
     @RequiredReadAction
-    protected void findExternalReferences(PsiMethod method, ArrayList<UsageInfo> result) {
+    protected void findExternalReferences(PsiMethod method, List<UsageInfo> result) {
         for (PsiReference ref : ReferencesSearch.search(method)) {
             PsiElement element = ref.getElement();
             PsiElement qualifier = null;
@@ -259,6 +260,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     }
 
     //should be called before setting static modifier
+    @RequiredWriteAction
     protected void setupTypeParameterList() throws IncorrectOperationException {
         PsiTypeParameterList list = myMember.getTypeParameterList();
         assert list != null;
@@ -285,9 +287,9 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                 && internalUsageInfo.getReferencedElement() instanceof PsiField refField
                 && field.equals(refField)
                 && internalUsageInfo.isInsideAnonymous()) {
-                        return true;
-                    }
-                }
+                return true;
+            }
+        }
         return false;
     }
 

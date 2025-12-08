@@ -7,6 +7,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -118,8 +119,12 @@ public final class MutationSignature {
         if (this == UNKNOWN) {
             return "(unknown)";
         }
-        return IntStreamEx.range(myParameters.length).mapToEntry(idx -> "param" + (idx + 1), idx -> myParameters[idx])
-            .prepend("this", myThis).filterValues(b -> b).keys().joining(",");
+        return IntStreamEx.range(myParameters.length)
+            .mapToEntry(idx -> "param" + (idx + 1), idx -> myParameters[idx])
+            .prepend("this", myThis)
+            .filterValues(b -> b)
+            .keys()
+            .joining(",");
     }
 
     /**
@@ -208,31 +213,30 @@ public final class MutationSignature {
      * @param method    a method to apply the signature
      * @return error message or null if signature is valid
      */
-    @Nullable
-    public static String checkSignature(@Nonnull String signature, @Nonnull PsiMethod method) {
+    @Nonnull
+    public static LocalizeValue checkSignature(@Nonnull String signature, @Nonnull PsiMethod method) {
         try {
             MutationSignature ms = parse(signature);
-            if (ms.myThis && method.hasModifierProperty(PsiModifier.STATIC)) {
-                return JavaAnalysisLocalize.mutationSignatureProblemStaticMethodCannotMutateThis().get();
+            if (ms.myThis && method.isStatic()) {
+                return JavaAnalysisLocalize.mutationSignatureProblemStaticMethodCannotMutateThis();
             }
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (ms.myParameters.length > parameters.length) {
-                return JavaAnalysisLocalize.mutationSignatureProblemReferenceToParameterInvalid(ms.myParameters.length).get();
+                return JavaAnalysisLocalize.mutationSignatureProblemReferenceToParameterInvalid(ms.myParameters.length);
             }
             for (int i = 0; i < ms.myParameters.length; i++) {
                 if (ms.myParameters[i]) {
                     PsiType type = parameters[i].getType();
                     if (ClassUtils.isImmutable(type)) {
-                        return JavaAnalysisLocalize.mutationSignatureProblemParameterHasImmutableType(i + 1, type.getPresentableText())
-                            .get();
+                        return JavaAnalysisLocalize.mutationSignatureProblemParameterHasImmutableType(i + 1, type.getPresentableText());
                     }
                 }
             }
         }
         catch (IllegalArgumentException ex) {
-            return ex.getMessage();
+            return LocalizeValue.ofNullable(ex.getMessage());
         }
-        return null;
+        return LocalizeValue.empty();
     }
 
     @Nonnull
@@ -256,8 +260,7 @@ public final class MutationSignature {
             }
             return fromMethod(method);
         }
-        if (call instanceof PsiNewExpression) {
-            PsiNewExpression newExpression = (PsiNewExpression)call;
+        if (call instanceof PsiNewExpression newExpression) {
             if (newExpression.isArrayCreation()) {
                 return PURE;
             }
@@ -275,12 +278,12 @@ public final class MutationSignature {
             Set<PsiClass> visited = new HashSet<>();
             while (true) {
                 for (PsiField field : clazz.getFields()) {
-                    if (!field.hasModifierProperty(PsiModifier.STATIC) && field.hasInitializer()) {
+                    if (!field.isStatic() && field.hasInitializer()) {
                         return UNKNOWN;
                     }
                 }
                 for (PsiClassInitializer initializer : clazz.getInitializers()) {
-                    if (!initializer.hasModifierProperty(PsiModifier.STATIC)) {
+                    if (!initializer.isStatic()) {
                         return UNKNOWN;
                     }
                 }

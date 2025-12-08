@@ -4,6 +4,7 @@ import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiDirectory;
@@ -12,6 +13,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
@@ -41,7 +43,7 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
                         MoveClassesOrPackagesUtil.findUsages(aClass, searchInComments, searchInNonJavaFiles, aClass.getName())
                     );
                 }
-                packageNames.add(((PsiClassOwner)psiFile).getPackageName());
+                packageNames.add(classOwner.getPackageName());
             }
         }
 
@@ -103,7 +105,7 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void postProcessUsages(UsageInfo[] usages, Function<PsiDirectory, PsiDirectory> newDirMapper) {
         for (UsageInfo usage : usages) {
             if (usage instanceof RemoveOnDemandImportStatementsUsageInfo) {
@@ -121,7 +123,7 @@ public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClasses
         Set<PsiFile> files,
         UsageInfo[] infos,
         PsiDirectory directory,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         RefactoringConflictsUtil.analyzeModuleConflicts(project, files, infos, directory, conflicts);
     }

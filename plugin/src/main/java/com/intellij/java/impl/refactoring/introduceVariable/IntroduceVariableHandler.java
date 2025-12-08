@@ -23,73 +23,97 @@ import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.markup.RangeHighlighter;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IntroduceVariableHandler extends IntroduceVariableBase implements JavaIntroduceVariableHandlerBase {
-
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiExpression expression) {
-    invokeImpl(project, expression, editor);
-  }
-
-  @Override
-  public IntroduceVariableSettings getSettings(Project project, Editor editor,
-                                               PsiExpression expr, PsiExpression[] occurrences,
-                                               TypeSelectorManagerImpl typeSelectorManager,
-                                               boolean declareFinalIfAll,
-                                               boolean anyAssignmentLHS,
-                                               final InputValidator validator,
-                                               PsiElement anchor, final OccurrencesChooser.ReplaceChoice replaceChoice) {
-    if (replaceChoice != null) {
-      return super.getSettings(project, editor, expr, occurrences, typeSelectorManager, declareFinalIfAll, anyAssignmentLHS, validator,
-                               anchor, replaceChoice);
-    }
-    ArrayList<RangeHighlighter> highlighters = new ArrayList<>();
-    HighlightManager highlightManager = null;
-    if (editor != null) {
-      highlightManager = HighlightManager.getInstance(project);
-      if (occurrences.length > 1 ) {
-        highlightManager.addOccurrenceHighlights(editor, occurrences, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
-      }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiExpression expression) {
+        invokeImpl(project, expression, editor);
     }
 
-    IntroduceVariableDialog dialog = new IntroduceVariableDialog(
+    @Override
+    @RequiredUIAccess
+    public IntroduceVariableSettings getSettings(
+        Project project, Editor editor,
+        PsiExpression expr, PsiExpression[] occurrences,
+        TypeSelectorManagerImpl typeSelectorManager,
+        boolean declareFinalIfAll,
+        boolean anyAssignmentLHS,
+        InputValidator validator,
+        PsiElement anchor,
+        OccurrencesChooser.ReplaceChoice replaceChoice
+    ) {
+        if (replaceChoice != null) {
+            return super.getSettings(
+                project,
+                editor,
+                expr,
+                occurrences,
+                typeSelectorManager,
+                declareFinalIfAll,
+                anyAssignmentLHS,
+                validator,
+                anchor,
+                replaceChoice
+            );
+        }
+        List<RangeHighlighter> highlighters = new ArrayList<>();
+        HighlightManager highlightManager = null;
+        if (editor != null) {
+            highlightManager = HighlightManager.getInstance(project);
+            if (occurrences.length > 1) {
+                highlightManager.addOccurrenceHighlights(editor, occurrences, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
+            }
+        }
+
+        IntroduceVariableDialog dialog = new IntroduceVariableDialog(
             project, expr, occurrences.length, anyAssignmentLHS, declareFinalIfAll,
             typeSelectorManager,
-            validator);
-    dialog.show();
-    if (!dialog.isOK()) {
-    } else {
-      if (editor != null) {
-        for (RangeHighlighter highlighter : highlighters) {
-          highlightManager.removeSegmentHighlighter(editor, highlighter);
+            validator
+        );
+        dialog.show();
+        if (!dialog.isOK()) {
         }
-      }
+        else if (editor != null) {
+            for (RangeHighlighter highlighter : highlighters) {
+                highlightManager.removeSegmentHighlighter(editor, highlighter);
+            }
+        }
+
+        return dialog;
     }
 
-    return dialog;
-  }
-
-  protected void showErrorMessage(final Project project, Editor editor, String message) {
-    CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_VARIABLE);
-  }
-
-  protected boolean reportConflicts(final MultiMap<PsiElement,String> conflicts, final Project project, IntroduceVariableSettings dialog) {
-    ConflictsDialog conflictsDialog = new ConflictsDialog(project, conflicts);
-    conflictsDialog.show();
-    final boolean ok = conflictsDialog.isOK();
-    if (!ok && conflictsDialog.isShowConflicts()) {
-      if (dialog instanceof DialogWrapper) ((DialogWrapper)dialog).close(DialogWrapper.CANCEL_EXIT_CODE);
+    @Override
+    @RequiredUIAccess
+    protected void showErrorMessage(Project project, Editor editor, @Nonnull LocalizeValue message) {
+        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_VARIABLE);
     }
-    return ok;
-  }
+
+    @Override
+    @RequiredUIAccess
+    protected boolean reportConflicts(
+        MultiMap<PsiElement, LocalizeValue> conflicts,
+        Project project,
+        IntroduceVariableSettings dialog
+    ) {
+        ConflictsDialog conflictsDialog = new ConflictsDialog(project, conflicts);
+        conflictsDialog.show();
+        boolean ok = conflictsDialog.isOK();
+        if (!ok && conflictsDialog.isShowConflicts() && dialog instanceof DialogWrapper dialogWrapper) {
+            dialogWrapper.close(DialogWrapper.CANCEL_EXIT_CODE);
+        }
+        return ok;
+    }
 }

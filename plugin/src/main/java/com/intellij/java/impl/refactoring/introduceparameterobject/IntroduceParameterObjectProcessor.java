@@ -35,6 +35,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -124,8 +125,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         PsiTypeVisitor<Object> typeParametersVisitor = new PsiTypeVisitor<>() {
             @Override
             public Object visitClassType(PsiClassType classType) {
-                PsiClass referent = classType.resolve();
-                if (referent instanceof PsiTypeParameter typeParameter) {
+                if (classType.resolve() instanceof PsiTypeParameter typeParameter) {
                     typeParamSet.add(typeParameter);
                 }
                 return super.visitClassType(classType);
@@ -150,14 +150,14 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         if (myUseExistingClass) {
             if (existingClass == null) {
                 conflicts.putValue(
                     null,
                     RefactoringLocalize.cannotPerformRefactoringWithReason(
                         LocalizeValue.localizeTODO("Could not find the selected class")
-                    ).get()
+                    )
                 );
             }
             if (myExistingClassCompatibleConstructor == null) {
@@ -165,7 +165,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
                     existingClass,
                     RefactoringLocalize.cannotPerformRefactoringWithReason(
                         LocalizeValue.localizeTODO("Selected class has no compatible constructors")
-                    ).get()
+                    )
                 );
             }
         }
@@ -175,20 +175,20 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
                     existingClass,
                     RefactoringLocalize.cannotPerformRefactoringWithReason(
                         JavaRefactoringLocalize.thereAlreadyExistsAClassWithTheChosenName()
-                    ).get()
+                    )
                 );
             }
             if (myMoveDestination != null) {
                 if (!myMoveDestination.isTargetAccessible(myProject, method.getContainingFile().getVirtualFile())) {
-                    conflicts.putValue(method, LocalizeValue.localizeTODO("Created class won't be accessible").get());
+                    conflicts.putValue(method, LocalizeValue.localizeTODO("Created class won't be accessible"));
                 }
             }
         }
         for (UsageInfo usageInfo : refUsages.get()) {
             if (usageInfo instanceof FixableUsageInfo fixableUsageInfo) {
-                String conflictMessage = fixableUsageInfo.getConflictMessage();
-                if (conflictMessage != null) {
-                    conflicts.putValue(usageInfo.getElement(), conflictMessage);
+                LocalizeValue conflictMessage = fixableUsageInfo.getConflictMessage();
+                if (conflictMessage != LocalizeValue.empty()) {
+                    conflicts.putValue(fixableUsageInfo.getElement(), conflictMessage);
                 }
             }
         }
@@ -287,7 +287,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         PsiClass psiClass = buildClass();
         if (psiClass != null) {
@@ -429,8 +429,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         @RequiredReadAction
         public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            PsiElement referent = expression.resolve();
-            if (referent instanceof PsiParameter parameter && paramsToMerge.contains(parameter)) {
+            if (expression.resolve() instanceof PsiParameter parameter && paramsToMerge.contains(parameter)) {
                 parameterUsages.add(expression);
             }
         }
@@ -569,8 +568,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
                 if (referent == null || !referent.equals(myParam)) {
                     return;
                 }
-                PsiElement assigned = lhs.resolve();
-                if (assigned != null && assigned instanceof PsiField assignedField) {
+                if (lhs.resolve() instanceof PsiField assignedField) {
                     fieldAssigned = assignedField;
                 }
             }

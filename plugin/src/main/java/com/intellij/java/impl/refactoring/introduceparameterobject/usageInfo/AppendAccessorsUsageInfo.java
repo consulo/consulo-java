@@ -20,6 +20,8 @@ import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -30,7 +32,7 @@ import consulo.util.lang.StringUtil;
 import java.util.List;
 import java.util.Set;
 
-/*
+/**
  * @author anna
  * @since 2009-11-02
  */
@@ -41,6 +43,7 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo {
     private final List<IntroduceParameterObjectProcessor.ParameterChunk> parameters;
     private static final Logger LOGGER = Logger.getInstance(AppendAccessorsUsageInfo.class);
 
+    @RequiredReadAction
     public AppendAccessorsUsageInfo(
         PsiElement psiClass,
         boolean generateAccessors,
@@ -56,6 +59,7 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo {
     }
 
     @Override
+    @RequiredWriteAction
     public void fixUsage() throws IncorrectOperationException {
         if (myGenerateAccessors) {
             appendAccessors(paramsNeedingGetters, true);
@@ -63,14 +67,15 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo {
         }
     }
 
-    private void appendAccessors(final Set<PsiParameter> params, boolean isGetter) {
-        final PsiElement element = getElement();
+    @RequiredWriteAction
+    private void appendAccessors(Set<PsiParameter> params, boolean isGetter) {
+        PsiElement element = getElement();
         if (element != null) {
             for (PsiParameter parameter : params) {
-                final IntroduceParameterObjectProcessor.ParameterChunk parameterChunk =
+                IntroduceParameterObjectProcessor.ParameterChunk parameterChunk =
                     IntroduceParameterObjectProcessor.ParameterChunk.getChunkByParameter(parameter, parameters);
                 LOGGER.assertTrue(parameterChunk != null);
-                final PsiField field = parameterChunk.getField();
+                PsiField field = parameterChunk.getField();
                 if (field != null) {
                     element.add(
                         isGetter
@@ -83,27 +88,27 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo {
     }
 
     @Override
-    public String getConflictMessage() {
+    public LocalizeValue getConflictMessage() {
         if (!myGenerateAccessors && (!paramsNeedingSetters.isEmpty() || !paramsNeedingGetters.isEmpty())) {
             StringBuffer buf = new StringBuffer();
             appendConflicts(buf, paramsNeedingGetters);
             appendConflicts(buf, paramsNeedingSetters);
-            return RefactoringLocalize.cannotPerformRefactoringWithReason(buf).get();
+            return RefactoringLocalize.cannotPerformRefactoringWithReason(buf);
         }
         return null;
     }
 
-    private void appendConflicts(StringBuffer buf, final Set<PsiParameter> paramsNeeding) {
+    private void appendConflicts(StringBuffer buf, Set<PsiParameter> paramsNeeding) {
         if (!paramsNeeding.isEmpty()) {
             buf.append(LocalizeValue.localizeTODO(paramsNeeding == paramsNeedingGetters ? "Getters" : "Setters"));
             buf.append(LocalizeValue.localizeTODO(" for the following fields are required:\n"));
             buf.append(StringUtil.join(
                 paramsNeeding,
                 psiParameter -> {
-                    final IntroduceParameterObjectProcessor.ParameterChunk chunk =
+                    IntroduceParameterObjectProcessor.ParameterChunk chunk =
                         IntroduceParameterObjectProcessor.ParameterChunk.getChunkByParameter(psiParameter, parameters);
                     if (chunk != null) {
-                        final PsiField field = chunk.getField();
+                        PsiField field = chunk.getField();
                         if (field != null) {
                             return field.getName();
                         }

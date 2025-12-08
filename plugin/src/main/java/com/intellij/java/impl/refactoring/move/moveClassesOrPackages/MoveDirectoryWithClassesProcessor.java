@@ -31,6 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.DumbService;
 import consulo.project.Project;
@@ -120,13 +121,13 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         for (PsiFile psiFile : myFilesToMove.keySet()) {
             try {
                 myFilesToMove.get(psiFile).checkMove(psiFile);
             }
             catch (IncorrectOperationException e) {
-                conflicts.putValue(psiFile, e.getMessage());
+                conflicts.putValue(psiFile, LocalizeValue.ofNullable(e.getMessage()));
             }
         }
         for (MoveDirectoryWithClassesHelper helper : MoveDirectoryWithClassesHelper.findAll()) {
@@ -140,7 +141,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
 
     @Override
-    @RequiredUIAccess
+    @RequiredWriteAction
     public void performRefactoring(@Nonnull UsageInfo[] usages) {
         //try to create all directories beforehand
         try {

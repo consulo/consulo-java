@@ -12,8 +12,10 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
 
@@ -87,8 +89,8 @@ public final class ContractChecker {
             @Nonnull DataFlowRunner runner,
             @Nonnull DfaMemoryState state
         ) {
-            if (instruction instanceof ReturnInstruction && ((ReturnInstruction)instruction).isViaException()) {
-                ContainerUtil.addIfNotNull(myFailures, ((ReturnInstruction)instruction).getAnchor());
+            if (instruction instanceof ReturnInstruction returnInsn && returnInsn.isViaException()) {
+                ContainerUtil.addIfNotNull(myFailures, returnInsn.getAnchor());
             }
             else {
                 myMayReturnNormally = true;
@@ -96,11 +98,11 @@ public final class ContractChecker {
             return super.visitControlTransfer(instruction, runner, state);
         }
 
-        private Map<PsiElement, String> getErrors() {
-            HashMap<PsiElement, String> errors = new HashMap<>();
+        private Map<PsiElement, LocalizeValue> getErrors() {
+            Map<PsiElement, LocalizeValue> errors = new HashMap<>();
             for (PsiElement element : myViolations) {
                 if (!myNonViolations.contains(element)) {
-                    errors.put(element, JavaAnalysisLocalize.inspectionContractCheckerContractViolated(myContract).get());
+                    errors.put(element, JavaAnalysisLocalize.inspectionContractCheckerContractViolated(myContract));
                 }
             }
 
@@ -111,13 +113,13 @@ public final class ContractChecker {
                         if (myContract.isTrivial()) {
                             errors.put(
                                 element,
-                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsTrivial(myContract).get()
+                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsTrivial(myContract)
                             );
                         }
                         else {
                             errors.put(
                                 element,
-                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsNontrivial(myContract).get()
+                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsNontrivial(myContract)
                             );
                         }
                     }
@@ -127,7 +129,7 @@ public final class ContractChecker {
                 PsiIdentifier nameIdentifier = myMethod.getNameIdentifier();
                 errors.put(
                     nameIdentifier != null ? nameIdentifier : myMethod,
-                    JavaAnalysisLocalize.inspectionContractCheckerNoExceptionThrown(myContract).get()
+                    JavaAnalysisLocalize.inspectionContractCheckerNoExceptionThrown(myContract)
                 );
             }
 
@@ -143,7 +145,8 @@ public final class ContractChecker {
         }
     }
 
-    public static Map<PsiElement, String> checkContractClause(PsiMethod method, StandardMethodContract contract, boolean ownContract) {
+    @RequiredReadAction
+    public static Map<PsiElement, LocalizeValue> checkContractClause(PsiMethod method, StandardMethodContract contract, boolean ownContract) {
         PsiCodeBlock body = method.getBody();
         if (body == null) {
             return Collections.emptyMap();
@@ -152,8 +155,8 @@ public final class ContractChecker {
         DataFlowRunner runner = new DataFlowRunner(method.getProject(), null);
 
         PsiParameter[] parameters = method.getParameterList().getParameters();
-        final DfaMemoryState initialState = runner.createMemoryState();
-        final DfaValueFactory factory = runner.getFactory();
+        DfaMemoryState initialState = runner.createMemoryState();
+        DfaValueFactory factory = runner.getFactory();
         for (int i = 0; i < contract.getParameterCount(); i++) {
             ValueConstraint constraint = contract.getParameterConstraint(i);
             DfaValue comparisonValue = constraint.getComparisonValue(factory);

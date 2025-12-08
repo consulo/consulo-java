@@ -31,7 +31,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.*;
@@ -141,8 +141,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     private void findUsagesForMethod(PsiMethod psiMethod, List<FixableUsageInfo> usages) {
         for (PsiReference reference : ReferencesSearch.search(psiMethod, psiMethod.getUseScope())) {
             PsiElement referenceElement = reference.getElement();
-            PsiElement parent = referenceElement.getParent();
-            if (parent instanceof PsiCallExpression callExpr) {
+            if (referenceElement.getParent() instanceof PsiCallExpression callExpr) {
                 usages.add(new UnwrapCall(callExpr, unwrapMethodName));
             }
         }
@@ -173,12 +172,12 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         PsiClass existingClass =
             JavaPsiFacade.getInstance(myProject).findClass(myQualifiedName, GlobalSearchScope.allScope(myProject));
         if (myUseExistingClass) {
             if (existingClass == null) {
-                conflicts.putValue(existingClass, JavaRefactoringLocalize.couldNotFindSelectedWrappingClass().get());
+                conflicts.putValue(existingClass, JavaRefactoringLocalize.couldNotFindSelectedWrappingClass());
             }
             else {
                 boolean foundConstructor = false;
@@ -238,33 +237,31 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                 if (!foundConstructor) {
                     conflicts.putValue(
                         existingClass,
-                        LocalizeValue.localizeTODO("Existing class does not have appropriate constructor").get()
+                        LocalizeValue.localizeTODO("Existing class does not have appropriate constructor")
                     );
                 }
             }
             if (unwrapMethodName.length() == 0) {
                 conflicts.putValue(
                     existingClass,
-                    LocalizeValue.localizeTODO("Existing class does not have getter for selected field").get()
+                    LocalizeValue.localizeTODO("Existing class does not have getter for selected field")
                 );
             }
         }
         else {
             if (existingClass != null) {
-                conflicts.putValue(existingClass, JavaRefactoringLocalize.thereAlreadyExistsAClassWithTheSelectedName().get());
+                conflicts.putValue(existingClass, JavaRefactoringLocalize.thereAlreadyExistsAClassWithTheSelectedName());
             }
-            if (myMoveDestination != null && !myMoveDestination.isTargetAccessible(
-                myProject,
-                method.getContainingFile().getVirtualFile()
-            )) {
-                conflicts.putValue(method, "Created class won't be accessible in the call place");
+            if (myMoveDestination != null
+                && !myMoveDestination.isTargetAccessible(myProject, method.getContainingFile().getVirtualFile())) {
+                conflicts.putValue(method, LocalizeValue.localizeTODO("Created class won't be accessible in the call place"));
             }
         }
         return showConflicts(conflicts, refUsages.get());
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         if (!myUseExistingClass && !buildClass()) {
             return;
@@ -312,7 +309,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                     directory = myMoveDestination.getTargetDirectory(containingDirectory);
                 }
                 else {
-                    Module module = ModuleUtil.findModuleForPsiElement(containingFile);
+                    Module module = containingFile.getModule();
                     directory = PackageUtil.findOrCreateDirectoryForPackage(module, packageName, containingDirectory, true, true);
                 }
 
@@ -365,19 +362,18 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                 return;
             }
 
-            PsiExpression returnValue = statement.getReturnValue();
-            if (myUseExistingClass && returnValue instanceof PsiMethodCallExpression call) {
-                if (call.getArgumentList().getExpressions().length == 0) {
-                    PsiReferenceExpression callMethodExpression = call.getMethodExpression();
-                    String methodName = callMethodExpression.getReferenceName();
-                    if (Comparing.strEqual(unwrapMethodName, methodName)) {
-                        PsiExpression qualifier = callMethodExpression.getQualifierExpression();
-                        if (qualifier != null) {
-                            PsiType qualifierType = qualifier.getType();
-                            if (qualifierType != null && qualifierType.getCanonicalText().equals(myQualifiedName)) {
-                                usages.add(new ReturnWrappedValue(statement));
-                                return;
-                            }
+            if (myUseExistingClass
+                && statement.getReturnValue() instanceof PsiMethodCallExpression call
+                && call.getArgumentList().getExpressions().length == 0) {
+                PsiReferenceExpression callMethodExpression = call.getMethodExpression();
+                String methodName = callMethodExpression.getReferenceName();
+                if (Comparing.strEqual(unwrapMethodName, methodName)) {
+                    PsiExpression qualifier = callMethodExpression.getQualifierExpression();
+                    if (qualifier != null) {
+                        PsiType qualifierType = qualifier.getType();
+                        if (qualifierType != null && qualifierType.getCanonicalText().equals(myQualifiedName)) {
+                            usages.add(new ReturnWrappedValue(statement));
+                            return;
                         }
                     }
                 }

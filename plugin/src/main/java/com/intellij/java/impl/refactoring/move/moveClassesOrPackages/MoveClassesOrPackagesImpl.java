@@ -30,6 +30,8 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.ide.util.DirectoryChooser;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
@@ -84,15 +86,15 @@ public class MoveClassesOrPackagesImpl {
         PsiDirectory initialTargetDirectory = getInitialTargetDirectory(initialTargetElement, adjustedElements);
         boolean isTargetDirectoryFixed = initialTargetDirectory == null;
 
-        boolean searchTextOccurences = false;
-        for (int i = 0; i < adjustedElements.length && !searchTextOccurences; i++) {
+        boolean searchTextOccurrences = false;
+        for (int i = 0; i < adjustedElements.length && !searchTextOccurrences; i++) {
             PsiElement psiElement = adjustedElements[i];
-            searchTextOccurences = TextOccurrencesUtil.isSearchTextOccurencesEnabled(psiElement);
+            searchTextOccurrences = TextOccurrencesUtil.isSearchTextOccurencesEnabled(psiElement);
         }
         MoveClassesOrPackagesDialog moveDialog =
-            new MoveClassesOrPackagesDialog(project, searchTextOccurences, adjustedElements, initialTargetElement, moveCallback);
+            new MoveClassesOrPackagesDialog(project, searchTextOccurrences, adjustedElements, initialTargetElement, moveCallback);
         boolean searchInComments = JavaRefactoringSettings.getInstance().MOVE_SEARCH_IN_COMMENTS;
-        boolean searchForTextOccurences = JavaRefactoringSettings.getInstance().MOVE_SEARCH_FOR_TEXT;
+        boolean searchForTextOccurrences = JavaRefactoringSettings.getInstance().MOVE_SEARCH_FOR_TEXT;
         moveDialog.setData(
             adjustedElements,
             initialTargetPackageName,
@@ -100,7 +102,7 @@ public class MoveClassesOrPackagesImpl {
             isTargetDirectoryFixed,
             initialTargetElement == null,
             searchInComments,
-            searchForTextOccurences,
+            searchForTextOccurrences,
             HelpID.getMoveHelpID(adjustedElements[0])
         );
         moveDialog.show();
@@ -118,9 +120,9 @@ public class MoveClassesOrPackagesImpl {
                 LOG.assertTrue(aPackage != null);
                 if (aPackage.getQualifiedName().isEmpty()) { //is default package
                     CommonRefactoringUtil.showErrorMessage(
-                        RefactoringLocalize.moveTitle().get(),
-                        RefactoringLocalize.movePackageRefactoringCannotBeAppliedToDefaultPackage().get(),
-                        HelpID.getMoveHelpID(element),
+                        RefactoringLocalize.moveTitle(),
+                        RefactoringLocalize.movePackageRefactoringCannotBeAppliedToDefaultPackage(),
+                        HelpID.getMoveHelpID(directory),
                         project
                     );
                     return null;
@@ -142,8 +144,8 @@ public class MoveClassesOrPackagesImpl {
             else if (element instanceof PsiClass aClass) {
                 if (aClass instanceof PsiAnonymousClass) {
                     CommonRefactoringUtil.showErrorMessage(
-                        RefactoringLocalize.moveTitle().get(),
-                        RefactoringLocalize.moveClassRefactoringCannotBeAppliedToAnonymousClasses().get(),
+                        RefactoringLocalize.moveTitle(),
+                        RefactoringLocalize.moveClassRefactoringCannotBeAppliedToAnonymousClasses(),
                         HelpID.getMoveHelpID(element),
                         project
                     );
@@ -151,10 +153,10 @@ public class MoveClassesOrPackagesImpl {
                 }
                 if (isClassInnerOrLocal(aClass)) {
                     CommonRefactoringUtil.showErrorMessage(
-                        RefactoringLocalize.moveTitle().get(),
+                        RefactoringLocalize.moveTitle(),
                         RefactoringLocalize.cannotPerformRefactoringWithReason(
                             RefactoringLocalize.movingLocalClassesIsNotSupported()
-                        ).get(),
+                        ),
                         HelpID.getMoveHelpID(element),
                         project
                     );
@@ -172,8 +174,8 @@ public class MoveClassesOrPackagesImpl {
                         RefactoringLocalize.thereAreGoingToBeMultipleDestinationFilesWithTheSameName()
                     );
                     CommonRefactoringUtil.showErrorMessage(
-                        RefactoringLocalize.moveTitle().get(),
-                        message.get(),
+                        RefactoringLocalize.moveTitle(),
+                        message,
                         HelpID.getMoveHelpID(element),
                         project
                     );
@@ -237,8 +239,8 @@ public class MoveClassesOrPackagesImpl {
             if (curPackage.equals(srcPackage)) {
                 if (showError) {
                     CommonRefactoringUtil.showErrorMessage(
-                        RefactoringLocalize.moveTitle().get(),
-                        RefactoringLocalize.cannotMovePackageIntoItself().get(),
+                        RefactoringLocalize.moveTitle(),
+                        RefactoringLocalize.cannotMovePackageIntoItself(),
                         HelpID.getMoveHelpID(srcPackage),
                         project
                     );
@@ -383,7 +385,8 @@ public class MoveClassesOrPackagesImpl {
         if (selectedTarget == null) {
             return;
         }
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        @RequiredReadAction
         Runnable analyzeConflicts = () -> RefactoringConflictsUtil.analyzeModuleConflicts(
             project,
             Arrays.asList(directories),
@@ -391,8 +394,12 @@ public class MoveClassesOrPackagesImpl {
             selectedTarget,
             conflicts
         );
-        if (!ProgressManager.getInstance()
-            .runProcessWithProgressSynchronously(analyzeConflicts, "Analyze Module Conflicts...", true, project)) {
+        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+            analyzeConflicts,
+            LocalizeValue.localizeTODO("Analyze Module Conflicts..."),
+            true,
+            project
+        )) {
             return;
         }
         if (!conflicts.isEmpty()) {
@@ -455,6 +462,7 @@ public class MoveClassesOrPackagesImpl {
         return sourceRootDirectories;
     }
 
+    @RequiredWriteAction
     private static void rearrangeDirectoriesToTarget(PsiDirectory[] directories, PsiDirectory selectedTarget)
         throws IncorrectOperationException {
         VirtualFile sourceRoot = selectedTarget.getVirtualFile();
