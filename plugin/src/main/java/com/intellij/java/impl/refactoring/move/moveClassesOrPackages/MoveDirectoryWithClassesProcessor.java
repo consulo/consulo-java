@@ -141,7 +141,6 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
 
     @Override
-    @RequiredUIAccess
     @RequiredWriteAction
     public void performRefactoring(@Nonnull UsageInfo[] usages) {
         //try to create all directories beforehand
