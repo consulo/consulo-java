@@ -1592,3 +1592,5 @@ xml.suppressable.for.file.title:
     text: Suppress for file
 xml.suppressable.for.tag.title:
     text: Suppress for tag
+inspection.message.redundant.default.parameter.value.assignment:
+    text: Redundant default parameter value assignment

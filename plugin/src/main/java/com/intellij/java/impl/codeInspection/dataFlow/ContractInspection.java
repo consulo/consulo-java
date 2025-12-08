@@ -8,7 +8,6 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.Application;
 import consulo.document.util.TextRange;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -36,23 +35,25 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
     @Nonnull
     public PsiElementVisitor buildVisitorImpl(
         @Nonnull final ProblemsHolder holder,
-        final boolean isOnTheFly,
+        boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
     ) {
         return new JavaElementVisitor() {
             @Override
+            @RequiredReadAction
             public void visitMethod(@Nonnull PsiMethod method) {
                 PsiAnnotation annotation = JavaMethodContractUtil.findContractAnnotation(method);
-                if (annotation == null || (!Application.get().isInternal() && AnnotationUtil.isInferredAnnotation(annotation))) {
+                if (annotation == null || (!method.getApplication().isInternal() && AnnotationUtil.isInferredAnnotation(annotation))) {
                     return;
                 }
                 boolean ownContract = annotation.getOwner() == method.getModifierList();
                 for (StandardMethodContract contract : JavaMethodContractUtil.getMethodContracts(method)) {
-                    Map<PsiElement, String> errors = ContractChecker.checkContractClause(method, contract, ownContract);
-                    for (Map.Entry<PsiElement, String> entry : errors.entrySet()) {
-                        PsiElement element = entry.getKey();
-                        holder.registerProblem(element, entry.getValue());
+                    Map<PsiElement, LocalizeValue> errors = ContractChecker.checkContractClause(method, contract, ownContract);
+                    for (Map.Entry<PsiElement, LocalizeValue> entry : errors.entrySet()) {
+                        holder.newProblem(entry.getValue())
+                            .range(entry.getKey())
+                            .create();
                     }
                 }
             }
@@ -83,7 +84,9 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                                 error.getRange().getEndOffset()
                             );
                         }
-                        holder.registerProblem(value, actualRange, error.getMessage());
+                        holder.newProblem(LocalizeValue.of(error.getMessage()))
+                            .range(value, actualRange)
+                            .create();
                     }
                 }
                 checkMutationContract(annotation, method);
@@ -93,17 +96,19 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                 String mutationContract = AnnotationUtil.getStringAttributeValue(annotation, MutationSignature.ATTR_MUTATES);
                 if (StringUtil.isNotEmpty(mutationContract)) {
                     boolean pure = Boolean.TRUE.equals(AnnotationUtil.getBooleanAttributeValue(annotation, "pure"));
-                    String error;
+                    LocalizeValue error;
                     if (pure) {
-                        error = "Pure method cannot have mutation contract";
+                        error = LocalizeValue.localizeTODO("Pure method cannot have mutation contract");
                     }
                     else {
                         error = MutationSignature.checkSignature(mutationContract, method);
                     }
-                    if (error != null) {
+                    if (error != LocalizeValue.empty()) {
                         PsiAnnotationMemberValue value = annotation.findAttributeValue(MutationSignature.ATTR_MUTATES);
                         assert value != null;
-                        holder.registerProblem(value, error);
+                        holder.newProblem(error)
+                            .range(value)
+                            .create();
                     }
                 }
             }
@@ -155,15 +160,15 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                         if (!PsiType.BOOLEAN.equals(type) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
                             LocalizeValue message = LocalizeValue.localizeTODO(
                                 "Contract clause '" + contract + "': parameter #" + (i + 1) + " has '" +
-                                type.getPresentableText() + "' type (expected boolean)"
+                                    type.getPresentableText() + "' type (expected boolean)"
                             );
                             return ParseException.forConstraint(message, text, clauseIndex, i);
                         }
                         break;
                 }
             }
-            LocalizeValue problem = LocalizeValue.localizeTODO(contract.getReturnValue().getMethodCompatibilityProblem(method));
-            if (problem != null) {
+            LocalizeValue problem = contract.getReturnValue().getMethodCompatibilityProblem(method);
+            if (problem != LocalizeValue.empty()) {
                 return ParseException.forReturnValue(problem, text, clauseIndex);
             }
             if (possibleContracts != null) {

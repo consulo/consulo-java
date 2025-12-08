@@ -8,6 +8,7 @@ import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMet
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
@@ -58,19 +59,20 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         );
     }
 
-    @Override
     @Nonnull
+    @Override
     public PsiElementVisitor buildVisitorImpl(
         @Nonnull final ProblemsHolder holder,
-        final boolean isOnTheFly,
+        boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
     ) {
         final List<SuspiciousMethodCallUtil.PatternMethod> patternMethods = new ArrayList<>();
         return new JavaElementVisitor() {
             @Override
+            @RequiredReadAction
             public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression methodCall) {
-                final PsiExpression[] args = methodCall.getArgumentList().getExpressions();
+                PsiExpression[] args = methodCall.getArgumentList().getExpressions();
                 if (args.length < 1) {
                     return;
                 }
@@ -78,20 +80,23 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
                     String message =
                         getSuspiciousMethodCallMessage(methodCall, REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, args[idx], idx);
                     if (message != null) {
-                        holder.registerProblem(methodCall.getArgumentList().getExpressions()[idx], message);
+                        holder.newProblem(LocalizeValue.localizeTODO(message))
+                            .range(methodCall.getArgumentList().getExpressions()[idx])
+                            .create();
                     }
                 }
             }
 
             @Override
+            @RequiredReadAction
             public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
-                final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
-                final PsiClassType.ClassResolveResult functionalInterfaceResolveResult =
+                PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
+                PsiClassType.ClassResolveResult functionalInterfaceResolveResult =
                     PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
-                final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+                PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
                 if (interfaceMethod != null && interfaceMethod.getParameterList().getParametersCount() == 1) {
-                    final PsiSubstitutor psiSubstitutor = LambdaUtil.getSubstitutor(interfaceMethod, functionalInterfaceResolveResult);
-                    final MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
+                    PsiSubstitutor psiSubstitutor = LambdaUtil.getSubstitutor(interfaceMethod, functionalInterfaceResolveResult);
+                    MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
                     String message = SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(
                         expression,
                         signature.getParameterTypes()[0],
@@ -100,7 +105,9 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
                         0
                     );
                     if (message != null) {
-                        holder.registerProblem(ObjectUtil.notNull(expression.getReferenceNameElement(), expression), message);
+                        holder.newProblem(LocalizeValue.of(message))
+                            .range(ObjectUtil.notNull(expression.getReferenceNameElement(), expression))
+                            .create();
                     }
                 }
             }
@@ -113,6 +120,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         return "SuspiciousMethodCalls";
     }
 
+    @RequiredReadAction
     private static String getSuspiciousMethodCallMessage(
         PsiMethodCallExpression methodCall,
         boolean reportConvertibleMethodCalls,
@@ -122,7 +130,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
     ) {
         PsiType argType = arg.getType();
         boolean exactType = arg instanceof PsiNewExpression;
-        final String plainMessage = SuspiciousMethodCallUtil
+        String plainMessage = SuspiciousMethodCallUtil
             .getSuspiciousMethodCallMessage(methodCall, arg, argType, exactType || reportConvertibleMethodCalls, patternMethods, i);
         if (plainMessage != null && !exactType) {
             String methodName = methodCall.getMethodExpression().getReferenceName();

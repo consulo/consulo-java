@@ -204,6 +204,10 @@ inline.method.multiline.method.in.ctor.call:
     text: Inline cannot be applied to multiline method in constructor call
 inline.method.used.in.javadoc:
     text: Inlined method is used in javadoc
+inline.method.used.in.reflection:
+    text: Inlined method is used reflectively
+inline.method.qualifier.usage.side.effect:
+    text: Inlined method is used in method reference with side effects in qualifier
 inline.parameter.cannot.find.initializer.warning.message:
     text: Cannot find constant initializer for parameter
 inline.parameter.no.usages.warning.message:
