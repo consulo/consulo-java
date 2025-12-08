@@ -20,8 +20,8 @@ import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCi
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -40,17 +40,17 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
     @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
-        return LocalizeValue.localizeTODO("Non-final field in @Immutable class");
+        return JavaAnalysisLocalize.inspectionNonFinalFieldInImmutableDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public String getShortName() {
         return "NonFinalFieldInImmutable";
     }
 
-    @Override
     @Nonnull
+    @Override
     public PsiElementVisitor buildVisitorImpl(
         @Nonnull final ProblemsHolder holder,
         boolean isOnTheFly,
@@ -59,17 +59,19 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
     ) {
         return new JavaElementVisitor() {
             @Override
-            public void visitField(PsiField field) {
+            public void visitField(@Nonnull PsiField field) {
                 super.visitField(field);
-                if (field.hasModifierProperty(PsiModifier.FINAL)) {
+                if (field.isFinal()) {
                     return;
                 }
-                final PsiClass containingClass = field.getContainingClass();
+                PsiClass containingClass = field.getContainingClass();
                 if (containingClass != null) {
                     if (!JCiPUtil.isImmutable(containingClass)) {
                         return;
                     }
-                    holder.registerProblem(field, "Non-final field #ref in @Immutable class  #loc");
+                    holder.newProblem(JavaAnalysisLocalize.nonFinalFieldCodeRefCodeInImmutableClassLoc())
+                        .range(field)
+                        .create();
                 }
             }
         };

@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.JBUI;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,208 +38,204 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
-  public boolean REPORT_PREFIX_EXPRESSIONS = false;
-  public boolean REPORT_POSTFIX_EXPRESSIONS = true;
-  public boolean REPORT_REDUNDANT_INITIALIZER = true;
+    public boolean REPORT_PREFIX_EXPRESSIONS = false;
+    public boolean REPORT_POSTFIX_EXPRESSIONS = true;
+    public boolean REPORT_REDUNDANT_INITIALIZER = true;
 
-  @NonNls
-  public static final String SHORT_NAME = "UnusedAssignment";
+    public static final String SHORT_NAME = "UnusedAssignment";
 
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            final boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
-    return new JavaElementVisitor() {
-      @Override
-      @RequiredReadAction
-      public void visitMethod(PsiMethod method) {
-        checkCodeBlock(method.getBody(), holder, isOnTheFly);
-      }
-
-      @Override
-      public void visitClassInitializer(PsiClassInitializer initializer) {
-        checkCodeBlock(initializer.getBody(), holder, isOnTheFly);
-      }
-    };
-  }
-
-  @RequiredReadAction
-  private void checkCodeBlock(
-    final PsiCodeBlock body,
-    final ProblemsHolder holder,
-    final boolean isOnTheFly
-  ) {
-    if (body == null) return;
-    final Set<PsiVariable> usedVariables = new HashSet<>();
-    List<DefUseUtil.Info> unusedDefs = DefUseUtil.getUnusedDefs(body, usedVariables);
-
-    if (unusedDefs != null && !unusedDefs.isEmpty()) {
-      Collections.sort(
-        unusedDefs,
-        (o1, o2) -> {
-          int offset1 = o1.getContext().getTextOffset();
-          int offset2 = o2.getContext().getTextOffset();
-
-          if (offset1 == offset2) return 0;
-          if (offset1 < offset2) return -1;
-
-          return 1;
-        }
-      );
-
-      for (DefUseUtil.Info info : unusedDefs) {
-        PsiElement context = info.getContext();
-        PsiVariable psiVariable = info.getVariable();
-
-        if (context instanceof PsiDeclarationStatement || context instanceof PsiResourceVariable) {
-          if (!info.isRead()) {
-            if (!isOnTheFly) {
-              holder.registerProblem(
-                psiVariable.getNameIdentifier(),
-                InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor1("<code>#ref</code> #loc").get(),
-                ProblemHighlightType.LIKE_UNUSED_SYMBOL
-              );
+    @Override
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        final boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        return new JavaElementVisitor() {
+            @Override
+            @RequiredReadAction
+            public void visitMethod(@Nonnull PsiMethod method) {
+                checkCodeBlock(method.getBody(), holder, isOnTheFly);
             }
-          } else {
-            if (REPORT_REDUNDANT_INITIALIZER) {
-              holder.registerProblem(
-                psiVariable.getInitializer(),
-                InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor2(
-                  "<code>" + psiVariable.getName() + "</code>",
-                  "<code>#ref</code> #loc"
-                ).get(),
-                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                createRemoveInitializerFix()
-              );
+
+            @Override
+            @RequiredReadAction
+            public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+                checkCodeBlock(initializer.getBody(), holder, isOnTheFly);
             }
-          }
-        } else if (context instanceof PsiAssignmentExpression assignment) {
-          holder.registerProblem(
-            assignment.getLExpression(),
-            InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor3(
-              assignment.getRExpression().getText(),
-              "<code>#ref</code>" + " #loc"
-            ).get(),
-            ProblemHighlightType.LIKE_UNUSED_SYMBOL
-          );
-        } else {
-          if (context instanceof PsiPrefixExpression && REPORT_PREFIX_EXPRESSIONS ||
-              context instanceof PsiPostfixExpression && REPORT_POSTFIX_EXPRESSIONS) {
-            holder.registerProblem(
-              context,
-              InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor4("<code>#ref</code> #loc").get()
-            );
-          }
-        }
-      }
+        };
     }
 
-    body.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override
-      public void visitClass(PsiClass aClass) {
-      }
-
-      @Override
-      public void visitLocalVariable(PsiLocalVariable variable) {
-        if (!usedVariables.contains(variable) && variable.getInitializer() == null && !isOnTheFly) {
-          holder.registerProblem(
-            variable.getNameIdentifier(),
-            InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor5("<code>#ref</code> #loc").get(),
-            ProblemHighlightType.LIKE_UNUSED_SYMBOL
-          );
+    @RequiredReadAction
+    private void checkCodeBlock(PsiCodeBlock body, final ProblemsHolder holder, final boolean isOnTheFly) {
+        if (body == null) {
+            return;
         }
-      }
+        final Set<PsiVariable> usedVariables = new HashSet<>();
+        List<DefUseUtil.Info> unusedDefs = DefUseUtil.getUnusedDefs(body, usedVariables);
 
-      @Override
-      @RequiredReadAction
-      public void visitAssignmentExpression(PsiAssignmentExpression expression) {
-        PsiExpression lExpression = expression.getLExpression();
-        PsiExpression rExpression = expression.getRExpression();
+        if (unusedDefs != null && !unusedDefs.isEmpty()) {
+            Collections.sort(
+                unusedDefs,
+                (o1, o2) -> {
+                    int offset1 = o1.getContext().getTextOffset();
+                    int offset2 = o2.getContext().getTextOffset();
 
-        if (lExpression instanceof PsiReferenceExpression lRef && rExpression instanceof PsiReferenceExpression rRef) {
-          if (lRef.resolve() != rRef.resolve()) return;
-          PsiExpression lQualifier = lRef.getQualifierExpression();
-          PsiExpression rQualifier = rRef.getQualifierExpression();
+                    if (offset1 == offset2) {
+                        return 0;
+                    }
+                    if (offset1 < offset2) {
+                        return -1;
+                    }
 
-          if ((lQualifier == null && rQualifier == null ||
-              lQualifier instanceof PsiThisExpression && rQualifier instanceof PsiThisExpression ||
-              lQualifier instanceof PsiThisExpression && rQualifier == null ||
-              lQualifier == null && rQualifier instanceof PsiThisExpression) && !isOnTheFly) {
-            holder.registerProblem(
-              expression,
-              InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor6("<code>#ref</code>").get()
+                    return 1;
+                }
             );
-          }
+
+            for (DefUseUtil.Info info : unusedDefs) {
+                PsiElement context = info.getContext();
+                PsiVariable psiVariable = info.getVariable();
+
+                if (context instanceof PsiDeclarationStatement || context instanceof PsiResourceVariable) {
+                    if (!info.isRead()) {
+                        if (!isOnTheFly) {
+                            holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor1("<code>#ref</code> #loc"))
+                                .range(psiVariable.getNameIdentifier())
+                                .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                                .create();
+                        }
+                    }
+                    else if (REPORT_REDUNDANT_INITIALIZER) {
+                        holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor2(
+                                "<code>" + psiVariable.getName() + "</code>",
+                                "<code>#ref</code> #loc"
+                            ))
+                            .range(psiVariable.getInitializer())
+                            .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                            .withFix(createRemoveInitializerFix())
+                            .create();
+                    }
+                }
+                else if (context instanceof PsiAssignmentExpression assignment) {
+                    holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor3(
+                            assignment.getRExpression().getText(),
+                            "<code>#ref</code>" + " #loc"
+                        ))
+                        .range(assignment.getLExpression())
+                        .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                        .create();
+                }
+                else if (context instanceof PsiPrefixExpression && REPORT_PREFIX_EXPRESSIONS
+                    || context instanceof PsiPostfixExpression && REPORT_POSTFIX_EXPRESSIONS) {
+                    holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor4("<code>#ref</code> #loc"))
+                        .range(context)
+                        .create();
+                }
+            }
         }
-      }
-    });
-  }
 
-  protected LocalQuickFix createRemoveInitializerFix() {
-    return null;
-  }
+        body.accept(new JavaRecursiveElementWalkingVisitor() {
+            @Override
+            public void visitClass(@Nonnull PsiClass aClass) {
+            }
 
-  @Override
-  public JComponent createOptionsPanel() {
-    return new OptionsPanel();
-  }
+            @Override
+            public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+                if (!usedVariables.contains(variable) && variable.getInitializer() == null && !isOnTheFly) {
+                    holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor5("<code>#ref</code> #loc"))
+                        .range(variable.getNameIdentifier())
+                        .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                        .create();
+                }
+            }
 
-  private class OptionsPanel extends JPanel {
-    private final JCheckBox myReportPrefix;
-    private final JCheckBox myReportPostfix;
-    private final JCheckBox myReportInitializer;
+            @Override
+            @RequiredReadAction
+            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+                if (expression.getLExpression() instanceof PsiReferenceExpression lRef
+                    && expression.getRExpression() instanceof PsiReferenceExpression rRef) {
+                    if (lRef.resolve() != rRef.resolve()) {
+                        return;
+                    }
+                    PsiExpression lQualifier = lRef.getQualifierExpression();
+                    PsiExpression rQualifier = rRef.getQualifierExpression();
 
-    private OptionsPanel() {
-      super(new GridBagLayout());
-
-      GridBagConstraints gc = new GridBagConstraints();
-      gc.weighty = 0;
-      gc.weightx = 1;
-      gc.fill = GridBagConstraints.HORIZONTAL;
-      gc.anchor = GridBagConstraints.NORTHWEST;
-
-      myReportInitializer = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption2().get());
-      myReportInitializer.setSelected(REPORT_REDUNDANT_INITIALIZER);
-      myReportInitializer.getModel().addChangeListener(e -> REPORT_REDUNDANT_INITIALIZER = myReportInitializer.isSelected());
-      gc.insets = JBUI.insetsBottom(15);
-      gc.gridy = 0;
-      add(myReportInitializer, gc);
-
-      myReportPrefix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption().get());
-      myReportPrefix.setSelected(REPORT_PREFIX_EXPRESSIONS);
-      myReportPrefix.getModel().addChangeListener(e -> REPORT_PREFIX_EXPRESSIONS = myReportPrefix.isSelected());
-      gc.insets = JBUI.emptyInsets();
-      gc.gridy++;
-      add(myReportPrefix, gc);
-
-      myReportPostfix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption1().get());
-      myReportPostfix.setSelected(REPORT_POSTFIX_EXPRESSIONS);
-      myReportPostfix.getModel().addChangeListener(e-> REPORT_POSTFIX_EXPRESSIONS = myReportPostfix.isSelected());
-
-      gc.weighty = 1;
-      gc.gridy++;
-      add(myReportPostfix, gc);
+                    if ((lQualifier == null && rQualifier == null
+                        || lQualifier instanceof PsiThisExpression && rQualifier instanceof PsiThisExpression
+                        || lQualifier instanceof PsiThisExpression && rQualifier == null
+                        || lQualifier == null && rQualifier instanceof PsiThisExpression) && !isOnTheFly) {
+                        holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor6("<code>#ref</code>"))
+                            .range(expression)
+                            .create();
+                    }
+                }
+            }
+        });
     }
-  }
 
+    protected LocalQuickFix createRemoveInitializerFix() {
+        return null;
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionUnusedAssignmentDisplayName();
-  }
+    @Override
+    public JComponent createOptionsPanel() {
+        return new OptionsPanel();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.groupNamesProbableBugs();
-  }
+    private class OptionsPanel extends JPanel {
+        private final JCheckBox myReportPrefix;
+        private final JCheckBox myReportPostfix;
+        private final JCheckBox myReportInitializer;
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return SHORT_NAME;
-  }
+        private OptionsPanel() {
+            super(new GridBagLayout());
+
+            GridBagConstraints gc = new GridBagConstraints();
+            gc.weighty = 0;
+            gc.weightx = 1;
+            gc.fill = GridBagConstraints.HORIZONTAL;
+            gc.anchor = GridBagConstraints.NORTHWEST;
+
+            myReportInitializer = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption2().get());
+            myReportInitializer.setSelected(REPORT_REDUNDANT_INITIALIZER);
+            myReportInitializer.getModel().addChangeListener(e -> REPORT_REDUNDANT_INITIALIZER = myReportInitializer.isSelected());
+            gc.insets = JBUI.insetsBottom(15);
+            gc.gridy = 0;
+            add(myReportInitializer, gc);
+
+            myReportPrefix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption().get());
+            myReportPrefix.setSelected(REPORT_PREFIX_EXPRESSIONS);
+            myReportPrefix.getModel().addChangeListener(e -> REPORT_PREFIX_EXPRESSIONS = myReportPrefix.isSelected());
+            gc.insets = JBUI.emptyInsets();
+            gc.gridy++;
+            add(myReportPrefix, gc);
+
+            myReportPostfix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption1().get());
+            myReportPostfix.setSelected(REPORT_POSTFIX_EXPRESSIONS);
+            myReportPostfix.getModel().addChangeListener(e -> REPORT_POSTFIX_EXPRESSIONS = myReportPostfix.isSelected());
+
+            gc.weighty = 1;
+            gc.gridy++;
+            add(myReportPostfix, gc);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionUnusedAssignmentDisplayName();
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesProbableBugs();
+    }
+
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return SHORT_NAME;
+    }
 }

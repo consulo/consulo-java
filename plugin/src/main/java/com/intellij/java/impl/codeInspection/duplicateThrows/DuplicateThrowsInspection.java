@@ -33,82 +33,86 @@ import javax.swing.*;
 
 @ExtensionImpl
 public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
+    @SuppressWarnings("PublicField")
+    public boolean ignoreSubclassing = false;
 
-  @SuppressWarnings("PublicField")
-  public boolean ignoreSubclassing = false;
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionDuplicateThrowsDisplayName();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionDuplicateThrowsDisplayName();
-  }
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+    @Override
+    @Nonnull
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesDeclarationRedundancy();
+    }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.groupNamesDeclarationRedundancy();
-  }
+    @Override
+    @Nonnull
+    public String getShortName() {
+        return "DuplicateThrows";
+    }
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "DuplicateThrows";
-  }
+    @Nullable
+    @Override
+    public JComponent createOptionsPanel() {
+        return new SingleCheckboxOptionsPanel(
+            InspectionLocalize.inspectionDuplicateThrowsIgnoreSubclassingOption().get(),
+            this,
+            "ignoreSubclassing"
+        );
+    }
 
-  @Nullable
-  @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionLocalize.inspectionDuplicateThrowsIgnoreSubclassingOption().get(),
-      this,
-      "ignoreSubclassing"
-    );
-  }
+    @Override
+    @Nonnull
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        return new JavaElementVisitor() {
 
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
-    boolean isOnTheFly,
-    LocalInspectionToolSession session,
-    Object state
-  ) {
-    return new JavaElementVisitor() {
-
-      @Override public void visitMethod(@Nonnull PsiMethod method) {
-        PsiReferenceList throwsList = method.getThrowsList();
-        PsiJavaCodeReferenceElement[] refs = throwsList.getReferenceElements();
-        PsiClassType[] types = throwsList.getReferencedTypes();
-        for (int i = 0; i < types.length; i++) {
-          PsiClassType type = types[i];
-          for (int j = i+1; j < types.length; j++) {
-            PsiClassType otherType = types[j];
-            LocalizeValue problem = null;
-            PsiJavaCodeReferenceElement ref = refs[i];
-            if (type.equals(otherType)) {
-              problem = InspectionLocalize.inspectionDuplicateThrowsProblem();
+            @Override
+            public void visitMethod(@Nonnull PsiMethod method) {
+                PsiReferenceList throwsList = method.getThrowsList();
+                PsiJavaCodeReferenceElement[] refs = throwsList.getReferenceElements();
+                PsiClassType[] types = throwsList.getReferencedTypes();
+                for (int i = 0; i < types.length; i++) {
+                    PsiClassType type = types[i];
+                    for (int j = i + 1; j < types.length; j++) {
+                        PsiClassType otherType = types[j];
+                        LocalizeValue problem = LocalizeValue.empty();
+                        PsiJavaCodeReferenceElement ref = refs[i];
+                        if (type.equals(otherType)) {
+                            problem = InspectionLocalize.inspectionDuplicateThrowsProblem();
+                        }
+                        else if (!ignoreSubclassing) {
+                            if (otherType.isAssignableFrom(type)) {
+                                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(otherType.getCanonicalText());
+                            }
+                            else if (type.isAssignableFrom(otherType)) {
+                                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(type.getCanonicalText());
+                                ref = refs[j];
+                                type = otherType;
+                            }
+                        }
+                        if (problem != LocalizeValue.empty()) {
+                            holder.newProblem(problem)
+                                .range(ref)
+                                .withFixes(new DeleteThrowsFix(method, type))
+                                .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                                .create();
+                        }
+                    }
+                }
             }
-            else if (!ignoreSubclassing) {
-              if (otherType.isAssignableFrom(type)) {
-                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(otherType.getCanonicalText());
-              }
-              else if (type.isAssignableFrom(otherType)) {
-                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(type.getCanonicalText());
-                ref = refs[j];
-                type = otherType;
-              }
-            }
-            if (problem != null) {
-              holder.registerProblem(ref, problem.get(), ProblemHighlightType.LIKE_UNUSED_SYMBOL, new DeleteThrowsFix(method, type));
-            }
-          }
-        }
-      }
-    };
-  }
+        };
+    }
 }

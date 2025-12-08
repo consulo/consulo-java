@@ -19,7 +19,9 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -39,7 +41,7 @@ public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
     @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
-        return LocalizeValue.localizeTODO("Non-final @GuardedBy field");
+        return JavaAnalysisLocalize.inspectionNonFinalGuardDisplayName();
     }
 
     @Override
@@ -64,60 +66,62 @@ public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
         private final ProblemsHolder myHolder;
 
         public Visitor(ProblemsHolder holder) {
-
             myHolder = holder;
         }
 
         @Override
-        public void visitAnnotation(PsiAnnotation annotation) {
+        @RequiredReadAction
+        public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
             if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(annotation);
+            String guardValue = JCiPUtil.getGuardValue(annotation);
             if (guardValue == null || "this".equals(guardValue)) {
                 return;
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
-            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            PsiField guardField = containingClass.findFieldByName(guardValue, true);
             if (guardField == null) {
                 return;
             }
-            if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
+            if (guardField.isFinal()) {
                 return;
             }
-            final PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
+            PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
             if (member == null) {
                 return;
             }
-            myHolder.registerProblem(member, "Non-final @GuardedBy field #ref #loc");
+            myHolder.newProblem(JavaAnalysisLocalize.nonFinalGuardedByFieldRefLoc())
+                .range(member)
+                .create();
         }
 
         @Override
-        public void visitDocTag(PsiDocTag psiDocTag) {
+        @RequiredReadAction
+        public void visitDocTag(@Nonnull PsiDocTag psiDocTag) {
             super.visitDocTag(psiDocTag);
             if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(psiDocTag);
+            String guardValue = JCiPUtil.getGuardValue(psiDocTag);
             if ("this".equals(guardValue)) {
                 return;
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
-            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
-            if (guardField == null) {
+            PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            if (guardField == null || guardField.isFinal()) {
                 return;
             }
-            if (guardField.hasModifierProperty(PsiModifier.FINAL)) {
-                return;
-            }
-            myHolder.registerProblem(psiDocTag, "Non-final @GuardedBy field \"" + guardValue + "\" #loc");
+            myHolder.newProblem(JavaAnalysisLocalize.nonFinalGuardedByField0Loc(guardValue))
+                .range(psiDocTag)
+                .create();
         }
     }
 }

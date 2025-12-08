@@ -44,8 +44,8 @@ contract.return.validator.return.type.must.be.boolean:
     text: method return type must be 'boolean'
 contract.return.validator.too.few.parameters:
     text: not applicable for method that has {0, choice, 0#no parameters|1#one parameter|2#{0} parameters}
-contract.return.value.validation.prefix:
-    text: 'Contract return value ''''{0}'''':'
+contract.return.value.validation.problem:
+    text: 'Contract return value ''''{0}'''': {1}'
 convert.0.to.float:
     text: Convert ''{0}'' to float
 custom.exception.class.should.have.a.constructor:
@@ -663,9 +663,9 @@ inspection.message.nullable.method.implements.non.null.method:
 inspection.module.exports.package.to.itself:
     text: Module exports/opens package to itself
 inspection.non.final.field.in.immutable.display.name:
-    text: Non-final field in @Immutable class
+    text: Non-final field in '@Immutable' class
 inspection.non.final.guard.display.name:
-    text: Non-final @GuardedBy field
+    text: Non-final '@GuardedBy' field
 inspection.nullable.problems.NotNull.parameter.overrides.Nullable:
     text: Parameter annotated @{0} must not override @{1} parameter
 inspection.nullable.problems.NotNull.parameter.overrides.not.annotated:
@@ -877,11 +877,11 @@ mutation.signature.problem.static.method.cannot.mutate.this:
 navigate.to.overridden.methods.title:
     text: Overriding methods of {0}
 non.final.field.code.ref.code.in.immutable.class.loc:
-    text: 'Non-final field <code>#ref</code> in @Immutable class  #loc'
+    text: 'Non-final field <code>#ref</code> in ''@Immutable'' class  #loc'
 non.final.guarded.by.field.0.loc:
-    text: 'Non-final @GuardedBy field "{0}" #loc'
+    text: 'Non-final ''@GuardedBy'' field "{0}" #loc'
 non.final.guarded.by.field.ref.loc:
-    text: 'Non-final @GuardedBy field #ref #loc'
+    text: 'Non-final ''@GuardedBy'' field #ref #loc'
 non.null.type.argument.is.expected:
     text: Non-null type argument is expected
 not.annotated.method.is.used.as.an.override.for.a.method.annotated.with.0:
