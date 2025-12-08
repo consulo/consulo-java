@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
@@ -57,8 +58,8 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     private final EncapsulateFieldsDescriptor myDescriptor;
     private final FieldDescriptor[] myFieldDescriptors;
 
-    private HashMap<String, PsiMethod> myNameToGetter;
-    private HashMap<String, PsiMethod> myNameToSetter;
+    private Map<String, PsiMethod> myNameToGetter;
+    private Map<String, PsiMethod> myNameToSetter;
 
     public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
         super(project);
@@ -97,7 +98,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         checkExistingMethods(conflicts, true);
         checkExistingMethods(conflicts, false);
@@ -123,7 +124,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                 for (PsiReference reference : ReferencesSearch.search(field)) {
                     PsiElement place = reference.getElement();
                     LOG.assertTrue(place instanceof PsiReferenceExpression);
-                    PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
+                    PsiExpression qualifierExpression = ((PsiReferenceExpression) place).getQualifierExpression();
                     PsiClass ancestor;
                     if (qualifierExpression == null) {
                         ancestor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
@@ -132,13 +133,16 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                         ancestor = PsiUtil.resolveClassInType(qualifierExpression.getType());
                     }
 
-                    boolean isGetter = !PsiUtil.isAccessedForWriting((PsiExpression)place);
+                    boolean isGetter = !PsiUtil.isAccessedForWriting((PsiExpression) place);
                     for (PsiMethod overridden : isGetter ? getters : setters) {
                         if (InheritanceUtil.isInheritorOrSelf(myClass, ancestor, true)) {
-                            conflicts.putValue(overridden, "There is already a " +
-                                RefactoringUIUtil.getDescription(overridden, true) +
-                                " which would hide generated " +
-                                (isGetter ? "getter" : "setter") + " for " + place.getText());
+                            conflicts.putValue(
+                                overridden,
+                                LocalizeValue.localizeTODO(
+                                    "There is already a " + RefactoringUIUtil.getDescription(overridden, true) +
+                                    " which would hide generated " + (isGetter ? "getter" : "setter") + " for " + place.getText()
+                                )
+                            );
                             break;
                         }
                     }
@@ -149,7 +153,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     }
 
     @RequiredReadAction
-    private void checkExistingMethods(MultiMap<PsiElement, String> conflicts, boolean isGetter) {
+    private void checkExistingMethods(MultiMap<PsiElement, LocalizeValue> conflicts, boolean isGetter) {
         if (isGetter) {
             if (!myDescriptor.isToEncapsulateGet()) {
                 return;
@@ -184,7 +188,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                         CommonRefactoringUtil.htmlEmphasize(descr),
                         CommonRefactoringUtil.htmlEmphasize(prototype.getName())
                     );
-                    conflicts.putValue(existing, message.get());
+                    conflicts.putValue(existing, message);
                 }
             }
             else {
@@ -195,7 +199,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                         for (PsiReference reference : ReferencesSearch.search(existing)) {
                             PsiElement place = reference.getElement();
                             LOG.assertTrue(place instanceof PsiReferenceExpression);
-                            PsiExpression qualifierExpression = ((PsiReferenceExpression)place).getQualifierExpression();
+                            PsiExpression qualifierExpression = ((PsiReferenceExpression) place).getQualifierExpression();
                             PsiClass inheritor;
                             if (qualifierExpression == null) {
                                 inheritor = PsiTreeUtil.getParentOfType(place, PsiClass.class, false);
@@ -207,10 +211,10 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                             if (InheritanceUtil.isInheritorOrSelf(inheritor, myClass, true)) {
                                 conflicts.putValue(
                                     existing,
-                                    "There is already a " + RefactoringUIUtil.getDescription(
-                                        existing,
-                                        true
-                                    ) + " which would be hidden by generated " + (isGetter ? "getter" : "setter")
+                                    LocalizeValue.localizeTODO(
+                                        "There is already a " + RefactoringUIUtil.getDescription(existing, true) +
+                                            " which would be hidden by generated " + (isGetter ? "getter" : "setter")
+                                    )
                                 );
                                 break;
                             }
@@ -226,7 +230,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
-        ArrayList<EncapsulateFieldUsageInfo> array = new ArrayList<>();
+        List<EncapsulateFieldUsageInfo> array = new ArrayList<>();
         for (FieldDescriptor fieldDescriptor : myFieldDescriptors) {
             for (PsiReference reference : ReferencesSearch.search(fieldDescriptor.getField())) {
                 PsiElement element = reference.getElement();
@@ -254,13 +258,14 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
 
             LOG.assertTrue(element instanceof PsiField);
 
-            myFieldDescriptors[idx].refreshField((PsiField)element);
+            myFieldDescriptors[idx].refreshField((PsiField) element);
         }
 
         myClass = myFieldDescriptors[0].getField().getContainingClass();
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         updateFieldVisibility();
         generateAccessors();
@@ -277,6 +282,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredWriteAction
     private void generateAccessors() {
         // generate accessors
         myNameToGetter = new HashMap<>();
@@ -292,7 +298,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                 assert prototype != null;
                 PsiMethod getter = addOrChangeAccessor(prototype, myNameToGetter);
                 if (docComment != null) {
-                    PsiDocComment getterJavadoc = (PsiDocComment)getter.addBefore(docComment, getter.getFirstChild());
+                    PsiDocComment getterJavadoc = (PsiDocComment) getter.addBefore(docComment, getter.getFirstChild());
                     commentPolicy.processNewJavaDoc(getterJavadoc);
                 }
             }
@@ -308,6 +314,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         }
     }
 
+    @RequiredReadAction
     private void processUsagesPerFile(UsageInfo[] usages) {
         Map<PsiFile, List<EncapsulateFieldUsageInfo>> usagesInFiles = new HashMap<>();
         for (UsageInfo usage : usages) {
@@ -321,7 +328,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                 usagesInFile = new ArrayList<>();
                 usagesInFiles.put(file, usagesInFile);
             }
-            usagesInFile.add(((EncapsulateFieldUsageInfo)usage));
+            usagesInFile.add(((EncapsulateFieldUsageInfo) usage));
         }
 
         for (List<EncapsulateFieldUsageInfo> usageInfos : usagesInFiles.values()) {
@@ -341,13 +348,13 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    private PsiMethod addOrChangeAccessor(PsiMethod prototype, HashMap<String, PsiMethod> nameToAncestor) {
+    private PsiMethod addOrChangeAccessor(PsiMethod prototype, Map<String, PsiMethod> nameToAncestor) {
         PsiMethod existing = myClass.findMethodBySignature(prototype, false);
         PsiMethod result = existing;
         try {
             if (existing == null) {
                 PsiUtil.setModifierProperty(prototype, myDescriptor.getAccessorsVisibility(), true);
-                result = (PsiMethod)myClass.add(prototype);
+                result = (PsiMethod) myClass.add(prototype);
             }
             else {
                 //TODO : change visibility

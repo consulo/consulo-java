@@ -139,7 +139,6 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @RequiredUIAccess
     @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         if (!prepareWritable(usages)) {

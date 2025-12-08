@@ -173,7 +173,6 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @RequiredUIAccess
     @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         PsiExpression initializer = myField.getInitializer();
@@ -290,13 +289,13 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         ReferencedElementsCollector collector = new ReferencedElementsCollector();
         PsiExpression initializer = myField.getInitializer();
         LOG.assertTrue(initializer != null);
         initializer.accept(collector);
-        HashSet<PsiMember> referencedWithVisibility = collector.myReferencedMembers;
+        Set<PsiMember> referencedWithVisibility = collector.myReferencedMembers;
 
         PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(myField.getProject()).getResolveHelper();
         for (UsageInfo info : usagesIn) {
@@ -306,7 +305,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
                     RefactoringUIUtil.getDescription(myField, true),
                     RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
                 );
-                conflicts.putValue(element, message.get());
+                conflicts.putValue(element, message);
             }
 
             for (PsiMember member : referencedWithVisibility) {
@@ -315,7 +314,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
                         RefactoringUIUtil.getDescription(member, true),
                         RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
                     );
-                    conflicts.putValue(member, message.get());
+                    conflicts.putValue(member, message);
                 }
             }
         }
@@ -325,11 +324,11 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
                 PsiElement element = info.getElement();
                 if (element instanceof PsiDocMethodOrFieldRef psiDocMethodOrFieldRef
                     && !PsiTreeUtil.isAncestor(myField, psiDocMethodOrFieldRef, false)) {
-                    conflicts.putValue(psiDocMethodOrFieldRef, JavaRefactoringLocalize.inlineFieldUsedInJavadoc().get());
+                    conflicts.putValue(psiDocMethodOrFieldRef, JavaRefactoringLocalize.inlineFieldUsedInJavadoc());
                 }
-                if (element instanceof PsiLiteralExpression
-                    && ContainerUtil.or(element.getReferences(), JavaLangClassMemberReference.class::isInstance)) {
-                    conflicts.putValue(element, JavaRefactoringLocalize.inlineFieldUsedInReflection().get());
+                if (element instanceof PsiLiteralExpression literal
+                    && ContainerUtil.or(literal.getReferences(), JavaLangClassMemberReference.class::isInstance)) {
+                    conflicts.putValue(literal, JavaRefactoringLocalize.inlineFieldUsedInReflection());
                 }
             }
         }

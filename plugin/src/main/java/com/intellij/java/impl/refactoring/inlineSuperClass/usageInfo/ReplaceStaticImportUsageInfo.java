@@ -24,30 +24,40 @@ import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 
 public class ReplaceStaticImportUsageInfo extends FixableUsageInfo {
-  private final PsiImportStaticStatement myStaticImportStatement;
-  private final PsiClass[] myTargetClasses;
+    private final PsiImportStaticStatement myStaticImportStatement;
+    private final PsiClass[] myTargetClasses;
 
-  public ReplaceStaticImportUsageInfo(final PsiImportStaticStatement staticImportStatement, final PsiClass[] targetClass) {
-    super(staticImportStatement);
-    myStaticImportStatement = staticImportStatement;
-    myTargetClasses = targetClass;
-  }
-
-  public void fixUsage() throws IncorrectOperationException {
-    final String memberName = myStaticImportStatement.getReferenceName();
-    myStaticImportStatement.replace(JavaPsiFacade.getInstance(myStaticImportStatement.getProject()).getElementFactory().createImportStaticStatement(myTargetClasses[0],
-                                                                                                                                                    memberName != null ? memberName : "*"));
-  }
-
-  @Override
-  public String getConflictMessage() {
-    if (myTargetClasses.length != 1) {
-      return "Static import can be replaced with any of " + StringUtil.join(myTargetClasses, psiClass -> psiClass.getQualifiedName(), ", ");
+    @RequiredReadAction
+    public ReplaceStaticImportUsageInfo(PsiImportStaticStatement staticImportStatement, PsiClass[] targetClass) {
+        super(staticImportStatement);
+        myStaticImportStatement = staticImportStatement;
+        myTargetClasses = targetClass;
     }
-    return super.getConflictMessage();
-  }
+
+    @Override
+    @RequiredWriteAction
+    public void fixUsage() throws IncorrectOperationException {
+        String memberName = myStaticImportStatement.getReferenceName();
+        myStaticImportStatement.replace(JavaPsiFacade.getInstance(myStaticImportStatement.getProject())
+            .getElementFactory()
+            .createImportStaticStatement(myTargetClasses[0], memberName != null ? memberName : "*"));
+    }
+
+    @Override
+    public LocalizeValue getConflictMessage() {
+        if (myTargetClasses.length != 1) {
+            return LocalizeValue.localizeTODO(
+                "Static import can be replaced with any of " +
+                    StringUtil.join(myTargetClasses, psiClass -> psiClass.getQualifiedName(), ", ")
+            );
+        }
+        return super.getConflictMessage();
+    }
 }

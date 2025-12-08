@@ -31,6 +31,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
@@ -105,15 +106,15 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
                     PsiExpression paramRef = JavaPsiFacade.getInstance(myMethod.getProject())
                         .getElementFactory()
                         .createExpressionFromText(param.getName(), myMethod);
-                    localToParamRef.put((PsiVariable)element, paramRef);
+                    localToParamRef.put((PsiVariable) element, paramRef);
                 }
             }
         }
 
         List<UsageInfo> result = new ArrayList<>();
         myInitializer.accept(new JavaRecursiveElementVisitor() {
-            @RequiredWriteAction
             @Override
+            @RequiredWriteAction
             public void visitReferenceExpression(PsiReferenceExpression expression) {
                 super.visitReferenceExpression(expression);
                 if (expression.resolve() instanceof PsiLocalVariable localVariable) {
@@ -179,7 +180,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         UsageInfo[] usages = refUsages.get();
         InaccessibleExpressionsDetector detector = new InaccessibleExpressionsDetector(conflicts);
         myInitializer.accept(detector);
@@ -206,7 +207,9 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
                 if (ref.getElement() instanceof PsiExpression expression && isAccessedForWriting(expression)) {
                     conflicts.putValue(
                         expression,
-                        "Parameter initializer depends on value which is not available inside method and cannot be inlined"
+                        LocalizeValue.localizeTODO(
+                            "Parameter initializer depends on value which is not available inside method and cannot be inlined"
+                        )
                     );
                     break;
                 }
@@ -240,21 +243,21 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
             }
             else {
                 LOG.assertTrue(!myCreateLocal);
-                paramRefsToInline.add((PsiJavaCodeReferenceElement)usage.getElement());
+                paramRefsToInline.add((PsiJavaCodeReferenceElement) usage.getElement());
             }
         }
-        myInitializer = (PsiExpression)RefactoringUtil.replaceElementsWithMap(myInitializer, replacements);
+        myInitializer = (PsiExpression) RefactoringUtil.replaceElementsWithMap(myInitializer, replacements);
 
         if (myCreateLocal) {
             PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
             PsiDeclarationStatement localDeclaration =
                 factory.createVariableDeclarationStatement(myParameter.getName(), myParameter.getType(), myInitializer);
-            PsiLocalVariable declaredVar = (PsiLocalVariable)localDeclaration.getDeclaredElements()[0];
+            PsiLocalVariable declaredVar = (PsiLocalVariable) localDeclaration.getDeclaredElements()[0];
             PsiUtil.setModifierProperty(declaredVar, PsiModifier.FINAL, myParameter.hasModifierProperty(PsiModifier.FINAL));
             PsiExpression localVarInitializer = InlineUtil.inlineVariable(
                 myParameter,
                 myInitializer,
-                (PsiReferenceExpression)factory.createExpressionFromText(myParameter.getName(), myMethod)
+                (PsiReferenceExpression) factory.createExpressionFromText(myParameter.getName(), myMethod)
             );
             PsiExpression initializer = declaredVar.getInitializer();
             LOG.assertTrue(initializer != null);
@@ -333,9 +336,9 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
     }
 
     private class InaccessibleExpressionsDetector extends JavaRecursiveElementWalkingVisitor {
-        private final MultiMap<PsiElement, String> myConflicts;
+        private final MultiMap<PsiElement, LocalizeValue> myConflicts;
 
-        public InaccessibleExpressionsDetector(MultiMap<PsiElement, String> conflicts) {
+        public InaccessibleExpressionsDetector(MultiMap<PsiElement, LocalizeValue> conflicts) {
             myConflicts = conflicts;
         }
 
@@ -348,23 +351,30 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
                 if (myMethod.isStatic()) {
                     myConflicts.putValue(
                         expression,
-                        "Parameter initializer depends on " + RefactoringUIUtil.getDescription(
-                            element,
-                            false
-                        ) + " which is not available inside the static method"
+                        LocalizeValue.localizeTODO(
+                            "Parameter initializer depends on " +
+                                RefactoringUIUtil.getDescription(member, false) + " which is not available inside the static method"
+                        )
                     );
                 }
             }
             if (element instanceof PsiMethod || element instanceof PsiField) {
-                if (!mySameClass && !((PsiModifierListOwner)element).hasModifierProperty(PsiModifier.STATIC)) {
-                    myConflicts.putValue(expression, "Parameter initializer depends on non static member from some other class");
+                PsiMember member = (PsiMember) element;
+                if (!mySameClass && !member.isStatic()) {
+                    myConflicts.putValue(
+                        expression,
+                        LocalizeValue.localizeTODO("Parameter initializer depends on non static member from some other class")
+                    );
                 }
-                else if (!PsiUtil.isAccessible((PsiMember)element, myMethod, null)) {
-                    myConflicts.putValue(expression, "Parameter initializer depends on value which is not available inside method");
+                else if (!PsiUtil.isAccessible(member, myMethod, null)) {
+                    myConflicts.putValue(
+                        expression,
+                        LocalizeValue.localizeTODO("Parameter initializer depends on value which is not available inside method")
+                    );
                 }
             }
             else if (element instanceof PsiParameter) {
-                myConflicts.putValue(expression, "Parameter initializer depends on callers parameter");
+                myConflicts.putValue(expression, LocalizeValue.localizeTODO("Parameter initializer depends on callers parameter"));
             }
         }
 
@@ -385,13 +395,15 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
             if (!PsiTreeUtil.isAncestor(containingClass, methodContainingClass, false)) {
                 myConflicts.putValue(
                     thisExpression,
-                    "Parameter initializer depends on this which is not available inside the method and cannot be inlined"
+                    LocalizeValue.localizeTODO(
+                        "Parameter initializer depends on this which is not available inside the method and cannot be inlined"
+                    )
                 );
             }
             else if (myMethod.isStatic()) {
                 myConflicts.putValue(
                     thisExpression,
-                    "Parameter initializer depends on this which is not available inside the static method"
+                    LocalizeValue.localizeTODO("Parameter initializer depends on this which is not available inside the static method")
                 );
             }
         }
@@ -403,7 +415,9 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
             if (myMethod.isStatic() && reference.resolve() instanceof PsiClass psiClass && !psiClass.isStatic()) {
                 myConflicts.putValue(
                     reference,
-                    "Parameter initializer depends on non static class which is not available inside static method"
+                    LocalizeValue.localizeTODO(
+                        "Parameter initializer depends on non static class which is not available inside static method"
+                    )
                 );
             }
         }
@@ -414,9 +428,11 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
             super.visitNewExpression(expression);
             PsiJavaCodeReferenceElement reference = expression.getClassOrAnonymousClassReference();
             if (reference != null && reference.resolve() instanceof PsiClass refClass) {
-                String classUnavailableMessage = "Parameter initializer depends on " +
-                    RefactoringUIUtil.getDescription(refClass, true) +
-                    " which is not available inside method and cannot be inlined";
+                LocalizeValue classUnavailableMessage = LocalizeValue.localizeTODO(
+                    "Parameter initializer depends on " +
+                        RefactoringUIUtil.getDescription(refClass, true) +
+                        " which is not available inside method and cannot be inlined"
+                );
                 if (!PsiUtil.isAccessible(refClass, myMethod, null)) {
                     myConflicts.putValue(expression, classUnavailableMessage);
                 }

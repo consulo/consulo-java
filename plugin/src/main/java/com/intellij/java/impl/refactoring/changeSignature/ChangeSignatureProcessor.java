@@ -25,6 +25,8 @@ import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.component.extension.ExtensionPoint;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -35,6 +37,7 @@ import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -53,6 +56,7 @@ import java.util.*;
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     private static final Logger LOG = Logger.getInstance(ChangeSignatureProcessor.class);
 
+    @RequiredReadAction
     public ChangeSignatureProcessor(
         Project project,
         PsiMethod method,
@@ -76,6 +80,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         );
     }
 
+    @RequiredReadAction
     public ChangeSignatureProcessor(
         Project project,
         PsiMethod method,
@@ -100,6 +105,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         );
     }
 
+    @RequiredReadAction
     public ChangeSignatureProcessor(
         Project project,
         PsiMethod method,
@@ -128,11 +134,13 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         );
     }
 
+    @RequiredReadAction
     public ChangeSignatureProcessor(Project project, JavaChangeInfo changeInfo) {
         super(project, changeInfo);
         LOG.assertTrue(myChangeInfo.getMethod().isValid());
     }
 
+    @RequiredReadAction
     private static JavaChangeInfo generateChangeInfo(
         PsiMethod method,
         boolean generateDelegate,
@@ -173,14 +181,14 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
     @Override
     public JavaChangeInfoImpl getChangeInfo() {
-        return (JavaChangeInfoImpl)super.getChangeInfo();
+        return (JavaChangeInfoImpl) super.getChangeInfo();
     }
 
     @Override
     protected void refreshElements(PsiElement[] elements) {
         boolean condition = elements.length == 1 && elements[0] instanceof PsiMethod;
         LOG.assertTrue(condition);
-        getChangeInfo().updateMethod((PsiMethod)elements[0]);
+        getChangeInfo().updateMethod((PsiMethod) elements[0]);
     }
 
     @Override
@@ -197,11 +205,11 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
             return false;
         }
 
-        MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflictDescriptions = new MultiMap<>();
         extensionPoint.forEach(usageProcessor -> {
-            MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
+            MultiMap<PsiElement, LocalizeValue> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
             for (PsiElement key : conflicts.keySet()) {
-                Collection<String> collection = conflictDescriptions.get(key);
+                Collection<LocalizeValue> collection = conflictDescriptions.get(key);
                 if (collection.size() == 0) {
                     collection = new HashSet<>();
                 }
@@ -289,6 +297,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         ) == DialogWrapper.OK_EXIT_CODE;
     }
 
+    @RequiredWriteAction
     public static void makeEmptyBody(PsiElementFactory factory, PsiMethod delegate) throws IncorrectOperationException {
         PsiCodeBlock body = delegate.getBody();
         if (body != null) {
@@ -311,19 +320,19 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
             PsiElement callStatement = factory.createStatementFromText("this();", null);
             callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
             callStatement = body.add(callStatement);
-            callExpression = (PsiCallExpression)((PsiExpressionStatement)callStatement).getExpression();
+            callExpression = (PsiCallExpression) ((PsiExpressionStatement) callStatement).getExpression();
         }
         else if (PsiType.VOID.equals(delegate.getReturnType())) {
             PsiElement callStatement = factory.createStatementFromText(newName + "();", null);
             callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
             callStatement = body.add(callStatement);
-            callExpression = (PsiCallExpression)((PsiExpressionStatement)callStatement).getExpression();
+            callExpression = (PsiCallExpression) ((PsiExpressionStatement) callStatement).getExpression();
         }
         else {
             PsiElement callStatement = factory.createStatementFromText("return " + newName + "();", null);
             callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
             callStatement = body.add(callStatement);
-            callExpression = (PsiCallExpression)((PsiReturnStatement)callStatement).getReturnValue();
+            callExpression = (PsiCallExpression) ((PsiReturnStatement) callStatement).getReturnValue();
         }
         return callExpression;
     }
