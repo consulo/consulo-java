@@ -62,7 +62,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     private final MoveCallback myMoveCallback;
     private final boolean myOpenInEditor;
     private String myNewVisibility; // "null" means "as is"
-    private String myCommandName = MoveMembersImpl.REFACTORING_NAME;
+    private LocalizeValue myCommandName = MoveMembersImpl.REFACTORING_NAME;
     private MoveMembersOptions myOptions;
 
     public MoveMembersProcessor(Project project, MoveMembersOptions options) {
@@ -83,7 +83,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     @Nonnull
     @Override
     protected String getCommandName() {
-        return myCommandName;
+        return myCommandName.get();
     }
 
     private void setOptions(MoveMembersOptions dialog) {
@@ -116,7 +116,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
             first = false;
         }
 
-        myCommandName = commandName.toString();
+        myCommandName = LocalizeValue.localizeTODO(commandName.toString());
     }
 
     @Nonnull
@@ -296,8 +296,8 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
 
         List<UsageInfo> filtered = new ArrayList<>();
         for (UsageInfo usage : usages) {
-            if (usage instanceof MoveMembersUsageInfo moveMembersUsageInfo && member == moveMembersUsageInfo.member) {
-                filtered.add(usage);
+            if (usage instanceof MoveMembersUsageInfo moveMembersUsage && member == moveMembersUsage.member) {
+                filtered.add(moveMembersUsage);
             }
         }
         UsageInfo[] infos = filtered.toArray(new UsageInfo[filtered.size()]);
@@ -307,7 +307,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         UsageInfo[] usages = refUsages.get();
 
         String newVisibility = myNewVisibility;
@@ -347,7 +347,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         String newVisibility,
         @Nonnull PsiClass targetClass,
         Map<PsiMember, PsiModifierList> modifierListCopies,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         for (UsageInfo usage : usages) {
             if (!(usage instanceof MoveMembersUsageInfo usageInfo)) {
@@ -374,7 +374,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         String newVisibility,
         PsiClass targetClass,
         Map<PsiMember, PsiModifierList> modifierListCopies,
-        MultiMap<PsiElement, String> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         for (PsiMember member : membersToMove) {
             MoveMemberHandler handler = MoveMemberHandler.forLanguage(member.getLanguage());
@@ -396,7 +396,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     public void doRun() {
         if (myMembersToMove.isEmpty()) {
             LocalizeValue message = RefactoringLocalize.noMembersSelected();
-            CommonRefactoringUtil.showErrorMessage(MoveMembersImpl.REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, myProject);
+            CommonRefactoringUtil.showErrorMessage(MoveMembersImpl.REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, myProject);
             return;
         }
         super.doRun();

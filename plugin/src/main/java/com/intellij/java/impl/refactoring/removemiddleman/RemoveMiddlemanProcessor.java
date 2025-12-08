@@ -27,12 +27,14 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.SymbolPresentationUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
@@ -74,7 +76,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
             if (!memberInfo.isChecked()) {
                 continue;
             }
-            PsiMethod method = (PsiMethod)memberInfo.getMember();
+            PsiMethod method = (PsiMethod) memberInfo.getMember();
             String getterName = PropertyUtil.suggestGetterName(field);
             int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
             PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
@@ -86,7 +88,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
             if (memberInfo.isChecked() && memberInfo.isToAbstract()
                 && memberInfo.getMember() instanceof PsiMethod method && method.findDeepestSuperMethods().length > 0) {
@@ -94,14 +96,14 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
                     method,
                     JavaRefactoringLocalize.removeMiddlemanDeletedHierarchyConflict(
                         SymbolPresentationUtil.getSymbolPresentableText(method)
-                    ).get()
+                    )
                 );
             }
         }
         return showConflicts(conflicts, refUsages.get());
     }
 
-    @RequiredReadAction
+    @RequiredWriteAction
     private void processUsagesForMethod(
         boolean deleteMethodHierarchy,
         PsiMethod method,
@@ -112,7 +114,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     ) {
         for (PsiReference reference : ReferencesSearch.search(method)) {
             PsiElement referenceElement = reference.getElement();
-            PsiMethodCallExpression call = (PsiMethodCallExpression)referenceElement.getParent();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) referenceElement.getParent();
             String access;
             if (call.getMethodExpression().getQualifierExpression() == null) {
                 access = field.getName();
@@ -131,6 +133,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         if (getter != null) {
             try {

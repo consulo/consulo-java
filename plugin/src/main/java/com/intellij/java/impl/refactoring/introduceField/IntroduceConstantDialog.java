@@ -43,6 +43,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
@@ -70,426 +71,452 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 class IntroduceConstantDialog extends DialogWrapper {
-  private static final Logger LOG = Logger.getInstance(IntroduceConstantDialog.class);
-  @NonNls private static final String RECENTS_KEY = "IntroduceConstantDialog.RECENTS_KEY";
-  @NonNls protected static final String NONNLS_SELECTED_PROPERTY = "INTRODUCE_CONSTANT_NONNLS";
+    private static final Logger LOG = Logger.getInstance(IntroduceConstantDialog.class);
+    @NonNls
+    private static final String RECENTS_KEY = "IntroduceConstantDialog.RECENTS_KEY";
+    @NonNls
+    protected static final String NONNLS_SELECTED_PROPERTY = "INTRODUCE_CONSTANT_NONNLS";
 
-  private final Project myProject;
-  private final PsiClass myParentClass;
-  private final PsiExpression myInitializerExpression;
-  private final PsiLocalVariable myLocalVariable;
-  private final boolean myInvokedOnDeclaration;
-  private final PsiExpression[] myOccurrences;
-  private final String myEnteredName;
-  private final int myOccurrencesCount;
-  private PsiClass myTargetClass;
-  private final TypeSelectorManager myTypeSelectorManager;
+    private final Project myProject;
+    private final PsiClass myParentClass;
+    private final PsiExpression myInitializerExpression;
+    private final PsiLocalVariable myLocalVariable;
+    private final boolean myInvokedOnDeclaration;
+    private final PsiExpression[] myOccurrences;
+    private final String myEnteredName;
+    private final int myOccurrencesCount;
+    private PsiClass myTargetClass;
+    private final TypeSelectorManager myTypeSelectorManager;
 
-  private NameSuggestionsField myNameField;
-  private JCheckBox myCbReplaceAll;
+    private NameSuggestionsField myNameField;
+    private JCheckBox myCbReplaceAll;
 
-  private TypeSelector myTypeSelector;
-  private StateRestoringCheckBox myCbDeleteVariable;
-  private final JavaCodeStyleManager myCodeStyleManager;
-  private ReferenceEditorComboWithBrowseButton myTfTargetClassName;
-  private BaseExpressionToFieldHandler.TargetDestination myDestinationClass;
-  private JPanel myTypePanel;
-  private JPanel myTargetClassNamePanel;
-  private JPanel myPanel;
-  private JLabel myTypeLabel;
-  private JPanel myNameSuggestionPanel;
-  private JLabel myNameSuggestionLabel;
-  private JLabel myTargetClassNameLabel;
-  private JCheckBox myCbNonNls;
-  private JPanel myVisibilityPanel;
-  private final JavaVisibilityPanel myVPanel;
-  private final JCheckBox myIntroduceEnumConstantCb = new JCheckBox(RefactoringLocalize.introduceConstantEnumCb().get(), true);
+    private TypeSelector myTypeSelector;
+    private StateRestoringCheckBox myCbDeleteVariable;
+    private final JavaCodeStyleManager myCodeStyleManager;
+    private ReferenceEditorComboWithBrowseButton myTfTargetClassName;
+    private BaseExpressionToFieldHandler.TargetDestination myDestinationClass;
+    private JPanel myTypePanel;
+    private JPanel myTargetClassNamePanel;
+    private JPanel myPanel;
+    private JLabel myTypeLabel;
+    private JPanel myNameSuggestionPanel;
+    private JLabel myNameSuggestionLabel;
+    private JLabel myTargetClassNameLabel;
+    private JCheckBox myCbNonNls;
+    private JPanel myVisibilityPanel;
+    private final JavaVisibilityPanel myVPanel;
+    private final JCheckBox myIntroduceEnumConstantCb = new JCheckBox(RefactoringLocalize.introduceConstantEnumCb().get(), true);
 
-  IntroduceConstantDialog(
-    Project project,
-    PsiClass parentClass,
-    PsiExpression initializerExpression,
-    PsiLocalVariable localVariable,
-    boolean isInvokedOnDeclaration,
-    PsiExpression[] occurrences,
-    PsiClass targetClass,
-    TypeSelectorManager typeSelectorManager, String enteredName
-  ) {
-    super(project, true);
-    myProject = project;
-    myParentClass = parentClass;
-    myInitializerExpression = initializerExpression;
-    myLocalVariable = localVariable;
-    myInvokedOnDeclaration = isInvokedOnDeclaration;
-    myOccurrences = occurrences;
-    myEnteredName = enteredName;
-    myOccurrencesCount = occurrences.length;
-    myTargetClass = targetClass;
-    myTypeSelectorManager = typeSelectorManager;
-    myDestinationClass = null;
+    IntroduceConstantDialog(
+        Project project,
+        PsiClass parentClass,
+        PsiExpression initializerExpression,
+        PsiLocalVariable localVariable,
+        boolean isInvokedOnDeclaration,
+        PsiExpression[] occurrences,
+        PsiClass targetClass,
+        TypeSelectorManager typeSelectorManager, String enteredName
+    ) {
+        super(project, true);
+        myProject = project;
+        myParentClass = parentClass;
+        myInitializerExpression = initializerExpression;
+        myLocalVariable = localVariable;
+        myInvokedOnDeclaration = isInvokedOnDeclaration;
+        myOccurrences = occurrences;
+        myEnteredName = enteredName;
+        myOccurrencesCount = occurrences.length;
+        myTargetClass = targetClass;
+        myTypeSelectorManager = typeSelectorManager;
+        myDestinationClass = null;
 
-    setTitle(IntroduceConstantHandlerImpl.REFACTORING_NAME);
-    myCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
-    myVPanel = new JavaVisibilityPanel(false, true);
-    myVisibilityPanel.add(TargetAWT.to(myVPanel.getComponent()), BorderLayout.CENTER);
-    init();
+        setTitle(IntroduceConstantHandlerImpl.REFACTORING_NAME);
+        myCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
+        myVPanel = new JavaVisibilityPanel(false, true);
+        myVisibilityPanel.add(TargetAWT.to(myVPanel.getComponent()), BorderLayout.CENTER);
+        init();
 
-    myVPanel.setVisibility(JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY);
-    myIntroduceEnumConstantCb.setEnabled(isSuitableForEnumConstant());
-    updateVisibilityPanel();
-    updateButtons();
-  }
-
-  public String getEnteredName() {
-    return myNameField.getEnteredName();
-  }
-
-  private String getTargetClassName() {
-    return myTfTargetClassName.getText().trim();
-  }
-
-  public BaseExpressionToFieldHandler.TargetDestination getDestinationClass () {
-    return myDestinationClass;
-  }
-
-  public boolean introduceEnumConstant() {
-    return myIntroduceEnumConstantCb.isEnabled() && myIntroduceEnumConstantCb.isSelected();
-  }
-
-  public String getFieldVisibility() {
-    return myVPanel.getVisibility();
-  }
-
-  public boolean isReplaceAllOccurrences() {
-    return myOccurrencesCount > 1 && myCbReplaceAll.isSelected();
-  }
-
-  public PsiType getSelectedType() {
-    return myTypeSelector.getSelectedType();
-  }
-
-  @Nonnull
-  protected Action[] createActions() {
-    return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
-  }
-
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.INTRODUCE_CONSTANT);
-  }
-
-  protected JComponent createNorthPanel() {
-    myTypeSelector = myTypeSelectorManager.getTypeSelector();
-    myTypePanel.setLayout(new BorderLayout());
-    myTypePanel.add(myTypeSelector.getComponent(), BorderLayout.CENTER);
-    if (myTypeSelector.getFocusableComponent() != null) {
-      myTypeLabel.setLabelFor(myTypeSelector.getFocusableComponent());
+        myVPanel.setVisibility(JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY);
+        myIntroduceEnumConstantCb.setEnabled(isSuitableForEnumConstant());
+        updateVisibilityPanel();
+        updateButtons();
     }
 
-    myNameField = new NameSuggestionsField(myProject);
-    myNameSuggestionPanel.setLayout(new BorderLayout());
-    myNameField.addDataChangedListener(this::updateButtons);
-    myNameSuggestionPanel.add(myNameField.getComponent(), BorderLayout.CENTER);
-    myNameSuggestionLabel.setLabelFor(myNameField.getFocusableComponent());
+    public String getEnteredName() {
+        return myNameField.getEnteredName();
+    }
 
-    Set<String> possibleClassNames = new LinkedHashSet<>();
-    for (final PsiExpression occurrence : myOccurrences) {
-      final PsiClass parentClass = new IntroduceConstantHandlerImpl().getParentClass(occurrence);
-      if (parentClass != null && parentClass.getQualifiedName() != null) {
-        possibleClassNames.add(parentClass.getQualifiedName());
-      }
+    private String getTargetClassName() {
+        return myTfTargetClassName.getText().trim();
     }
-    myTfTargetClassName =
-      new ReferenceEditorComboWithBrowseButton(new ChooseClassAction(), "", myProject, true, RECENTS_KEY);
-    myTfTargetClassName.setButtonIcon(PlatformIconGroup.nodesClass());
-    myTargetClassNamePanel.setLayout(new BorderLayout());
-    myTargetClassNamePanel.add(myTfTargetClassName, BorderLayout.CENTER);
-    myTargetClassNameLabel.setLabelFor(myTfTargetClassName);
-    for (String possibleClassName : possibleClassNames) {
-      myTfTargetClassName.prependItem(possibleClassName);
-    }
-    myTfTargetClassName.getChildComponent().addDocumentListener(new DocumentAdapter() {
-      public void documentChanged(DocumentEvent e) {
-        targetClassChanged();
-        enableEnumDependant(introduceEnumConstant());
-      }
-    });
-    myIntroduceEnumConstantCb.addActionListener(e -> enableEnumDependant(introduceEnumConstant()));
-    final JPanel enumPanel = new JPanel(new BorderLayout());
-    enumPanel.add(myIntroduceEnumConstantCb, BorderLayout.EAST);
-    myTargetClassNamePanel.add(enumPanel, BorderLayout.SOUTH);
 
-    final String propertyName;
-    if (myLocalVariable != null) {
-      propertyName = myCodeStyleManager.variableNameToPropertyName(myLocalVariable.getName(), VariableKind.LOCAL_VARIABLE);
+    public BaseExpressionToFieldHandler.TargetDestination getDestinationClass() {
+        return myDestinationClass;
     }
-    else {
-      propertyName = null;
-    }
-    final NameSuggestionsManager nameSuggestionsManager =
-      new NameSuggestionsManager(myTypeSelector, myNameField, createNameSuggestionGenerator(propertyName, myInitializerExpression,
-                                                                                            myCodeStyleManager, myEnteredName, myParentClass));
 
-    nameSuggestionsManager.setLabelsFor(myTypeLabel, myNameSuggestionLabel);
-    //////////
-    if (myOccurrencesCount > 1) {
-      myCbReplaceAll.addItemListener(e -> {
+    public boolean introduceEnumConstant() {
+        return myIntroduceEnumConstantCb.isEnabled() && myIntroduceEnumConstantCb.isSelected();
+    }
+
+    public String getFieldVisibility() {
+        return myVPanel.getVisibility();
+    }
+
+    public boolean isReplaceAllOccurrences() {
+        return myOccurrencesCount > 1 && myCbReplaceAll.isSelected();
+    }
+
+    public PsiType getSelectedType() {
+        return myTypeSelector.getSelectedType();
+    }
+
+    @Nonnull
+    protected Action[] createActions() {
+        return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
+    }
+
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.INTRODUCE_CONSTANT);
+    }
+
+    protected JComponent createNorthPanel() {
+        myTypeSelector = myTypeSelectorManager.getTypeSelector();
+        myTypePanel.setLayout(new BorderLayout());
+        myTypePanel.add(myTypeSelector.getComponent(), BorderLayout.CENTER);
+        if (myTypeSelector.getFocusableComponent() != null) {
+            myTypeLabel.setLabelFor(myTypeSelector.getFocusableComponent());
+        }
+
+        myNameField = new NameSuggestionsField(myProject);
+        myNameSuggestionPanel.setLayout(new BorderLayout());
+        myNameField.addDataChangedListener(this::updateButtons);
+        myNameSuggestionPanel.add(myNameField.getComponent(), BorderLayout.CENTER);
+        myNameSuggestionLabel.setLabelFor(myNameField.getFocusableComponent());
+
+        Set<String> possibleClassNames = new LinkedHashSet<>();
+        for (final PsiExpression occurrence : myOccurrences) {
+            final PsiClass parentClass = new IntroduceConstantHandlerImpl().getParentClass(occurrence);
+            if (parentClass != null && parentClass.getQualifiedName() != null) {
+                possibleClassNames.add(parentClass.getQualifiedName());
+            }
+        }
+        myTfTargetClassName =
+            new ReferenceEditorComboWithBrowseButton(new ChooseClassAction(), "", myProject, true, RECENTS_KEY);
+        myTfTargetClassName.setButtonIcon(PlatformIconGroup.nodesClass());
+        myTargetClassNamePanel.setLayout(new BorderLayout());
+        myTargetClassNamePanel.add(myTfTargetClassName, BorderLayout.CENTER);
+        myTargetClassNameLabel.setLabelFor(myTfTargetClassName);
+        for (String possibleClassName : possibleClassNames) {
+            myTfTargetClassName.prependItem(possibleClassName);
+        }
+        myTfTargetClassName.getChildComponent().addDocumentListener(new DocumentAdapter() {
+            public void documentChanged(DocumentEvent e) {
+                targetClassChanged();
+                enableEnumDependant(introduceEnumConstant());
+            }
+        });
+        myIntroduceEnumConstantCb.addActionListener(e -> enableEnumDependant(introduceEnumConstant()));
+        final JPanel enumPanel = new JPanel(new BorderLayout());
+        enumPanel.add(myIntroduceEnumConstantCb, BorderLayout.EAST);
+        myTargetClassNamePanel.add(enumPanel, BorderLayout.SOUTH);
+
+        final String propertyName;
+        if (myLocalVariable != null) {
+            propertyName = myCodeStyleManager.variableNameToPropertyName(myLocalVariable.getName(), VariableKind.LOCAL_VARIABLE);
+        }
+        else {
+            propertyName = null;
+        }
+        final NameSuggestionsManager nameSuggestionsManager =
+            new NameSuggestionsManager(myTypeSelector, myNameField, createNameSuggestionGenerator(propertyName, myInitializerExpression,
+                myCodeStyleManager, myEnteredName, myParentClass
+            ));
+
+        nameSuggestionsManager.setLabelsFor(myTypeLabel, myNameSuggestionLabel);
+        //////////
+        if (myOccurrencesCount > 1) {
+            myCbReplaceAll.addItemListener(e -> {
+                updateTypeSelector();
+
+                myNameField.requestFocusInWindow();
+            });
+            myCbReplaceAll.setText(RefactoringLocalize.replaceAllOccurences(myOccurrencesCount).get());
+        }
+        else {
+            myCbReplaceAll.setVisible(false);
+        }
+
+        if (myLocalVariable != null) {
+            if (myInvokedOnDeclaration) {
+                myCbDeleteVariable.setEnabled(false);
+                myCbDeleteVariable.setSelected(true);
+            }
+            else if (myCbReplaceAll != null) {
+                updateCbDeleteVariable();
+                myCbReplaceAll.addItemListener(e -> updateCbDeleteVariable());
+            }
+        }
+        else {
+            myCbDeleteVariable.setVisible(false);
+        }
+
+        final PsiManager psiManager = PsiManager.getInstance(myProject);
+        if (
+            (
+                myTypeSelectorManager.isSuggestedType(CommonClassNames.JAVA_LANG_STRING)
+                    || (myLocalVariable != null && AnnotationUtil.isAnnotated(myLocalVariable, AnnotationUtil.NON_NLS, false, false))
+            )
+                && PsiUtil.isLanguageLevel5OrHigher(myParentClass)
+                && JavaPsiFacade.getInstance(psiManager.getProject())
+                .findClass(AnnotationUtil.NON_NLS, myParentClass.getResolveScope()) != null
+        ) {
+            final PropertiesComponent component = ProjectPropertiesComponent.getInstance(myProject);
+            myCbNonNls.setSelected(component.isTrueValue(NONNLS_SELECTED_PROPERTY));
+            myCbNonNls.addItemListener(e -> component.setValue(NONNLS_SELECTED_PROPERTY, Boolean.toString(myCbNonNls.isSelected())));
+        }
+        else {
+            myCbNonNls.setVisible(false);
+        }
+
         updateTypeSelector();
 
-        myNameField.requestFocusInWindow();
-      });
-      myCbReplaceAll.setText(RefactoringLocalize.replaceAllOccurences(myOccurrencesCount).get());
-    }
-    else {
-      myCbReplaceAll.setVisible(false);
+        enableEnumDependant(introduceEnumConstant());
+        return myPanel;
     }
 
-    if (myLocalVariable != null) {
-      if (myInvokedOnDeclaration) {
-        myCbDeleteVariable.setEnabled(false);
-        myCbDeleteVariable.setSelected(true);
-      }
-      else if (myCbReplaceAll != null) {
-        updateCbDeleteVariable();
-        myCbReplaceAll.addItemListener(e -> updateCbDeleteVariable());
-      }
-    }
-    else {
-      myCbDeleteVariable.setVisible(false);
+    public void setReplaceAllOccurrences(boolean replaceAllOccurrences) {
+        if (myCbReplaceAll != null) {
+            myCbReplaceAll.setSelected(replaceAllOccurrences);
+        }
     }
 
-    final PsiManager psiManager = PsiManager.getInstance(myProject);
-    if (
-      (
-        myTypeSelectorManager.isSuggestedType(CommonClassNames.JAVA_LANG_STRING)
-          || (myLocalVariable != null && AnnotationUtil.isAnnotated(myLocalVariable, AnnotationUtil.NON_NLS, false, false))
-      )
-      && PsiUtil.isLanguageLevel5OrHigher(myParentClass)
-      && JavaPsiFacade.getInstance(psiManager.getProject()).findClass(AnnotationUtil.NON_NLS, myParentClass.getResolveScope()) != null
+    protected static NameSuggestionsGenerator createNameSuggestionGenerator(
+        final String propertyName,
+        final PsiExpression psiExpression,
+        final JavaCodeStyleManager codeStyleManager,
+        final String enteredName, final PsiClass parentClass
     ) {
-      final PropertiesComponent component = ProjectPropertiesComponent.getInstance(myProject);
-      myCbNonNls.setSelected(component.isTrueValue(NONNLS_SELECTED_PROPERTY));
-      myCbNonNls.addItemListener(e -> component.setValue(NONNLS_SELECTED_PROPERTY, Boolean.toString(myCbNonNls.isSelected())));
-    } else {
-      myCbNonNls.setVisible(false);
-    }
-
-    updateTypeSelector();
-
-    enableEnumDependant(introduceEnumConstant());
-    return myPanel;
-  }
-
-  public void setReplaceAllOccurrences(boolean replaceAllOccurrences) {
-    if (myCbReplaceAll != null) {
-      myCbReplaceAll.setSelected(replaceAllOccurrences);
-    }
-  }
-
-  protected static NameSuggestionsGenerator createNameSuggestionGenerator(
-    final String propertyName,
-    final PsiExpression psiExpression,
-    final JavaCodeStyleManager codeStyleManager,
-    final String enteredName, final PsiClass parentClass
-  ) {
-    return type -> {
-      SuggestedNameInfo nameInfo =
-          codeStyleManager.suggestVariableName(VariableKind.STATIC_FINAL_FIELD, propertyName, psiExpression, type);
-      if (psiExpression != null) {
-        String[] names = nameInfo.names;
-        for (int i = 0, namesLength = names.length; i < namesLength; i++) {
-          String name = names[i];
-          if (parentClass.findFieldByName(name, false) != null) {
-            names[i] = codeStyleManager.suggestUniqueVariableName(name, psiExpression, true);
-          }
-        }
-      }
-      final String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(
-        JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, nameInfo),
-        psiExpression
-      );
-      return new SuggestedNameInfo.Delegate(enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings): strings, nameInfo);
-    };
-  }
-
-  private void updateButtons() {
-    setOKActionEnabled(PsiNameHelper.getInstance(myProject).isIdentifier(getEnteredName()));
-  }
-
-  private void targetClassChanged() {
-    final String targetClassName = getTargetClassName();
-    myTargetClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
-    updateVisibilityPanel();
-    myIntroduceEnumConstantCb.setEnabled(isSuitableForEnumConstant());
-  }
-
-  private boolean isSuitableForEnumConstant() {
-    return EnumConstantsUtil.isSuitableForEnumConstant(getSelectedType(), myTargetClass) && PsiTreeUtil
-                                                                                              .getParentOfType(myInitializerExpression,
-                                                                                                               PsiEnumConstant.class) == null;
-  }
-
-  private void enableEnumDependant(boolean enable) {
-    if (enable) {
-      myVPanel.disableAllButPublic();
-    } else {
-      updateVisibilityPanel();
-    }
-    myCbNonNls.setEnabled(!enable);
-  }
-
-  protected JComponent createCenterPanel() {
-    return new JPanel();
-  }
-
-  public boolean isDeleteVariable() {
-    return myInvokedOnDeclaration || myCbDeleteVariable != null && myCbDeleteVariable.isSelected();
-  }
-
-  public boolean isAnnotateAsNonNls() {
-    return myCbNonNls != null && myCbNonNls.isSelected();
-  }
-
-  private void updateCbDeleteVariable() {
-    if (!myCbReplaceAll.isSelected()) {
-      myCbDeleteVariable.makeUnselectable(false);
-    }
-    else {
-      myCbDeleteVariable.makeSelectable();
-    }
-  }
-
-  private void updateTypeSelector() {
-    if (myCbReplaceAll != null) {
-      myTypeSelectorManager.setAllOccurrences(myCbReplaceAll.isSelected());
-    }
-    else {
-      myTypeSelectorManager.setAllOccurrences(false);
-    }
-  }
-
-  private void updateVisibilityPanel() {
-    if (myTargetClass != null && myTargetClass.isInterface()) {
-      myVPanel.disableAllButPublic();
-    }
-    else {
-      UIUtil.setEnabled(myVisibilityPanel, true, true);
-      // exclude all modifiers not visible from all occurences
-      final Set<String> visible = new HashSet<>();
-      visible.add(PsiModifier.PRIVATE);
-      visible.add(PsiModifier.PROTECTED);
-      visible.add(PsiModifier.PACKAGE_LOCAL);
-      visible.add(PsiModifier.PUBLIC);
-      for (PsiExpression occurrence : myOccurrences) {
-        final PsiManager psiManager = PsiManager.getInstance(myProject);
-        for (Iterator<String> iterator = visible.iterator(); iterator.hasNext();) {
-          String modifier = iterator.next();
-
-          try {
-            final String modifierText = PsiModifier.PACKAGE_LOCAL.equals(modifier) ? "" : modifier + " ";
-            final PsiField field = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createFieldFromText(modifierText + "int xxx;", myTargetClass);
-            if (!JavaResolveUtil.isAccessible(field, myTargetClass, field.getModifierList(), occurrence, myTargetClass, null)) {
-              iterator.remove();
+        return type -> {
+            SuggestedNameInfo nameInfo =
+                codeStyleManager.suggestVariableName(VariableKind.STATIC_FINAL_FIELD, propertyName, psiExpression, type);
+            if (psiExpression != null) {
+                String[] names = nameInfo.names;
+                for (int i = 0, namesLength = names.length; i < namesLength; i++) {
+                    String name = names[i];
+                    if (parentClass.findFieldByName(name, false) != null) {
+                        names[i] = codeStyleManager.suggestUniqueVariableName(name, psiExpression, true);
+                    }
+                }
             }
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
+            final String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(
+                JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, nameInfo),
+                psiExpression
+            );
+            return new SuggestedNameInfo.Delegate(
+                enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings) : strings,
+                nameInfo
+            );
+        };
+    }
+
+    private void updateButtons() {
+        setOKActionEnabled(PsiNameHelper.getInstance(myProject).isIdentifier(getEnteredName()));
+    }
+
+    private void targetClassChanged() {
+        final String targetClassName = getTargetClassName();
+        myTargetClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
+        updateVisibilityPanel();
+        myIntroduceEnumConstantCb.setEnabled(isSuitableForEnumConstant());
+    }
+
+    private boolean isSuitableForEnumConstant() {
+        return EnumConstantsUtil.isSuitableForEnumConstant(getSelectedType(), myTargetClass) && PsiTreeUtil
+            .getParentOfType(
+                myInitializerExpression,
+                PsiEnumConstant.class
+            ) == null;
+    }
+
+    private void enableEnumDependant(boolean enable) {
+        if (enable) {
+            myVPanel.disableAllButPublic();
         }
-      }
-      if (!visible.contains(getFieldVisibility())) {
-        if (visible.contains(PsiModifier.PUBLIC)) myVPanel.setVisibility(PsiModifier.PUBLIC);
-        if (visible.contains(PsiModifier.PACKAGE_LOCAL)) myVPanel.setVisibility(PsiModifier.PACKAGE_LOCAL);
-        if (visible.contains(PsiModifier.PROTECTED)) myVPanel.setVisibility(PsiModifier.PROTECTED);
-        if (visible.contains(PsiModifier.PRIVATE)) myVPanel.setVisibility(PsiModifier.PRIVATE);
-      }
-    }
-  }
-
-  @RequiredUIAccess
-  protected void doOKAction() {
-    final String targetClassName = getTargetClassName();
-    PsiClass newClass = myParentClass;
-
-    if (!"".equals (targetClassName) && !Comparing.strEqual(targetClassName, myParentClass.getQualifiedName())) {
-      newClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
-      if (newClass == null) {
-        if (Messages.showOkCancelDialog(
-          myProject,
-          RefactoringLocalize.classDoesNotExistInTheProject().get(),
-          IntroduceConstantHandlerImpl.REFACTORING_NAME,
-          UIUtil.getErrorIcon()
-        ) != OK_EXIT_CODE) {
-          return;
+        else {
+            updateVisibilityPanel();
         }
-        myDestinationClass = new BaseExpressionToFieldHandler.TargetDestination(targetClassName, myParentClass);
-      } else {
-        myDestinationClass = new BaseExpressionToFieldHandler.TargetDestination(newClass);
-      }
+        myCbNonNls.setEnabled(!enable);
     }
 
-    String fieldName = getEnteredName();
-    String errorString = null;
-    if ("".equals(fieldName)) {
-      errorString = RefactoringLocalize.noFieldNameSpecified().get();
-    } else if (!PsiNameHelper.getInstance(myProject).isIdentifier(fieldName)) {
-      errorString = RefactoringMessageUtil.getIncorrectIdentifierMessage(fieldName);
-    } else if (newClass != null && !myParentClass.getLanguage().equals(newClass.getLanguage())) {
-      errorString = RefactoringLocalize.moveToDifferentLanguage(UsageViewUtil.getType(myParentClass),
-        myParentClass.getQualifiedName(),
-        newClass.getQualifiedName()
-      ).get();
+    protected JComponent createCenterPanel() {
+        return new JPanel();
     }
-    if (errorString != null) {
-      CommonRefactoringUtil.showErrorMessage(
-              IntroduceFieldHandler.REFACTORING_NAME,
-              errorString,
-              HelpID.INTRODUCE_FIELD,
-              myProject);
-      return;
-    }
-    if (newClass != null) {
-      PsiField oldField = newClass.findFieldByName(fieldName, true);
 
-      if (oldField != null) {
-        int answer = Messages.showYesNoDialog(
-          myProject,
-          RefactoringLocalize.fieldExists(fieldName, oldField.getContainingClass().getQualifiedName()).get(),
-          IntroduceFieldHandler.REFACTORING_NAME,
-          UIUtil.getWarningIcon()
-        );
-        if (answer != 0) {
-          return;
+    public boolean isDeleteVariable() {
+        return myInvokedOnDeclaration || myCbDeleteVariable != null && myCbDeleteVariable.isSelected();
+    }
+
+    public boolean isAnnotateAsNonNls() {
+        return myCbNonNls != null && myCbNonNls.isSelected();
+    }
+
+    private void updateCbDeleteVariable() {
+        if (!myCbReplaceAll.isSelected()) {
+            myCbDeleteVariable.makeUnselectable(false);
         }
-      }
+        else {
+            myCbDeleteVariable.makeSelectable();
+        }
     }
 
-    JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY = getFieldVisibility();
-
-    RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, targetClassName);
-    super.doOKAction();
-  }
-
-  @RequiredUIAccess
-  public JComponent getPreferredFocusedComponent() {
-    return myNameField.getFocusableComponent();
-  }
-
-  private class ChooseClassAction implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(
-        RefactoringLocalize.chooseDestinationClass().get(),
-        GlobalSearchScope.projectScope(myProject),
-        aClass -> aClass.getParent() instanceof PsiJavaFile || aClass.hasModifierProperty(PsiModifier.STATIC),
-        null
-      );
-      if (myTargetClass != null) {
-        chooser.selectDirectory(myTargetClass.getContainingFile().getContainingDirectory());
-      }
-      chooser.showDialog();
-      PsiClass aClass = chooser.getSelected();
-      if (aClass != null) {
-        myTfTargetClassName.setText(aClass.getQualifiedName());
-      }
+    private void updateTypeSelector() {
+        if (myCbReplaceAll != null) {
+            myTypeSelectorManager.setAllOccurrences(myCbReplaceAll.isSelected());
+        }
+        else {
+            myTypeSelectorManager.setAllOccurrences(false);
+        }
     }
-  }
+
+    private void updateVisibilityPanel() {
+        if (myTargetClass != null && myTargetClass.isInterface()) {
+            myVPanel.disableAllButPublic();
+        }
+        else {
+            UIUtil.setEnabled(myVisibilityPanel, true, true);
+            // exclude all modifiers not visible from all occurences
+            final Set<String> visible = new HashSet<>();
+            visible.add(PsiModifier.PRIVATE);
+            visible.add(PsiModifier.PROTECTED);
+            visible.add(PsiModifier.PACKAGE_LOCAL);
+            visible.add(PsiModifier.PUBLIC);
+            for (PsiExpression occurrence : myOccurrences) {
+                final PsiManager psiManager = PsiManager.getInstance(myProject);
+                for (Iterator<String> iterator = visible.iterator(); iterator.hasNext(); ) {
+                    String modifier = iterator.next();
+
+                    try {
+                        final String modifierText = PsiModifier.PACKAGE_LOCAL.equals(modifier) ? "" : modifier + " ";
+                        final PsiField field = JavaPsiFacade.getInstance(psiManager.getProject())
+                            .getElementFactory()
+                            .createFieldFromText(modifierText + "int xxx;", myTargetClass);
+                        if (!JavaResolveUtil.isAccessible(field, myTargetClass, field.getModifierList(), occurrence, myTargetClass, null)) {
+                            iterator.remove();
+                        }
+                    }
+                    catch (IncorrectOperationException e) {
+                        LOG.error(e);
+                    }
+                }
+            }
+            if (!visible.contains(getFieldVisibility())) {
+                if (visible.contains(PsiModifier.PUBLIC)) {
+                    myVPanel.setVisibility(PsiModifier.PUBLIC);
+                }
+                if (visible.contains(PsiModifier.PACKAGE_LOCAL)) {
+                    myVPanel.setVisibility(PsiModifier.PACKAGE_LOCAL);
+                }
+                if (visible.contains(PsiModifier.PROTECTED)) {
+                    myVPanel.setVisibility(PsiModifier.PROTECTED);
+                }
+                if (visible.contains(PsiModifier.PRIVATE)) {
+                    myVPanel.setVisibility(PsiModifier.PRIVATE);
+                }
+            }
+        }
+    }
+
+    @RequiredUIAccess
+    protected void doOKAction() {
+        final String targetClassName = getTargetClassName();
+        PsiClass newClass = myParentClass;
+
+        if (!"".equals(targetClassName) && !Comparing.strEqual(targetClassName, myParentClass.getQualifiedName())) {
+            newClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
+            if (newClass == null) {
+                if (Messages.showOkCancelDialog(
+                    myProject,
+                    RefactoringLocalize.classDoesNotExistInTheProject().get(),
+                    IntroduceConstantHandlerImpl.REFACTORING_NAME.get(),
+                    UIUtil.getErrorIcon()
+                ) != OK_EXIT_CODE) {
+                    return;
+                }
+                myDestinationClass = new BaseExpressionToFieldHandler.TargetDestination(targetClassName, myParentClass);
+            }
+            else {
+                myDestinationClass = new BaseExpressionToFieldHandler.TargetDestination(newClass);
+            }
+        }
+
+        String fieldName = getEnteredName();
+        LocalizeValue errorString = LocalizeValue.empty();
+        if ("".equals(fieldName)) {
+            errorString = RefactoringLocalize.noFieldNameSpecified();
+        }
+        else if (!PsiNameHelper.getInstance(myProject).isIdentifier(fieldName)) {
+            errorString = LocalizeValue.localizeTODO(RefactoringMessageUtil.getIncorrectIdentifierMessage(fieldName));
+        }
+        else if (newClass != null && !myParentClass.getLanguage().equals(newClass.getLanguage())) {
+            errorString = RefactoringLocalize.moveToDifferentLanguage(
+                UsageViewUtil.getType(myParentClass),
+                myParentClass.getQualifiedName(),
+                newClass.getQualifiedName()
+            );
+        }
+        if (errorString != LocalizeValue.empty()) {
+            CommonRefactoringUtil.showErrorMessage(
+                IntroduceFieldHandler.REFACTORING_NAME,
+                errorString,
+                HelpID.INTRODUCE_FIELD,
+                myProject
+            );
+            return;
+        }
+        if (newClass != null) {
+            PsiField oldField = newClass.findFieldByName(fieldName, true);
+
+            if (oldField != null) {
+                int answer = Messages.showYesNoDialog(
+                    myProject,
+                    RefactoringLocalize.fieldExists(fieldName, oldField.getContainingClass().getQualifiedName()).get(),
+                    IntroduceFieldHandler.REFACTORING_NAME.get(),
+                    UIUtil.getWarningIcon()
+                );
+                if (answer != 0) {
+                    return;
+                }
+            }
+        }
+
+        JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY = getFieldVisibility();
+
+        RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, targetClassName);
+        super.doOKAction();
+    }
+
+    @RequiredUIAccess
+    public JComponent getPreferredFocusedComponent() {
+        return myNameField.getFocusableComponent();
+    }
+
+    private class ChooseClassAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(
+                RefactoringLocalize.chooseDestinationClass().get(),
+                GlobalSearchScope.projectScope(myProject),
+                aClass -> aClass.getParent() instanceof PsiJavaFile || aClass.hasModifierProperty(PsiModifier.STATIC),
+                null
+            );
+            if (myTargetClass != null) {
+                chooser.selectDirectory(myTargetClass.getContainingFile().getContainingDirectory());
+            }
+            chooser.showDialog();
+            PsiClass aClass = chooser.getSelected();
+            if (aClass != null) {
+                myTfTargetClassName.setText(aClass.getQualifiedName());
+            }
+        }
+    }
 }

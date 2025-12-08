@@ -19,11 +19,13 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Functions;
 import consulo.util.lang.ref.SimpleReference;
+import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -57,7 +59,7 @@ public class ExtractEnumProcessor {
                     });
                 }
                 else if (element != null) {
-                    resolvableConflicts.add(new ConflictUsageInfo(element, null));
+                    resolvableConflicts.add(new ConflictUsageInfo(element, LocalizeValue.empty()));
                 }
             }
             if (!resolvableConflicts.isEmpty()) {
@@ -106,11 +108,11 @@ public class ExtractEnumProcessor {
             for (PsiSwitchStatement switchStatement : switchStatements) {
                 PsiStatement errStatement = EnumConstantsUtil.isEnumSwitch(switchStatement, enumValueType, enumValues);
                 if (errStatement != null) {
-                    String description = null;
+                    LocalizeValue description = LocalizeValue.empty();
                     if (errStatement instanceof PsiSwitchLabelStatement switchLabelStmt) {
                         PsiExpression caseValue = switchLabelStmt.getCaseValue();
                         if (caseValue != null) {
-                            description = caseValue.getText() + " can not be replaced with enum";
+                            description = LocalizeValue.localizeTODO(caseValue.getText() + " can not be replaced with enum");
                         }
                     }
                     result.add(new ConflictUsageInfo(errStatement, description));
@@ -122,12 +124,14 @@ public class ExtractEnumProcessor {
                         if (element != null && !element.getManager().isInProject(element)) {
                             result.add(new ConflictUsageInfo(
                                 expression,
-                                StringUtil.capitalize(RefactoringUIUtil.getDescription(element, false)) + " is out of project"
+                                LocalizeValue.localizeTODO(
+                                    StringUtil.capitalize(RefactoringUIUtil.getDescription(element, false)) + " is out of project"
+                                )
                             ));
                         }
                     }
                     else {
-                        result.add(new ConflictUsageInfo(expression, null));
+                        result.add(new ConflictUsageInfo(expression, LocalizeValue.empty()));
                     }
                 }
             }
@@ -143,12 +147,12 @@ public class ExtractEnumProcessor {
                 true
             );
             for (UsageInfo usageInfo : myTypeMigrationProcessor.findUsages()) {
-                PsiElement migrateElement = usageInfo.getElement();
-                if (migrateElement instanceof PsiField enumConstantField) {
-                    if (enumConstantField.isStatic() && enumConstantField.isFinal()
-                        && enumConstantField.hasInitializer() && !myEnumConstants.contains(enumConstantField)) {
-                        continue;
-                    }
+                if (usageInfo.getElement() instanceof PsiField enumConstantField
+                    && enumConstantField.isStatic()
+                    && enumConstantField.isFinal()
+                    && enumConstantField.hasInitializer()
+                    && !myEnumConstants.contains(enumConstantField)) {
+                    continue;
                 }
                 result.add(new EnumTypeMigrationUsageInfo(usageInfo));
             }
@@ -186,9 +190,11 @@ public class ExtractEnumProcessor {
     }
 
     private static class ConflictUsageInfo extends FixableUsageInfo {
-        private final String myDescription;
+        @Nonnull
+        private final LocalizeValue myDescription;
 
-        public ConflictUsageInfo(PsiElement expression, String description) {
+        @RequiredReadAction
+        public ConflictUsageInfo(PsiElement expression, @Nonnull LocalizeValue description) {
             super(expression);
             myDescription = description;
         }
@@ -198,8 +204,10 @@ public class ExtractEnumProcessor {
         }
 
         @Override
-        public String getConflictMessage() {
-            return "Unable to migrate statement to enum constant." + (myDescription != null ? " " + myDescription : "");
+        public LocalizeValue getConflictMessage() {
+            return LocalizeValue.localizeTODO(
+                "Unable to migrate statement to enum constant." + (myDescription != LocalizeValue.empty() ? " " + myDescription : "")
+            );
         }
     }
 }

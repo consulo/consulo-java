@@ -36,6 +36,7 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
 import consulo.application.Result;
 import consulo.java.localize.JavaRefactoringLocalize;
@@ -173,7 +174,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         myExtractEnumProcessor.findEnumConstantConflicts(refUsages);
         if (!DestinationFolderComboBox.isAccessible(
             myProject,
@@ -182,7 +183,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         )) {
             conflicts.putValue(
                 sourceClass,
-                "Extracted class won't be accessible in " + RefactoringUIUtil.getDescription(sourceClass, true)
+                LocalizeValue.localizeTODO("Extracted class won't be accessible in " + RefactoringUIUtil.getDescription(sourceClass, true))
             );
         }
         Application.get().runWriteAction(myClass::delete);
@@ -195,7 +196,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
                 existingClass,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.thereAlreadyExistsAClassWithTheChosenName()
-                ).get()
+                )
             );
         }
 
@@ -207,13 +208,13 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             fieldsNeedingGetter.addAll(visitor.getFieldsNeedingGetter());
             fieldsNeedingGetter.addAll(srcVisitor.getFieldsNeedingGetter());
             for (PsiField field : fieldsNeedingGetter) {
-                conflicts.putValue(field, LocalizeValue.localizeTODO("Field \'" + field.getName() + "\' needs getter").get());
+                conflicts.putValue(field, LocalizeValue.localizeTODO("Field \'" + field.getName() + "\' needs getter"));
             }
             Set<PsiField> fieldsNeedingSetter = new LinkedHashSet<>();
             fieldsNeedingSetter.addAll(visitor.getFieldsNeedingSetter());
             fieldsNeedingSetter.addAll(srcVisitor.getFieldsNeedingSetter());
             for (PsiField field : fieldsNeedingSetter) {
-                conflicts.putValue(field, LocalizeValue.localizeTODO("Field \'" + field.getName() + "\' needs setter").get());
+                conflicts.putValue(field, LocalizeValue.localizeTODO("Field \'" + field.getName() + "\' needs setter"));
             }
         }
         checkConflicts(refUsages, conflicts);
@@ -221,16 +222,16 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     }
 
 
-    private void calculateInitializersConflicts(MultiMap<PsiElement, String> conflicts) {
+    private void calculateInitializersConflicts(MultiMap<PsiElement, LocalizeValue> conflicts) {
         PsiClassInitializer[] initializers = sourceClass.getInitializers();
         for (PsiClassInitializer initializer : initializers) {
             if (initializerDependsOnMoved(initializer)) {
-                conflicts.putValue(initializer, LocalizeValue.localizeTODO("Class initializer requires moved members").get());
+                conflicts.putValue(initializer, LocalizeValue.localizeTODO("Class initializer requires moved members"));
             }
         }
         for (PsiMethod constructor : sourceClass.getConstructors()) {
             if (initializerDependsOnMoved(constructor.getBody())) {
-                conflicts.putValue(constructor, LocalizeValue.localizeTODO("Constructor requires moved members").get());
+                conflicts.putValue(constructor, LocalizeValue.localizeTODO("Constructor requires moved members"));
             }
         }
     }
@@ -292,7 +293,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         PsiClass psiClass = buildClass();
         if (psiClass == null) {
@@ -538,12 +539,9 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             StringUtil.getQualifiedName(newPackageName, newClassName) + innerName.substring(sourceClassQualifiedName.length());
         boolean hasExternalReference = false;
         for (PsiReference reference : calls) {
-            PsiElement referenceElement = reference.getElement();
-            if (referenceElement instanceof PsiJavaCodeReferenceElement javaCodeReferenceElement) {
-                if (!isInMovedElement(referenceElement)) {
-                    usages.add(new ReplaceClassReference(javaCodeReferenceElement, newInnerClassName));
-                    hasExternalReference = true;
-                }
+            if (reference.getElement() instanceof PsiJavaCodeReferenceElement javaCodeRef && !isInMovedElement(javaCodeRef)) {
+                usages.add(new ReplaceClassReference(javaCodeRef, newInnerClassName));
+                hasExternalReference = true;
             }
         }
         if (hasExternalReference) {

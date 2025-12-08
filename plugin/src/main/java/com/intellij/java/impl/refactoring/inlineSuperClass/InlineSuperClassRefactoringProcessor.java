@@ -40,6 +40,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -219,7 +220,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         PushDownConflicts pushDownConflicts = new PushDownConflicts(mySuperClass, myMemberInfos);
         for (PsiClass targetClass : myTargetClasses) {
             for (MemberInfo info : myMemberInfos) {
@@ -228,7 +229,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
             }
             //todo check accessibility conflicts
         }
-        MultiMap<PsiElement, String> conflictsMap = pushDownConflicts.getConflicts();
+        MultiMap<PsiElement, LocalizeValue> conflictsMap = pushDownConflicts.getConflicts();
         for (PsiElement element : conflictsMap.keySet()) {
             conflicts.put(element, conflictsMap.get(element));
         }
@@ -237,7 +238,9 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
                 PsiElement element = reference.getElement();
                 if (element != null && element.getParent() instanceof PsiNewExpression newExpr
                     && PsiUtil.resolveClassInType(getPlaceExpectedType(newExpr)) == mySuperClass) {
-                    conflicts.putValue(newExpr, "Instance of target type is passed to a place where super class is expected.");
+                    conflicts.putValue(newExpr,
+                        LocalizeValue.localizeTODO("Instance of target type is passed to a place where super class is expected.")
+                    );
                     return false;
                 }
                 return true;
@@ -274,18 +277,17 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     }
 
     @Override
-    @RequiredUIAccess
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         new PushDownProcessor(mySuperClass.getProject(), myMemberInfos, mySuperClass, new DocCommentPolicy(myPolicy)) {
             //push down conflicts are already collected
             @Override
             @RequiredUIAccess
-            protected boolean showConflicts(@Nonnull MultiMap<PsiElement, String> conflicts, UsageInfo[] usages) {
+            protected boolean showConflicts(@Nonnull MultiMap<PsiElement, LocalizeValue> conflicts, UsageInfo[] usages) {
                 return true;
             }
 
             @Override
-            @RequiredUIAccess
             @RequiredWriteAction
             protected void performRefactoring(@Nonnull UsageInfo[] pushDownUsages) {
                 if (myCurrentInheritor != null) {

@@ -25,38 +25,49 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-
-import java.util.function.Function;
+import jakarta.annotation.Nonnull;
 
 public class ReplaceReferenceUsageInfo extends FixableUsageInfo {
-  public static final Logger LOG = Logger.getInstance(ReplaceReferenceUsageInfo.class);
-  private final PsiClass myTargetClass;
-  private final String myConflict;
+    public static final Logger LOG = Logger.getInstance(ReplaceReferenceUsageInfo.class);
+    private final PsiClass myTargetClass;
+    @Nonnull
+    private final LocalizeValue myConflict;
 
-  public ReplaceReferenceUsageInfo(PsiElement referenceExpression, PsiClass[] targetClasses) {
-    super(referenceExpression);
-    myTargetClass = targetClasses[0];
-    myConflict = targetClasses.length > 1 ? referenceExpression.getText() + "can be replaced with any of " + StringUtil.join(targetClasses, new Function<PsiClass, String>() {
-      public String apply(final PsiClass psiClass) {
-        return psiClass.getQualifiedName();
-      }
-    }, ", ") : null;
-  }
-
-  public void fixUsage() throws IncorrectOperationException {
-    final PsiElement referenceExpression = getElement();
-    if (referenceExpression != null) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
-      referenceExpression.replace(referenceExpression instanceof PsiReferenceExpression ? elementFactory.createReferenceExpression(myTargetClass) : elementFactory.createClassReferenceElement(myTargetClass));
+    @RequiredReadAction
+    public ReplaceReferenceUsageInfo(PsiElement referenceExpression, PsiClass[] targetClasses) {
+        super(referenceExpression);
+        myTargetClass = targetClasses[0];
+        myConflict = targetClasses.length > 1
+            ? LocalizeValue.localizeTODO(
+            referenceExpression.getText() + "can be replaced with any of " +
+                    StringUtil.join(targetClasses, PsiClass::getQualifiedName, ", ")
+        )
+            : LocalizeValue.empty();
     }
-  }
 
-  @Override
-  public String getConflictMessage() {
-    return myConflict;
-  }
+    @Override
+    @RequiredWriteAction
+    public void fixUsage() throws IncorrectOperationException {
+        PsiElement referenceExpression = getElement();
+        if (referenceExpression != null) {
+            PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+            referenceExpression.replace(
+                referenceExpression instanceof PsiReferenceExpression
+                    ? elementFactory.createReferenceExpression(myTargetClass)
+                    : elementFactory.createClassReferenceElement(myTargetClass)
+            );
+        }
+    }
+
+    @Override
+    public LocalizeValue getConflictMessage() {
+        return myConflict;
+    }
 }

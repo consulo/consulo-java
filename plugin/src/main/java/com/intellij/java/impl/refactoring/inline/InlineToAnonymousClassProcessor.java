@@ -30,9 +30,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
@@ -116,7 +116,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     @Override
     protected void refreshElements(PsiElement[] elements) {
         assert elements.length == 1;
-        myClass = (PsiClass)elements[0];
+        myClass = (PsiClass) elements[0];
     }
 
     @Override
@@ -139,19 +139,13 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
             return true;
         }
         PsiElement element = usage.getElement();
-        if (element != null) {
-            PsiFile file = element.getContainingFile();
-            if (!(file instanceof PsiJavaFile)) {
-                return true;
-            }
-        }
-        return false;
+        return element != null && !(element.getContainingFile() instanceof PsiJavaFile);
     }
 
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = getConflicts(refUsages.get());
+        MultiMap<PsiElement, LocalizeValue> conflicts = getConflicts(refUsages.get());
         if (!conflicts.isEmpty()) {
             return showConflicts(conflicts, refUsages.get());
         }
@@ -159,17 +153,15 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     }
 
     @RequiredReadAction
-    public MultiMap<PsiElement, String> getConflicts(UsageInfo[] usages) {
-        final MultiMap<PsiElement, String> result = new MultiMap<>();
+    public MultiMap<PsiElement, LocalizeValue> getConflicts(UsageInfo[] usages) {
+        final MultiMap<PsiElement, LocalizeValue> result = new MultiMap<>();
         ReferencedElementsCollector collector = new ReferencedElementsCollector() {
             @Override
             protected void checkAddMember(@Nonnull PsiMember member) {
                 if (PsiTreeUtil.isAncestor(myClass, member, false)) {
                     return;
                 }
-                PsiModifierList modifierList = member.getModifierList();
-                if (member.getContainingClass() == myClass.getSuperClass() && modifierList != null
-                    && modifierList.hasModifierProperty(PsiModifier.PROTECTED)) {
+                if (member.getContainingClass() == myClass.getSuperClass() && member.isProtected()) {
                     // ignore access to protected members of superclass - they'll be accessible anyway
                     return;
                 }
@@ -197,9 +189,12 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
                                 if (resolvedMember instanceof PsiMethod method
                                     && myClass.findMethodsBySignature(method, true).length > 1) {
                                     //skip inherited methods
-                                        continue;
-                                    }
-                                result.putValue(refElement, "Class cannot be inlined because a call to its member inside body");
+                                    continue;
+                                }
+                                result.putValue(
+                                    refElement,
+                                    LocalizeValue.localizeTODO("Class cannot be inlined because a call to its member inside body")
+                                );
                             }
                         }
                     }
@@ -212,7 +207,10 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
                 if (PsiUtil.resolveClassInType(expression.getType()) != myClass) {
                     return;
                 }
-                result.putValue(expression, "Class cannot be inlined because a call to its constructor inside body");
+                result.putValue(
+                    expression,
+                    LocalizeValue.localizeTODO("Class cannot be inlined because a call to its constructor inside body")
+                );
             }
 
             @Override
@@ -224,11 +222,10 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
                 if (qualifierExpression != null && PsiUtil.resolveClassInType(qualifierExpression.getType()) != myClass) {
                     return;
                 }
-                PsiElement resolved = methodExpression.resolve();
-                if (resolved instanceof PsiMethod method) {
-                    if ("getClass".equals(method.getName()) && method.getParameterList().getParametersCount() == 0) {
-                        result.putValue(methodExpression, "Result of getClass() invocation would be changed");
-                    }
+                if (methodExpression.resolve() instanceof PsiMethod method
+                    && "getClass".equals(method.getName())
+                    && method.getParameterList().getParametersCount() == 0) {
+                    result.putValue(methodExpression, LocalizeValue.localizeTODO("Result of getClass() invocation would be changed"));
                 }
             }
         });
@@ -309,7 +306,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     @RequiredWriteAction
     private void replaceWithSuperType(PsiTypeElement typeElement, PsiClassType superType) {
         PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
-        PsiClassType psiType = (PsiClassType)typeElement.getType();
+        PsiClassType psiType = (PsiClassType) typeElement.getType();
         PsiClassType.ClassResolveResult classResolveResult = psiType.resolveGenerics();
         PsiType substType = classResolveResult.getSubstitutor().substitute(superType);
         assert classResolveResult.getElement() == myClass;

@@ -143,7 +143,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         Set<PsiMember> methods = Collections.singleton((PsiMember)myMethod);
         if (!myTargetClass.isInterface()) {
             RefactoringConflictsUtil.analyzeAccessibilityConflicts(methods, myTargetClass, conflicts, myNewVisibility);
@@ -174,7 +174,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
                             RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(methodCall), true),
                             CommonRefactoringUtil.htmlEmphasize(myTargetParameter.getName())
                         );
-                        conflicts.putValue(methodCall, message.get());
+                        conflicts.putValue(methodCall, message);
                     }
                 }
             }
@@ -350,11 +350,8 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
                 refExpr.replace(expression);
             }
         }
-        else {
-            PsiElement element = reference.getElement();
-            if (element instanceof PsiDocParamRef) {
-                element.getParent().delete();
-            }
+        else if (reference.getElement() instanceof PsiDocParamRef docParamRef) {
+            docParamRef.getParent().delete();
         }
     }
 

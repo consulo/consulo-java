@@ -19,13 +19,14 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
 
 /**
  * @author Maxim.Medvedev
- * Date: Apr 17, 2009 5:16:10 PM
+ * @since 2009-04-17
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface IntroduceParameterMethodUsagesProcessor {
@@ -34,7 +35,7 @@ public interface IntroduceParameterMethodUsagesProcessor {
 
     boolean isMethodUsage(UsageInfo usage);
 
-    void findConflicts(IntroduceParameterData data, UsageInfo[] usages, MultiMap<PsiElement, String> conflicts);
+    void findConflicts(IntroduceParameterData data, UsageInfo[] usages, MultiMap<PsiElement, LocalizeValue> conflicts);
 
     boolean processChangeMethodUsage(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException;
 

@@ -30,6 +30,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -78,7 +79,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredUIAccess
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
-        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         PsiTypeParameter[] parameters = myClass.getTypeParameters();
         Map<String, TypeParameterInfo> infos = new HashMap<>();
@@ -88,7 +89,9 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
             if (existing != null) {
                 conflicts.putValue(
                     myClass,
-                    RefactoringUIUtil.getDescription(myClass, false) + " already contains type parameter " + newName
+                    LocalizeValue.localizeTODO(
+                        RefactoringUIUtil.getDescription(myClass, false) + " already contains type parameter " + newName
+                    )
                 );
             }
             infos.put(newName, info);
@@ -139,11 +142,11 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     @RequiredWriteAction
     private void doRefactoring(UsageInfo[] usages) throws IncorrectOperationException {
         PsiTypeParameter[] typeParameters = myClass.getTypeParameters();
-        boolean[] toRemoveParms = detectRemovedParameters(typeParameters);
+        boolean[] toRemoveParams = detectRemovedParameters(typeParameters);
 
         for (UsageInfo usage : usages) {
             LOG.assertTrue(usage.getElement() instanceof PsiJavaCodeReferenceElement);
-            processUsage(usage, typeParameters, toRemoveParms);
+            processUsage(usage, typeParameters, toRemoveParams);
         }
         Map<PsiTypeElement, PsiClass> supersMap = new HashMap<>();
         myClass.accept(new JavaRecursiveElementWalkingVisitor() {
@@ -152,7 +155,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
                 super.visitTypeElement(typeElement);
                 if (PsiUtil.resolveClassInType(typeElement.getType()) instanceof PsiTypeParameter typeParam) {
                     int i = ArrayUtil.find(typeParameters, typeParam);
-                    if (i >= 0 && i < toRemoveParms.length && toRemoveParms[i]) {
+                    if (i >= 0 && i < toRemoveParams.length && toRemoveParams[i]) {
                         supersMap.put(typeElement, typeParam.getSuperClass());
                     }
                 }
@@ -162,11 +165,11 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         for (Map.Entry<PsiTypeElement, PsiClass> classEntry : supersMap.entrySet()) {
             classEntry.getKey().replace(elementFactory.createTypeElement(elementFactory.createType(classEntry.getValue())));
         }
-        changeClassSignature(typeParameters, toRemoveParms);
+        changeClassSignature(typeParameters, toRemoveParams);
     }
 
     @RequiredWriteAction
-    private void changeClassSignature(PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParms)
+    private void changeClassSignature(PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParams)
         throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
         List<PsiTypeParameter> newTypeParameters = new ArrayList<>();
@@ -179,23 +182,23 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
                 newTypeParameters.add(factory.createTypeParameterFromText(info.getNewName(), null));
             }
         }
-        ChangeSignatureUtil.synchronizeList(myClass.getTypeParameterList(), newTypeParameters, TypeParameterList.INSTANCE, toRemoveParms);
+        ChangeSignatureUtil.synchronizeList(myClass.getTypeParameterList(), newTypeParameters, TypeParameterList.INSTANCE, toRemoveParams);
     }
 
-    private boolean[] detectRemovedParameters(PsiTypeParameter[] originaltypeParameters) {
-        boolean[] toRemoveParms = new boolean[originaltypeParameters.length];
-        Arrays.fill(toRemoveParms, true);
+    private boolean[] detectRemovedParameters(PsiTypeParameter[] originalTypeParams) {
+        boolean[] toRemoveParams = new boolean[originalTypeParams.length];
+        Arrays.fill(toRemoveParams, true);
         for (TypeParameterInfo info : myNewSignature) {
             int oldParameterIndex = info.getOldParameterIndex();
             if (oldParameterIndex >= 0) {
-                toRemoveParms[oldParameterIndex] = false;
+                toRemoveParams[oldParameterIndex] = false;
             }
         }
-        return toRemoveParms;
+        return toRemoveParams;
     }
 
     @RequiredWriteAction
-    private void processUsage(UsageInfo usage, PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParms)
+    private void processUsage(UsageInfo usage, PsiTypeParameter[] originalTypeParameters, boolean[] toRemoveParams)
         throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory();
         PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)usage.getElement();
@@ -219,7 +222,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
                 newValues.add(newValue);
             }
         }
-        ChangeSignatureUtil.synchronizeList(referenceParameterList, newValues, ReferenceParameterList.INSTANCE, toRemoveParms);
+        ChangeSignatureUtil.synchronizeList(referenceParameterList, newValues, ReferenceParameterList.INSTANCE, toRemoveParams);
     }
 
     private PsiSubstitutor determineUsageSubstitutor(PsiJavaCodeReferenceElement referenceElement) {
