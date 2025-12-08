@@ -126,7 +126,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
             return;
         }
         GlobalSearchScope scope = GlobalSearchScope.projectScope(originalExpression.getProject());
-        PsiSearchHelper searchHelper = holder.getProject().getInstance(PsiSearchHelper.class);
+        PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(holder.getFile().getProject());
         List<String> words = StringUtil.getWordsIn(stringToFind);
         if (words.isEmpty()) {
             return;
