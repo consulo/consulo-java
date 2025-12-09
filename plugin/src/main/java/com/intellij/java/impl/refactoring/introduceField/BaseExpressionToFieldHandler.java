@@ -195,7 +195,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
 
         PsiElement tempAnchorElement = RefactoringUtil.getParentExpressionAnchorElement(selectedExpr);
         if (!IntroduceConstantHandlerImpl.REFACTORING_NAME.equals(getRefactoringName())
-            && IntroduceVariableBase.checkAnchorBeforeThisOrSuper(project, editor, tempAnchorElement, getRefactoringName(), getHelpID())) {
+            && IntroduceVariableBase.checkAnchorBeforeThisOrSuper(project, editor, tempAnchorElement, getRefactoringName().get(), getHelpID())) {
             return true;
         }
 

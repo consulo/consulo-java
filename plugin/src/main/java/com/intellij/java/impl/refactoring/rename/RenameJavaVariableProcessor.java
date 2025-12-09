@@ -38,6 +38,7 @@ import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
@@ -265,7 +266,7 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
   }
 
   @Override
-  public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, String> conflicts) {
+  public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, LocalizeValue> conflicts) {
     if (element instanceof PsiCompiledElement) return;
     if (element instanceof PsiField) {
       PsiField refactoredField = (PsiField) element;

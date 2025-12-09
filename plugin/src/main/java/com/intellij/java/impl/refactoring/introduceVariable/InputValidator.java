@@ -27,64 +27,67 @@ import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class InputValidator implements IntroduceVariableBase.Validator {
-  private final Project myProject;
-  private final PsiElement myAnchorStatementIfAll;
-  private final PsiElement myAnchorStatement;
-  private final ExpressionOccurrenceManager myOccurenceManager;
-  private final IntroduceVariableBase myIntroduceVariableBase;
+    private final Project myProject;
+    private final PsiElement myAnchorStatementIfAll;
+    private final PsiElement myAnchorStatement;
+    private final ExpressionOccurrenceManager myOccurrenceManager;
+    private final IntroduceVariableBase myIntroduceVariableBase;
 
-  public boolean isOK(IntroduceVariableSettings settings) {
-    String name = settings.getEnteredName();
-    final PsiElement anchor;
-    final boolean replaceAllOccurrences = settings.isReplaceAllOccurrences();
-    if (replaceAllOccurrences) {
-      anchor = myAnchorStatementIfAll;
-    } else {
-      anchor = myAnchorStatement;
-    }
-    final PsiElement scope = anchor.getParent();
-    if(scope == null) return true;
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    final HashSet<PsiVariable> reportedVariables = new HashSet<PsiVariable>();
-    JavaUnresolvableLocalCollisionDetector.CollidingVariableVisitor visitor = new JavaUnresolvableLocalCollisionDetector.CollidingVariableVisitor() {
-      public void visitCollidingElement(PsiVariable collidingVariable) {
-        if (!reportedVariables.contains(collidingVariable)) {
-          reportedVariables.add(collidingVariable);
-          LocalizeValue message =
-            RefactoringLocalize.introducedVariableWillConflictWith0(RefactoringUIUtil.getDescription(collidingVariable, true));
-          conflicts.putValue(collidingVariable, message.get());
+    @Override
+    public boolean isOK(IntroduceVariableSettings settings) {
+        String name = settings.getEnteredName();
+        PsiElement anchor;
+        boolean replaceAllOccurrences = settings.isReplaceAllOccurrences();
+        if (replaceAllOccurrences) {
+            anchor = myAnchorStatementIfAll;
         }
-      }
-    };
-    JavaUnresolvableLocalCollisionDetector.visitLocalsCollisions(anchor, name, scope, anchor, visitor);
-    if (replaceAllOccurrences) {
-      final PsiExpression[] occurences = myOccurenceManager.getOccurrences();
-      for (PsiExpression occurence : occurences) {
-        IntroduceVariableBase.checkInLoopCondition(occurence, conflicts);
-      }
-    } else {
-      IntroduceVariableBase.checkInLoopCondition(myOccurenceManager.getMainOccurence(), conflicts);
+        else {
+            anchor = myAnchorStatement;
+        }
+        PsiElement scope = anchor.getParent();
+        if (scope == null) {
+            return true;
+        }
+        MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        Set<PsiVariable> reportedVariables = new HashSet<>();
+        JavaUnresolvableLocalCollisionDetector.CollidingVariableVisitor visitor = collidingVariable -> {
+            if (!reportedVariables.contains(collidingVariable)) {
+                reportedVariables.add(collidingVariable);
+                LocalizeValue message =
+                    RefactoringLocalize.introducedVariableWillConflictWith0(RefactoringUIUtil.getDescription(
+                        collidingVariable,
+                        true
+                    ));
+                conflicts.putValue(collidingVariable, message);
+            }
+        };
+        JavaUnresolvableLocalCollisionDetector.visitLocalsCollisions(anchor, name, scope, anchor, visitor);
+        if (replaceAllOccurrences) {
+            for (PsiExpression occurrence : myOccurrenceManager.getOccurrences()) {
+                IntroduceVariableBase.checkInLoopCondition(occurrence, conflicts);
+            }
+        }
+        else {
+            IntroduceVariableBase.checkInLoopCondition(myOccurrenceManager.getMainOccurence(), conflicts);
+        }
+
+        return conflicts.size() <= 0 || myIntroduceVariableBase.reportConflicts(conflicts, myProject, settings);
     }
 
-    if (conflicts.size() > 0) {
-      return myIntroduceVariableBase.reportConflicts(conflicts, myProject, settings);
-    } else {
-      return true;
+    public InputValidator(
+        IntroduceVariableBase introduceVariableBase,
+        Project project,
+        PsiElement anchorStatementIfAll,
+        PsiElement anchorStatement,
+        ExpressionOccurrenceManager occurrenceManager
+    ) {
+        myIntroduceVariableBase = introduceVariableBase;
+        myProject = project;
+        myAnchorStatementIfAll = anchorStatementIfAll;
+        myAnchorStatement = anchorStatement;
+        myOccurrenceManager = occurrenceManager;
     }
-  }
-
-
-  public InputValidator(final IntroduceVariableBase introduceVariableBase,
-                        Project project,
-                        PsiElement anchorStatementIfAll,
-                        PsiElement anchorStatement,
-                        ExpressionOccurrenceManager occurenceManager) {
-    myIntroduceVariableBase = introduceVariableBase;
-    myProject = project;
-    myAnchorStatementIfAll = anchorStatementIfAll;
-    myAnchorStatement = anchorStatement;
-    myOccurenceManager = occurenceManager;
-  }
 }

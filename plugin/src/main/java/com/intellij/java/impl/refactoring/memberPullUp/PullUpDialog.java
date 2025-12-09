@@ -53,230 +53,236 @@ import java.util.List;
 
 /**
  * @author dsl
- * Date: 18.06.2002
+ * @since 2002-06-18
  */
 public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo, PsiMember, PsiClass> {
-  private final Callback myCallback;
-  private DocCommentPanel myJavaDocPanel;
+    private final Callback myCallback;
+    private DocCommentPanel myJavaDocPanel;
 
-  private final InterfaceContainmentVerifier myInterfaceContainmentVerifier = new InterfaceContainmentVerifier() {
-    public boolean checkedInterfacesContain(PsiMethod psiMethod) {
-      return PullUpProcessor.checkedInterfacesContain(myMemberInfos, psiMethod);
-    }
-  };
-
-  private static final String PULL_UP_STATISTICS_KEY = "pull.up##";
-
-  public interface Callback {
-    boolean checkConflicts(PullUpDialog dialog);
-  }
-
-  public PullUpDialog(Project project,
-                      PsiClass aClass,
-                      List<PsiClass> superClasses,
-                      MemberInfoStorage memberInfoStorage,
-                      Callback callback) {
-    super(project, aClass, superClasses, memberInfoStorage, JavaPullUpHandler.REFACTORING_NAME);
-    myCallback = callback;
-
-    init();
-  }
-
-  public int getJavaDocPolicy() {
-    return myJavaDocPanel.getPolicy();
-  }
-
-  protected String getDimensionServiceKey() {
-    return "#com.intellij.refactoring.memberPullUp.PullUpDialog";
-  }
-
-  InterfaceContainmentVerifier getContainmentVerifier() {
-    return myInterfaceContainmentVerifier;
-  }
-
-  @Override
-  protected void initClassCombo(JComboBox classCombo) {
-    classCombo.setRenderer(new ClassCellRenderer(classCombo.getRenderer()));
-    classCombo.addItemListener(new ItemListener() {
-      public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-          if (myMemberSelectionPanel != null) {
-            ((MyMemberInfoModel) myMemberInfoModel).setSuperClass(getSuperClass());
-            myMemberSelectionPanel.getTable().setMemberInfos(myMemberInfos);
-            myMemberSelectionPanel.getTable().fireExternalDataChange();
-          }
+    private final InterfaceContainmentVerifier myInterfaceContainmentVerifier = new InterfaceContainmentVerifier() {
+        public boolean checkedInterfacesContain(PsiMethod psiMethod) {
+            return PullUpProcessor.checkedInterfacesContain(myMemberInfos, psiMethod);
         }
-      }
-    });
-  }
+    };
 
-  protected PsiClass getPreselection() {
-    PsiClass preselection = RefactoringHierarchyUtil.getNearestBaseClass(myClass, false);
+    private static final String PULL_UP_STATISTICS_KEY = "pull.up##";
 
-    final String statKey = PULL_UP_STATISTICS_KEY + myClass.getQualifiedName();
-    for (StatisticsInfo info : StatisticsManager.getInstance().getAllValues(statKey)) {
-      final String superClassName = info.getValue();
-      PsiClass superClass = null;
-      for (PsiClass aClass : mySuperClasses) {
-        if (Comparing.strEqual(superClassName, aClass.getQualifiedName())) {
-          superClass = aClass;
-          break;
-        }
-      }
-      if (superClass != null && StatisticsManager.getInstance().getUseCount(info) > 0) {
-        preselection = superClass;
-        break;
-      }
-    }
-    return preselection;
-  }
-
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.MEMBERS_PULL_UP);
-  }
-
-  protected void doAction() {
-    if (!myCallback.checkConflicts(this)) {
-      return;
-    }
-    JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC = myJavaDocPanel.getPolicy();
-    final PsiClass superClass = getSuperClass();
-    String name = superClass.getQualifiedName();
-    if (name != null) {
-      StatisticsManager.getInstance().incUseCount(new StatisticsInfo(PULL_UP_STATISTICS_KEY + myClass
-          .getQualifiedName(), name));
+    public interface Callback {
+        boolean checkConflicts(PullUpDialog dialog);
     }
 
-    List<MemberInfo> infos = getSelectedMemberInfos();
-    invokeRefactoring(new PullUpProcessor(myClass, superClass, infos.toArray(new MemberInfo[infos.size()]),
-        new DocCommentPolicy(getJavaDocPolicy())));
-    close(OK_EXIT_CODE);
-  }
+    public PullUpDialog(
+        Project project,
+        PsiClass aClass,
+        List<PsiClass> superClasses,
+        MemberInfoStorage memberInfoStorage,
+        Callback callback
+    ) {
+        super(project, aClass, superClasses, memberInfoStorage, JavaPullUpHandler.REFACTORING_NAME.get());
+        myCallback = callback;
 
-  @Override
-  protected void addCustomElementsToCentralPanel(JPanel panel) {
-    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.javadocForAbstracts());
-    myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
-    boolean hasJavadoc = false;
-    for (MemberInfo info : myMemberInfos) {
-      final PsiMember member = info.getMember();
-      if (myMemberInfoModel.isAbstractEnabled(info)) {
-        info.setToAbstract(myMemberInfoModel.isAbstractWhenDisabled(info));
-        if (!hasJavadoc &&
-            member instanceof PsiDocCommentOwner &&
-            ((PsiDocCommentOwner) member).getDocComment() != null) {
-          hasJavadoc = true;
-        }
-      }
+        init();
     }
 
-    Component component = myJavaDocPanel.getComponent();
-    component.setEnabledRecursive(hasJavadoc);
-    panel.add(TargetAWT.to(component), BorderLayout.EAST);
-  }
+    public int getJavaDocPolicy() {
+        return myJavaDocPanel.getPolicy();
+    }
 
-  @Override
-  protected AbstractMemberSelectionTable<PsiMember, MemberInfo> createMemberSelectionTable(List<MemberInfo> infos) {
-    return new MemberSelectionTable(infos, RefactoringLocalize.makeAbstract().get());
-  }
+    protected String getDimensionServiceKey() {
+        return "#com.intellij.refactoring.memberPullUp.PullUpDialog";
+    }
 
-  @Override
-  protected MemberInfoModel<PsiMember, MemberInfo> createMemberInfoModel() {
-    return new MyMemberInfoModel();
-  }
-
-  private class MyMemberInfoModel extends UsesAndInterfacesDependencyMemberInfoModel<PsiMember, MemberInfo> {
-    public MyMemberInfoModel() {
-      super(myClass, getSuperClass(), false, myInterfaceContainmentVerifier);
+    InterfaceContainmentVerifier getContainmentVerifier() {
+        return myInterfaceContainmentVerifier;
     }
 
     @Override
-    public boolean isMemberEnabled(MemberInfo member) {
-      final PsiClass currentSuperClass = getSuperClass();
-      if (currentSuperClass == null) {
-        return true;
-      }
-      if (myMemberInfoStorage.getDuplicatedMemberInfos(currentSuperClass).contains(member)) {
-        return false;
-      }
-      if (myMemberInfoStorage.getExtending(currentSuperClass).contains(member.getMember())) {
-        return false;
-      }
-      final boolean isInterface = currentSuperClass.isInterface();
-      if (!isInterface) {
-        return true;
-      }
+    protected void initClassCombo(JComboBox classCombo) {
+        classCombo.setRenderer(new ClassCellRenderer(classCombo.getRenderer()));
+        classCombo.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (myMemberSelectionPanel != null) {
+                        ((MyMemberInfoModel) myMemberInfoModel).setSuperClass(getSuperClass());
+                        myMemberSelectionPanel.getTable().setMemberInfos(myMemberInfos);
+                        myMemberSelectionPanel.getTable().fireExternalDataChange();
+                    }
+                }
+            }
+        });
+    }
 
-      PsiElement element = member.getMember();
-      if (element instanceof PsiClass && ((PsiClass) element).isInterface()) {
-        return true;
-      }
-      if (element instanceof PsiField) {
-        return ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC);
-      }
-      if (element instanceof PsiMethod) {
-        final PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(currentSuperClass,
-            myClass, PsiSubstitutor.EMPTY);
-        final MethodSignature signature = ((PsiMethod) element).getSignature(superSubstitutor);
-        final PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(currentSuperClass,
-            signature, false);
-        if (superClassMethod != null && !PsiUtil.isLanguageLevel8OrHigher(currentSuperClass)) {
-          return false;
+    protected PsiClass getPreselection() {
+        PsiClass preselection = RefactoringHierarchyUtil.getNearestBaseClass(myClass, false);
+
+        final String statKey = PULL_UP_STATISTICS_KEY + myClass.getQualifiedName();
+        for (StatisticsInfo info : StatisticsManager.getInstance().getAllValues(statKey)) {
+            final String superClassName = info.getValue();
+            PsiClass superClass = null;
+            for (PsiClass aClass : mySuperClasses) {
+                if (Comparing.strEqual(superClassName, aClass.getQualifiedName())) {
+                    superClass = aClass;
+                    break;
+                }
+            }
+            if (superClass != null && StatisticsManager.getInstance().getUseCount(info) > 0) {
+                preselection = superClass;
+                break;
+            }
         }
-        return !((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC) || PsiUtil
-            .isLanguageLevel8OrHigher(currentSuperClass);
-      }
-      return true;
+        return preselection;
     }
 
-    @Override
-    public boolean isAbstractEnabled(MemberInfo member) {
-      PsiClass currentSuperClass = getSuperClass();
-      if (currentSuperClass == null || !currentSuperClass.isInterface()) {
-        return true;
-      }
-      if (PsiUtil.isLanguageLevel8OrHigher(currentSuperClass)) {
-        return true;
-      }
-      return false;
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.MEMBERS_PULL_UP);
     }
 
-    @Override
-    public boolean isAbstractWhenDisabled(MemberInfo member) {
-      PsiClass currentSuperClass = getSuperClass();
-      if (currentSuperClass == null) {
-        return false;
-      }
-      if (currentSuperClass.isInterface()) {
-        final PsiMember psiMember = member.getMember();
-        if (psiMember instanceof PsiMethod) {
-          return !psiMember.hasModifierProperty(PsiModifier.STATIC);
+    protected void doAction() {
+        if (!myCallback.checkConflicts(this)) {
+            return;
         }
-      }
-      return false;
-    }
-
-    @Override
-    public int checkForProblems(@Nonnull MemberInfo member) {
-      if (member.isChecked()) {
-        return OK;
-      }
-      PsiClass currentSuperClass = getSuperClass();
-
-      if (currentSuperClass != null && currentSuperClass.isInterface()) {
-        PsiMember element = member.getMember();
-        if (element.hasModifierProperty(PsiModifier.STATIC)) {
-          return super.checkForProblems(member);
+        JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC = myJavaDocPanel.getPolicy();
+        final PsiClass superClass = getSuperClass();
+        String name = superClass.getQualifiedName();
+        if (name != null) {
+            StatisticsManager.getInstance().incUseCount(new StatisticsInfo(PULL_UP_STATISTICS_KEY + myClass
+                .getQualifiedName(), name));
         }
-        return OK;
-      } else {
-        return super.checkForProblems(member);
-      }
+
+        List<MemberInfo> infos = getSelectedMemberInfos();
+        invokeRefactoring(new PullUpProcessor(myClass, superClass, infos.toArray(new MemberInfo[infos.size()]),
+            new DocCommentPolicy(getJavaDocPolicy())
+        ));
+        close(OK_EXIT_CODE);
     }
 
     @Override
-    public Boolean isFixedAbstract(MemberInfo member) {
-      return Boolean.TRUE;
+    protected void addCustomElementsToCentralPanel(JPanel panel) {
+        myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.javadocForAbstracts());
+        myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
+        boolean hasJavadoc = false;
+        for (MemberInfo info : myMemberInfos) {
+            final PsiMember member = info.getMember();
+            if (myMemberInfoModel.isAbstractEnabled(info)) {
+                info.setToAbstract(myMemberInfoModel.isAbstractWhenDisabled(info));
+                if (!hasJavadoc &&
+                    member instanceof PsiDocCommentOwner &&
+                    ((PsiDocCommentOwner) member).getDocComment() != null) {
+                    hasJavadoc = true;
+                }
+            }
+        }
+
+        Component component = myJavaDocPanel.getComponent();
+        component.setEnabledRecursive(hasJavadoc);
+        panel.add(TargetAWT.to(component), BorderLayout.EAST);
     }
-  }
+
+    @Override
+    protected AbstractMemberSelectionTable<PsiMember, MemberInfo> createMemberSelectionTable(List<MemberInfo> infos) {
+        return new MemberSelectionTable(infos, RefactoringLocalize.makeAbstract().get());
+    }
+
+    @Override
+    protected MemberInfoModel<PsiMember, MemberInfo> createMemberInfoModel() {
+        return new MyMemberInfoModel();
+    }
+
+    private class MyMemberInfoModel extends UsesAndInterfacesDependencyMemberInfoModel<PsiMember, MemberInfo> {
+        public MyMemberInfoModel() {
+            super(myClass, getSuperClass(), false, myInterfaceContainmentVerifier);
+        }
+
+        @Override
+        public boolean isMemberEnabled(MemberInfo member) {
+            final PsiClass currentSuperClass = getSuperClass();
+            if (currentSuperClass == null) {
+                return true;
+            }
+            if (myMemberInfoStorage.getDuplicatedMemberInfos(currentSuperClass).contains(member)) {
+                return false;
+            }
+            if (myMemberInfoStorage.getExtending(currentSuperClass).contains(member.getMember())) {
+                return false;
+            }
+            final boolean isInterface = currentSuperClass.isInterface();
+            if (!isInterface) {
+                return true;
+            }
+
+            PsiElement element = member.getMember();
+            if (element instanceof PsiClass && ((PsiClass) element).isInterface()) {
+                return true;
+            }
+            if (element instanceof PsiField) {
+                return ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC);
+            }
+            if (element instanceof PsiMethod) {
+                final PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(currentSuperClass,
+                    myClass, PsiSubstitutor.EMPTY
+                );
+                final MethodSignature signature = ((PsiMethod) element).getSignature(superSubstitutor);
+                final PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(currentSuperClass,
+                    signature, false
+                );
+                if (superClassMethod != null && !PsiUtil.isLanguageLevel8OrHigher(currentSuperClass)) {
+                    return false;
+                }
+                return !((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC) || PsiUtil
+                    .isLanguageLevel8OrHigher(currentSuperClass);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean isAbstractEnabled(MemberInfo member) {
+            PsiClass currentSuperClass = getSuperClass();
+            if (currentSuperClass == null || !currentSuperClass.isInterface()) {
+                return true;
+            }
+            if (PsiUtil.isLanguageLevel8OrHigher(currentSuperClass)) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean isAbstractWhenDisabled(MemberInfo member) {
+            PsiClass currentSuperClass = getSuperClass();
+            if (currentSuperClass == null) {
+                return false;
+            }
+            if (currentSuperClass.isInterface()) {
+                final PsiMember psiMember = member.getMember();
+                if (psiMember instanceof PsiMethod) {
+                    return !psiMember.hasModifierProperty(PsiModifier.STATIC);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int checkForProblems(@Nonnull MemberInfo member) {
+            if (member.isChecked()) {
+                return OK;
+            }
+            PsiClass currentSuperClass = getSuperClass();
+
+            if (currentSuperClass != null && currentSuperClass.isInterface()) {
+                PsiMember element = member.getMember();
+                if (element.hasModifierProperty(PsiModifier.STATIC)) {
+                    return super.checkForProblems(member);
+                }
+                return OK;
+            }
+            else {
+                return super.checkForProblems(member);
+            }
+        }
+
+        @Override
+        public Boolean isFixedAbstract(MemberInfo member) {
+            return Boolean.TRUE;
+        }
+    }
 }
