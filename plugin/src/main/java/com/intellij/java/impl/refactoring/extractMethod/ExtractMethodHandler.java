@@ -202,7 +202,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         }
 
         final ExtractMethodProcessor processor =
-            new ExtractMethodProcessor(project, editor, elements, null, REFACTORING_NAME, "", HelpID.EXTRACT_METHOD);
+            new ExtractMethodProcessor(project, editor, elements, null, REFACTORING_NAME.get(), "", HelpID.EXTRACT_METHOD);
         processor.setShowErrorDialogs(showErrorMessages);
         try {
             if (!processor.prepare(pass)) {

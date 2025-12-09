@@ -33,7 +33,6 @@ import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -46,140 +45,158 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class TempWithQueryHandler implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance(TempWithQueryHandler.class);
+    private static final Logger LOG = Logger.getInstance(TempWithQueryHandler.class);
 
-  private static final String REFACTORING_NAME = RefactoringBundle.message("replace.temp.with.query.title");
+    private static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.replaceTempWithQueryTitle();
 
-  @RequiredUIAccess
-  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
-    Set<String> flags = Set.of(
-      TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
-      TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
-      TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED
-    );
-    PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
-    editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    if (!(element instanceof PsiLocalVariable)) {
-      LocalizeValue message =
-        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalName());
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-      return;
-    }
-
-    invokeOnVariable(file, project, (PsiLocalVariable) element, editor);
-  }
-
-  @RequiredUIAccess
-  private static void invokeOnVariable(final PsiFile file, final Project project, final PsiLocalVariable local, final Editor editor) {
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
-      return;
-    }
-
-    String localName = local.getName();
-    final PsiExpression initializer = local.getInitializer();
-    if (initializer == null) {
-      LocalizeValue message =
-        RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableHasNoInitializer(localName));
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-      return;
-    }
-
-    final PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false)
-      .toArray(new PsiReference[0]);
-
-    if (refs.length == 0) {
-      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsNeverUsed(localName));
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-      return;
-    }
-
-    final HighlightManager highlightManager = HighlightManager.getInstance(project);
-    ArrayList<PsiReference> array = new ArrayList<>();
-    for (PsiReference ref : refs) {
-      PsiElement refElement = ref.getElement();
-      if (PsiUtil.isAccessedForWriting((PsiExpression) refElement)) {
-        array.add(ref);
-      }
-      if (!array.isEmpty()) {
-        PsiReference[] refsForWriting = array.toArray(new PsiReference[array.size()]);
-        highlightManager.addOccurrenceHighlights(editor, refsForWriting, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-        LocalizeValue message =
-          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
-        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-        return;
-      }
-    }
-
-    final ExtractMethodProcessor processor = new ExtractMethodProcessor(project, editor, new PsiElement[]{initializer}, local.getType(),
-        REFACTORING_NAME, localName, HelpID.REPLACE_TEMP_WITH_QUERY);
-
-    try {
-      if (!processor.prepare()) {
-        return;
-      }
-    } catch (PrepareFailedException e) {
-      CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-      ExtractMethodHandler.highlightPrepareError(e, file, editor, project);
-      return;
-    }
-    final PsiClass targetClass = processor.getTargetClass();
-    if (targetClass != null && targetClass.isInterface()) {
-      LocalizeValue message = RefactoringLocalize.cannotReplaceTempWithQueryInInterface();
-      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-      return;
-    }
-
-    if (processor.showDialog()) {
-      CommandProcessor.getInstance().executeCommand(project, () -> {
-        final Runnable action = () -> {
-          try {
-            processor.doRefactoring();
-
-            local.normalizeDeclaration();
-
-            PsiExpression initializer1 = local.getInitializer();
-
-            PsiExpression[] exprs = new PsiExpression[refs.length];
-            for (int idx = 0; idx < refs.length; idx++) {
-              PsiElement ref = refs[idx].getElement();
-              exprs[idx] = (PsiExpression) ref.replace(initializer1);
-            }
-            PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
-            declaration.delete();
-
-            highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-          } catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-        };
-
-        PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
-          project.getApplication().runWriteAction(action);
-          DuplicatesImpl.processDuplicates(processor, project, editor);
-        });
-      }, REFACTORING_NAME, null);
-    }
-  }
-
-  @RequiredUIAccess
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    if (elements.length == 1 && elements[0] instanceof PsiLocalVariable) {
-      if (dataContext != null) {
-        final PsiFile file = dataContext.getData(PsiFile.KEY);
-        final Editor editor = dataContext.getData(Editor.KEY);
-        if (file != null && editor != null) {
-          invokeOnVariable(file, project, (PsiLocalVariable) elements[0], editor);
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        Set<String> flags = Set.of(
+            TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
+            TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
+            TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED
+        );
+        PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
+        editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
+        if (!(element instanceof PsiLocalVariable localVar)) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalName());
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+            return;
         }
-      }
+
+        invokeOnVariable(file, project, localVar, editor);
     }
-  }
+
+    @RequiredUIAccess
+    private static void invokeOnVariable(PsiFile file, Project project, PsiLocalVariable local, Editor editor) {
+        if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
+            return;
+        }
+
+        String localName = local.getName();
+        PsiExpression initializer = local.getInitializer();
+        if (initializer == null) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableHasNoInitializer(localName));
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+            return;
+        }
+
+        PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false).toArray(new PsiReference[0]);
+
+        if (refs.length == 0) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsNeverUsed(localName));
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+            return;
+        }
+
+        HighlightManager highlightManager = HighlightManager.getInstance(project);
+        List<PsiReference> array = new ArrayList<>();
+        for (PsiReference ref : refs) {
+            PsiElement refElement = ref.getElement();
+            if (PsiUtil.isAccessedForWriting((PsiExpression) refElement)) {
+                array.add(ref);
+            }
+            if (!array.isEmpty()) {
+                PsiReference[] refsForWriting = array.toArray(new PsiReference[array.size()]);
+                highlightManager.addOccurrenceHighlights(editor, refsForWriting, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
+                LocalizeValue message =
+                    RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
+                CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+                return;
+            }
+        }
+
+        ExtractMethodProcessor processor = new ExtractMethodProcessor(
+            project,
+            editor,
+            new PsiElement[]{initializer},
+            local.getType(),
+            REFACTORING_NAME.get(),
+            localName,
+            HelpID.REPLACE_TEMP_WITH_QUERY
+        );
+
+        try {
+            if (!processor.prepare()) {
+                return;
+            }
+        }
+        catch (PrepareFailedException e) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                LocalizeValue.ofNullable(e.getMessage()),
+                REFACTORING_NAME,
+                HelpID.REPLACE_TEMP_WITH_QUERY
+            );
+            ExtractMethodHandler.highlightPrepareError(e, file, editor, project);
+            return;
+        }
+        PsiClass targetClass = processor.getTargetClass();
+        if (targetClass != null && targetClass.isInterface()) {
+            LocalizeValue message = RefactoringLocalize.cannotReplaceTempWithQueryInInterface();
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+            return;
+        }
+
+        if (processor.showDialog()) {
+            CommandProcessor.getInstance().newCommand()
+                .project(project)
+                .name(REFACTORING_NAME)
+                .run(() -> {
+                    Runnable action = () -> {
+                        try {
+                            processor.doRefactoring();
+
+                            local.normalizeDeclaration();
+
+                            PsiExpression initializer1 = local.getInitializer();
+
+                            PsiExpression[] exprs = new PsiExpression[refs.length];
+                            for (int idx = 0; idx < refs.length; idx++) {
+                                PsiElement ref = refs[idx].getElement();
+                                exprs[idx] = (PsiExpression) ref.replace(initializer1);
+                            }
+                            PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
+                            declaration.delete();
+
+                            highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
+                        }
+                        catch (IncorrectOperationException e) {
+                            LOG.error(e);
+                        }
+                    };
+
+                    PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
+                        project.getApplication().runWriteAction(action);
+                        DuplicatesImpl.processDuplicates(processor, project, editor);
+                    });
+                });
+        }
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        if (elements.length == 1 && elements[0] instanceof PsiLocalVariable localVar && dataContext != null) {
+            PsiFile file = dataContext.getData(PsiFile.KEY);
+            Editor editor = dataContext.getData(Editor.KEY);
+            if (file != null && editor != null) {
+                invokeOnVariable(file, project, localVar, editor);
+            }
+        }
+    }
 }

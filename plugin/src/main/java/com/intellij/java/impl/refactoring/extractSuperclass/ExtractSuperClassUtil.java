@@ -241,7 +241,7 @@ public class ExtractSuperClassUtil {
         return null;
     }
 
-    public static void checkSuperAccessible(PsiDirectory targetDirectory, MultiMap<PsiElement, String> conflicts, final PsiClass subclass) {
+    public static void checkSuperAccessible(PsiDirectory targetDirectory, MultiMap<PsiElement, LocalizeValue> conflicts, PsiClass subclass) {
         final VirtualFile virtualFile = subclass.getContainingFile().getVirtualFile();
         if (virtualFile != null) {
             final boolean inTestSourceContent =
@@ -251,7 +251,7 @@ public class ExtractSuperClassUtil {
                 module != null &&
                 !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent)
                     .contains(targetDirectory.getVirtualFile())) {
-                conflicts.putValue(subclass, "Superclass won't be accessible in subclass");
+                conflicts.putValue(subclass, LocalizeValue.localizeTODO("Superclass won't be accessible in subclass"));
             }
         }
     }

@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: dsl
- * Date: 17.06.2002
- * Time: 15:40:16
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.impl.refactoring.memberPullUp;
 
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
@@ -57,336 +48,408 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author dsl
+ * @since 2002-06-17
+ */
 public class PullUpConflictsUtil {
-  private PullUpConflictsUtil() {}
-
-  public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
-                                        PsiClass subclass,
-                                        @Nullable PsiClass superClass,
-                                        @Nonnull PsiJavaPackage targetPackage,
-                                        @Nonnull PsiDirectory targetDirectory,
-                                        final InterfaceContainmentVerifier interfaceContainmentVerifier) {
-    return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
-  }
-
-  public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
-                                                            @Nonnull final PsiClass subclass,
-                                                            @Nullable PsiClass superClass,
-                                                            @Nonnull final PsiJavaPackage targetPackage,
-                                                            @Nonnull PsiDirectory targetDirectory,
-                                                            final InterfaceContainmentVerifier interfaceContainmentVerifier,
-                                                            boolean movedMembers2Super) {
-    final Set<PsiMember> movedMembers = new HashSet<PsiMember>();
-    final Set<PsiMethod> abstractMethods = new HashSet<PsiMethod>();
-    final boolean isInterfaceTarget;
-    final PsiElement targetRepresentativeElement;
-    if (superClass != null) {
-      isInterfaceTarget = superClass.isInterface();
-      targetRepresentativeElement = superClass;
+    private PullUpConflictsUtil() {
     }
-    else {
-      isInterfaceTarget = false;
-      targetRepresentativeElement = targetDirectory;
+
+    public static MultiMap<PsiElement, LocalizeValue> checkConflicts(
+        final MemberInfo[] infos,
+        PsiClass subclass,
+        @Nullable PsiClass superClass,
+        @Nonnull PsiJavaPackage targetPackage,
+        @Nonnull PsiDirectory targetDirectory,
+        final InterfaceContainmentVerifier interfaceContainmentVerifier
+    ) {
+        return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
     }
-    for (MemberInfo info : infos) {
-      PsiMember member = info.getMember();
-      if (member instanceof PsiMethod) {
-        if (!info.isToAbstract() && !isInterfaceTarget) {
-          movedMembers.add(member);
+
+    public static MultiMap<PsiElement, LocalizeValue> checkConflicts(
+        final MemberInfo[] infos,
+        @Nonnull final PsiClass subclass,
+        @Nullable PsiClass superClass,
+        @Nonnull final PsiJavaPackage targetPackage,
+        @Nonnull PsiDirectory targetDirectory,
+        final InterfaceContainmentVerifier interfaceContainmentVerifier,
+        boolean movedMembers2Super
+    ) {
+        final Set<PsiMember> movedMembers = new HashSet<PsiMember>();
+        final Set<PsiMethod> abstractMethods = new HashSet<PsiMethod>();
+        final boolean isInterfaceTarget;
+        final PsiElement targetRepresentativeElement;
+        if (superClass != null) {
+            isInterfaceTarget = superClass.isInterface();
+            targetRepresentativeElement = superClass;
         }
         else {
-          abstractMethods.add((PsiMethod)member);
+            isInterfaceTarget = false;
+            targetRepresentativeElement = targetDirectory;
         }
-      }
-      else {
-        movedMembers.add(member);
-      }
-    }
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    final Set<PsiMethod> abstrMethods = new HashSet<PsiMethod>(abstractMethods);
-    if (superClass != null) {
-      for (PsiMethod method : subclass.getMethods()) {
-        if (!movedMembers.contains(method) && !method.hasModifierProperty(PsiModifier.PRIVATE)) {
-          if (method.findSuperMethods(superClass).length > 0) {
-            abstrMethods.add(method);
-          }
+        for (MemberInfo info : infos) {
+            PsiMember member = info.getMember();
+            if (member instanceof PsiMethod) {
+                if (!info.isToAbstract() && !isInterfaceTarget) {
+                    movedMembers.add(member);
+                }
+                else {
+                    abstractMethods.add((PsiMethod) member);
+                }
+            }
+            else {
+                movedMembers.add(member);
+            }
         }
-      }
-    }
-    RefactoringConflictsUtil.analyzeAccessibilityConflicts(movedMembers, superClass, conflicts, VisibilityUtil.ESCALATE_VISIBILITY, targetRepresentativeElement, abstrMethods);
-    if (superClass != null) {
-      if (movedMembers2Super) {
-        checkSuperclassMembers(superClass, infos, conflicts);
-        if (isInterfaceTarget) {
-          checkInterfaceTarget(infos, conflicts);
+        final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+        final Set<PsiMethod> abstrMethods = new HashSet<PsiMethod>(abstractMethods);
+        if (superClass != null) {
+            for (PsiMethod method : subclass.getMethods()) {
+                if (!movedMembers.contains(method) && !method.hasModifierProperty(PsiModifier.PRIVATE)) {
+                    if (method.findSuperMethods(superClass).length > 0) {
+                        abstrMethods.add(method);
+                    }
+                }
+            }
         }
-      } else {
-        final String qualifiedName = superClass.getQualifiedName();
-        assert qualifiedName != null;
-        if (superClass.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
-          if (!Comparing.strEqual(StringUtil.getPackageName(qualifiedName), targetPackage.getQualifiedName())) {
-            conflicts.putValue(superClass, RefactoringUIUtil.getDescription(superClass, true) + " won't be accessible from " +RefactoringUIUtil.getDescription(targetPackage, true));
-          }
+        RefactoringConflictsUtil.analyzeAccessibilityConflicts(
+            movedMembers,
+            superClass,
+            conflicts,
+            VisibilityUtil.ESCALATE_VISIBILITY,
+            targetRepresentativeElement,
+            abstrMethods
+        );
+        if (superClass != null) {
+            if (movedMembers2Super) {
+                checkSuperclassMembers(superClass, infos, conflicts);
+                if (isInterfaceTarget) {
+                    checkInterfaceTarget(infos, conflicts);
+                }
+            }
+            else {
+                final String qualifiedName = superClass.getQualifiedName();
+                assert qualifiedName != null;
+                if (superClass.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
+                    if (!Comparing.strEqual(StringUtil.getPackageName(qualifiedName), targetPackage.getQualifiedName())) {
+                        conflicts.putValue(
+                            superClass,
+                            LocalizeValue.localizeTODO(
+                                RefactoringUIUtil.getDescription(superClass, true) + " won't be accessible from " +
+                                    RefactoringUIUtil.getDescription(targetPackage, true)
+                            )
+                        );
+                    }
+                }
+            }
         }
-      }
+        // check if moved methods use other members in the classes between Subclass and Superclass
+        List<PsiElement> checkModuleConflictsList = new ArrayList<PsiElement>();
+        for (PsiMember member : movedMembers) {
+            if (member instanceof PsiMethod || member instanceof PsiClass && !(member instanceof PsiCompiledElement)) {
+                ClassMemberReferencesVisitor visitor = movedMembers2Super
+                    ? new ConflictingUsagesOfSubClassMembers(
+                    member,
+                    movedMembers,
+                    abstractMethods,
+                    subclass,
+                    superClass,
+                    superClass != null ? null : targetPackage, conflicts,
+                    interfaceContainmentVerifier
+                )
+                    : new ConflictingUsagesOfSuperClassMembers(member, subclass, targetPackage, movedMembers, conflicts);
+                member.accept(visitor);
+            }
+            checkModuleConflictsList.add(member);
+        }
+        for (final PsiMethod method : abstractMethods) {
+            checkModuleConflictsList.add(method.getParameterList());
+            checkModuleConflictsList.add(method.getReturnTypeElement());
+            checkModuleConflictsList.add(method.getTypeParameterList());
+        }
+        RefactoringConflictsUtil.analyzeModuleConflicts(
+            subclass.getProject(),
+            checkModuleConflictsList,
+            new UsageInfo[0],
+            targetRepresentativeElement,
+            conflicts
+        );
+        final String fqName = subclass.getQualifiedName();
+        final String packageName;
+        if (fqName != null) {
+            packageName = StringUtil.getPackageName(fqName);
+        }
+        else {
+            final PsiFile psiFile = PsiTreeUtil.getParentOfType(subclass, PsiFile.class);
+            if (psiFile instanceof PsiClassOwner) {
+                packageName = ((PsiClassOwner) psiFile).getPackageName();
+            }
+            else {
+                packageName = null;
+            }
+        }
+        final boolean toDifferentPackage = !Comparing.strEqual(targetPackage.getQualifiedName(), packageName);
+        for (final PsiMethod abstractMethod : abstractMethods) {
+            abstractMethod.accept(new ClassMemberReferencesVisitor(subclass) {
+                @Override
+                protected void visitClassMemberReferenceElement(PsiMember classMember, PsiJavaCodeReferenceElement classMemberReference) {
+                    if (classMember != null && willBeMoved(classMember, movedMembers)) {
+                        boolean isAccessible = false;
+                        if (classMember.hasModifierProperty(PsiModifier.PRIVATE)) {
+                            isAccessible = true;
+                        }
+                        else if (classMember.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) &&
+                            toDifferentPackage) {
+                            isAccessible = true;
+                        }
+                        if (isAccessible) {
+                            String message = RefactoringUIUtil.getDescription(abstractMethod, false) +
+                                " uses " +
+                                RefactoringUIUtil.getDescription(classMember, true) +
+                                " which won't be accessible from the subclass.";
+                            conflicts.putValue(classMember, LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(message)));
+                        }
+                    }
+                }
+            });
+            if (abstractMethod.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && toDifferentPackage) {
+                if (!isInterfaceTarget) {
+                    String message = "Can't make " + RefactoringUIUtil.getDescription(abstractMethod, false) +
+                        " abstract as it won't be accessible from the subclass.";
+                    conflicts.putValue(abstractMethod, LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(message)));
+                }
+            }
+        }
+        return conflicts;
     }
-    // check if moved methods use other members in the classes between Subclass and Superclass
-    List<PsiElement> checkModuleConflictsList = new ArrayList<PsiElement>();
-    for (PsiMember member : movedMembers) {
-      if (member instanceof PsiMethod || member instanceof PsiClass && !(member instanceof PsiCompiledElement)) {
-        ClassMemberReferencesVisitor visitor =
-          movedMembers2Super? new ConflictingUsagesOfSubClassMembers(member, movedMembers, abstractMethods, subclass, superClass,
-                                                 superClass != null ? null : targetPackage, conflicts,
-                                                 interfaceContainmentVerifier)
-                            : new ConflictingUsagesOfSuperClassMemebers(member, subclass, targetPackage, movedMembers, conflicts);
-        member.accept(visitor);
-      }
-      checkModuleConflictsList.add(member);
+
+    private static void checkInterfaceTarget(MemberInfo[] infos, MultiMap<PsiElement, LocalizeValue> conflictsList) {
+        for (MemberInfo info : infos) {
+            PsiElement member = info.getMember();
+
+            if (member instanceof PsiField || member instanceof PsiClass) {
+
+                if (!((PsiModifierListOwner) member).hasModifierProperty(PsiModifier.STATIC)
+                    && !(member instanceof PsiClass && ((PsiClass) member).isInterface())) {
+                    LocalizeValue message =
+                        RefactoringLocalize.zeroIsNotStaticItCannotBeMovedToTheInterface(RefactoringUIUtil.getDescription(member, false));
+                    conflictsList.putValue(member, message.capitalize());
+                }
+            }
+
+            if (member instanceof PsiField && ((PsiField) member).getInitializer() == null) {
+                LocalizeValue message = RefactoringLocalize.zeroIsNotInitializedInDeclarationSuchFieldsAreNotAllowedInInterfaces(
+                    RefactoringUIUtil.getDescription(member, false)
+                );
+                conflictsList.putValue(member, message.capitalize());
+            }
+        }
     }
-    for (final PsiMethod method : abstractMethods) {
-      checkModuleConflictsList.add(method.getParameterList());
-      checkModuleConflictsList.add(method.getReturnTypeElement());
-      checkModuleConflictsList.add(method.getTypeParameterList());
+
+    private static void checkSuperclassMembers(
+        PsiClass superClass,
+        MemberInfo[] infos,
+        MultiMap<PsiElement, LocalizeValue> conflictsList
+    ) {
+        for (MemberInfo info : infos) {
+            PsiMember member = info.getMember();
+            boolean isConflict = false;
+            if (member instanceof PsiField) {
+                String name = member.getName();
+
+                isConflict = superClass.findFieldByName(name, false) != null;
+            }
+            else if (member instanceof PsiMethod) {
+                PsiSubstitutor superSubstitutor =
+                    TypeConversionUtil.getSuperClassSubstitutor(superClass, member.getContainingClass(), PsiSubstitutor.EMPTY);
+                MethodSignature signature = ((PsiMethod) member).getSignature(superSubstitutor);
+                final PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(superClass, signature, false);
+                isConflict = superClassMethod != null;
+            }
+
+            if (isConflict) {
+                LocalizeValue message = RefactoringLocalize.zeroAlreadyContainsA1(
+                    RefactoringUIUtil.getDescription(superClass, false),
+                    RefactoringUIUtil.getDescription(member, false)
+                );
+                conflictsList.putValue(superClass, message.capitalize());
+            }
+
+            if (member instanceof PsiMethod) {
+                final PsiMethod method = (PsiMethod) member;
+                final PsiModifierList modifierList = method.getModifierList();
+                if (!modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
+                    for (PsiClass subClass : ClassInheritorsSearch.search(superClass)) {
+                        if (method.getContainingClass() != subClass) {
+                            MethodSignature signature = ((PsiMethod) member).getSignature(TypeConversionUtil.getSuperClassSubstitutor(
+                                superClass,
+                                subClass,
+                                PsiSubstitutor.EMPTY
+                            ));
+                            final PsiMethod wouldBeOverriden = MethodSignatureUtil.findMethodBySignature(subClass, signature, false);
+                            if (wouldBeOverriden != null && VisibilityUtil.compare(
+                                VisibilityUtil.getVisibilityModifier(wouldBeOverriden.getModifierList()),
+                                VisibilityUtil.getVisibilityModifier(modifierList)
+                            ) > 0) {
+                                conflictsList.putValue(
+                                    wouldBeOverriden,
+                                    LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(
+                                        RefactoringUIUtil.getDescription(method, true) + " in super class would clash " +
+                                            "with local method from " + RefactoringUIUtil.getDescription(subClass, true)
+                                    ))
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
-    RefactoringConflictsUtil.analyzeModuleConflicts(subclass.getProject(), checkModuleConflictsList,
-                                           new UsageInfo[0], targetRepresentativeElement, conflicts);
-    final String fqName = subclass.getQualifiedName();
-    final String packageName;
-    if (fqName != null) {
-      packageName = StringUtil.getPackageName(fqName);
-    } else {
-      final PsiFile psiFile = PsiTreeUtil.getParentOfType(subclass, PsiFile.class);
-      if (psiFile instanceof PsiClassOwner) {
-        packageName = ((PsiClassOwner)psiFile).getPackageName();
-      } else {
-        packageName = null;
-      }
+
+    private static boolean willBeMoved(PsiElement element, Set<PsiMember> movedMembers) {
+        PsiElement parent = element;
+        while (parent != null) {
+            if (movedMembers.contains(parent)) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
-    final boolean toDifferentPackage = !Comparing.strEqual(targetPackage.getQualifiedName(), packageName);
-    for (final PsiMethod abstractMethod : abstractMethods) {
-      abstractMethod.accept(new ClassMemberReferencesVisitor(subclass) {
+
+    private static class ConflictingUsagesOfSuperClassMembers extends ClassMemberReferencesVisitor {
+        private PsiMember myMember;
+        private PsiClass mySubClass;
+        private PsiJavaPackage myTargetPackage;
+        private Set<PsiMember> myMovedMembers;
+        private MultiMap<PsiElement, LocalizeValue> myConflicts;
+
+        public ConflictingUsagesOfSuperClassMembers(
+            PsiMember member,
+            PsiClass aClass,
+            PsiJavaPackage targetPackage,
+            Set<PsiMember> movedMembers,
+            MultiMap<PsiElement, LocalizeValue> conflicts
+        ) {
+            super(aClass);
+            myMember = member;
+            mySubClass = aClass;
+            myTargetPackage = targetPackage;
+            myMovedMembers = movedMembers;
+            myConflicts = conflicts;
+        }
+
         @Override
         protected void visitClassMemberReferenceElement(PsiMember classMember, PsiJavaCodeReferenceElement classMemberReference) {
-          if (classMember != null && willBeMoved(classMember, movedMembers)) {
-            boolean isAccessible = false;
-            if (classMember.hasModifierProperty(PsiModifier.PRIVATE)) {
-              isAccessible = true;
+            if (classMember != null && !willBeMoved(classMember, myMovedMembers)) {
+                final PsiClass containingClass = classMember.getContainingClass();
+                if (containingClass != null) {
+                    if (!PsiUtil.isAccessibleFromPackage(classMember, myTargetPackage)) {
+                        if (classMember.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
+                            myConflicts.putValue(
+                                myMember,
+                                LocalizeValue.localizeTODO(RefactoringUIUtil.getDescription(classMember, true) + " won't be accessible")
+                            );
+                        }
+                        else if (classMember.hasModifierProperty(PsiModifier.PROTECTED) && !mySubClass.isInheritor(containingClass, true)) {
+                            myConflicts.putValue(
+                                myMember,
+                                LocalizeValue.localizeTODO(RefactoringUIUtil.getDescription(classMember, true) + " won't be accessible")
+                            );
+                        }
+                    }
+                }
             }
-            else if (classMember.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) &&
-                     toDifferentPackage) {
-              isAccessible = true;
+        }
+    }
+
+    private static class ConflictingUsagesOfSubClassMembers extends ClassMemberReferencesVisitor {
+        private final PsiElement myScope;
+        private final Set<PsiMember> myMovedMembers;
+        private final Set<PsiMethod> myAbstractMethods;
+        private final PsiClass mySubclass;
+        private final PsiClass mySuperClass;
+        private final PsiJavaPackage myTargetPackage;
+        private final MultiMap<PsiElement, LocalizeValue> myConflictsList;
+        private final InterfaceContainmentVerifier myInterfaceContainmentVerifier;
+
+        ConflictingUsagesOfSubClassMembers(
+            PsiElement scope,
+            Set<PsiMember> movedMembers,
+            Set<PsiMethod> abstractMethods,
+            PsiClass subclass,
+            PsiClass superClass,
+            PsiJavaPackage targetPackage,
+            MultiMap<PsiElement, LocalizeValue> conflictsList,
+            InterfaceContainmentVerifier interfaceContainmentVerifier
+        ) {
+            super(subclass);
+            myScope = scope;
+            myMovedMembers = movedMembers;
+            myAbstractMethods = abstractMethods;
+            mySubclass = subclass;
+            mySuperClass = superClass;
+            myTargetPackage = targetPackage;
+            myConflictsList = conflictsList;
+            myInterfaceContainmentVerifier = interfaceContainmentVerifier;
+        }
+
+        protected void visitClassMemberReferenceElement(
+            PsiMember classMember,
+            PsiJavaCodeReferenceElement classMemberReference
+        ) {
+            if (classMember != null
+                && RefactoringHierarchyUtil.isMemberBetween(mySuperClass, mySubclass, classMember)) {
+                if (classMember.hasModifierProperty(PsiModifier.STATIC)
+                    && !willBeMoved(classMember, myMovedMembers)) {
+                    final boolean isAccessible;
+                    if (mySuperClass != null) {
+                        isAccessible = PsiUtil.isAccessible(classMember, mySuperClass, null);
+                    }
+                    else if (myTargetPackage != null) {
+                        isAccessible = PsiUtil.isAccessibleFromPackage(classMember, myTargetPackage);
+                    }
+                    else {
+                        isAccessible = classMember.hasModifierProperty(PsiModifier.PUBLIC);
+                    }
+                    if (!isAccessible) {
+                        LocalizeValue message = RefactoringLocalize.zeroUses1WhichIsNotAccessibleFromTheSuperclass(
+                            RefactoringUIUtil.getDescription(myScope, false),
+                            RefactoringUIUtil.getDescription(classMember, true)
+                        );
+                        myConflictsList.putValue(classMember, message.capitalize());
+                    }
+                    return;
+                }
+                if (!myAbstractMethods.contains(classMember) && !willBeMoved(classMember, myMovedMembers)) {
+                    if (!existsInSuperClass(classMember)) {
+                        LocalizeValue message = RefactoringLocalize.zeroUses1WhichIsNotMovedToTheSuperclass(
+                            RefactoringUIUtil.getDescription(myScope, false),
+                            RefactoringUIUtil.getDescription(classMember, true)
+                        );
+                        myConflictsList.putValue(classMember, message.capitalize());
+                    }
+                }
             }
-            if (isAccessible) {
-              String message = RefactoringUIUtil.getDescription(abstractMethod, false) +
-                               " uses " +
-                               RefactoringUIUtil.getDescription(classMember, true) +
-                               " which won't be accessible from the subclass.";
-              conflicts.putValue(classMember, CommonRefactoringUtil.capitalize(message));
+        }
+
+
+        private boolean existsInSuperClass(PsiElement classMember) {
+            if (!(classMember instanceof PsiMethod)) {
+                return false;
             }
-          }
-        }
-      });
-      if (abstractMethod.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && toDifferentPackage) {
-        if (!isInterfaceTarget) {
-          String message = "Can't make " + RefactoringUIUtil.getDescription(abstractMethod, false) +
-                           " abstract as it won't be accessible from the subclass.";
-          conflicts.putValue(abstractMethod, CommonRefactoringUtil.capitalize(message));
-        }
-      }
-    }
-    return conflicts;
-  }
-
-  private static void checkInterfaceTarget(MemberInfo[] infos, MultiMap<PsiElement, String> conflictsList) {
-    for (MemberInfo info : infos) {
-      PsiElement member = info.getMember();
-
-      if (member instanceof PsiField || member instanceof PsiClass) {
-
-        if (!((PsiModifierListOwner)member).hasModifierProperty(PsiModifier.STATIC)
-            && !(member instanceof PsiClass && ((PsiClass)member).isInterface())) {
-          LocalizeValue message =
-            RefactoringLocalize.zeroIsNotStaticItCannotBeMovedToTheInterface(RefactoringUIUtil.getDescription(member, false));
-          conflictsList.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
-        }
-      }
-
-      if (member instanceof PsiField && ((PsiField)member).getInitializer() == null) {
-        LocalizeValue message = RefactoringLocalize.zeroIsNotInitializedInDeclarationSuchFieldsAreNotAllowedInInterfaces(
-          RefactoringUIUtil.getDescription(member, false)
-        );
-        conflictsList.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
-      }
-    }
-  }
-
-  private static void checkSuperclassMembers(PsiClass superClass,
-                                             MemberInfo[] infos,
-                                             MultiMap<PsiElement, String> conflictsList) {
-    for (MemberInfo info : infos) {
-      PsiMember member = info.getMember();
-      boolean isConflict = false;
-      if (member instanceof PsiField) {
-        String name = member.getName();
-
-        isConflict = superClass.findFieldByName(name, false) != null;
-      }
-      else if (member instanceof PsiMethod) {
-        PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, member.getContainingClass(), PsiSubstitutor.EMPTY);
-        MethodSignature signature = ((PsiMethod) member).getSignature(superSubstitutor);
-        final PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(superClass, signature, false);
-        isConflict = superClassMethod != null;
-      }
-
-      if (isConflict) {
-        LocalizeValue message = RefactoringLocalize.zeroAlreadyContainsA1(
-          RefactoringUIUtil.getDescription(superClass, false),
-          RefactoringUIUtil.getDescription(member, false)
-        );
-        conflictsList.putValue(superClass, CommonRefactoringUtil.capitalize(message.get()));
-      }
-
-      if (member instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)member;
-        final PsiModifierList modifierList = method.getModifierList();
-        if (!modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
-          for (PsiClass subClass : ClassInheritorsSearch.search(superClass)) {
-            if (method.getContainingClass() != subClass) {
-              MethodSignature signature = ((PsiMethod) member).getSignature(TypeConversionUtil.getSuperClassSubstitutor(superClass, subClass, PsiSubstitutor.EMPTY));
-              final PsiMethod wouldBeOverriden = MethodSignatureUtil.findMethodBySignature(subClass, signature, false);
-              if (wouldBeOverriden != null && VisibilityUtil.compare(VisibilityUtil.getVisibilityModifier(wouldBeOverriden.getModifierList()),
-                                                                     VisibilityUtil.getVisibilityModifier(modifierList)) > 0) {
-                conflictsList.putValue(wouldBeOverriden, CommonRefactoringUtil.capitalize(RefactoringUIUtil.getDescription(method, true) + " in super class would clash with local method from " + RefactoringUIUtil.getDescription(subClass, true)));
-              }
+            final PsiMethod method = ((PsiMethod) classMember);
+            if (myInterfaceContainmentVerifier.checkedInterfacesContain(method)) {
+                return true;
             }
-          }
-        }
-      }
-    }
-
-  }
-
-  private static boolean willBeMoved(PsiElement element, Set<PsiMember> movedMembers) {
-    PsiElement parent = element;
-    while (parent != null) {
-      if (movedMembers.contains(parent)) return true;
-      parent = parent.getParent();
-    }
-    return false;
-  }
-
-  private static class ConflictingUsagesOfSuperClassMemebers extends ClassMemberReferencesVisitor {
-
-    private PsiMember myMember;
-    private PsiClass mySubClass;
-    private PsiJavaPackage myTargetPackage;
-    private Set<PsiMember> myMovedMembers;
-    private MultiMap<PsiElement, String> myConflicts;
-
-    public ConflictingUsagesOfSuperClassMemebers(PsiMember member, PsiClass aClass,
-                                                 PsiJavaPackage targetPackage,
-                                                 Set<PsiMember> movedMembers,
-                                                 MultiMap<PsiElement, String> conflicts) {
-      super(aClass);
-      myMember = member;
-      mySubClass = aClass;
-      myTargetPackage = targetPackage;
-      myMovedMembers = movedMembers;
-      myConflicts = conflicts;
-    }
-
-    @Override
-    protected void visitClassMemberReferenceElement(PsiMember classMember, PsiJavaCodeReferenceElement classMemberReference) {
-      if (classMember != null && !willBeMoved(classMember, myMovedMembers)) {
-        final PsiClass containingClass = classMember.getContainingClass();
-        if (containingClass != null) {
-          if (!PsiUtil.isAccessibleFromPackage(classMember, myTargetPackage)) {
-            if (classMember.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
-              myConflicts.putValue(myMember, RefactoringUIUtil.getDescription(classMember, true) + " won't be accessible");
+            if (mySuperClass == null) {
+                return false;
             }
-            else if (classMember.hasModifierProperty(PsiModifier.PROTECTED) && !mySubClass.isInheritor(containingClass, true)) {
-              myConflicts.putValue(myMember, RefactoringUIUtil.getDescription(classMember, true) + " won't be accessible");
-            }
-          }
+            final PsiMethod methodBySignature = mySuperClass.findMethodBySignature(method, true);
+            return methodBySignature != null;
         }
-      }
     }
-  }
-
-  private static class ConflictingUsagesOfSubClassMembers extends ClassMemberReferencesVisitor {
-    private final PsiElement myScope;
-    private final Set<PsiMember> myMovedMembers;
-    private final Set<PsiMethod> myAbstractMethods;
-    private final PsiClass mySubclass;
-    private final PsiClass mySuperClass;
-    private final PsiJavaPackage myTargetPackage;
-    private final MultiMap<PsiElement, String> myConflictsList;
-    private final InterfaceContainmentVerifier myInterfaceContainmentVerifier;
-
-    ConflictingUsagesOfSubClassMembers(PsiElement scope,
-                                       Set<PsiMember> movedMembers, Set<PsiMethod> abstractMethods,
-                                       PsiClass subclass, PsiClass superClass,
-                                       PsiJavaPackage targetPackage, MultiMap<PsiElement, String> conflictsList,
-                                       InterfaceContainmentVerifier interfaceContainmentVerifier) {
-      super(subclass);
-      myScope = scope;
-      myMovedMembers = movedMembers;
-      myAbstractMethods = abstractMethods;
-      mySubclass = subclass;
-      mySuperClass = superClass;
-      myTargetPackage = targetPackage;
-      myConflictsList = conflictsList;
-      myInterfaceContainmentVerifier = interfaceContainmentVerifier;
-    }
-
-    protected void visitClassMemberReferenceElement(PsiMember classMember,
-                                                    PsiJavaCodeReferenceElement classMemberReference) {
-      if (classMember != null
-          && RefactoringHierarchyUtil.isMemberBetween(mySuperClass, mySubclass, classMember)) {
-        if (classMember.hasModifierProperty(PsiModifier.STATIC)
-            && !willBeMoved(classMember, myMovedMembers)) {
-          final boolean isAccessible;
-          if (mySuperClass != null) {
-            isAccessible = PsiUtil.isAccessible(classMember, mySuperClass, null);
-          }
-          else if (myTargetPackage != null) {
-            isAccessible = PsiUtil.isAccessibleFromPackage(classMember, myTargetPackage);
-          }
-          else {
-            isAccessible = classMember.hasModifierProperty(PsiModifier.PUBLIC);
-          }
-          if (!isAccessible) {
-            LocalizeValue message = RefactoringLocalize.zeroUses1WhichIsNotAccessibleFromTheSuperclass(
-              RefactoringUIUtil.getDescription(myScope, false),
-              RefactoringUIUtil.getDescription(classMember, true)
-            );
-            myConflictsList.putValue(classMember, CommonRefactoringUtil.capitalize(message.get()));
-          }
-          return;
-        }
-        if (!myAbstractMethods.contains(classMember) && !willBeMoved(classMember, myMovedMembers)) {
-          if (!existsInSuperClass(classMember)) {
-            LocalizeValue message = RefactoringLocalize.zeroUses1WhichIsNotMovedToTheSuperclass(
-              RefactoringUIUtil.getDescription(myScope, false),
-              RefactoringUIUtil.getDescription(classMember, true)
-            );
-            myConflictsList.putValue(classMember, CommonRefactoringUtil.capitalize(message.get()));
-          }
-        }
-      }
-    }
-
-
-
-    private boolean existsInSuperClass(PsiElement classMember) {
-      if (!(classMember instanceof PsiMethod)) return false;
-      final PsiMethod method = ((PsiMethod)classMember);
-      if (myInterfaceContainmentVerifier.checkedInterfacesContain(method)) return true;
-      if (mySuperClass == null) return false;
-      final PsiMethod methodBySignature = mySuperClass.findMethodBySignature(method, true);
-      return methodBySignature != null;
-    }
-  }
 
 
 }
