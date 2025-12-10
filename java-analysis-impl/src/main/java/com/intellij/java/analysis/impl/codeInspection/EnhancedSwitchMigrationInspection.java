@@ -13,6 +13,8 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.StatementExtractor;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.*;
@@ -35,7 +37,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
     private static final SwitchConversion[] ourInspections = new SwitchConversion[]{
         EnhancedSwitchMigrationInspection::inspectReturningSwitch,
         EnhancedSwitchMigrationInspection::inspectVariableAssigningSwitch,
-        (statement, branches, isExhaustive, maxNumberStatementsForExpression) -> inspectReplacementWithStatement(statement, branches)
+        (statement, branches, isExhaustive, maxNumberStatementsForExpression) ->
+            inspectReplacementWithStatement(statement, branches)
     };
 
     @Override
@@ -49,8 +52,9 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return new EnhancedSwitchMigrationInspectionState();
     }
 
+    @Nonnull
     @Override
-    public @Nonnull Set<JavaFeature> requiredFeatures() {
+    public Set<JavaFeature> requiredFeatures() {
         return Set.of(JavaFeature.ENHANCED_SWITCH);
     }
 
@@ -60,15 +64,17 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return JavaInspectionsLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids14();
     }
 
-    @Override
     @Nonnull
-    public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
-                                              boolean isOnTheFly,
-                                              LocalInspectionToolSession localInspectionToolSession,
-                                              EnhancedSwitchMigrationInspectionState state) {
+    @Override
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession localInspectionToolSession,
+        EnhancedSwitchMigrationInspectionState state
+    ) {
         return new JavaElementVisitor() {
-
             @Override
+            @RequiredReadAction
             public void visitSwitchExpression(@Nonnull PsiSwitchExpression expression) {
                 PsiElement switchKeyword = expression.getFirstChild();
                 if (switchKeyword == null) {
@@ -98,10 +104,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                         if (!(statement instanceof PsiYieldStatement || statement instanceof PsiThrowStatement)) {
                             onlyOneYieldAfterLabel = false;
                         }
-                        else {
-                            if (statementAfterLabelCount > 1) {
-                                onlyOneYieldAfterLabel = false;
-                            }
+                        else if (statementAfterLabelCount > 1) {
+                            onlyOneYieldAfterLabel = false;
                         }
                     }
                 }
@@ -112,12 +116,15 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 if (!onlyOneYieldAfterLabel) {
                     warningType = ProblemHighlightType.INFORMATION;
                 }
-                holder.registerProblem(switchKeyword,
-                    JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchExpressionDescription().get(),
-                    warningType, new ReplaceExpressionWithEnhancedSwitchExpressionFix());
+                holder.newProblem(JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchExpressionDescription())
+                    .range(switchKeyword)
+                    .withFix(new ReplaceExpressionWithEnhancedSwitchExpressionFix())
+                    .highlightType(warningType)
+                    .create();
             }
 
             @Override
+            @RequiredReadAction
             public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
                 PsiElement switchKeyword = statement.getFirstChild();
                 if (switchKeyword == null) {
@@ -136,7 +143,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                         fixes.add(new UpdateInspectionOptionFix<EnhancedSwitchMigrationInspection, EnhancedSwitchMigrationInspectionState>(
                             EnhancedSwitchMigrationInspection.this,
                             JavaInspectionsLocalize.inspectionSwitchExpressionMigrationWarnOnlyOnExpression(),
-                            state -> state.myWarnOnlyOnExpressionConversion = true));
+                            state -> state.myWarnOnlyOnExpressionConversion = true
+                        ));
                     }
                     if (replacer.getType() == ReplacementType.Expression &&
                         replacer.getMaxNumberStatementsInBranch() != null &&
@@ -144,13 +152,16 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                         int newMaxValue = replacer.getMaxNumberStatementsInBranch() - 1;
 
                         fixes.add(new UpdateInspectionOptionFix<EnhancedSwitchMigrationInspection, EnhancedSwitchMigrationInspectionState>(
-                            EnhancedSwitchMigrationInspection.this,
-                            JavaInspectionsLocalize.inspectionSwitchExpressionMigrationOptionExpressionMaxStatements(newMaxValue),
-                            state -> state.myMaxNumberStatementsForBranch = newMaxValue)
+                                EnhancedSwitchMigrationInspection.this,
+                                JavaInspectionsLocalize.inspectionSwitchExpressionMigrationOptionExpressionMaxStatements(newMaxValue),
+                                state -> state.myMaxNumberStatementsForBranch = newMaxValue
+                            )
                         );
                     }
-                    holder.registerProblem(switchKeyword, JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchDescription().get(),
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
+                    holder.newProblem(JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchDescription())
+                        .range(switchKeyword)
+                        .withFixes(fixes)
+                        .create();
                     replacers.remove(replacer);
                 }
                 if (!holder.isOnTheFly()) {
@@ -159,9 +170,13 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 if (replacers.isEmpty()) {
                     return;
                 }
-                List<LocalQuickFix> fixes = ContainerUtil.map(replacers, replacer -> new ReplaceWithSwitchExpressionFix(replacer.getType()));
-                holder.registerProblem(switchKeyword, JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchDescription().get(),
-                    ProblemHighlightType.INFORMATION, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
+                List<LocalQuickFix> fixes =
+                    ContainerUtil.map(replacers, replacer -> new ReplaceWithSwitchExpressionFix(replacer.getType()));
+                holder.newProblem(JavaInspectionsLocalize.inspectionSwitchExpressionMigrationInspectionSwitchDescription())
+                    .range(switchKeyword)
+                    .highlightType(ProblemHighlightType.INFORMATION)
+                    .withFixes(fixes)
+                    .create();
             }
 
             private boolean isWarningLevel(@Nonnull SwitchReplacer replacer) {
@@ -173,10 +188,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         };
     }
 
-    private static List<SwitchReplacer> runInspections(@Nonnull PsiStatement statement,
-                                                       boolean isExhaustive,
-                                                       @Nonnull List<OldSwitchStatementBranch> branches,
-                                                       int maxNumberStatementsForExpression) {
+    private static List<SwitchReplacer> runInspections(
+        @Nonnull PsiStatement statement,
+        boolean isExhaustive,
+        @Nonnull List<OldSwitchStatementBranch> branches,
+        int maxNumberStatementsForExpression
+    ) {
         List<SwitchReplacer> replacers = new ArrayList<>();
         for (SwitchConversion inspection : ourInspections) {
             SwitchReplacer replacer = inspection.suggestReplacer(statement, branches, isExhaustive, maxNumberStatementsForExpression);
@@ -187,11 +204,13 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return replacers;
     }
 
-    private static OldSwitchStatementBranch addBranch(List<? super OldSwitchStatementBranch> branches,
-                                                      PsiStatement[] statements,
-                                                      int unmatchedCaseIndex,
-                                                      int endIndexExcl,
-                                                      boolean isFallthrough, PsiBreakStatement current) {
+    private static OldSwitchStatementBranch addBranch(
+        List<? super OldSwitchStatementBranch> branches,
+        PsiStatement[] statements,
+        int unmatchedCaseIndex,
+        int endIndexExcl,
+        boolean isFallthrough, PsiBreakStatement current
+    ) {
         PsiSwitchLabelStatement labelStatement = (PsiSwitchLabelStatement) statements[unmatchedCaseIndex];
         PsiStatement[] branchStatements = Arrays.copyOfRange(statements, unmatchedCaseIndex + 1, endIndexExcl);
         OldSwitchStatementBranch branch = new OldSwitchStatementBranch(isFallthrough, branchStatements, labelStatement, current);
@@ -199,8 +218,10 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return branch;
     }
 
-    private static @Nullable List<OldSwitchStatementBranch> extractBranches(@Nonnull PsiCodeBlock body,
-                                                                            PsiSwitchStatement switchStatement) {
+    private static @Nullable List<OldSwitchStatementBranch> extractBranches(
+        @Nonnull PsiCodeBlock body,
+        PsiSwitchStatement switchStatement
+    ) {
         List<OldSwitchStatementBranch> branches = new ArrayList<>();
         PsiStatement[] statements = body.getStatements();
         int unmatchedCaseIndex = -1;
@@ -216,14 +237,14 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 }
                 unmatchedCaseIndex = i;
             }
-            else if (current instanceof PsiBreakStatement) {
-                if (((PsiBreakStatement) current).findExitedStatement() != switchStatement) {
+            else if (current instanceof PsiBreakStatement breakStmt) {
+                if (breakStmt.findExitedStatement() != switchStatement) {
                     return null;
                 }
                 if (unmatchedCaseIndex == -1) {
                     return null;
                 }
-                OldSwitchStatementBranch newBranch = addBranch(branches, statements, unmatchedCaseIndex, i, false, (PsiBreakStatement) current);
+                OldSwitchStatementBranch newBranch = addBranch(branches, statements, unmatchedCaseIndex, i, false, breakStmt);
                 newBranch.myPreviousSwitchBranch = previousBranch;
                 previousBranch = newBranch;
                 unmatchedCaseIndex = -1;
@@ -253,8 +274,10 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return null;
     }
 
-    private static @Nonnull List<SwitchReplacer> findSwitchReplacers(@Nonnull PsiSwitchStatement switchStatement,
-                                                                     int maxNumberStatementsForExpression) {
+    private static @Nonnull List<SwitchReplacer> findSwitchReplacers(
+        @Nonnull PsiSwitchStatement switchStatement,
+        int maxNumberStatementsForExpression
+    ) {
         PsiExpression expression = switchStatement.getExpression();
         if (expression == null) {
             return List.of();
@@ -271,21 +294,24 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return runInspections(switchStatement, isExhaustive, branches, maxNumberStatementsForExpression);
     }
 
-    private static @Nullable PsiSwitchBlock generateEnhancedSwitch(@Nonnull PsiStatement statementToReplace,
-                                                                   List<SwitchBranch> newBranches,
-                                                                   CommentTracker ct,
-                                                                   boolean isExpr) {
-        PsiElementFactory factory = JavaPsiFacade.getElementFactory(statementToReplace.getProject());
-        if (!(statementToReplace instanceof PsiSwitchStatement)) {
+    @RequiredReadAction
+    private static @Nullable PsiSwitchBlock generateEnhancedSwitch(
+        @Nonnull PsiStatement statementToReplace,
+        List<SwitchBranch> newBranches,
+        CommentTracker ct,
+        boolean isExpr
+    ) {
+        if (!(statementToReplace instanceof PsiSwitchStatement switchStmt)) {
             return null;
         }
-        PsiCodeBlock body = ((PsiSwitchStatement) statementToReplace).getBody();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(switchStmt.getProject());
+        PsiCodeBlock body = switchStmt.getBody();
         if (body == null) {
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
-        for (PsiElement e = statementToReplace.getFirstChild(); e != null && e != body; e = e.getNextSibling()) {
+        for (PsiElement e = switchStmt.getFirstChild(); e != null && e != body; e = e.getNextSibling()) {
             sb.append(ct.text(e));
         }
         PsiJavaToken lBrace = body.getLBrace();
@@ -297,15 +323,17 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         sb.append(rBrace != null ? ct.textWithComments(rBrace) : "}");
         PsiSwitchBlock switchBlock;
         if (isExpr) {
-            switchBlock = (PsiSwitchBlock) factory.createExpressionFromText(sb.toString(), statementToReplace);
+            switchBlock = (PsiSwitchBlock) factory.createExpressionFromText(sb.toString(), switchStmt);
         }
         else {
-            switchBlock = (PsiSwitchBlock) factory.createStatementFromText(sb.toString(), statementToReplace);
+            switchBlock = (PsiSwitchBlock) factory.createStatementFromText(sb.toString(), switchStmt);
         }
         StreamEx.ofTree((PsiElement) switchBlock, block -> Arrays.stream(block.getChildren()))
             .select(PsiBreakStatement.class)
-            .filter(breakStmt -> ControlFlowUtils.statementCompletesWithStatement(switchBlock, breakStmt) &&
-                breakStmt.findExitedStatement() == switchBlock)
+            .filter(
+                breakStmt -> ControlFlowUtils.statementCompletesWithStatement(switchBlock, breakStmt)
+                    && breakStmt.findExitedStatement() == switchBlock
+            )
             .forEach(statement -> new CommentTracker().delete(statement));
         return switchBlock;
     }
@@ -320,8 +348,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             }
         }
         SwitchUtils.SwitchExhaustivenessState completenessResult = SwitchUtils.evaluateSwitchCompleteness(switchStatement, true);
-        return completenessResult == SwitchUtils.SwitchExhaustivenessState.EXHAUSTIVE_CAN_ADD_DEFAULT ||
-            completenessResult == SwitchUtils.SwitchExhaustivenessState.EXHAUSTIVE_NO_DEFAULT;
+        return completenessResult == SwitchUtils.SwitchExhaustivenessState.EXHAUSTIVE_CAN_ADD_DEFAULT
+            || completenessResult == SwitchUtils.SwitchExhaustivenessState.EXHAUSTIVE_NO_DEFAULT;
     }
 
     private static boolean isConvertibleBranch(@Nonnull OldSwitchStatementBranch branch, boolean hasNext) {
@@ -366,10 +394,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
 
     private interface SwitchConversion {
         @Nullable
-        SwitchReplacer suggestReplacer(@Nonnull PsiStatement statement,
-                                       @Nonnull List<OldSwitchStatementBranch> branches,
-                                       boolean isExhaustive,
-                                       int maxNumberStatementsForExpression);
+        SwitchReplacer suggestReplacer(
+            @Nonnull PsiStatement statement,
+            @Nonnull List<OldSwitchStatementBranch> branches,
+            boolean isExhaustive,
+            int maxNumberStatementsForExpression
+        );
     }
 
     //Right part of switch rule (case labels -> result)
@@ -386,6 +416,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredWriteAction
         public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problemDescriptor) {
             PsiElement element = problemDescriptor.getPsiElement();
 
@@ -403,9 +434,9 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                         if (codeBlockChildren instanceof PsiSwitchLabelStatement switchLabelStatement) {
                             boolean nextIsBodyStatement = checkNextIsStatement(codeBlockChildren);
                             for (@Nonnull PsiElement labelStatementChild : switchLabelStatement.getChildren()) {
-                                if (!previousHasBodyStatement &&
-                                    labelStatementChild instanceof PsiJavaToken javaToken &&
-                                    javaToken.textMatches("case")) {
+                                if (!previousHasBodyStatement
+                                    && labelStatementChild instanceof PsiJavaToken javaToken
+                                    && javaToken.textMatches("case")) {
                                     continue;
                                 }
                                 if (labelStatementChild instanceof PsiJavaToken javaToken && javaToken.textMatches(":")) {
@@ -422,8 +453,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                                 }
                             }
                             PsiElement nextOfSwitchLabelStatement = PsiTreeUtil.skipWhitespacesAndCommentsForward(switchLabelStatement);
-                            if (nextIsBodyStatement && !(nextOfSwitchLabelStatement instanceof PsiBlockStatement) &&
-                                findOneYieldOrThrowStatement(PsiTreeUtil.skipWhitespacesAndCommentsForward(codeBlockChildren)) == null) {
+                            if (nextIsBodyStatement && !(nextOfSwitchLabelStatement instanceof PsiBlockStatement)
+                                && findOneYieldOrThrowStatement(PsiTreeUtil.skipWhitespacesAndCommentsForward(codeBlockChildren)) == null) {
                                 builder.append("{"); //wrap multiline rule into '{}'
                             }
                             previousHasBodyStatement = nextIsBodyStatement;
@@ -440,12 +471,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                             else {
                                 builder.append(codeBlockChildren.getText());
                                 PsiElement nextOfCodeBlockChildren = PsiTreeUtil.skipWhitespacesAndCommentsForward(codeBlockChildren);
-                                if (!(codeBlockChildren instanceof PsiComment || codeBlockChildren instanceof PsiWhiteSpace) &&
-                                    !(PsiTreeUtil.skipWhitespacesAndCommentsBackward(codeBlockChildren) instanceof PsiJavaToken) &&
-                                    findOneYieldOrThrowStatement(PsiTreeUtil.skipWhitespacesAndCommentsBackward(codeBlockChildren)) == null &&
-                                    !(codeBlockChildren instanceof PsiJavaToken) &&
-                                    (nextOfCodeBlockChildren instanceof PsiSwitchLabelStatement ||
-                                        nextOfCodeBlockChildren instanceof PsiJavaToken javaToken && javaToken.textMatches("}"))) {
+                                if (!(codeBlockChildren instanceof PsiComment || codeBlockChildren instanceof PsiWhiteSpace)
+                                    && !(PsiTreeUtil.skipWhitespacesAndCommentsBackward(codeBlockChildren) instanceof PsiJavaToken)
+                                    && findOneYieldOrThrowStatement(PsiTreeUtil.skipWhitespacesAndCommentsBackward(codeBlockChildren)) == null
+                                    && !(codeBlockChildren instanceof PsiJavaToken)
+                                    && (nextOfCodeBlockChildren instanceof PsiSwitchLabelStatement ||
+                                    nextOfCodeBlockChildren instanceof PsiJavaToken javaToken && javaToken.textMatches("}"))) {
                                     builder.append("\n}"); //wrap multiline rule into '{}'
                                 }
                             }
@@ -461,23 +492,27 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             switchExpression.replace(newSwitchExpression);
         }
 
+        @RequiredReadAction
         private static boolean checkNextIsStatement(@Nullable PsiElement statement) {
             PsiElement forward = PsiTreeUtil.skipWhitespacesAndCommentsForward(statement);
-            return statement instanceof PsiSwitchLabelStatement &&
-                !(forward instanceof PsiSwitchLabelStatement) &&
-                forward instanceof PsiStatement;
+            return statement instanceof PsiSwitchLabelStatement
+                && !(forward instanceof PsiSwitchLabelStatement)
+                && forward instanceof PsiStatement;
         }
 
-        private static @Nullable PsiStatement findOneYieldOrThrowStatement(@Nullable PsiElement switchBlockChild) {
+        @Nullable
+        @RequiredReadAction
+        private static PsiStatement findOneYieldOrThrowStatement(@Nullable PsiElement switchBlockChild) {
             if (switchBlockChild == null) {
                 return null;
             }
-            boolean isOldOrThrow = switchBlockChild instanceof PsiYieldStatement ||
-                switchBlockChild instanceof PsiThrowStatement;
+            boolean isOldOrThrow = switchBlockChild instanceof PsiYieldStatement
+                || switchBlockChild instanceof PsiThrowStatement;
             if (!isOldOrThrow) {
                 return null;
             }
-            boolean hasSwitchLabelBefore = PsiTreeUtil.skipWhitespacesAndCommentsBackward(switchBlockChild) instanceof PsiSwitchLabelStatement;
+            boolean hasSwitchLabelBefore =
+                PsiTreeUtil.skipWhitespacesAndCommentsBackward(switchBlockChild) instanceof PsiSwitchLabelStatement;
             if (!hasSwitchLabelBefore) {
                 return null;
             }
@@ -504,6 +539,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredWriteAction
         public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problemDescriptor) {
             PsiElement element = problemDescriptor.getPsiElement();
 
@@ -527,8 +563,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
      *
      * @return rearranged branches
      */
-    private static @Nonnull List<SwitchBranch> rearrangeBranches(@Nonnull List<SwitchBranch> branches,
-                                                                 @Nonnull PsiElement context) {
+    @RequiredReadAction
+    private static @Nonnull List<SwitchBranch> rearrangeBranches(@Nonnull List<SwitchBranch> branches, @Nonnull PsiElement context) {
         if (branches.isEmpty()) {
             return branches;
         }
@@ -557,9 +593,11 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
      *
      * @param result - container, where sorted cases will be added
      */
-    private static void rearrangeCases(@Nonnull SwitchBranch branch,
-                                       @Nonnull List<? extends PsiCaseLabelElement> caseExpressions,
-                                       @Nonnull List<SwitchBranch> result) {
+    private static void rearrangeCases(
+        @Nonnull SwitchBranch branch,
+        @Nonnull List<? extends PsiCaseLabelElement> caseExpressions,
+        @Nonnull List<SwitchBranch> result
+    ) {
         List<PsiCaseLabelElement> previousExpressions = new ArrayList<>();
         for (PsiCaseLabelElement expression : caseExpressions) {
             PsiCaseLabelElement external = findNullLabel(List.of(expression));
@@ -586,8 +624,10 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
     }
 
     private static @Nullable PsiCaseLabelElement findNullLabel(@Nonnull List<? extends PsiCaseLabelElement> expressions) {
-        return ContainerUtil.find(expressions,
-            label -> label instanceof PsiExpression literal && TypeConversionUtil.isNullType(literal.getType()));
+        return ContainerUtil.find(
+            expressions,
+            label -> label instanceof PsiExpression literal && TypeConversionUtil.isNullType(literal.getType())
+        );
     }
 
     private static final class ReturningSwitchReplacer implements SwitchReplacer {
@@ -599,13 +639,16 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         private final boolean myIsInfo;
         private final int myMaxNumberStatementsInBranch;
 
-        private ReturningSwitchReplacer(@Nonnull PsiStatement statement,
-                                        @Nonnull List<SwitchBranch> newBranches,
-                                        @Nullable PsiReturnStatement returnToDelete,
-                                        @Nullable PsiThrowStatement throwToDelete,
-                                        @Nonnull List<? extends PsiStatement> statementsToDelete,
-                                        boolean isInfo,
-                                        int maxNumberStatementsInBranch) {
+        @RequiredReadAction
+        private ReturningSwitchReplacer(
+            @Nonnull PsiStatement statement,
+            @Nonnull List<SwitchBranch> newBranches,
+            @Nullable PsiReturnStatement returnToDelete,
+            @Nullable PsiThrowStatement throwToDelete,
+            @Nonnull List<? extends PsiStatement> statementsToDelete,
+            boolean isInfo,
+            int maxNumberStatementsInBranch
+        ) {
             myStatement = statement;
             myNewBranches = rearrangeBranches(newBranches, statement);
             myReturnToDelete = returnToDelete;
@@ -626,6 +669,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredWriteAction
         public void replace(@Nonnull PsiStatement statement) {
             CommentTracker commentTracker = new CommentTracker();
             PsiSwitchBlock switchBlock = generateEnhancedSwitch(statement, myNewBranches, commentTracker, true);
@@ -670,9 +714,13 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
      * </pre>
      */
 
-    private static @Nullable SwitchReplacer inspectReturningSwitch(@Nonnull PsiStatement statement,
-                                                                   @Nonnull List<OldSwitchStatementBranch> branches,
-                                                                   boolean isExhaustive, int maxNumberStatementsForExpression) {
+    @RequiredReadAction
+    private static @Nullable SwitchReplacer inspectReturningSwitch(
+        @Nonnull PsiStatement statement,
+        @Nonnull List<OldSwitchStatementBranch> branches,
+        boolean isExhaustive,
+        int maxNumberStatementsForExpression
+    ) {
         PsiReturnStatement returnAfterSwitch =
             ObjectUtil.tryCast(PsiTreeUtil.getNextSiblingOfType(statement, PsiStatement.class), PsiReturnStatement.class);
         PsiThrowStatement throwAfterSwitch =
@@ -719,9 +767,15 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 isInfo = true;
             }
             int lastIndex = statements.length - 1;
-            if (ContainerUtil.exists(statements,
-                st -> !PsiTreeUtil.findChildrenOfAnyType(st, PsiContinueStatement.class, PsiBreakStatement.class,
-                    PsiYieldStatement.class).isEmpty())) {
+            if (ContainerUtil.exists(
+                statements,
+                st -> !PsiTreeUtil.findChildrenOfAnyType(
+                    st,
+                    PsiContinueStatement.class,
+                    PsiBreakStatement.class,
+                    PsiYieldStatement.class
+                ).isEmpty()
+            )) {
                 return null;
             }
             PsiReturnStatement returnStmt = ObjectUtil.tryCast(statements[lastIndex], PsiReturnStatement.class);
@@ -785,18 +839,27 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 current = current.getNextSibling();
             }
         }
-        return new ReturningSwitchReplacer(statement, newBranches, returnAfterSwitch, throwAfterSwitch, statementsToDelete, isInfo, maxLines);
+        return new ReturningSwitchReplacer(
+            statement,
+            newBranches,
+            returnAfterSwitch,
+            throwAfterSwitch,
+            statementsToDelete,
+            isInfo,
+            maxLines
+        );
     }
 
+    @RequiredReadAction
     private static PsiStatement[] replaceAllReturnWithYield(PsiStatement[] statements) {
         PsiStatement[] result = ArrayUtil.copyOf(statements);
         for (int i = 0; i < statements.length; i++) {
             PsiStatement statement = result[i];
             if (statement instanceof PsiReturnStatement returnStatement) {
                 PsiExpression returnValue = returnStatement.getReturnValue();
-                if (returnValue == null || !returnValue.isValid() || PsiTreeUtil.hasErrorElements(returnValue) ||
+                if (returnValue == null || !returnValue.isValid() || PsiTreeUtil.hasErrorElements(returnValue)
                     //skip PsiCall not to resolve and get exceptions
-                    (!(returnValue instanceof PsiCall) && returnValue.getType() == null)) {
+                    || (!(returnValue instanceof PsiCall) && returnValue.getType() == null)) {
                     return null;
                 }
                 result[i] = createYieldStatement(returnValue);
@@ -807,15 +870,20 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             Collection<PsiReturnStatement> returnStatements = PsiTreeUtil.findChildrenOfType(copy, PsiReturnStatement.class);
             for (PsiReturnStatement returnStatement : returnStatements) {
                 PsiExpression returnValue = returnStatement.getReturnValue();
-                if (returnValue == null || PsiTreeUtil.hasErrorElements(returnValue) || !returnValue.isValid() || returnValue.getType() == null) {
+                if (returnValue == null
+                    || PsiTreeUtil.hasErrorElements(returnValue)
+                    || !returnValue.isValid()
+                    || returnValue.getType() == null) {
                     return null;
                 }
+                //noinspection RequiredXAction
                 returnStatement.replace(createYieldStatement(returnValue));
             }
         }
         return result;
     }
 
+    @RequiredReadAction
     private static PsiStatement[] withLastStatementReplacedWithYield(PsiStatement[] statements, @Nonnull PsiExpression expr) {
         PsiStatement[] result = ArrayUtil.copyOf(statements);
         PsiStatement yieldStatement = createYieldStatement(expr);
@@ -823,6 +891,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return result;
     }
 
+    @RequiredReadAction
     private static @Nonnull PsiStatement createYieldStatement(@Nonnull PsiExpression expr) {
         Project project = expr.getProject();
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
@@ -837,12 +906,15 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         private final boolean myIsInfo;
         private final int myMaxNumberStatementsInBranch;
 
-        private SwitchExistingVariableReplacer(@Nonnull PsiVariable variableToAssign,
-                                               @Nonnull PsiStatement statement,
-                                               List<SwitchBranch> newBranches,
-                                               boolean isRightAfterDeclaration,
-                                               boolean isInfo,
-                                               int maxNumberStatementsInBranch) {
+        @RequiredReadAction
+        private SwitchExistingVariableReplacer(
+            @Nonnull PsiVariable variableToAssign,
+            @Nonnull PsiStatement statement,
+            List<SwitchBranch> newBranches,
+            boolean isRightAfterDeclaration,
+            boolean isInfo,
+            int maxNumberStatementsInBranch
+        ) {
             myVariableToAssign = variableToAssign;
             myStatement = statement;
             myNewBranches = rearrangeBranches(newBranches, statement);
@@ -862,6 +934,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredWriteAction
         public void replace(@Nonnull PsiStatement switchStatement) {
             PsiLabeledStatement labeledStatement = ObjectUtil.tryCast(switchStatement.getParent(), PsiLabeledStatement.class);
             CommentTracker commentTracker = new CommentTracker();
@@ -897,6 +970,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             }
         }
 
+        @RequiredReadAction
         private static boolean isNotUsed(@Nonnull PsiVariable variable, @Nonnull PsiElement switchElement) {
             try {
                 ControlFlow controlFlow = ControlFlowFactory
@@ -930,9 +1004,13 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
      * }
      * </pre>
      */
-    private static @Nullable SwitchReplacer inspectVariableAssigningSwitch(@Nonnull PsiStatement statement,
-                                                                           @Nonnull List<OldSwitchStatementBranch> branches,
-                                                                           boolean isExhaustive, int maxNumberStatementsForExpression) {
+    @RequiredReadAction
+    private static @Nullable SwitchReplacer inspectVariableAssigningSwitch(
+        @Nonnull PsiStatement statement,
+        @Nonnull List<OldSwitchStatementBranch> branches,
+        boolean isExhaustive,
+        int maxNumberStatementsForExpression
+    ) {
         PsiElement parent = statement.getParent();
         PsiElement anchor = parent instanceof PsiLabeledStatement ? parent : statement;
         PsiLocalVariable assignedVariable = null;
@@ -953,13 +1031,18 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             if (statements.length == 0) {
                 return null;
             }
-            if (ContainerUtil.exists(statements,
+            if (ContainerUtil.exists(
+                statements,
                 st -> !PsiTreeUtil.findChildrenOfAnyType(st, PsiContinueStatement.class,
-                    PsiYieldStatement.class, PsiReturnStatement.class).isEmpty())) {
+                    PsiYieldStatement.class, PsiReturnStatement.class
+                ).isEmpty()
+            )) {
                 return null;
             }
-            if (ContainerUtil.exists(Arrays.stream(statements).toList().subList(0, statements.length - 1),
-                st -> !PsiTreeUtil.findChildrenOfAnyType(st, PsiBreakStatement.class).isEmpty())) {
+            if (ContainerUtil.exists(
+                Arrays.stream(statements).toList().subList(0, statements.length - 1),
+                st -> !PsiTreeUtil.findChildrenOfAnyType(st, PsiBreakStatement.class).isEmpty()
+            )) {
                 return null;
             }
             if (statements.length > maxNumberStatementsForExpression) {
@@ -1004,12 +1087,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                     result = new SwitchStatementBranch(withLastStatementReplacedWithYield(statements, rExpression));
                 }
             }
-            if (branch.isDefault()) {
-                wasDefault = true;
-            }
-            else {
-                wasDefault = existsDefaultLabelElement(branch.myLabelStatement);
-            }
+            wasDefault = branch.isDefault() || existsDefaultLabelElement(branch.myLabelStatement);
             newBranches.add(SwitchBranch.fromOldBranch(branch, result, branch.getRelatedStatements()));
         }
         if (assignedVariable == null || !hasAssignedBranch) {
@@ -1025,8 +1103,14 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                 return null;
             }
         }
-        return new SwitchExistingVariableReplacer(assignedVariable, statement, newBranches, isRightAfterDeclaration, isInfo,
-            maxNumberStatementsInBranch);
+        return new SwitchExistingVariableReplacer(
+            assignedVariable,
+            statement,
+            newBranches,
+            isRightAfterDeclaration,
+            isInfo,
+            maxNumberStatementsInBranch
+        );
     }
 
     private static boolean existsDefaultLabelElement(@Nonnull PsiSwitchLabelStatement statement) {
@@ -1037,9 +1121,11 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return ContainerUtil.exists(labelElementList.getElements(), el -> el instanceof PsiDefaultCaseLabelElement);
     }
 
-    private static @Nullable EnhancedSwitchMigrationInspection.SwitchBranch getVariableAssigningDefaultBranch(@Nullable PsiLocalVariable assignedVariable,
-                                                                                                              boolean isRightAfterDeclaration,
-                                                                                                              @Nonnull PsiStatement statement) {
+    private static @Nullable EnhancedSwitchMigrationInspection.SwitchBranch getVariableAssigningDefaultBranch(
+        @Nullable PsiLocalVariable assignedVariable,
+        boolean isRightAfterDeclaration,
+        @Nonnull PsiStatement statement
+    ) {
         if (assignedVariable == null) {
             return null;
         }
@@ -1052,14 +1138,14 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             return null;
         }
         try {
-            final LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
-            final ControlFlow controlFlow =
+            LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
+            ControlFlow controlFlow =
                 ControlFlowFactory.getInstance(declaration.getProject()).getControlFlow(declaration.getParent(), policy);
-            final int switchStart = controlFlow.getStartOffset(statement);
+            int switchStart = controlFlow.getStartOffset(statement);
             if (switchStart <= 0) {
                 return null;
             }
-            final ControlFlow beforeFlow = new ControlFlowSubRange(controlFlow, 0, switchStart);
+            ControlFlow beforeFlow = new ControlFlowSubRange(controlFlow, 0, switchStart);
             if (!ControlFlowUtil.isVariableDefinitelyAssigned(assignedVariable, beforeFlow)) {
                 return null;
             }
@@ -1073,6 +1159,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return SwitchBranch.createDefault(new SwitchRuleExpressionResult(reference));
     }
 
+    @RequiredReadAction
     private static boolean isRightAfterDeclaration(PsiElement anchor, PsiVariable assignedVariable) {
         PsiDeclarationStatement declaration =
             ObjectUtil.tryCast(PsiTreeUtil.getPrevSiblingOfType(anchor, PsiStatement.class), PsiDeclarationStatement.class);
@@ -1095,8 +1182,8 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         final @Nonnull PsiStatement myStatement;
         final @Nonnull List<SwitchBranch> myExpressionBranches;
 
-        private SwitchStatementReplacer(@Nonnull PsiStatement statement,
-                                        @Nonnull List<SwitchBranch> ruleResults) {
+        @RequiredReadAction
+        private SwitchStatementReplacer(@Nonnull PsiStatement statement, @Nonnull List<SwitchBranch> ruleResults) {
             myStatement = statement;
             myExpressionBranches = rearrangeBranches(ruleResults, statement);
         }
@@ -1112,6 +1199,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredWriteAction
         public void replace(@Nonnull PsiStatement switchStatement) {
             CommentTracker commentTracker = new CommentTracker();
             PsiSwitchBlock switchBlock = generateEnhancedSwitch(switchStatement, myExpressionBranches, commentTracker, false);
@@ -1130,8 +1218,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
     /**
      * Suggest replacement with an enhanced switch statement
      */
-    private static @Nullable SwitchReplacer inspectReplacementWithStatement(@Nonnull PsiStatement statement,
-                                                                            @Nonnull List<OldSwitchStatementBranch> branches) {
+    @Nullable
+    @RequiredReadAction
+    private static SwitchReplacer inspectReplacementWithStatement(
+        @Nonnull PsiStatement statement,
+        @Nonnull List<OldSwitchStatementBranch> branches
+    ) {
         for (int i = 0, size = branches.size(); i < size; i++) {
             OldSwitchStatementBranch branch = branches.get(i);
             if (!isConvertibleBranch(branch, i != size - 1) &&
@@ -1166,9 +1258,11 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         return new SwitchStatementReplacer(statement, switchRules);
     }
 
-
-    private static boolean isInBranchOrOutside(@Nonnull PsiStatement switchStmt,
-                                               OldSwitchStatementBranch branch, PsiLocalVariable variable) {
+    private static boolean isInBranchOrOutside(
+        @Nonnull PsiStatement switchStmt,
+        OldSwitchStatementBranch branch,
+        PsiLocalVariable variable
+    ) {
         return !PsiTreeUtil.isAncestor(switchStmt, variable, false)
             || ContainerUtil.or(branch.getStatements(), stmt -> PsiTreeUtil.isAncestor(stmt, variable, false));
     }
@@ -1184,13 +1278,16 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             myOriginalResultStatements = null;
         }
 
-        private SwitchStatementBranch(@Nullable PsiStatement[] resultStatements,
-                                      @Nullable PsiStatement[] originalResultStatements) {
+        private SwitchStatementBranch(
+            @Nullable PsiStatement[] resultStatements,
+            @Nullable PsiStatement[] originalResultStatements
+        ) {
             myResultStatements = resultStatements;
             myOriginalResultStatements = originalResultStatements;
         }
 
         @Override
+        @RequiredReadAction
         public String generate(CommentTracker ct, SwitchBranch branch) {
             @Nullable PsiStatement[] resultStatements = myResultStatements;
             if (resultStatements == null) {
@@ -1223,8 +1320,9 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
                     PsiElement current = getElementForComments(element, i);
                     addWhiteSpaceAndComments(current, sb, ct);
                 }
-                if (element.getNextSibling() == null && element.getLastChild() instanceof PsiComment comment &&
-                    comment.getTokenType() == JavaTokenType.END_OF_LINE_COMMENT) {
+                if (element.getNextSibling() == null
+                    && element.getLastChild() instanceof PsiComment comment
+                    && comment.getTokenType() == JavaTokenType.END_OF_LINE_COMMENT) {
                     addNewLine(sb);
                 }
             }
@@ -1255,6 +1353,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             return current;
         }
 
+        @RequiredReadAction
         private static void addWhiteSpaceAndComments(@Nullable PsiElement element, @Nonnull StringBuilder sb, CommentTracker ct) {
             if (element == null) {
                 return;
@@ -1275,6 +1374,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
 
         @Override
+        @RequiredReadAction
         public String generate(CommentTracker ct, SwitchBranch branch) {
             return ct.textWithComments(myExpression) + ";";
         }
@@ -1288,6 +1388,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
      * @param branch  the SwitchBranch object representing a switch branch
      * @param builder the StringBuilder object to append comments to
      */
+    @RequiredReadAction
     private static void addCommentsUntilNextLabel(CommentTracker ct, SwitchBranch branch, StringBuilder builder) {
         PsiElement label = ContainerUtil.find(branch.myUsedElements, e -> e instanceof PsiSwitchLabelStatement);
         if (!(label instanceof PsiSwitchLabelStatement labelStatement)) {
@@ -1320,14 +1421,16 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         }
     }
 
+    @RequiredReadAction
     private static @Nonnull String grubCommentsBefore(@Nonnull PsiElement untilComment, @Nonnull CommentTracker ct, SwitchBranch branch) {
         List<String> comments = new ArrayList<>();
-        PsiElement current =
-            (untilComment instanceof PsiComment || untilComment instanceof PsiWhiteSpace) ? untilComment : PsiTreeUtil.prevLeaf(untilComment);
+        PsiElement current = (untilComment instanceof PsiComment || untilComment instanceof PsiWhiteSpace)
+            ? untilComment
+            : PsiTreeUtil.prevLeaf(untilComment);
         while (current != null) {
-            if ((current instanceof PsiComment || current instanceof PsiWhiteSpace)) {
-                if (branch.myUsedElements.isEmpty() ||
-                    !PsiTreeUtil.isAncestor(branch.myUsedElements.get(branch.myUsedElements.size() - 1), current, false)) {
+            if (current instanceof PsiComment || current instanceof PsiWhiteSpace) {
+                if (branch.myUsedElements.isEmpty()
+                    || !PsiTreeUtil.isAncestor(branch.myUsedElements.get(branch.myUsedElements.size() - 1), current, false)) {
                     comments.add(ct.text(current));
                 }
             }
@@ -1347,10 +1450,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         final @Nonnull List<? extends PsiElement> myUsedElements; // used elements only for this branch
         private final @Nonnull SwitchRuleResult myRuleResult;
 
-        private SwitchBranch(boolean isDefault,
-                             @Nonnull List<? extends PsiCaseLabelElement> caseExpressions,
-                             @Nullable PsiExpression guard, @Nonnull SwitchRuleResult ruleResult,
-                             @Nonnull List<? extends PsiElement> usedElements) {
+        private SwitchBranch(
+            boolean isDefault,
+            @Nonnull List<? extends PsiCaseLabelElement> caseExpressions,
+            @Nullable PsiExpression guard, @Nonnull SwitchRuleResult ruleResult,
+            @Nonnull List<? extends PsiElement> usedElements
+        ) {
             if (ContainerUtil.exists(caseExpressions, exp -> exp instanceof PsiDefaultCaseLabelElement)) {
                 myIsDefault = true;
             }
@@ -1374,6 +1479,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             myUsedElements = usedElements;
         }
 
+        @RequiredReadAction
         private String generate(CommentTracker ct) {
             StringBuilder sb = new StringBuilder();
             PsiElement label = ContainerUtil.find(myUsedElements, e -> e instanceof PsiSwitchLabelStatement);
@@ -1405,15 +1511,17 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             sb.append(myRuleResult.generate(ct, this));
             if (!myUsedElements.isEmpty()) {
                 PsiElement element = PsiTreeUtil.nextCodeLeaf(myUsedElements.get(myUsedElements.size() - 1));
-                if (element instanceof PsiJavaToken javaToken && javaToken.textMatches("}") &&
-                    element.getParent() instanceof PsiCodeBlock codeBlock &&
-                    codeBlock.getParent() instanceof PsiSwitchBlock) {
-                    sb.append(ct.commentsBefore(element));
+                if (element instanceof PsiJavaToken javaToken
+                    && javaToken.textMatches("}")
+                    && element.getParent() instanceof PsiCodeBlock codeBlock
+                    && codeBlock.getParent() instanceof PsiSwitchBlock) {
+                    sb.append(ct.commentsBefore(javaToken));
                 }
             }
             return sb.toString();
         }
 
+        @RequiredReadAction
         private static void grabCommentsBeforeColon(PsiElement label, CommentTracker ct, StringBuilder sb) {
             if (label != null) {
                 PsiElement child = label.getLastChild();
@@ -1434,9 +1542,11 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             return new SwitchBranch(true, Collections.emptyList(), null, ruleResult, Collections.emptyList());
         }
 
-        private static @Nonnull SwitchBranch fromOldBranch(@Nonnull OldSwitchStatementBranch branch,
-                                                           @Nonnull SwitchRuleResult result,
-                                                           @Nonnull List<? extends PsiElement> usedElements) {
+        private static @Nonnull SwitchBranch fromOldBranch(
+            @Nonnull OldSwitchStatementBranch branch,
+            @Nonnull SwitchRuleResult result,
+            @Nonnull List<? extends PsiElement> usedElements
+        ) {
             return new SwitchBranch(branch.isDefault(), branch.getCaseLabelElements(), branch.getGuardExpression(), result, usedElements);
         }
     }
@@ -1449,10 +1559,12 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
         @Nullable
         OldSwitchStatementBranch myPreviousSwitchBranch;
 
-        private OldSwitchStatementBranch(boolean isFallthrough,
-                                         PsiStatement[] statements,
-                                         @Nonnull PsiSwitchLabelStatement switchLabelStatement,
-                                         @Nullable PsiBreakStatement breakStatement) {
+        private OldSwitchStatementBranch(
+            boolean isFallthrough,
+            PsiStatement[] statements,
+            @Nonnull PsiSwitchLabelStatement switchLabelStatement,
+            @Nullable PsiBreakStatement breakStatement
+        ) {
             myIsFallthrough = isFallthrough;
             myStatements = statements;
             myLabelStatement = switchLabelStatement;
@@ -1476,7 +1588,7 @@ public final class EnhancedSwitchMigrationInspection extends AbstractBaseJavaLoc
             List<OldSwitchStatementBranch> branches = getWithFallthroughBranches();
             Collections.reverse(branches);
             return StreamEx.of(branches).flatMap(branch -> {
-                final PsiCaseLabelElementList caseLabelElementList = branch.myLabelStatement.getCaseLabelElementList();
+                PsiCaseLabelElementList caseLabelElementList = branch.myLabelStatement.getCaseLabelElementList();
                 if (caseLabelElementList == null) {
                     return StreamEx.empty();
                 }
