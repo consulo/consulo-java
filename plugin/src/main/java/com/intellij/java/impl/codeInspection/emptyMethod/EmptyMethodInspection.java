@@ -101,6 +101,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
             }
         }
 
+        @Nonnull
         LocalizeValue message = LocalizeValue.empty();
         boolean needToDeleteHierarchy = false;
         if (refMethod.isOnlyCallsSuper() && !refMethod.isFinal()) {
@@ -149,7 +150,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
             }
         }
 
-        if (message != null) {
+        if (message != LocalizeValue.empty()) {
             List<LocalQuickFix> fixes = new ArrayList<>();
             fixes.add(getFix(processor, needToDeleteHierarchy));
             SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(
@@ -260,21 +261,20 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
         return false;
     }
 
-
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionEmptyMethodDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Override
     @Nonnull
+    @Override
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -325,8 +325,8 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
             myHint = hint;
         }
 
-        @Override
         @Nonnull
+        @Override
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionEmptyMethodDeleteQuickfix();
         }
