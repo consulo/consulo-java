@@ -29,7 +29,6 @@ import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
@@ -51,353 +50,349 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.proximity.PsiProximityComparator;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.*;
 
 @ExtensionImpl
 public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
-  @NonNls
-  public static final String SHORT_NAME = "JavadocReference";
+    public static final String SHORT_NAME = "JavadocReference";
 
-  private static ProblemDescriptor createDescriptor(
-    @Nonnull PsiElement element,
-    String template,
-    InspectionManager manager,
-    boolean onTheFly
-  ) {
-    return manager.createProblemDescriptor(element, template, onTheFly, null, ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
-  }
-
-  @Override
-  @Nullable
-  @RequiredReadAction
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    return checkMember(psiMethod, manager, isOnTheFly);
-  }
-
-  @Override
-  @Nullable
-  @RequiredReadAction
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    return checkMember(field, manager, isOnTheFly);
-  }
-
-  @Override
-  @Nullable
-  @RequiredReadAction
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
-    return checkMember(aClass, manager, isOnTheFly);
-  }
-
-  @Nullable
-  @RequiredReadAction
-  private ProblemDescriptor[] checkMember(
-    final PsiDocCommentOwner docCommentOwner,
-    final InspectionManager manager,
-    final boolean isOnTheFly
-  ) {
-    final ArrayList<ProblemDescriptor> problems = new ArrayList<>();
-    final PsiDocComment docComment = docCommentOwner.getDocComment();
-    if (docComment == null) {
-      return null;
-    }
-
-    final Set<PsiJavaCodeReferenceElement> references = new HashSet<>();
-    docComment.accept(getVisitor(references, docCommentOwner, problems, manager, isOnTheFly));
-    for (PsiJavaCodeReferenceElement reference : references) {
-      final List<PsiClass> classesToImport = new ImportClassFix(reference).getClassesToImport();
-      final PsiElement referenceNameElement = reference.getReferenceNameElement();
-      problems.add(manager.createProblemDescriptor(
-        referenceNameElement != null ? referenceNameElement : reference,
-        cannotResolveSymbolMessage("<code>" + reference.getText() + "</code>"),
-        !isOnTheFly || classesToImport.isEmpty() ? null : new AddQualifierFix(classesToImport),
-        ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
-        isOnTheFly
-      ));
-    }
-
-    return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
-
-  private PsiElementVisitor getVisitor(
-    final Set<PsiJavaCodeReferenceElement> references,
-    final PsiElement context,
-    final ArrayList<ProblemDescriptor> problems,
-    final InspectionManager manager,
-    final boolean onTheFly
-  ) {
-    return new JavaElementVisitor() {
-      @Override
-      @RequiredReadAction
-      public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
-        visitElement(expression);
-      }
-
-      @Override
-      public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
-        super.visitReferenceElement(reference);
-        JavaResolveResult result = reference.advancedResolve(false);
-        if (result.getElement() == null && !result.isPackagePrefixPackageReference()) {
-          references.add(reference);
-        }
-      }
-
-      @Override
-      @RequiredReadAction
-      public void visitDocTag(@Nonnull PsiDocTag tag) {
-        super.visitDocTag(tag);
-        final JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
-        final JavadocTagInfo info = javadocManager.getTagInfo(tag.getName());
-        if (info == null || !info.isInline()) {
-          visitRefInDocTag(tag, javadocManager, context, problems, manager, onTheFly);
-        }
-      }
-
-      @Override
-      @RequiredReadAction
-      public void visitInlineDocTag(@Nonnull PsiInlineDocTag tag) {
-        super.visitInlineDocTag(tag);
-        final JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
-        visitRefInDocTag(tag, javadocManager, context, problems, manager, onTheFly);
-      }
-
-      @Override
-      @RequiredReadAction
-      public void visitElement(PsiElement element) {
-        PsiElement[] children = element.getChildren();
-        for (PsiElement child : children) {
-          //do not visit method javadoc twice
-          if (!(child instanceof PsiDocCommentOwner)) {
-            child.accept(this);
-          }
-        }
-      }
-    };
-  }
-
-  @RequiredReadAction
-  public static void visitRefInDocTag(
-    final PsiDocTag tag,
-    final JavadocManager manager,
-    final PsiElement context,
-    final ArrayList<ProblemDescriptor> problems,
-    final InspectionManager inspectionManager,
-    final boolean onTheFly
-  ) {
-    final String tagName = tag.getName();
-    final PsiDocTagValue value = tag.getValueElement();
-    if (value == null) {
-      return;
-    }
-    final JavadocTagInfo info = manager.getTagInfo(tagName);
-    if (info != null && !info.isValidInContext(context)) {
-      return;
-    }
-    final String message = info == null || !info.isInline() ? null : info.checkTagValue(value);
-    if (message != null) {
-      problems.add(createDescriptor(value, message, inspectionManager, onTheFly));
-    }
-
-    final PsiReference reference = value.getReference();
-    if (reference == null) {
-      return;
-    }
-    final PsiElement element = reference.resolve();
-    if (element != null) {
-      return;
-    }
-    final int textOffset = value.getTextOffset();
-    if (textOffset == value.getTextRange().getEndOffset()) {
-      return;
-    }
-    final PsiDocTagValue valueElement = tag.getValueElement();
-    if (valueElement == null) {
-      return;
-    }
-
-    final CharSequence paramName =
-      value.getContainingFile().getViewProvider().getContents().subSequence(textOffset, value.getTextRange().getEndOffset());
-    final String params = "<code>" + paramName + "</code>";
-    final List<LocalQuickFix> fixes = new ArrayList<>();
-    if (onTheFly && "param".equals(tagName)) {
-      final PsiDocCommentOwner commentOwner = PsiTreeUtil.getParentOfType(tag, PsiDocCommentOwner.class);
-      if (commentOwner instanceof PsiMethod method) {
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
-        final PsiDocTag[] tags = tag.getContainingComment().getTags();
-        final Set<String> unboundParams = new HashSet<>();
-        for (PsiParameter parameter : parameters) {
-          if (!JavaDocLocalInspection.isFound(tags, parameter)) {
-            unboundParams.add(parameter.getName());
-          }
-        }
-        if (!unboundParams.isEmpty()) {
-          fixes.add(new RenameReferenceQuickFix(unboundParams));
-        }
-      }
-    }
-    fixes.add(new RemoveTagFix(tagName, paramName));
-
-    problems.add(inspectionManager.createProblemDescriptor(
-      valueElement,
-      reference.getRangeInElement(),
-      cannotResolveSymbolMessage(params),
-      ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
-      onTheFly,
-      fixes.toArray(new LocalQuickFix[fixes.size()])
-    ));
-  }
-
-  private static String cannotResolveSymbolMessage(String params) {
-    return InspectionLocalize.inspectionJavadocProblemCannotResolve(params).get();
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionJavadocRefDisplayName();
-  }
-
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.groupNamesJavadocIssues();
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return SHORT_NAME;
-  }
-
-  @Override
-  @Nonnull
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.ERROR;
-  }
-
-  private class AddQualifierFix implements LocalQuickFix {
-    private final List<PsiClass> originalClasses;
-
-    public AddQualifierFix(final List<PsiClass> originalClasses) {
-      this.originalClasses = originalClasses;
+    @Override
+    @Nullable
+    @RequiredReadAction
+    public ProblemDescriptor[] checkMethod(
+        @Nonnull PsiMethod psiMethod,
+        @Nonnull InspectionManager manager,
+        boolean isOnTheFly,
+        Object state
+    ) {
+        return checkMember(psiMethod, manager, isOnTheFly);
     }
 
     @Override
-    @Nonnull
-    public LocalizeValue getName() {
-      return JavaQuickFixLocalize.addQualifier();
+    @Nullable
+    @RequiredReadAction
+    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+        return checkMember(field, manager, isOnTheFly);
     }
 
     @Override
-    @RequiredWriteAction
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-      final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiJavaCodeReferenceElement.class);
-      if (element instanceof PsiJavaCodeReferenceElement) {
-        final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
-        Collections.sort(originalClasses, new PsiProximityComparator(referenceElement.getElement()));
-        final JList<PsiClass> list = new JBList<>(originalClasses.toArray(new PsiClass[originalClasses.size()]));
-        list.setCellRenderer(new FQNameCellRenderer());
-        final Runnable runnable = () -> {
-          if (!element.isValid()) {
-            return;
-          }
-          final int index = list.getSelectedIndex();
-          if (index < 0) {
-            return;
-          }
-          new WriteCommandAction(project, element.getContainingFile()) {
+    @Nullable
+    @RequiredReadAction
+    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+        return checkMember(aClass, manager, isOnTheFly);
+    }
+
+    @Nullable
+    @RequiredReadAction
+    private ProblemDescriptor[] checkMember(
+        PsiDocCommentOwner docCommentOwner,
+        InspectionManager manager,
+        boolean isOnTheFly
+    ) {
+        List<ProblemDescriptor> problems = new ArrayList<>();
+        PsiDocComment docComment = docCommentOwner.getDocComment();
+        if (docComment == null) {
+            return null;
+        }
+
+        Set<PsiJavaCodeReferenceElement> references = new HashSet<>();
+        docComment.accept(getVisitor(references, docCommentOwner, problems, manager, isOnTheFly));
+        for (PsiJavaCodeReferenceElement reference : references) {
+            List<PsiClass> classesToImport = new ImportClassFix(reference).getClassesToImport();
+            PsiElement referenceNameElement = reference.getReferenceNameElement();
+            PsiElement psiElement = referenceNameElement != null ? referenceNameElement : reference;
+            problems.add(
+                manager.newProblemDescriptor(InspectionLocalize.inspectionJavadocProblemCannotResolve("<code>" + reference.getText() + "</code>"))
+                    .range(psiElement)
+                    .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
+                    .onTheFly(isOnTheFly)
+                    .withOptionalFix(!isOnTheFly || classesToImport.isEmpty() ? null : new AddQualifierFix(classesToImport))
+                    .create()
+            );
+        }
+
+        return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
+    }
+
+    private PsiElementVisitor getVisitor(
+        final Set<PsiJavaCodeReferenceElement> references,
+        final PsiElement context,
+        final List<ProblemDescriptor> problems,
+        final InspectionManager manager,
+        final boolean onTheFly
+    ) {
+        return new JavaElementVisitor() {
             @Override
-            @RequiredWriteAction
-            protected void run(final Result result) throws Throwable {
-              final PsiClass psiClass = originalClasses.get(index);
-              if (psiClass.isValid()) {
-                PsiDocumentManager.getInstance(project).commitAllDocuments();
-                referenceElement.bindToElement(psiClass);
-              }
+            @RequiredReadAction
+            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+                visitElement(expression);
             }
-          }.execute();
+
+            @Override
+            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+                super.visitReferenceElement(reference);
+                JavaResolveResult result = reference.advancedResolve(false);
+                if (result.getElement() == null && !result.isPackagePrefixPackageReference()) {
+                    references.add(reference);
+                }
+            }
+
+            @Override
+            @RequiredReadAction
+            public void visitDocTag(@Nonnull PsiDocTag tag) {
+                super.visitDocTag(tag);
+                JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
+                JavadocTagInfo info = javadocManager.getTagInfo(tag.getName());
+                if (info == null || !info.isInline()) {
+                    visitRefInDocTag(tag, javadocManager, context, problems, manager, onTheFly);
+                }
+            }
+
+            @Override
+            @RequiredReadAction
+            public void visitInlineDocTag(@Nonnull PsiInlineDocTag tag) {
+                super.visitInlineDocTag(tag);
+                JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
+                visitRefInDocTag(tag, javadocManager, context, problems, manager, onTheFly);
+            }
+
+            @Override
+            @RequiredReadAction
+            public void visitElement(PsiElement element) {
+                for (PsiElement child : element.getChildren()) {
+                    //do not visit method javadoc twice
+                    if (!(child instanceof PsiDocCommentOwner)) {
+                        child.accept(this);
+                    }
+                }
+            }
         };
-        final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
-        asyncResult.doWhenDone(
-          dataContext -> new PopupChooserBuilder(list)
-            .setTitle(JavaQuickFixBundle.message("add.qualifier.original.class.chooser.title"))
-            .setItemChoosenCallback(runnable)
-            .createPopup()
-            .showInBestPositionFor(dataContext)
+    }
+
+    @RequiredReadAction
+    public static void visitRefInDocTag(
+        PsiDocTag tag,
+        JavadocManager manager,
+        PsiElement context,
+        List<ProblemDescriptor> problems,
+        InspectionManager inspectionManager,
+        boolean onTheFly
+    ) {
+        String tagName = tag.getName();
+        PsiDocTagValue value = tag.getValueElement();
+        if (value == null) {
+            return;
+        }
+        JavadocTagInfo info = manager.getTagInfo(tagName);
+        if (info != null && !info.isValidInContext(context)) {
+            return;
+        }
+        String message = info == null || !info.isInline() ? null : info.checkTagValue(value);
+        if (message != null) {
+            problems.add(inspectionManager.newProblemDescriptor(LocalizeValue.of(message))
+                .range(value)
+                .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
+                .onTheFly(onTheFly)
+                .create());
+        }
+
+        PsiReference reference = value.getReference();
+        if (reference == null) {
+            return;
+        }
+        PsiElement element = reference.resolve();
+        if (element != null) {
+            return;
+        }
+        int textOffset = value.getTextOffset();
+        if (textOffset == value.getTextRange().getEndOffset()) {
+            return;
+        }
+        PsiDocTagValue valueElement = tag.getValueElement();
+        if (valueElement == null) {
+            return;
+        }
+
+        CharSequence paramName =
+            value.getContainingFile().getViewProvider().getContents().subSequence(textOffset, value.getTextRange().getEndOffset());
+        String params = "<code>" + paramName + "</code>";
+        List<LocalQuickFix> fixes = new ArrayList<>();
+        if (onTheFly && "param".equals(tagName)) {
+            PsiDocCommentOwner commentOwner = PsiTreeUtil.getParentOfType(tag, PsiDocCommentOwner.class);
+            if (commentOwner instanceof PsiMethod method) {
+                PsiParameter[] parameters = method.getParameterList().getParameters();
+                PsiDocTag[] tags = tag.getContainingComment().getTags();
+                Set<String> unboundParams = new HashSet<>();
+                for (PsiParameter parameter : parameters) {
+                    if (!JavaDocLocalInspection.isFound(tags, parameter)) {
+                        unboundParams.add(parameter.getName());
+                    }
+                }
+                if (!unboundParams.isEmpty()) {
+                    fixes.add(new RenameReferenceQuickFix(unboundParams));
+                }
+            }
+        }
+        fixes.add(new RemoveTagFix(tagName, paramName));
+
+        problems.add(
+            inspectionManager.newProblemDescriptor(InspectionLocalize.inspectionJavadocProblemCannotResolve(params))
+                .range(valueElement, reference.getRangeInElement())
+                .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
+                .onTheFly(onTheFly)
+                .withFixes(fixes)
+                .create()
         );
-      }
-    }
-  }
-
-  private static class RenameReferenceQuickFix implements LocalQuickFix {
-    private final Set<String> myUnboundParams;
-
-    public RenameReferenceQuickFix(Set<String> unboundParams) {
-      myUnboundParams = unboundParams;
     }
 
-    @Override
     @Nonnull
-    public LocalizeValue getName() {
-      return LocalizeValue.localizeTODO("Change to ...");
-    }
-
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
-      final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
-      asyncResult.doWhenDone(dataContext -> {
-        final Editor editor = dataContext.getData(Editor.KEY);
-        assert editor != null;
-        final TextRange textRange = ((ProblemDescriptorBase)descriptor).getTextRange();
-        editor.getSelectionModel().setSelection(textRange.getStartOffset(), textRange.getEndOffset());
-
-        final String word = editor.getSelectionModel().getSelectedText();
-
-        if (word == null || StringUtil.isEmptyOrSpaces(word)) {
-          return;
-        }
-        final List<LookupElement> items = new ArrayList<>();
-        for (String variant : myUnboundParams) {
-          items.add(LookupElementBuilder.create(variant));
-        }
-        LookupManager.getInstance(project).showLookup(editor, items.toArray(new LookupElement[items.size()]));
-      });
-    }
-  }
-
-  private static class RemoveTagFix implements LocalQuickFix {
-    private final String myTagName;
-    private final CharSequence myParamName;
-
-    public RemoveTagFix(String tagName, CharSequence paramName) {
-      myTagName = tagName;
-      myParamName = paramName;
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionJavadocRefDisplayName();
     }
 
-    @Override
     @Nonnull
-    public LocalizeValue getName() {
-      return LocalizeValue.localizeTODO("Remove @" + myTagName + " " + myParamName);
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.groupNamesJavadocIssues();
     }
 
+    @Nonnull
     @Override
-    @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      final PsiDocTag myTag = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiDocTag.class);
-      if (myTag == null) {
-        return;
-      }
-      if (!FileModificationService.getInstance().preparePsiElementForWrite(myTag)) {
-        return;
-      }
-      myTag.delete();
+    public String getShortName() {
+        return SHORT_NAME;
     }
-  }
+
+    @Nonnull
+    @Override
+    public HighlightDisplayLevel getDefaultLevel() {
+        return HighlightDisplayLevel.ERROR;
+    }
+
+    private class AddQualifierFix implements LocalQuickFix {
+        private final List<PsiClass> originalClasses;
+
+        public AddQualifierFix(List<PsiClass> originalClasses) {
+            this.originalClasses = originalClasses;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return JavaQuickFixLocalize.addQualifier();
+        }
+
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiJavaCodeReferenceElement.class);
+            if (element instanceof PsiJavaCodeReferenceElement refElem) {
+                Collections.sort(originalClasses, new PsiProximityComparator(refElem.getElement()));
+                JList<PsiClass> list = new JBList<>(originalClasses.toArray(new PsiClass[originalClasses.size()]));
+                list.setCellRenderer(new FQNameCellRenderer());
+                @RequiredUIAccess
+                Runnable runnable = () -> {
+                    if (!refElem.isValid()) {
+                        return;
+                    }
+                    final int index = list.getSelectedIndex();
+                    if (index < 0) {
+                        return;
+                    }
+                    new WriteCommandAction(project, refElem.getContainingFile()) {
+                        @Override
+                        @RequiredWriteAction
+                        protected void run(Result result) throws Throwable {
+                            PsiClass psiClass = originalClasses.get(index);
+                            if (psiClass.isValid()) {
+                                PsiDocumentManager.getInstance(project).commitAllDocuments();
+                                refElem.bindToElement(psiClass);
+                            }
+                        }
+                    }.execute();
+                };
+                AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
+                asyncResult.doWhenDone(
+                    dataContext -> new PopupChooserBuilder(list)
+                        .setTitle(JavaQuickFixLocalize.addQualifierOriginalClassChooserTitle().get())
+                        .setItemChoosenCallback(runnable)
+                        .createPopup()
+                        .showInBestPositionFor(dataContext)
+                );
+            }
+        }
+    }
+
+    private static class RenameReferenceQuickFix implements LocalQuickFix {
+        private final Set<String> myUnboundParams;
+
+        public RenameReferenceQuickFix(Set<String> unboundParams) {
+            myUnboundParams = unboundParams;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return LocalizeValue.localizeTODO("Change to ...");
+        }
+
+        @Override
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
+            asyncResult.doWhenDone(dataContext -> {
+                Editor editor = dataContext.getData(Editor.KEY);
+                assert editor != null;
+                TextRange textRange = ((ProblemDescriptorBase) descriptor).getTextRange();
+                editor.getSelectionModel().setSelection(textRange.getStartOffset(), textRange.getEndOffset());
+
+                String word = editor.getSelectionModel().getSelectedText();
+
+                if (word == null || StringUtil.isEmptyOrSpaces(word)) {
+                    return;
+                }
+                List<LookupElement> items = new ArrayList<>();
+                for (String variant : myUnboundParams) {
+                    items.add(LookupElementBuilder.create(variant));
+                }
+                LookupManager.getInstance(project).showLookup(editor, items.toArray(new LookupElement[items.size()]));
+            });
+        }
+    }
+
+    private static class RemoveTagFix implements LocalQuickFix {
+        private final String myTagName;
+        private final CharSequence myParamName;
+
+        public RemoveTagFix(String tagName, CharSequence paramName) {
+            myTagName = tagName;
+            myParamName = paramName;
+        }
+
+        @Nonnull
+        @Override
+        public LocalizeValue getName() {
+            return LocalizeValue.localizeTODO("Remove @" + myTagName + " " + myParamName);
+        }
+
+        @Override
+        @RequiredWriteAction
+        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            PsiDocTag myTag = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiDocTag.class);
+            if (myTag == null) {
+                return;
+            }
+            if (!FileModificationService.getInstance().preparePsiElementForWrite(myTag)) {
+                return;
+            }
+            myTag.delete();
+        }
+    }
 }
