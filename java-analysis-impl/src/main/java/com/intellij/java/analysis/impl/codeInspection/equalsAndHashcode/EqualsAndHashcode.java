@@ -18,12 +18,11 @@ package com.intellij.java.analysis.impl.codeInspection.equalsAndHashcode;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
-import consulo.application.util.function.Computable;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
@@ -33,118 +32,125 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.Couple;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+
+import java.util.function.Supplier;
 
 /**
  * @author max
  */
 @ExtensionImpl
 public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
-  @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
-    boolean isOnTheFly,
-    LocalInspectionToolSession session,
-    Object state
-  ) {
-    final Project project = holder.getProject();
-    Couple<PsiMethod> pair = CachedValuesManager.getManager(project).getCachedValue(project, () -> {
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass psiObjectClass = project.getApplication().runReadAction(
-          new Computable<PsiClass>() {
-            @Override
-            @Nullable
-            public PsiClass compute() {
-              return psiFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project));
+    private static record CheckResult(boolean hasEquals, boolean hasHashCode) {
+        private static final String CODE_EQUALS = "<code>equals()</code>";
+        private static final String CODE_HASH_CODE = "<code>hashCode()</code>";
+
+        public boolean hasInconsistency() {
+            return hasEquals != hasHashCode;
+        }
+
+        public LocalizeValue getErrorMessage() {
+            if (!hasInconsistency()) {
+                return LocalizeValue.empty();
             }
-          }
-      );
-      if (psiObjectClass == null) {
-        return CachedValueProvider.Result.create(null, ProjectRootManager.getInstance(project));
-      }
-      PsiMethod[] methods = psiObjectClass.getMethods();
-      PsiMethod myEquals = null;
-      PsiMethod myHashCode = null;
-      for (PsiMethod method : methods) {
-        @NonNls final String name = method.getName();
-        if ("equals".equals(name)) {
-          myEquals = method;
+            return hasEquals
+                ? InspectionLocalize.inspectionEqualsHashcodeOnlyOneDefinedProblemDescriptor(CODE_EQUALS, CODE_HASH_CODE)
+                : InspectionLocalize.inspectionEqualsHashcodeOnlyOneDefinedProblemDescriptor(CODE_HASH_CODE, CODE_EQUALS);
         }
-        else if ("hashCode".equals(name)) {
-          myHashCode = method;
-        }
-      }
-      return CachedValueProvider.Result.create(Couple.of(myEquals, myHashCode), psiObjectClass);
-    });
-
-    if (pair == null) return new PsiElementVisitor() {};
-
-    //jdk wasn't configured for the project
-    final PsiMethod myEquals = pair.first;
-    final PsiMethod myHashCode = pair.second;
-    if (myEquals == null || myHashCode == null || !myEquals.isValid() || !myHashCode.isValid()) return new PsiElementVisitor() {};
-
-    return new JavaElementVisitor() {
-      @Override public void visitClass(PsiClass aClass) {
-        super.visitClass(aClass);
-        boolean [] hasEquals = {false};
-        boolean [] hasHashCode = {false};
-        processClass(aClass, hasEquals, hasHashCode, myEquals, myHashCode);
-        if (hasEquals[0] != hasHashCode[0]) {
-          PsiIdentifier identifier = aClass.getNameIdentifier();
-          holder.registerProblem(
-            identifier != null ? identifier : aClass,
-            hasEquals[0]
-              ? InspectionLocalize.inspectionEqualsHashcodeOnlyOneDefinedProblemDescriptor(
-                "<code>equals()</code>",
-                "<code>hashCode()</code>"
-              ).get()
-              : InspectionLocalize.inspectionEqualsHashcodeOnlyOneDefinedProblemDescriptor(
-                "<code>hashCode()</code>",
-                "<code>equals()</code>"
-              ).get(),
-            (LocalQuickFix[])null
-          );
-        }
-      }
-    };
-  }
-
-  private static void processClass(
-    final PsiClass aClass,
-    final boolean[] hasEquals,
-    final boolean[] hasHashCode,
-    PsiMethod equals,
-    PsiMethod hashcode
-  ) {
-    final PsiMethod[] methods = aClass.getMethods();
-    for (PsiMethod method : methods) {
-      if (MethodSignatureUtil.areSignaturesEqual(method, equals)) {
-        hasEquals[0] = true;
-      }
-      else if (MethodSignatureUtil.areSignaturesEqual(method, hashcode)) {
-        hasHashCode[0] = true;
-      }
     }
-  }
 
-  @Override
-  @Nonnull
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.inspectionEqualsHashcodeDisplayName();
-  }
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    public PsiElementVisitor buildVisitorImpl(
+        @Nonnull final ProblemsHolder holder,
+        boolean isOnTheFly,
+        LocalInspectionToolSession session,
+        Object state
+    ) {
+        Project project = holder.getProject();
+        Couple<PsiMethod> pair = CachedValuesManager.getManager(project).getCachedValue(
+            project,
+            () -> {
+                JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+                PsiClass psiObjectClass = project.getApplication().runReadAction(
+                    (Supplier<PsiClass>) () -> psiFacade.findClass(CommonClassNames.JAVA_LANG_OBJECT, GlobalSearchScope.allScope(project))
+                );
+                if (psiObjectClass == null) {
+                    return CachedValueProvider.Result.create(null, ProjectRootManager.getInstance(project));
+                }
+                PsiMethod[] methods = psiObjectClass.getMethods();
+                PsiMethod myEquals = null;
+                PsiMethod myHashCode = null;
+                for (PsiMethod method : methods) {
+                    String name = method.getName();
+                    if ("equals".equals(name)) {
+                        myEquals = method;
+                    }
+                    else if ("hashCode".equals(name)) {
+                        myHashCode = method;
+                    }
+                }
+                return CachedValueProvider.Result.create(Couple.of(myEquals, myHashCode), psiObjectClass);
+            }
+        );
 
-  @Override
-  @Nonnull
-  public LocalizeValue getGroupDisplayName() {
-    return LocalizeValue.of();
-  }
+        if (pair == null) {
+            return new PsiElementVisitor() {
+            };
+        }
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "EqualsAndHashcode";
-  }
+        //jdk wasn't configured for the project
+        final PsiMethod myEquals = pair.first;
+        final PsiMethod myHashCode = pair.second;
+        if (myEquals == null || myHashCode == null || !myEquals.isValid() || !myHashCode.isValid()) {
+            return new PsiElementVisitor() {
+            };
+        }
+
+        return new JavaElementVisitor() {
+            @Override
+            public void visitClass(@Nonnull PsiClass aClass) {
+                super.visitClass(aClass);
+                CheckResult checkResult = processClass(aClass, myEquals, myHashCode);
+                if (checkResult.hasInconsistency()) {
+                    PsiIdentifier identifier = aClass.getNameIdentifier();
+                    holder.newProblem(checkResult.getErrorMessage())
+                        .range(identifier != null ? identifier : aClass)
+                        .create();
+                }
+            }
+        };
+    }
+
+    private static CheckResult processClass(PsiClass aClass, PsiMethod equals, PsiMethod hashCode) {
+        boolean hasEquals = false, hasHashCode = false;
+        PsiMethod[] methods = aClass.getMethods();
+        for (PsiMethod method : methods) {
+            if (MethodSignatureUtil.areSignaturesEqual(method, equals)) {
+                hasEquals = true;
+            }
+            else if (MethodSignatureUtil.areSignaturesEqual(method, hashCode)) {
+                hasHashCode = true;
+            }
+        }
+        return new CheckResult(hasEquals, hasHashCode);
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.inspectionEqualsHashcodeDisplayName();
+    }
+
+    @Nonnull
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return LocalizeValue.of();
+    }
+
+    @Nonnull
+    @Override
+    public String getShortName() {
+        return "EqualsAndHashcode";
+    }
 }

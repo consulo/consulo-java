@@ -25,6 +25,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessToken;
 import consulo.application.WriteAction;
@@ -75,26 +77,24 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
     private static class MakePrivateFix extends InspectionGadgetsFix {
         @Nonnull
+        @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.makePrivateQuickfix();
         }
 
         @Override
+        @RequiredWriteAction
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final PsiElement grandParent = parent.getParent();
-            if (!(grandParent instanceof PsiMember)) {
+            PsiElement element = descriptor.getPsiElement();
+            if (!(element.getParent().getParent() instanceof PsiMember member)) {
                 return;
             }
-            final PsiMember member = (PsiMember) grandParent;
-            final PsiModifierList modifierList = member.getModifierList();
+            PsiModifierList modifierList = member.getModifierList();
             if (modifierList == null) {
                 return;
             }
-            final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
-            if (member instanceof PsiMethod) {
-                final PsiMethod method = (PsiMethod) member;
+            MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
+            if (member instanceof PsiMethod method) {
                 SuperMethodsSearch.search(method, method.getContainingClass(), true, false).forEach(methodSignature -> {
                     PsiMethod superMethod = methodSignature.getMethod();
                     conflicts.putValue(
@@ -117,9 +117,9 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                     return false;
                 });
             }
-            final PsiModifierList modifierListCopy = (PsiModifierList) modifierList.copy();
+            PsiModifierList modifierListCopy = (PsiModifierList) modifierList.copy();
             modifierListCopy.setModifierProperty(PsiModifier.PRIVATE, true);
-            final Query<PsiReference> search = ReferencesSearch.search(member, member.getResolveScope());
+            Query<PsiReference> search = ReferencesSearch.search(member, member.getResolveScope());
             search.forEach(reference -> {
                 PsiElement element1 = reference.getElement();
                 if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element1, null, null)) {
@@ -136,7 +136,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                 }
                 return true;
             });
-            final boolean conflictsDialogOK;
+            boolean conflictsDialogOK;
             if (conflicts.isEmpty()) {
                 conflictsDialogOK = true;
             }
@@ -147,7 +147,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                 ConflictsDialog conflictsDialog = new ConflictsDialog(
                     member.getProject(),
                     conflicts,
-                    (Runnable) () -> {
+                    () -> {
                         AccessToken token = WriteAction.start();
                         try {
                             modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
@@ -172,14 +172,14 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     }
 
     private static class ProtectedMemberInFinalClassVisitor extends BaseInspectionVisitor {
-
         @Override
+        @RequiredReadAction
         public void visitMethod(@Nonnull PsiMethod method) {
-            if (!method.hasModifierProperty(PsiModifier.PROTECTED)) {
+            if (!method.isProtected()) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
-            if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+            PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null || !containingClass.isFinal()) {
                 return;
             }
             if (MethodUtils.hasSuper(method)) {
@@ -189,12 +189,13 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
         }
 
         @Override
+        @RequiredReadAction
         public void visitField(@Nonnull PsiField field) {
-            if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
+            if (!field.isProtected()) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
-            if (containingClass == null || !containingClass.hasModifierProperty(PsiModifier.FINAL)) {
+            PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null || !containingClass.isFinal()) {
                 return;
             }
             registerModifierError(PsiModifier.PROTECTED, field, PsiModifier.PROTECTED);
