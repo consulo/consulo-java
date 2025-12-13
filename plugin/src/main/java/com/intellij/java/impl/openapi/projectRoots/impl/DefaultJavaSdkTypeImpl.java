@@ -35,6 +35,7 @@ import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
+import consulo.platform.PlatformOperatingSystem;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.localize.ProjectLocalize;
 import consulo.ui.image.Image;
@@ -42,7 +43,6 @@ import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.SystemProperties;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
@@ -56,6 +56,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -156,31 +158,41 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     /**
-     * @implNote do not chech JAVA_HOME, {@link #getEnviromentVariables(Platform)}
+     * @implNote do not check JAVA_HOME, {@link #getEnviromentVariables(Platform)}
      */
     @Nonnull
     @Override
     public Collection<String> suggestHomePaths() {
-        List<String> list = new ArrayList<>();
-        if (Platform.current().os().isMac()) {
+        Set<String> list = new LinkedHashSet<>();
+        Platform platform = Platform.current();
+        PlatformOperatingSystem os = platform.os();
+
+        if (os.isMac()) {
             collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
             collectJavaPathsAtMac(list, "/System/Library/Java/JavaVirtualMachines");
             list.add("/usr/libexec/java_home");
         }
-        else if (Platform.current().os().isLinux()) {
+        else if (os.isLinux()) {
             list.add("/usr/java");
             list.add("/opt/java");
             list.add("/usr/lib/jvm");
         }
-        else if (Platform.current().os().isWindows()) {
-            collectJavaPathsAtWindows(list, "ProgramFiles");
-            collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
+        else if (os.isWindows()) {
+            String[] subDirs = {
+                "Java", // original oracle distro
+                "Eclipse Adoptium",
+                "Amazon Corretto",
+                "Microsoft"
+            };
+
+            collectJavaPathsAtWindows(platform, list, "ProgramFiles", subDirs);
+            collectJavaPathsAtWindows(platform, list, "ProgramFiles(x86)", subDirs);
         }
 
         // JDKs in SDKMan located at $HOME/.sdkman/candidates/java/
-        File sdkmanJavaDir = new File(SystemProperties.getUserHome(), "/.sdkman/candidates/java/");
-        if (sdkmanJavaDir.exists()) {
-            collectJavaPathsAtSdkman(list, sdkmanJavaDir);
+        Path sdkmanJavaDir = platform.user().homePath().resolve(".sdkman/candidates/java/");
+        if (Files.exists(sdkmanJavaDir)) {
+            collectJavaPathsAtSdkman(list, sdkmanJavaDir.toFile());
         }
 
         return list;
@@ -192,19 +204,19 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return Set.of("JAVA_HOME");
     }
 
-    private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir) {
+    private void collectJavaPathsAtSdkman(Collection<String> list, File sdkmanJavaDir) {
         File[] files = sdkmanJavaDir.listFiles();
         if (files != null) {
             for (File dir : files) {
-                if (!dir.getName().equals("current")) // skip "current" directory, because it's link
-                {
+                // skip "current" directory, because it's link
+                if (!dir.getName().equals("current")) {
                     list.add(dir.getAbsolutePath());
                 }
             }
         }
     }
 
-    private static void collectJavaPathsAtMac(List<String> list, String path) {
+    private static void collectJavaPathsAtMac(Collection<String> list, String path) {
         File dir = new File(path);
         if (dir.exists()) {
             File[] files = dir.listFiles();
@@ -216,10 +228,17 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         }
     }
 
-    private static void collectJavaPathsAtWindows(List<String> list, String env) {
-        String programFiles = Platform.current().os().getEnvironmentVariable(env);
-        if (programFiles != null) {
-            File temp = new File(programFiles, "Java");
+    private static void collectJavaPathsAtWindows(Platform platform,
+                                                  Collection<String> list,
+                                                  String env,
+                                                  String... subDirs) {
+        String programFiles = platform.os().getEnvironmentVariable(env);
+        if (programFiles == null) {
+            return;
+        }
+
+        for (String subDir : subDirs) {
+            File temp = new File(programFiles, subDir);
             File[] files = temp.listFiles();
             if (files != null) {
                 for (File file : files) {
