@@ -25,6 +25,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
@@ -34,7 +35,6 @@ import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.introduce.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -63,10 +63,11 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     public static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.extractMethodTitle();
 
     @Override
+    @RequiredUIAccess
     public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
         if (dataContext != null) {
-            final PsiFile file = dataContext.getData(PsiFile.KEY);
-            final Editor editor = dataContext.getData(Editor.KEY);
+            PsiFile file = dataContext.getData(PsiFile.KEY);
+            Editor editor = dataContext.getData(Editor.KEY);
             if (file != null && editor != null) {
                 invokeOnElements(project, editor, file, elements);
             }
@@ -74,21 +75,24 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
-        final Consumer<PsiElement[]> callback = selectedValue -> invokeOnElements(project, editor, file, selectedValue);
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        @RequiredUIAccess
+        Consumer<PsiElement[]> callback = selectedValue -> invokeOnElements(project, editor, file, selectedValue);
         selectAndPass(project, editor, file, callback);
     }
 
+    @RequiredReadAction
     public static void selectAndPass(
-        @Nonnull final Project project,
-        @Nonnull final Editor editor,
-        @Nonnull final PsiFile file,
-        @Nonnull final Consumer<PsiElement[]> callback
+        @Nonnull Project project,
+        @Nonnull Editor editor,
+        @Nonnull PsiFile file,
+        @Nonnull @RequiredUIAccess Consumer<PsiElement[]> callback
     ) {
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         if (!editor.getSelectionModel().hasSelection()) {
-            final int offset = editor.getCaretModel().getOffset();
-            final List<PsiExpression> expressions = IntroduceVariableBase.collectExpressions(file, editor, offset, true);
+            int offset = editor.getCaretModel().getOffset();
+            List<PsiExpression> expressions = IntroduceVariableBase.collectExpressions(file, editor, offset, true);
             if (expressions.isEmpty()) {
                 editor.getSelectionModel().selectLineAtCaret();
             }
@@ -120,9 +124,9 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         else {
             elements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
             if (elements.length == 0) {
-                final PsiExpression expression = IntroduceVariableBase.getSelectedExpression(project, file, startOffset, endOffset);
+                PsiExpression expression = IntroduceVariableBase.getSelectedExpression(project, file, startOffset, endOffset);
                 if (expression != null && IntroduceVariableBase.getErrorMessage(expression) == null) {
-                    final PsiType originalType = RefactoringUtil.getTypeByExpressionWithExpectedType(expression);
+                    PsiType originalType = RefactoringUtil.getTypeByExpressionWithExpectedType(expression);
                     if (originalType != null) {
                         elements = new PsiElement[]{expression};
                     }
@@ -132,15 +136,17 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         callback.accept(elements);
     }
 
-    private static void invokeOnElements(final Project project, final Editor editor, PsiFile file, PsiElement[] elements) {
+    @RequiredUIAccess
+    private static void invokeOnElements(Project project, Editor editor, PsiFile file, PsiElement[] elements) {
         getProcessor(elements, project, file, editor, true, processor -> invokeOnElements(project, editor, processor, true));
     }
 
+    @RequiredUIAccess
     private static boolean invokeOnElements(
-        final Project project,
-        final Editor editor,
-        @Nonnull final ExtractMethodProcessor processor,
-        final boolean directTypes
+        Project project,
+        Editor editor,
+        @Nonnull ExtractMethodProcessor processor,
+        boolean directTypes
     ) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(project, processor.getTargetClass().getContainingFile())) {
             return false;
@@ -153,31 +159,29 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         return false;
     }
 
-    public static void run(@Nonnull final Project project, final Editor editor, final ExtractMethodProcessor processor) {
-        CommandProcessor.getInstance().executeCommand(
-            project,
-            () -> PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
+    public static void run(@Nonnull Project project, Editor editor, ExtractMethodProcessor processor) {
+        CommandProcessor.getInstance().newCommand()
+            .project(project)
+            .name(REFACTORING_NAME)
+            .run(() -> PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
                 try {
                     processor.doRefactoring();
                 }
                 catch (IncorrectOperationException e) {
                     LOG.error(e);
                 }
-            }),
-            REFACTORING_NAME.get(),
-            null
-        );
+            }));
     }
 
     @Nullable
     @RequiredUIAccess
     private static ExtractMethodProcessor getProcessor(
-        final PsiElement[] elements,
-        final Project project,
-        final PsiFile file,
-        final Editor editor,
-        final boolean showErrorMessages,
-        final @Nullable Consumer<ExtractMethodProcessor> pass
+        PsiElement[] elements,
+        Project project,
+        PsiFile file,
+        Editor editor,
+        boolean showErrorMessages,
+        @Nullable @RequiredUIAccess Consumer<ExtractMethodProcessor> pass
     ) {
         if (elements == null || elements.length == 0) {
             if (showErrorMessages) {
@@ -201,8 +205,8 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
             }
         }
 
-        final ExtractMethodProcessor processor =
-            new ExtractMethodProcessor(project, editor, elements, null, REFACTORING_NAME.get(), "", HelpID.EXTRACT_METHOD);
+        ExtractMethodProcessor processor =
+            new ExtractMethodProcessor(project, editor, elements, null, REFACTORING_NAME, "", HelpID.EXTRACT_METHOD);
         processor.setShowErrorDialogs(showErrorMessages);
         try {
             if (!processor.prepare(pass)) {
@@ -211,7 +215,13 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         }
         catch (PrepareFailedException e) {
             if (showErrorMessages) {
-                CommonRefactoringUtil.showErrorHint(project, editor, LocalizeValue.ofNullable(e.getMessage()), REFACTORING_NAME, HelpID.EXTRACT_METHOD);
+                CommonRefactoringUtil.showErrorHint(
+                    project,
+                    editor,
+                    LocalizeValue.ofNullable(e.getMessage()),
+                    REFACTORING_NAME,
+                    HelpID.EXTRACT_METHOD
+                );
                 highlightPrepareError(e, file, editor, project);
             }
             return null;
@@ -219,10 +229,10 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         return processor;
     }
 
-    public static void highlightPrepareError(PrepareFailedException e, PsiFile file, Editor editor, final Project project) {
+    public static void highlightPrepareError(PrepareFailedException e, PsiFile file, Editor editor, Project project) {
         if (e.getFile() == file) {
-            final TextRange textRange = e.getTextRange();
-            final HighlightManager highlightManager = HighlightManager.getInstance(project);
+            TextRange textRange = e.getTextRange();
+            HighlightManager highlightManager = HighlightManager.getInstance(project);
             highlightManager.addRangeHighlight(
                 editor,
                 textRange.getStartOffset(),
@@ -231,35 +241,27 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
                 true,
                 null
             );
-            final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
+            LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
             editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.MAKE_VISIBLE);
         }
     }
 
     @Nullable
-    public static ExtractMethodProcessor getProcessor(
-        final Project project,
-        final PsiElement[] elements,
-        final PsiFile file,
-        final boolean openEditor
-    ) {
+    @RequiredUIAccess
+    public static ExtractMethodProcessor getProcessor(Project project, PsiElement[] elements, PsiFile file, boolean openEditor) {
         return getProcessor(elements, project, file, openEditor ? openEditor(project, file) : null, false, null);
     }
 
-    public static boolean invokeOnElements(
-        final Project project,
-        @Nonnull final ExtractMethodProcessor processor,
-        final PsiFile file,
-        final boolean directTypes
-    ) {
+    @RequiredUIAccess
+    public static boolean invokeOnElements(Project project, @Nonnull ExtractMethodProcessor processor, PsiFile file, boolean directTypes) {
         return invokeOnElements(project, openEditor(project, file), processor, directTypes);
     }
 
     @Nullable
-    private static Editor openEditor(final Project project, final PsiFile file) {
-        final VirtualFile virtualFile = file.getVirtualFile();
+    private static Editor openEditor(Project project, PsiFile file) {
+        VirtualFile virtualFile = file.getVirtualFile();
         LOG.assertTrue(virtualFile != null);
-        final OpenFileDescriptor fileDescriptor = OpenFileDescriptorFactory.getInstance(project).newBuilder(virtualFile).build();
+        OpenFileDescriptor fileDescriptor = OpenFileDescriptorFactory.getInstance(project).newBuilder(virtualFile).build();
         return FileEditorManager.getInstance(project).openTextEditor(fileDescriptor, false);
     }
 }

@@ -124,7 +124,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
             editor,
             new PsiElement[]{initializer},
             local.getType(),
-            REFACTORING_NAME.get(),
+            REFACTORING_NAME,
             localName,
             HelpID.REPLACE_TEMP_WITH_QUERY
         );
@@ -153,38 +153,36 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
         }
 
         if (processor.showDialog()) {
+            Runnable action = () -> {
+                try {
+                    processor.doRefactoring();
+
+                    local.normalizeDeclaration();
+
+                    PsiExpression initializer1 = local.getInitializer();
+
+                    PsiExpression[] exprs = new PsiExpression[refs.length];
+                    for (int idx = 0; idx < refs.length; idx++) {
+                        PsiElement ref = refs[idx].getElement();
+                        exprs[idx] = (PsiExpression) ref.replace(initializer1);
+                    }
+                    PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
+                    declaration.delete();
+
+                    highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            };
+
             CommandProcessor.getInstance().newCommand()
                 .project(project)
                 .name(REFACTORING_NAME)
-                .run(() -> {
-                    Runnable action = () -> {
-                        try {
-                            processor.doRefactoring();
-
-                            local.normalizeDeclaration();
-
-                            PsiExpression initializer1 = local.getInitializer();
-
-                            PsiExpression[] exprs = new PsiExpression[refs.length];
-                            for (int idx = 0; idx < refs.length; idx++) {
-                                PsiElement ref = refs[idx].getElement();
-                                exprs[idx] = (PsiExpression) ref.replace(initializer1);
-                            }
-                            PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
-                            declaration.delete();
-
-                            highlightManager.addOccurrenceHighlights(editor, exprs, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-                        }
-                        catch (IncorrectOperationException e) {
-                            LOG.error(e);
-                        }
-                    };
-
-                    PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
-                        project.getApplication().runWriteAction(action);
-                        DuplicatesImpl.processDuplicates(processor, project, editor);
-                    });
-                });
+                .run(() -> PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
+                    project.getApplication().runWriteAction(action);
+                    DuplicatesImpl.processDuplicates(processor, project, editor);
+                }));
         }
     }
 
