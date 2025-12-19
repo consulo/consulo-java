@@ -58,8 +58,8 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     private static final int IS_USES_DEPRECATION_MASK = 0x200;
     private static final int IS_SYNTHETIC_JSP_ELEMENT = 0x400;
 
-    protected RefJavaElementImpl(String name, RefJavaElement owner) {
-        super(name, owner);
+    protected RefJavaElementImpl(@Nonnull LocalizeValue name, RefJavaElement owner) {
+        super(name.get(), owner);
         String am = owner.getAccessModifier();
         doSetAccessModifier(am);
 
