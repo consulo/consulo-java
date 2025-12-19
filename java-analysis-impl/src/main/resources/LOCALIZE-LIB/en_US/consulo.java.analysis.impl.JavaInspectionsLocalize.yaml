@@ -464,20 +464,12 @@ inspection.data.flow.display.name:
     text: Constant conditions & exceptions
 inspection.data.flow.filter.notnull.quickfix:
     text: Insert 'filter(Objects::nonNull)' step
+inspection.data.flow.ignore.assert.statements:
+    text: Ignore assert statements
 inspection.data.flow.nullable.quickfix.option:
     text: Suggest @Nullable annotation for methods that may possibly return <code>null</code> and report nullable values passed to non-annotated parameters
 inspection.data.flow.redundant.instanceof.quickfix:
     text: Replace with != null
-inspection.data.flow.simplify.boolean.expression.quickfix:
-    text: Simplify boolean expression
-inspection.data.flow.simplify.to.assignment.quickfix.name:
-    text: Simplify to normal assignment
-inspection.data.flow.true.asserts.option:
-    text: Don't report assertions with condition statically proven to be always <code>true</code>
-inspection.data.flow.ignore.assert.statements:
-    text: Ignore assert statements
-inspection.data.flow.treat.non.annotated.members.and.parameters.as.nullable:
-    text: Treat non-annotated members and parameters as @Nullable
 inspection.data.flow.report.constant.reference.values:
     text: Warn when reading a value guaranteed to be constant
 inspection.data.flow.report.not.null.required.parameter.with.null.literal.argument.usages:
@@ -486,6 +478,14 @@ inspection.data.flow.report.nullable.methods.that.always.return.a.non.null.value
     text: Report nullable methods that always return a non-null value
 inspection.data.flow.report.problems.that.happen.only.on.some.code.paths:
     text: Report problems that happen only on some code paths
+inspection.data.flow.simplify.boolean.expression.quickfix:
+    text: Simplify boolean expression
+inspection.data.flow.simplify.to.assignment.quickfix.name:
+    text: Simplify to normal assignment
+inspection.data.flow.treat.non.annotated.members.and.parameters.as.nullable:
+    text: Treat non-annotated members and parameters as @Nullable
+inspection.data.flow.true.asserts.option:
+    text: Don't report assertions with condition statically proven to be always <code>true</code>
 inspection.data.flow.use.computeifpresent.quickfix:
     text: Replace 'compute' with 'computeIfPresent'
 inspection.dead.code.comment:
@@ -932,6 +932,8 @@ inspection.map.foreach.option.no.loops:
     text: Do not report loops
 inspection.marked.for.removal.display.name:
     text: Usage of API marked for removal
+inspection.message.redundant.default.parameter.value.assignment:
+    text: Redundant default parameter value assignment
 inspection.module.exports.package.to.itself:
     text: Module exports/opens package to itself
 inspection.new.profile.dialog.title:
@@ -1098,16 +1100,30 @@ inspection.redundant.type.remove.quickfix:
     text: Remove explicit type arguments
 inspection.reference.anonymous:
     text: anonymous
+inspection.reference.anonymous.class:
+    text: anonymous class
 inspection.reference.anonymous.name:
     text: anonymous ({0})
+inspection.reference.default.lambda.name:
+    text: lambda
+inspection.reference.default.method.reference.name:
+    text: method reference
 inspection.reference.default.package:
     text: <default>
+inspection.reference.implicit.class:
+    text: compact source file ''{0}''
 inspection.reference.implicit.constructor.name:
     text: implicit constructor of {0}
 inspection.reference.invalid:
     text: element no longer exists
 inspection.reference.jsp.holder.method.anonymous.name:
     text: <% page content %>
+inspection.reference.jsp.synthetic.class.name:
+    text: <{0}>
+inspection.reference.lambda.name:
+    text: lambda ({0})
+inspection.reference.method.reference.name:
+    text: method reference ({0})
 inspection.reference.noname:
     text: noname
 inspection.reflect.handle.invocation.argument.not.array:
@@ -1592,5 +1608,3 @@ xml.suppressable.for.file.title:
     text: Suppress for file
 xml.suppressable.for.tag.title:
     text: Suppress for tag
-inspection.message.redundant.default.parameter.value.assignment:
-    text: Redundant default parameter value assignment
