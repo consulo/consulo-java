@@ -40,7 +40,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ThreeState;
 import jakarta.annotation.Nonnull;
@@ -151,7 +150,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                     PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(expression);
                     if (TypeConversionUtil.isPrimitiveAndNotNull(returnType)) {
                         holder.newProblem(JavaAnalysisLocalize.dataflowMessageUnboxingMethodReference())
-                            .range((PsiElement) expression)
+                            .range(expression)
                             .create();
                     }
                 }
@@ -188,7 +187,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                 if (condition != null && condition.textMatches(PsiKeyword.FALSE)) {
                     holder.newProblem(JavaAnalysisLocalize.dataflowMessageConstantNoRef(0))
                         .range(condition)
-                        .withFix(createSimplifyBooleanExpressionFix(condition, false))
+                        .withOptionalFix(createSimplifyBooleanExpressionFix(condition, false))
                         .create();
                 }
             }
@@ -284,18 +283,17 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         return Collections.emptyList();
     }
 
-    protected
     @Nullable
-    LocalQuickFix createUnwrapSwitchLabelFix() {
+    protected LocalQuickFix createUnwrapSwitchLabelFix() {
         return null;
     }
 
-    protected
     @Nullable
-    LocalQuickFix createIntroduceVariableFix() {
+    protected LocalQuickFix createIntroduceVariableFix() {
         return null;
     }
 
+    @Nullable
     protected LocalQuickFix createRemoveAssignmentFix(PsiAssignmentExpression assignment) {
         return null;
     }
@@ -405,7 +403,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             coveredSwitches.add(statement);
             holder.newProblem(JavaAnalysisLocalize.dataflowMessageOnlySwitchLabel())
                 .range(label)
-                .withFix(createUnwrapSwitchLabelFix())
+                .withOptionalFix(createUnwrapSwitchLabelFix())
                 .create();
         }
         for (Map.Entry<PsiExpression, ThreeState> entry : labelReachability.entrySet()) {
@@ -652,7 +650,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                 : JavaAnalysisLocalize.dataflowMessageRedundantAssignment();
             reporter.newProblem(message)
                 .range(expr)
-                .withFix(createRemoveAssignmentFix(assignment))
+                .withOptionalFix(createRemoveAssignmentFix(assignment))
                 .create();
         });
     }
@@ -698,7 +696,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             NullabilityProblemKind.callMethodRefNPE.ifMyProblem(
                 problem,
                 methodRef -> reporter.newProblem(JavaAnalysisLocalize.dataflowMessageNpeMethodrefInvocation())
-                    .range((PsiElement) methodRef)
+                    .range(methodRef)
                     .withFixes(createMethodReferenceNPEFixes(methodRef, reporter.isOnTheFly()))
                     .create()
             );
@@ -716,14 +714,14 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             NullabilityProblemKind.passingToNotNullMethodRefParameter.ifMyProblem(
                 problem,
                 methodRef -> reporter.newProblem(JavaAnalysisLocalize.dataflowMessagePassingNullableArgumentMethodref())
-                    .range((PsiElement) methodRef)
+                    .range(methodRef)
                     .withFixes(createMethodReferenceNPEFixes(methodRef, reporter.isOnTheFly()))
                     .create()
             );
             NullabilityProblemKind.unboxingMethodRefParameter.ifMyProblem(
                 problem,
                 methodRef -> reporter.newProblem(JavaAnalysisLocalize.dataflowMessageUnboxingNullableArgumentMethodref())
-                    .range((PsiElement) methodRef)
+                    .range(methodRef)
                     .withFixes(createMethodReferenceNPEFixes(methodRef, reporter.isOnTheFly()))
                     .create()
             );
@@ -774,7 +772,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                 NullabilityProblemKind.passingToNonAnnotatedMethodRefParameter.ifMyProblem(
                     problem,
                     methodRef -> reporter.newProblem(problem.getMessage(expressions))
-                        .range((PsiElement) methodRef)
+                        .range(methodRef)
                         .create()
                 );
                 NullabilityProblemKind.passingToNonAnnotatedParameter.ifMyProblem(
@@ -829,7 +827,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             if (result != ConstantResult.UNKNOWN) {
                 Object value = result.value();
                 holder.newProblem(JavaAnalysisLocalize.dataflowMessageConstantMethodReference(value))
-                    .range((PsiElement) methodRef)
+                    .range(methodRef)
                     .withFix(createReplaceWithTrivialLambdaFix(value))
                     .create();
             }
@@ -858,7 +856,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                 NullableStuffInspectionBase.getPresentableAnnoName(annotation),
                 method.getName()
             ))
-            .range((PsiElement) annoName)
+            .range(annoName)
             .withOptionalFix(AddAnnotationPsiFix.createAddNotNullFix(method))
             .withOptionalFix(
                 holder.isOnTheFly()
