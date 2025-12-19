@@ -367,7 +367,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
         myInTypeReferences = new HashSet<>(1);
       }
       myInTypeReferences.add(from);
-      ((RefJavaElementImpl) from).addOutTypeRefernce(this);
+      ((RefJavaElementImpl) from).addOutTypeReference(this);
       getRefManager().fireNodeMarkedReferenced(this, from, false, false, false);
     }
   }
