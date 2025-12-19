@@ -13,83 +13,78 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Nov 28, 2001
- * Time: 4:17:17 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefImplicitConstructor;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.application.Application;
-import consulo.application.util.function.Computable;
-import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ReadAction;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.psi.PsiFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+/**
+ * @author max
+ * @since 2001-11-28
+ */
 public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImplicitConstructor {
+    RefImplicitConstructorImpl(RefClass ownerClass) {
+        super(JavaInspectionsLocalize.inspectionReferenceImplicitConstructorName(ownerClass.getName()), ownerClass);
+    }
 
-  RefImplicitConstructorImpl(RefClass ownerClass) {
-    super(InspectionLocalize.inspectionReferenceImplicitConstructorName(ownerClass.getName()).get(), ownerClass);
-  }
+    @Override
+    @RequiredReadAction
+    public void buildReferences() {
+        getRefManager().fireBuildReferences(this);
+    }
 
-  @Override
-  public void buildReferences() {
-    getRefManager().fireBuildReferences(this);
-  }
+    @Override
+    public boolean isSuspicious() {
+        return ((RefClassImpl) getOwnerClass()).isSuspicious();
+    }
 
-  @Override
-  public boolean isSuspicious() {
-    return ((RefClassImpl) getOwnerClass()).isSuspicious();
-  }
+    @Nonnull
+    @Override
+    public String getName() {
+        return JavaInspectionsLocalize.inspectionReferenceImplicitConstructorName(getOwnerClass().getName()).get();
+    }
 
-  @Override
-  @Nonnull
-  public String getName() {
-    return InspectionLocalize.inspectionReferenceImplicitConstructorName(getOwnerClass().getName()).get();
-  }
+    @Override
+    public String getExternalName() {
+        return getOwnerClass().getExternalName();
+    }
 
-  @Override
-  public String getExternalName() {
-    return getOwnerClass().getExternalName();
-  }
+    @Override
+    public boolean isValid() {
+        return ReadAction.compute(() -> getOwnerClass().isValid());
+    }
 
-  @Override
-  public boolean isValid() {
-    return Application.get().runReadAction((Computable<Boolean>)() -> getOwnerClass().isValid());
-  }
+    @Override
+    public String getAccessModifier() {
+        return getOwnerClass().getAccessModifier();
+    }
 
-  @Override
-  public String getAccessModifier() {
-    return getOwnerClass().getAccessModifier();
-  }
+    @Override
+    public void setAccessModifier(String am) {
+        RefJavaUtil.getInstance().setAccessModifier(getOwnerClass(), am);
+    }
 
-  @Override
-  public void setAccessModifier(String am) {
-    RefJavaUtil.getInstance().setAccessModifier(getOwnerClass(), am);
-  }
+    @Override
+    public PsiModifierListOwner getElement() {
+        return getOwnerClass().getElement();
+    }
 
-  @Override
-  public PsiModifierListOwner getElement() {
-    return getOwnerClass().getElement();
-  }
+    @Nullable
+    @Override
+    public PsiFile getContainingFile() {
+        return getOwnerClass().getContainingFile();
+    }
 
-  @Override
-  @Nullable
-  public PsiFile getContainingFile() {
-    return getOwnerClass().getContainingFile();
-  }
-
-  @Override
-  public RefClass getOwnerClass() {
-    return myOwnerClass == null ? super.getOwnerClass() : myOwnerClass;
-  }
+    @Override
+    public RefClass getOwnerClass() {
+        return myOwnerClass == null ? super.getOwnerClass() : myOwnerClass;
+    }
 }
