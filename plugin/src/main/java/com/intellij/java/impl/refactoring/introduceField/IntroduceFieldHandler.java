@@ -222,7 +222,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(final Project project, PsiLocalVariable localVariable, final Editor editor) {
+    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, final Editor editor) {
         PsiElement parent = localVariable.getParent();
         if (!(parent instanceof PsiDeclarationStatement)) {
             LocalizeValue message =
